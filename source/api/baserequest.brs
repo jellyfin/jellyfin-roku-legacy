@@ -110,6 +110,13 @@ function get_url()
 
 end function
 
+function force_https()
+  base = get_setting("server")
+  base = base.Replace("http://", "https://")
+  set_setting("server", base)
+  return base
+end function
+
 function authorize_request(request)
   devinfo = CreateObject("roDeviceInfo")
   appinfo = CreateObject("roAppInfo")
