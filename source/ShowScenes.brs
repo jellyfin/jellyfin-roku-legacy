@@ -47,6 +47,11 @@ function CreateServerGroup()
         end if
         'Append http:// to server
         if left(server_hostname.value,4) <> "http" then server_hostname.value = "http://" + server_hostname.value
+        'If this is a different server from what we know, reset username/password setting
+        if get_setting("server") <> server_hostname.value then
+          set_setting("username", "")
+          set_setting("password", "")
+        endif
         set_setting("server", server_hostname.value)
         if ServerInfo() = invalid then
           ' Maybe don't unset setting, but offer as a prompt
@@ -111,11 +116,18 @@ function CreateSigninGroup(user = "")
   username_field.label = tr("Username")
   username_field.field = "username"
   username_field.type = "string"
-  username_field.value = user
+  if user = "" and get_setting("username") <> invalid
+    username_field.value = get_setting("username")
+  else
+    username_field.value = user
+  end if
   password_field = CreateObject("roSGNode", "ConfigData")
   password_field.label = tr("Password")
   password_field.field = "password"
   password_field.type = "password"
+  if get_setting("password") <> invalid
+    password_field.value = get_setting("password")
+  end if
   items = [ username_field, password_field ]
   config.configItems = items
 
@@ -143,7 +155,11 @@ function CreateSigninGroup(user = "")
       if node = "submit"
         ' Validate credentials
         get_token(username.value, password.value)
-        if get_setting("active_user") <> invalid then return "true"
+        if get_setting("active_user") <> invalid
+          set_setting("username", username.value)
+          set_setting("password", password.value)
+          return "true"
+        end if
         print "Login attempt failed..."
         group.findNode("alert").text = tr("Login attempt failed.")
       end if
@@ -159,6 +175,7 @@ function CreateHomeGroup()
   group = CreateObject("roSGNode", "Home")
 
   group.observeField("selectedItem", m.port)
+  group.observeField("quickPlayNode", m.port)
 
   sidepanel = group.findNode("options")
   sidepanel.observeField("closeSidePanel", m.port)
@@ -199,6 +216,7 @@ function CreateMovieListGroup(libraryItem)
   group.parentItem = libraryItem
 
   group.observeField("selectedItem", m.port)
+  group.observeField("quickPlayNode", m.port)
 
   sidepanel = group.findNode("options")
   movie_options = [
@@ -281,6 +299,7 @@ function CreateSeasonDetailsGroup(series, season)
   group.objects = TVEpisodes(series.id, season.id)
 
   group.observeField("episodeSelected", m.port)
+  group.observeField("quickPlayNode", m.port)
 
   return group
 end function
@@ -291,6 +310,7 @@ function CreateCollectionsList(libraryItem)
   group.parentItem = libraryItem
 
   group.observeField("selectedItem", m.port)
+  group.observeField("quickPlayNode", m.port)
 
   sidepanel = group.findNode("options")
 

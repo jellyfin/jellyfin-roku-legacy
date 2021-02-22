@@ -3,6 +3,7 @@
   <interface>
     <field id="selectedItem" type="node" alwaysNotify="true" />
     <field id="userConfig" type="assocarray" />
+    <field id="quickPlayNode" type="node" alwaysNotify="true" />
     <function name="updateHomeRows" />
     <function name="loadLibraries" />
   </interface>

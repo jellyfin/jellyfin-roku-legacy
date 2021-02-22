@@ -3,7 +3,7 @@
   <interface>
     <field id="image" type="node" onChange="setPoster" />
     <field id="movieID" type="string" />
-    <field id="seasons" type="associativearray" />
+    <field id="seasons" type="assocarray" />
     <field id="container" type="string" />
   </interface>
   <script type="text/brightscript" uri="MovieData.brs" />

@@ -3,7 +3,7 @@
   <interface>
     <field id="id" type="string" />
     <field id="title" type="string" />
-    <field id="json" type="associativearray" onChange="setFields" />
+    <field id="json" type="assocarray" onChange="setFields" />
   </interface>
   <script type="text/brightscript" uri="AlbumData.brs" />
 </component>

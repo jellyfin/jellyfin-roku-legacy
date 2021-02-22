@@ -56,6 +56,7 @@ sub onChannelsLoaded()
 
     m.scheduleGrid.setFocus(true)
     m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
+    m.LoadChannelsTask.channels = []
 end sub
 
 ' When LoadScheduleTask completes (initial or more data) and we have a schedule to display
@@ -76,6 +77,7 @@ sub onScheduleLoaded()
     end for
 
     m.scheduleGrid.showLoadingDataFeedback = false
+    m.LoadScheduleTask.schedule = []
 end sub
 
 sub onProgramFocused()
@@ -113,6 +115,7 @@ sub onProgramDetailsLoaded()
     end if
 
     channel.ReplaceChild(m.LoadProgramDetailsTask.programDetails, m.LoadProgramDetailsTask.programDetails.programIndex)
+    m.LoadProgramDetailsTask.programDetails = invalid
 end sub
 
 

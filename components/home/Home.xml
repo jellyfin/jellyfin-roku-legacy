@@ -7,6 +7,7 @@
   <interface>
     <field id="selectedItem" alias="homeRows.selectedItem" />
     <field id="userConfig" alias="homeRows.userConfig" />
+    <field id="quickPlayNode" alias="homeRows.quickPlayNode" />
     <field id="timeLastRefresh" type="integer" />
     <function name="refresh" />
     <function name="loadLibraries" />

@@ -6,7 +6,7 @@
     <field id="startIndex" type="integer" value="0" />
     <field id="itemType" type="string" value="" />
     <field id="limit" type="integer" value="36" />
-    <field id="metadata" type="associativearray" />
+    <field id="metadata" type="assocarray" />
     <field id="sortField" type="string" value="SortName" />
     <field id="sortAscending" type="boolean" value="true" />
     <field id="recursive" type="boolean" value="true" />
@@ -21,4 +21,5 @@
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
 </component>

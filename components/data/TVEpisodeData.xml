@@ -8,8 +8,8 @@
     <field id="showID" type="string" />
     <field id="seasonID" type="string" />
     <field id="overview" type="string" />
-    <field id="json" type="associativearray" onChange="setFields" />
-    <function name="loadSeasons" />
+    <field id="type" type="string" value="Episode" />
+    <field id="json" type="assocarray" onChange="setFields" />
   </interface>
   <script type="text/brightscript" uri="TVEpisodeData.brs" />
 </component>

@@ -4,7 +4,7 @@
   <interface>
     <field id="itemsToLoad" type="string" value="libraries" />
     <field id="itemId" type="string" />
-    <field id="metadata" type="associativearray" />
+    <field id="metadata" type="assocarray" />
     <field id="content" type="array" />
   </interface>
   <script type="text/brightscript" uri="LoadItemsTask.brs" />

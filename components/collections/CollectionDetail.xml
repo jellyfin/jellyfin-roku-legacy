@@ -6,7 +6,7 @@
   <interface>
     <field id="collectionId" type="string" onChange="collectionIdChanged" />
     <field id="selectedItem" type="node" alwaysNotify="true" />
-    <field id="objects" type="associativearray" onChange="setupRows" />
+    <field id="objects" type="assocarray" onChange="setupRows" />
   </interface>
   <script type="text/brightscript" uri="CollectionDetail.brs" />
 </component>

@@ -5,7 +5,8 @@
   </children>
   <interface>
     <field id="episodeSelected" alias="picker.itemSelected" />
-    <field id="seasonData" type="associativearray" onChange="setSeason" />
+    <field id="quickPlayNode" type="node" alwaysNotify="true" />
+    <field id="seasonData" type="assocarray" onChange="setSeason" />
     <field id="objects" alias="picker.objects" />
   </interface>
   <script type="text/brightscript" uri="TVEpisodes.brs" />

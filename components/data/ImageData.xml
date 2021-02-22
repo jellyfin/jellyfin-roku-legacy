@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="ImageData" extends="ContentNode">
   <interface>
-    <field id="json" type="associativearray" onChange="setFields" />
+    <field id="json" type="assocarray" onChange="setFields" />
     <field id="imagetype" type="string" />
     <field id="size" type="string" />
     <field id="height" type="integer" />

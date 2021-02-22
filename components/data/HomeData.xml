@@ -8,7 +8,7 @@
     <field id="posterURL" type="string" />
     <field id="widePosterURL" type="string" />
     <field id="type" type="string" />
-    <field id="json" type="associativearray" onChange="setData" />
+    <field id="json" type="assocarray" onChange="setData" />
     <field id="collectionType" type="string" />
     <field id="imageWidth" type="integer" value="464" />
     <field id="usePoster" type="bool" value="false" />

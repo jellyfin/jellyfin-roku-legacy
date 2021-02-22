@@ -30,7 +30,7 @@
   </children>
   <interface>
     <field id="buttons" type="nodearray" />
-    <field id="options" type="associativearray" onChange="optionsSet" />
+    <field id="options" type="assocarray" onChange="optionsSet" />
     <field id="audioSteamIndex" type="integer" />
   </interface>
   <script type="text/brightscript" uri="MovieOptions.brs" />

@@ -55,6 +55,7 @@ sub onLibrariesLoaded()
   ' save data for other functions
   m.libraryData = m.LoadLibrariesTask.content
   m.LoadLibrariesTask.unobserveField("content")
+  m.LoadLibrariesTask.content = []
   ' create My Media, Continue Watching, and Next Up rows
   content = CreateObject("roSGNode", "ContentNode")
   mediaRow = content.CreateChild("HomeRow")
@@ -65,8 +66,8 @@ sub onLibrariesLoaded()
   nextUpRow.title = tr("Next Up >")
   sizeArray = [
     [464, 311], ' My Media
-    [464, 311], ' Continue Watching
-    [464, 311]  ' Next Up
+    [464, 331], ' Continue Watching
+    [464, 331]  ' Next Up
   ]
   ' validate library data
   if (m.libraryData <> invalid and m.libraryData.count() > 0) then
@@ -101,8 +102,9 @@ function updateHomeRows()
 end function
 
 function updateContinueItems()
-  m.LoadContinueTask.unobserveField("content")
   itemData = m.LoadContinueTask.content
+  m.LoadContinueTask.unobserveField("content")
+  m.LoadContinueTask.content = []
 
   if itemData = invalid then return false
 
@@ -141,8 +143,9 @@ function updateContinueItems()
 end function
 
 function updateNextUpItems()
-  m.LoadNextUpTask.unobserveField("content")
   itemData = m.LoadNextUpTask.content
+  m.LoadNextUpTask.unobserveField("content")
+  m.LoadNextUpTask.content = []
 
   if itemData = invalid then return false
 
@@ -209,6 +212,7 @@ function updateLatestItems(msg)
   data = msg.getField()
   node = msg.getRoSGNode()
   node.unobserveField("content")
+  node.content = []
 
   if itemData = invalid then return false
 
@@ -309,7 +313,17 @@ function itemSelected()
 end function
 
 function onKeyEvent(key as string, press as boolean) as boolean
-  return false
+  handled = false
+  if press then
+    if key = "play" then
+      itemToPlay = m.top.content.getChild(m.top.rowItemFocused[0]).getChild(m.top.rowItemFocused[1])
+      if itemToPlay <> invalid and (itemToPlay.type = "Movie" or itemToPlay.type = "Episode") then
+        m.top.quickPlayNode = itemToPlay
+      end if
+      handled = true
+    end if
+  end if
+  return handled
 end function
 
 function filterNodeArray(nodeArray as object, nodeKey as string, excludeArray as object) as object

@@ -7,7 +7,7 @@
     <field id="Subtitles" type="array" />
     <field id="SelectedSubtitle" type="integer" />
     <field id="captionMode" type="string" />
-    <field id="transcodeParams" type="associativearray" />
+    <field id="transcodeParams" type="assocarray" />
     <field id="container" type="string" />
     <field id="directPlaySupported" type="boolean" />
     <field id="decodeAudioSupported" type="boolean" />

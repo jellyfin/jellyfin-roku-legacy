@@ -26,7 +26,7 @@ function VideoContent(video, audio_stream_idx = 1) as object
   ' If there is a last playback positon, ask user if they want to resume
   position = meta.json.UserData.PlaybackPositionTicks
   if position > 0 then
-    dialogResult = startPlaybackOver(position)
+    dialogResult = startPlayBackOver(position)
     'Dialog returns -1 when back pressed, 0 for resume, and 1 for start over
     if dialogResult = -1 then
       'User pressed back, return invalid and don't load video
@@ -34,6 +34,14 @@ function VideoContent(video, audio_stream_idx = 1) as object
     else if dialogResult = 1 then
       'Start Over selected, change position to 0
       position = 0
+    else if dialogResult = 2 then
+      'Mark this item as watched, refresh the page, and return invalid so we don't load the video
+      MarkItemWatched(video.id)
+      video.content.watched = not video.content.watched
+      group = m.scene.focusedChild
+      group.timeLastRefresh = CreateObject("roDateTime").AsSeconds()
+      group.callFunc("refresh")
+      return invalid
     end if
   end if
   video.content.PlayStart = int(position/10000000)
@@ -223,7 +231,11 @@ end function
 
 'Opens dialog asking user if they want to resume video or start playback over
 function startPlayBackOver(time as LongInteger) as integer
-  return option_dialog([ "Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning." ])
+  if m.scene.focusedChild.overhangTitle = "Home" then
+    return option_dialog([ "Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning.", "Watched"])
+  else
+    return option_dialog([ "Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning."])
+  endif
 end function
 
 function directPlaySupported(meta as object) as boolean
@@ -241,7 +253,12 @@ function directPlaySupported(meta as object) as boolean
     streamInfo.Profile = LCase(meta.json.MediaStreams[0].Profile)
   end if
   if meta.json.MediaSources[0].container <> invalid and meta.json.MediaSources[0].container.len() > 0  then
-    streamInfo.Container = meta.json.MediaSources[0].container
+    'CanDecodeVideo() requires the .container to be format: “mp4”, “hls”, “mkv”, “ism”, “dash”, “ts” if its to direct stream
+    if meta.json.MediaSources[0].container = "mov" then 
+        streamInfo.Container = "mp4"
+    else
+    	streamInfo.Container = meta.json.MediaSources[0].container
+    end if
   end if
   return devinfo.CanDecodeVideo(streamInfo).result
 end function
@@ -337,27 +354,32 @@ function displaySubtitlesByUserConfig(subtitleTrack, audioTrack)
   end if
 end function
 
-function playNextEpisode(videoID as string, showID as string)
-  ' query API for next episode ID
-  url = Substitute("Shows/{0}/Episodes", showID)
-  urlParams = { "UserId": get_setting("active_user")}
-  urlParams.Append({ "StartItemId": videoID })
-  urlParams.Append({ "Limit": 2 })
-  resp = APIRequest(url, urlParams)
-  data = getJson(resp)
-  
-  if data <> invalid and data.Items.Count() = 2 then
-    ' remove finished video node
-    n = m.scene.getChildCount() - 1
-    m.scene.removeChildIndex(n)
-    ' setup new video node
-    nextVideo = CreateVideoPlayerGroup(data.Items[1].Id)
-    m.scene.appendChild(nextVideo)
-    nextVideo.setFocus(true)
-    nextVideo.control = "play"
-    ReportPlayback(nextVideo, "start")
+function autoPlayNextEpisode(videoID as string, showID as string)
+  ' use web client setting
+  if m.user.Configuration.EnableNextEpisodeAutoPlay then
+    ' query API for next episode ID
+    url = Substitute("Shows/{0}/Episodes", showID)
+    urlParams = { "UserId": get_setting("active_user")}
+    urlParams.Append({ "StartItemId": videoID })
+    urlParams.Append({ "Limit": 2 })
+    resp = APIRequest(url, urlParams)
+    data = getJson(resp)
+    
+    if data <> invalid and data.Items.Count() = 2 then
+      ' remove finished video node
+      n = m.scene.getChildCount() - 1
+      m.scene.removeChildIndex(n)
+      ' setup new video node
+      nextVideo = CreateVideoPlayerGroup(data.Items[1].Id)
+      m.scene.appendChild(nextVideo)
+      nextVideo.setFocus(true)
+      nextVideo.control = "play"
+      ReportPlayback(nextVideo, "start")
+    else
+      ' can't play next episode
+      RemoveCurrentGroup()
+    end if
   else
-    ' can't play next episode
     RemoveCurrentGroup()
   end if
 end function

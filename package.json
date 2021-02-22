@@ -6,11 +6,12 @@
   "directories": {
     "test": "tests"
   },
-  "dependencies": {
+  "devDependencies": {
+    "brighterscript": "^0.30.1",
     "rooibos-cli": "^1.0.1"
   },
-  "devDependencies": {},
   "scripts": {
+    "validate": "npx bsc --copy-to-staging=false --create-package=false",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

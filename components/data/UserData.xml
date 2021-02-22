@@ -5,7 +5,7 @@
     <field id="username" type="string" />
     <field id="token" type="string" />
     <field id="server" type="string" />
-    <field id="json" type="associativearray" onChange="setDataFromJSON" />
+    <field id="json" type="assocarray" onChange="setDataFromJSON" />
     <function name="setServer" />
     <function name="getPreference" />
     <function name="setPreference" />

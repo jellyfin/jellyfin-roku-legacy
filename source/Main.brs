@@ -1,6 +1,7 @@
 sub Main()
 
   ' If the Rooibos files are included in deployment, run tests
+  'bs:disable-next-line
   if (type(Rooibos__Init) = "Function") then Rooibos__Init()
 
   ' The main function that runs when the application is launched.
@@ -80,6 +81,24 @@ sub Main()
         group.lastFocus.setFocus(true)
       else
         group.setFocus(true)
+      end if
+    else if isNodeEvent(msg, "quickPlayNode")
+      reportingNode = msg.getRoSGNode()
+      itemNode = reportingNode.quickPlayNode
+      if itemNode = invalid or itemNode.id = "" then return
+      if itemNode.type = "Episode" or itemNode.type = "Movie" or itemNode.type = "Video" then
+        video = CreateVideoPlayerGroup(itemNode.id)
+        if video <> invalid then
+          group.lastFocus = group.focusedChild
+          group.setFocus(false)
+          group.visible = false
+          group = video
+          m.scene.appendChild(group)
+          group.setFocus(true)
+          group.control = "play"
+          ReportPlayback(group, "start")
+          m.overhang.visible = false
+        end if
       end if
     else if isNodeEvent(msg, "selectedItem")
       ' If you select a library from ANYWHERE, follow this flow
@@ -404,7 +423,7 @@ sub Main()
           RemoveCurrentGroup()
         else
           MarkItemWatched(video.id)
-          playNextEpisode(video.id, video.showID)
+          autoPlayNextEpisode(video.id, video.showID)
         end if
       end if
     else if isNodeEvent(msg, "fire")
@@ -416,7 +435,7 @@ sub Main()
         if node.showID = invalid then
           RemoveCurrentGroup()
         else
-          playNextEpisode(node.id, node.showID)
+          autoPlayNextEpisode(node.id, node.showID)
         end if
       else if node.state = "playing" or node.state = "paused" then
         ReportPlayback(group, "update")

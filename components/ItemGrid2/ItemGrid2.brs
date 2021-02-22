@@ -162,6 +162,8 @@ sub ItemDataLoaded(msg)
 
   itemData = msg.GetData()
   data = msg.getField()
+  m.loadItemsTask.unobserveField("content")
+  m.loadItemsTask.content = []
 
   if itemData = invalid then
     m.Loading = false
@@ -258,6 +260,7 @@ sub loadMoreData()
 
   m.Loading = true
   m.loadItemsTask.startIndex = m.loadedItems
+  m.loadItemsTask.observeField("content", "ItemDataLoaded")
   m.loadItemsTask.control = "RUN"
 end sub
 
@@ -340,6 +343,13 @@ function onKeyEvent(key as string, press as boolean) as boolean
       optionsClosed()
       return true
     end if
+  else if key = "play" then
+    markupGrid = m.top.getChild(2)
+    itemToPlay = markupGrid.content.getChild(markupGrid.itemFocused)
+    if itemToPlay <> invalid and (itemToPlay.type = "Movie" or itemToPlay.type = "Episode") then
+      m.top.quickPlayNode = itemToPlay
+    end if
+    return true
   end if
   return false
 end function

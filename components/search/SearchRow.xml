@@ -2,7 +2,7 @@
 <component name="SearchRow" extends="RowList">
   <interface>
     <field id="rowSize" type="int" />
-    <field id="itemData" type="associativeArray" onChange="getData" />
+    <field id="itemData" type="assocarray" onChange="getData" />
     <field id="query" type="string" />
     <field id="itemSelected" type="int" />
   </interface>
