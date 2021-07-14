@@ -33,14 +33,14 @@ sub itemContentChanged()
   end if
 
   ' Format the Data based on the type of Home Data
-  if itemData.type = "CollectionFolder" OR itemData.type = "UserView"  OR itemData.type = "Channel" OR itemData.type = "Series" then
+  if itemData.type = "CollectionFolder" OR itemData.type = "UserView"  OR itemData.type = "Channel" OR itemData.type = "Series"
     m.itemText.text = itemData.name
     m.itemPoster.uri = itemData.widePosterURL
     m.itemPoster.loadDisplayMode = "scaleToFit"
     return
   end if
 
-  if itemData.type = "UserView" then
+  if itemData.type = "UserView"
     m.itemPoster.width = "96"
     m.itemPoster.height = "96"
     m.itemPoster.translation = "[192, 88]"
@@ -58,10 +58,10 @@ sub itemContentChanged()
   m.itemTextExtra.font.size = 22
 
 
-  if itemData.type = "Episode" then
+  if itemData.type = "Episode"
     m.itemText.text = itemData.json.SeriesName
 
-    if itemData.usePoster = true then
+    if itemData.usePoster = true
       m.itemPoster.uri = itemData.widePosterURL
     else
       m.itemPoster.uri = itemData.thumbnailURL
@@ -69,13 +69,13 @@ sub itemContentChanged()
 
     ' Set Series and Episode Number for Extra Text
     extraPrefix = ""
-    if itemData.json.ParentIndexNumber <> invalid then
+    if itemData.json.ParentIndexNumber <> invalid
       extraPrefix = "S" + StrI(itemData.json.ParentIndexNumber).trim()
     end if
-    if itemData.json.IndexNumber <> invalid then
+    if itemData.json.IndexNumber <> invalid
       extraPrefix = extraPrefix + "E" + StrI(itemData.json.IndexNumber).trim()
     end if
-    if extraPrefix.len() > 0 then
+    if extraPrefix.len() > 0
       extraPrefix = extraPrefix + " - "
     end if
 
@@ -83,7 +83,7 @@ sub itemContentChanged()
     return
   end if
 
-  if itemData.type = "Movie" then
+  if itemData.type = "Movie"
     m.itemText.text = itemData.name
 
     ' Use best image, but fallback to secondary if it's empty
@@ -95,11 +95,11 @@ sub itemContentChanged()
 
     ' Set Release Year and Age Rating for Extra Text
     textExtra = ""
-    if itemData.json.ProductionYear <> invalid then
+    if itemData.json.ProductionYear <> invalid
       textExtra = StrI(itemData.json.ProductionYear).trim()
     end if
-    if itemData.json.OfficialRating <> invalid then
-      if textExtra <> "" then
+    if itemData.json.OfficialRating <> invalid
+      if textExtra <> ""
         textExtra = textExtra + " - " + itemData.json.OfficialRating
       else
         textExtra = itemData.json.OfficialRating
@@ -110,7 +110,7 @@ sub itemContentChanged()
     return
   end if
 
-  if itemData.type = "TvChannel" then
+  if itemData.type = "TvChannel"
     m.itemText.text = itemData.json.name
 
     if itemData.imageWidth = 180
@@ -121,7 +121,7 @@ sub itemContentChanged()
     return
   end if
 
-  if itemData.type = "Video" then
+  if itemData.type = "Video"
     m.itemText.text = itemData.name
 
     if itemData.imageWidth = 180
@@ -131,12 +131,12 @@ sub itemContentChanged()
     end if
     return
   end if
-  if itemData.type = "Series" then
+  if itemData.type = "Series"
 
     m.itemText.text = itemData.name
 
-    if itemData.usePoster = true then
-      if itemData.imageWidth = 180 then
+    if itemData.usePoster = true
+      if itemData.imageWidth = 180
         m.itemPoster.uri = itemData.posterURL
       else
         m.itemPoster.uri = itemData.widePosterURL
@@ -146,12 +146,12 @@ sub itemContentChanged()
     end if
 
     textExtra = ""
-    if itemData.json.ProductionYear <> invalid then
+    if itemData.json.ProductionYear <> invalid
       textExtra = StrI(itemData.json.ProductionYear).trim()
     end if
 
     ' Set Years Run for Extra Text
-    if itemData.json.Status = "Continuing" then
+    if itemData.json.Status = "Continuing"
       textExtra = textExtra + " - Present"
     else if itemData.json.Status = "Ended" and itemData.json.EndDate <> invalid
       textExtra = textExtra + " - " + LEFT(itemData.json.EndDate, 4)
@@ -161,7 +161,7 @@ sub itemContentChanged()
     return
   end if
 
-  if itemData.type = "MusicAlbum" then
+  if itemData.type = "MusicAlbum"
     m.itemText.text = itemData.name
     m.itemTextExtra.text = itemData.json.AlbumArtist
     m.itemPoster.uri = itemData.posterURL
@@ -176,7 +176,7 @@ end sub
 ' Enable title scrolling based on item Focus
 sub focusChanged()
 
-  if m.top.itemHasFocus = true then
+  if m.top.itemHasFocus = true
     m.itemText.repeatCount = -1
   else
     m.itemText.repeatCount = 0
@@ -186,7 +186,7 @@ end sub
 
 'Hide backdrop and icon when poster loaded
 sub onPosterLoadStatusChanged()
-  if m.itemPoster.loadStatus = "ready" and m.itemPoster.uri <> ""  then
+  if m.itemPoster.loadStatus = "ready" and m.itemPoster.uri <> ""
     m.backdrop.visible = false
     m.itemIcon.visible = false
   else
