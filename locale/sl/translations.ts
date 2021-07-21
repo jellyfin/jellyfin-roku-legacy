@@ -70,7 +70,7 @@
     </message>
     <message>
         <source>Submit</source>
-        <translation type="unfinished">Oddaj</translation>
+        <translation>Pošlji</translation>
     </message>
     <message>
         <source>Watched</source>
@@ -106,11 +106,11 @@
     </message>
     <message>
         <source>Latest in</source>
-        <translation type="unfinished">Najnovejše</translation>
+        <translation>Najnovejše</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="unfinished">Domov</translation>
+        <translation>Domov</translation>
     </message>
     <message>
         <source>Enter a value...</source>
@@ -210,6 +210,210 @@
     <message>
         <source>Error Retrieving Content</source>
         <translation>Napaka pri pridobivanju vsebin</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>The requested content does not exist on the server</source>
+        <translation>Zahtevana vsebina ne obstaja na strežniku</translation>
+        <extracomment>Content of message box when the requested content is not found on the server</extracomment>
+    </message>
+    <message>
+        <source>Not found</source>
+        <translation>Ni najdeno</translation>
+        <extracomment>Title of message box when the requested content is not found on the server</extracomment>
+    </message>
+    <message>
+        <source>Connecting to Server</source>
+        <translation>Povezovanje s strežnikom</translation>
+        <extracomment>Message to display to user while client is attempting to connect to the server</extracomment>
+    </message>
+    <message>
+        <source>TV Guide</source>
+        <translation>TV vodič</translation>
+        <extracomment>Menu option for showing Live TV Guide / Schedule</extracomment>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation>Kanali</translation>
+        <extracomment>Menu option for showing Live TV Channel List</extracomment>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation>Ponovitev</translation>
+        <extracomment>If TV Shows has previously been broadcasted</extracomment>
+    </message>
+    <message>
+        <source>Live</source>
+        <translation>V živo</translation>
+        <extracomment>If TV Show is being broadcast live (not pre-recorded)</extracomment>
+    </message>
+    <message>
+        <source>Ends at</source>
+        <translation>Končano v</translation>
+        <extracomment>(Past Tense) For defining a day and time when a program ended  (e.g.  Ended Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Ended at</source>
+        <translation>Končano ob</translation>
+        <extracomment>(Past Tense) For defining time when a program will ended (e.g.  Ended at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Starts</source>
+        <translation>Prične v</translation>
+        <extracomment>(Future Tense) For defining a day and time when a program will start (e.g.  Starts Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Starts at</source>
+        <translation>Prične ob</translation>
+        <extracomment>(Future Tense) For defining time when a program will start today (e.g.  Starts at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation>Pričelo v</translation>
+        <extracomment>(Past Tense) For defining a day and time when a program started (e.g.  Started Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Started at</source>
+        <translation>Pričelo ob</translation>
+        <extracomment>(Past Tense) For defining time when a program started today (e.g.  Started at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Sobota</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>Petek</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Četrtek</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Sreda</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Torek</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation>Ponedeljek</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Nedelja</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation>jutri</translation>
+        <extracomment>Next day</extracomment>
+    </message>
+    <message>
+        <source>yesterday</source>
+        <translation>včeraj</translation>
+        <extracomment>Previous day</extracomment>
+    </message>
+    <message>
+        <source>today</source>
+        <translation>danes</translation>
+        <extracomment>Current day</extracomment>
+    </message>
+    <message>
+        <comment>Title of Tab for options to filter library content</comment>
+        <source>TAB_FILTER</source>
+        <translation>Filter</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to sort library content</comment>
+        <source>TAB_SORT</source>
+        <translation>Razvrsti</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for switching &quot;views&quot; when looking at a library</comment>
+        <source>TAB_VIEW</source>
+        <translation>Poglej</translation>
+    </message>
+    <message>
+        <source>RUNTIME</source>
+        <translation>Čas trajanja</translation>
+    </message>
+    <message>
+        <source>RELEASE_DATE</source>
+        <translation>Datum izida</translation>
+    </message>
+    <message>
+        <source>PLAY_COUNT</source>
+        <translation>Število predvajanj</translation>
+    </message>
+    <message>
+        <source>OFFICIAL_RATING</source>
+        <translation>Ocena za starše</translation>
+    </message>
+    <message>
+        <source>DATE_PLAYED</source>
+        <translation>Datum predvajanja</translation>
+    </message>
+    <message>
+        <source>DATE_ADDED</source>
+        <translation>Datum dodajanja</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Ocena kritikov</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>IMDb ocena</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Ime</translation>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation type="unfinished">Ta %1 ne vsebuje ničesar</translation>
+    </message>
+    <message>
+        <source>Unable to load Channel Data from the server</source>
+        <translation>Podatkov o kanalu ni mogoče pridobiti s strežnika</translation>
+    </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Napaka pri nalaganju podatkov o kanalu</translation>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Nalaganje podatkov o kanalu</translation>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>Pri predvajanju je prišlo do napake.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Pri pridobivanju vsebine s strežnika je prišlo do napake</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Napaka pri predvajanju</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Napaka pri pridobivanju vsebine</translation>
         <extracomment>Dialog title when unable to load Content from Server</extracomment>
     </message>
 </context>
