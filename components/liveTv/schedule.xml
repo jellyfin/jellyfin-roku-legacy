@@ -18,6 +18,8 @@
   </children>
   <interface>
         <field id="watchChannel" type="node" alwaysNotify="false" />
+        <field id="filter" type="string" value="All" onChange="channelFilterSet" />
+         <field id="sort" type="string" value="All" onChange="sortFilterSet" />
   </interface>
   <script type="text/brightscript" uri="schedule.brs" />
 </component>

@@ -1,92 +1,379 @@
 sub init()
-  m.posterMask = m.top.findNode("posterMask")
-  m.itemPoster = m.top.findNode("itemPoster")
-  m.itemIcon = m.top.findNode("itemIcon")
-  m.posterText = m.top.findNode("posterText")
-  m.itemText = m.top.findNode("itemText")
-  m.backdrop = m.top.findNode("backdrop")
 
-  m.itemPoster.observeField("loadStatus", "onPosterLoadStatusChanged")
+    m.options = m.top.findNode("options")
+    m.tvGuide = invalid
 
-  m.itemText.translation = [0, m.itemPoster.height + 7]
+    m.itemGrid = m.top.findNode("itemGrid")
+    m.backdrop = m.top.findNode("backdrop")
+    m.newBackdrop = m.top.findNode("backdropTransition")
+    m.emptyText = m.top.findNode("emptyText")
 
-  'Parent is MarkupGrid and it's parent is the ItemGrid
-  topParent = m.top.GetParent().GetParent()
-  'Get the imageDisplayMode for these grid items
-  if topParent.imageDisplayMode <> invalid
-    m.itemPoster.loadDisplayMode = topParent.imageDisplayMode
-  end if
+    m.swapAnimation = m.top.findNode("backroundSwapAnimation")
+    m.swapAnimation.observeField("state", "swapDone")
 
-end sub
+    m.loadedRows = 0
+    m.loadedItems = 0
 
-sub itemContentChanged()
+    m.data = CreateObject("roSGNode", "ContentNode")
 
-  ' Set Random background colors from pallet
-  posterBackgrounds = m.global.constants.poster_bg_pallet
-  m.backdrop.blendColor = posterBackgrounds[rnd(posterBackgrounds.count()) - 1]
+    m.itemGrid.content = m.data
+    m.itemGrid.setFocus(true)
 
-  itemData = m.top.itemContent
+    m.itemGrid.observeField("itemFocused", "onItemFocused")
+    m.itemGrid.observeField("itemSelected", "onItemSelected")
+    m.newBackdrop.observeField("loadStatus", "newBGLoaded")
 
-  if itemData = invalid then return
+    'Background Image Queued for loading
+    m.queuedBGUri = ""
 
-  if itemData.type = "Movie"
-    m.itemPoster.uri = itemData.PosterUrl
-    m.itemText.text = itemData.Title
-  else if itemData.type = "Series"
-    m.itemPoster.uri = itemData.PosterUrl
-    m.itemText.text = itemData.Title
-  else if itemData.type = "Boxset"
-    m.itemPoster.uri = itemData.PosterUrl
-    m.itemText.text = itemData.Title
-  else if itemData.type = "TvChannel"
-    m.itemPoster.uri = itemData.PosterUrl
-    m.itemText.text = itemData.Title
-  else if itemData.type = "Folder"
-    m.itemPoster.uri = itemData.PosterUrl
-    m.itemIcon.uri = itemData.iconUrl
-    m.itemText.text = itemData.Title
-  else if itemData.type = "Video"
-    m.itemPoster.uri = itemData.PosterUrl
-    m.itemText.text = itemData.Title
-  else
-    print "Unhandled Item Type: " + itemData.type
-  end if
+    'Item sort - maybe load defaults from user prefs?
+    m.sortField = "SortName"
+    m.sortAscending = true
+    m.filter = "All"
 
-  'If Poster not loaded, ensure "blue box" is shown until loaded
-  if m.itemPoster.loadStatus <> "ready"
-    m.backdrop.visible = true
-    m.posterText.visible = true
-  end if
-
-  m.posterText.text = m.itemText.text
+    m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
 
 end sub
 
 '
-'Use FocusPercent to animate scaling of Poser Image
-sub focusChanging()
-  scaleFactor = 0.85 + (m.top.focusPercent * 0.15)
-  m.posterMask.scale = [scaleFactor, scaleFactor]
+'Load initial set of Data
+sub loadInitialItems()
+
+    if m.top.parentItem.backdropUrl <> invalid
+        SetBackground(m.top.parentItem.backdropUrl)
+    end if
+
+    m.loadItemsTask.itemId = m.top.parentItem.Id
+    m.loadItemsTask.sortField = m.sortField
+    m.loadItemsTask.sortAscending = m.sortAscending
+    m.loadItemsTask.filter = m.filter
+    m.loadItemsTask.startIndex = 0
+    print "this is the inital sort " m.loadItemsTask.sortField
+    if m.top.parentItem.collectionType = "movies"
+        m.loadItemsTask.itemType = "Movie"
+    else if m.top.parentItem.collectionType = "tvshows"
+        m.loadItemsTask.itemType = "Series"
+    else if m.top.parentItem.collectionType = "livetv"
+        m.loadItemsTask.itemType = "LiveTV"
+
+        'For LiveTV, we want to "Fit" the item images, not zoom
+        m.top.imageDisplayMode = "scaleToFit"
+
+        if get_user_setting("display.livetv.landing") = "guide" and m.options.view <> "livetv"
+            showTvGuide()
+        end if
+
+    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
+        ' Non-recursive, to not show subfolder contents
+        m.loadItemsTask.recursive = false
+    else if m.top.parentItem.collectionType = "Channel"
+        m.top.imageDisplayMode = "scaleToFit"
+    else
+        print "[ItemGrid] Unknown Type: " m.top.parentItem
+    end if
+
+    m.loadItemsTask.observeField("content", "ItemDataLoaded")
+    m.loadItemsTask.control = "RUN"
+
+    SetUpOptions()
+
+end sub
+
+' Data to display when options button selected
+sub SetUpOptions()
+
+    options = {}
+    options.filter = []
+
+    'Movies
+    if m.top.parentItem.collectionType = "movies"
+        options.views = [
+            { "Title": tr("Movies"), "Name": "movies" },
+        ]
+        options.sort = [
+            { "Title": tr("TITLE"), "Name": "SortName" },
+            { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
+            { "Title": tr("CRITIC_RATING"), "Name": "CriticRating" },
+            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+            { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+            { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
+            { "Title": tr("PLAY_COUNT"), "Name": "PlayCount" },
+            { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+            { "Title": tr("RUNTIME"), "Name": "Runtime" }
+        ]
+        options.filter = [
+            { "Title": tr("All"), "Name": "All" },
+            { "Title": tr("Favorites"), "Name": "Favorites" }
+        ]
+        'Boxsets
+    else if m.top.parentItem.collectionType = "boxsets"
+        options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
+        options.sort = [
+            { "Title": tr("TITLE"), "Name": "SortName" },
+            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+            { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+            { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+        ]
+        options.filter = [
+            { "Title": tr("All"), "Name": "All" },
+            { "Title": tr("Favorites"), "Name": "Favorites" }
+        ]
+        'TV Shows
+    else if m.top.parentItem.collectionType = "tvshows"
+        options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
+        options.sort = [
+            { "Title": tr("TITLE"), "Name": "SortName" },
+            { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
+            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+            { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+            { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
+            { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+        ]
+        options.filter = [
+            { "Title": tr("All"), "Name": "All" },
+            { "Title": tr("Favorites"), "Name": "Favorites" }
+        ]
+        'Live TV
+    else if m.top.parentItem.collectionType = "livetv"
+        options.views = [
+            { "Title": tr("Channels"), "Name": "livetv" },
+            { "Title": tr("TV Guide"), "Name": "tvGuide", "Selected": get_user_setting("display.livetv.landing") = "guide" }
+        ]
+        options.sort = [
+            { "Title": tr("TITLE"), "Name": "SortName" }
+            { "Title": tr("Favorites"), "Name": "SortFavorite" }
+        ]
+        options.filter = [
+            { "Title": tr("All"), "Name": "All" },
+            { "Title": tr("Favorites"), "Name": "Favorites" }
+        ]
+    else
+        options.views = [
+            { "Title": tr("Default"), "Name": "default" }
+        ]
+        options.sort = [
+            { "Title": tr("TITLE"), "Name": "SortName" }
+        ]
+        options.filter = []
+    end if
+
+    for each o in options.sort
+        if o.Name = m.sortField
+            o.Selected = true
+            o.Ascending = m.sortAscending
+            print "Sort type Selected " m.sortField
+        end if
+    end for
+
+    for each o in options.filter
+        if o.Name = m.filter
+            o.Selected = true
+        end if
+    end for
+
+    m.options.options = options
+
+end sub
+
+
+'
+'Handle loaded data, and add to Grid
+sub ItemDataLoaded(msg)
+
+    itemData = msg.GetData()
+    m.loadItemsTask.unobserveField("content")
+    m.loadItemsTask.content = []
+
+    if itemData = invalid
+        m.Loading = false
+        return
+    end if
+
+    for each item in itemData
+        m.data.appendChild(item)
+    end for
+
+    'Update the stored counts
+    m.loadedItems = m.itemGrid.content.getChildCount()
+    m.loadedRows = m.loadedItems / m.itemGrid.numColumns
+    m.Loading = false
+
+    'If there are no items to display, show message
+    if m.loadedItems = 0
+        m.emptyText.text = tr("NO_ITEMS").Replace("%1", m.top.parentItem.Type)
+        m.emptyText.visible = true
+    end if
+
+    m.itemGrid.setFocus(true)
+
 end sub
 
 '
-'Display or hide title Visibility on focus change
-sub focusChanged()
+'Set Background Image
+sub SetBackground(backgroundUri as string)
 
-  if m.top.itemHasFocus = true
-    m.itemText.visible = true
-    m.itemText.repeatCount = -1
-  else
-    m.itemText.visible = false
-    m.itemText.repeatCount = 0
-  end if
+    'If a new image is being loaded, or transitioned to, store URL to load next
+    if m.swapAnimation.state <> "stopped" or m.newBackdrop.loadStatus = "loading"
+        m.queuedBGUri = backgroundUri
+        return
+    end if
 
+    m.newBackdrop.uri = backgroundUri
 end sub
 
-'Hide backdrop and text when poster loaded
-sub onPosterLoadStatusChanged()
-  if m.itemPoster.loadStatus = "ready"
-    m.backdrop.visible = false
-    m.posterText.visible = false
-  end if
+'
+'Handle new item being focused
+sub onItemFocused()
+
+    focusedRow = CInt(m.itemGrid.itemFocused / m.itemGrid.numColumns) + 1
+
+    itemInt = m.itemGrid.itemFocused
+
+    ' If no selected item, set background to parent backdrop
+    if itemInt = -1
+        return
+    end if
+
+    ' Set Background to item backdrop
+    SetBackground(m.itemGrid.content.getChild(m.itemGrid.itemFocused).backdropUrl)
+
+    ' Load more data if focus is within last 3 rows, and there are more items to load
+    if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.loadItemsTask.totalRecordCount
+        loadMoreData()
+    end if
 end sub
+
+'
+'When Image Loading Status changes
+sub newBGLoaded()
+    'If image load was sucessful, start the fade swap
+    if m.newBackdrop.loadStatus = "ready"
+        m.swapAnimation.control = "start"
+    end if
+end sub
+
+'
+'Swap Complete
+sub swapDone()
+
+    if m.swapAnimation.state = "stopped"
+
+        'Set main BG node image and hide transitioning node
+        m.backdrop.uri = m.newBackdrop.uri
+        m.backdrop.opacity = 0.25
+        m.newBackdrop.opacity = 0
+
+        'If there is another one to load
+        if m.newBackdrop.uri <> m.queuedBGUri and m.queuedBGUri <> ""
+            SetBackground(m.queuedBGUri)
+            m.queuedBGUri = ""
+        end if
+    end if
+end sub
+
+'
+'Load next set of items
+sub loadMoreData()
+
+    if m.Loading = true then return
+
+    m.Loading = true
+    m.loadItemsTask.startIndex = m.loadedItems
+    m.loadItemsTask.observeField("content", "ItemDataLoaded")
+    m.loadItemsTask.control = "RUN"
+end sub
+
+'
+'Item Selected
+sub onItemSelected()
+    m.top.selectedItem = m.itemGrid.content.getChild(m.itemGrid.itemSelected)
+end sub
+
+
+'
+'Check if options updated and any reloading required
+sub optionsClosed()
+
+    if m.options.view = "tvGuide"
+        showTVGuide()
+        return
+    else if m.tvGuide <> invalid
+        ' Try to hide the TV Guide
+        m.top.removeChild(m.tvGuide)
+    end if
+
+print "item grid m.options.sortField " m.options.sortField 
+print "item grid m.sortField " m.sortField
+
+    reload = false
+    if m.options.sortField <> m.sortField or m.options.sortAscending <> m.sortAscending
+        m.sortField = m.options.sortField
+        m.sortAscending = m.options.sortAscending
+        reload = true
+    end if
+    if m.options.filter <> m.filter
+        m.filter = m.options.filter
+        reload = true
+    end if
+    if reload
+        m.loadedRows = 0
+        m.loadedItems = 0
+        m.data = CreateObject("roSGNode", "ContentNode")
+        m.itemGrid.content = m.data
+        loadInitialItems()
+    end if
+    m.itemGrid.setFocus(true)
+end sub
+
+sub showTVGuide()
+    if m.tvGuide = invalid
+        m.tvGuide = createObject("roSGNode", "Schedule")
+        m.top.signalBeacon("EPGLaunchInitiate") ' Required Roku Performance monitoring
+    end if
+    m.tvGuide.observeField("watchChannel", "onChannelSelected")
+    m.tvGuide.filter = m.options.filter
+    m.tvGuide.sort = m.options.sortField
+    m.top.appendChild(m.tvGuide)
+    m.tvGuide.lastFocus.setFocus(true)
+end sub
+
+sub onChannelSelected(msg)
+    node = msg.getRoSGNode()
+    m.top.lastFocus = lastFocusedChild(node)
+    if node.watchChannel <> invalid
+        ' Clone the node when it's reused/update in the TimeGrid it doesn't automatically start playing
+        m.top.selectedItem = node.watchChannel.clone(false)
+    end if
+end sub
+
+function onKeyEvent(key as string, press as boolean) as boolean
+
+    if not press then return false
+
+    if key = "options"
+        if m.options.visible = true
+            m.options.visible = false
+            m.top.removeChild(m.options)
+            optionsClosed()
+        else
+            m.options.visible = true
+            m.top.appendChild(m.options)
+            m.options.setFocus(true)
+        end if
+        return true
+    else if key = "back"
+        if m.options.visible = true
+            m.options.visible = false
+            optionsClosed()
+            return true
+        end if
+    else if key = "play"
+        markupGrid = m.top.getChild(2)
+        itemToPlay = markupGrid.content.getChild(markupGrid.itemFocused)
+        if itemToPlay <> invalid and (itemToPlay.type = "Movie" or itemToPlay.type = "Episode")
+            m.top.quickPlayNode = itemToPlay
+        end if
+        return true
+    end if
+    return false
+end function

@@ -2,8 +2,10 @@
 
 <component name="LoadChannelsTask" extends="Task">
   <interface>
-    <field id="limit" type="integer" value="" />
+    <field id="limit" type="integer" value="36" />
     <field id="startIndex" type="integer" value="0" />
+    <field id="filter" type="string" value="All" />
+    <field id="sort" type="string" value="All" />
     
     <!-- Total records available from server-->
     <field id="channels" type="array" />
