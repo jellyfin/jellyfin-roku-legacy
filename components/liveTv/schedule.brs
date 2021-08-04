@@ -1,5 +1,6 @@
 sub init()
 
+    m.EPGLaunchCompleteSignaled = false
     m.scheduleGrid = m.top.findNode("scheduleGrid")
     m.detailsPane = m.top.findNode("detailsPane")
 
@@ -25,6 +26,31 @@ sub init()
     m.top.lastFocus = m.scheduleGrid
 
     m.channelIndex = {}
+end sub
+
+sub channelFilterSet()
+    print "Channel Filter set"
+    if m.top.filter <> invalid and m.LoadChannelsTask.filter <> m.top.filter
+        if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
+
+        m.LoadChannelsTask.filter = m.top.filter
+        m.LoadChannelsTask.control = "RUN"
+    end if
+
+end sub
+
+
+sub sortFilterSet()
+    print "sort Filter set"
+    if m.top.sort <> invalid  and m.LoadChannelsTask.sort <> m.top.sort
+        print "m.top.sort = " m.top.sort
+        print "m.LoadChannelsTask.sort = " m.LoadChannelsTask.sort
+        if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
+        print "reloading Guide"
+        m.LoadChannelsTask.sort = m.top.sort
+        m.LoadChannelsTask.control = "RUN"
+    end if
+
 end sub
 
 ' Initial list of channels loaded
@@ -55,7 +81,10 @@ sub onChannelsLoaded()
     m.LoadProgramDetailsTask.observeField("programDetails", "onProgramDetailsLoaded")
 
     m.scheduleGrid.setFocus(true)
-    m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
+    if m.EPGLaunchCompleteSignaled = false
+        m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
+        m.EPGLaunchCompleteSignaled = true
+    end if
     m.LoadChannelsTask.channels = []
 end sub
 
@@ -65,11 +94,11 @@ sub onScheduleLoaded()
     for each item in m.LoadScheduleTask.schedule
 
         channel = m.scheduleGrid.content.GetChild(m.channelIndex[item.ChannelId])
-        
-        if channel.PosterUrl <> "" then 
+
+        if channel.PosterUrl <> ""
             item.channelLogoUri = channel.PosterUrl
         end if
-        if channel.Title <> "" then 
+        if channel.Title <> ""
             item.channelName = channel.Title
         end if
 
@@ -88,14 +117,14 @@ sub onProgramFocused()
     m.detailsPane.channel = channel
 
     ' Exit if Channels not yet loaded
-    if channel.getChildCount() = 0 then
+    if channel.getChildCount() = 0
         m.detailsPane.programDetails = invalid
         return
     end if
 
     prog = channel.GetChild(m.scheduleGrid.programFocusedDetails.focusIndex)
 
-    if prog <> invalid and prog.fullyLoaded = false then
+    if prog <> invalid and prog.fullyLoaded = false
         m.LoadProgramDetailsTask.programId = prog.Id
         m.LoadProgramDetailsTask.channelIndex = m.scheduleGrid.programFocusedDetails.focusChannelIndex
         m.LoadProgramDetailsTask.programIndex = m.scheduleGrid.programFocusedDetails.focusIndex
@@ -107,11 +136,11 @@ end sub
 
 ' Update the Program Details with full information
 sub onProgramDetailsLoaded()
-    if m.LoadProgramDetailsTask.programDetails = invalid then return 
+    if m.LoadProgramDetailsTask.programDetails = invalid then return
     channel = m.scheduleGrid.content.GetChild(m.LoadProgramDetailsTask.programDetails.channelIndex)
 
     ' If TV Show does not have its own image, use the channel logo
-    if m.LoadProgramDetailsTask.programDetails.PosterUrl = invalid or m.LoadProgramDetailsTask.programDetails.PosterUrl = "" then
+    if m.LoadProgramDetailsTask.programDetails.PosterUrl = invalid or m.LoadProgramDetailsTask.programDetails.PosterUrl = ""
         m.LoadProgramDetailsTask.programDetails.PosterUrl = channel.PosterUrl
     end if
 
@@ -122,7 +151,7 @@ end sub
 
 sub onProgramSelected()
     ' If there is no program data - view the channel
-    if m.detailsPane.programDetails = invalid then
+    if m.detailsPane.programDetails = invalid
         m.top.watchChannel = m.scheduleGrid.content.GetChild(m.scheduleGrid.programFocusedDetails.focusChannelIndex)
         return
     end if
@@ -132,20 +161,20 @@ sub onProgramSelected()
 end sub
 
 ' Move the TV Guide Grid down or up depending whether details are selected
-sub focusProgramDetails(setFocused) 
+sub focusProgramDetails(setFocused)
 
     h = m.detailsPane.height
     if h < 400 then h = 400
     h = h + 160 + 80
 
-    if setFocused = true then
-        m.gridMoveAnimationPosition.keyValue = [ [0,600], [0, h] ]
+    if setFocused = true
+        m.gridMoveAnimationPosition.keyValue = [[0, 600], [0, h]]
         m.detailsPane.setFocus(true)
         m.detailsPane.hasFocus = true
         m.top.lastFocus = m.detailsPane
     else
         m.detailsPane.hasFocus = false
-        m.gridMoveAnimationPosition.keyValue = [ [0, h], [0,600] ]
+        m.gridMoveAnimationPosition.keyValue = [[0, h], [0, 600]]
         m.scheduleGrid.setFocus(true)
         m.top.lastFocus = m.scheduleGrid
     end if
@@ -159,7 +188,7 @@ sub onWatchChannelSelected()
     if m.detailsPane.watchSelectedChannel = false then return
 
     ' Set focus back to grid before showing channel, to ensure grid has focus when we return
-    focusProgramDetails(false) 
+    focusProgramDetails(false)
 
     m.top.watchChannel = m.detailsPane.channel
 end sub
@@ -168,10 +197,10 @@ end sub
 sub onGridScrolled()
 
     ' If we're within 12 hours of end of grid, load next 24hrs of data
-    if m.scheduleGrid.leftEdgeTargetTime + (12 * 60 * 60) > m.gridEndDate.AsSeconds() then
+    if m.scheduleGrid.leftEdgeTargetTime + (12 * 60 * 60) > m.gridEndDate.AsSeconds()
 
-        ' Ensure the task is not already (still) running, 
-        if  m.LoadScheduleTask.state <> "run" then 
+        ' Ensure the task is not already (still) running,
+        if m.LoadScheduleTask.state <> "run"
             m.LoadScheduleTask.startTime = m.gridEndDate.ToISOString()
             m.gridEndDate.FromSeconds(m.gridEndDate.AsSeconds() + (24 * 60 * 60))
             m.LoadScheduleTask.endTime = m.gridEndDate.ToISOString()
@@ -183,7 +212,7 @@ end sub
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
 
-    if key = "back" and m.detailsPane.isInFocusChain() then
+    if key = "back" and m.detailsPane.isInFocusChain()
         focusProgramDetails(false)
         return true
     end if
