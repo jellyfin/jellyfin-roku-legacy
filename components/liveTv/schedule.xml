@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="Schedule" extends="JFGroup">
   <children>
-    <rectangle translation="[0,125]" width="1920" height="955" color="#262626" />
+    <rectangle translation="[0,150]" width="1920" height="930" color="#262626" />
 
     <!-- Selected Item Details -->
     <ProgramDetails id="detailsPane" focusable="true" />

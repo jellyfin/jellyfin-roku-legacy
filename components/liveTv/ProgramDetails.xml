@@ -3,8 +3,8 @@
     <children>
 
         <!-- Selected Item Details -->
-        <maskGroup id="backgroundMask" maskUri="pkg:/images/backgroundmask.png" translation="[1208, 127]" maskSize="[712,400]">
-            <Poster id="image" height="400" width="712" loadDisplayMode="scaleToFit" />
+        <maskGroup id="backgroundMask" maskUri="pkg:/images/backgroundmask.png" translation="[1320, 150]" maskSize="[500,375]">
+            <Poster id="image" height="375" width="500" loadDisplayMode="scaleToFit" />
         </maskGroup>
 
         <Group id="detailsView" visible="false">
@@ -32,7 +32,7 @@
                         <Label id="channelName" />
                     </LayoutGroup>
 
-                    <label id="overview" wrap="true" width="1250" font="font:SmallestSystemFont" />
+                    <label id="overview" wrap="true" width="1210" font="font:SmallestSystemFont" />
     
                     <!-- View Channel button -->
                     <Group id="viewChannelButton" opacity="0">
