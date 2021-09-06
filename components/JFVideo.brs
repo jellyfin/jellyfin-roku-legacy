@@ -1,10 +1,13 @@
 sub init()
+    m.playbackTimer = m.top.findNode("playbackTimer")
+    m.bufferCheckTimer = m.top.findNode("bufferCheckTimer")
     m.top.observeField("state", "onState")
+    m.playbackTimer.observeField("fire", "ReportPlayback")
     m.bufferPercentage = 0 ' Track whether content is being loaded
+    m.playReported = false
     m.top.transcodeReasons = []
 
 end sub
-
 
 '
 ' When Video Player state changes
@@ -14,11 +17,9 @@ sub onState(msg)
     if m.top.state = "buffering" and m.bufferCheckTimer <> invalid
 
         ' start timer
-        m.bufferCheckTimer = m.top.findNode("bufferCheckTimer")
         m.bufferCheckTimer.control = "start"
         m.bufferCheckTimer.ObserveField("fire", "bufferCheck")
     else if m.top.state = "error"
-
         ' If an error was encountered, Display dialog
         dialog = createObject("roSGNode", "Dialog")
         dialog.title = tr("Error During Playback")
@@ -30,8 +31,48 @@ sub onState(msg)
         ' Stop playback and exit player
         m.top.control = "stop"
         m.top.backPressed = true
+    else if m.top.state = "playing"
+        if m.playReported = false
+            ReportPlayback("start")
+            m.playReported = true
+        else
+            m.playbackTimer.control = "start"
+            ReportPlayback()
+        end if
+    else if m.top.state = "paused"
+        m.playbackTimer.control = "stop"
+        ReportPlayback()
+    else if m.top.state = "stopped"
+        m.playbackTimer.control = "stop"
+        ReportPlayback("stop")
+        m.playReported = false
     end if
 
+end sub
+
+'
+' Report playback to server
+sub ReportPlayback(state = "update" as string)
+
+    if m.top.position = invalid then return
+
+    params = {
+        "ItemId": m.top.id
+        "PlaySessionId": m.top.PlaySessionId,
+        "PositionTicks": int(m.top.position) * 10000000&, 'Ensure a LongInteger is used
+        "IsPaused": (m.top.state = "paused"),
+    }
+    if m.top.content.live
+        params.append({
+            "MediaSourceId": m.top.transcodeParams.MediaSourceId,
+            "LiveStreamId": m.top.transcodeParams.LiveStreamId
+        })
+    end if
+
+    ' Report playstate via worker task
+    playstateTask = m.global.playstateTask
+    playstateTask.setFields({ status: state, params: params })
+    playstateTask.control = "RUN"
 end sub
 
 '

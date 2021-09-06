@@ -295,13 +295,9 @@ function CreateVideoPlayerGroup(video_id, audio_stream_idx = 1)
     ' Video is Playing
     video = VideoPlayer(video_id, audio_stream_idx)
     if video = invalid then return invalid
-    timer = video.findNode("playbackTimer")
-
     video.observeField("backPressed", m.port)
     video.observeField("selectSubtitlePressed", m.port)
     video.observeField("state", m.port)
-    timer.control = "start"
-    timer.observeField("fire", m.port)
 
     return video
 end function

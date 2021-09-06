@@ -17,7 +17,11 @@ sub Main (args as dynamic) as void
 
     ' Set any initial Global Variables
     m.global = m.screen.getGlobalNode()
-    m.global.addFields({ app_loaded: false })
+
+    playstateTask = CreateObject("roSGNode", "PlaystateTask")
+    playstateTask.id = "playstateTask"
+
+    m.global.addFields({ app_loaded: false, playstateTask: playstateTask })
 
     m.overhang = CreateObject("roSGNode", "JFOverhang")
     m.scene.insertChild(m.overhang, 0)
@@ -62,7 +66,6 @@ sub Main (args as dynamic) as void
             m.scene.appendChild(group)
             group.setFocus(true)
             group.control = "play"
-            ReportPlayback(group, "start")
             m.overhang.visible = false
         else
             dialog = createObject("roSGNode", "Dialog")
@@ -120,7 +123,6 @@ sub Main (args as dynamic) as void
                     m.scene.appendChild(group)
                     group.setFocus(true)
                     group.control = "play"
-                    ReportPlayback(group, "start")
                     m.overhang.visible = false
                 end if
             end if
@@ -139,6 +141,7 @@ sub Main (args as dynamic) as void
                 ' play episode
                 ' todo: create an episode page to link here
                 video_id = selectedItem.id
+                m.scene.unobserveField("optionsPressed")
                 video = CreateVideoPlayerGroup(video_id)
                 if video <> invalid
                     group.lastFocus = group.focusedChild
@@ -148,7 +151,6 @@ sub Main (args as dynamic) as void
                     m.scene.appendChild(group)
                     group.setFocus(true)
                     group.control = "play"
-                    ReportPlayback(group, "start")
                     m.overhang.visible = false
                 end if
             else if selectedItem.type = "Series"
@@ -184,6 +186,7 @@ sub Main (args as dynamic) as void
                 dialog.title = tr("Loading Channel Data")
                 m.scene.dialog = dialog
 
+                m.scene.unobserveField("optionsPressed")
                 video = CreateVideoPlayerGroup(video_id)
                 dialog.close = true
 
@@ -195,7 +198,6 @@ sub Main (args as dynamic) as void
                     m.scene.appendChild(group)
                     group.setFocus(true)
                     group.control = "play"
-                    ReportPlayback(group, "start")
                     m.overhang.visible = false
                 else
                     dialog = createObject("roSGNode", "Dialog")
@@ -258,6 +260,7 @@ sub Main (args as dynamic) as void
             ' If you select a TV Episode from ANYWHERE, follow this flow
             node = getMsgPicker(msg, "picker")
             video_id = node.id
+            m.scene.unobserveField("optionsPressed")
             video = CreateVideoPlayerGroup(video_id)
             if video <> invalid
                 group.lastFocus = group.focusedChild
@@ -267,7 +270,6 @@ sub Main (args as dynamic) as void
                 m.scene.appendChild(group)
                 group.setFocus(true)
                 group.control = "play"
-                ReportPlayback(group, "start")
                 m.overhang.visible = false
             end if
         else if isNodeEvent(msg, "search_value")
@@ -323,7 +325,6 @@ sub Main (args as dynamic) as void
                     m.scene.appendChild(group)
                     group.setFocus(true)
                     group.control = "play"
-                    ReportPlayback(group, "start")
                     m.overhang.visible = false
                 end if
             else if btn <> invalid and btn.id = "watched-button"
@@ -399,8 +400,6 @@ sub Main (args as dynamic) as void
                     changeSubtitleDuringPlayback(trackSelected)
                 end if
             end if
-        else if isNodeEvent(msg, "fire")
-            ReportPlayback(group, "update")
         else if isNodeEvent(msg, "state")
             node = msg.getRoSGNode()
             if node.state = "finished"
@@ -411,8 +410,6 @@ sub Main (args as dynamic) as void
                     nextEpisode = autoPlayNextEpisode(node.id, node.showID)
                     if nextEpisode <> invalid then group = nextEpisode
                 end if
-            else if node.state = "playing" or node.state = "paused"
-                ReportPlayback(group, "update")
             end if
         else if type(msg) = "roDeviceInfoEvent"
             event = msg.GetInfo()
@@ -441,7 +438,6 @@ sub Main (args as dynamic) as void
                         m.scene.appendChild(group)
                         group.setFocus(true)
                         group.control = "play"
-                        ReportPlayback(group, "start")
                         m.overhang.visible = false
                     else
                         dialog = createObject("roSGNode", "Dialog")

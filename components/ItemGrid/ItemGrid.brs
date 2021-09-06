@@ -395,9 +395,9 @@ sub showTVGuide()
     if m.tvGuide = invalid
         m.tvGuide = createObject("roSGNode", "Schedule")
         m.top.signalBeacon("EPGLaunchInitiate") ' Required Roku Performance monitoring
+        m.tvGuide.observeField("watchChannel", "onChannelSelected")
     end if
-    m.tvGuide.observeField("watchChannel", "onChannelSelected")
-    m.tvGuide.filter = m.filter
+    m.tvGuide.filter = m.options.filter
     m.top.appendChild(m.tvGuide)
     m.tvGuide.lastFocus.setFocus(true)
 end sub

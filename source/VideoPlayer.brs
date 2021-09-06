@@ -208,30 +208,10 @@ function getAudioInfo(meta as object) as object
     return results
 end function
 
-sub ReportPlayback(video, state = "update" as string)
-
-    if video = invalid or video.position = invalid then return
-
-    params = {
-        "PlaySessionId": video.PlaySessionId,
-        "PositionTicks": int(video.position) * 10000000&, 'Ensure a LongInteger is used
-        "IsPaused": (video.state = "paused"),
-    }
-    if video.content.live
-        params.append({
-            "MediaSourceId": video.transcodeParams.MediaSourceId,
-            "LiveStreamId": video.transcodeParams.LiveStreamId
-        })
-    end if
-    PlaystateUpdate(video.id, state, params)
-end sub
-
 sub StopPlayback()
     video = m.scene.focusedchild
     video.control = "stop"
     m.device.EnableAppFocusEvent(False)
-    video.findNode("playbackTimer").control = "stop"
-    ReportPlayback(video, "stop")
 end sub
 
 function autoPlayNextEpisode(videoID as string, showID as string)
@@ -254,7 +234,6 @@ function autoPlayNextEpisode(videoID as string, showID as string)
             m.scene.appendChild(nextVideo)
             nextVideo.setFocus(true)
             nextVideo.control = "play"
-            ReportPlayback(nextVideo, "start")
             return nextVideo
         else
             ' can't play next episode
