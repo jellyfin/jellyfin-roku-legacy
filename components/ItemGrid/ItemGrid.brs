@@ -44,6 +44,34 @@ sub loadInitialItems()
         SetBackground(m.top.parentItem.backdropUrl)
     end if
 
+    ' Read view/sort/filter settings
+    if m.top.parentItem.collectionType = "livetv"
+        ' Translate between app and server nomenclature
+        viewSetting = get_user_setting("display.livetv.landing")
+        if viewSetting = "guide"
+            m.view = "tvGuide"
+        else
+            m.view = "livetv"
+        end if
+        m.sortField = get_user_setting("display.livetv.sortField")
+        sortAscendingStr = get_user_setting("display.livetv.sortAscending")
+        m.filter = get_user_setting("display.livetv.filter")
+    else
+        m.view = invalid
+        m.sortField = get_user_setting("display." + m.top.parentItem.Id + ".sortField")
+        sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
+        m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
+    end if
+
+    if m.sortField = invalid then m.sortField = "SortName"
+    if m.filter = invalid then m.filter = "All"
+
+    if sortAscendingStr = invalid or sortAscendingStr = "true"
+        m.sortAscending = true
+    else
+        m.sortAscending = false
+    end if
+
     m.loadItemsTask.itemId = m.top.parentItem.Id
     m.loadItemsTask.sortField = m.sortField
     m.loadItemsTask.sortAscending = m.sortAscending
@@ -138,7 +166,7 @@ sub SetUpOptions()
     else if m.top.parentItem.collectionType = "livetv"
         options.views = [
             { "Title": tr("Channels"), "Name": "livetv" },
-            { "Title": tr("TV Guide"), "Name": "tvGuide", "Selected": get_user_setting("display.livetv.landing") = "guide" }
+            { "Title": tr("TV Guide"), "Name": "tvGuide" }
         ]
         options.sort = [
             { "Title": tr("TITLE"), "Name": "SortName" }
@@ -157,16 +185,26 @@ sub SetUpOptions()
         options.filter = []
     end if
 
+    for each o in options.views
+        if o.Name = m.view
+            o.Selected = true
+            o.Ascending = m.sortAscending
+            m.options.view = o.Name
+        end if
+    end for
+
     for each o in options.sort
         if o.Name = m.sortField
             o.Selected = true
             o.Ascending = m.sortAscending
+            m.options.sortField = o.Name
         end if
     end for
 
     for each o in options.filter
         if o.Name = m.filter
             o.Selected = true
+            m.options.filter = o.Name
         end if
     end for
 
@@ -293,12 +331,22 @@ end sub
 'Check if options updated and any reloading required
 sub optionsClosed()
 
-    if m.options.view = "tvGuide"
-        showTVGuide()
-        return
-    else if m.tvGuide <> invalid
-        ' Try to hide the TV Guide
-        m.top.removeChild(m.tvGuide)
+    if m.top.parentItem.collectionType = "livetv" and m.options.view <> m.view
+        if m.options.view = "tvGuide"
+            m.view = "tvGuide"
+            set_user_setting("display.livetv.landing", "guide")
+            showTVGuide()
+            return
+        else
+            m.view = "livetv"
+            set_user_setting("display.livetv.landing", "channels")
+
+            if m.tvGuide <> invalid
+                ' Try to hide the TV Guide
+                m.top.removeChild(m.tvGuide)
+            end if
+        end if
+
     end if
 
     reload = false
@@ -306,10 +354,32 @@ sub optionsClosed()
         m.sortField = m.options.sortField
         m.sortAscending = m.options.sortAscending
         reload = true
+
+        'Store sort settings
+        if m.sortAscending = true
+            sortAscendingStr = "true"
+        else
+            sortAscendingStr = "false"
+        end if
+
+        if m.top.parentItem.collectionType = "livetv"
+            set_user_setting("display.livetv.sortField", m.sortField)
+            set_user_setting("display.livetv.sortAscending", sortAscendingStr)
+        else
+            set_user_setting("display." + m.top.parentItem.Id + ".sortField", m.sortField)
+            set_user_setting("display." + m.top.parentItem.Id + ".sortAscending", sortAscendingStr)
+        end if
     end if
     if m.options.filter <> m.filter
         m.filter = m.options.filter
         reload = true
+
+        'Store filter setting
+        if m.top.parentItem.collectionType = "livetv"
+            set_user_setting("display.livetv.filter", m.options.filter)
+        else
+            set_user_setting("display." + m.top.parentItem.Id + ".filter", m.options.filter)
+        end if
     end if
     if reload
         m.loadedRows = 0
@@ -327,7 +397,7 @@ sub showTVGuide()
         m.top.signalBeacon("EPGLaunchInitiate") ' Required Roku Performance monitoring
     end if
     m.tvGuide.observeField("watchChannel", "onChannelSelected")
-    m.tvGuide.filter = m.options.filter
+    m.tvGuide.filter = m.filter
     m.top.appendChild(m.tvGuide)
     m.tvGuide.lastFocus.setFocus(true)
 end sub
