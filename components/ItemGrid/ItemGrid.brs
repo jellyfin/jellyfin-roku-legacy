@@ -389,6 +389,10 @@ sub optionsClosed()
         loadInitialItems()
     end if
     m.itemGrid.setFocus(true)
+    if m.tvGuide <> invalid
+        m.tvGuide.lastFocus.setFocus(true)
+    end if
+    stop
 end sub
 
 sub showTVGuide()
