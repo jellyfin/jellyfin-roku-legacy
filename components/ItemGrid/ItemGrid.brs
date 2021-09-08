@@ -392,7 +392,6 @@ sub optionsClosed()
     if m.tvGuide <> invalid
         m.tvGuide.lastFocus.setFocus(true)
     end if
-    stop
 end sub
 
 sub showTVGuide()
