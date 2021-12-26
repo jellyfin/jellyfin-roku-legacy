@@ -281,6 +281,10 @@ sub Main (args as dynamic) as void
                     autoPlayNextEpisode(node.id, node.showID)
                 end if
             end if
+        else if isNodeEvent(msg, "personShowSelected")
+            sceneManager.callFunc("popScene")
+        else if isNodeEvent(msg, "selectedPerson")
+            CreatePersonView(msg.getData())
         else if type(msg) = "roDeviceInfoEvent"
             event = msg.GetInfo()
             group = sceneManager.callFunc("getActiveScene")

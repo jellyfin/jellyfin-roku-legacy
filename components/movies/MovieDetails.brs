@@ -1,14 +1,15 @@
 sub init()
+    m.extrasGrp = m.top.findnode("extrasGrp")
+    m.peopleGrid = m.top.findNode("peopleGrid")
     m.top.optionsAvailable = false
+    m.main_group = m.top.findNode("main_group")
     m.options = m.top.findNode("options")
-
     main = m.top.findNode("main_group")
     main.translation = [96, 175]
-
     overview = m.top.findNode("overview")
     overview.width = 1920 - 96 - 300 - 96 - 30
-
-    m.top.findNode("buttons").setFocus(true)
+    m.buttonGrp = m.top.findNode("buttons")
+    m.buttonGrp.setFocus(true)
 end sub
 
 sub itemContentChanged()
@@ -85,6 +86,11 @@ sub itemContentChanged()
     if itemData.taglines.count() > 0
         setFieldText("tagline", itemData.taglines[0])
     end if
+    ' Populate "Extras RowGrids"
+    'm.peopleGrid.itemContent = itemData
+    'm.peopleGrid.visible = true
+    m.extrasPos = m.peopleGrid.Translation
+
     setFavoriteColor()
     setWatchedColor()
     SetUpOptions(itemData.mediaStreams)
@@ -125,6 +131,7 @@ sub setFieldText(field, value)
 end sub
 
 function getRuntime() as integer
+
     itemData = m.top.itemContent.json
 
     ' A tick is .1ms, so 1/10,000,000 for ticks to seconds,
@@ -199,6 +206,28 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if key = "OK" and m.top.findNode("audio-button").isInFocusChain()
         m.options.visible = true
         m.options.setFocus(true)
+    end if
+
+    vs = m.top.findNode("VertSlider")
+
+    if key = "down" and m.buttonGrp.isInFocusChain() then
+        m.peopleGrid.setFocus(true)
+        'm.main_group.visible = false
+        'm.peopleGrid.Translation = [30, 180]
+        vs.reverse = false
+        m.top.findNode("pplAnime").control = "start"
+        return true
+    end if
+
+    if key = "up" and m.top.findNode("PeopleGrid").isInFocusChain() then
+        if m.peopleGrid.itemFocused = 0
+            'm.peopleGrid.Translation = [ 30, 960 ]
+            'm.main_group.visible = true
+            vs.reverse = true
+            m.top.findNode("pplAnime").control = "start"
+            m.buttonGrp.setFocus(true)
+            return true
+        end if
     end if
 
     if not press then return false

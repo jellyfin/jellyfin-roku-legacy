@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- The "ContentNode" for displaying the actual Extras Item -->
+<component name="ExtrasData" extends="ContentNode">
+  <interface>
+    <field id="subTitle" type="string" />
+    <field id="labelText" type="string" />
+    <field id="posterUrl" type="string" />
+  </interface>
+</component>

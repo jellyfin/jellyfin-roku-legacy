@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- The top-Level RowList for the Extras rows -->
+<component name="ExtrasRowList" extends="RowList">
+  <interface>
+    <field id="parentId" type="string" />
+    <field id="selectedPerson" type="node" alwaysNotify="true" />
+    <field id="itemContent" type="assocarray" onChange="setUpRows" />
+  </interface>
+  <script type="text/brightscript" uri="ExtrasRowList.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+</component>

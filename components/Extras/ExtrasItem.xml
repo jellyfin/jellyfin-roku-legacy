@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="ExtrasItem" extends="JFGroup">
+  <interface>
+    <field id="itemContent" type="node" onChange="showContent" />
+    <!--<field id="Type" type="string" />
+    <field id="labelText" type="string" onChange="setLabel" />
+    <field id="subTitle" type="string" onChange="setSubTtl" />
+    <field id="posterUrl" type="string" onChange="setPoster" />-->
+  </interface>
+  <script type="text/brightscript">
+  <![CDATA[
+    function init() as void
+      m.posterImg = m.top.findNode("posterImg")
+      m.name = m.top.findNode("pLabel")
+      m.role = m.top.findNode("subTitle")
+    end function
+
+    sub setLabel()
+        m.name.text = m.top.labelText
+    end sub
+
+    sub setSubTtl()
+        m.role.text = m.top.subTitle
+    end sub
+
+    sub setPoster()
+        m.posterImg.uri = m.top.posterUrl
+        ? m.posterImg.uri
+    end sub
+
+    sub showContent()
+      if m.top.itemContent <> Invalid
+        cont = m.top.itemContent
+        m.name.text = cont.labelText
+        m.posterImg.uri = cont.posterUrl
+        m.role.Text = cont.subTitle
+      else
+        m.role.text = "Who??"
+        m.posterImg.uri = "pkg:/images/baseline_person_white_48dp.png"
+      end if
+      ? m.name.text, m.role.text, m.posterimg.uri
+    end sub
+  ]]>
+  </script>
+  <children>
+    <LayoutGroup layoutDirection="vert" >
+      <Poster id="posterImg" width="200" height="240" />
+      <Label id="pLabel" />
+      <Label id="SubTitle" />
+    </LayoutGroup>
+  </children>
+</component>

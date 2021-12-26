@@ -15,9 +15,9 @@
             <Label id="communityRating" />
           </LayoutGroup>
           <LayoutGroup layoutDirection="horiz" itemSpacings="[-5]" id="criticRatingGroup">
-             <Poster id="criticRatingIcon" height="32" width="32" />
-             <Label id="criticRatingLabel" />
-           </LayoutGroup>
+            <Poster id="criticRatingIcon" height="32" width="32" />
+            <Label id="criticRatingLabel" />
+          </LayoutGroup>
           <Label id="ends-at" />
         </LayoutGroup>
         <Label id="genres" />
@@ -32,9 +32,27 @@
         </ButtonGroupHoriz>
         <Label id="tagline" />
         <Label id="overview" wrap="true" maxLines="8" />
-
       </LayoutGroup>
     </LayoutGroup>
+        
+    <!-- "Cast and Crew" row -->
+    <Rectangle id="extrasGrp" color="#1000208F" width="1920" height="900" translation="[30, 960]" opacity="1.0" >
+      <ExtrasRowList id="peopleGrid"
+        itemSpacing="[ 60, 132]"
+        rowLabelOffset="[ [9, 30] ]"
+        numRows="2"
+        showRowLabel="true"
+        showRowCounter="true"
+        visible="true"
+        itemComponentName="ExtrasItem" />
+      <Animation id="pplAnime" duration=".4" repeat="false" >
+      <Vector2DFieldInterpolator
+        id="VertSlider"
+        key="[0.0, 0.25, 0.50, 75.0, 1.0]"
+        keyValue="[[30, 960], [30, 765], [30, 570], [30,375 ], [30, 180]]"
+        fieldToInterp="extrasGrp.translation" />
+      </Animation>
+    </Rectangle>
     <MovieOptions id="options" visible="false" />
   </children>
   <interface>
