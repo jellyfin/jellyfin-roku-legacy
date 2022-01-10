@@ -306,8 +306,10 @@ function CreateMovieDetailsGroup(movie)
         b.observeField("buttonSelected", m.port)
     end for
 
-    extras = group.findNode("peopleGrid")
-    extras.itemContent = movie.json
+    extras = group.findNode("extrasGrid")
+    extras.observeField("selectedExtra", m.port)
+    'extras.itemContent = movie.json
+    extras.callFunc("loadPeople", movie.json)
 
     return group
 end function

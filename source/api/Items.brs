@@ -112,6 +112,11 @@ function ItemMetaData(id as string)
         tmp.image = PosterImage(data.id)
         tmp.json = data
         return tmp
+    else if data.type = "Person"
+        tmp = CreateObject("roSGNode", "ExtrasData")
+        tmp.image = PosterImage(data.id)
+        tmp.json = data
+        return tmp
     else
         print "Items.brs::ItemMetaData processed unhandled type: " data.type
         ' Return json if we don't know what it is

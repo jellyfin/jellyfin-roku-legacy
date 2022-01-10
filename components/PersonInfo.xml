@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="PersonInfo" extends="Group">
+  <interface>
+    <field id="personData" type="assocarray" />
+    <function name="loadPerson" />
+  </interface>
+  <children>
+    <LayoutGroup id="personInfoGroup"
+        layoutDirection="horiz" itemSpacings="[36]">
+      <Poster id="personImage"
+          width="300" height="450"
+          translation="[60,180]" />
+      <LayoutGroup id="dataGroup>" layoutDirection="vert"
+          translation="[450,180]">
+        <Label id="name" font="font:MediumBoldSystemFont" height="60" />
+        <label id="premierDate" />
+        <Label id="endDate" />
+        <Label id="description" wrap="true"
+             height="720" width="1410"
+             font="font:SmallestSystemFont" />
+      </LayoutGroup>
+    </LayoutGroup>
+  </children>
+  <script type="text/brightscript" uri="Personinfo.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    
+</component>

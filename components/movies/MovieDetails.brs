@@ -1,6 +1,6 @@
 sub init()
     m.extrasGrp = m.top.findnode("extrasGrp")
-    m.peopleGrid = m.top.findNode("peopleGrid")
+    m.extrasGrid = m.top.findNode("extrasGrid")
     m.top.optionsAvailable = false
     m.main_group = m.top.findNode("main_group")
     m.options = m.top.findNode("options")
@@ -87,9 +87,9 @@ sub itemContentChanged()
         setFieldText("tagline", itemData.taglines[0])
     end if
     ' Populate "Extras RowGrids"
-    'm.peopleGrid.itemContent = itemData
-    'm.peopleGrid.visible = true
-    m.extrasPos = m.peopleGrid.Translation
+    'm.extrasGrid.itemContent = itemData
+    'm.extrasGrid.visible = true
+    m.extrasPos = m.extrasGrid.Translation
 
     setFavoriteColor()
     setWatchedColor()
@@ -211,17 +211,17 @@ function onKeyEvent(key as string, press as boolean) as boolean
     vs = m.top.findNode("VertSlider")
 
     if key = "down" and m.buttonGrp.isInFocusChain() then
-        m.peopleGrid.setFocus(true)
+        m.extrasGrid.setFocus(true)
         'm.main_group.visible = false
-        'm.peopleGrid.Translation = [30, 180]
+        'm.extrasGrid.Translation = [30, 180]
         vs.reverse = false
         m.top.findNode("pplAnime").control = "start"
         return true
     end if
 
-    if key = "up" and m.top.findNode("PeopleGrid").isInFocusChain() then
-        if m.peopleGrid.itemFocused = 0
-            'm.peopleGrid.Translation = [ 30, 960 ]
+    if key = "up" and m.top.findNode("extrasGrid").isInFocusChain() then
+        if m.extrasGrid.itemFocused = 0
+            'm.extrasGrid.Translation = [ 30, 960 ]
             'm.main_group.visible = true
             vs.reverse = true
             m.top.findNode("pplAnime").control = "start"

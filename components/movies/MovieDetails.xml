@@ -34,10 +34,10 @@
         <Label id="overview" wrap="true" maxLines="8" />
       </LayoutGroup>
     </LayoutGroup>
-        
+
     <!-- "Cast and Crew" row -->
-    <Rectangle id="extrasGrp" color="#1000208F" width="1920" height="900" translation="[30, 960]" opacity="1.0" >
-      <ExtrasRowList id="peopleGrid"
+    <Rectangle id="extrasGrp" color="#0A0010CF" width="1920" height="900" translation="[30, 960]" opacity="1.0" >
+      <ExtrasRowList id="extrasGrid"
         itemSpacing="[ 60, 132]"
         rowLabelOffset="[ [9, 30] ]"
         numRows="2"

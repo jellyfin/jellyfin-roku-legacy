@@ -94,6 +94,29 @@ sub loadItems()
             tmp.json = item
             results.push(tmp)
         end for
+        ' Load a Person's Metadata
+    else if m.top.itemsToLoad = "person"
+        params = {}
+
+        url = Substitute("Users/{0}/Items/{1}", get_setting("active_user"), m.top.itemId)
+        resp = APIRequest(url, params)
+        data = getJson(resp)
+        ' We only have one item  and need only the data
+        results.push(data)
+
+        ' Extract array of persons from Views and download full metadata for each
+    else if m.top.itemsToLoad = "people"
+        params = {}
+        for each person in m.top.peopleList
+            tmp = CreateObject("roSGNode", "ExtrasData")
+            tmp.Id = person.Id
+            tmp.labelText = person.Name
+            tmp.subTitle = person.Type
+            tmp.posterURL = ImageUrl(person.Id, "Primary", {"Tags": person.PrimaryImageTag})
+            results.push(tmp)
+        end for
+    else if m.top.itemsToLoad = "imageurl"
+        results.push(ImageUrl(m.top.itemId, "Primary", m.top.metadata))
     end if
 
     m.top.content = results

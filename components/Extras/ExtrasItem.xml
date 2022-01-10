@@ -25,7 +25,6 @@
 
     sub setPoster()
         m.posterImg.uri = m.top.posterUrl
-        ? m.posterImg.uri
     end sub
 
     sub showContent()
@@ -38,7 +37,6 @@
         m.role.text = "Who??"
         m.posterImg.uri = "pkg:/images/baseline_person_white_48dp.png"
       end if
-      ? m.name.text, m.role.text, m.posterimg.uri
     end sub
   ]]>
   </script>
