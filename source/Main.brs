@@ -112,6 +112,8 @@ sub Main (args as dynamic) as void
             else if selectedItem.type = "Movie"
                 ' open movie detail page
                 group = CreateMovieDetailsGroup(selectedItem)
+            else if selectedItem.type = "Person"
+                CreatePersonView(selectedItem)
             else if selectedItem.type = "TvChannel" or selectedItem.type = "Video" or selectedItem.type = "Program"
                 ' play channel feed
                 video_id = selectedItem.id
@@ -281,12 +283,12 @@ sub Main (args as dynamic) as void
                     autoPlayNextEpisode(node.id, node.showID)
                 end if
             end if
-        else if isNodeEvent(msg, "selectedExtra")
+        'else if isNodeEvent(msg, "selectedExtra")
             'rl = msg.getData()
             'sel = rl.rowItemSelected
             '? "msg.getfield():" + msg.getField()
             'stop
-            CreatePersonView(msg.getData())
+            'CreatePersonView(msg.getData())
         else if type(msg) = "roDeviceInfoEvent"
             event = msg.GetInfo()
             group = sceneManager.callFunc("getActiveScene")

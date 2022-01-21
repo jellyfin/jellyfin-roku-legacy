@@ -49,7 +49,7 @@
       <Vector2DFieldInterpolator
         id="VertSlider"
         key="[0.0, 0.25, 0.50, 75.0, 1.0]"
-        keyValue="[[30, 960], [30, 765], [30, 570], [30,375 ], [30, 180]]"
+        keyValue="[[30, 960], [30, 762], [30, 564], [30,369 ], [30, 162]]"
         fieldToInterp="extrasGrp.translation" />
       </Animation>
     </Rectangle>

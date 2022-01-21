@@ -307,7 +307,8 @@ function CreateMovieDetailsGroup(movie)
     end for
 
     extras = group.findNode("extrasGrid")
-    extras.observeField("selectedExtra", m.port)
+    'extras.observeField("selectedExtra", m.port)
+    extras.observeField("selectedItem", m.port)
     'extras.itemContent = movie.json
     extras.callFunc("loadPeople", movie.json)
 
@@ -378,6 +379,16 @@ function CreateVideoPlayerGroup(video_id, audio_stream_idx = 1)
     video.observeField("state", m.port)
 
     return video
+end function
+
+function CreatePersonView(personData as object) as object
+    group = CreateObject("roSGNode", "PersonInfo")
+    group.callFunc("loadPerson", personData.Id)
+    'group.personData = personData.json
+    m.global.SceneManager.callFunc("pushScene", group)
+    group.setFocus(true)
+
+    return group
 end function
 
 sub UpdateSavedServerList()

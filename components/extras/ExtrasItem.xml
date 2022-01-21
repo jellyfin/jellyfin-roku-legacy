@@ -42,9 +42,9 @@
   </script>
   <children>
     <LayoutGroup layoutDirection="vert" >
-      <Poster id="posterImg" width="200" height="240" />
-      <Label id="pLabel" />
-      <Label id="SubTitle" />
+      <Poster id="posterImg" width="234" height="300" translation="[8,243]" />
+      <ScrollingLabel id="pLabel" horizAlign="center" vertAlign="center" maxWidth="266" translation="[8,300]" font="font:SmallestBoldSystemFont" height="64"  />
+      <Label id="SubTitle" horizAlign="center" vertAlign="center" font="font:SmallestBoldSystemFont" height="32" color="#A7A7A7FF"  />
     </LayoutGroup>
   </children>
 </component>

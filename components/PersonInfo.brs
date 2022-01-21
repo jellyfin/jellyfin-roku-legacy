@@ -18,16 +18,39 @@ sub onPersondataLoaded()
     m.loadPersonTask.unobserveField("content")
     data = m.top.personData
     m.top.findNode("Name").Text = data.Name
-    if data.PremiereDate = invalid then
-        m.top.findnode("premierDate").PremiereDate.Text = "???"
-    else
-        m.top.findNode("premierDate").Text = "Born: " + shortDate(data.PremiereDate)
+    if data.PremiereDate <> invalid and data.PremiereDate <> ""
+        birthDate = CreateObject("roDateTime")
+        birthDate.FromISO8601String(data.PremiereDate)
+        deathDate = CreateObject("roDatetime")
+        lifeString = "Born: " + birthDate.AsDateString("short-month-no-weekday")
+
+        if data.EndDate <> invalid and data.EndDate <> ""
+            deathDate.FromISO8601String(data.EndDate)
+            lifeString = lifeString + " * Died: " + deathDate.AsDateString("short-month-no-weekday")
+
+        end if
+        ' Calculate age
+        age = deathDate.getYear() - birthDate.getYear()
+        if (deathDate.getMonth() < birthDate.getMonth())
+            age--
+        else if deathDate.getMonth() = birthDate.getMonth()
+            if deathDate.getDayOfMonth() < birthDate.getDayOfMonth()
+                age--
+            end if
+        end if
+        lifeString = lifeString + " * Age: " + stri(age)
+        m.top.findNode("premierDate").Text = lifeString
     end if
-    endDate = m.top.findnode("endDate")
-    if data.endDate <> invalid and data.EndDate <> ""
-        endDate.height = 60
-        endDate.Text = "Died: " + shortDate(data.endDate)
-    end if
+    'if data.PremiereDate = invalid then
+    '    m.top.findnode("premierDate").Text = "???"
+    'else
+    '    m.top.findNode("premierDate").Text = "Born: " + shortDate(data.PremiereDate)
+    'end if
+    'endDate = m.top.findnode("endDate")
+    'if data.endDate <> invalid and data.EndDate <> ""
+    '    endDate.height = 60
+    '    endDate.Text = "Died: " + shortDate(data.endDate)
+    'end if
     m.top.findnode("description").text = data.Overview
     if data.ImageTags.Primary <> invalid
         m.LoadImageUrlTask.itemId = data.Id

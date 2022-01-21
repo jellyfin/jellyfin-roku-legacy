@@ -18,11 +18,3 @@ function loadExtras(extrasList as object, pplData as object) as object
 
     return rowNode
 end function
-
-function CreatePersonView(personData as object) as object
-    group = CreateObject("roSGNode", "PersonInfo")
-    group.callFunc("loadPerson", personData.Id)
-    'group.personData = personData.json
-    m.global.SceneManager.callFunc("pushScene", group)
-    group.setFocus(true)
-end function

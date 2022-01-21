@@ -16,6 +16,7 @@
   </script>
   <interface>
     <field id="image" type="node" />
+    <field id="Type" type="string" />
     <field id="subTitle" type="string" />
     <field id="labelText" type="string" />
     <field id="posterUrl" type="string" />

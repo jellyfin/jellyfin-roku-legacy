@@ -12,16 +12,16 @@
           translation="[60,180]" />
       <LayoutGroup id="dataGroup>" layoutDirection="vert"
           translation="[450,180]">
-        <Label id="name" font="font:MediumBoldSystemFont" height="60" />
-        <label id="premierDate" />
-        <Label id="endDate" />
+        <Label id="name" font="font:MediumBoldSystemFont" height="45" />
+        <label id="premierDate" font="font:SmallestBoldSystemFont" height="48" vertAlign="top" />
+        <!--<Label id="endDate" />-->
         <Label id="description" wrap="true"
              height="720" width="1410"
              font="font:SmallestSystemFont" />
       </LayoutGroup>
     </LayoutGroup>
   </children>
-  <script type="text/brightscript" uri="Personinfo.brs" />
+  <script type="text/brightscript" uri="PersonInfo.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
