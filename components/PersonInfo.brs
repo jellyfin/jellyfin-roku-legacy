@@ -41,16 +41,6 @@ sub onPersondataLoaded()
         lifeString = lifeString + " * Age: " + stri(age)
         m.top.findNode("premierDate").Text = lifeString
     end if
-    'if data.PremiereDate = invalid then
-    '    m.top.findnode("premierDate").Text = "???"
-    'else
-    '    m.top.findNode("premierDate").Text = "Born: " + shortDate(data.PremiereDate)
-    'end if
-    'endDate = m.top.findnode("endDate")
-    'if data.endDate <> invalid and data.EndDate <> ""
-    '    endDate.height = 60
-    '    endDate.Text = "Died: " + shortDate(data.endDate)
-    'end if
     m.top.findnode("description").text = data.Overview
     if data.ImageTags.Primary <> invalid
         m.LoadImageUrlTask.itemId = data.Id
