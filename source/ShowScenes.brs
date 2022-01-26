@@ -326,6 +326,12 @@ function CreateSeriesDetailsGroup(series)
 
     group.observeField("seasonSelected", m.port)
 
+    extras = group.findNode("extrasGrid")
+    'extras.observeField("selectedExtra", m.port)
+    extras.observeField("selectedItem", m.port)
+    'extras.itemContent = movie.json
+    extras.callFunc("loadPeople", group.itemcontent.json)
+
     return group
 end function
 

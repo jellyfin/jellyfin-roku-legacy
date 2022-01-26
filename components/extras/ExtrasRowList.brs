@@ -16,7 +16,7 @@ end sub
 
 sub updateSize()
     itemWidth = 234
-    itemHeight = 420
+    itemHeight = 396
     m.top.itemSize = [1710, itemHeight]
     m.top.rowItemSpacing = [36, 36]
 end sub
@@ -45,7 +45,7 @@ function onPeopleLoaded()
         end for
     end if
     m.top.content = data
-    m.top.rowItemSize = [[234,420]]
+    m.top.rowItemSize = [[234,396]]
     m.LikeThisTask.itemId = m.top.parentId
     m.LikeThisTask.control="RUN"
 end function
@@ -69,7 +69,7 @@ function onLikeThisLoaded()
             item.Type = item.json.Type
             row.appendChild(item)
         end for
-        addRowSize([234, 420])
+        addRowSize([234, 396])
     end if
     m.SpecialFeaturesTask.itemId = m.top.parentId
     m.SpecialFeaturesTask.control = "RUN"
@@ -90,7 +90,7 @@ function onSpecialFeaturesLoaded()
             item.imageWidth = 450
             row.appendChild(item)
         end for
-        addRowSize([462, 396])
+        addRowSize([462, 372])
     end if
 
     return m.top.content
@@ -107,6 +107,5 @@ sub addRowSize(newRow)
 end sub
 
 sub onRowItemSelected()
-    'm.top.selectedExtra = m.top.content.getChild(m.top.rowItemSelected[0]).getChild(m.top.rowItemSelected[1])
     m.top.selectedItem = m.top.content.getChild(m.top.rowItemSelected[0]).getChild(m.top.rowItemSelected[1])
 end sub

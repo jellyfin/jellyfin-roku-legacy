@@ -2,6 +2,8 @@ sub init()
     m.top.optionsAvailable = false
     main = m.top.findNode("toplevel")
     main.translation = [96, 175]
+    m.extrasSlider = m.top.findNode("tvSeasonExtras")
+    m.extrasSlider.visible = false
 end sub
 
 sub itemContentChanged()
@@ -129,4 +131,30 @@ function round(f as float) as integer
     else
         return n
     end if
+end function
+
+function onKeyEvent(key as string, press as boolean) as boolean
+    vs = m.top.findNode("VertSlider")
+    topGrp = m.top.findNode("seasons")
+    bottomGrp = m.top.findNode("extrasGrid")
+
+
+    if key = "down" and topGrp.isinFocusChain() then
+        bottomGrp.setFocus(true)
+        vs.reverse = false
+        m.top.findNode("pplAnime").control = "start"
+        m.extrasSlider.visible = true
+        return true
+    else if key = "up" and bottomGrp.isinFocusChain()
+        if bottomGrp.itemFocused = 0
+            'm.extrasGrid.Translation = [ 30, 960 ]
+            'm.main_group.visible = true
+            vs.reverse = true
+            m.top.findNode("pplAnime").control = "start"
+            topGrp.setFocus(true)
+            m.extrasSlider.visible = false
+            return true
+        end if
+    end if
+    return false
 end function
