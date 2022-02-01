@@ -86,9 +86,6 @@ sub itemContentChanged()
     if itemData.taglines.count() > 0
         setFieldText("tagline", itemData.taglines[0])
     end if
-    ' Populate "Extras RowGrids"
-    'm.extrasGrid.itemContent = itemData
-    'm.extrasGrid.visible = true
     m.extrasPos = m.extrasGrid.Translation
 
     setFavoriteColor()
@@ -212,18 +209,16 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     if key = "down" and m.buttonGrp.isInFocusChain() then
         m.extrasGrid.setFocus(true)
-        'm.main_group.visible = false
-        'm.extrasGrid.Translation = [30, 180]
-        vs.reverse = false
+        m.top.findNode("VertSlider").reverse = false
+        m.top.findNode("extrasFader").reverse = false
         m.top.findNode("pplAnime").control = "start"
         return true
     end if
 
     if key = "up" and m.top.findNode("extrasGrid").isInFocusChain() then
         if m.extrasGrid.itemFocused = 0
-            'm.extrasGrid.Translation = [ 30, 960 ]
-            'm.main_group.visible = true
-            vs.reverse = true
+            m.top.findNode("VertSlider").reverse = true
+            m.top.findNode("extrasFader").reverse = true
             m.top.findNode("pplAnime").control = "start"
             m.buttonGrp.setFocus(true)
             return true

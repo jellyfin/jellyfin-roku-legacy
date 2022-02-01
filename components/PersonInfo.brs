@@ -1,14 +1,18 @@
 sub init()
     m.top.translation = [24,165]
+    m.topGrp = m.top.findNode("personInfoGroup")
+    m.vidsList = m.top.findNode("extrasGrid")
+    m.personVideos = m.top.findnode("personVideos")
     m.loadPersonTask = CreateObject("roSGNode", "LoadItemsTask")
     m.LoadPersonTask.itemsToLoad = "person"
     m.loadPersonTask.observeField("content", "onPersondataLoaded")
-    ' set up to load imae
+    ' set up to load image
     m.LoadImageUrlTask = CreateObject("roSGNode", "LoadItemsTask")
     m.LoadImageUrlTask.itemsToLoad = "imageurl"
 end sub
 
 sub loadPerson(personId as string)
+    m.personId = personId
     m.loadPersonTask.itemId = personId
     m.loadPersonTask.control = "RUN"
 end sub
@@ -56,6 +60,8 @@ sub onImageUrlLoaded()
     data = m.LoadImageUrlTask.content[0]
     m.LoadImageUrlTask.unobserveField("content")
     m.top.findnode("personImage").uri = data
+    m.vidsList .callFunc("loadPersonVideos", m.personId)
+    m.topGrp.setFocus(true)
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
@@ -66,6 +72,22 @@ function onKeyEvent(key as string, press as boolean) as boolean
         return true
     end if
 
+    vs = m.top.findNode("VertSlider")
+    bottomGrp = m.top.findNode("extrasGrid")
+
+    if key = "down" and m.topGrp.isinFocusChain() then
+        m.vidsList.setFocus(true)
+        vs.reverse = false
+        m.top.findNode("pplAnime").control = "start"
+        return true
+    else if key = "up" and m.vidsList.isinFocusChain()
+        if m.vidsList.itemFocused = 0
+            vs.reverse = true
+            m.top.findNode("pplAnime").control = "start"
+            m.topGrp.setFocus(true)
+            return true
+        end if
+    end if
     return false
 end function
 

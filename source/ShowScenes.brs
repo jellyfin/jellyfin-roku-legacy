@@ -307,9 +307,7 @@ function CreateMovieDetailsGroup(movie)
     end for
 
     extras = group.findNode("extrasGrid")
-    'extras.observeField("selectedExtra", m.port)
     extras.observeField("selectedItem", m.port)
-    'extras.itemContent = movie.json
     extras.callFunc("loadPeople", movie.json)
 
     return group
@@ -327,9 +325,7 @@ function CreateSeriesDetailsGroup(series)
     group.observeField("seasonSelected", m.port)
 
     extras = group.findNode("extrasGrid")
-    'extras.observeField("selectedExtra", m.port)
     extras.observeField("selectedItem", m.port)
-    'extras.itemContent = movie.json
     extras.callFunc("loadPeople", group.itemcontent.json)
 
     return group
@@ -393,6 +389,7 @@ function CreatePersonView(personData as object) as object
     'group.personData = personData.json
     m.global.SceneManager.callFunc("pushScene", group)
     group.setFocus(true)
+    group.observeField("selectedItem", m.port)
 
     return group
 end function

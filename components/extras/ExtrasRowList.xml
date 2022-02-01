@@ -6,6 +6,7 @@
     <field id="parentId" type="string" />
     <field id="selectedItem" type="node" alwaysNotify="true" />
     <function name="loadPeople" />
+    <function name="loadPersonVideos" />
   </interface>
   <script type="text/brightscript" uri="ExtrasRowList.brs" />
 </component>
