@@ -94,7 +94,7 @@ sub loadInitialItems()
             showTvGuide()
         end if
 
-    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel" 
+    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
         ' Non-recursive, to not show subfolder contents
         m.loadItemsTask.recursive = false
     else if m.top.parentItem.collectionType = "Channel"
@@ -468,7 +468,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         else if itemToPlay <> invalid and (itemToPlay.type = "Photo" or itemToPlay.type = "PhotoAlbum" or itemToPlay.type = "Folder")
             ' Spawn photo player task
             photoPlayer = CreateObject("roSgNode", "PhotoPlayerTask")
-            photoPlayer.itemContent =  itemToPlay
+            photoPlayer.itemContent = itemToPlay
             photoPlayer.control = "RUN"
         end if
         return true

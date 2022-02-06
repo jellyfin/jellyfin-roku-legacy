@@ -15,6 +15,6 @@ sub onPhotoLoaded()
         photo.uri = m.LoadLibrariesTask.results
     else
         'Show user error here (for example if it's not a supported image type)
-        message_dialog("This image type is not supported.") 
+        message_dialog("This image type is not supported.")
     end if
 end sub
