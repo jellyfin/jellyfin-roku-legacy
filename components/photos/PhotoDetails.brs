@@ -1,5 +1,5 @@
 sub init()
-    m.top.optionsAvailable = false  ' Change once Shuffle option is added
+    m.top.optionsAvailable = false ' Change once Shuffle option is added
 end sub
 
 sub itemContentChanged()

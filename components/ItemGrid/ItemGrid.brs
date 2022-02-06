@@ -466,7 +466,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         if itemToPlay <> invalid and (itemToPlay.type = "Movie" or itemToPlay.type = "Episode")
             m.top.quickPlayNode = itemToPlay
             return true
-        else if itemToPlay <> invalid and itemToPlay.type = "Photo" 
+        else if itemToPlay <> invalid and itemToPlay.type = "Photo"
             ' Spawn photo player task
             photoPlayer = CreateObject("roSgNode", "PhotoPlayerTask")
             photoPlayer.itemContent = itemToPlay
