@@ -399,7 +399,7 @@ end function
 
 function CreatePhotoPage(photo)
     group = CreateObject("roSGNode", "PhotoDetails")
-    group.optionsAvailable = false
+    group.optionsAvailable = true
     m.global.sceneManager.callFunc("pushScene", group)
 
     group.itemContent = photo
