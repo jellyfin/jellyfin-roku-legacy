@@ -43,6 +43,8 @@
     <field id="title" type="string" onChange="updateTitle" />
     <field id="showOptions" value="true" type="boolean" onChange="updateOptions" />
     <function name="resetTime" />
+    <function name="hideOverhang" />
+    <function name="showOverhang" />
   </interface>
   <script type="text/brightscript" uri="JFOverhang.brs" />
 </component>

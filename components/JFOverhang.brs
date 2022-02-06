@@ -28,6 +28,17 @@ sub init()
     updateTimeDisplay()
 end sub
 
+sub hideOverhang()
+    m.top.findNode("overlayLogo").visible = false
+    m.top.findNode("overlayLeftGroup").visible = false
+    m.top.findNode("overlayRightGroup").visible = false
+end sub
+
+sub showOverhang()
+    m.top.findNode("overlayLogo").visible = true
+    m.top.findNode("overlayLeftGroup").visible = true
+    m.top.findNode("overlayRightGroup").visible = true
+end sub
 
 sub updateTitle()
     leftSeperator = m.top.findNode("overlayLeftSeperator")

@@ -114,6 +114,13 @@ sub clearScenes()
     m.groups = []
 end sub
 
+sub hideOverhang()
+    m.overhang.callFunc("hideOverhang")
+end sub
+
+sub showOverhang()
+    m.overhang.callFunc("showOverhang")
+end sub
 
 '
 ' Register observers for overhang data

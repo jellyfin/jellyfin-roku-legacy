@@ -460,18 +460,19 @@ function onKeyEvent(key as string, press as boolean) as boolean
             optionsClosed()
             return true
         end if
-    else if key = "play"
+    else if key = "play" or key = "OK"
         markupGrid = m.top.getChild(2)
         itemToPlay = markupGrid.content.getChild(markupGrid.itemFocused)
         if itemToPlay <> invalid and (itemToPlay.type = "Movie" or itemToPlay.type = "Episode")
             m.top.quickPlayNode = itemToPlay
-        else if itemToPlay <> invalid and (itemToPlay.type = "Photo" or itemToPlay.type = "PhotoAlbum" or itemToPlay.type = "Folder")
+            return true
+        else if itemToPlay <> invalid and itemToPlay.type = "Photo" 
             ' Spawn photo player task
             photoPlayer = CreateObject("roSgNode", "PhotoPlayerTask")
             photoPlayer.itemContent = itemToPlay
             photoPlayer.control = "RUN"
+            return true
         end if
-        return true
     end if
     return false
 end function

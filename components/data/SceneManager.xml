@@ -7,6 +7,8 @@
     <function name="clearScenes" />
     <function name="resetTime" />
     <function name="userMessage" />
+    <function name="hideOverhang" />
+    <function name="showOverhang" />
     <field id="currentUser" type="string" onChange="updateUser" />
   </interface>
   <script type="text/brightscript" uri="SceneManager.brs" />

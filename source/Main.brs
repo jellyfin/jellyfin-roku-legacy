@@ -138,8 +138,7 @@ sub Main (args as dynamic) as void
                     m.scene.dialog.observeField("buttonSelected", m.port)
                 end if
             else if selectedItem.type = "Photo"
-                ' Show selected photo
-                group = CreatePhotoPage(selectedItem)
+                ' Nothing to do here, handled in ItemGrid
             else
                 ' TODO - switch on more node types
                 message_dialog("This type is not yet supported: " + selectedItem.type + ".")
