@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="PhotoData" extends="JFContentItem">
+  <interface>
+    <field id="image" type="node" onChange="setPoster" />
+    <field id="photoID" type="string" />
+  </interface>
+  <script type="text/brightscript" uri="PhotoData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+</component>

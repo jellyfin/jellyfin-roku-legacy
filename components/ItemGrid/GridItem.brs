@@ -48,6 +48,9 @@ sub itemContentChanged()
     else if itemData.type = "Video"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title
+    else if itemData.type = "Photo"
+        m.itemPoster.uri = itemData.PosterUrl
+        m.itemText.text = itemData.Title
     else
         print "Unhandled Grid Item Type: " + itemData.type
     end if

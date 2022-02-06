@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="LoadPhotoTask" extends="Task">
+  <interface>
+    <field id="itemContent" type="node" />
+    <field id="results" type="string" />
+  </interface>
+  <script type="text/brightscript" uri="LoadPhotoTask.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+</component>

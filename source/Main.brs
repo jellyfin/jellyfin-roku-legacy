@@ -137,6 +137,9 @@ sub Main (args as dynamic) as void
                     m.scene.dialog = dialog
                     m.scene.dialog.observeField("buttonSelected", m.port)
                 end if
+            else if selectedItem.type = "Photo"
+                ' Show selected photo
+                group = CreatePhotoPage(selectedItem)
             else
                 ' TODO - switch on more node types
                 message_dialog("This type is not yet supported: " + selectedItem.type + ".")
