@@ -114,13 +114,6 @@ sub clearScenes()
     m.groups = []
 end sub
 
-sub hideOverhang()
-    m.overhang.callFunc("hideOverhang")
-end sub
-
-sub showOverhang()
-    m.overhang.callFunc("showOverhang")
-end sub
 
 '
 ' Register observers for overhang data
@@ -136,7 +129,13 @@ sub registerOverhangData(group)
         group.observeField("optionsAvailable", "updateOptions")
 
         group.observeField("overhangTitle", "updateOverhangTitle")
-        m.overhang.visible = true
+
+        if group.overhangVisible
+            m.overhang.visible = true
+        else
+            m.overhang.visible = false
+        end if
+        group.observeField("overhangVisible", "updateOverhangVisible")
     else if group.isSubType("JFVideo")
         m.overhang.visible = false
     else
@@ -163,6 +162,13 @@ end sub
 ' Update options availability
 sub updateOptions(msg)
     m.overhang.showOptions = msg.getData()
+end sub
+
+
+'
+' Update whether the overhang is visible or not
+sub updateOverhangVisible(msg)
+    m.overhang.visible = msg.getData()
 end sub
 
 
