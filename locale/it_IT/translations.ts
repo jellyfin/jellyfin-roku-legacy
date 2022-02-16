@@ -1450,5 +1450,87 @@
         <source>Change Server</source>
         <translation>Cambia server</translation>
     </message>
+    <message>
+        <source>OFFICIAL_RATING</source>
+        <translation>Classificazione per genitori</translation>
+    </message>
+    <message>
+        <source>DATE_PLAYED</source>
+        <translation>Visto il</translation>
+    </message>
+    <message>
+        <source>DATE_ADDED</source>
+        <translation>Aggiunto il</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Voto della critica</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>Voto IMDB</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Nome</translation>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>Questa %1 non contiene elementi</translation>
+    </message>
+    <message>
+        <source>Unable to load Channel Data from the server</source>
+        <translation>Impossibile recuperare i dati del canale dal server</translation>
+    </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Errore nel caricamento dei dati del canale</translation>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Caricamento dati del canale</translation>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>C&apos;è stato un errore durante la riproduzione.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>C&apos;è stato un errore nel recupero dei dati dal server.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Errone durante la riproduzione</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Errore nel recupero del contenuto</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>In onda ora</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Elimina salvati</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Salvare credenziali?</translation>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Esci</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Cambia server</translation>
+    </message>
 </context>
 </TS>

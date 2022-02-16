@@ -18,7 +18,7 @@ sub updateSize()
     m.top.translation = [border, 75 + 115]
 
     itemWidth = (dimensions["width"] - border * 2)
-    itemHeight = 300
+    itemHeight = 400
 
     m.top.visible = true
 

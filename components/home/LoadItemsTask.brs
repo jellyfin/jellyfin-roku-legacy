@@ -13,9 +13,12 @@ sub loadItems()
         resp = APIRequest(url)
         data = getJson(resp)
         for each item in data.Items
-            tmp = CreateObject("roSGNode", "HomeData")
-            tmp.json = item
-            results.push(tmp)
+            ' Skip Books for now as we don't support it (issue #525)
+            if item.CollectionType <> "books"
+                tmp = CreateObject("roSGNode", "HomeData")
+                tmp.json = item
+                results.push(tmp)
+            end if
         end for
 
         ' Load Latest Additions to Libraries
@@ -32,9 +35,12 @@ sub loadItems()
         data = getJson(resp)
 
         for each item in data
-            tmp = CreateObject("roSGNode", "HomeData")
-            tmp.json = item
-            results.push(tmp)
+            ' Skip Books for now as we don't support it (issue #525)
+            if item.Type <> "Book"
+                tmp = CreateObject("roSGNode", "HomeData")
+                tmp.json = item
+                results.push(tmp)
+            end if
         end for
 
         ' Load Next Up
