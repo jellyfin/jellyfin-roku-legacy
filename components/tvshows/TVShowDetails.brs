@@ -139,7 +139,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     bottomGrp = m.top.findNode("extrasGrid")
 
 
-    if key = "down" and topGrp.isinFocusChain() then
+    if key = "down" and topGrp.isinFocusChain()
         bottomGrp.setFocus(true)
         m.top.findNode("VertSlider").reverse = false
         m.top.findNode("extrasFader").reverse = false

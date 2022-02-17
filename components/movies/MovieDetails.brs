@@ -205,9 +205,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.options.setFocus(true)
     end if
 
-    vs = m.top.findNode("VertSlider")
-
-    if key = "down" and m.buttonGrp.isInFocusChain() then
+    if key = "down" and m.buttonGrp.isInFocusChain()
         m.extrasGrid.setFocus(true)
         m.top.findNode("VertSlider").reverse = false
         m.top.findNode("extrasFader").reverse = false
@@ -215,7 +213,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         return true
     end if
 
-    if key = "up" and m.top.findNode("extrasGrid").isInFocusChain() then
+    if key = "up" and m.top.findNode("extrasGrid").isInFocusChain()
         if m.extrasGrid.itemFocused = 0
             m.top.findNode("VertSlider").reverse = true
             m.top.findNode("extrasFader").reverse = true

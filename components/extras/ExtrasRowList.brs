@@ -21,7 +21,6 @@ sub init()
 end sub
 
 sub updateSize()
-    itemWidth = 234
     itemHeight = 396
     m.top.itemSize = [1710, itemHeight]
     m.top.rowItemSpacing = [36, 36]
@@ -40,7 +39,7 @@ sub loadPersonVideos(personId)
     m.LoadMoviesTask.control = "RUN"
 end sub
 
-function onPeopleLoaded()
+sub onPeopleLoaded()
     people = m.LoadPeopleTask.content
     m.loadPeopleTask.unobserveField("content")
     data = CreateObject("roSGNode", "ContentNode") ' The row Node
@@ -61,9 +60,9 @@ function onPeopleLoaded()
     m.top.rowItemSize = [[234, 396]]
     m.LikeThisTask.itemId = m.top.parentId
     m.LikeThisTask.control = "RUN"
-end function
+end sub
 
-function onLikeThisLoaded()
+sub onLikeThisLoaded()
     data = m.LikeThisTask.content
     m.LikeThisTask.unobserveField("content")
     if data <> invalid and data.count() > 0
@@ -86,7 +85,7 @@ function onLikeThisLoaded()
     end if
     m.SpecialFeaturesTask.itemId = m.top.parentId
     m.SpecialFeaturesTask.control = "RUN"
-end function
+end sub
 
 function onSpecialFeaturesLoaded()
     data = m.SpecialFeaturesTask.content

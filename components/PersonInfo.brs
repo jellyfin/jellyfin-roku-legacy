@@ -35,7 +35,7 @@ sub onPersondataLoaded()
         end if
         ' Calculate age
         age = deathDate.getYear() - birthDate.getYear()
-        if (deathDate.getMonth() < birthDate.getMonth())
+        if deathDate.getMonth() < birthDate.getMonth()
             age--
         else if deathDate.getMonth() = birthDate.getMonth()
             if deathDate.getDayOfMonth() < birthDate.getDayOfMonth()
@@ -72,9 +72,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         return true
     end if
 
-    bottomGrp = m.top.findNode("extrasGrid")
-
-    if key = "down" and m.topGrp.isinFocusChain() then
+    if key = "down" and m.topGrp.isinFocusChain()
         m.vidsList.setFocus(true)
         m.top.findNode("VertSlider").reverse = false
         m.top.findNode("extrasFader").reverse = false
