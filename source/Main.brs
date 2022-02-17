@@ -283,7 +283,7 @@ sub Main (args as dynamic) as void
                     autoPlayNextEpisode(node.id, node.showID)
                 end if
             end if
-        'else if isNodeEvent(msg, "selectedExtra")
+            'else if isNodeEvent(msg, "selectedExtra")
             'rl = msg.getData()
             'sel = rl.rowItemSelected
             '? "msg.getfield():" + msg.getField()

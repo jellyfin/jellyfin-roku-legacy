@@ -144,9 +144,9 @@ sub loadItems()
     else if m.top.itemsToLoad = "imageurl"
         results.push(ImageUrl(m.top.itemId, "Primary", m.top.metadata))
     else if m.top.itemsToLoad = "likethis"
-        params = {"userId": get_setting("active_user"), "limit": 16 }
+        params = { "userId": get_setting("active_user"), "limit": 16 }
         url = Substitute("Items/{0}/Similar", m.top.itemId)
-        resp = APIRequest(url,params)
+        resp = APIRequest(url, params)
         data = getJson(resp)
         for each item in data.items
             tmp = CreateObject("roSGNode", "ExtrasData")
@@ -165,14 +165,14 @@ sub loadItems()
 end sub
 
 sub getPersonVideos(videoType, dest)
-    params = { personIds: m.top.itemId, recursive: true, includeItemTypes: videoType}
+    params = { personIds: m.top.itemId, recursive: true, includeItemTypes: videoType }
     url = Substitute("Users/{0}/Items", get_setting("active_user"))
     resp = APIRequest(url, params)
     data = getJson(resp)
     if data <> invalid and data.count() > 0
         for each item in data.items
             tmp = CreateObject("roSGNode", "ExtrasData")
-            tmp.posterURL = ImageUrl(item.Id, "Primary", { "Tags": item.ImageTags.Primary})
+            tmp.posterURL = ImageUrl(item.Id, "Primary", { "Tags": item.ImageTags.Primary })
             tmp.json = item
             dest.push(tmp)
         end for

@@ -1,6 +1,6 @@
 sub init()
-    m.top.translation = [24,165]
     m.topGrp = m.top.findNode("personInfoGroup")
+    m.topGrp.translation = [24, 165]
     m.vidsList = m.top.findNode("extrasGrid")
     m.personVideos = m.top.findnode("personVideos")
     m.loadPersonTask = CreateObject("roSGNode", "LoadItemsTask")
@@ -67,22 +67,23 @@ end sub
 function onKeyEvent(key as string, press as boolean) as boolean
     'if not press then return false
 
-    if key = "back" then
+    if key = "back"
         m.global.sceneManager.callfunc("popScene")
         return true
     end if
 
-    vs = m.top.findNode("VertSlider")
     bottomGrp = m.top.findNode("extrasGrid")
 
     if key = "down" and m.topGrp.isinFocusChain() then
         m.vidsList.setFocus(true)
-        vs.reverse = false
+        m.top.findNode("VertSlider").reverse = false
+        m.top.findNode("extrasFader").reverse = false
         m.top.findNode("pplAnime").control = "start"
         return true
     else if key = "up" and m.vidsList.isinFocusChain()
         if m.vidsList.itemFocused = 0
-            vs.reverse = true
+            m.top.findNode("VertSlider").reverse = true
+            m.top.findNode("extrasFader").reverse = true
             m.top.findNode("pplAnime").control = "start"
             m.topGrp.setFocus(true)
             return true

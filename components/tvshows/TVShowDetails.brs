@@ -144,7 +144,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.top.findNode("VertSlider").reverse = false
         m.top.findNode("extrasFader").reverse = false
         m.top.findNode("pplAnime").control = "start"
-        'm.extrasSlider.visible = true
         return true
     else if key = "up" and bottomGrp.isinFocusChain()
         if bottomGrp.itemFocused = 0
@@ -152,7 +151,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
             m.top.findNode("extrasFader").reverse = true
             m.top.findNode("pplAnime").control = "start"
             topGrp.setFocus(true)
-            'm.extrasSlider.visible = false
             return true
         end if
     end if

@@ -9,7 +9,6 @@
   "devDependencies": {
     "@rokucommunity/bslint": "^0.4.0",
     "brighterscript": "^0.39.4",
-    "brighterscript-formatter": "^1.6.1",
     "rooibos-cli": "^1.0.1"
   },
   "scripts": {
@@ -32,5 +31,8 @@
   "bugs": {
     "url": "https://github.com/jellyfin/jellyfin-roku/issues"
   },
-  "homepage": "https://github.com/jellyfin/jellyfin-roku#readme"
+  "homepage": "https://github.com/jellyfin/jellyfin-roku#readme",
+  "dependencies": {
+    "brighterscript-formatter": "^1.6.8"
+  }
 }

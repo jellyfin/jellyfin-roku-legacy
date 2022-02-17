@@ -58,9 +58,9 @@ function onPeopleLoaded()
         end for
     end if
     m.top.content = data
-    m.top.rowItemSize = [[234,396]]
+    m.top.rowItemSize = [[234, 396]]
     m.LikeThisTask.itemId = m.top.parentId
-    m.LikeThisTask.control="RUN"
+    m.LikeThisTask.control = "RUN"
 end function
 
 function onLikeThisLoaded()
@@ -141,6 +141,7 @@ sub onShowsLoaded()
             mov.Id = mov.json.Id
             mov.labelText = mov.json.Name
             mov.subTitle = mov.json.ProductionYear
+            mov.Type = mov.json.Type
             row.appendChild(mov)
         end for
         m.top.content.appendChild(row)
