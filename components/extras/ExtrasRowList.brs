@@ -122,9 +122,9 @@ sub onMoviesLoaded()
             mov.Type = mov.json.Type
             row.appendChild(mov)
         end for
+        m.top.rowItemSize = [[234, 396]]
     end if
     m.top.content = rlContent
-    m.top.rowItemSize = [[234, 396]]
     m.LoadShowsTask.itemId = m.personId
     m.LoadShowsTask.observeField("content", "onShowsLoaded")
     m.LoadShowsTask.control = "RUN"
@@ -141,8 +141,10 @@ sub onShowsLoaded()
             mov.labelText = mov.json.Name
             mov.subTitle = mov.json.ProductionYear
             mov.Type = mov.json.Type
+            mov.imageWidth = 502
             row.appendChild(mov)
         end for
+        addRowSize([502, 396])
         m.top.content.appendChild(row)
     end if
     m.top.visible = true

@@ -11,18 +11,6 @@
       m.role = m.top.findNode("subTitle")
     end function
 
-    sub setLabel()
-        m.name.text = m.top.labelText
-    end sub
-
-    sub setSubTtl()
-        m.role.text = m.top.subTitle
-    end sub
-
-    sub setPoster()
-        m.posterImg.uri = m.top.posterUrl
-    end sub
-
     sub showContent()
       if m.top.itemContent <> Invalid
         cont = m.top.itemContent

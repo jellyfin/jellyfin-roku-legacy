@@ -155,24 +155,26 @@ sub loadItems()
             results.push(tmp)
         end for
     else if m.top.itemsToLoad = "personMovies"
-        getPersonVideos("Movie", results)
+        getPersonVideos("Movie", results, {})
     else if m.top.itemsToLoad = "personTVShows"
-        getPersonVideos("Episode", results)
+        getPersonVideos("Episode", results, { MaxWidth: 502, MaxHeight: 300 })
     end if
 
     m.top.content = results
 
 end sub
 
-sub getPersonVideos(videoType, dest)
-    params = { personIds: m.top.itemId, recursive: true, includeItemTypes: videoType }
+sub getPersonVideos(videoType, dest, dimens)
+    params = { personIds: m.top.itemId, recursive: true, includeItemTypes: videoType, Limit: 30, SortBy: "Random" }
     url = Substitute("Users/{0}/Items", get_setting("active_user"))
     resp = APIRequest(url, params)
     data = getJson(resp)
     if data <> invalid and data.count() > 0
         for each item in data.items
             tmp = CreateObject("roSGNode", "ExtrasData")
-            tmp.posterURL = ImageUrl(item.Id, "Primary", { "Tags": item.ImageTags.Primary })
+            imgParms = { "Tags": item.ImageTags.Primary }
+            params.append(dimens)
+            tmp.posterURL = ImageUrl(item.Id, "Primary", params)
             tmp.json = item
             dest.push(tmp)
         end for
