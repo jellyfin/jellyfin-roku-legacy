@@ -1,6 +1,7 @@
 sub init()
     m.topGrp = m.top.findNode("personInfoGroup")
     m.topGrp.translation = [24, 165]
+    m.top.optionsAvailable = false
     m.vidsList = m.top.findNode("extrasGrid")
     m.personVideos = m.top.findnode("personVideos")
     m.loadPersonTask = CreateObject("roSGNode", "LoadItemsTask")

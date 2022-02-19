@@ -16,7 +16,7 @@
         <Label id="name" font="font:MediumBoldSystemFont" height="45" />
         <label id="premierDate" font="font:SmallestBoldSystemFont" height="48" vertAlign="top" />
         <Label id="description" wrap="true"
-             height="720" width="1410"
+             height="360" width="1410"
              font="font:SmallestSystemFont" />
       </LayoutGroup>
     </LayoutGroup>
