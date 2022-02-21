@@ -30,7 +30,7 @@
   <children>
     <LayoutGroup layoutDirection="vert" >
       <Poster id="posterImg" width="234" height="300" translation="[8,243]" failedBitmapUri="pkg:/images/baseline_person_white_48dp.png" />
-      <ScrollingLabel id="pLabel" horizAlign="center" vertAlign="bottom" maxWidth="266" translation="[8,300]" font="font:SmallestBoldSystemFont" height="36"  />
+      <ScrollingLabel id="pLabel" horizAlign="center" vertAlign="bottom" maxWidth="266" font="font:SmallestBoldSystemFont" height="48"  />
       <Label id="SubTitle" horizAlign="center" vertAlign="center" font="font:SmallestBoldSystemFont" height="32" color="#A7A7A7FF"  />
     </LayoutGroup>
   </children>

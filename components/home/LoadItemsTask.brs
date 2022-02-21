@@ -165,7 +165,7 @@ sub loadItems()
 end sub
 
 sub getPersonVideos(videoType, dest, dimens)
-    params = { personIds: m.top.itemId, recursive: true, includeItemTypes: videoType, Limit: 30, SortBy: "Random" }
+    params = { personIds: m.top.itemId, recursive: true, includeItemTypes: videoType, Limit: 50, SortBy: "Random" }
     url = Substitute("Users/{0}/Items", get_setting("active_user"))
     resp = APIRequest(url, params)
     data = getJson(resp)
@@ -173,8 +173,8 @@ sub getPersonVideos(videoType, dest, dimens)
         for each item in data.items
             tmp = CreateObject("roSGNode", "ExtrasData")
             imgParms = { "Tags": item.ImageTags.Primary }
-            params.append(dimens)
-            tmp.posterURL = ImageUrl(item.Id, "Primary", params)
+            imgParms.append(dimens)
+            tmp.posterURL = ImageUrl(item.Id, "Primary", imgParms)
             tmp.json = item
             dest.push(tmp)
         end for

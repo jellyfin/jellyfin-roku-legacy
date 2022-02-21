@@ -9,6 +9,7 @@
         showRowLabel="true"
         showRowCounter="true"
         visible="true"
+        translation="[12,36]"
         itemComponentName="ExtrasItem" />
       <Animation id="pplAnime" duration=".4" repeat="false" >
         <Vector2DFieldInterpolator

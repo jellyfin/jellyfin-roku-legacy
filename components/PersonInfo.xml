@@ -6,18 +6,21 @@
     <function name="loadPerson" />
   </interface>
   <children>
+    <LayoutGroup id="showVids" layoutDirection="horiz" translation="[1620, 117]">
+      <Label id="star" font="font:LargeBoldSystemFont" color="#ffA0A0ff" text="* " />
+      <Label id="showVidText" font="font:SmallestBoldSystemFont" text="Show Videos" />
+    </LayoutGroup>
     <LayoutGroup id="personInfoGroup"
-        layoutDirection="horiz" itemSpacings="[36]">
+        layoutDirection="horiz"  translation="[60,180]" itemSpacings="[36]">
       <Poster id="personImage"
-          width="300" height="450"
-          translation="[60,180]" />
+          width="300" height="450"/>
       <LayoutGroup id="dataGroup>" layoutDirection="vert"
-          translation="[450,180]">
-        <Label id="name" font="font:MediumBoldSystemFont" height="45" />
+            translation="[450,180]">
+        <Label id="name" font="font:MediumBoldSystemFont" height="45" width="1200" />
         <label id="premierDate" font="font:SmallestBoldSystemFont" height="48" vertAlign="top" />
-        <Label id="description" wrap="true"
+        <ScrollableText id="description"
              height="360" width="1410"
-             font="font:SmallestSystemFont" />
+             font="font:SmallestSystemFont" color="#eeeeeeff" />
       </LayoutGroup>
     </LayoutGroup>
     <extrasSlider id="personVideos" />
