@@ -26,11 +26,11 @@ sub onPersondataLoaded()
         birthDate = CreateObject("roDateTime")
         birthDate.FromISO8601String(data.PremiereDate)
         deathDate = CreateObject("roDatetime")
-        lifeString = "Born: " + birthDate.AsDateString("short-month-no-weekday")
+        lifeString = tr("Born") + ": " + birthDate.AsDateString("short-month-no-weekday")
 
         if data.EndDate <> invalid and data.EndDate <> ""
             deathDate.FromISO8601String(data.EndDate)
-            lifeString = lifeString + " * Died: " + deathDate.AsDateString("short-month-no-weekday")
+            lifeString = lifeString + " * " + tr("Died") + ": " + deathDate.AsDateString("short-month-no-weekday")
 
         end if
         ' Calculate age
@@ -42,7 +42,7 @@ sub onPersondataLoaded()
                 age--
             end if
         end if
-        lifeString = lifeString + " * Age: " + stri(age)
+        lifeString = lifeString + " * " + tr("Age") + ": " + stri(age)
         m.top.findNode("premierDate").Text = lifeString
     end if
     m.top.findnode("description").text = data.Overview

@@ -45,7 +45,7 @@ sub onPeopleLoaded()
     data = CreateObject("roSGNode", "ContentNode") ' The row Node
     if people <> invalid and people.count() > 0
         row = data.createChild("ContentNode")
-        row.Title = "Cast & Crew"
+        row.Title = tr("Cast & Crew")
         for each person in people
             if person.json.type = "Actor"
                 person.subTitle = "as " + person.json.Role
@@ -67,7 +67,7 @@ sub onLikeThisLoaded()
     m.LikeThisTask.unobserveField("content")
     if data <> invalid and data.count() > 0
         row = m.top.content.createChild("ContentNode")
-        row.Title = "More Like This"
+        row.Title = tr("More Like This")
         for each item in data
             item.Id = item.json.Id
             item.labelText = item.json.Name
@@ -92,7 +92,7 @@ function onSpecialFeaturesLoaded()
     m.SpecialFeaturesTask.unobserveField("content")
     if data <> invalid and data.count() > 0
         row = m.top.content.createChild("ContentNode")
-        row.Title = "Special Features"
+        row.Title = tr("Special Features")
         for each item in data
             m.top.visible = true
             item.Id = item.json.Id
@@ -114,7 +114,7 @@ sub onMoviesLoaded()
     rlContent = CreateObject("roSGNode", "ContentNode")
     if data <> invalid and data.count() > 0
         row = rlContent.createChild("ContentNode")
-        row.title = "Movies"
+        row.title = tr("Movies")
         for each mov in data
             mov.Id = mov.json.Id
             mov.labelText = mov.json.Name
@@ -135,7 +135,7 @@ sub onShowsLoaded()
     m.LoadShowsTask.unobserveField("content")
     if data <> invalid and data.count() > 0
         row = CreateObject("roSGNode", "ContentNode")
-        row.Title = "TV Shows"
+        row.Title = tr("TV Shows")
         for each mov in data
             mov.Id = mov.json.Id
             mov.labelText = mov.json.Name
