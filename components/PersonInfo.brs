@@ -4,25 +4,10 @@ sub init()
     m.top.optionsAvailable = false
     m.vidsList = m.top.findNode("extrasGrid")
     m.showVidTxt = m.top.findNode("showVidText")
-    m.personVideos = m.top.findnode("personVideos")
-    m.loadPersonTask = CreateObject("roSGNode", "LoadItemsTask")
-    m.LoadPersonTask.itemsToLoad = "person"
-    m.loadPersonTask.observeField("content", "onPersondataLoaded")
-    ' set up to load image
-    m.LoadImageUrlTask = CreateObject("roSGNode", "LoadItemsTask")
-    m.LoadImageUrlTask.itemsToLoad = "imageurl"
 end sub
 
-sub loadPerson(personId as string)
-    m.personId = personId
-    m.loadPersonTask.itemId = personId
-    m.loadPersonTask.control = "RUN"
-end sub
-
-sub onPersondataLoaded()
-    m.top.personData = m.loadPersonTask.content[0]
-    m.loadPersonTask.unobserveField("content")
-    data = m.top.personData
+sub loadPerson()
+    data = m.top.json
     m.top.findNode("Name").Text = data.Name
     if data.PremiereDate <> invalid and data.PremiereDate <> ""
         birthDate = CreateObject("roDateTime")
@@ -48,21 +33,12 @@ sub onPersondataLoaded()
         m.top.findNode("premierDate").Text = lifeString
     end if
     m.top.findnode("description").text = data.Overview
-    if data.ImageTags.Primary <> invalid
-        m.LoadImageUrlTask.itemId = data.Id
-        m.LoadImageUrlTask.metadata = { "Tags": data.ImageTags.Primary }
-        m.LoadImageUrlTask.observeField("content", "onImageUrlLoaded")
-        m.LoadImageUrlTask.control = "RUN"
+    if m.top.image <> invalid
+        m.top.findnode("personImage").uri = m.top.image.url
     else
         m.top.findnode("personImage").uri = "pkg:/images/baseline_person_white_48dp.png"
     end if
-end sub
-
-sub onImageUrlLoaded()
-    data = m.LoadImageUrlTask.content[0]
-    m.LoadImageUrlTask.unobserveField("content")
-    m.top.findnode("personImage").uri = data
-    m.vidsList .callFunc("loadPersonVideos", m.personId)
+    m.vidsList .callFunc("loadPersonVideos", m.top.json.Id)
     m.topGrp.setFocus(true)
 end sub
 

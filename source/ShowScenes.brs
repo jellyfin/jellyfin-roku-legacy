@@ -384,14 +384,22 @@ function CreateVideoPlayerGroup(video_id, audio_stream_idx = 1)
 end function
 
 function CreatePersonView(personData as object) as object
-    group = CreateObject("roSGNode", "PersonInfo")
-    group.callFunc("loadPerson", personData.Id)
+    ' Will do setup directly.  Could call Itemmetadata() but it creates
+    ' only *Data ContentNodes, so will not use it
+    url = Substitute("Users/{0}/Items/{1}", get_setting("active_user"), personData.Id)
+    resp = APIRequest(url)
+    data = getJson(resp)
+    person = CreateObject("roSGNode", "PersonInfo")
+    m.global.SceneManager.callFunc("pushScene", person)
+    imgParams = { "MaxWidth": 300, "MaxHeight": 450 }
+    person.image = PosterImage(data.Id, imgParams)
+    person.json = data
+    'group.callFunc("loadPerson", personData.Id)
     'group.personData = personData.json
-    m.global.SceneManager.callFunc("pushScene", group)
-    group.setFocus(true)
-    group.observeField("selectedItem", m.port)
+    person.setFocus(true)
+    person.observeField("selectedItem", m.port)
 
-    return group
+    return person
 end function
 
 sub UpdateSavedServerList()

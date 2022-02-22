@@ -2,8 +2,9 @@
 <component name="PersonInfo" extends="JFGroup">
   <interface>
     <field id="personData" type="assocarray" />
+    <field id="image" type="node" />
     <field id="selectedItem" type="node" alias="extrasGrid.selectedItem" alwaysNotify="true" />
-    <function name="loadPerson" />
+    <field id="json" type="assocarray" onChange="loadPerson" />
   </interface>
   <children>
     <LayoutGroup id="showVids" layoutDirection="horiz" translation="[1620, 117]">
