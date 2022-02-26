@@ -29,15 +29,8 @@ The Jellyfin Roku App is a Jellyfin client for Roku Devices.  This is still very
 
 
 ## Getting Started
- **Stable Release (Recommended!)**
 
-The full released version of the channel is available on the [Roku Channel Store](https://my.roku.com/add/jellyfin).
-
----
-**Beta Release**
-
-If you want, you can install the Beta version by clicking [here](https://my.roku.com/add/jellyfinbeta).
-
+The channel is available on the [Roku Channel Store](https://my.roku.com/add/jellyfin).
 
 ## Getting Involved<a name="get_involved"></a>
 
