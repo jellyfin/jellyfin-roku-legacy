@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="PersonInfo" extends="JFGroup">
+<component name="PersonDetails" extends="JFGroup">
   <interface>
-    <field id="personData" type="assocarray" />
+    <field id="itemContent" type="node" onChange="loadPerson" />
     <field id="image" type="node" />
     <field id="selectedItem" type="node" alias="extrasGrid.selectedItem" alwaysNotify="true" />
-    <field id="json" type="assocarray" onChange="loadPerson" />
   </interface>
   <children>
     <LayoutGroup id="showVids" layoutDirection="horiz" translation="[1620, 117]">
       <Label id="star" font="font:LargeBoldSystemFont" color="#ffA0A0ff" text="* " />
       <Label id="showVidText" font="font:SmallestBoldSystemFont" text="Show Videos" />
     </LayoutGroup>
-    <LayoutGroup id="personInfoGroup"
+    <LayoutGroup id="personDetailsGroup"
         layoutDirection="horiz"  translation="[60,180]" itemSpacings="[36]">
       <Poster id="personImage"
           width="300" height="450"/>
@@ -26,7 +25,7 @@
     </LayoutGroup>
     <extrasSlider id="personVideos" />
   </children>
-  <script type="text/brightscript" uri="PersonInfo.brs" />
+  <script type="text/brightscript" uri="PersonDetails.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />

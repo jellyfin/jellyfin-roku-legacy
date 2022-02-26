@@ -113,8 +113,8 @@ function ItemMetaData(id as string)
         tmp.json = data
         return tmp
     else if data.type = "Person"
-        tmp = CreateObject("roSGNode", "ExtrasData")
-        tmp.image = PosterImage(data.id)
+        tmp = CreateObject("roSGNode", "PersonData")
+        tmp.image = PosterImage(data.id, { "MaxWidth": 300, "MaxHeight": 450 })
         tmp.json = data
         return tmp
     else
