@@ -62,10 +62,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
         return false
     end if
 
-        if key = "back"
-            m.global.sceneManager.callfunc("popScene")
-            return true
-        end if
+    if key = "back"
+        m.global.sceneManager.callfunc("popScene")
+        return true
+    end if
 
     if key = "down"
         if m.dscr.hasFocus()
@@ -137,7 +137,8 @@ sub createDialogPallete()
         DialogSecondaryItemColor: "0xcc7ecc4D",
         DialogInputFieldColor: "0x80FF8080",
         DialogKeyboardColor: "0x80FF804D",
-        DialogFootprintColor: "0x80FF804D" }
+        DialogFootprintColor: "0x80FF804D"
+    }
 end sub
 
 function shortDate(isoDate) as string

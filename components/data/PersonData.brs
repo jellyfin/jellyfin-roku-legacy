@@ -1,9 +1,9 @@
 sub setFields()
-  json = m.top.json
-  m.top.id = json.id
-  m.top.favorite = json.UserData.isFavorite
-  m.top.Type = "Person"
-  setPoster()
+    json = m.top.json
+    m.top.id = json.id
+    m.top.favorite = json.UserData.isFavorite
+    m.top.Type = "Person"
+    setPoster()
 end sub
 
 sub setPoster()
