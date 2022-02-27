@@ -392,6 +392,7 @@ function CreatePersonView(personData as object) as object
 
     person.setFocus(true)
     person.observeField("selectedItem", m.port)
+    person.findNode("favorite-button").observeField("buttonSelected", m.port)
 
     return person
 end function

@@ -414,6 +414,10 @@
         <translation>Cancel Series Recording</translation>
     </message>
     <message>
+        <source>Close</source>
+        <translation>Close</translation>
+    </message>
+    <message>
         <source>Connecting to Server</source>
         <translation>Connecting to Server</translation>
         <extracomment>Message to display to user while client is attempting to connect to the server</extracomment>

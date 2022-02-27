@@ -1,3 +1,11 @@
+sub setFields()
+  json = m.top.json
+  m.top.id = json.id
+  m.top.favorite = json.UserData.isFavorite
+  m.top.Type = "Person"
+  setPoster()
+end sub
+
 sub setPoster()
     if m.top.image <> invalid
         m.top.posterURL = m.top.image.url

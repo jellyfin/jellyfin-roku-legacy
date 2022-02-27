@@ -4,24 +4,29 @@
     <field id="itemContent" type="node" onChange="loadPerson" />
     <field id="image" type="node" />
     <field id="selectedItem" type="node" alias="extrasGrid.selectedItem" alwaysNotify="true" />
+    <!--<field id="optionsAvailable" type="boolean" value="false" />-->
   </interface>
   <children>
-    <LayoutGroup id="showVids" layoutDirection="horiz" translation="[1620, 117]">
-      <Label id="star" font="font:LargeBoldSystemFont" color="#ffA0A0ff" text="* " />
-      <Label id="showVidText" font="font:SmallestBoldSystemFont" text="Show Videos" />
-    </LayoutGroup>
-    <LayoutGroup id="personDetailsGroup"
-        layoutDirection="horiz"  translation="[60,180]" itemSpacings="[36]">
-      <Poster id="personImage"
-          width="300" height="450"/>
-      <LayoutGroup id="dataGroup>" layoutDirection="vert"
-            translation="[450,180]">
-        <Label id="name" font="font:MediumBoldSystemFont" height="45" width="1200" />
-        <label id="premierDate" font="font:SmallestBoldSystemFont" height="48" vertAlign="top" />
-        <ScrollableText id="description"
-             height="360" width="1410"
-             font="font:SmallestSystemFont" color="#eeeeeeff" />
+    <LayoutGroup id="main_group"
+        layoutdirection="vert" translation="[60, 180]" itemSpacings="[36]">
+      <LayoutGroup id="personInfoGroup"
+          layoutDirection="horiz" itemSpacings="[36]">
+        <Poster id="personImage"
+            width="300" height="450"/>
+        <LayoutGroup id="dataGroup>" layoutDirection="vert"
+              translation="[450,180]">
+          <Label id="name" font="font:MediumBoldSystemFont" height="45" width="1200" />
+          <label id="premierDate" font="font:SmallestBoldSystemFont" height="48" vertAlign="top" />
+          <Label id="description"
+              height="360" width="1410" wrap="true"
+              font="font:SmallestSystemFont" color="#bbbbbbff" ellipsisText=" ...  Show More" />
+        </LayoutGroup>
       </LayoutGroup>
+      <ButtonGroup id="buttons" itemSpacings="[10]" layoutDirection="horiz" >
+        <Button id="favorite-button" text="Favorite"
+            iconUri="" focusedIconUri="" 
+            maxWidth="320" minWidth="320" />
+        </ButtonGroup>
     </LayoutGroup>
     <extrasSlider id="personVideos" />
   </children>

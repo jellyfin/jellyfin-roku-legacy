@@ -86,7 +86,6 @@ sub itemContentChanged()
     if itemData.taglines.count() > 0
         setFieldText("tagline", itemData.taglines[0])
     end if
-    m.extrasPos = m.extrasGrid.Translation
 
     setFavoriteColor()
     setWatchedColor()
