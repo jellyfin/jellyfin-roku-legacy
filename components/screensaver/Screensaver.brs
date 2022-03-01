@@ -1,4 +1,4 @@
-function init()
+sub init()
     ' backgroundUri must be set to an empty string before backgroundColor can be set
     m.top.backgroundUri = ""
     m.top.backgroundColor = "#000000"
@@ -8,4 +8,4 @@ function init()
 
     m.BounceAnimation = m.top.findNode("BounceAnimation")
     m.BounceAnimation.control = "start" 'Start BounceAnimation
-end function
+end sub

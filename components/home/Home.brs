@@ -1,12 +1,12 @@
 sub init()
-	m.top.overhangTitle = "Home"
-	m.top.optionsAvailable = true
+    m.top.overhangTitle = "Home"
+    m.top.optionsAvailable = true
 end sub
 
-function refresh()
-	m.top.findNode("homeRows").callFunc("updateHomeRows")
-end function
+sub refresh()
+    m.top.findNode("homeRows").callFunc("updateHomeRows")
+end sub
 
-function loadLibraries()
-	m.top.findNode("homeRows").callFunc("loadLibraries")
-end function
+sub loadLibraries()
+    m.top.findNode("homeRows").callFunc("loadLibraries")
+end sub

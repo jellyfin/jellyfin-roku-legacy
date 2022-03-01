@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="ItemGrid2" extends="JFGroup">
+<component name="ItemGrid" extends="JFGroup">
   <children>
     <poster id="backdrop" 
       loadDisplayMode="scaleToFill"
@@ -39,5 +39,5 @@
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
-  <script type="text/brightscript" uri="ItemGrid2.brs" />
+  <script type="text/brightscript" uri="ItemGrid.brs" />
 </component>

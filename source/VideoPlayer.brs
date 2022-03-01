@@ -1,385 +1,254 @@
-function VideoPlayer(id, audio_stream_idx = 1) 
-  ' Get video controls and UI
-  video = CreateObject("roSGNode", "JFVideo")
-  video.id = id
-  video = VideoContent(video, audio_stream_idx)
-  if video = invalid 
-    return invalid
-  end if
-  jellyfin_blue = "#00a4dcFF"
+function VideoPlayer(id, audio_stream_idx = 1, subtitle_idx = -1)
 
-  video.retrievingBar.filledBarBlendColor = jellyfin_blue
-  video.bufferingBar.filledBarBlendColor = jellyfin_blue
-  video.trickPlayBar.filledBarBlendColor = jellyfin_blue
-  return video
+    ' Get video controls and UI
+    video = CreateObject("roSGNode", "JFVideo")
+    video.id = id
+    AddVideoContent(video, audio_stream_idx, subtitle_idx)
+
+    if video.content = invalid
+        return invalid
+    end if
+    jellyfin_blue = "#00a4dcFF"
+
+    video.retrievingBar.filledBarBlendColor = jellyfin_blue
+    video.bufferingBar.filledBarBlendColor = jellyfin_blue
+    video.trickPlayBar.filledBarBlendColor = jellyfin_blue
+    return video
 end function
 
-function VideoContent(video, audio_stream_idx = 1) as object
-  ' Get video stream
-  video.content = createObject("RoSGNode", "ContentNode")
-  params = {}
+sub AddVideoContent(video, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1)
 
-  meta = ItemMetaData(video.id)
-  video.content.title = meta.title
-  video.showID = meta.showID
-  
-  ' If there is a last playback positon, ask user if they want to resume
-  position = meta.json.UserData.PlaybackPositionTicks
-  if position > 0 then
-    dialogResult = startPlayBackOver(position)
-    'Dialog returns -1 when back pressed, 0 for resume, and 1 for start over
-    if dialogResult = -1 then
-      'User pressed back, return invalid and don't load video
-      return invalid
-    else if dialogResult = 1 then
-      'Start Over selected, change position to 0
-      position = 0
-    else if dialogResult = 2 then
-      'Mark this item as watched, refresh the page, and return invalid so we don't load the video
-      MarkItemWatched(video.id)
-      video.content.watched = not video.content.watched
-      group = m.scene.focusedChild
-      group.timeLastRefresh = CreateObject("roDateTime").AsSeconds()
-      group.callFunc("refresh")
-      return invalid
+    video.content = createObject("RoSGNode", "ContentNode")
+
+    meta = ItemMetaData(video.id)
+    if meta = invalid
+        video.content = invalid
+        return
     end if
-  end if
-  video.content.PlayStart = int(position/10000000)
 
-  playbackInfo = ItemPostPlaybackInfo(video.id, position)
+    ' Special handling for "Programs" launched from "On Now"
+    if meta.json.type = "Program"
+        meta.title = meta.json.EpisodeTitle
+        meta.showID = meta.json.id
+        meta.live = true
+        video.id = meta.json.ChannelId
+    end if
 
-  if playbackInfo = invalid then
-    return invalid
-  end if
+    video.content.title = meta.title
+    video.showID = meta.showID
 
-  video.PlaySessionId = playbackInfo.PlaySessionId
+    if playbackPosition = -1
+        playbackPosition = meta.json.UserData.PlaybackPositionTicks
+        if playbackPosition > 0
+            dialogResult = startPlayBackOver(playbackPosition)
+            'Dialog returns -1 when back pressed, 0 for resume, and 1 for start over
+            if dialogResult = -1
+                'User pressed back, return invalid and don't load video
+                video.content = invalid
+                return
+            else if dialogResult = 1
+                'Start Over selected, change position to 0
+                playbackPosition = 0
+            else if dialogResult = 2
+                'Mark this item as watched, refresh the page, and return invalid so we don't load the video
+                MarkItemWatched(video.id)
+                video.content.watched = not video.content.watched
+                group = m.scene.focusedChild
+                group.timeLastRefresh = CreateObject("roDateTime").AsSeconds()
+                group.callFunc("refresh")
+                video.content = invalid
+                return
+            end if
+        end if
+    end if
+    video.content.PlayStart = int(playbackPosition / 10000000)
 
-  if meta.live then
-    video.content.live = true
-    video.content.StreamFormat = "hls"
+    ' Call PlayInfo from server
+    mediaSourceId = video.id
+    if meta.live then mediaSourceId = "" ' Don't send mediaSourceId for Live media
+    playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
 
-    'Original MediaSource seems to be a placeholder and real stream data is available
-    'after POSTing to PlaybackInfo
-    json = meta.json
-    json.AddReplace("MediaSources", playbackInfo.MediaSources)
-    json.AddReplace("MediaStreams", playbackInfo.MediaSources[0].MediaStreams)
-    meta.json = json
-  end if
+    video.videoId = video.id
+    video.mediaSourceId = video.id
+    video.audioIndex = audio_stream_idx
 
-  container = getContainerType(meta)
-  video.container = container
+    if playbackInfo = invalid
+        video.content = invalid
+        return
+    end if
 
-  transcodeParams = getTranscodeParameters(meta, audio_stream_idx)
-  transcodeParams.append({"PlaySessionId": video.PlaySessionId})
+    params = {}
+    video.PlaySessionId = playbackInfo.PlaySessionId
 
-  if meta.live then
-    _livestream_params = {
-      "MediaSourceId": playbackInfo.MediaSources[0].Id,
-      "LiveStreamId": playbackInfo.MediaSources[0].LiveStreamId,
-      "MinSegments": 2  'This is a guess about initial buffer size, segments are 3s each
-    }
-    params.append(_livestream_params)
-    transcodeParams.append(_livestream_params)
-  end if
+    if meta.live
+        video.content.live = true
+        video.content.StreamFormat = "hls"
+    end if
 
-  subtitles =  sortSubtitles(meta.id,meta.json.MediaStreams)
-  video.Subtitles = subtitles["all"]
-  video.content.SubtitleTracks = subtitles["text"]
+    video.container = getContainerType(meta)
 
-  'TODO: allow user selection of subtitle track before playback initiated, for now set to first track
-  if video.Subtitles.count() then
-    video.SelectedSubtitle = 0
-  else
+    subtitles = sortSubtitles(meta.id, playbackInfo.MediaSources[0].MediaStreams)
+    video.Subtitles = subtitles["all"]
+
+    if meta.live
+        video.transcodeParams = {
+            "MediaSourceId": playbackInfo.MediaSources[0].Id,
+            "LiveStreamId": playbackInfo.MediaSources[0].LiveStreamId,
+            "PlaySessionId": video.PlaySessionId
+        }
+    end if
+
+    video.content.SubtitleTracks = subtitles["text"]
+
+    ' 'TODO: allow user selection of subtitle track before playback initiated, for now set to no subtitles
     video.SelectedSubtitle = -1
-  end if
 
-  if video.SelectedSubtitle <> -1 and displaySubtitlesByUserConfig(video.Subtitles[video.SelectedSubtitle], meta.json.MediaStreams[audio_stream_idx]) then
-    if video.Subtitles[0].IsTextSubtitleStream then
-      video.subtitleTrack = video.availableSubtitleTracks[video.Subtitles[0].TextIndex].TrackName
-      video.suppressCaptions = false
+    video.directPlaySupported = playbackInfo.MediaSources[0].SupportsDirectPlay
+
+    if video.directPlaySupported
+        params.append({
+            "Static": "true",
+            "Container": video.container,
+            "PlaySessionId": video.PlaySessionId,
+            "AudioStreamIndex": audio_stream_idx
+        })
+        video.content.url = buildURL(Substitute("Videos/{0}/stream", video.id), params)
+        video.isTranscoded = false
+        video.audioTrack = (audio_stream_idx + 1).ToStr() ' Roku's track indexes count from 1. Our index is zero based
     else
-      video.suppressCaptions = true
-      'Watch to see if system overlay opened/closed to change transcoding if caption mode changed
-      m.device.EnableAppFocusEvent(True)
-      video.captionMode = video.globalCaptionMode
-      if video.globalCaptionMode = "On" or (video.globalCaptionMode = "When mute" and m.mute = true) then
-        'Only transcode if subtitles are turned on
-        transcodeParams.append({"SubtitleStreamIndex" : video.Subtitles[0].index })
-      end if
+        ' If server does not provide a transcode URL, display a message to the user
+        if playbackInfo.MediaSources[0].TranscodingUrl = invalid
+            m.global.sceneManager.callFunc("userMessage", tr("Error Getting Playback Information"), tr("An error was encountered while playing this item.  Server did not provide required transcoding data."))
+            video.content = invalid
+            return
+        end if
+
+        ' Get transcoding reason
+        video.transcodeReasons = getTranscodeReasons(playbackInfo.MediaSources[0].TranscodingUrl)
+
+        video.content.url = buildURL(playbackInfo.MediaSources[0].TranscodingUrl)
+        video.isTranscoded = true
     end if
-  else
-    video.suppressCaptions = true
-    video.SelectedSubtitle = -1
-  end if
 
-  video.directPlaySupported = directPlaySupported(meta)
-  video.decodeAudioSupported = decodeAudioSupported(meta, audio_stream_idx)
-  video.transcodeParams = transcodeParams
+    video.content = authorize_request(video.content)
+    video.content.setCertificatesFile("common:/certs/ca-bundle.crt")
 
-  if video.directPlaySupported and video.decodeAudioSupported and transcodeParams.SubtitleStreamIndex = invalid then
-    params.append({
-      "Static": "true",
-      "Container": container,
-      "PlaySessionId": video.PlaySessionId,
-      "AudioStreamIndex": audio_stream_idx
-    })
-    video.content.url = buildURL(Substitute("Videos/{0}/stream", video.id), params)
-    video.content.streamformat = container
-    video.content.switchingStrategy = ""
-    video.isTranscode = False
-  else
-    video.content.url = buildURL(Substitute("Videos/{0}/master.m3u8", video.id), transcodeParams)
-    video.isTranscoded = true
-  end if
-  video.content = authorize_request(video.content)
+end sub
 
-  ' todo - audioFormat is read only
-  video.content.audioFormat = getAudioFormat(meta)
-  video.content.setCertificatesFile("common:/certs/ca-bundle.crt")
-  return video
+'
+' Extract array of Transcode Reasons from the content URL
+' @returns Array of Strings
+function getTranscodeReasons(url as string) as object
+
+    regex = CreateObject("roRegex", "&TranscodeReasons=([^&]*)", "")
+    match = regex.Match(url)
+
+    if match.count() > 1
+        return match[1].Split(",")
+    end if
+
+    return []
 end function
 
 
-function getTranscodeParameters(meta as object, audio_stream_idx = 1)
-
-  params = {"AudioStreamIndex": audio_stream_idx}
-  if decodeAudioSupported(meta, audio_stream_idx) and meta.json.MediaStreams[audio_stream_idx] <> invalid and meta.json.MediaStreams[audio_stream_idx].Type = "Audio" then
-    audioCodec = meta.json.MediaStreams[audio_stream_idx].codec
-    audioChannels = meta.json.MediaStreams[audio_stream_idx].channels
-  else
-    params.Append({"AudioCodec": "aac"})
-
-    ' If 5.1 Audio Output is connected then allow transcoding to 5.1
-    di = CreateObject("roDeviceInfo")
-    if di.GetAudioOutputChannel() = "5.1 surround" and di.CanDecodeAudio({ Codec: "aac", ChCnt: 6 }).result then
-      params.Append({"MaxAudioChannels": "6"})
-    else
-      params.Append({"MaxAudioChannels": "2"})
-    end if
-  end if
-
-  streamInfo = {}
-  
-  if meta.json.MediaStreams[0] <> invalid and meta.json.MediaStreams[0].codec <> invalid then
-    streamInfo.Codec = meta.json.MediaStreams[0].codec
-  end if
-	
-  if meta.json.MediaStreams[0] <> invalid and meta.json.MediaStreams[0].Profile <> invalid and meta.json.MediaStreams[0].Profile.len() > 0 then
-    streamInfo.Profile = LCase(meta.json.MediaStreams[0].Profile)
-  end if
-  if meta.json.MediaSources[0] <> invalid and meta.json.MediaSources[0].container <> invalid and meta.json.MediaSources[0].container.len() > 0  then
-    streamInfo.Container = meta.json.MediaSources[0].container
-  end if
-
-  devinfo = CreateObject("roDeviceInfo")
-  res = devinfo.CanDecodeVideo(streamInfo)
-
-  if res.result = false then
-    params.Append({"VideoCodec": "h264"})
-    streamInfo.Profile = "h264"
-    streamInfo.Container = "ts"
-  end if
-
-  params.Append({"MediaSourceId": meta.id})
-
-  return params
-end function
-
-'Checks available subtitle tracks and puts subtitles in forced, default, and non-default/forced but preferred language at the top
-function sortSubtitles(id as string, MediaStreams)
-  tracks = { "forced": [], "default": [], "normal": [] }
-  'Too many args for using substitute
-  dashedid = id.left(8) + "-" + id.mid(8,4) + "-" + id.mid(12,4) + "-" + id.mid(16,4) + "-" + id.right(12)
-  prefered_lang = m.user.Configuration.SubtitleLanguagePreference
-  for each stream in MediaStreams
-    if stream.type = "Subtitle" then
-      'Documentation lists that srt, ttml, and dfxp can be sideloaded but only srt was working in my testing,
-      'forcing srt for all text subtitles
-      url = Substitute("{0}/Videos/{1}/{2}/Subtitles/{3}/0/", get_url(), dashedid, id, stream.index.tostr())
-      url = url + Substitute("Stream.js?api_key={0}&format=srt", get_setting("active_user"))
-      stream = {
-        "Track": { "Language" : stream.language, "Description": stream.displaytitle , "TrackName": url },
-        "IsTextSubtitleStream": stream.IsTextSubtitleStream,
-        "Index": stream.index,
-        "TextIndex": -1,
-        "IsDefault": stream.IsDefault,
-        "IsForced": stream.IsForced
-      }
-      if stream.isForced then
-        trackType = "forced"
-      else if stream.IsDefault then
-        trackType = "default"
-      else
-        trackType = "normal"
-      end if
-      if prefered_lang <> "" and prefered_lang = stream.Track.Language then
-        tracks[trackType].unshift(stream)
-      else
-        tracks[trackType].push(stream)
-      end if
-    end if
-  end for
-  tracks["default"].append(tracks["normal"])
-  tracks["forced"].append(tracks["default"])
-  textTracks = []
-  for i = 0 to tracks["forced"].count() - 1
-    if tracks["forced"][i].IsTextSubtitleStream then tracks["forced"][i].TextIndex = textTracks.count()
-    textTracks.push(tracks["forced"][i].Track)
-  end for
-  return { "all" : tracks["forced"], "text": textTracks }
-end function
 
 'Opens dialog asking user if they want to resume video or start playback over
-function startPlayBackOver(time as LongInteger) as integer
-  if m.scene.focusedChild.overhangTitle = "Home" then
-    return option_dialog([ "Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning.", "Watched"])
-  else
-    return option_dialog([ "Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning."])
-  endif
+function startPlayBackOver(time as longinteger) as integer
+    if m.scene.focusedChild.overhangTitle = "Home"
+        return option_dialog(["Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning.", "Watched"])
+    else
+        return option_dialog(["Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning."])
+    end if
 end function
 
 function directPlaySupported(meta as object) as boolean
-  devinfo = CreateObject("roDeviceInfo")
-  if meta.json.MediaSources[0] <> invalid and meta.json.MediaSources[0].SupportsDirectPlay = false then
-    return false
-  end if
-
-  if meta.json.MediaStreams[0] = invalid then
-    return false
-  end if
-
-  streamInfo =  { Codec: meta.json.MediaStreams[0].codec }
-  if meta.json.MediaStreams[0].Profile <> invalid and meta.json.MediaStreams[0].Profile.len() > 0 then
-    streamInfo.Profile = LCase(meta.json.MediaStreams[0].Profile)
-  end if
-  if meta.json.MediaSources[0].container <> invalid and meta.json.MediaSources[0].container.len() > 0  then
-    'CanDecodeVideo() requires the .container to be format: “mp4”, “hls”, “mkv”, “ism”, “dash”, “ts” if its to direct stream
-    if meta.json.MediaSources[0].container = "mov" then 
-        streamInfo.Container = "mp4"
-    else
-    	streamInfo.Container = meta.json.MediaSources[0].container
+    devinfo = CreateObject("roDeviceInfo")
+    if meta.json.MediaSources[0] <> invalid and meta.json.MediaSources[0].SupportsDirectPlay = false
+        return false
     end if
-  end if
-  return devinfo.CanDecodeVideo(streamInfo).result
-end function
 
-function decodeAudioSupported(meta as object, audio_stream_idx = 1) as boolean
+    if meta.json.MediaStreams[0] = invalid
+        return false
+    end if
 
-  'Check for missing audio and allow playing
-  if meta.json.MediaStreams[audio_stream_idx] = invalid or meta.json.MediaStreams[audio_stream_idx].Type <> "Audio" then return true
+    streamInfo = { Codec: meta.json.MediaStreams[0].codec }
+    if meta.json.MediaStreams[0].Profile <> invalid and meta.json.MediaStreams[0].Profile.len() > 0
+        streamInfo.Profile = LCase(meta.json.MediaStreams[0].Profile)
+    end if
+    if meta.json.MediaSources[0].container <> invalid and meta.json.MediaSources[0].container.len() > 0
+        'CanDecodeVideo() requires the .container to be format: “mp4”, “hls”, “mkv”, “ism”, “dash”, “ts” if its to direct stream
+        if meta.json.MediaSources[0].container = "mov"
+            streamInfo.Container = "mp4"
+        else
+            streamInfo.Container = meta.json.MediaSources[0].container
+        end if
+    end if
 
-  devinfo = CreateObject("roDeviceInfo")
-  codec = meta.json.MediaStreams[audio_stream_idx].codec
-  streamInfo = { Codec: codec, ChCnt: meta.json.MediaStreams[audio_stream_idx].channels }
+    decodeResult = devinfo.CanDecodeVideo(streamInfo)
+    return decodeResult <> invalid and decodeResult.result
 
-  'Otherwise check Roku can decode stream and channels
-  canDecode = devinfo.CanDecodeAudio(streamInfo)
-  return canDecode.result
 end function
 
 function getContainerType(meta as object) as string
-  ' Determine the file type of the video file source
-  if meta.json.mediaSources = invalid then return ""
+    ' Determine the file type of the video file source
+    if meta.json.mediaSources = invalid then return ""
 
-  container = meta.json.mediaSources[0].container
-  if container = invalid
-    container = ""
-  else if container = "m4v" or container = "mov"
-    container = "mp4"
-  end if
+    container = meta.json.mediaSources[0].container
+    if container = invalid
+        container = ""
+    else if container = "m4v" or container = "mov"
+        container = "mp4"
+    end if
 
-  return container
+    return container
 end function
 
 function getAudioFormat(meta as object) as string
-  ' Determine the codec of the audio file source
-  if meta.json.mediaSources = invalid then return ""
+    ' Determine the codec of the audio file source
+    if meta.json.mediaSources = invalid then return ""
 
-  audioInfo = getAudioInfo(meta)
-  if audioInfo.count() = 0 or audioInfo[0].codec = invalid then return ""
-  return audioInfo[0].codec
+    audioInfo = getAudioInfo(meta)
+    if audioInfo.count() = 0 or audioInfo[0].codec = invalid then return ""
+    return audioInfo[0].codec
 end function
 
 function getAudioInfo(meta as object) as object
-  ' Return audio metadata for a given stream
-  results = []
-  for each source in meta.json.mediaSources[0].mediaStreams
-    if source["type"] = "Audio"
-      results.push(source)
-    end if
-  end for
-  return results
+    ' Return audio metadata for a given stream
+    results = []
+    for each source in meta.json.mediaSources[0].mediaStreams
+        if source["type"] = "Audio"
+            results.push(source)
+        end if
+    end for
+    return results
 end function
 
-function ReportPlayback(video, state = "update" as string)
-  params = {
-    "PlaySessionId": video.PlaySessionId,
-    "PositionTicks": int(video.position) * 10000000&,   'Ensure a LongInteger is used
-    "IsPaused": (video.state = "paused"),
-  }
-  if video.content.live then
-    params.append({
-      "MediaSourceId": video.transcodeParams.MediaSourceId,
-      "LiveStreamId": video.transcodeParams.LiveStreamId
-    })
-  end if
-  PlaystateUpdate(video.id, state, params)
-end function
+sub autoPlayNextEpisode(videoID as string, showID as string)
+    ' use web client setting
+    if m.user.Configuration.EnableNextEpisodeAutoPlay
+        ' query API for next episode ID
+        url = Substitute("Shows/{0}/Episodes", showID)
+        urlParams = { "UserId": get_setting("active_user") }
+        urlParams.Append({ "StartItemId": videoID })
+        urlParams.Append({ "Limit": 2 })
+        resp = APIRequest(url, urlParams)
+        data = getJson(resp)
 
-function StopPlayback()
-  video = m.scene.focusedchild
-  if video.state = "finished" then MarkItemWatched(video.id)
-  video.control = "stop"
-  m.device.EnableAppFocusEvent(False)
-  video.findNode("playbackTimer").control = "stop"
-  ReportPlayback(video, "stop")
-end function
-
-function displaySubtitlesByUserConfig(subtitleTrack, audioTrack)
-  subtitleMode = m.user.Configuration.SubtitleMode
-  audioLanguagePreference = m.user.Configuration.AudioLanguagePreference
-  subtitleLanguagePreference = m.user.Configuration.SubtitleLanguagePreference
-  if subtitleMode = "Default"
-    return (subtitleTrack.isForced or subtitleTrack.isDefault)
-  else if subtitleMode = "Smart"
-    return (audioLanguagePreference <> "" and audioTrack.Language <> invalid and subtitleLanguagePreference <> "" and subtitleTrack.Track.Language <> invalid and subtitleLanguagePreference = subtitleTrack.Track.Language and audioLanguagePreference <> audioTrack.Language)
-  else if subtitleMode = "OnlyForced"
-    return subtitleTrack.IsForced
-  else if subtitleMode = "Always"
-    return true
-  else if subtitleMode = "None"
-    return false
-  else
-    return false
-  end if
-end function
-
-function autoPlayNextEpisode(videoID as string, showID as string)
-  ' use web client setting
-  if m.user.Configuration.EnableNextEpisodeAutoPlay then
-    ' query API for next episode ID
-    url = Substitute("Shows/{0}/Episodes", showID)
-    urlParams = { "UserId": get_setting("active_user")}
-    urlParams.Append({ "StartItemId": videoID })
-    urlParams.Append({ "Limit": 2 })
-    resp = APIRequest(url, urlParams)
-    data = getJson(resp)
-    
-    if data <> invalid and data.Items.Count() = 2 then
-      ' remove finished video node
-      n = m.scene.getChildCount() - 1
-      m.scene.removeChildIndex(n)
-      ' setup new video node
-      nextVideo = CreateVideoPlayerGroup(data.Items[1].Id)
-      m.scene.appendChild(nextVideo)
-      nextVideo.setFocus(true)
-      nextVideo.control = "play"
-      ReportPlayback(nextVideo, "start")
+        if data <> invalid and data.Items.Count() = 2
+            ' remove finished video node
+            m.global.sceneManager.callFunc("popScene")
+            ' setup new video node
+            nextVideo = CreateVideoPlayerGroup(data.Items[1].Id)
+            if nextVideo <> invalid
+                m.global.sceneManager.callFunc("pushScene", nextVideo)
+            else
+                m.global.sceneManager.callFunc("popScene")
+            end if
+        else
+            ' can't play next episode
+            m.global.sceneManager.callFunc("popScene")
+        end if
     else
-      ' can't play next episode
-      RemoveCurrentGroup()
+        m.global.sceneManager.callFunc("popScene")
     end if
-  else
-    RemoveCurrentGroup()
-  end if
-end function
+end sub

@@ -4,9 +4,9 @@ sub init()
 
     updateSize()
 
-    m.top.showRowLabel = [ true ]
+    m.top.showRowLabel = [true]
     m.top.rowLabelOffset = [0, 20]
-    m.top.showRowCounter = [ true ]
+    m.top.showRowCounter = [true]
 
     ' TODO - Define a failed to load image background
     ' m.top.failedBitmapURI
@@ -27,34 +27,34 @@ sub updateSize()
     itemWidth = (dimensions["width"] - border * 2) / m.top.rowSize
     itemHeight = itemWidth * 1.5 + textHeight
 
-    m.top.itemSize = [dimensions["width"] - border*2, itemHeight]
+    m.top.itemSize = [dimensions["width"] - border * 2, itemHeight]
     m.top.itemSpacing = [0, 50]
 
-    m.top.rowItemSize = [ itemWidth, itemHeight ]
+    m.top.rowItemSize = [itemWidth, itemHeight]
     m.top.rowItemSpacing = [0, 0]
 end sub
 
 function getData()
-    if m.top.itemData = invalid then
+    if m.top.itemData = invalid
         data = CreateObject("roSGNode", "ContentNode")
         return data
     end if
 
     itemData = m.top.itemData
-    rowSize = m.top.rowSize
 
     ' todo - Or get the old data? I can't remember...
     data = CreateObject("roSGNode", "ContentNode")
     ' Do this to keep the ordering, AssociateArrays have no order
-    type_array = ["Movie", "Series", "Episode", "AlbumArtist", "Album", "Audio", "Person"]
+    type_array = ["Movie", "Series", "TvChannel", "Episode", "AlbumArtist", "Album", "Audio", "Person"]
     content_types = {
-        "Movie": {"label": "Movies", "count": 0},
-        "Series": {"label": "Shows", "count": 0},
-        "Episode": {"label": "Episodes", "count": 0},
-        "AlbumArtist": {"label": "Artists", "count": 0},
-        "Album": {"label": "Albums", "count": 0},
-        "Audio": {"label": "Songs", "count": 0},
-        "Person": {"label": "People", "count": 0}
+        "TvChannel": { "label": "Channels", "count": 0 },
+        "Movie": { "label": "Movies", "count": 0 },
+        "Series": { "label": "Shows", "count": 0 },
+        "Episode": { "label": "Episodes", "count": 0 },
+        "AlbumArtist": { "label": "Artists", "count": 0 },
+        "Album": { "label": "Albums", "count": 0 },
+        "Audio": { "label": "Songs", "count": 0 },
+        "Person": { "label": "People", "count": 0 }
     }
 
     for each item in itemData.searchHints
@@ -74,7 +74,7 @@ function getData()
     return data
 end function
 
-function addRow(data, title, type_filter)
+sub addRow(data, title, type_filter)
     itemData = m.top.itemData
     row = data.CreateChild("ContentNode")
     row.title = title
@@ -83,4 +83,4 @@ function addRow(data, title, type_filter)
             row.appendChild(item)
         end if
     end for
-end function
+end sub

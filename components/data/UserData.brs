@@ -3,21 +3,21 @@ sub setDataFromJSON()
     loadFromJSON(json)
 end sub
 
-function loadFromJSON(json)
+sub loadFromJSON(json)
     m.top.id = json.User.id
 
     m.top.username = json.User.name
     m.top.token = json.AccessToken
-end function
+end sub
 
-function loadFromRegistry(id as string)
+sub loadFromRegistry(id as string)
     m.top.id = id
 
     m.top.username = get_user_setting("username")
     m.top.token = get_user_setting("token")
-end function
+end sub
 
-function saveToRegistry()
+sub saveToRegistry()
     set_user_setting("username", m.top.username)
     set_user_setting("token", m.top.token)
 
@@ -34,9 +34,9 @@ function saveToRegistry()
         })
         set_setting("available_users", formatJson(users))
     end if
-end function
+end sub
 
-function removeFromRegistry()
+sub removeFromRegistry()
     new_users = []
     users = parseJson(get_setting("available_users", "[]"))
     for each user in users
@@ -44,7 +44,7 @@ function removeFromRegistry()
     end for
 
     set_setting("available_users", formatJson(new_users))
-end function
+end sub
 
 function getPreference(key as string, default as string)
     return get_user_setting("pref-" + key, default)
@@ -54,10 +54,10 @@ function setPreference(key as string, value as string)
     return set_user_setting("pref-" + key, value)
 end function
 
-function setActive()
+sub setActive()
     set_setting("active_user", m.top.id)
-end function
+end sub
 
-function setServer(hostname as string)
+sub setServer(hostname as string)
     m.top.server = hostname
-end function
+end sub

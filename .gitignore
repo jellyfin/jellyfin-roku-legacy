@@ -15,3 +15,8 @@ rooibosFunctionMap.brs
 */buildinfo.brs
 .vscode
 logs
+
+#Eclipse
+.buildpath
+.project
+.settings

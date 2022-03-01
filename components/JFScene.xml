@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="JFScene" extends="Scene">
+  <children>
+    <Group id="content" />
+    <JFOverhang id="overhang" />
+  </children>
   <interface>
-    <field id="backPressed" type="boolean" alwaysNotify="true" />
-    <field id="optionsPressed" type="boolean" alwaysNotify="true" />
+    <field id="exit" type="boolean" alwaysNotify="true" />
   </interface>
   <script type="text/brightscript" uri="JFScene.brs" />
 </component>

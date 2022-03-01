@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="JFOverhang" extends="Group">
   <children>
-    <LayoutGroup id="overlayBackgroundGroup" layoutDirection="horiz" translation="[0, 0]" >
-      <Rectangle
-        id="overlayBackground"
-        color="#000000"
-        width="1920"
-        height="125"
-        translation="[0,0]" />
-    </LayoutGroup>
     <Poster id="overlayLogo"
       uri="pkg:/images/logo.png"
       translation="[70, 53]"
