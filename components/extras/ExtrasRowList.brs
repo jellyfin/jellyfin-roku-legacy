@@ -18,6 +18,8 @@ sub init()
     m.LoadMoviesTask.itemsToLoad = "personMovies"
     m.LoadShowsTask = CreateObject("roSGNode", "LoadItemsTask")
     m.LoadShowsTask.itemsToLoad = "personTVShows"
+    m.LoadSeriesTask = CreateObject("roSGNode", "LoadItemsTask")
+    m.LoadSeriesTask.itemsToLoad = "personSeries"
 end sub
 
 sub updateSize()
@@ -134,21 +136,41 @@ sub onShowsLoaded()
     data = m.LoadShowsTask.content
     m.LoadShowsTask.unobserveField("content")
     if data <> invalid and data.count() > 0
-        row = CreateObject("roSGNode", "ContentNode")
-        row.Title = tr("TV Shows")
-        for each mov in data
-            mov.Id = mov.json.Id
-            mov.labelText = mov.json.Name
-            mov.subTitle = mov.json.ProductionYear
-            mov.Type = mov.json.Type
-            mov.imageWidth = 502
-            row.appendChild(mov)
-        end for
+        row = buildRow("TV Shows", data, 502)
         addRowSize([502, 396])
+        m.top.content.appendChild(row)
+    end if
+    m.LoadSeriesTask.itemId = m.personId
+    m.LoadSeriesTask.observeField("content", "onSeriesLoaded")
+    m.LoadSeriesTask.control = "RUN"
+end sub
+
+sub onSeriesLoaded()
+    data = m.LoadSeriesTask.content
+    m.LoadSeriesTask.unobserveField("content")
+    if data <> invalid and data.count() > 0
+        row = buildRow("Series", data)
+        addRowSize([234, 396])
         m.top.content.appendChild(row)
     end if
     m.top.visible = true
 end sub
+
+function buildRow(rowTitle as string, items, imgWdth = 0)
+    row = CreateObject("roSGNode", "ContentNode")
+    row.Title = tr(rowTitle)
+    for each mov in items
+        mov.Id = mov.json.Id
+        mov.labelText = mov.json.Name
+        mov.subTitle = mov.json.ProductionYear
+        mov.Type = mov.json.Type
+        if imgWdth > 0
+            mov.imageWidth = imgWdth
+        end if
+        row.appendChild(mov)
+    end for
+    return row
+end function
 
 sub addRowSize(newRow)
     sizeArray = m.top.rowItemSize

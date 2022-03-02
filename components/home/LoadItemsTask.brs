@@ -147,6 +147,8 @@ sub loadItems()
         getPersonVideos("Movie", results, {})
     else if m.top.itemsToLoad = "personTVShows"
         getPersonVideos("Episode", results, { MaxWidth: 502, MaxHeight: 300 })
+    else if m.top.itemsToLoad = "personSeries"
+        getPersonVideos("Series", results, {})
     end if
 
     m.top.content = results
