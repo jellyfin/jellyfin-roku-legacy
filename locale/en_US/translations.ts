@@ -284,6 +284,10 @@
     <message>
         <source>Special Features</source>
         <translation>Special Features</translation>
+     <message>
+        <source>Press 'OK' to Close</source>
+        <translation>Press 'OK' to Close</translation>
+    </message>
     </message>
     <message>
         <source>Movies</source>

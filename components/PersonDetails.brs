@@ -2,9 +2,14 @@ sub init()
     m.dscr = m.top.findNode("description")
     m.vidsList = m.top.findNode("extrasGrid")
     m.btnGrp = m.top.findNode("buttons")
+    m.btnGrp.observeField("escape", "onButtonGroupEscaped")
     m.favBtn = m.top.findNode("favorite-button")
+    m.extrasGrp = m.top.findNode("extrasGrp")
+    m.top.findNode("VertSlider").keyValue = "[[30, 998], [30, 789], [30, 580], [30,371 ], [30, 162]]"
+    m.extrasGrp.opacity = 1.0
+    m.extrasGrp.translation = "[30, 998]"
+    m.dscr.observeField("isTextEllipsized", "onEllipsisChanged")
     createDialogPallete()
-    'm.topGrp.translation = [24, 165]
     m.top.optionsAvailable = false
 end sub
 
@@ -48,6 +53,31 @@ sub loadPerson()
     m.favBtn.setFocus(true)
 end sub
 
+sub onEllipsisChanged()
+    if m.dscr.isTextEllipsized
+        dscrShowFocus()
+    end if
+end sub
+
+sub dscrShowFocus()
+    if m.dscr.isTextEllipsized
+        m.dscr.setFocus(true)
+        m.dscr.opacity = 1.0
+        m.top.findNode("dscrBorder").color = "#d0d0d0ff"
+    end if
+end sub
+
+sub onButtonGroupEscaped()
+    key = m.btnGrp.escape
+    if key = "down"
+        m.vidsList.setFocus(true)
+        m.top.findNode("VertSlider").reverse = false
+        m.top.findNode("pplAnime").control = "start"
+    else if key = "up" and m.dscr.isTextEllipsized
+        dscrShowFocus()
+    end if
+end sub
+
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
 
@@ -55,9 +85,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
         if m.dscr.hasFocus() and m.dscr.isTextEllipsized
             createFullDscrDlg()
             return true
-            'else if m.dscr.hasFocus()
-            '    m.top.getScene().dialog = m.fullDscrDlg
-            '    return true
         end if
         return false
     end if
@@ -70,23 +97,13 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if key = "down"
         if m.dscr.hasFocus()
             m.favBtn.setFocus(true)
-            m.dscr.color = "#bbbbbbff"
-            return true
-        else if m.favBtn.hasFocus()
-            m.vidsList.setFocus(true)
-            m.top.findNode("VertSlider").reverse = false
-            m.top.findNode("extrasFader").reverse = false
-            m.top.findNode("pplAnime").control = "start"
+            m.dscr.opacity = 0.6
+            m.top.findNode("dscrBorder").color = "#data202020ff"
             return true
         end if
     else if key = "up"
-        if m.favBtn.hasFocus()
-            m.dscr.setFocus(true)
-            m.dscr.color = "#ddfeddff"
-            return true
-        else if m.vidsList.isInFocusChain() and m.vidsList.itemFocused = 0
+        if m.vidsList.isInFocusChain() and m.vidsList.itemFocused = 0
             m.top.findNode("VertSlider").reverse = true
-            m.top.findNode("extrasFader").reverse = true
             m.top.findNode("pplAnime").control = "start"
             m.favBtn.setFocus(true)
             return true
@@ -108,32 +125,31 @@ sub setFavoriteColor()
 end sub
 
 sub createFullDscrDlg()
-    dlg = CreateObject("roSGNode", "StandardMessageDialog")
-    dlg.width = 1620
-    dlg.height = 750
-    dlg.translation = [250, 180]
+    dlg = CreateObject("roSGNode", "OverviewDialog")
+    dlg.Title = tr("Press 'OK' to Close")
+    dlg.width = 1290
     dlg.palette = m.dlgPalette
-    dlg.message = [m.dscr.text]
-    dlg.buttons = [tr("Close")]
-    dlg.observeFieldScoped("buttonSelected", "onButtonSelected")
+    dlg.overview = [m.dscr.text]
     m.fullDscrDlg = dlg
     m.top.getScene().dialog = dlg
-end sub
-
-sub onButtonSelected()
-    ' we have only one button
-    m.fullDscrDlg.close = true
+    border = createObject("roSGNode", "Poster")
+    border.uri = "pkg:/images/hd_focul_9.png"
+    border.blendColor = "#c9c9c9ff"
+    border.width = dlg.width + 6
+    border.height = dlg.height + 6
+    border.translation = [dlg.translation[0] - 3, dlg.translation[1] - 3]
+    border.visible = true
 end sub
 
 sub createDialogPallete()
     m.dlgPalette = createObject("roSGNode", "RSGPalette")
     m.dlgPalette.colors = {
-        DialogBackgroundColor: "0x101010FF",
+        DialogBackgroundColor: "0x262828FF",
         DialogItemColor: "0x00EF00FF",
-        DialogTextColor: "0xccEFccFF",
-        DialogFocusColor: "0x008e00FF",
-        DialogFocusItemColor: "0xdeeedeFF",
-        DialogSecondaryTextColor: "0xcc7ecc66",
+        DialogTextColor: "0xb0b0b0FF",
+        DialogFocusColor: "0xcececeFF",
+        DialogFocusItemColor: "0x202020FF",
+        DialogSecondaryTextColor: "0xf8f8f8ff",
         DialogSecondaryItemColor: "0xcc7ecc4D",
         DialogInputFieldColor: "0x80FF8080",
         DialogKeyboardColor: "0x80FF804D",

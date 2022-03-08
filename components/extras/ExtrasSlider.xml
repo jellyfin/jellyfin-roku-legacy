@@ -20,7 +20,7 @@
         <FloatFieldInterpolator
             id="extrasFader"
             key="[0.0, 0.25, 0.50, 75.0, 1.0]"
-            keyValue="[0.3, 0.45, 0.6, 0.75, 0.9]"
+            keyValue="[0.2, 0.4, 0.6, 0.8, 1.0]"
             fieldToInterp="extrasGrp.opacity" />
       </Animation>
     </Rectangle>
