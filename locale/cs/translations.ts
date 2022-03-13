@@ -1173,5 +1173,234 @@
         <source>IMDB_RATING</source>
         <translation>Hodnocení IMDb</translation>
     </message>
+    <message>
+        <source>An error was encountered while playing this item.  Server did not provide required transcoding data.</source>
+        <translation>Při přehrávání této položky došlo k chybě. Server neposkytl požadovaná data o překódování.</translation>
+        <extracomment>Content of message box when trying to play an item which requires transcoding, and the server did not provide transcode url</extracomment>
+    </message>
+    <message>
+        <source>Error Getting Playback Information</source>
+        <translation>Nepodařilo se získat informace o přehrávání</translation>
+        <extracomment>Dialog Title: Received error from server when trying to get information about the selected item for playback</extracomment>
+    </message>
+    <message>
+        <source>...or enter server URL manually:</source>
+        <translation>…nebo zadejte URL serveru ručně:</translation>
+        <extracomment>Instructions on initial app launch when the user is asked to manually enter a server URL</extracomment>
+    </message>
+    <message>
+        <source>Pick a Jellyfin server from the local network</source>
+        <translation>Vyberte server Jellyfin na místní síti</translation>
+        <extracomment>Instructions on initial app launch when the user is asked to pick a server from a list</extracomment>
+    </message>
+    <message>
+        <source>Enter the server name or ip address</source>
+        <translation>Zadejte název nebo IP adresu serveru</translation>
+        <extracomment>Title of KeyboardDialog when manually entering a server URL</extracomment>
+    </message>
+    <message>
+        <source>The requested content does not exist on the server</source>
+        <translation>Požadovaný obsah na serveru neexistuje</translation>
+        <extracomment>Content of message box when the requested content is not found on the server</extracomment>
+    </message>
+    <message>
+        <source>Not found</source>
+        <translation>Nenalezeno</translation>
+        <extracomment>Title of message box when the requested content is not found on the server</extracomment>
+    </message>
+    <message>
+        <source>Connecting to Server</source>
+        <translation>Připojování k serveru</translation>
+        <extracomment>Message to display to user while client is attempting to connect to the server</extracomment>
+    </message>
+    <message>
+        <source>Cancel Series Recording</source>
+        <translation>Zrušit nahrávání řady</translation>
+    </message>
+    <message>
+        <source>Cancel Recording</source>
+        <translation>Zrušit nahrávání</translation>
+    </message>
+    <message>
+        <source>Record Series</source>
+        <translation>Nahrávat řadu</translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation>Nahrávat</translation>
+    </message>
+    <message>
+        <source>View Channel</source>
+        <translation>Zobrazit kanál</translation>
+    </message>
+    <message>
+        <source>TV Guide</source>
+        <translation>Programový průvodce</translation>
+        <extracomment>Menu option for showing Live TV Guide / Schedule</extracomment>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation>Kanály</translation>
+        <extracomment>Menu option for showing Live TV Channel List</extracomment>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation>Opakovat</translation>
+        <extracomment>If TV Shows has previously been broadcasted</extracomment>
+    </message>
+    <message>
+        <source>Live</source>
+        <translation>Živě</translation>
+        <extracomment>If TV Show is being broadcast live (not pre-recorded)</extracomment>
+    </message>
+    <message>
+        <source>Ends at</source>
+        <translation>Končí v</translation>
+        <extracomment>(Past Tense) For defining a day and time when a program ended  (e.g.  Ended Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Ended at</source>
+        <translation>Skončilo v</translation>
+        <extracomment>(Past Tense) For defining time when a program will ended (e.g.  Ended at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Starts</source>
+        <translation>Začíná</translation>
+        <extracomment>(Future Tense) For defining a day and time when a program will start (e.g.  Starts Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Starts at</source>
+        <translation>Začíná v</translation>
+        <extracomment>(Future Tense) For defining time when a program will start today (e.g.  Starts at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation>Začalo</translation>
+        <extracomment>(Past Tense) For defining a day and time when a program started (e.g.  Started Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Started at</source>
+        <translation>Začátek v</translation>
+        <extracomment>(Past Tense) For defining time when a program started today (e.g.  Started at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Sobota</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>Pátek</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Čtvrtek</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Středa</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Úterý</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation>Pondělí</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Neděle</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation>zítra</translation>
+        <extracomment>Next day</extracomment>
+    </message>
+    <message>
+        <source>yesterday</source>
+        <translation>včera</translation>
+        <extracomment>Previous day</extracomment>
+    </message>
+    <message>
+        <source>today</source>
+        <translation>dnes</translation>
+        <extracomment>Current day</extracomment>
+    </message>
+    <message>
+        <comment>Title of Tab for options to filter library content</comment>
+        <source>TAB_FILTER</source>
+        <translation>Filtr</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to sort library content</comment>
+        <source>TAB_SORT</source>
+        <translation>Třídit</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for switching &quot;views&quot; when looking at a library</comment>
+        <source>TAB_VIEW</source>
+        <translation>Pohled</translation>
+    </message>
+    <message>
+        <source>RUNTIME</source>
+        <translation>Délka</translation>
+    </message>
+    <message>
+        <source>RELEASE_DATE</source>
+        <translation>Datum vydání</translation>
+    </message>
+    <message>
+        <source>PLAY_COUNT</source>
+        <translation>Počet přehrání</translation>
+    </message>
+    <message>
+        <source>OFFICIAL_RATING</source>
+        <translation>Rodičovské hodnocení</translation>
+    </message>
+    <message>
+        <source>DATE_PLAYED</source>
+        <translation>Datum přehrání</translation>
+    </message>
+    <message>
+        <source>DATE_ADDED</source>
+        <translation>Datum přidání</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Hodnocení kritiků</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>Hodnocení IMDb</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Název</translation>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>Tato %1 neobsahuje žádné položky</translation>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Právě teď</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Odstranění uloženo</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Uložit údaje?</translation>
+    </message>
 </context>
 </TS>
