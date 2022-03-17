@@ -26,8 +26,7 @@
         <Label id="audio_codec" />
         <ButtonGroupHoriz id="buttons" itemSpacings="[10]">
           <Button text="Play" id="play-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
-          <Button text="Version" id="video-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
-          <Button text="Audio" id="audio-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
+          <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
           <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
           <Button text="Favorite" id="favorite-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
         </ButtonGroupHoriz>
@@ -35,8 +34,7 @@
         <Label id="overview" wrap="true" maxLines="8" />
       </LayoutGroup>
     </LayoutGroup>
-    <MovieVideoOptions id="videoOptions" visible="false" />
-    <MovieAudioOptions id="audioOptions" visible="false" />
+    <MovieOptions id="movieOptions" visible="false" />
     <!-- "Cast and Crew" row -->
     <extrasSlider id="movieExtras" />
   </children>
