@@ -22,8 +22,14 @@
         </LayoutGroup>
         <Label id="genres" />
         <Label id="director" />
-        <Label id="video_codec" />
-        <Label id="audio_codec" />
+        <LayoutGroup layoutDirection="horiz" >
+          <Label id="video_codec" vertAlign="center" height="36" />
+          <label id="video_codec_count" font="font:smallestBoldSystemFont" vertAlign="top" color="#ff5c5cff" />
+        </LayoutGroup>
+        <LayoutGroup layoutDirection="horiz" >
+          <Label id="audio_codec" vertAlign="center" height="36" />
+          <label id="audio_codec_count" font="font:smallestBoldSystemFont" vertAlign="top" color="#ff5c5cff" />
+        </LayoutGroup>
         <ButtonGroupHoriz id="buttons" itemSpacings="[10]">
           <Button text="Play" id="play-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
           <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />

@@ -105,6 +105,10 @@ sub SetUpVideoOptions(streams)
         end if
     end for
 
+    if streams.count() > 1
+        m.top.findnode("video_codec_count").text = "+" + stri(streams.Count() - 1).trim()
+    end if
+
     options = {}
     options.videos = videos
     m.options.options = options
@@ -120,6 +124,10 @@ sub SetUpAudioOptions(streams)
             tracks.push({ "Title": streams[i].displayTitle, "Description": streams[i].Title, "Selected": m.top.selectedAudioStreamIndex = i, "StreamIndex": i })
         end if
     end for
+
+    if tracks.count() > 1
+        m.top.findnode("audio_codec_count").text = "+" + stri(tracks.Count() - 1).trim()
+    end if
 
     options = {}
     if m.options.options.videos <> invalid
