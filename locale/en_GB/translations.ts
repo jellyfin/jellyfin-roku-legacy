@@ -459,5 +459,62 @@
         <source>Save Credentials?</source>
         <translation>Save Credentials?</translation>
     </message>
+    <message>
+        <source>An error was encountered while playing this item.  Server did not provide required transcoding data.</source>
+        <translation>An error was encountered while playing this item.  Server did not provide required transcoding data.</translation>
+        <extracomment>Content of message box when trying to play an item which requires transcoding, and the server did not provide transcode url</extracomment>
+    </message>
+    <message>
+        <source>Error Getting Playback Information</source>
+        <translation>Error Getting Playback Information</translation>
+        <extracomment>Dialog Title: Received error from server when trying to get information about the selected item for playback</extracomment>
+    </message>
+    <message>
+        <source>...or enter server URL manually:</source>
+        <translation>…or enter server URL manually:</translation>
+        <extracomment>Instructions on initial app launch when the user is asked to manually enter a server URL</extracomment>
+    </message>
+    <message>
+        <source>Pick a Jellyfin server from the local network</source>
+        <translation>Pick a Jellyfin server from the local network</translation>
+        <extracomment>Instructions on initial app launch when the user is asked to pick a server from a list</extracomment>
+    </message>
+    <message>
+        <source>Enter the server name or ip address</source>
+        <translation>Enter the server name or ip address</translation>
+        <extracomment>Title of KeyboardDialog when manually entering a server URL</extracomment>
+    </message>
+    <message>
+        <source>Cancel Series Recording</source>
+        <translation>Cancel Series Recording</translation>
+    </message>
+    <message>
+        <source>Cancel Recording</source>
+        <translation>Cancel Recording</translation>
+    </message>
+    <message>
+        <source>Record Series</source>
+        <translation>Record Series</translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation>Record</translation>
+    </message>
+    <message>
+        <source>View Channel</source>
+        <translation>View Channel</translation>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>On Now</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Delete Saved</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Save Credentials?</translation>
+    </message>
 </context>
 </TS>
