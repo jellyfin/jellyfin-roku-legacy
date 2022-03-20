@@ -99,17 +99,28 @@ sub itemContentChanged()
         btnWdth = 1440 / m.btnCount - m.buttonGrp.itemSpacings[0]
         m.buttons = []
         ' we dont reference this button anymore
-        buildGrpBtn("Play", "play-button", btnWdth)
+        buttonList = ["Play"]
 
         if itemData.mediaSources.Count() > 1
-            m.videoBtn = buildGrpBtn("Version", "video-button", btnWdth)
+            buttonList.push("Version")
         end if
-        m.audioBtn = buildGrpBtn("Audio", "audio-button", btnWdth)
-        m.watchedBtn = buildGrpBtn("Watched", "watched-button", btnWdth)
-        m.favoriteBtn = buildGrpBtn("Favorite", "favorite-button", btnWdth)
-        m.focusedButton = 0
+        buttonList.push("Audio")
+        buttonList.push("Watched")
+        buttonList.push("Favorite")
+
+        m.buttonGrp.buttons = buttonList
+        btnIds = { "Play": "play-button", "Version": "video-button", "Audio": "audio-button", "Watched": "watched-button", "Favorite": "favorite-button" }
+        for each btn in m.buttonGrp.getChildren(-1, 0)
+            btn.id = btnIds[btn.text]
+            btn.iconUri = ""
+            btn.focusedIconUri = ""
+            if btn.text = "Version" then m.videoBtn = btn
+            if btn.text = "Audio" then m.audioBtn = btn
+            if btn.text = "Favorite" then m.favoriteBtn = btn
+            if btn.text = "Watched" then m.watchedBtn = btn
+        end for
     end if
-    m.buttons[m.focusedButton].setFocus(true)
+    m.buttonGrp.setFocus(true)
 
     setFavoriteColor()
     setWatchedColor()
@@ -117,19 +128,6 @@ sub itemContentChanged()
     SetUpAudioOptions(itemData.mediaStreams)
 
 end sub
-
-function buildGrpBtn(txt as string, id as string, widths)
-    button = m.buttonGrp.createChild("Button")
-    button.text = txt
-    button.id = id
-    button.iconUri = ""
-    button.focusedIconUri = ""
-    button.minWidth = widths
-    button.maxWidth = widths
-    m.buttons.push(button)
-    return button
-end function
-
 
 sub SetUpVideoOptions(streams)
 
@@ -255,7 +253,7 @@ sub audioOptionsClosed()
         m.top.selectedAudioStreamIndex = m.audioOptions.audioStreamIndex
         setFieldText("audio_codec", tr("Audio") + ": " + m.top.itemContent.json.mediaStreams[m.top.selectedAudioStreamIndex].displayTitle)
     end if
-    m.buttons[m.focusedButton].setFocus(true)
+    m.buttonGrp.setFocus(true)
 end sub
 
 '
@@ -281,19 +279,21 @@ sub videoOptionsClosed()
         m.top.itemContent.json = itemData
         m.top.observeField("itemContent", "itemContentChanged")
     end if
-    m.buttons[m.focusedButton].setFocus(true)
+    m.buttonGrp.setFocus(true)
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
 
     ' Due to the way the button pressed event works, need to catch the release for the button as the press is being sent
     ' directly to the main loop.  Will get this sorted in the layout update for Movie Details
-    if key = "OK" and m.videoBtn.isInFocusChain()
-        m.videoOptions.visible = true
-        m.videoOptions.setFocus(true)
-    else if key = "OK" and m.audioBtn.isInFocusChain()
-        m.audioOptions.visible = true
-        m.audioOptions.setFocus(true)
+    if key = "OK"
+        if m.videoBtn <> invalid and m.videoBtn.isInFocusChain()
+            m.videoOptions.visible = true
+            m.videoOptions.setFocus(true)
+        else if m.audioBtn <> invalid and m.audioBtn.isInFocusChain()
+            m.audioOptions.visible = true
+            m.audioOptions.setFocus(true)
+        end if
     end if
 
     if key = "down" and m.buttonGrp.isInFocusChain()
@@ -315,27 +315,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
     end if
 
     if not press then return false
-
-    if m.buttonGrp.isInFocusChain()
-        if key = "right"
-            if m.focusedButton < m.btnCount - 1
-                ? m.focusedButton; " < "; m.btnCount
-                m.focusedButton = m.focusedButton + 1
-            else
-                m.focusedButton = 0
-            end if
-            m.buttons[m.focusedButton].setFocus(true)
-            return true
-        else if key = "left"
-            if m.focusedButton > 0
-                m.focusedButton = m.focusedButton - 1
-            else
-                m.focusedButton = m.btnCount - 1
-            end if
-            m.buttons[m.focusedButton].setFocus(true)
-            return true
-        end if
-    end if
 
     if key = "back"
         if m.audioOptions.visible = true
