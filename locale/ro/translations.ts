@@ -1141,5 +1141,27 @@
         <source>Save Credentials?</source>
         <translation>Dorești să salvezi acreditarile?</translation>
     </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Eroare în timpul redării</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Eroare la preluarea conținutului</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Acum</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Ștergere salvată</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Salvezi datele de autentificare?</translation>
+    </message>
 </context>
 </TS>
