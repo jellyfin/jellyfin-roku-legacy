@@ -21,6 +21,7 @@ sub loadItems()
         parentid: m.top.itemId,
         SortBy: sort_field,
         SortOrder: sort_order,
+        NameStartsWith: m.top.nameStartsWith,
         recursive: m.top.recursive,
         Fields: "Overview"
     }
