@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="VideoTrackListData" extends="ContentNode">
+  <interface>
+    <field id="selected" type="boolean" value="false" />
+    <field id="streamId" type="string" />
+    <field id="video_codec" type="string" />
+  </interface>
+</component>

@@ -1,9 +1,9 @@
-function VideoPlayer(id, audio_stream_idx = 1, subtitle_idx = -1)
+function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1)
 
     ' Get video controls and UI
     video = CreateObject("roSGNode", "JFVideo")
     video.id = id
-    AddVideoContent(video, audio_stream_idx, subtitle_idx)
+    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx)
 
     if video.content = invalid
         return invalid
@@ -16,7 +16,7 @@ function VideoPlayer(id, audio_stream_idx = 1, subtitle_idx = -1)
     return video
 end function
 
-sub AddVideoContent(video, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1)
+sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1)
 
     video.content = createObject("RoSGNode", "ContentNode")
 
@@ -64,12 +64,15 @@ sub AddVideoContent(video, audio_stream_idx = 1, subtitle_idx = -1, playbackPosi
     video.content.PlayStart = int(playbackPosition / 10000000)
 
     ' Call PlayInfo from server
-    mediaSourceId = video.id
+    if mediaSourceId = invalid
+        mediaSourceId = video.id
+    end if
     if meta.live then mediaSourceId = "" ' Don't send mediaSourceId for Live media
+
     playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
 
     video.videoId = video.id
-    video.mediaSourceId = video.id
+    video.mediaSourceId = mediaSourceId
     video.audioIndex = audio_stream_idx
 
     if playbackInfo = invalid
@@ -112,6 +115,9 @@ sub AddVideoContent(video, audio_stream_idx = 1, subtitle_idx = -1, playbackPosi
             "PlaySessionId": video.PlaySessionId,
             "AudioStreamIndex": audio_stream_idx
         })
+        if mediaSourceId <> ""
+            params.MediaSourceId = mediaSourceId
+        end if
         video.content.url = buildURL(Substitute("Videos/{0}/stream", video.id), params)
         video.isTranscoded = false
         video.audioTrack = (audio_stream_idx + 1).ToStr() ' Roku's track indexes count from 1. Our index is zero based

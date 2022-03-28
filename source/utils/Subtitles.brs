@@ -49,7 +49,7 @@ sub changeSubtitleDuringPlayback(newid)
 
         ' Switching to Encoded Subtitle stream
         video.control = "stop"
-        AddVideoContent(video, video.audioIndex, newSubtitles.Index, video.position * 10000000)
+        AddVideoContent(video, video.mediaSourceId, video.audioIndex, newSubtitles.Index, video.position * 10000000)
         video.control = "play"
         video.globalCaptionMode = "Off" ' Using encoded subtitles - so turn off text subtitles
 
@@ -57,7 +57,7 @@ sub changeSubtitleDuringPlayback(newid)
 
         ' Switching from an Encoded stream to a text stream
         video.control = "stop"
-        AddVideoContent(video, video.audioIndex, -1, video.position * 10000000)
+        AddVideoContent(video, video.mediaSourceId, video.audioIndex, -1, video.position * 10000000)
         video.control = "play"
         video.globalCaptionMode = "On"
         video.subtitleTrack = video.availableSubtitleTracks[newSubtitles.TextIndex].TrackName
@@ -82,7 +82,7 @@ sub turnoffSubtitles()
     ' Check if Enoded subtitles are being displayed, and turn off
     if current > -1 and video.Subtitles[current].IsEncoded
         video.control = "stop"
-        AddVideoContent(video, video.audioIndex, -1, video.position * 10000000)
+        AddVideoContent(video, video.mediaSourceId, video.audioIndex, -1, video.position * 10000000)
         video.control = "play"
     end if
 end sub

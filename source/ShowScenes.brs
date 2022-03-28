@@ -306,6 +306,10 @@ function CreateMovieDetailsGroup(movie)
         b.observeField("buttonSelected", m.port)
     end for
 
+    extras = group.findNode("extrasGrid")
+    extras.observeField("selectedItem", m.port)
+    extras.callFunc("loadPeople", movie.json)
+
     return group
 end function
 
@@ -319,6 +323,10 @@ function CreateSeriesDetailsGroup(series)
     group.seasonData = TVSeasons(series.id)
 
     group.observeField("seasonSelected", m.port)
+
+    extras = group.findNode("extrasGrid")
+    extras.observeField("selectedItem", m.port)
+    extras.callFunc("loadPeople", group.itemcontent.json)
 
     return group
 end function
@@ -365,14 +373,39 @@ sub CreateSidePanel(buttons, options)
     group.options = options
 end sub
 
-function CreateVideoPlayerGroup(video_id, audio_stream_idx = 1)
+function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_idx = 1)
     ' Video is Playing
-    video = VideoPlayer(video_id, audio_stream_idx)
+    video = VideoPlayer(video_id, mediaSourceId, audio_stream_idx)
     if video = invalid then return invalid
     video.observeField("selectSubtitlePressed", m.port)
     video.observeField("state", m.port)
 
     return video
+end function
+
+function CreatePersonView(personData as object) as object
+    person = CreateObject("roSGNode", "PersonDetails")
+    m.global.SceneManager.callFunc("pushScene", person)
+
+    info = ItemMetaData(personData.id)
+    person.itemContent = info
+
+    person.setFocus(true)
+    person.observeField("selectedItem", m.port)
+    person.findNode("favorite-button").observeField("buttonSelected", m.port)
+
+    return person
+end function
+
+function CreatePhotoPage(photo)
+    group = CreateObject("roSGNode", "PhotoDetails")
+    group.optionsAvailable = true
+    m.global.sceneManager.callFunc("pushScene", group)
+
+    group.itemContent = photo
+
+    return group
+
 end function
 
 sub UpdateSavedServerList()

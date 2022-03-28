@@ -110,7 +110,7 @@ end function
 '
 ' Clear all content from group stack
 sub clearScenes()
-    m.content.removeChildrenIndex(m.content.getChildCount(), 0)
+    if m.content <> invalid then m.content.removeChildrenIndex(m.content.getChildCount(), 0)
     m.groups = []
 end sub
 

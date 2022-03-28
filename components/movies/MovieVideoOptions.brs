@@ -1,19 +1,19 @@
 sub init()
 
     m.buttons = m.top.findNode("buttons")
-    m.buttons.buttons = [tr("Audio")]
+    m.buttons.buttons = [tr("Version")]
     m.buttons.setFocus(true)
 
     m.selectedItem = 0
-    m.selectedAudioIndex = 0
+    m.selectedVideoIndex = 0
 
     m.menus = []
-    m.menus.push(m.top.findNode("audioMenu"))
+    m.menus.push(m.top.findNode("videoMenu"))
 
     m.viewNames = []
 
     ' Set button color to global
-    m.top.findNode("audioMenu").focusBitmapBlendColor = m.global.constants.colors.button
+    m.top.findNode("videoMenu").focusBitmapBlendColor = m.global.constants.colors.button
 
     ' Animation
     m.fadeAnim = m.top.findNode("fadeAnim")
@@ -33,22 +33,23 @@ sub optionsSet()
         selectedViewIndex = 0
 
         for each view in m.top.options.views
-            entry = viewContent.CreateChild("AudioTrackListData")
+            entry = viewContent.CreateChild("VideoTrackListData")
             entry.title = view.Title
             entry.description = view.Description
-            entry.streamIndex = view.StreamIndex
+            entry.streamId = view.streamId
+            entry.video_codec = view.video_codec
             m.viewNames.push(view.Name)
             if view.Selected <> invalid and view.Selected = true
                 selectedViewIndex = index
                 entry.selected = true
-                m.top.audioSteamIndex = view.streamIndex
+                m.top.videoStreamId = view.streamId
             end if
             index = index + 1
         end for
 
         m.menus[0].content = viewContent
         m.menus[0].jumpToItem = selectedViewIndex
-        m.selectedAudioIndex = selectedViewIndex
+        m.selectedVideoIndex = selectedViewIndex
     end if
 
 end sub
@@ -84,13 +85,14 @@ function onKeyEvent(key as string, press as boolean) as boolean
             selMenu = m.menus[m.selectedItem]
             selIndex = selMenu.itemSelected
 
-            if m.selectedAudioIndex = selIndex
+            if m.selectedVideoIndex = selIndex
             else
-                selMenu.content.GetChild(m.selectedAudioIndex).selected = false
+                selMenu.content.GetChild(m.selectedVideoIndex).selected = false
                 newSelection = selMenu.content.GetChild(selIndex)
                 newSelection.selected = true
-                m.selectedAudioIndex = selIndex
-                m.top.audioSteamIndex = newSelection.streamIndex
+                m.selectedVideoIndex = selIndex
+                m.top.videoStreamId = newSelection.streamId
+                m.top.video_codec = newSelection.video_codec
             end if
         end if
         return true

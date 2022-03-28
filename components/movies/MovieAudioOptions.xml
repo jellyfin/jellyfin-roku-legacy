@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="MovieAudioOptions" extends="Group">
+  <children>
+    <Rectangle width="1920" height="1080" color="#000000" opacity="0.75" />
+    <Group translation="[100,100]">
+      <Poster width="1720" height="880" uri="pkg:/images/dialog.9.png" />
+      <LayoutGroup horizAlignment="center" translation="[860,50]" itemSpacings="[50]">
+        <JFButtons id="buttons" />
+        <Group>
+            <MarkupList
+                id="audioMenu"
+                itemComponentName="AudioTrackListItem"
+                itemSize="[600, 70]"
+                itemSpacing="[20,20]"
+                numrows = "8"
+                vertFocusAnimationStyle="floatingFocus"
+                focusFootprintBlendColor="#00000000"
+            />
+          <!-- <RadiobuttonList id="audioMenu" itemspacing="[0,10]" vertFocusAnimationStyle="floatingFocus" drawFocusFeedback="false">
+          </RadiobuttonList> -->
+        </Group>
+      </LayoutGroup>
+    </Group>
+
+    <Animation id="fadeAnim" duration="0.5" repeat="false">
+      <FloatFieldInterpolator id="outOpacity" key="[0.0, 0.5, 1.0]" keyValue="[ 1, 0, 0 ]" fieldToInterp="focus.opacity" />
+      <FloatFieldInterpolator id="inOpacity" key="[0.0, 0.5, 1.0]" keyValue="[ 0, 0, 1 ]" fieldToInterp="focus.opacity" />
+    </Animation>
+
+  </children>
+  <interface>
+    <field id="buttons" type="nodearray" />
+    <field id="options" type="assocarray" onChange="optionsSet" />
+    <field id="audioStreamIndex" type="integer" />
+  </interface>
+  <script type="text/brightscript" uri="MovieAudioOptions.brs" />
+</component>

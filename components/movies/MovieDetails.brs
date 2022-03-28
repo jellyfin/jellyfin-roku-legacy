@@ -1,14 +1,22 @@
 sub init()
+    m.extrasGrp = m.top.findnode("extrasGrp")
+    m.extrasGrid = m.top.findNode("extrasGrid")
     m.top.optionsAvailable = false
-    m.options = m.top.findNode("options")
+
+    m.audioOptions = m.top.findNode("audioOptions")
+    m.videoOptions = m.top.findNode("videoOptions")
+
+    m.main_group = m.top.findNode("main_group")
 
     main = m.top.findNode("main_group")
     main.translation = [96, 175]
-
     overview = m.top.findNode("overview")
     overview.width = 1920 - 96 - 300 - 96 - 30
 
-    m.top.findNode("buttons").setFocus(true)
+    m.buttonGrp = m.top.findNode("buttons")
+    m.buttonGrp.setFocus(true)
+
+    m.top.observeField("itemContent", "itemContentChanged")
 end sub
 
 sub itemContentChanged()
@@ -18,13 +26,11 @@ sub itemContentChanged()
     m.top.id = itemData.id
     m.top.findNode("moviePoster").uri = m.top.itemContent.posterURL
 
+    ' Set default video source
+    m.top.selectedVideoStreamId = itemData.MediaSources[0].id
+
     ' Find first Audio Stream and set that as default
-    for i = 0 to itemData.mediaStreams.Count() - 1
-        if itemData.mediaStreams[i].Type = "Audio"
-            m.top.selectedAudioStreamIndex = i
-            exit for
-        end if
-    end for
+    SetDefaultAudioTrack(itemData)
 
     ' Handle all "As Is" fields
     m.top.overhangTitle = itemData.name
@@ -78,20 +84,36 @@ sub itemContentChanged()
     if itemData.mediaStreams[0] <> invalid
         setFieldText("video_codec", tr("Video") + ": " + itemData.mediaStreams[0].displayTitle)
     end if
-    if itemData.mediaStreams[m.top.selectedAudioStreamIndex] <> invalid
-        setFieldText("audio_codec", tr("Audio") + ": " + itemData.mediaStreams[m.top.selectedAudioStreamIndex].displayTitle)
-    end if
     ' TODO - cmon now. these are buttons, not words
     if itemData.taglines.count() > 0
         setFieldText("tagline", itemData.taglines[0])
     end if
+
     setFavoriteColor()
     setWatchedColor()
-    SetUpOptions(itemData.mediaStreams)
+    SetUpVideoOptions(itemData.mediaSources)
+    SetUpAudioOptions(itemData.mediaStreams)
 end sub
 
 
-sub SetUpOptions(streams)
+sub SetUpVideoOptions(streams)
+
+    videos = []
+
+    for i = 0 to streams.Count() - 1
+        if streams[i].VideoType = "VideoFile"
+            videos.push({ "Title": streams[i].Name, "Description": tr("Video"), "Selected": m.top.selectedVideoStreamId = streams[i].id, "StreamID": streams[i].id, "video_codec": streams[i].mediaStreams[0].displayTitle })
+        end if
+    end for
+
+    options = {}
+    options.views = videos
+    m.videoOptions.options = options
+
+end sub
+
+
+sub SetUpAudioOptions(streams)
 
     tracks = []
 
@@ -103,10 +125,20 @@ sub SetUpOptions(streams)
 
     options = {}
     options.views = tracks
-    m.options.options = options
+    m.audioOptions.options = options
 
 end sub
 
+
+sub SetDefaultAudioTrack(itemData)
+    for i = 0 to itemData.mediaStreams.Count() - 1
+        if itemData.mediaStreams[i].Type = "Audio"
+            m.top.selectedAudioStreamIndex = i
+            setFieldText("audio_codec", tr("Audio") + ": " + itemData.mediaStreams[i].displayTitle)
+            exit for
+        end if
+    end for
+end sub
 
 sub setFieldText(field, value)
     node = m.top.findNode(field)
@@ -125,6 +157,7 @@ sub setFieldText(field, value)
 end sub
 
 function getRuntime() as integer
+
     itemData = m.top.itemContent.json
 
     ' A tick is .1ms, so 1/10,000,000 for ticks to seconds,
@@ -183,39 +216,80 @@ end function
 
 '
 'Check if options updated and any reloading required
-sub optionsClosed()
-    if m.options.audioSteamIndex <> m.top.selectedAudioStreamIndex
-        m.top.selectedAudioStreamIndex = m.options.audioSteamIndex
+sub audioOptionsClosed()
+    if m.audioOptions.audioStreamIndex <> m.top.selectedAudioStreamIndex
+        m.top.selectedAudioStreamIndex = m.audioOptions.audioStreamIndex
         setFieldText("audio_codec", tr("Audio") + ": " + m.top.itemContent.json.mediaStreams[m.top.selectedAudioStreamIndex].displayTitle)
     end if
     m.top.findNode("buttons").setFocus(true)
 end sub
 
+'
+' Check if options were updated and if any reloding is needed...
+sub videoOptionsClosed()
+    if m.videoOptions.videoStreamId <> m.top.selectedVideoStreamId
+        m.top.selectedVideoStreamId = m.videoOptions.videoStreamId
+        setFieldText("video_codec", tr("Video") + ": " + m.videoOptions.video_codec)
+        ' Because the video stream has changed (i.e. the actual video)... we need to reload the audio stream choices for that video
+        m.top.unobservefield("itemContent")
+        itemData = m.top.itemContent.json
+        for each mediaSource in itemData.mediaSources
+            if mediaSource.id = m.top.selectedVideoStreamId
+                itemData.mediaStreams = []
+                for i = 0 to mediaSource.mediaStreams.Count() - 1
+                    itemData.mediaStreams.push(mediaSource.mediaStreams[i])
+                end for
+                SetDefaultAudioTrack(itemData)
+                SetUpAudioOptions(itemData.mediaStreams)
+                exit for
+            end if
+        end for
+        m.top.itemContent.json = itemData
+        m.top.observeField("itemContent", "itemContentChanged")
+    end if
+    m.top.findNode("buttons").setFocus(true)
+end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
 
     ' Due to the way the button pressed event works, need to catch the release for the button as the press is being sent
     ' directly to the main loop.  Will get this sorted in the layout update for Movie Details
-    if key = "OK" and m.top.findNode("audio-button").isInFocusChain()
-        m.options.visible = true
-        m.options.setFocus(true)
+    if key = "OK" and m.top.findNode("video-button").isInFocusChain()
+        m.videoOptions.visible = true
+        m.videoOptions.setFocus(true)
+    else if key = "OK" and m.top.findNode("audio-button").isInFocusChain()
+        m.audioOptions.visible = true
+        m.audioOptions.setFocus(true)
+    end if
+
+    if key = "down" and m.buttonGrp.isInFocusChain()
+        m.extrasGrid.setFocus(true)
+        m.top.findNode("VertSlider").reverse = false
+        m.top.findNode("extrasFader").reverse = false
+        m.top.findNode("pplAnime").control = "start"
+        return true
+    end if
+
+    if key = "up" and m.top.findNode("extrasGrid").isInFocusChain()
+        if m.extrasGrid.itemFocused = 0
+            m.top.findNode("VertSlider").reverse = true
+            m.top.findNode("extrasFader").reverse = true
+            m.top.findNode("pplAnime").control = "start"
+            m.buttonGrp.setFocus(true)
+            return true
+        end if
     end if
 
     if not press then return false
 
-    if key = "options"
-        if m.options.visible = true
-            m.options.visible = false
-            optionsClosed()
-        else
-            m.options.visible = true
-            m.options.setFocus(true)
-        end if
-        return true
-    else if key = "back"
-        if m.options.visible = true
-            m.options.visible = false
-            optionsClosed()
+    if key = "back"
+        if m.audioOptions.visible = true
+            m.audioOptions.visible = false
+            audioOptionsClosed()
+            return true
+        else if m.videoOptions.visible = true
+            m.videoOptions.visible = false
+            videoOptionsClosed()
             return true
         end if
     end if

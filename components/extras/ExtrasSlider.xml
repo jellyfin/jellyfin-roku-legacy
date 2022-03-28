@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="ExtrasSlider" extends="JFGroup">
+  <children>
+    <Rectangle id="extrasGrp" color="#0A0010" opacity="0.3" width="1860" height="900" translation="[30, 1014]" >
+      <ExtrasRowList id="extrasGrid"
+        itemSpacing="[ 60, 132]"
+        rowLabelOffset="[ [9, 24] ]"
+        numRows="2"
+        showRowLabel="true"
+        showRowCounter="true"
+        visible="true"
+        translation="[12,18]"
+        itemComponentName="ExtrasItem" />
+      <Animation id="pplAnime" duration=".4" repeat="false" >
+        <Vector2DFieldInterpolator
+            id="VertSlider"
+            key="[0.0, 0.25, 0.50, 75.0, 1.0]"
+            keyValue="[[30, 1014], [30, 804], [30, 588], [30,375 ], [30, 162]]"
+            fieldToInterp="extrasGrp.translation" />
+        <FloatFieldInterpolator
+            id="extrasFader"
+            key="[0.0, 0.25, 0.50, 75.0, 1.0]"
+            keyValue="[0.2, 0.4, 0.6, 0.8, 1.0]"
+            fieldToInterp="extrasGrp.opacity" />
+      </Animation>
+    </Rectangle>
+  </children>
+</component>

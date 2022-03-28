@@ -262,6 +262,42 @@
         <translation>Filter</translation>
     </message>
     <message>
+        <source>Born</source>
+        <translation>Born</translation>
+    </message>
+    <message>
+        <source>Died</source>
+        <translation>Died</translation>
+    </message>
+    <message>
+        <source>Age</source>
+        <translation>Age</translation>
+    </message>
+    <message>
+        <source>Cast &amp; Crew</source>
+        <translation>Cast &amp; Crew</translation>
+    </message>
+    <message>
+        <source>More Like This</source>
+        <translation>More Like This</translation>
+    </message>
+    <message>
+        <source>Special Features</source>
+        <translation>Special Features</translation>
+     <message>
+        <source>Press 'OK' to Close</source>
+        <translation>Press 'OK' to Close</translation>
+    </message>
+    </message>
+    <message>
+        <source>Movies</source>
+        <translation>Movies</translation>
+    </message>
+    <message>
+        <source>TV Shows</source>
+        <translation>TV Shows</translation>
+    </message>
+    <message>
         <source>today</source>
         <translation>today</translation>
         <extracomment>Current day</extracomment>
@@ -382,6 +418,10 @@
         <translation>Cancel Series Recording</translation>
     </message>
     <message>
+        <source>Close</source>
+        <translation>Close</translation>
+    </message>
+    <message>
         <source>Connecting to Server</source>
         <translation>Connecting to Server</translation>
         <extracomment>Message to display to user while client is attempting to connect to the server</extracomment>
@@ -420,6 +460,10 @@
         <source>An error was encountered while playing this item.  Server did not provide required transcoding data.</source>
         <translation>An error was encountered while playing this item.  Server did not provide required transcoding data.</translation>
         <extracomment>Content of message box when trying to play an item which requires transcoding, and the server did not provide transcode url</extracomment>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Version</translation>
     </message>
 </context>
 </TS>

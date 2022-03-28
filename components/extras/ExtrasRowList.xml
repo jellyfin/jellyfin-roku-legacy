@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- The top-Level RowList for the Extras rows -->
+<component name="ExtrasRowList" extends="RowList">
+  <interface>
+    <field id="type" type="string" />
+    <field id="parentId" type="string" />
+    <field id="selectedItem" type="node" alwaysNotify="true" />
+    <function name="loadPeople" />
+    <function name="loadPersonVideos" />
+  </interface>
+  <script type="text/brightscript" uri="ExtrasRowList.brs" />
+</component>

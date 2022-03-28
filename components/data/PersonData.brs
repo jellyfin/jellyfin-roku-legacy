@@ -1,35 +1,9 @@
 sub setFields()
     json = m.top.json
-
     m.top.id = json.id
-    m.top.Title = json.name
-    m.top.Description = json.overview
     m.top.favorite = json.UserData.isFavorite
-    m.top.watched = json.UserData.played
-    m.top.Type = "Movie"
-
-    if json.MediaSourceCount <> invalid and json.MediaSourceCount > 1
-        m.top.mediaSources = []
-        for each source in json.MediaSources
-            m.top.mediaSources.push(source)
-        end for
-    end if
-
-    if json.ProductionYear <> invalid
-        m.top.SubTitle = json.ProductionYear
-    end if
-
-    if json.OfficialRating <> invalid and json.OfficialRating <> ""
-        m.top.Rating = json.OfficialRating
-        if m.top.SubTitle <> ""
-            m.top.SubTitle = m.top.SubTitle + " - " + m.top.Rating
-        else
-            m.top.SubTitle = m.top.Rating
-        end if
-    end if
-
+    m.top.Type = "Person"
     setPoster()
-    setContainer()
 end sub
 
 sub setPoster()
@@ -54,20 +28,5 @@ sub setPoster()
             m.top.backdropURL = ImageURL(m.top.json.id, "Backdrop", imgParams)
         end if
 
-    end if
-end sub
-
-sub setContainer()
-    json = m.top.json
-
-    if json.mediaSources = invalid then return
-    if json.mediaSources.count() = 0 then return
-
-    m.top.container = json.mediaSources[0].container
-
-    if m.top.container = invalid then m.top.container = ""
-
-    if m.top.container = "m4v" or m.top.container = "mov"
-        m.top.container = "mp4"
     end if
 end sub

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="VideoTrackListItem" extends="Group">
+  <children>
+    <Poster width="32" height="32" id="selectedIcon" translation="[5,19]" uri="" />
+    <Label id="title" font="font:MediumSystemFont" color="0xffffffff" translation="[50,3]" />
+    <ScrollingLabel id="description" font="font:SmallestSystemFont" color="0xabababff" maxWidth="800" repeatCount="0" translation="[50,45]" />
+  </children>
+  <interface>
+    <field id="itemContent" type="node" onChange="itemContentChanged"/>
+    <field id="itemHasFocus" type="boolean" onChange="focusChanged" />
+  </interface>
+  <script type="text/brightscript" uri="VideoTrackListItem.brs" />
+</component>
