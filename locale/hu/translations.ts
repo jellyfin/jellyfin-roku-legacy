@@ -2006,5 +2006,45 @@ elemeket</translation>
         <source>Save Credentials?</source>
         <translation>Menti a hitelesítő adatokat?</translation>
     </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Hiba történt a lejátszás közben</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Hiba a tartalom lekérésekor</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Most</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Mentettek Törlése</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Hitelesítő adatok mentése?</translation>
+    </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Hiba történt a csatornaadatok betöltésekor</translation>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Csatornaadatok betöltése</translation>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>Hiba történt az elem lejátszása közben.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Hiba történt az elem(ek) betöltése során a szerverről.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
 </context>
 </TS>
