@@ -96,7 +96,7 @@ sub itemContentChanged()
         else
             m.btnCount = 4
         end if
-        btnWdth = 1440 / m.btnCount - m.buttonGrp.itemSpacings[0]
+        btnWdth = (1440 / m.btnCount) - m.buttonGrp.itemSpacings[0]
         m.buttons = []
         ' we dont reference this button anymore
         buttonList = ["Play"]
@@ -114,6 +114,8 @@ sub itemContentChanged()
             btn.id = btnIds[btn.text]
             btn.iconUri = ""
             btn.focusedIconUri = ""
+            btn.minWidth = btnWdth
+            btn.maxWidth = btnWdth
             if btn.text = "Version" then m.videoBtn = btn
             if btn.text = "Audio" then m.audioBtn = btn
             if btn.text = "Favorite" then m.favoriteBtn = btn
