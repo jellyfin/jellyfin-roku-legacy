@@ -107,37 +107,62 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     video.SelectedSubtitle = -1
 
     video.directPlaySupported = playbackInfo.MediaSources[0].SupportsDirectPlay
-
+    fully_external = false
     if video.directPlaySupported
-        params.append({
+        protocol = LCase(playbackInfo.MediaSources[0].Protocol)
+        if protocol = "http"
+            ' directplay http
+            reg = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
+            ' ' proto $1, host $2, port $3, the-rest $4
+            if reg.Match(playbackinfo.MediaSources[0].Path)[2] = "127.0.0.1"
+                ' a better solution would be match the entire loopback space. looking for a good regex
+                ' this is a case where strm files are being served from the same stack as jellyfin
+                ' we handle this case by assuming single-port reverse proxy configuration for both services
+                video.content.url = buildURL(reg.Match(playbackInfo.MediaSources[0].Path)[4])
+            else
+                fully_external = true
+                video.content.url = playbackinfo.MediaSources[0].Path
+            end if
+            video.isTranscoded = false
+        else if protocol = "file"
+            params.append({
             "Static": "true",
             "Container": video.container,
             "PlaySessionId": video.PlaySessionId,
             "AudioStreamIndex": audio_stream_idx
-        })
-        if mediaSourceId <> ""
-            params.MediaSourceId = mediaSourceId
+            })
+            if mediaSourceId <> ""
+                params.MediaSourceId = mediaSourceId
+            end if
+            video.content.url = buildURL(Substitute("Videos/{0}/stream", video.id), params)
+            video.isTranscoded = false
+            video.audioTrack = (audio_stream_idx + 1).ToStr() ' Roku's track indexes count from 1. Our index is zero based
         end if
-        video.content.url = buildURL(Substitute("Videos/{0}/stream", video.id), params)
-        video.isTranscoded = false
-        video.audioTrack = (audio_stream_idx + 1).ToStr() ' Roku's track indexes count from 1. Our index is zero based
-    else
-        ' If server does not provide a transcode URL, display a message to the user
+    else if protocol = "file"
+        ' directplay file
         if playbackInfo.MediaSources[0].TranscodingUrl = invalid
+            ' If server does not provide a transcode URL, display a message to the user
             m.global.sceneManager.callFunc("userMessage", tr("Error Getting Playback Information"), tr("An error was encountered while playing this item.  Server did not provide required transcoding data."))
             video.content = invalid
             return
         end if
-
         ' Get transcoding reason
         video.transcodeReasons = getTranscodeReasons(playbackInfo.MediaSources[0].TranscodingUrl)
-
         video.content.url = buildURL(playbackInfo.MediaSources[0].TranscodingUrl)
         video.isTranscoded = true
     end if
-
-    video.content = authorize_request(video.content)
-    video.content.setCertificatesFile("common:/certs/ca-bundle.crt")
+    
+    if fully_external
+        video.content.setCertificatesFile("common:/certs/ca-bundle.crt")
+    else
+        video.content = authorize_request(video.content)
+        ' this switch also serves these purposes:
+        '       video.content.setCertificatesFile("pkg:/source/certs/ca-bundle.crt")
+        '       video.content.AddHeader("X-Roku-Reserved-Dev-Id", "")
+        '       video.content.InitClientCertificates()
+        ' but otherwise just:
+        video.content.setCertificatesFile("common:/certs/ca-bundle.crt")
+    end if
 
 end sub
 
