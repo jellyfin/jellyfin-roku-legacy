@@ -138,8 +138,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
             video.isTranscoded = false
             video.audioTrack = (audio_stream_idx + 1).ToStr() ' Roku's track indexes count from 1. Our index is zero based
         end if
-    else if protocol = "file"
-        ' directplay file
+    else
         if playbackInfo.MediaSources[0].TranscodingUrl = invalid
             ' If server does not provide a transcode URL, display a message to the user
             m.global.sceneManager.callFunc("userMessage", tr("Error Getting Playback Information"), tr("An error was encountered while playing this item.  Server did not provide required transcoding data."))
@@ -180,8 +179,6 @@ function getTranscodeReasons(url as string) as object
 
     return []
 end function
-
-
 
 'Opens dialog asking user if they want to resume video or start playback over
 function startPlayBackOver(time as longinteger) as integer
