@@ -35,15 +35,25 @@ sub itemContentChanged()
     ' Format the Data based on the type of Home Data
     if itemData.type = "CollectionFolder" or itemData.type = "UserView" or itemData.type = "Channel"
         m.itemText.text = itemData.name
-        m.itemPoster.uri = itemData.widePosterURL
+        if itemData.isSmall = true
+            m.backdrop.height = "100"
+            m.itemText.translation = [0, 20]
+            itemData.usePoster = false
+        end if
+        if itemData.usePoster = true
+            m.itemPoster.uri = itemData.widePosterURL
+        end if
         return
     end if
 
-    if itemData.type = "UserView"
+    if itemData.type = "UserView" and itemData.usePoster = true
         m.itemPoster.width = "96"
         m.itemPoster.height = "96"
         m.itemPoster.translation = "[192, 88]"
         m.itemText.text = itemData.name
+        if itemData.isSmall = true
+            m.itemText.translation = [8,10]
+        end if
         m.itemPoster.uri = itemData.widePosterURL
         return
     end if
@@ -52,8 +62,8 @@ sub itemContentChanged()
     m.itemText.height = 34
     m.itemText.font.size = 25
     m.itemText.horizAlign = "left"
-    m.itemText.vertAlign = "bottom"
-    m.itemTextExtra.visible = true
+    ' m.itemText.vertAlign = "bottom"
+    m.itemTextExtra.visible = false
     m.itemTextExtra.font.size = 22
 
     ' "Program" is from clicking on an "On Now" item on the Home Screen

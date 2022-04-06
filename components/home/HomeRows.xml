@@ -3,9 +3,15 @@
   <interface>
     <field id="selectedItem" type="node" alwaysNotify="true" />
     <field id="userConfig" type="assocarray" />
+    <field id="latestMediaCount" type="integer" />
+    <field id="latestMediaInt" type="integer" />
+    <field id="latestMediaNode" type="string" />
+    <field id="sectionCount" type="integer" />
+    <field id="completed" type="bool" value="false" />
     <field id="quickPlayNode" type="node" alwaysNotify="true" />
     <function name="updateHomeRows" />
     <function name="loadLibraries" />
   </interface>
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
   <script type="text/brightscript" uri="HomeRows.brs"/>
 </component>
