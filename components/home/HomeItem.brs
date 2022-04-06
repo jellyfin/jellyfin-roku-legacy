@@ -52,7 +52,7 @@ sub itemContentChanged()
         m.itemPoster.translation = "[192, 88]"
         m.itemText.text = itemData.name
         if itemData.isSmall = true
-            m.itemText.translation = [8,10]
+            m.itemText.translation = [8, 10]
         end if
         m.itemPoster.uri = itemData.widePosterURL
         return

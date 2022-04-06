@@ -264,7 +264,7 @@ sub loadHomeSection6()
         m.LoadOnNowTask.observeField("content", "updateOnNowItems")
         m.LoadOnNowTask.control = "RUN"
     else if homesection6 = "none"
-        
+
     end if
 
     m.top.content = content
@@ -277,7 +277,7 @@ sub loadHomeSection6()
 end sub
 
 sub createHoldingChildren()
-    ' Creating children to fill later on. 
+    ' Creating children to fill later on.
     ' Welcome Children - Mose
     home_section_count = getHomeSectionCount()
     content = m.top.content
@@ -322,12 +322,12 @@ sub updateHomeRows()
 end sub
 
 function getHomeSectionInt(section as string)
-    For i = 0 to 6 
+    for i = 0 to 6
         homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
         if homesection = section
             return i
         end if
-    End For
+    end for
     return -1
 end function
 
@@ -416,7 +416,7 @@ sub updateMyMediaSmall()
             item.usePoster = false
             item.isSmall = true
             item.iconUrl = ""
-            
+
             row.appendChild(item)
         end for
         updateSizeArray(itemSize, section + latestMediaCount, "replace")
@@ -429,7 +429,7 @@ sub updateMyMediaSmall()
     end if
 end sub
 
-sub updateLatestMedia()        
+sub updateLatestMedia()
     userConfig = m.top.userConfig
     filteredLatest = filterNodeArray(m.libraryData, "id", userConfig.LatestItemsExcludes)
     latest_count = 0
@@ -578,7 +578,7 @@ sub updateOnNowItems()
     m.LoadOnNowTask.content = []
 
     itemSize = [464, 331]
-    
+
     homeRows = m.top.content
     section = getHomeSectionInt("livetv")
 
