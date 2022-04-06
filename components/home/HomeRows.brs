@@ -292,18 +292,15 @@ end sub
 sub rebuildItemArray()
     section_count = getHomeSectionCount()
 
-    homeRows = m.top.content
     m.top.rowItemSize = []
 
     for i = 0 to section_count
         homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
-        section = getHomeSectionInt(homesection)
         if homesection = "latestmedia"
             userConfig = m.top.userConfig
             filteredLatest = filterNodeArray(m.libraryData, "id", userConfig.LatestItemsExcludes)
             for each lib in filteredLatest
                 if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv"
-                    latestInShows = getRowIndex("Latest in Shows >")
                     itemSize = [200, 331]
                     updateSizeArray(itemSize)
                 end if
@@ -331,6 +328,7 @@ function getHomeSectionInt(section as string)
             return i
         end if
     End For
+    return -1
 end function
 
 function getHomeSectionCount()
@@ -340,7 +338,6 @@ function getHomeSectionCount()
         if homesection = "latestmedia"
             userConfig = m.top.userConfig
             filteredLatest = filterNodeArray(m.libraryData, "id", userConfig.LatestItemsExcludes)
-            latest_count = 0
             for each lib in filteredLatest
                 if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv"
                     section_count += 1
@@ -432,13 +429,7 @@ sub updateMyMediaSmall()
     end if
 end sub
 
-sub updateLatestMedia()
-    itemData = m.LoadLatestMediaTask.content
-    m.LoadLatestMediaTask.unobserveField("content")
-    m.LoadLatestMediaTask.content = []
-
-    homeRows = m.top.content
-        
+sub updateLatestMedia()        
     userConfig = m.top.userConfig
     filteredLatest = filterNodeArray(m.libraryData, "id", userConfig.LatestItemsExcludes)
     latest_count = 0
@@ -544,8 +535,6 @@ sub updateLatestItems(msg)
     node.unobserveField("content")
     node.content = []
 
-    itemSize = [200, 331]
-
     homeRows = m.top.content
     section = getHomeSectionInt("latestmedia")
     latest_node = m.top.latestMediaNode
@@ -592,7 +581,6 @@ sub updateOnNowItems()
     
     homeRows = m.top.content
     section = getHomeSectionInt("livetv")
-    onNowRowIndex = getRowIndex("On Now")
 
     latest_media_int = m.top.latestMediaInt
     latestMediaCount = m.top.latestMediaCount - 1
