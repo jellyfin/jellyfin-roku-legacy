@@ -141,8 +141,10 @@ sub LoadUserPreferences()
     resp = APIRequest(url)
     jsonResponse = getJson(resp)
 
-    if jsonResponse <> invalid and jsonResponse.CustomPrefs <> invalid and jsonResponse.CustomPrefs["landing-livetv"] <> invalid
-        set_user_setting("display.livetv.landing", jsonResponse.CustomPrefs["landing-livetv"])
+    if jsonResponse <> invalid and jsonResponse.CustomPrefs <> invalid
+        if jsonResponse.CustomPrefs["landing-livetv"] <> invalid
+            set_user_setting("display.livetv.landing", jsonResponse.CustomPrefs["landing-livetv"])
+        end if
         set_user_setting("display.homesection0", jsonResponse.CustomPrefs["homesection0"])
         set_user_setting("display.homesection1", jsonResponse.CustomPrefs["homesection1"])
         set_user_setting("display.homesection2", jsonResponse.CustomPrefs["homesection2"])
