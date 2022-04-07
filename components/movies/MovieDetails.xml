@@ -22,12 +22,17 @@
         </LayoutGroup>
         <Label id="genres" />
         <Label id="director" />
-        <Label id="video_codec" />
-        <Label id="audio_codec" />
+        <LayoutGroup layoutDirection="horiz" >
+          <Label id="video_codec" vertAlign="bottom" height="39" />
+          <label id="video_codec_count" font="font:smallestSystemFont" vertAlign="top" color="#ceffff" />
+        </LayoutGroup>
+        <LayoutGroup layoutDirection="horiz" >
+          <Label id="audio_codec" vertAlign="bottom" height="39" />
+          <label id="audio_codec_count" font="font:smallestSystemFont" vertAlign="top" color="#ceffff" />
+        </LayoutGroup>
         <ButtonGroupHoriz id="buttons" itemSpacings="[10]">
           <Button text="Play" id="play-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
-          <Button text="Version" id="video-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
-          <Button text="Audio" id="audio-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
+          <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
           <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
           <Button text="Favorite" id="favorite-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
         </ButtonGroupHoriz>
@@ -35,8 +40,7 @@
         <Label id="overview" wrap="true" maxLines="8" />
       </LayoutGroup>
     </LayoutGroup>
-    <MovieVideoOptions id="videoOptions" visible="false" />
-    <MovieAudioOptions id="audioOptions" visible="false" />
+    <MovieOptions id="movieOptions" visible="false" />
     <!-- "Cast and Crew" row -->
     <extrasSlider id="movieExtras" />
   </children>
