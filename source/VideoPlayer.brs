@@ -112,13 +112,16 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
         protocol = LCase(playbackInfo.MediaSources[0].Protocol)
         if protocol = "http"
             ' directplay http
-            reg = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
-            ' ' proto $1, host $2, port $3, the-rest $4
-            if reg.Match(playbackinfo.MediaSources[0].Path)[2] = "127.0.0.1"
-                ' a better solution would be match the entire loopback space. looking for a good regex
-                ' this is a case where strm files are being served from the same stack as jellyfin
-                ' we handle this case by assuming single-port reverse proxy configuration for both services
-                video.content.url = buildURL(reg.Match(playbackInfo.MediaSources[0].Path)[4])
+            uriRegex = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
+            uri = uriRegex.Match(playbackinfo.MediaSources[0].Path)
+            ' proto $1, host $2, port $3, the-rest $4
+            localhost = CreateObject("roRegex", "^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*\:)*?:?0*1$", "i")
+            ' https://stackoverflow.com/questions/8426171/what-regex-will-match-all-loopback-addresses
+            if localhost.isMatch(uri[2])
+                ' if the domain of the URI is local to the server,
+                ' create a new URI by appending the received path to the server URL
+                ' later we will substitute the users provided URL for this case
+                video.content.url = buildURL(uri[4])
             else
                 fully_external = true
                 video.content.url = playbackinfo.MediaSources[0].Path
