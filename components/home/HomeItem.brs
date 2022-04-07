@@ -173,10 +173,10 @@ sub itemContentChanged()
         return
     end if
 
-    if itemData.type = "MusicAlbum"
+    if itemData.type = "MusicAlbum" or itemData.type = "Audio" or itemData.type = "Book"
         m.itemText.text = itemData.name
         m.itemTextExtra.text = itemData.json.AlbumArtist
-        m.itemPoster.uri = itemData.posterURL
+
         return
     end if
 

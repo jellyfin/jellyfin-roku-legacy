@@ -13,6 +13,7 @@ sub init()
     m.top.latestMediaCount = 0
     m.top.latestMediaInt = 0
     m.top.latestMediaNode = ""
+    m.top.nodeCount = 0
     m.top.sectionCount = 0
 
     updateSize()
@@ -30,8 +31,12 @@ sub init()
     m.LoadMyMediaTask = createObject("roSGNode", "LoadItemsTask")
     m.LoadMyMediaSmallTask = createObject("roSGNode", "LoadItemsTask")
     m.LoadLatestMediaTask = createObject("roSGNode", "LoadItemsTask")
-    m.LoadContinueTask = createObject("roSGNode", "LoadItemsTask")
-    m.LoadContinueTask.itemsToLoad = "continue"
+    m.LoadContinueVideoTask = createObject("roSGNode", "LoadItemsTask")
+    m.LoadContinueVideoTask.itemsToLoad = "continueVideo"
+    m.LoadContinueAudioTask = createObject("roSGNode", "LoadItemsTask")
+    m.LoadContinueAudioTask.itemsToLoad = "continueAudio"
+    m.LoadContinueBookTask = createObject("roSGNode", "LoadItemsTask")
+    m.LoadContinueBookTask.itemsToLoad = "continueBook"
     m.LoadNextUpTask = createObject("roSGNode", "LoadItemsTask")
     m.LoadNextUpTask.itemsToLoad = "nextUp"
     m.LoadOnNowTask = createObject("roSGNode", "LoadItemsTask")
@@ -86,14 +91,22 @@ sub loadHomeSection0()
         m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
         m.LoadLatestMediaTask.control = "RUN"
     else if homesection0 = "resume"
-        m.LoadContinueTask.observeField("content", "updateContinueItems")
-        m.LoadContinueTask.control = "RUN"
+        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
+        m.LoadContinueVideoTask.control = "RUN"
+    else if homesection0 = "resumeaudio"
+        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
+        m.LoadContinueAudioTask.control = "RUN"
+    else if homesection0 = "resumebook"
+        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
+        m.LoadContinueBookTask.control = "RUN"
     else if homesection0 = "nextup"
         m.LoadNextUpTask.observeField("content", "updateNextUpItems")
         m.LoadNextUpTask.control = "RUN"
     else if homesection0 = "livetv"
         m.LoadOnNowTask.observeField("content", "updateOnNowItems")
         m.LoadOnNowTask.control = "RUN"
+    else
+        removeHoldingChild(1)
     end if
     m.top.content = content
     loadHomeSection1()
@@ -114,14 +127,22 @@ sub loadHomeSection1()
         m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
         m.LoadLatestMediaTask.control = "RUN"
     else if homesection1 = "resume"
-        m.LoadContinueTask.observeField("content", "updateContinueItems")
-        m.LoadContinueTask.control = "RUN"
+        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
+        m.LoadContinueVideoTask.control = "RUN"
+    else if homesection1 = "resumeaudio"
+        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
+        m.LoadContinueAudioTask.control = "RUN"
+    else if homesection1 = "resumebook"
+        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
+        m.LoadContinueBookTask.control = "RUN"
     else if homesection1 = "nextup"
         m.LoadNextUpTask.observeField("content", "updateNextUpItems")
         m.LoadNextUpTask.control = "RUN"
     else if homesection1 = "livetv"
         m.LoadOnNowTask.observeField("content", "updateOnNowItems")
         m.LoadOnNowTask.control = "RUN"
+    else
+        removeHoldingChild(2)
     end if
     m.top.content = content
     loadHomeSection2()
@@ -142,14 +163,22 @@ sub loadHomeSection2()
         m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
         m.LoadLatestMediaTask.control = "RUN"
     else if homesection2 = "resume"
-        m.LoadContinueTask.observeField("content", "updateContinueItems")
-        m.LoadContinueTask.control = "RUN"
+        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
+        m.LoadContinueVideoTask.control = "RUN"
+    else if homesection2 = "resumeaudio"
+        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
+        m.LoadContinueAudioTask.control = "RUN"
+    else if homesection2 = "resumebook"
+        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
+        m.LoadContinueBookTask.control = "RUN"
     else if homesection2 = "nextup"
         m.LoadNextUpTask.observeField("content", "updateNextUpItems")
         m.LoadNextUpTask.control = "RUN"
     else if homesection2 = "livetv"
         m.LoadOnNowTask.observeField("content", "updateOnNowItems")
         m.LoadOnNowTask.control = "RUN"
+    else
+        removeHoldingChild(3)
     end if
     m.top.content = content
     loadHomeSection3()
@@ -170,14 +199,22 @@ sub loadHomeSection3()
         m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
         m.LoadLatestMediaTask.control = "RUN"
     else if homesection3 = "resume"
-        m.LoadContinueTask.observeField("content", "updateContinueItems")
-        m.LoadContinueTask.control = "RUN"
+        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
+        m.LoadContinueVideoTask.control = "RUN"
+    else if homesection3 = "resumeaudio"
+        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
+        m.LoadContinueAudioTask.control = "RUN"
+    else if homesection3 = "resumebook"
+        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
+        m.LoadContinueBookTask.control = "RUN"
     else if homesection3 = "nextup"
         m.LoadNextUpTask.observeField("content", "updateNextUpItems")
         m.LoadNextUpTask.control = "RUN"
     else if homesection3 = "livetv"
         m.LoadOnNowTask.observeField("content", "updateOnNowItems")
         m.LoadOnNowTask.control = "RUN"
+    else
+        removeHoldingChild(4)
     end if
     m.top.content = content
     loadHomeSection4()
@@ -198,14 +235,22 @@ sub loadHomeSection4()
         m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
         m.LoadLatestMediaTask.control = "RUN"
     else if homesection4 = "resume"
-        m.LoadContinueTask.observeField("content", "updateContinueItems")
-        m.LoadContinueTask.control = "RUN"
+        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
+        m.LoadContinueVideoTask.control = "RUN"
+    else if homesection4 = "resumeaudio"
+        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
+        m.LoadContinueAudioTask.control = "RUN"
+    else if homesection4 = "resumebook"
+        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
+        m.LoadContinueBookTask.control = "RUN"
     else if homesection4 = "nextup"
         m.LoadNextUpTask.observeField("content", "updateNextUpItems")
         m.LoadNextUpTask.control = "RUN"
     else if homesection4 = "livetv"
         m.LoadOnNowTask.observeField("content", "updateOnNowItems")
         m.LoadOnNowTask.control = "RUN"
+    else
+        removeHoldingChild(5)
     end if
     m.top.content = content
     loadHomeSection5()
@@ -226,14 +271,22 @@ sub loadHomeSection5()
         m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
         m.LoadLatestMediaTask.control = "RUN"
     else if homesection5 = "resume"
-        m.LoadContinueTask.observeField("content", "updateContinueItems")
-        m.LoadContinueTask.control = "RUN"
+        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
+        m.LoadContinueVideoTask.control = "RUN"
+    else if homesection5 = "resumeaudio"
+        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
+        m.LoadContinueAudioTask.control = "RUN"
+    else if homesection5 = "resumebook"
+        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
+        m.LoadContinueBookTask.control = "RUN"
     else if homesection5 = "nextup"
         m.LoadNextUpTask.observeField("content", "updateNextUpItems")
         m.LoadNextUpTask.control = "RUN"
     else if homesection5 = "livetv"
         m.LoadOnNowTask.observeField("content", "updateOnNowItems")
         m.LoadOnNowTask.control = "RUN"
+    else
+        removeHoldingChild(6)
     end if
 
     m.top.content = content
@@ -255,16 +308,20 @@ sub loadHomeSection6()
         m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
         m.LoadLatestMediaTask.control = "RUN"
     else if homesection6 = "resume"
-        m.LoadContinueTask.observeField("content", "updateContinueItems")
-        m.LoadContinueTask.control = "RUN"
+        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
+        m.LoadContinueVideoTask.control = "RUN"
+    else if homesection6 = "resumeaudio"
+        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
+        m.LoadContinueAudioTask.control = "RUN"
+    else if homesection6 = "resumebook"
+        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
+        m.LoadContinueBookTask.control = "RUN"
     else if homesection6 = "nextup"
         m.LoadNextUpTask.observeField("content", "updateNextUpItems")
         m.LoadNextUpTask.control = "RUN"
     else if homesection6 = "livetv"
         m.LoadOnNowTask.observeField("content", "updateOnNowItems")
         m.LoadOnNowTask.control = "RUN"
-    else if homesection6 = "none"
-
     end if
 
     m.top.content = content
@@ -283,8 +340,27 @@ sub createHoldingChildren()
     content = m.top.content
     for i = 1 to home_section_count
         homeSectionHold = CreateObject("roSGNode", "HomeRow")
-        homeSectionHold.title = Substitute("Hold{0}", i.toStr())
+        homeSectionHold.title = Substitute("Loading Section {0}...", i.toStr())
         content.insertChild(homeSectionHold, i)
+    end for
+    m.top.content = content
+end sub
+
+sub removeHoldingChild(child as integer)
+    content = m.top.content
+    row_index = getRowIndex(Substitute("Loading Section {0}...", child.toStr()))
+    row = content.getChild(row_index)
+    content.removeChild(row)
+    m.top.content = content
+end sub
+
+sub removeHoldingChildren()
+    home_section_count = getHomeSectionCount()
+    content = m.top.content
+    for i = 1 to home_section_count
+        row_index = getRowIndex(Substitute("Loading Section {0}...", child.toStr()))
+        row = content.getChild(row_index)
+        content.removeChild(row)
     end for
     m.top.content = content
 end sub
@@ -310,6 +386,8 @@ sub rebuildItemArray()
             itemSize = [464, 261]
             if homesection = "librarybuttons"
                 itemSize = [464, 100]
+            else if homesection = "resumebook"
+                itemSize = [200, 331]
             end if
             updateSizeArray(itemSize)
         end if
@@ -317,12 +395,13 @@ sub rebuildItemArray()
 end sub
 
 sub updateHomeRows()
-    m.LoadContinueTask.observeField("content", "loadHomeSection0")
-    m.LoadContinueTask.control = "RUN"
+    m.LoadContinueVideoTask.observeField("content", "loadHomeSection0")
+    m.LoadContinueVideoTask.control = "RUN"
 end sub
 
 function getHomeSectionInt(section as string)
-    for i = 0 to 6
+    home_section_count = getHomeSectionCount()
+    for i = 0 to home_section_count
         homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
         if homesection = section
             return i
@@ -370,7 +449,7 @@ sub updateMyMedia()
     end if
 
     index_section = section + 1
-    row_index = getRowIndex(Substitute("Hold{0}", index_section.toStr()))
+    row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
     if row_index <> invalid
         row = homeRows.getChild(row_index)
         row.title = tr("My Media")
@@ -385,7 +464,7 @@ sub updateMyMedia()
     end if
 
     section_count = m.top.sectionCount
-    if section_count = section + 1
+    if section_count = section + latestMediaCount
         rebuildItemArray()
     end if
 end sub
@@ -408,7 +487,7 @@ sub updateMyMediaSmall()
     end if
 
     index_section = section + 1
-    row_index = getRowIndex(Substitute("Hold{0}", index_section.toStr()))
+    row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
     if row_index <> invalid
         row = homeRows.getChild(row_index)
         row.title = tr("My Media")
@@ -416,7 +495,6 @@ sub updateMyMediaSmall()
             item.usePoster = false
             item.isSmall = true
             item.iconUrl = ""
-
             row.appendChild(item)
         end for
         updateSizeArray(itemSize, section + latestMediaCount, "replace")
@@ -424,7 +502,7 @@ sub updateMyMediaSmall()
     end if
 
     section_count = m.top.sectionCount
-    if section_count = section + 1
+    if section_count = section + latestMediaCount
         rebuildItemArray()
     end if
 end sub
@@ -451,12 +529,12 @@ sub updateLatestMedia()
     m.top.latestMediaCount = latest_count
 end sub
 
-sub updateContinueItems()
+sub updateContinueVideoItems()
     homeRows = m.top.content
     section = getHomeSectionInt("resume")
-    itemData = m.LoadContinueTask.content
-    m.LoadContinueTask.unobserveField("content")
-    m.LoadContinueTask.content = []
+    itemData = m.LoadContinueVideoTask.content
+    m.LoadContinueVideoTask.unobserveField("content")
+    m.LoadContinueVideoTask.content = []
 
     itemSize = [464, 331]
 
@@ -469,14 +547,23 @@ sub updateContinueItems()
     end if
 
     index_section = section + 1
-    row_index = getRowIndex(Substitute("Hold{0}", index_section.toStr()))
+    row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
     if row_index <> invalid
         row = homeRows.getChild(row_index)
         row.title = tr("Continue Watching")
-        for each item in itemData
-            item.usePoster = true
-            item.imageWidth = 464
-            row.appendChild(item)
+        item_count = itemData.count()
+        if item_count > 1000
+            item_count = 1000
+        end if
+        if item_count = 0
+            homeRows.removeChild(row)
+        end if
+        for i = 0 to item_count
+            if itemData[i] <> invalid
+                itemData[i].usePoster = true
+                itemData[i].imageWidth = 464
+                row.appendChild(itemData[i])
+            end if
         end for
 
         updateSizeArray(itemSize, section + latestMediaCount, "replace")
@@ -484,7 +571,102 @@ sub updateContinueItems()
     end if
 
     section_count = m.top.sectionCount
-    if section_count = section + 1
+    if section_count = section + latestMediaCount
+        rebuildItemArray()
+    end if
+end sub
+
+sub updateContinueAudioItems()
+    homeRows = m.top.content
+    section = getHomeSectionInt("resumeaudio")
+    itemData = m.LoadContinueAudioTask.content
+    m.LoadContinueAudioTask.unobserveField("content")
+    m.LoadContinueAudioTask.content = []
+
+    itemSize = [464, 331]
+
+    latest_media_int = m.top.latestMediaInt
+    latestMediaCount = m.top.latestMediaCount - 1
+    if latest_media_int < section
+        if latestMediaCount > 0
+            section = section + latestMediaCount
+        end if
+    end if
+
+    index_section = section + 1
+    row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
+    if row_index <> invalid
+        row = homeRows.getChild(row_index)
+        row.title = tr("Continue Listening")
+        item_count = itemData.count()
+        if item_count > 1000
+            item_count = 1000
+        end if
+        if item_count = 0
+            homeRows.removeChild(row)
+        end if
+        for i = 0 to item_count
+            if itemData[i] <> invalid
+                itemData[i].usePoster = true
+                itemData[i].imageWidth = 464
+                row.appendChild(itemData[i])
+            end if
+        end for
+
+        updateSizeArray(itemSize, section + latestMediaCount, "replace")
+        row.update(row, false)
+    end if
+
+    section_count = m.top.sectionCount
+    if section_count = section + latestMediaCount
+        rebuildItemArray()
+    end if
+end sub
+
+sub updateContinueBookItems()
+    homeRows = m.top.content
+    section = getHomeSectionInt("resumebook")
+    itemData = m.LoadContinueBookTask.content
+    m.LoadContinueBookTask.unobserveField("content")
+    m.LoadContinueBookTask.content = []
+
+    itemSize = [200, 331]
+
+    latest_media_int = m.top.latestMediaInt
+    latestMediaCount = m.top.latestMediaCount - 1
+    if latest_media_int < section
+        if latestMediaCount > 0
+            section = section + latestMediaCount
+        end if
+    end if
+
+    index_section = section + 1
+    row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
+    if row_index <> invalid
+        row = homeRows.getChild(row_index)
+        row.title = tr("Continue Reading")
+        item_count = itemData.count()
+        if item_count > 1000
+            item_count = 1000
+        end if
+        if item_count = 0
+            homeRows.removeChild(row)
+        end if
+        for i = 0 to item_count
+            if itemData[i] <> invalid
+                itemData[i].usePoster = true
+                itemData[i].imageWidth = 200
+                row.appendChild(itemData[i])
+                
+            end if
+        end for
+        
+        row.update(row, false)
+        updateSizeArray(itemSize, section + latestMediaCount, "replace")
+    end if
+
+    section_count = m.top.sectionCount
+    if section_count = section + latestMediaCount
         rebuildItemArray()
     end if
 end sub
@@ -508,14 +690,23 @@ sub updateNextUpItems()
     end if
 
     index_section = section + 1
-    row_index = getRowIndex(Substitute("Hold{0}", index_section.toStr()))
+    row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
     if row_index <> invalid
         row = homeRows.getChild(row_index)
         row.title = tr("Next Up") + " >"
-        for each item in itemData
-            item.usePoster = false
-            item.imageWidth = 464
-            row.appendChild(item)
+        item_count = itemData.count()
+        if item_count > 1000
+            item_count = 1000
+        end if
+        if item_count = 0
+            homeRows.removeChild(row)
+        end if
+        for i = 0 to item_count
+            if itemData[i] <> invalid
+                itemData[i].usePoster = false
+                itemData[i].imageWidth = 464
+                row.appendChild(itemData[i])
+            end if
         end for
 
         updateSizeArray(itemSize, section + latestMediaCount, "replace")
@@ -523,7 +714,7 @@ sub updateNextUpItems()
     end if
 
     section_count = m.top.sectionCount
-    if section_count = section + 1
+    if section_count = section + latestMediaCount
         rebuildItemArray()
     end if
 end sub
@@ -538,36 +729,43 @@ sub updateLatestItems(msg)
     homeRows = m.top.content
     section = getHomeSectionInt("latestmedia")
     latest_node = m.top.latestMediaNode
+    node_count = m.top.nodeCount
+    section_count = m.top.sectionCount
+    latest_media_int = m.top.latestMediaInt
+    latestMediaCount = m.top.latestMediaCount - 1
 
     if latest_node = ""
         m.top.latestMediaNode = node.metadata.title
     end if
 
     if latest_node <> "" and latest_node <> node.metadata.title
-        section++
+        node_count++
+        m.top.nodeCount = node_count
         m.top.latestMediaNode = node.metadata.title
     end if
-
+    
     latest_count = 0
     index_section = section + 1
-    index_section_latest = index_section + latest_count
-    row_index = getRowIndex(Substitute("Hold{0}", index_section_latest.toStr()))
+    index_section_latest = index_section + node_count
+    row_index = getRowIndex(Substitute("Loading Section {0}...", index_section_latest.toStr()))
     if row_index <> invalid
         row = homeRows.getChild(row_index)
-        for each item in itemData
-            if row_index <> invalid
+        item_count = itemData.count()
+        if item_count > 1000
+            item_count = 1000
+        end if
+        for i = 0 to item_count
+            if itemData[i] <> invalid
                 row.title = tr("Latest in") + " " + node.metadata.title + " >"
-                item.usePoster = true
-                item.imageWidth = 200
-                row.appendChild(item)
-                latest_count++
+                itemData[i].usePoster = true
+                itemData[i].imageWidth = 200
+                row.appendChild(itemData[i])
             end if
         end for
         row.update(row, false)
     end if
 
-    section_count = m.top.sectionCount
-    if section_count = section + 1
+    if section_count = index_section + node_count
         rebuildItemArray()
     end if
 end sub
@@ -591,21 +789,30 @@ sub updateOnNowItems()
     end if
 
     index_section = section + 1
-    row_index = getRowIndex(Substitute("Hold{0}", index_section.toStr()))
+    row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
     if row_index <> invalid
         row = homeRows.getChild(row_index)
         row.title = tr("On Now")
-        for each item in itemData
-            item.usePoster = row.usePoster
-            item.imageWidth = 464
-            row.appendChild(item)
+        item_count = itemData.count()
+        if item_count > 1000
+            item_count = 1000
+        end if
+        if item_count = 0
+            homeRows.removeChild(row)
+        end if
+        for i = 0 to item_count
+            if itemData[i] <> invalid
+                itemData[i].usePoster = false
+                itemData[i].imageWidth = 464
+                row.appendChild(itemData[i])
+            end if
         end for
         updateSizeArray(itemSize, section + latestMediaCount, "replace")
         row.update(row, false)
     end if
 
     section_count = m.top.sectionCount
-    if section_count = section + 1
+    if section_count = section + latestMediaCount
         rebuildItemArray()
     end if
 end sub

@@ -5,6 +5,7 @@
     <field id="userConfig" type="assocarray" />
     <field id="latestMediaCount" type="integer" />
     <field id="latestMediaInt" type="integer" />
+    <field id="nodeCount" type="integer" />
     <field id="latestMediaNode" type="string" />
     <field id="sectionCount" type="integer" />
     <field id="completed" type="bool" value="false" />

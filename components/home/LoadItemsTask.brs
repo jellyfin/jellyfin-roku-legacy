@@ -48,6 +48,7 @@ sub loadItems()
 
         url = "Shows/NextUp"
         params = {}
+        params["Limit"] = 30
         params["recursive"] = true
         params["SortBy"] = "DatePlayed"
         params["SortOrder"] = "Descending"
@@ -63,15 +64,57 @@ sub loadItems()
         end for
 
         ' Load Continue Watching
-    else if m.top.itemsToLoad = "continue"
+    else if m.top.itemsToLoad = "continueVideo"
 
         url = Substitute("Users/{0}/Items/Resume", get_setting("active_user"))
 
         params = {}
+        params["Limit"] = 30
         params["recursive"] = true
         params["SortBy"] = "DatePlayed"
         params["SortOrder"] = "Descending"
         params["Filters"] = "IsResumable"
+        params["MediaTypes"] = "Video"
+
+        resp = APIRequest(url, params)
+        data = getJson(resp)
+        for each item in data.Items
+            tmp = CreateObject("roSGNode", "HomeData")
+            tmp.json = item
+            results.push(tmp)
+        end for
+
+    else if m.top.itemsToLoad = "continueAudio"
+
+        url = Substitute("Users/{0}/Items/Resume", get_setting("active_user"))
+
+        params = {}
+        params["limit"] = 30
+        params["recursive"] = true
+        params["SortBy"] = "DatePlayed"
+        params["SortOrder"] = "Descending"
+        params["Filters"] = "IsResumable"
+        params["MediaTypes"] = "Audio"
+
+        resp = APIRequest(url, params)
+        data = getJson(resp)
+        for each item in data.Items
+            tmp = CreateObject("roSGNode", "HomeData")
+            tmp.json = item
+            results.push(tmp)
+        end for
+
+    else if m.top.itemsToLoad = "continueBook"
+
+        url = Substitute("Users/{0}/Items/Resume", get_setting("active_user"))
+
+        params = {}
+        params["Limit"] = 30
+        params["recursive"] = true
+        params["SortBy"] = "DatePlayed"
+        params["SortOrder"] = "Descending"
+        params["Filters"] = "IsResumable"
+        params["MediaTypes"] = "Book"
 
         resp = APIRequest(url, params)
         data = getJson(resp)
@@ -84,6 +127,7 @@ sub loadItems()
     else if m.top.itemsToLoad = "onNow"
         url = "LiveTv/Programs/Recommended"
         params = {}
+        params["Limit"] = 30
         params["userId"] = get_setting("active_user")
         params["isAiring"] = true
         params["limit"] = 16 ' 16 to be consistent with "Latest In"
