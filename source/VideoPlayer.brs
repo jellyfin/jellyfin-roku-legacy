@@ -69,6 +69,8 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     end if
     if meta.live then mediaSourceId = "" ' Don't send mediaSourceId for Live media
 
+    StartOfSubtitleReload:
+
     playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
 
     video.videoId = video.id
@@ -103,8 +105,25 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
 
     video.content.SubtitleTracks = subtitles["text"]
 
-    ' 'TODO: allow user selection of subtitle track before playback initiated, for now set to no subtitles
-    video.SelectedSubtitle = -1
+    ' if user has selected subtitles previously and this selection has subtitles in the same language
+    ' use them; until the user decides they no longer want subtitles...
+    subLang = get_setting("current_subtitle")
+    if subtitle_idx = -1 and subLang <> invalid and subLang <> ""
+        for each item in video.Subtitles
+            if item.Track.Language = subLang
+                video.SelectedSubtitle = item.index
+                if item.IsEncoded
+                    subtitle_idx = item.Index
+                    video.globalCaptionMode = "Off" ' Using encoded subtitles - so turn off text subtitles
+                    goto StartOfSubtitleReload ' some people hate Goto, but some times they just work
+                else
+                    video.globalCaptionMode = "On"
+                end if
+            end if
+        end for
+    else
+        video.SelectedSubtitle = subtitle_idx
+    end if
 
     video.directPlaySupported = playbackInfo.MediaSources[0].SupportsDirectPlay
 

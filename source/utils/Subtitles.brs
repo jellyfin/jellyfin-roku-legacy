@@ -5,6 +5,14 @@ function selectSubtitleTrack(tracks, current = -1) as integer
     if trackSelected = invalid or trackSelected = -1 ' back pressed in Dialog - no selection made
         return -2
     else
+        ' Save off subtitle selected and we can use this if available for other media going forward
+        ' until the user turns it back off.
+        video = m.scene.focusedChild.focusedChild
+        newSubtitles = video.Subtitles[trackSelected - 1]
+        if newSubtitles <> invalid
+            set_setting("current_subtitle", newSubtitles.Track.Language)
+        end if
+
         return trackSelected - 1
     end if
 end function
@@ -42,8 +50,8 @@ sub changeSubtitleDuringPlayback(newid)
     ' If no change of subtitle track, return
     if newid = video.SelectedSubtitle then return
 
-    currentSubtitles = video.Subtitles[video.SelectedSubtitle]
     newSubtitles = video.Subtitles[newid]
+    set_setting("current_subtitle", newSubtitles.Track.Language)
 
     if newSubtitles.IsEncoded
 
@@ -53,7 +61,7 @@ sub changeSubtitleDuringPlayback(newid)
         video.control = "play"
         video.globalCaptionMode = "Off" ' Using encoded subtitles - so turn off text subtitles
 
-    else if currentSubtitles <> invalid and currentSubtitles.IsEncoded
+    else
 
         ' Switching from an Encoded stream to a text stream
         video.control = "stop"
@@ -62,11 +70,6 @@ sub changeSubtitleDuringPlayback(newid)
         video.globalCaptionMode = "On"
         video.subtitleTrack = video.availableSubtitleTracks[newSubtitles.TextIndex].TrackName
 
-    else
-
-        ' Switch to Text Subtitle Track
-        video.globalCaptionMode = "On"
-        video.subtitleTrack = video.availableSubtitleTracks[newSubtitles.TextIndex].TrackName
     end if
 
     video.SelectedSubtitle = newid
@@ -74,6 +77,7 @@ sub changeSubtitleDuringPlayback(newid)
 end sub
 
 sub turnoffSubtitles()
+    set_setting("current_subtitle", "")
     video = m.scene.focusedChild.focusedChild
     current = video.SelectedSubtitle
     video.SelectedSubtitle = -1
