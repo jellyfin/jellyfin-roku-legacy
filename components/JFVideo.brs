@@ -93,6 +93,9 @@ sub bufferCheck(msg)
             m.bufferPercentage = m.top.bufferingStatus["percentage"]
         else
             ' If buffering has stopped Display dialog
+            ' Remove any persisted subtitle selections as this may be the source of the error
+            ' (ASS / SSA graphical subs taking too long)
+            set_setting("current_subtitle", "")
             dialog = createObject("roSGNode", "Dialog")
             dialog.title = tr("Error Retrieving Content")
             dialog.buttons = [tr("OK")]
