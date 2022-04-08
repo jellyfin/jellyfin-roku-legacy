@@ -129,10 +129,10 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
             video.isTranscoded = false
         else if protocol = "file"
             params.append({
-            "Static": "true",
-            "Container": video.container,
-            "PlaySessionId": video.PlaySessionId,
-            "AudioStreamIndex": audio_stream_idx
+                "Static": "true",
+                "Container": video.container,
+                "PlaySessionId": video.PlaySessionId,
+                "AudioStreamIndex": audio_stream_idx
             })
             if mediaSourceId <> ""
                 params.MediaSourceId = mediaSourceId
@@ -153,15 +153,15 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
         video.content.url = buildURL(playbackInfo.MediaSources[0].TranscodingUrl)
         video.isTranscoded = true
     end if
-    
+
     if fully_external
         video.content.setCertificatesFile("common:/certs/ca-bundle.crt")
     else
         video.content = authorize_request(video.content)
         ' this switch also serves these purposes:
-        '       video.content.setCertificatesFile("pkg:/source/certs/ca-bundle.crt")
-        '       video.content.AddHeader("X-Roku-Reserved-Dev-Id", "")
-        '       video.content.InitClientCertificates()
+        ' video.content.setCertificatesFile("pkg:/source/certs/ca-bundle.crt")
+        ' video.content.AddHeader("X-Roku-Reserved-Dev-Id", "")
+        ' video.content.InitClientCertificates()
         ' but otherwise just:
         video.content.setCertificatesFile("common:/certs/ca-bundle.crt")
     end if
