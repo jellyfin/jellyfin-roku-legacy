@@ -19,7 +19,6 @@ sub itemContentChanged()
     if itemData = invalid then return
     itemData.Title = itemData.name ' Temporarily required while we move from "HomeItem" to "JFContentItem"
 
-
     m.itemPoster.width = itemData.imageWidth
     m.itemText.maxWidth = itemData.imageWidth
     m.itemTextExtra.width = itemData.imageWidth
@@ -144,18 +143,8 @@ sub itemContentChanged()
         return
     end if
     if itemData.type = "Series"
-
         m.itemText.text = itemData.name
-
-        if itemData.usePoster = true
-            if itemData.imageWidth = 180
-                m.itemPoster.uri = itemData.posterURL
-            else
-                m.itemPoster.uri = itemData.widePosterURL
-            end if
-        else
-            m.itemPoster.uri = itemData.thumbnailURL
-        end if
+        m.itemPoster.uri = itemData.posterURL
 
         textExtra = ""
         if itemData.json.ProductionYear <> invalid
@@ -176,7 +165,11 @@ sub itemContentChanged()
     if itemData.type = "MusicAlbum" or itemData.type = "Audio" or itemData.type = "Book"
         m.itemText.text = itemData.name
         m.itemTextExtra.text = itemData.json.AlbumArtist
-
+        if itemData.usePoster = true
+            if itemData.posterURL <> ""
+               m.itemPoster.uri = itemData.posterURL
+            end if
+        end if
         return
     end if
 

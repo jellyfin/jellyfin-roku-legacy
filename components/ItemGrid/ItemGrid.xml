@@ -3,13 +3,13 @@
   <children>
   
     <poster id="backdrop" 
-      loadDisplayMode="scaleToFill"
+      loadDisplayMode="scaleToFit"
       width="1920"
       height="1080" 
       opacity="0.25"
       />
     <poster id="backdropTransition" 
-      loadDisplayMode="scaleToFill"
+      loadDisplayMode="scaleToFit"
       width="1920"
       height="1080" 
       opacity="0.25"
@@ -39,6 +39,7 @@
     <field id="quickPlayNode" type="node" alwaysNotify="true" />
     <field id="imageDisplayMode" type="string" value="scaleToZoom" />
     <field id="AlphaSelected" type="string" alias="AlphaMenu.itemAlphaSelected" alwaysNotify="true" onChange="onItemAlphaSelected" />
+    <field id="imageDisplayMode" type="string" value="scaleToFit" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />

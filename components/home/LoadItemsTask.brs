@@ -28,8 +28,9 @@ sub loadItems()
         params = {}
         params["Limit"] = 16
         params["ParentId"] = m.top.itemId
-        params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
+        params["EnableImageTypes"] = "Primary"
         params["ImageTypeLimit"] = 1
+        params["MaxWidth"] = 180
 
         resp = APIRequest(url, params)
         data = getJson(resp)
@@ -89,17 +90,21 @@ sub loadItems()
         url = Substitute("Users/{0}/Items/Resume", get_setting("active_user"))
 
         params = {}
-        params["limit"] = 30
+        params["Limit"] = 30
         params["recursive"] = true
         params["SortBy"] = "DatePlayed"
         params["SortOrder"] = "Descending"
         params["Filters"] = "IsResumable"
         params["MediaTypes"] = "Audio"
+        params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
+        params["ImageTypeLimit"] = 1
 
         resp = APIRequest(url, params)
         data = getJson(resp)
         for each item in data.Items
             tmp = CreateObject("roSGNode", "HomeData")
+            poster = PosterImage(item.Id)
+            item.posterURL = poster.url
             tmp.json = item
             results.push(tmp)
         end for
@@ -115,11 +120,14 @@ sub loadItems()
         params["SortOrder"] = "Descending"
         params["Filters"] = "IsResumable"
         params["MediaTypes"] = "Book"
+        params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
 
         resp = APIRequest(url, params)
         data = getJson(resp)
         for each item in data.Items
             tmp = CreateObject("roSGNode", "HomeData")
+            poster = PosterImage(item.Id)
+            item.posterURL = poster.url
             tmp.json = item
             results.push(tmp)
         end for
@@ -130,7 +138,6 @@ sub loadItems()
         params["Limit"] = 30
         params["userId"] = get_setting("active_user")
         params["isAiring"] = true
-        params["limit"] = 16 ' 16 to be consistent with "Latest In"
         params["imageTypeLimit"] = 1
         params["enableImageTypes"] = "Primary,Thumb,Backdrop"
         params["enableTotalRecordCount"] = false

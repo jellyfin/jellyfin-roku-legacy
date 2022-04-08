@@ -102,7 +102,7 @@ sub setData()
         if datum.ImageTags <> invalid and datum.imageTags.Thumb <> invalid
             imgParams["Tag"] = datum.imageTags.Thumb
             m.top.thumbnailUrl = ImageURL(datum.Id, "Thumb", imgParams)
-        else if datum.BackdropImageTags[0] <> invalid
+        else if datum.BackdropImageTags <> invalid and datum.BackdropImageTags[0] <> invalid
             imgParams["Tag"] = datum.BackdropImageTags[0]
             m.top.thumbnailUrl = ImageURL(datum.id, "Backdrop", imgParams)
         end if
@@ -134,7 +134,7 @@ sub setData()
             imgParams["Tag"] = datum.BackdropImageTags[0]
             m.top.thumbnailUrl = ImageURL(datum.id, "Backdrop", imgParams)
         end if
-    else if datum.type = "MusicAlbum"
+    else if datum.type = "MusicAlbum" or datum.type = "Audio" or datum.type = "Book"
         params = { "Tag": datum.ImageTags.Primary, "maxHeight": 261, "maxWidth": 261 }
         m.top.thumbnailURL = ImageURL(datum.id, "Primary", params)
         m.top.widePosterUrl = m.top.thumbnailURL
