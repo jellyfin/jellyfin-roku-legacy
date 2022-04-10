@@ -58,9 +58,90 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 group.callFunc("refresh")
                 video.content = invalid
                 return
+            else if dialogResult = 3
+            'get series ID based off episiode ID
+                params = {
+                    ids: video.Id
+                }
+                url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                resp = APIRequest(url, params)
+                data = getJson(resp)
+                    for each item in data.Items
+                        series_ID = item.SeriesId
+                    end for
+                print series
+            'Get series json data
+            params = {
+                ids: series_ID
+            }
+            url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+            resp = APIRequest(url, params)
+            data = getJson(resp)
+                for each item in data.Items
+                    tmp = item
+                end for   
+            'Create Series Scene
+                group = CreateSeriesDetailsGroup(tmp)
+                video.content = invalid
+                return  
+            
+            else if dialogResult = 4
+                    'get Season/Series ID based off episiode ID
+                    params = {
+                        ids: video.Id
+                    }
+                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    resp = APIRequest(url, params)
+                    data = getJson(resp)
+                        for each item in data.Items
+                            season_id = item.SeasonId
+                            series_id = item.SeriesId
+                        end for
+                        'Get Series json data
+                            params = {
+                            ids: season_ID
+                            }
+                            url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                            resp = APIRequest(url, params)
+                            data = getJson(resp)
+                            for each item in data.Items
+                                Season_tmp = item
+                            end for   
+                        'Get Season json data
+                        params = {
+                            ids: series_id
+                            }
+                            url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                            resp = APIRequest(url, params)
+                            data = getJson(resp)
+                            for each item in data.Items
+                                Series_tmp = item
+                            end for   
+                        'Create Season Scene
+                    group = CreateSeasonDetailsGroup(Series_tmp,Season_tmp)
+                    video.content = invalid
+                    return  
+
+                else if dialogResult = 5
+                    'get  episiode ID
+                    params = {
+                        ids: video.Id
+                    }
+                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    resp = APIRequest(url, params)
+                    data = getJson(resp)
+                        for each item in data.Items
+                            episode_ID = item
+                        end for
+                        'Create Episode Scene
+                    group = CreateMovieDetailsGroup(episode_ID)
+                    video.content = invalid
+                    return     
             end if
         end if
     end if
+
+
     video.content.PlayStart = int(playbackPosition / 10000000)
 
     ' Call PlayInfo from server
@@ -161,9 +242,9 @@ end function
 'Opens dialog asking user if they want to resume video or start playback over
 function startPlayBackOver(time as longinteger) as integer
     if m.scene.focusedChild.overhangTitle = "Home"
-        return option_dialog(["Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning.", "Watched"])
+        return option_dialog(["Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning.", "Watched","Go to series","Go to season","Go to episode"])
     else
-        return option_dialog(["Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning."])
+        return option_dialog(["Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning.","Watched","Go to series","Go to season","Go to episode"])
     end if
 end function
 
