@@ -69,7 +69,6 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     for each item in data.Items
                         series_ID = item.SeriesId
                     end for
-                print series
             'Get series json data
             params = {
                 ids: series_ID
