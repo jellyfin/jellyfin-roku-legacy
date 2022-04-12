@@ -145,13 +145,27 @@ sub LoadUserPreferences()
         if jsonResponse.CustomPrefs["landing-livetv"] <> invalid
             set_user_setting("display.livetv.landing", jsonResponse.CustomPrefs["landing-livetv"])
         end if
-        set_user_setting("display.homesection0", jsonResponse.CustomPrefs["homesection0"])
-        set_user_setting("display.homesection1", jsonResponse.CustomPrefs["homesection1"])
-        set_user_setting("display.homesection2", jsonResponse.CustomPrefs["homesection2"])
-        set_user_setting("display.homesection3", jsonResponse.CustomPrefs["homesection3"])
-        set_user_setting("display.homesection4", jsonResponse.CustomPrefs["homesection4"])
-        set_user_setting("display.homesection5", jsonResponse.CustomPrefs["homesection5"])
-        set_user_setting("display.homesection6", jsonResponse.CustomPrefs["homesection6"])
+        if jsonResponse.CustomPrefs["homesection0"] <> invalid
+            set_user_setting("display.homesection0", jsonResponse.CustomPrefs["homesection0"])
+        end if
+        if jsonResponse.CustomPrefs["homesection1"] <> invalid
+            set_user_setting("display.homesection1", jsonResponse.CustomPrefs["homesection1"])
+        end if
+        if jsonResponse.CustomPrefs["homesection2"] <> invalid
+            set_user_setting("display.homesection2", jsonResponse.CustomPrefs["homesection2"])
+        end if
+        if jsonResponse.CustomPrefs["homesection3"] <> invalid
+            set_user_setting("display.homesection3", jsonResponse.CustomPrefs["homesection3"])
+        end if
+        if jsonResponse.CustomPrefs["homesection4"] <> invalid
+            set_user_setting("display.homesection4", jsonResponse.CustomPrefs["homesection4"])
+        end if
+        if jsonResponse.CustomPrefs["homesection5"] <> invalid
+            set_user_setting("display.homesection5", jsonResponse.CustomPrefs["homesection5"])
+        end if
+        if jsonResponse.CustomPrefs["homesection6"] <> invalid
+            set_user_setting("display.homesection6", jsonResponse.CustomPrefs["homesection6"])
+        end if
     else
         unset_user_setting("display.livetv.landing")
         unset_user_setting("display.homesection0")

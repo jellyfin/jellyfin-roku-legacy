@@ -167,7 +167,7 @@ sub itemContentChanged()
         m.itemTextExtra.text = itemData.json.AlbumArtist
         if itemData.usePoster = true
             if itemData.posterURL <> ""
-               m.itemPoster.uri = itemData.posterURL
+                m.itemPoster.uri = itemData.posterURL
             end if
         end if
         return
@@ -191,11 +191,13 @@ end sub
 
 'Hide backdrop and icon when poster loaded
 sub onPosterLoadStatusChanged()
-    if m.itemPoster.loadStatus = "ready" and m.itemPoster.uri <> ""
-        m.backdrop.visible = false
-        m.itemIcon.visible = false
-    else
-        m.backdrop.visible = true
-        m.itemIcon.visible = true
+    if m.itemPoster <> invalid
+        if m.itemPoster.loadStatus = "ready" and m.itemPoster.uri <> ""
+            m.backdrop.visible = false
+            m.itemIcon.visible = false
+        else
+            m.backdrop.visible = true
+            m.itemIcon.visible = true
+        end if
     end if
 end sub
