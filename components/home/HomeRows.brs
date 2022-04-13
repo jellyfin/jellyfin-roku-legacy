@@ -15,6 +15,7 @@ sub init()
     m.top.latestMediaNode = ""
     m.top.nodeCount = 0
     m.top.sectionCount = 0
+    m.top.sectionIgnores = []
 
     updateSize()
 
@@ -419,7 +420,21 @@ end sub
 
 sub onUpdateContinueAudioItemsComplete(event)
     data = event.GetData()
+    ignores = m.top.sectionIgnores
     if data = "stop"
+        itemData = m.LoadContinueAudioTask.content
+        if itemData.count() = 0
+            ignores.push("resumeaudio")
+            m.top.sectionIgnores = ignores
+            section = getHomeSectionInt("resumeaudio")
+            index_section = section + 1
+            row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
+            if row_index <> invalid
+                homeRows = m.top.content
+                row = homeRows.getChild(row_index)
+                homeRows.removeChild(row)
+            end if
+        end if
         rebuildItemArray()
     end if
 end sub
@@ -449,6 +464,7 @@ sub createHoldingChildren()
     ' Creating children to fill later on.
     ' Welcome Children - Mose
     home_section_count = getHomeSectionCount()
+    print "HOME COUNT: " home_section_count
     content = m.top.content
     for i = 1 to home_section_count
         homeSectionHold = CreateObject("roSGNode", "HomeRow")
@@ -481,11 +497,23 @@ end sub
 
 sub rebuildItemArray()
     section_count = getHomeSectionCount()
-
+    ignores = m.top.sectionIgnores
     m.top.rowItemSize = []
 
+    newSizeArray = []
     for i = 0 to section_count
         homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
+        if homesection <> invalid
+            ' Loop through ignores
+            if ignores <> invalid and ignores.count() > 0
+                for each ignore in ignores
+                    if ignore = homesection
+                        i++
+                        homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
+                    end if
+                end for
+            end if
+        end if
         if homesection <> invalid
             if homesection = "latestmedia"
                 userConfig = m.top.userConfig
@@ -493,7 +521,8 @@ sub rebuildItemArray()
                 for each lib in filteredLatest
                     if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv"
                         itemSize = [200, 331]
-                        updateSizeArray(itemSize)
+                        newSizeArray.push(itemSize)
+                        ' updateSizeArray(itemSize)
                     end if
                 end for
             end if
@@ -504,10 +533,12 @@ sub rebuildItemArray()
                 else if homesection = "resumebook"
                     itemSize = [200, 331]
                 end if
-                updateSizeArray(itemSize)
+                newSizeArray.push(itemSize)
+                ' updateSizeArray(itemSize)
             end if
         end if
     end for
+    m.top.rowItemSize = newSizeArray
 end sub
 
 sub updateHomeRows()
@@ -835,6 +866,9 @@ sub updateLatestItems(msg)
         item_count = itemData.count()
         if item_count > 1000
             item_count = 1000
+        end if
+        if item_count = 0
+            homeRows.removeChild(row)
         end if
         for i = 0 to item_count
             if itemData[i] <> invalid
