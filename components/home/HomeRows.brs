@@ -30,7 +30,9 @@ sub init()
     m.LoadHomeSectionTask = createObject("roSGNode", "LoadItemsTask")
 
     m.LoadMyMediaTask = createObject("roSGNode", "LoadItemsTask")
+    m.LoadMyMediaTask.itemsToLoad = "libraries"
     m.LoadMyMediaSmallTask = createObject("roSGNode", "LoadItemsTask")
+    m.LoadMyMediaSmallTask.itemsToLoad = "libraries"
     m.LoadLatestMediaTask = createObject("roSGNode", "LoadItemsTask")
     m.LoadContinueVideoTask = createObject("roSGNode", "LoadItemsTask")
     m.LoadContinueVideoTask.itemsToLoad = "continueVideo"
@@ -392,28 +394,84 @@ end sub
 
 sub onUpdateMyMediaComplete(event)
     data = event.GetData()
+    ignores = m.top.sectionIgnores
     if data = "stop"
+        itemData = m.LoadMyMediaTask.content
+        if itemData.count() = 0
+            ignores.push("smalllibrarytiles")
+            m.top.sectionIgnores = ignores
+            section = getHomeSectionInt("smalllibrarytiles")
+            index_section = section + 1
+            row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
+            if row_index <> invalid
+                homeRows = m.top.content
+                row = homeRows.getChild(row_index)
+                homeRows.removeChild(row)
+            end if
+        end if
         rebuildItemArray()
     end if
 end sub
 
 sub onUpdateMyMediaSmallComplete(event)
     data = event.GetData()
+    ignores = m.top.sectionIgnores
     if data = "stop"
+        itemData = m.LoadMyMediaSmallTask.content
+        if itemData.count() = 0
+            ignores.push("librarybuttons")
+            m.top.sectionIgnores = ignores
+            section = getHomeSectionInt("librarybuttons")
+            index_section = section + 1
+            row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
+            if row_index <> invalid
+                homeRows = m.top.content
+                row = homeRows.getChild(row_index)
+                homeRows.removeChild(row)
+            end if
+        end if
         rebuildItemArray()
     end if
 end sub
 
 sub onUpdateLatestMediaComplete(event)
     data = event.GetData()
+    ignores = m.top.sectionIgnores
     if data = "stop"
+        itemData = m.LoadLatestMediaTask.content
+        if itemData.count() = 0
+            ignores.push("latestmedia")
+            m.top.sectionIgnores = ignores
+            section = getHomeSectionInt("latestmedia")
+            index_section = section + 1
+            row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
+            if row_index <> invalid
+                homeRows = m.top.content
+                row = homeRows.getChild(row_index)
+                homeRows.removeChild(row)
+            end if
+        end if
         rebuildItemArray()
     end if
 end sub
 
 sub onUpdateContinueVideoItemsComplete(event)
     data = event.GetData()
+    ignores = m.top.sectionIgnores
     if data = "stop"
+        itemData = m.LoadContinueVideoTask.content
+        if itemData.count() = 0
+            ignores.push("resume")
+            m.top.sectionIgnores = ignores
+            section = getHomeSectionInt("resume")
+            index_section = section + 1
+            row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
+            if row_index <> invalid
+                homeRows = m.top.content
+                row = homeRows.getChild(row_index)
+                homeRows.removeChild(row)
+            end if
+        end if
         rebuildItemArray()
     end if
 end sub
@@ -441,21 +499,63 @@ end sub
 
 sub onUpdateContinueBookItemsComplete(event)
     data = event.GetData()
+    ignores = m.top.sectionIgnores
     if data = "stop"
+        itemData = m.LoadContinueBookTask.content
+        if itemData.count() = 0
+            ignores.push("resumebook")
+            m.top.sectionIgnores = ignores
+            section = getHomeSectionInt("resumebook")
+            index_section = section + 1
+            row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
+            if row_index <> invalid
+                homeRows = m.top.content
+                row = homeRows.getChild(row_index)
+                homeRows.removeChild(row)
+            end if
+        end if
         rebuildItemArray()
     end if
 end sub
 
 sub onUpdateNextUpItemsComplete(event)
     data = event.GetData()
+    ignores = m.top.sectionIgnores
     if data = "stop"
+        itemData = m.LoadNextUpTask.content
+        if itemData.count() = 0
+            ignores.push("nextup")
+            m.top.sectionIgnores = ignores
+            section = getHomeSectionInt("nextup")
+            index_section = section + 1
+            row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
+            if row_index <> invalid
+                homeRows = m.top.content
+                row = homeRows.getChild(row_index)
+                homeRows.removeChild(row)
+            end if
+        end if
         rebuildItemArray()
     end if
 end sub
 
 sub onUpdateOnNowItemsComplete(event)
     data = event.GetData()
+    ignores = m.top.sectionIgnores
     if data = "stop"
+        itemData = m.LoadOnNowTask.content
+        if itemData.count() = 0
+            ignores.push("livetv")
+            m.top.sectionIgnores = ignores
+            section = getHomeSectionInt("livetv")
+            index_section = section + 1
+            row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
+            if row_index <> invalid
+                homeRows = m.top.content
+                row = homeRows.getChild(row_index)
+                homeRows.removeChild(row)
+            end if
+        end if
         rebuildItemArray()
     end if
 end sub
@@ -464,7 +564,6 @@ sub createHoldingChildren()
     ' Creating children to fill later on.
     ' Welcome Children - Mose
     home_section_count = getHomeSectionCount()
-    print "HOME COUNT: " home_section_count
     content = m.top.content
     for i = 1 to home_section_count
         homeSectionHold = CreateObject("roSGNode", "HomeRow")
@@ -499,7 +598,6 @@ sub rebuildItemArray()
     section_count = getHomeSectionCount()
     ignores = m.top.sectionIgnores
     m.top.rowItemSize = []
-
     newSizeArray = []
     for i = 0 to section_count
         homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
@@ -522,7 +620,6 @@ sub rebuildItemArray()
                     if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv"
                         itemSize = [200, 331]
                         newSizeArray.push(itemSize)
-                        ' updateSizeArray(itemSize)
                     end if
                 end for
             end if
@@ -534,7 +631,6 @@ sub rebuildItemArray()
                     itemSize = [200, 331]
                 end if
                 newSizeArray.push(itemSize)
-                ' updateSizeArray(itemSize)
             end if
         end if
     end for
@@ -583,7 +679,6 @@ sub updateMyMedia()
     m.LoadMyMediaTask.control = "RUN"
     itemData = m.LoadMyMediaTask.content
     m.LoadMyMediaTask.unobserveField("content")
-    m.LoadMyMediaTask.content = []
 
     itemSize = [464, 261]
 
@@ -616,7 +711,6 @@ sub updateMyMediaSmall()
     section = getHomeSectionInt("librarybuttons")
     itemData = m.LoadMyMediaSmallTask.content
     m.LoadMyMediaSmallTask.unobserveField("content")
-    m.LoadMyMediaSmallTask.content = []
 
     itemSize = [464, 100]
 
@@ -671,7 +765,6 @@ sub updateContinueVideoItems()
     section = getHomeSectionInt("resume")
     itemData = m.LoadContinueVideoTask.content
     m.LoadContinueVideoTask.unobserveField("content")
-    m.LoadContinueVideoTask.content = []
 
     itemSize = [464, 331]
 
@@ -713,7 +806,6 @@ sub updateContinueAudioItems()
     section = getHomeSectionInt("resumeaudio")
     itemData = m.LoadContinueAudioTask.content
     m.LoadContinueAudioTask.unobserveField("content")
-    m.LoadContinueAudioTask.content = []
 
     itemSize = [464, 331]
 
@@ -755,7 +847,6 @@ sub updateContinueBookItems()
     section = getHomeSectionInt("resumebook")
     itemData = m.LoadContinueBookTask.content
     m.LoadContinueBookTask.unobserveField("content")
-    m.LoadContinueBookTask.content = []
 
     itemSize = [200, 331]
 
@@ -796,7 +887,6 @@ end sub
 sub updateNextUpItems()
     itemData = m.LoadNextUpTask.content
     m.LoadNextUpTask.unobserveField("content")
-    m.LoadNextUpTask.content = []
 
     itemSize = [464, 331]
 
@@ -841,7 +931,6 @@ sub updateLatestItems(msg)
 
     node = msg.getRoSGNode()
     node.unobserveField("content")
-    node.content = []
 
     homeRows = m.top.content
     section = getHomeSectionInt("latestmedia")
@@ -885,7 +974,6 @@ end sub
 sub updateOnNowItems()
     itemData = m.LoadOnNowTask.content
     m.LoadOnNowTask.unobserveField("content")
-    m.LoadOnNowTask.content = []
 
     itemSize = [464, 331]
 
