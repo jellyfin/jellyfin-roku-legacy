@@ -169,6 +169,12 @@ prep_tests:
 	cp -r $(SOURCEREL)/tests/source/* $(STAGINGREL)/source/tests/;\
 	./node_modules/.bin/rooibos-cli i tests/.rooibosrc.json
 
+prep_commit:
+	npm run format
+	npm ci
+	npm run validate
+	npm run check-formatting
+
 install: prep_staging package home
 	@echo "Installing $(APPNAME)-$(BUILD) to host $(ROKU_DEV_TARGET)"
 	@$(CURLCMD) --user $(USERPASS) --digest -F "mysubmit=Install" -F "archive=@$(ZIPREL)/$(APPNAME)-$(BUILD).zip" -F "passwd=" http://$(ROKU_DEV_TARGET)/plugin_install | grep "<font color" | sed "s/<font color=\"red\">//" | sed "s[</font>[["
