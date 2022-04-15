@@ -34,7 +34,7 @@ function selectSubtitleTrackDialog(tracks, currentTrack = -1)
         end if
         options.push(language + forced + default)
     end for
-    return option_dialog(options, "Select a subtitle track", currentTrack + 1)
+    return option_dialog(options, "Select a subtitle track", currentTrack - 1)
 end function
 
 sub changeSubtitleDuringPlayback(newid)

@@ -76,6 +76,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     video.videoId = video.id
     video.mediaSourceId = mediaSourceId
     video.audioIndex = audio_stream_idx
+    video.SelectedSubtitle = subtitle_idx
 
     if playbackInfo = invalid
         video.content = invalid
@@ -111,9 +112,9 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     if subtitle_idx = -1 and subLang <> invalid and subLang <> ""
         for each item in video.Subtitles
             if item.Track.Language = subLang
-                video.SelectedSubtitle = item.index
+                subtitle_idx = item.Index
+                video.SelectedSubtitle = subtitle_idx
                 if item.IsEncoded
-                    subtitle_idx = item.Index
                     video.globalCaptionMode = "Off" ' Using encoded subtitles - so turn off text subtitles
                     goto StartOfSubtitleReload ' some people hate Goto, but some times they just work
                 else
@@ -121,8 +122,6 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 end if
             end if
         end for
-    else
-        video.SelectedSubtitle = subtitle_idx
     end if
 
     video.directPlaySupported = playbackInfo.MediaSources[0].SupportsDirectPlay
