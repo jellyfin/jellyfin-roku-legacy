@@ -135,6 +135,32 @@ sub SetUpOptions()
         options.filter = [
             { "Title": tr("All"), "Name": "All" },
             { "Title": tr("Favorites"), "Name": "Favorites" }
+            { "Title": tr("A"), "Name": "A" }
+            { "Title": tr("B"), "Name": "B" }
+            { "Title": tr("C"), "Name": "C" }
+            { "Title": tr("D"), "Name": "D" }
+            { "Title": tr("E"), "Name": "E" }
+            { "Title": tr("F"), "Name": "F" }
+            { "Title": tr("G"), "Name": "G" }
+            { "Title": tr("H"), "Name": "H" }
+            { "Title": tr("I"), "Name": "I" }
+            { "Title": tr("J"), "Name": "J" }
+            { "Title": tr("K"), "Name": "K" }
+            { "Title": tr("L"), "Name": "L" }
+            { "Title": tr("M"), "Name": "M" }
+            { "Title": tr("N"), "Name": "N" }
+            { "Title": tr("O"), "Name": "O" }
+            { "Title": tr("P"), "Name": "P" }
+            { "Title": tr("Q"), "Name": "Q" }
+            { "Title": tr("R"), "Name": "R" }
+            { "Title": tr("S"), "Name": "S" }
+            { "Title": tr("T"), "Name": "T" }
+            { "Title": tr("U"), "Name": "U" }
+            { "Title": tr("V"), "Name": "V" }
+            { "Title": tr("W"), "Name": "W" }
+            { "Title": tr("X"), "Name": "X" }
+            { "Title": tr("Y"), "Name": "Y" }
+            { "Title": tr("Z"), "Name": "Z" }
         ]
         'Boxsets
     else if m.top.parentItem.collectionType = "boxsets"
@@ -148,6 +174,32 @@ sub SetUpOptions()
         options.filter = [
             { "Title": tr("All"), "Name": "All" },
             { "Title": tr("Favorites"), "Name": "Favorites" }
+            { "Title": tr("A"), "Name": "A" }
+            { "Title": tr("B"), "Name": "B" }
+            { "Title": tr("C"), "Name": "C" }
+            { "Title": tr("D"), "Name": "D" }
+            { "Title": tr("E"), "Name": "E" }
+            { "Title": tr("F"), "Name": "F" }
+            { "Title": tr("G"), "Name": "G" }
+            { "Title": tr("H"), "Name": "H" }
+            { "Title": tr("I"), "Name": "I" }
+            { "Title": tr("J"), "Name": "J" }
+            { "Title": tr("K"), "Name": "K" }
+            { "Title": tr("L"), "Name": "L" }
+            { "Title": tr("M"), "Name": "M" }
+            { "Title": tr("N"), "Name": "N" }
+            { "Title": tr("O"), "Name": "O" }
+            { "Title": tr("P"), "Name": "P" }
+            { "Title": tr("Q"), "Name": "Q" }
+            { "Title": tr("R"), "Name": "R" }
+            { "Title": tr("S"), "Name": "S" }
+            { "Title": tr("T"), "Name": "T" }
+            { "Title": tr("U"), "Name": "U" }
+            { "Title": tr("V"), "Name": "V" }
+            { "Title": tr("W"), "Name": "W" }
+            { "Title": tr("X"), "Name": "X" }
+            { "Title": tr("Y"), "Name": "Y" }
+            { "Title": tr("Z"), "Name": "Z" }
         ]
         'TV Shows
     else if m.top.parentItem.collectionType = "tvshows"
@@ -163,6 +215,32 @@ sub SetUpOptions()
         options.filter = [
             { "Title": tr("All"), "Name": "All" },
             { "Title": tr("Favorites"), "Name": "Favorites" }
+            { "Title": tr("A"), "Name": "A" }
+            { "Title": tr("B"), "Name": "B" }
+            { "Title": tr("C"), "Name": "C" }
+            { "Title": tr("D"), "Name": "D" }
+            { "Title": tr("E"), "Name": "E" }
+            { "Title": tr("F"), "Name": "F" }
+            { "Title": tr("G"), "Name": "G" }
+            { "Title": tr("H"), "Name": "H" }
+            { "Title": tr("I"), "Name": "I" }
+            { "Title": tr("J"), "Name": "J" }
+            { "Title": tr("K"), "Name": "K" }
+            { "Title": tr("L"), "Name": "L" }
+            { "Title": tr("M"), "Name": "M" }
+            { "Title": tr("N"), "Name": "N" }
+            { "Title": tr("O"), "Name": "O" }
+            { "Title": tr("P"), "Name": "P" }
+            { "Title": tr("Q"), "Name": "Q" }
+            { "Title": tr("R"), "Name": "R" }
+            { "Title": tr("S"), "Name": "S" }
+            { "Title": tr("T"), "Name": "T" }
+            { "Title": tr("U"), "Name": "U" }
+            { "Title": tr("V"), "Name": "V" }
+            { "Title": tr("W"), "Name": "W" }
+            { "Title": tr("X"), "Name": "X" }
+            { "Title": tr("Y"), "Name": "Y" }
+            { "Title": tr("Z"), "Name": "Z" }
         ]
         'Live TV
     else if m.top.parentItem.collectionType = "livetv"
@@ -176,6 +254,32 @@ sub SetUpOptions()
         options.filter = [
             { "Title": tr("All"), "Name": "All" },
             { "Title": tr("Favorites"), "Name": "Favorites" }
+            { "Title": tr("A"), "Name": "A" }
+            { "Title": tr("B"), "Name": "B" }
+            { "Title": tr("C"), "Name": "C" }
+            { "Title": tr("D"), "Name": "D" }
+            { "Title": tr("E"), "Name": "E" }
+            { "Title": tr("F"), "Name": "F" }
+            { "Title": tr("G"), "Name": "G" }
+            { "Title": tr("H"), "Name": "H" }
+            { "Title": tr("I"), "Name": "I" }
+            { "Title": tr("J"), "Name": "J" }
+            { "Title": tr("K"), "Name": "K" }
+            { "Title": tr("L"), "Name": "L" }
+            { "Title": tr("M"), "Name": "M" }
+            { "Title": tr("N"), "Name": "N" }
+            { "Title": tr("O"), "Name": "O" }
+            { "Title": tr("P"), "Name": "P" }
+            { "Title": tr("Q"), "Name": "Q" }
+            { "Title": tr("R"), "Name": "R" }
+            { "Title": tr("S"), "Name": "S" }
+            { "Title": tr("T"), "Name": "T" }
+            { "Title": tr("U"), "Name": "U" }
+            { "Title": tr("V"), "Name": "V" }
+            { "Title": tr("W"), "Name": "W" }
+            { "Title": tr("X"), "Name": "X" }
+            { "Title": tr("Y"), "Name": "Y" }
+            { "Title": tr("Z"), "Name": "Z" }
         ]
     else if m.top.parentItem.collectionType = "photoalbum" or m.top.parentItem.collectionType = "photo" or m.top.parentItem.collectionType = "homevideos"
         ' For some reason, my photo library shows up as "homevideos", maybe because it has some mp4 mixed in with the jpgs?

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="ItemGridOptions" extends="Group">
   <children>
-    <Rectangle width="1920" height="1080" color="#000000" opacity="0.75" />
-    <Group translation="[100,100]">
+    <Rectangle width="1080" height="1080" color="#000000" opacity="0.75" />
+    <Group translation="[100,150]">
       <Poster width="1720" height="880" uri="pkg:/images/dialog.9.png" />
       <LayoutGroup horizAlignment="center" translation="[860,50]" itemSpacings="[50]">
-        <JFButtons id="buttons" />
+        <JFButtons id="buttons"/>
         <Group>
           <RadiobuttonList id="viewMenu" itemspacing="[0,10]" vertFocusAnimationStyle="floatingFocus" opacity="0" drawFocusFeedback="false">
           </RadiobuttonList>
           <RadiobuttonList id="sortMenu" itemspacing="[0,10]" vertFocusAnimationStyle="floatingFocus" opacity="1" numRows="8" drawFocusFeedback="false">
           </RadiobuttonList>
-          <RadiobuttonList id="filterMenu" itemspacing="[0,10]" vertFocusAnimationStyle="floatingFocus" opacity="0" drawFocusFeedback="false">
+          <RadiobuttonList id="filterMenu" itemspacing="[0,10]" vertFocusAnimationStyle="floatingFocus" opacity="0" numRows="8" drawFocusFeedback="false">
           </RadiobuttonList>
         </Group>
       </LayoutGroup>
