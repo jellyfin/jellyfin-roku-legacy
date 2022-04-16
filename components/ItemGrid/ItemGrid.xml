@@ -29,6 +29,7 @@
         <FloatFieldInterpolator id = "fadeinLoading" key="[0.0, 1.0]" keyValue="[ 0.00, 0.25 ]" fieldToInterp="backdropTransition.opacity" />
         <FloatFieldInterpolator id = "fadeoutLoaded" key="[0.0, 1.0]" keyValue="[ 0.25, 0.00 ]" fieldToInterp="backdrop.opacity" />
     </Animation>
+    <AlphaSlider id="AlphaPicker" />
   </children>
   <interface>
     <field id="parentItem" type="node" onChange="loadInitialItems" />

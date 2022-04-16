@@ -17,7 +17,7 @@ sub init()
     m.data = CreateObject("roSGNode", "ContentNode")
 
     m.itemGrid.content = m.data
-    m.itemGrid.setFocus(true)
+    'm.itemGrid.setFocus(true)
 
     m.itemGrid.observeField("itemFocused", "onItemFocused")
     m.itemGrid.observeField("itemSelected", "onItemSelected")
@@ -31,12 +31,17 @@ sub init()
     m.sortAscending = true
 
     m.filter = "All"
-
+    
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
+
+    m.AlphaSlider = m.top.findNode("AlphaPicker")
+    m.Alphamenu = m.top.findNode("Alphamenu")
+    m.AlphaSlider.visible = true
+    m.AlphaSlider.setFocus(true)
 
 end sub
 
-'
+
 'Load initial set of Data
 sub loadInitialItems()
 
@@ -254,7 +259,7 @@ sub ItemDataLoaded(msg)
         m.emptyText.visible = true
     end if
 
-    m.itemGrid.setFocus(true)
+    'm.itemGrid.setFocus(true)
 
 end sub
 

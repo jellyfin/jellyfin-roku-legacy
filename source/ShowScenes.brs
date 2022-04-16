@@ -351,6 +351,12 @@ function CreateItemGrid(libraryItem)
     group.parentItem = libraryItem
     group.optionsAvailable = true
     group.observeField("selectedItem", m.port)
+    m.global.sceneManager.callFunc("pushScene", group)
+
+    Alpha = group.findNode("Alphamenu")
+    Alpha.observeField("selectedItem", m.port)
+    'Alpha.callFunc("loadPeople", movie.json)
+
     return group
 end function
 
