@@ -360,7 +360,7 @@ function CreateSearchPage()
 
     search = group.findNode("SearchBox")
     search.observeField("search_value", m.port)
-    print m.port
+
     options = group.findNode("SearchSelect")
     options.observeField("itemSelected", m.port)
 

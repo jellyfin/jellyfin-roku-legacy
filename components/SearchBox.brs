@@ -3,14 +3,14 @@ sub init()
     m.top.horizAlignment = "center"
     m.top.vertAlignment = "top"
     m.top.visible = false
-    m.searchText = m.top.findNode("query")
+    m.searchText = m.top.findNode("search-input")
     m.searchText.ObserveField("text", "LoadGrid")
     'show_dialog()
 end sub
 
 sub LoadGrid()
     print m.searchText.text
-    msg.getRoSGNode()
+    
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean

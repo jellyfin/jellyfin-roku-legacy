@@ -3,9 +3,8 @@
   <children>
         <Label id = "text" text="Search now"        />
    <!-- <TextEditBox id="search-input" width="800" maxTextLength="75" />-->
-        <MiniKeyboard id = "search_value"/>
+        <MiniKeyboard id = "search-input"/>
     <SearchRow id="SearchSelect" visible="true" translation="[0, 900]" />
-    <items/>
   </children>
   <interface>
     <field id="search_value" type="string" alwaysNotify="true" />
