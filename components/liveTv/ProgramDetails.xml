@@ -3,8 +3,8 @@
     <children>
 
         <!-- Selected Item Details -->
-        <maskGroup id="backgroundMask" maskUri="pkg:/images/backgroundmask.png" translation="[1208, 127]" maskSize="[712,400]">
-            <Poster id="image" height="400" width="712" loadDisplayMode="scaleToFit" />
+        <maskGroup id="backgroundMask" maskUri="pkg:/images/backgroundmask.png" translation="[1320, 150]" maskSize="[500,375]">
+            <Poster id="image" height="375" width="500" loadDisplayMode="scaleToFit" />
         </maskGroup>
 
         <Group id="detailsView" visible="false">
@@ -32,13 +32,30 @@
                         <Label id="channelName" />
                     </LayoutGroup>
 
-                    <label id="overview" wrap="true" width="1250" font="font:SmallestSystemFont" />
-    
-                    <!-- View Channel button -->
-                    <Group id="viewChannelButton" opacity="0">
-                        <Poster id="viewChannelButtonBackground" uri="pkg:/images/white.9.png" blendColor="#006fab" />
-                        <Label text="View Channel" translation="[20,20]" />
-                    </Group>
+                    <label id="overview" wrap="true" width="1210" font="font:SmallestSystemFont" />
+
+                    <LayoutGroup layoutDirection="horiz" itemSpacings="[30]"> 
+                        <!-- View Channel button -->
+                        <Group id="viewChannelButton" opacity="0">
+                            <Poster id="viewChannelButtonBackground" uri="pkg:/images/white.9.png" blendColor="#000000" />
+                            <Poster id="viewChannelOutline" visible="false" uri="pkg:/images/hd_focus.9.png" />
+                            <Label id="viewChannelButtonLabel" text="View Channel" translation="[20,20]" />
+                        </Group>
+
+                        <!-- Record button -->
+                        <Group id="recordButton" opacity="0">
+                            <Poster id="recordButtonBackground" uri="pkg:/images/white.9.png" blendColor="#000000" />
+                            <Poster id="recordOutline" visible="false" uri="pkg:/images/hd_focus.9.png" />
+                            <Label id="recordButtonLabel" text="Record" translation="[20,20]" />
+                        </Group>
+
+                        <!-- Record Series button-->
+                        <Group id="recordSeriesButton" opacity="0">
+                            <Poster id="recordSeriesButtonBackground" uri="pkg:/images/white.9.png" blendColor="#000000" />
+                            <Poster id="recordSeriesOutline" visible="false" uri="pkg:/images/hd_focus.9.png" />
+                            <Label id="recordSeriesButtonLabel" text="Record Series" translation="[20,20]" />
+                        </Group>                        
+                    </LayoutGroup>
     
                 </LayoutGroup>
 
@@ -50,11 +67,15 @@
             <Label font="font:SmallSystemFont" text="No schedule information" />
         </LayoutGroup>
         <Animation id="focusAnimation" duration="0.66" repeat="false" easeFunction="linear" >
-            <FloatFieldInterpolator id="focusAnimationOpacity" key="[0.0, 1]" fieldToInterp="viewChannelButton.opacity" />
+            <FloatFieldInterpolator id="viewChannelFocusAnimationOpacity" key="[0.0, 1]" fieldToInterp="viewChannelButton.opacity" />
+            <FloatFieldInterpolator id="recordFocusAnimationOpacity" key="[0.0, 1]" fieldToInterp="recordButton.opacity" />
+            <FloatFieldInterpolator id="recordSeriesFocusAnimationOpacity" key="[0.0, 1]" fieldToInterp="recordSeriesButton.opacity" />
         </Animation>
     </children>
     <interface>
         <field id="WatchSelectedChannel" type="boolean" value="false" />
+        <field id="recordSelectedChannel" type="boolean" value="false" />
+        <field id="recordSeriesSelectedChannel" type="boolean" value="false" />
         <field id="channel" type="node" onchange="channelUpdated" />
         <field id="programDetails" type="node" onchange="programUpdated" />
         <field id="height" type="integer" />
@@ -62,4 +83,5 @@
     </interface>
     <script type="text/brightscript" uri="ProgramDetails.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

@@ -5,6 +5,8 @@
     <field id="movieID" type="string" />
     <field id="seasons" type="assocarray" />
     <field id="container" type="string" />
+    <field id="mediaSourceCount" type="integer" />
+    <field id="mediaSources" type="array" />
   </interface>
   <script type="text/brightscript" uri="MovieData.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />

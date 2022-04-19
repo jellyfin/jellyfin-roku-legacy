@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="SceneManager" extends="ContentNode">
+  <interface>
+    <function name="pushScene" />
+    <function name="popScene" />
+    <function name="getActiveScene" />
+    <function name="clearScenes" />
+    <function name="resetTime" />
+    <function name="userMessage" />
+    <field id="currentUser" type="string" onChange="updateUser" />
+  </interface>
+  <script type="text/brightscript" uri="SceneManager.brs" />
+</component>

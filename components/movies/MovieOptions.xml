@@ -7,17 +7,8 @@
       <LayoutGroup horizAlignment="center" translation="[860,50]" itemSpacings="[50]">
         <JFButtons id="buttons" />
         <Group>
-            <MarkupList
-                id="audioMenu"
-                itemComponentName="AudioTrackListItem"
-                itemSize="[600, 70]"
-                itemSpacing="[20,20]"
-                numrows = "8"
-                vertFocusAnimationStyle="floatingFocus"
-                focusFootprintBlendColor="#00000000"
-            />
-          <!-- <RadiobuttonList id="audioMenu" itemspacing="[0,10]" vertFocusAnimationStyle="floatingFocus" drawFocusFeedback="false">
-          </RadiobuttonList> -->
+          <RadiobuttonList id="videoMenu" itemspacing="[0,10]" opacity="1" vertFocusAnimationStyle="floatingFocus" drawFocusFeedback="false" />
+          <RadiobuttonList id="audioMenu" itemspacing="[0,10]" opacity="0" vertFocusAnimationStyle="floatingFocus" drawFocusFeedback="false" />
         </Group>
       </LayoutGroup>
     </Group>
@@ -31,7 +22,9 @@
   <interface>
     <field id="buttons" type="nodearray" />
     <field id="options" type="assocarray" onChange="optionsSet" />
-    <field id="audioSteamIndex" type="integer" />
+    <field id="videoStreamId" type="string" />
+    <field id="video_codec" type="string" />
+    <field id="audioStreamIndex" type="integer" />
   </interface>
   <script type="text/brightscript" uri="MovieOptions.brs" />
 </component>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="PersonDetails" extends="JFGroup">
+  <interface>
+    <field id="itemContent" type="node" onChange="loadPerson" />
+    <field id="image" type="node" />
+    <field id="selectedItem" type="node" alias="extrasGrid.selectedItem" alwaysNotify="true" />
+  </interface>
+  <children>
+    <LayoutGroup id="main_group"
+        layoutdirection="vert" translation="[60, 180]" itemSpacings="[36]">
+      <LayoutGroup id="personInfoGroup"
+          layoutDirection="horiz" itemSpacings="[36]">
+        <Poster id="personImage"
+            width="300" height="450" />
+        <LayoutGroup id="vertSpacer" layoutDirection="vert" itemSpacings="[24]">
+          <LayoutGroup id="dataGroup>" layoutDirection="vert"
+                translation="[450,180]">
+            <Label id="name" font="font:MediumBoldSystemFont" height="45" width="1200" />
+            <label id="premierDate" font="font:SmallestBoldSystemFont" height="48" vertAlign="top" />
+            <Rectangle id="dscrBorder"
+                height="360" width="1422"
+                color="0x202020ff">
+              <Rectangle id='dscrRect' translation="[3, 3]"
+                  height="354" width="1416"
+                  color="0x202020ff">
+              <Label id="description"
+                  height="342" width="1380" wrap="true" translation="[18, 15]"
+                  font="font:SmallestSystemFont" color="#e4e4e4ff" ellipsisText=" ...  (-OK- for More)" />
+              </Rectangle>
+            </Rectangle>
+          </LayoutGroup>
+          <ButtonGroupHoriz id="buttons" >
+            <Button id="favorite-button" text="Favorite"
+                iconUri="" focusedIconUri="" />
+          </ButtonGroupHoriz>
+        </LayoutGroup>
+      </LayoutGroup>
+    </LayoutGroup>
+    <extrasSlider id="personVideos" />
+  </children>
+  <script type="text/brightscript" uri="PersonDetails.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+</component>

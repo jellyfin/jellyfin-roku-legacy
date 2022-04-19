@@ -4,6 +4,7 @@
   <interface>
     <field id="limit" type="integer" value="" />
     <field id="startIndex" type="integer" value="0" />
+    <field id="filter" type="string" value="All" />
     
     <!-- Total records available from server-->
     <field id="channels" type="array" />

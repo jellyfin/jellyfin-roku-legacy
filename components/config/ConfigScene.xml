@@ -8,21 +8,20 @@
     <ConfigList
       id="configOptions"
       translation="[150, 240]" />
-    <label text=""
-      id="example"
-      font="font:smallSystemFont"
-      translation="[150, 350]" />
+    <CheckList
+      id="onOff"
+      translation="[200, 450]" />
     <Button
       id="submit"
       text="Submit"
       showFocusFootprint="false"
-      translation="[150, 450]" />
+      translation="[150, 550]" />
     <label text=""
       id="alert"
       wrap="true"
       width="1620"
       font="font:MediumSystemFont"
-      translation="[150, 580]" />
+      translation="[150, 680]" />
   </children>
   <script type="text/brightscript" uri="ConfigScene.brs"/>
 </component>

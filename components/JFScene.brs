@@ -1,18 +1,24 @@
 sub init()
-  m.top.backgroundColor = "#262626" '"#101010"
-  m.top.backgroundURI = ""
+    m.top.backgroundColor = "#262626" '"#101010"
+    m.top.backgroundURI = ""
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
-  if not press then return false
+    if not press then return false
 
-  if key = "back"
-    m.top.backPressed = true
-    return true
-  else if key = "options"
-    m.top.optionsPressed = true
-    return true
-  end if
+    if key = "back"
+        m.global.sceneManager.callFunc("popScene")
+        return true
+    else if key = "options"
+        group = m.global.sceneManager.callFunc("getActiveScene")
+        if group <> invalid and group.optionsAvailable
+            group.lastFocus = group.focusedChild
+            panel = group.findNode("options")
+            panel.visible = true
+            panel.findNode("panelList").setFocus(true)
+        end if
+        return true
+    end if
 
-  return false
+    return false
 end function

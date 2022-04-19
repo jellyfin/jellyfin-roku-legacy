@@ -3,7 +3,7 @@
   <children>
     <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[40]">
       <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[30]">
-        <Poster id="poster" width="534" height="300" />
+        <Poster id="poster" width="534" height="400" />
         <LayoutGroup id="text" layoutDirection="vert" itemSpacings="[15]">
           <!-- Using poster of 1 length to get spacing. Not successful with adding translation to title -->
           <Poster id="null" height="1" />
@@ -17,6 +17,10 @@
             <Label id="endtime" font="font:SmallestSystemFont" />
           </LayoutGroup>
           <Label id="overview" wrap="true" height="170" width="1200" maxLines="4" ellipsizeOnBoundary="true"/>
+          <LayoutGroup layoutDirection="horiz" itemSpacings="[15]">
+            <Label id="video_codec" />
+            <Label id="audio_codec" />
+          </LayoutGroup>
         </LayoutGroup>
       </LayoutGroup>
     </LayoutGroup>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="ButtonGroupHoriz" extends="ButtonGroup">
   <interface>
-    <field id="escape" type="boolean" alwaysNotify="true" />
+    <field id="escape" type="string" alwaysNotify="true" />
   </interface>
   <script type="text/brightscript" uri="ButtonGroupHoriz.brs" />
 
