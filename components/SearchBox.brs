@@ -3,8 +3,13 @@ sub init()
     m.top.horizAlignment = "center"
     m.top.vertAlignment = "top"
     m.top.visible = false
-
+    m.searchText = m.top.findNode("search-input")
+    searchText.ObserveField("search_value", "LoadGrid")
     'show_dialog()
+end sub
+
+sub LoadGrid()
+    print searchkey
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
@@ -23,7 +28,7 @@ function onDialogButton()
     d = m.top.getScene().dialog
     button_text = d.buttons[d.buttonSelected]
 
-    if button_text = tr("Search Box")
+    if button_text = tr("Search now")
         m.top.search_value = d.text
         dismiss_dialog()
         return true
