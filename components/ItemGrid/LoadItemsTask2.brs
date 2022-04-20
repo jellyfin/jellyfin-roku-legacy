@@ -16,7 +16,7 @@ sub loadItems()
 
 
     params = {
-        limit: m.top.limit,
+        'limit: m.top.limit,
         StartIndex: m.top.startIndex,
         parentid: m.top.itemId,
         SortBy: sort_field,

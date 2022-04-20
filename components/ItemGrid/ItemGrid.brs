@@ -33,7 +33,8 @@ sub init()
     m.filter = "All"
 
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
-
+    m.spinner = m.top.findNode("spinner")
+    m.spinner.visible = true
 end sub
 
 '
@@ -255,7 +256,7 @@ sub ItemDataLoaded(msg)
     end if
 
     m.itemGrid.setFocus(true)
-
+    m.spinner.visible = false
 end sub
 
 '
@@ -275,10 +276,10 @@ end sub
 'Handle new item being focused
 sub onItemFocused()
 
-    focusedRow = CInt(m.itemGrid.itemFocused / m.itemGrid.numColumns) + 1
+    focusedRow =  m.itemGrid.currFocusRow
 
     itemInt = m.itemGrid.itemFocused
-
+    print m.Loading
     ' If no selected item, set background to parent backdrop
     if itemInt = -1
         return
