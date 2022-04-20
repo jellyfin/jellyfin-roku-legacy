@@ -84,9 +84,9 @@ sub itemContentChanged()
         m.itemText.text = itemData.json.SeriesName
 
         if itemData.usePoster = true
-            m.itemPoster.uri = itemData.widePosterURL
+            m.itemPoster.uri = itemData.posterURL
         else
-            m.itemPoster.uri = itemData.thumbnailURL
+            m.itemPoster.uri = itemData.widePosterURL
         end if
 
         ' Set Series and Episode Number for Extra Text
@@ -145,7 +145,6 @@ sub itemContentChanged()
     if itemData.type = "Series"
         m.itemText.text = itemData.name
         m.itemPoster.uri = itemData.posterURL
-
         textExtra = ""
         if itemData.json.ProductionYear <> invalid
             textExtra = StrI(itemData.json.ProductionYear).trim()

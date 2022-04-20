@@ -38,11 +38,11 @@ sub setData()
         imgParams.Append({ "maxWidth": 464 })
 
         if datum.ImageTags.Primary <> invalid
-            param = { "Tag": datum.ImageTags.Primary }
+            param = { "Tag": datum.SeriesPrimaryImageTag }
             imgParams.Append(param)
         end if
 
-        m.top.thumbnailURL = ImageURL(datum.id, "Primary", imgParams)
+        m.top.thumbnailURL = ImageURL(datum.SeriesId, "Primary", imgParams)
 
         ' Add Wide Poster  (Series Backdrop)
         if datum.ParentThumbImageTag <> invalid
@@ -53,7 +53,7 @@ sub setData()
             m.top.widePosterUrl = ImageURL(datum.ParentBackdropItemId, "Backdrop", imgParams)
         else if datum.ImageTags.Primary <> invalid
             imgParams["Tag"] = datum.SeriesPrimaryImageTag
-            m.top.widePosterUrl = ImageURL(datum.id, "Primary", imgParams)
+            m.top.posterUrl = ImageURL(datum.SeriesId, "Primary", imgParams)
         end if
 
     else if datum.type = "Series"

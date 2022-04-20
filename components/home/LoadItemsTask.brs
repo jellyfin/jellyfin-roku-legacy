@@ -27,8 +27,8 @@ sub loadItems()
         params["ParentId"] = m.top.itemId
         params["EnableImageTypes"] = "Primary"
         params["ImageTypeLimit"] = 1
+        params["fields"] = "PrimaryImageAspectRatio,BasicSyncInfo,Path"
         params["MaxWidth"] = 180
-
         resp = APIRequest(url, params)
         data = getJson(resp)
 
