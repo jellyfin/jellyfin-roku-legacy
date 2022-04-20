@@ -62,7 +62,6 @@ sub itemContentChanged()
     m.itemText.font.size = 25
     m.itemText.horizAlign = "left"
     ' m.itemText.vertAlign = "bottom"
-    m.itemTextExtra.visible = false
     m.itemTextExtra.font.size = 22
 
     ' "Program" is from clicking on an "On Now" item on the Home Screen
