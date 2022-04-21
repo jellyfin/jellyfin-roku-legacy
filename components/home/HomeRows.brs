@@ -52,7 +52,7 @@ end sub
 
 sub updateSize()
     m.top.translation = [111, 180]
-    itemHeight = 330
+    itemHeight = 380
 
     'Set width of Rows to cut off at edge of Safe Zone
     m.top.itemSize = [1703, itemHeight]
@@ -595,30 +595,38 @@ sub removeHoldingChildren()
 end sub
 
 sub rebuildItemArray()
+    print "--- STARTING REBUILD ---"
     section_count = getHomeSectionCount()
     ignores = m.top.sectionIgnores
+    print "IGNORES: " ignores
     m.top.rowItemSize = []
     newSizeArray = []
+    homesections = []
     for i = 0 to section_count
         homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
         if homesection <> invalid
-            ' Loop through ignores
-            if ignores <> invalid and ignores.count() > 0
-                for each ignore in ignores
-                    if ignore = homesection
-                        i++
-                        homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
-                    end if
-                end for
-            end if
+            homesections.push(homesection)
         end if
+    end for
+    for i = 0 to homesections.count()
+        ' Loop through ignores
+        if ignores <> invalid and ignores.count() > 0
+            for each ignore in ignores
+                if ignore = homesections[i]
+                    homesections.delete(i)
+                    i--
+                end if
+            end for
+        end if
+    end for
+    for each homesection in homesections
         if homesection <> invalid
             if homesection = "latestmedia"
                 userConfig = m.top.userConfig
                 filteredLatest = filterNodeArray(m.libraryData, "id", userConfig.LatestItemsExcludes)
                 for each lib in filteredLatest
                     if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv"
-                        itemSize = [200, 331]
+                        itemSize = [200, 270]
                         newSizeArray.push(itemSize)
                     end if
                 end for
@@ -628,11 +636,14 @@ sub rebuildItemArray()
                 if homesection = "librarybuttons"
                     itemSize = [464, 100]
                 else if homesection = "resumebook"
-                    itemSize = [200, 331]
+                    itemSize = [200, 270]
                 end if
                 newSizeArray.push(itemSize)
             end if
         end if
+    end for
+    for each size in newSizeArray
+        ' print "SIZE: " size
     end for
     m.top.rowItemSize = newSizeArray
 end sub
@@ -848,7 +859,7 @@ sub updateContinueBookItems()
     itemData = m.LoadContinueBookTask.content
     m.LoadContinueBookTask.unobserveField("content")
 
-    itemSize = [200, 331]
+    itemSize = [200, 270]
 
     latest_media_int = m.top.latestMediaInt
     latestMediaCount = m.top.latestMediaCount - 1
