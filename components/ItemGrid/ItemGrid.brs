@@ -276,7 +276,7 @@ end sub
 'Handle new item being focused
 sub onItemFocused()
 
-    focusedRow =  m.itemGrid.currFocusRow
+    focusedRow = m.itemGrid.currFocusRow
 
     itemInt = m.itemGrid.itemFocused
     print m.Loading
