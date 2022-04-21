@@ -1,8 +1,8 @@
 sub init()
     m.top.visible = true
 
-    m.top.observeField("rowItemSelected", "onRowItemSelected")
-    print "rowselected = " rowItemSelected
+   ' m.top.observeField("rowItemSelected", "onRowItemSelected")
+    'print "rowselected = " rowItemSelected
     ' Set up alpha Task
     
 end sub

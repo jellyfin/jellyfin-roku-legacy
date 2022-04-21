@@ -17,7 +17,7 @@ sub init()
     m.data = CreateObject("roSGNode", "ContentNode")
 
     m.itemGrid.content = m.data
-    'm.itemGrid.setFocus(true)
+    m.itemGrid.setFocus(true)
 
     m.itemGrid.observeField("itemFocused", "onItemFocused")
     m.itemGrid.observeField("itemSelected", "onItemSelected")
@@ -34,10 +34,10 @@ sub init()
     
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
 
-    m.AlphaSlider = m.top.findNode("AlphaPicker")
-    m.Alphamenu = m.top.findNode("Alphamenu")
-    m.AlphaSlider.visible = true
-    m.AlphaSlider.setFocus(true)
+    m.Alphamenu = m.top.findNode("AlphaMenu")
+    'm.Alphamenu.checkedItem = 0
+    m.Alphamenu.visible = true
+    m.Alphamenu = m.Alphamenu.checkedItem
 
 end sub
 
@@ -259,7 +259,7 @@ sub ItemDataLoaded(msg)
         m.emptyText.visible = true
     end if
 
-    'm.itemGrid.setFocus(true)
+    m.itemGrid.setFocus(true)
 
 end sub
 
@@ -280,20 +280,22 @@ end sub
 'Handle new item being focused
 sub onItemFocused()
 
-    focusedRow = CInt(m.itemGrid.itemFocused / m.itemGrid.numColumns) + 1
+    m.focusedRow = CInt(m.itemGrid.itemFocused / m.itemGrid.numColumns) + 1
 
-    itemInt = m.itemGrid.itemFocused
+    m.itemInt = m.itemGrid.itemFocused
+    print m.itemGrid.currFocusColumn
 
     ' If no selected item, set background to parent backdrop
-    if itemInt = -1
+    if m.itemInt = -1
         return
     end if
+    
 
     ' Set Background to item backdrop
     SetBackground(m.itemGrid.content.getChild(m.itemGrid.itemFocused).backdropUrl)
 
     ' Load more data if focus is within last 3 rows, and there are more items to load
-    if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.loadItemsTask.totalRecordCount
+    if m.focusedRow >= m.loadedRows - 3 and m.loadeditems < m.loadItemsTask.totalRecordCount
         loadMoreData()
     end if
 end sub
@@ -444,7 +446,17 @@ sub onChannelSelected(msg)
     end if
 end sub
 
+sub radiobutton()
+ alpha = m.top.findNode("AlphaMenu")
+
+ print "item focused " alpha.value
+
+end sub
+
 function onKeyEvent(key as string, press as boolean) as boolean
+
+    topGrp = m.top.findNode("itemGrid")
+    bottomGrp = m.top.findNode("AlphaMenu")
 
     if not press then return false
 
@@ -478,6 +490,19 @@ function onKeyEvent(key as string, press as boolean) as boolean
             photoPlayer.control = "RUN"
             return true
         end if
+    else if  key = "right" and m.itemGrid.currFocusColumn = 5 and topGrp.isinFocusChain()
+                bottomGrp.setFocus(true)
+                print "focused to radio buttons"
+                radiobutton()
+            return true
+    else if key = "left" and bottomGrp.isinFocusChain()
+        topGrp.setFocus(true)
+        return true
+        print "focus to item grid"
+    else if (key = "up" or key = "down") and bottomGrp.isinFocusChain()
+        radiobutton()
+        return true
+    
     end if
     return false
 end function
