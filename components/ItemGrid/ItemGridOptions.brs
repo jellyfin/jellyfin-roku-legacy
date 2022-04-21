@@ -1,6 +1,6 @@
 sub init()
 
-    m.buttons = m.top.findNode("buttons") 
+    m.buttons = m.top.findNode("buttons")
     m.buttons.buttons = [tr("TAB_VIEW"), tr("TAB_SORT"), tr("TAB_FILTER")]
     m.buttons.selectedIndex = 1
     m.buttons.setFocus(true)
@@ -139,7 +139,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             ' Handle View Screen
             if m.selectedItem = 0
                 m.selectedViewIndex = m.menus[0].itemSelected
-                m.top.view = m.viewNames[m.selectedViewIndex] 
+                m.top.view = m.viewNames[m.selectedViewIndex]
             end if
 
             ' Handle Sort screen
@@ -168,7 +168,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             if m.selectedItem = 2
                 m.selectedFilterIndex = m.menus[2].itemSelected
                 m.top.filter = m.filterNames[m.selectedFilterIndex]
-            end if  
+            end if
         end if
         return false
     else if key = "back" or key = "up"
