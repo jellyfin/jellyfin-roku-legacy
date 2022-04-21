@@ -67,11 +67,11 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 resp = APIRequest(url, params)
                 data = getJson(resp)
                 for each item in data.Items
-                    series_id = item.SeriesId
+                    m.series_id = item.SeriesId
                 end for
                 'Get series json data
                 params = {
-                    ids: series_id
+                    ids: m.series_id
                 }
                 url = Substitute("Users/{0}/Items/", get_setting("active_user"))
                 resp = APIRequest(url, params)
@@ -80,7 +80,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     tmp = item
                 end for
                 'Create Series Scene
-                group = CreateSeriesDetailsGroup(tmp)
+                'group = CreateSeriesDetailsGroup(tmp)
                 video.content = invalid
                 return
 
@@ -93,31 +93,31 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 resp = APIRequest(url, params)
                 data = getJson(resp)
                 for each item in data.Items
-                    season_id = item.SeasonId
-                    series_id = item.SeriesId
+                    m.season_id = item.SeasonId
+                    m.series_id = item.SeriesId
                 end for
                 'Get Series json data
                 params = {
-                    ids: season_id
+                    ids: m.season_id
                 }
                 url = Substitute("Users/{0}/Items/", get_setting("active_user"))
                 resp = APIRequest(url, params)
                 data = getJson(resp)
                 for each item in data.Items
-                    Season_tmp = item
+                    m.Season_tmp = item
                 end for
                 'Get Season json data
                 params = {
-                    ids: series_id
+                    ids: m.series_id
                 }
                 url = Substitute("Users/{0}/Items/", get_setting("active_user"))
                 resp = APIRequest(url, params)
                 data = getJson(resp)
                 for each item in data.Items
-                    Series_tmp = item
+                    m.Series_tmp = item
                 end for
                 'Create Season Scene
-                group = CreateSeasonDetailsGroup(Series_tmp, Season_tmp)
+                'group = CreateSeasonDetailsGroup(m.Series_tmp, m.Season_tmp)
                 video.content = invalid
                 return
 
@@ -130,10 +130,10 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 resp = APIRequest(url, params)
                 data = getJson(resp)
                 for each item in data.Items
-                    episode_id = item
+                    m.episode_id = item
                 end for
                 'Create Episode Scene
-                group = CreateMovieDetailsGroup(episode_id)
+                'group = CreateMovieDetailsGroup(m.episode_id)
                 video.content = invalid
                 return
             end if
