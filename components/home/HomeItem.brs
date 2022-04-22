@@ -171,6 +171,15 @@ sub itemContentChanged()
         return
     end if
 
+    if itemData.type = "Photo" or itemData.type = "PhotoAlbum"
+        if itemData.usePoster = true
+            if itemData.json.ImageURL <> invalid
+                m.itemPoster.uri = itemData.json.ImageURL
+            end if
+        end if
+        return
+    end if
+
     print "Unhandled Home Item Type: " + itemData.type
 
 end sub

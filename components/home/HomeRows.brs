@@ -13,7 +13,6 @@ sub init()
     m.top.latestMediaCount = 0
     m.top.latestMediaInt = 0
     m.top.latestMediaNode = ""
-    m.top.nodeCount = 0
     m.top.sectionCount = 0
     m.top.sectionIgnores = []
 
@@ -633,7 +632,7 @@ sub rebuildItemArray()
                 itemSize = [464, 261]
                 if homesection = "librarybuttons"
                     itemSize = [464, 100]
-                else if homesection = "resumebook"
+                else if homesection = "resumebook" or homesection = "livetv"
                     itemSize = [200, 270]
                 end if
                 newSizeArray.push(itemSize)
@@ -752,46 +751,44 @@ sub updateLatestMedia()
     filteredLatest = filterNodeArray(m.libraryData, "id", userConfig.LatestItemsExcludes)
     latest_count = 0
 
+    ' Have to filter the orderedViews because Brightscript is awesome
     userConfig = ParseJson(get_user_setting("display.userConfig"))
+    orderedViews = userConfig.Configuration.OrderedViews
+    filteredOrderedViews = []
     if userConfig <> invalid
-        orderedViews = userConfig.Configuration.OrderedViews
-
         if orderedViews <> invalid
-            for each view in orderedViews
-                for each lib in filteredLatest
-                    if view = lib.id
-                        if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv"
-                            latest_count = latest_count + 1
-                            loadLatest = createObject("roSGNode", "LoadItemsTask")
-                            loadLatest.itemsToLoad = "latest"
-                            loadLatest.itemId = lib.id
-
-                            metadata = { "title": lib.name }
-                            metadata.Append({ "contentType": lib.json.CollectionType })
-                            loadLatest.metadata = metadata
-
-                            loadLatest.observeField("content", "updateLatestItems")
-                            loadLatest.control = "RUN"
+            for i = 0 to orderedViews.count() - 1
+                for j = 0 to filteredLatest.count() - 1
+                    if filteredLatest[j].id = orderedViews[i]
+                        if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv"
+                            filteredOrderedViews.push(orderedViews[i])
+                            exit for
                         end if
                     end if
                 end for
             end for
         end if
-    else
-        for each lib in filteredLatest
-            if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv"
-                latest_count = latest_count + 1
-                loadLatest = createObject("roSGNode", "LoadItemsTask")
-                loadLatest.itemsToLoad = "latest"
-                loadLatest.itemId = lib.id
+    end if
+    if filteredOrderedViews <> invalid
+        for i = 0 to filteredOrderedViews.count() - 1
+            for each lib in filteredLatest
+                if filteredOrderedViews[i] = lib.id
+                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv"
+                        latest_count = latest_count + 1
+                        loadLatest = createObject("roSGNode", "LoadItemsTask")
+                        loadLatest.itemsToLoad = "latest"
+                        loadLatest.itemId = lib.id
+                        loadLatest.nodeNumber = i
 
-                metadata = { "title": lib.name }
-                metadata.Append({ "contentType": lib.json.CollectionType })
-                loadLatest.metadata = metadata
+                        metadata = { "title": lib.name }
+                        metadata.Append({ "contentType": lib.json.CollectionType })
+                        loadLatest.metadata = metadata
 
-                loadLatest.observeField("content", "updateLatestItems")
-                loadLatest.control = "RUN"
-            end if
+                        loadLatest.observeField("content", "updateLatestItems")
+                        loadLatest.control = "RUN"
+                    end if
+                end if
+            end for
         end for
     end if
     m.top.latestMediaCount = latest_count
@@ -971,21 +968,10 @@ sub updateLatestItems(msg)
 
     homeRows = m.top.content
     section = getHomeSectionInt("latestmedia")
-    latest_node = m.top.latestMediaNode
-    node_count = m.top.nodeCount
-
-    if latest_node = ""
-        m.top.latestMediaNode = node.metadata.title
-    end if
-
-    if latest_node <> "" and latest_node <> node.metadata.title
-        node_count++
-        m.top.nodeCount = node_count
-        m.top.latestMediaNode = node.metadata.title
-    end if
+    node_index = node.nodeNumber
 
     index_section = section + 1
-    index_section_latest = index_section + node_count
+    index_section_latest = index_section + node_index
     row_index = getRowIndex(Substitute("Loading Section {0}...", index_section_latest.toStr()))
     if row_index <> invalid
         row = homeRows.getChild(row_index)
@@ -1012,7 +998,7 @@ sub updateOnNowItems()
     itemData = m.LoadOnNowTask.content
     m.LoadOnNowTask.unobserveField("content")
 
-    itemSize = [464, 331]
+    itemSize = [200, 270]
 
     homeRows = m.top.content
     section = getHomeSectionInt("livetv")
@@ -1039,8 +1025,8 @@ sub updateOnNowItems()
         end if
         for i = 0 to item_count
             if itemData[i] <> invalid
-                itemData[i].usePoster = false
-                itemData[i].imageWidth = 464
+                itemData[i].usePoster = true
+                itemData[i].imageWidth = 200
                 row.appendChild(itemData[i])
             end if
         end for
