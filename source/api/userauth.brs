@@ -176,6 +176,15 @@ sub LoadUserPreferences()
         unset_user_setting("display.homesection5")
         unset_user_setting("display.homesection6")
     end if
+
+    ' Actual user settings for getting ordered views
+    url = Substitute("Users/{0}", id)
+    resp = APIRequest(url)
+    jsonResponse = getJson(resp)
+    if jsonResponse <> invalid
+        set_user_setting("display.userConfig", FormatJson(jsonResponse))
+    end if
+
 end sub
 
 sub LoadUserAbilities(user)

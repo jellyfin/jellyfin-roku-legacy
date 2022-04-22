@@ -595,10 +595,8 @@ sub removeHoldingChildren()
 end sub
 
 sub rebuildItemArray()
-    print "--- STARTING REBUILD ---"
     section_count = getHomeSectionCount()
     ignores = m.top.sectionIgnores
-    print "IGNORES: " ignores
     m.top.rowItemSize = []
     newSizeArray = []
     homesections = []
@@ -753,21 +751,49 @@ sub updateLatestMedia()
     userConfig = m.top.userConfig
     filteredLatest = filterNodeArray(m.libraryData, "id", userConfig.LatestItemsExcludes)
     latest_count = 0
-    for each lib in filteredLatest
-        if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv"
-            latest_count = latest_count + 1
-            loadLatest = createObject("roSGNode", "LoadItemsTask")
-            loadLatest.itemsToLoad = "latest"
-            loadLatest.itemId = lib.id
 
-            metadata = { "title": lib.name }
-            metadata.Append({ "contentType": lib.json.CollectionType })
-            loadLatest.metadata = metadata
+    userConfig = ParseJson(get_user_setting("display.userConfig"))
+    if userConfig <> invalid
+        orderedViews = userConfig.Configuration.OrderedViews
 
-            loadLatest.observeField("content", "updateLatestItems")
-            loadLatest.control = "RUN"
+        if orderedViews <> invalid
+            for each view in orderedViews
+                for each lib in filteredLatest
+                    if view = lib.id
+                        if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv"
+                            latest_count = latest_count + 1
+                            loadLatest = createObject("roSGNode", "LoadItemsTask")
+                            loadLatest.itemsToLoad = "latest"
+                            loadLatest.itemId = lib.id
+
+                            metadata = { "title": lib.name }
+                            metadata.Append({ "contentType": lib.json.CollectionType })
+                            loadLatest.metadata = metadata
+
+                            loadLatest.observeField("content", "updateLatestItems")
+                            loadLatest.control = "RUN"
+                        end if
+                    end if
+                end for
+            end for
         end if
-    end for
+    else
+        for each lib in filteredLatest
+            if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv"
+                latest_count = latest_count + 1
+                loadLatest = createObject("roSGNode", "LoadItemsTask")
+                loadLatest.itemsToLoad = "latest"
+                loadLatest.itemId = lib.id
+
+                metadata = { "title": lib.name }
+                metadata.Append({ "contentType": lib.json.CollectionType })
+                loadLatest.metadata = metadata
+
+                loadLatest.observeField("content", "updateLatestItems")
+                loadLatest.control = "RUN"
+            end if
+        end for
+    end if
     m.top.latestMediaCount = latest_count
 end sub
 
