@@ -71,11 +71,15 @@ sub loadItems()
         params["SortOrder"] = "Descending"
         params["Filters"] = "IsResumable"
         params["MediaTypes"] = "Video"
+        params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
+        params["ImageTypeLimit"] = 1
 
         resp = APIRequest(url, params)
         data = getJson(resp)
         for each item in data.Items
             tmp = CreateObject("roSGNode", "HomeData")
+            item.ImageURL = ImageURL(item.Id)
+            item.stretch = true
             tmp.json = item
             results.push(tmp)
         end for

@@ -2,6 +2,7 @@
 <component name="HomeRow" extends="ContentNode">
   <interface>
     <field id="imageWidth" type="integer" value="200" />
+    <field id="stretch" type="bool" value="false" />
     <field id="usePoster" type="bool" value="false" />
   </interface>
 </component>

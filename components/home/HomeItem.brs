@@ -18,7 +18,6 @@ sub itemContentChanged()
     itemData = m.top.itemContent
     if itemData = invalid then return
     itemData.Title = itemData.name ' Temporarily required while we move from "HomeItem" to "JFContentItem"
-
     m.itemPoster.width = itemData.imageWidth
     m.itemText.maxWidth = itemData.imageWidth
     m.itemTextExtra.width = itemData.imageWidth
@@ -29,6 +28,10 @@ sub itemContentChanged()
 
     if itemData.iconUrl <> invalid
         m.itemIcon.uri = itemData.iconUrl
+    end if
+
+    if itemData.stretch = true
+        m.itemPoster.loadDisplayMode = "scaleToZoom"
     end if
 
     ' Format the Data based on the type of Home Data
@@ -87,6 +90,9 @@ sub itemContentChanged()
         else
             m.itemPoster.uri = itemData.widePosterURL
         end if
+        if itemData.json.ImageURL <> invalid
+            m.itemPoster.uri = itemData.json.ImageURL
+        end if
 
         ' Set Series and Episode Number for Extra Text
         extraPrefix = ""
@@ -112,6 +118,9 @@ sub itemContentChanged()
             m.itemPoster.uri = itemData.posterURL
         else
             m.itemPoster.uri = itemData.thumbnailURL
+        end if
+        if itemData.json.ImageURL <> invalid
+            m.itemPoster.uri = itemData.json.ImageURL
         end if
 
         ' Set Release Year and Age Rating for Extra Text
@@ -139,11 +148,17 @@ sub itemContentChanged()
         else
             m.itemPoster.uri = itemData.thumbnailURL
         end if
+        if itemData.json.ImageURL <> invalid
+            m.itemPoster.uri = itemData.json.ImageURL
+        end if
         return
     end if
     if itemData.type = "Series"
         m.itemText.text = itemData.name
         m.itemPoster.uri = itemData.posterURL
+        if itemData.json.ImageURL <> invalid
+            m.itemPoster.uri = itemData.json.ImageURL
+        end if
         textExtra = ""
         if itemData.json.ProductionYear <> invalid
             textExtra = StrI(itemData.json.ProductionYear).trim()
