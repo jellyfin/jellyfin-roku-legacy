@@ -1,9 +1,7 @@
 sub init()
     m.title = m.top.findNode("title")
     m.title.text = tr("Loading...")
-    m.overview = m.top.findNode("overview")
-
-    m.deviceInfo = CreateObject("roDeviceInfo")
+    m.options = m.top.findNode("tvListOptions")
 end sub
 
 sub itemContentChanged()
@@ -38,14 +36,31 @@ sub itemContentChanged()
                 videoIdx = i
                 m.top.findNode("video_codec").text = tr("Video") + ": " + itemData.mediaStreams[i].DisplayTitle
             else if itemData.MediaStreams[i].Type = "Audio" and audioIdx = invalid
-                audioIdx = i
-                m.top.findNode("audio_codec").text = tr("Audio") + ": " + itemData.mediaStreams[i].DisplayTitle
+                if item.selectedAudioStreamIndex > 1
+                    audioIdx = item.selectedAudioStreamIndex
+                else
+                    audioIdx = i
+                end if
             end if
             if videoIdx <> invalid and audioIdx <> invalid then exit for
         end for
     end if
-    m.top.findNode("video_codec").visible = videoIdx <> invalid
-    m.top.findNode("audio_codec").visible = audioIdx <> invalid
+
+    DisplayAudioAvailable(itemData.mediaStreams)
+end sub
+
+sub DisplayAudioAvailable(streams)
+
+    count = 0
+    for i = 0 to streams.Count() - 1
+        if streams[i].Type = "Audio"
+            count++
+        end if
+    end for
+
+    if count > 1
+        m.top.findnode("audio_codec_count").text = "+" + stri(count - 1).trim()
+    end if
 
 end sub
 
