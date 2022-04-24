@@ -136,7 +136,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 params.MediaSourceId = mediaSourceId
             end if
             video.content.url = buildURL(Substitute("Videos/{0}/stream", video.id), params)
-            
+
         end if
         video.isTranscoded = false
     else
