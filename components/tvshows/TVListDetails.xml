@@ -18,8 +18,8 @@
           </LayoutGroup>
           <Label id="overview" font="font:SmallestSystemFont" wrap="true" height="130" width="950" maxLines="3" ellipsizeOnBoundary="true"/>
           <LayoutGroup layoutDirection="horiz" itemSpacings="[15]">
-            <Label id="video_codec" font="font:SmallestSystemFont" />
-            <ScrollingLabel id="audio_codec" font="font:SmallestSystemFont" />
+            <Label id="video_codec" />
+            <ScrollingLabel id="audio_codec" />
             <label id="audio_codec_count" font="font:smallestSystemFont" vertAlign="top" color="#ceffff" />
           </LayoutGroup>
         </LayoutGroup>
@@ -29,7 +29,6 @@
   <interface>
     <field id="itemContent" type="node" onChange="itemContentChanged"/>
     <field id="selectedAudioStreamIndex" type="integer" />
-    <field id="itemHasFocus" type="boolean" onChange="focusChanged" />
   </interface>
   <script type="text/brightscript" uri="TVListDetails.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
