@@ -136,7 +136,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 params.MediaSourceId = mediaSourceId
             end if
             video.content.url = buildURL(Substitute("Videos/{0}/stream", video.id), params)
-            video.audioTrack = (audio_stream_idx + 1).ToStr() ' Roku's track indexes count from 1. Our index is zero based
+            
         end if
         video.isTranscoded = false
     else
@@ -153,6 +153,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     end if
 
     video.content.setCertificatesFile("common:/certs/ca-bundle.crt")
+    video.audioTrack = (audio_stream_idx + 1).ToStr() ' Roku's track indexes count from 1. Our index is zero based
 
     if not fully_external
         video.content = authorize_request(video.content)
