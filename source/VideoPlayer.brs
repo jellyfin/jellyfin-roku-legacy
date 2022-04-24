@@ -110,8 +110,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     fully_external = false
     if video.directPlaySupported
         protocol = LCase(playbackInfo.MediaSources[0].Protocol)
-        if protocol = "http"
-            ' directplay http
+        if protocol <> "file"
             uriRegex = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
             uri = uriRegex.Match(playbackinfo.MediaSources[0].Path)
             ' proto $1, host $2, port $3, the-rest $4
@@ -126,8 +125,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 fully_external = true
                 video.content.url = playbackinfo.MediaSources[0].Path
             end if
-            video.isTranscoded = false
-        else if protocol = "file"
+        else:
             params.append({
                 "Static": "true",
                 "Container": video.container,
@@ -138,9 +136,9 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 params.MediaSourceId = mediaSourceId
             end if
             video.content.url = buildURL(Substitute("Videos/{0}/stream", video.id), params)
-            video.isTranscoded = false
             video.audioTrack = (audio_stream_idx + 1).ToStr() ' Roku's track indexes count from 1. Our index is zero based
         end if
+        video.isTranscoded = false
     else
         if playbackInfo.MediaSources[0].TranscodingUrl = invalid
             ' If server does not provide a transcode URL, display a message to the user
