@@ -34,11 +34,12 @@ sub init()
     
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
 
+    m.AlphaTask = createObject("roSGNode", "Alpha")
     m.Alphamenu = m.top.findNode("AlphaMenu")
+    m.Alpha = m.top.findNode("Alpha")
     'm.Alphamenu.checkedItem = 0
     m.Alphamenu.visible = true
-    m.Alphamenu = m.Alphamenu.checkedItem
-
+    m.AlphaTask.observeField("Alphamenucontent", "radiobutton")
 end sub
 
 
@@ -346,6 +347,12 @@ sub onItemSelected()
     m.top.selectedItem = m.itemGrid.content.getChild(m.itemGrid.itemSelected)
 end sub
 
+'Alpha Selected
+sub onAlphaSelected()
+    m.top.AlphaSelected = m.Alphamenu.checkedItem
+    print m.AlphamenuChecked
+end sub
+
 
 '
 'Check if options updated and any reloading required
@@ -447,10 +454,13 @@ sub onChannelSelected(msg)
 end sub
 
 sub radiobutton()
- alpha = m.top.findNode("AlphaMenu")
+ 'm.alpha = m.top.findNode("AlphaMenu")
+ m.AlphaTask.checkedItem = 5
+print "item focused " m.AlphaTask.itemFocused
+end sub
 
- print "item focused " alpha.value
-
+sub radiobuttonchecked()
+    print m.AlphaTask.itemFocused
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
@@ -458,7 +468,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     topGrp = m.top.findNode("itemGrid")
     bottomGrp = m.top.findNode("AlphaMenu")
 
-    if not press then return false
+    'if not press then return false
 
     if key = "options"
         if m.options.visible = true
@@ -477,7 +487,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             optionsClosed()
             return true
         end if
-    else if key = "play" or key = "OK"
+    else if key = "play" or (key = "OK" and topGrp.isinFocusChain())
         markupGrid = m.top.getChild(2)
         itemToPlay = markupGrid.content.getChild(markupGrid.itemFocused)
         if itemToPlay <> invalid and (itemToPlay.type = "Movie" or itemToPlay.type = "Episode")
@@ -493,16 +503,18 @@ function onKeyEvent(key as string, press as boolean) as boolean
     else if  key = "right" and m.itemGrid.currFocusColumn = 5 and topGrp.isinFocusChain()
                 bottomGrp.setFocus(true)
                 print "focused to radio buttons"
-                radiobutton()
+               ' radiobutton()
             return true
     else if key = "left" and bottomGrp.isinFocusChain()
         topGrp.setFocus(true)
         return true
         print "focus to item grid"
     else if (key = "up" or key = "down") and bottomGrp.isinFocusChain()
-        radiobutton()
+        'radiobutton()
         return true
-    
+    else if key = "OK" and bottomGrp.isinFocusChain()
+        'radiobuttonchecked()
+        return true
     end if
     return false
 end function

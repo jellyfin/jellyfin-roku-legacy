@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="Alpha" extends = "JFGroup">
+<component name="Alpha" extends = "Group">
   <children>
-    <Rectangle id="AlphaGrp" color="666666" opacity="1" width="50" height="1080" translation="[1820, 185]" >
-      <RadiobuttonList 
+  <Rectangle id="AlphaGrp" color="666666" opacity="1" width="20" height="1080" translation="[1820, 185]" >
+          <LabelList 
+          vertFocusAnimationStyle="floatingFocus" 
+          drawFocusFeedback="true"
           id = "Alphamenu"
-          vertFocusAnimationStyle="floatingFocus" >
-          <ContentNode id = "Alphamenucontent" role = "content" >
+           >
+          <ContentNode id="alphatext" role = "content" >
             <ContentNode title = "ALL" />
             <ContentNode title = "A" />
             <ContentNode title = "B" />
@@ -34,11 +36,15 @@
             <ContentNode title = "Y" />
             <ContentNode title = "Z" />
           </ContentNode>
-        </RadiobuttonList>
-   </Rectangle>
+        </LabelList>
+  </Rectangle>
   </children>
   <interface>
     <field id="selectedItem" type="node" alwaysNotify="true" />
+    <field id="focusedChild" type="node" onChange="focusChanged" />
+    <field id="focusedIndex" type="integer" alwaysNotify="true" />
+    <field id="selectedIndex" type="integer" onChange="selectedIndexChanged" />
+   
   </interface>
-<!--<script type="text/brightscript" uri="Alpha.brs" />-->
+<script type="text/brightscript" uri="Alpha.brs" />
 </component>

@@ -310,9 +310,6 @@ function CreateMovieDetailsGroup(movie)
     extras.observeField("selectedItem", m.port)
     extras.callFunc("loadPeople", movie.json)
 
-    Alpha = group.findNode("Alphamenu")
-    Alpha.observeField("selectedItem", m.port)
-
     return group
 end function
 

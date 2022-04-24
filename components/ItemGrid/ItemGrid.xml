@@ -36,7 +36,7 @@
     <field id="selectedItem" type="node" alwaysNotify="true" />
     <field id="quickPlayNode" type="node" alwaysNotify="true" />
     <field id="imageDisplayMode" type="string" value="scaleToZoom" />
-    <field id="AlphaSelected" type="boolean" alwaysNotify="true" />
+    <field id="AlphaSelected" type="node" alwaysNotify="true" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
