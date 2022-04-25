@@ -83,6 +83,9 @@ sub loadInitialItems()
     m.loadItemsTask.filter = m.filter
     m.loadItemsTask.startIndex = 0
 
+    if m.top.AlphaSelected = "#"
+        m.top.AlphaSelected = "%23"
+    end if
     m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
 
     if m.top.parentItem.collectionType = "movies"
@@ -453,7 +456,6 @@ sub onChannelSelected(msg)
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
-
     if not press then return false
     topGrp = m.top.findNode("itemGrid")
     if key = "options"
@@ -487,7 +489,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             photoPlayer.control = "RUN"
             return true
         end if
-    else if key = "right" and m.itemGrid.currFocusColumn = 5 and topGrp.isinFocusChain()
+    else if key = "right" and topGrp.isinFocusChain()
         topGrp.setFocus(false)
         alpha = m.Alpha.getChild(0).findNode("Alphamenu")
         alpha.setFocus(true)
