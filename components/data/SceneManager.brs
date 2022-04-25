@@ -176,7 +176,7 @@ end sub
 ' Update username in overhang
 sub updateUser()
     ' Passthrough to overhang
-    m.overhang.currentUser = m.top.currentUser
+    if m.overhang <> invalid then m.overhang.currentUser = m.top.currentUser
 end sub
 
 
