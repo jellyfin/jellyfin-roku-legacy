@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="Alpha" extends = "Group">
+  <children>
+  <Rectangle id="AlphaGrp" color="666666" opacity="1" width="10" height="1080" translation="[1850, 185]" >
+          <LabelList 
+          vertFocusAnimationStyle="floatingFocus" 
+          drawFocusFeedback="true"
+          id = "Alphamenu"
+           >
+          <ContentNode id="alphatext" role = "content" >
+            <ContentNode title = "#" />
+            <ContentNode title = "A" />
+            <ContentNode title = "B" />
+            <ContentNode title = "C" />
+            <ContentNode title = "D" />
+            <ContentNode title = "E" />
+            <ContentNode title = "F" />
+            <ContentNode title = "G" />
+            <ContentNode title = "H" />
+            <ContentNode title = "I" />
+            <ContentNode title = "J" />
+            <ContentNode title = "K" />
+            <ContentNode title = "L" />
+            <ContentNode title = "M" />
+            <ContentNode title = "N" />
+            <ContentNode title = "O" />
+            <ContentNode title = "P" />
+            <ContentNode title = "Q" />
+            <ContentNode title = "R" />
+            <ContentNode title = "S" />
+            <ContentNode title = "T" />
+            <ContentNode title = "U" />
+            <ContentNode title = "V" />
+            <ContentNode title = "W" />
+            <ContentNode title = "X" />
+            <ContentNode title = "Y" />
+            <ContentNode title = "Z" />
+          </ContentNode>
+        </LabelList>
+  </Rectangle>
+  </children>
+  <interface>
+    <field id="selectedItem" type="node" alwaysNotify="true" />
+    <field id="focusedChild" type="node" onChange="focusChanged" />
+    <field id="focusedIndex" type="integer" alwaysNotify="true" />
+    <field id="selectedIndex" type="integer" onChange="selectedIndexChanged" />
+    <field id="itemAlphaSelected" type="string" />
+   
+  </interface>
+<script type="text/brightscript" uri="Alpha.brs" />
+</component>

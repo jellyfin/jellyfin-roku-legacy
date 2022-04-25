@@ -21,6 +21,7 @@ sub init()
 
     m.itemGrid.observeField("itemFocused", "onItemFocused")
     m.itemGrid.observeField("itemSelected", "onItemSelected")
+    m.itemGrid.observeField("AlphaSelected", "onItemAlphaSelected")
     m.newBackdrop.observeField("loadStatus", "newBGLoaded")
 
     'Background Image Queued for loading
@@ -34,6 +35,8 @@ sub init()
 
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
 
+    m.Alpha = m.top.findNode("AlphaMenu")
+    m.AlphaSelected = m.top.findNode("AlphaSelected")
 end sub
 
 '
@@ -79,6 +82,8 @@ sub loadInitialItems()
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
     m.loadItemsTask.startIndex = 0
+
+    m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
 
     if m.top.parentItem.collectionType = "movies"
         m.loadItemsTask.itemType = "Movie"
@@ -339,6 +344,14 @@ sub onItemSelected()
     m.top.selectedItem = m.itemGrid.content.getChild(m.itemGrid.itemSelected)
 end sub
 
+sub onItemAlphaSelected()
+    m.loadedRows = 0
+    m.loadedItems = 0
+    m.data = CreateObject("roSGNode", "ContentNode")
+    m.itemGrid.content = m.data
+    loadInitialItems()
+end sub
+
 
 '
 'Check if options updated and any reloading required
@@ -442,7 +455,7 @@ end sub
 function onKeyEvent(key as string, press as boolean) as boolean
 
     if not press then return false
-
+    topGrp = m.top.findNode("itemGrid")
     if key = "options"
         if m.options.visible = true
             m.options.visible = false
@@ -463,6 +476,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     else if key = "play" or key = "OK"
         markupGrid = m.top.getChild(2)
         itemToPlay = markupGrid.content.getChild(markupGrid.itemFocused)
+
         if itemToPlay <> invalid and (itemToPlay.type = "Movie" or itemToPlay.type = "Episode")
             m.top.quickPlayNode = itemToPlay
             return true
@@ -473,6 +487,16 @@ function onKeyEvent(key as string, press as boolean) as boolean
             photoPlayer.control = "RUN"
             return true
         end if
+    else if key = "right" and m.itemGrid.currFocusColumn = 5 and topGrp.isinFocusChain()
+        topGrp.setFocus(false)
+        alpha = m.Alpha.getChild(0).findNode("Alphamenu")
+        alpha.setFocus(true)
+        return true
+    else if key = "left" and m.Alpha.isinFocusChain()
+        m.Alpha.setFocus(false)
+        m.Alpha.visible = true
+        topGrp.setFocus(true)
+        return true
     end if
     return false
 end function
