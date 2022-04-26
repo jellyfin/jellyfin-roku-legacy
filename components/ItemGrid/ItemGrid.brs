@@ -85,6 +85,8 @@ sub loadInitialItems()
 
     if m.top.AlphaSelected = "#"
         m.top.AlphaSelected = "%23"
+    else if m.top.AlphaSelected = "x"
+        m.top.AlphaSelected = ""
     end if
     m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
 
