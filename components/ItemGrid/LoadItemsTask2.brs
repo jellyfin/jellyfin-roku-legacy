@@ -46,40 +46,34 @@ sub loadItems()
     resp = APIRequest(url, params)
     data = getJson(resp)
 
-    if data.TotalRecordCount <> invalid
-        m.top.totalRecordCount = data.TotalRecordCount
+    if data <> invalid
+
+        if data.TotalRecordCount <> invalid then m.top.totalRecordCount = data.TotalRecordCount
+
+        for each item in data.Items
+            tmp = invalid
+            if item.Type = "Movie"
+                tmp = CreateObject("roSGNode", "MovieData")
+            else if item.Type = "Series"
+                tmp = CreateObject("roSGNode", "SeriesData")
+            else if item.Type = "BoxSet"
+                tmp = CreateObject("roSGNode", "CollectionData")
+            else if item.Type = "TvChannel"
+                tmp = CreateObject("roSGNode", "ChannelData")
+            else if item.Type = "Folder" or item.Type = "ChannelFolderItem" or item.Type = "CollectionFolder"
+                tmp = CreateObject("roSGNode", "FolderData")
+            else if item.Type = "Video"
+                tmp = CreateObject("roSGNode", "VideoData")
+            else
+                print "[LoadItems] Unknown Type: " item.Type
+            end if
+
+            if tmp <> invalid
+                tmp.json = item
+                results.push(tmp)
+            end if
+        end for
     end if
-
-    for each item in data.Items
-
-        tmp = invalid
-        if item.Type = "Movie"
-            tmp = CreateObject("roSGNode", "MovieData")
-        else if item.Type = "Series"
-            tmp = CreateObject("roSGNode", "SeriesData")
-        else if item.Type = "BoxSet"
-            tmp = CreateObject("roSGNode", "CollectionData")
-        else if item.Type = "TvChannel"
-            tmp = CreateObject("roSGNode", "ChannelData")
-        else if item.Type = "Folder" or item.Type = "ChannelFolderItem" or item.Type = "CollectionFolder"
-            tmp = CreateObject("roSGNode", "FolderData")
-        else if item.Type = "Video"
-            tmp = CreateObject("roSGNode", "VideoData")
-        else if item.Type = "Photo"
-            tmp = CreateObject("roSGNode", "PhotoData")
-        else if item.type = "PhotoAlbum"
-            tmp = CreateObject("roSGNode", "FolderData")
-        else
-            print "[LoadItems] Unknown Type: " item.Type
-        end if
-
-        if tmp <> invalid
-
-            tmp.json = item
-            results.push(tmp)
-
-        end if
-    end for
 
     m.top.content = results
 
