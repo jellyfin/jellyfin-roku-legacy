@@ -58,6 +58,11 @@ sub loadItems()
         data = getJson(resp)
         for each item in data.Items
             tmp = CreateObject("roSGNode", "HomeData")
+            item.ImageURL = ImageURL(item.Id, "Backdrop")
+            if item.type = "Episode"
+                item.ImageURL = ImageURL(item.SeriesId, "Backdrop")
+            end if
+            item.stretch = true
             tmp.json = item
             results.push(tmp)
         end for
@@ -81,7 +86,10 @@ sub loadItems()
         data = getJson(resp)
         for each item in data.Items
             tmp = CreateObject("roSGNode", "HomeData")
-            item.ImageURL = ImageURL(item.Id)
+            item.ImageURL = ImageURL(item.Id, "Backdrop")
+            if item.type = "Episode"
+                item.ImageURL = ImageURL(item.SeriesId, "Backdrop")
+            end if
             item.stretch = true
             tmp.json = item
             results.push(tmp)
@@ -105,8 +113,7 @@ sub loadItems()
         data = getJson(resp)
         for each item in data.Items
             tmp = CreateObject("roSGNode", "HomeData")
-            poster = PosterImage(item.Id)
-            item.posterURL = poster.url
+            item.ImageURL = ImageURL(item.Id, "Backdrop")
             tmp.json = item
             results.push(tmp)
         end for
@@ -128,8 +135,7 @@ sub loadItems()
         data = getJson(resp)
         for each item in data.Items
             tmp = CreateObject("roSGNode", "HomeData")
-            poster = PosterImage(item.Id)
-            item.posterURL = poster.url
+            item.ImageURL = ImageURL(item.Id, "Backdrop")
             tmp.json = item
             results.push(tmp)
         end for
