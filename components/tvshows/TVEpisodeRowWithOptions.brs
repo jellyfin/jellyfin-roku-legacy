@@ -43,12 +43,12 @@ end sub
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
 
-    if key = "options" and m.rows.focusedChild.rowItemFocused <> invalid
+    if key = "options" and m.rows.focusedChild <> invalid and m.rows.focusedChild.rowItemFocused <> invalid
         m.currentSelected = m.rows.focusedChild.rowItemFocused[0]
         mediaStreams = m.rows.objects.items[m.currentSelected].json.MediaStreams
         SetUpAudioOptions(mediaStreams)
         return true
-    else if key = "back" and m.tvListOptions.visible = true
+    else if m.tvListOptions.visible = true and key = "back" or key = "options"
         m.tvListOptions.setFocus(false)
         m.tvListOptions.visible = false
         m.rows.setFocus(true)
