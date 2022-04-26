@@ -4,6 +4,8 @@ sub init()
     m.Alphamenu.focusable = true
     m.Alphatext = m.top.findNode("alphatext")
     m.focusedChild = m.top.findNode("focusedChild")
+    m.Alphamenu.focusedFont.size = 25
+    m.Alphamenu.font.size = 25
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
