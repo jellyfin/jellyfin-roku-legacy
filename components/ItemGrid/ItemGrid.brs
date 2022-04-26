@@ -89,6 +89,7 @@ sub loadInitialItems()
         m.top.AlphaSelected = ""
     end if
     m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
+    m.emptyText.visible = false
 
     if m.top.parentItem.collectionType = "movies"
         m.loadItemsTask.itemType = "Movie"

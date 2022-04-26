@@ -27,9 +27,12 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.top.itemAlphaSelected = child.title
 
         if child.title <> "x"
-            clear_all = CreateObject("roSGNode", "ContentNode")
-            clear_all.title = "x"
-            m.Alphatext.insertChild(clear_all, 0)
+            existing = m.Alphatext.getChild(0)
+            if existing.title <> "x"
+                clear_all = CreateObject("roSGNode", "ContentNode")
+                clear_all.title = "x"
+                m.Alphatext.insertChild(clear_all, 0)
+            end if
         end if
         if child.title = "x"
             m.Alphatext.removeChildIndex(0)
