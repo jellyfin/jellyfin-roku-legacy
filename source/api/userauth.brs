@@ -145,36 +145,13 @@ sub LoadUserPreferences()
         if jsonResponse.CustomPrefs["landing-livetv"] <> invalid
             set_user_setting("display.livetv.landing", jsonResponse.CustomPrefs["landing-livetv"])
         end if
-        if jsonResponse.CustomPrefs["homesection0"] <> invalid
-            set_user_setting("display.homesection0", jsonResponse.CustomPrefs["homesection0"])
-        end if
-        if jsonResponse.CustomPrefs["homesection1"] <> invalid
-            set_user_setting("display.homesection1", jsonResponse.CustomPrefs["homesection1"])
-        end if
-        if jsonResponse.CustomPrefs["homesection2"] <> invalid
-            set_user_setting("display.homesection2", jsonResponse.CustomPrefs["homesection2"])
-        end if
-        if jsonResponse.CustomPrefs["homesection3"] <> invalid
-            set_user_setting("display.homesection3", jsonResponse.CustomPrefs["homesection3"])
-        end if
-        if jsonResponse.CustomPrefs["homesection4"] <> invalid
-            set_user_setting("display.homesection4", jsonResponse.CustomPrefs["homesection4"])
-        end if
-        if jsonResponse.CustomPrefs["homesection5"] <> invalid
-            set_user_setting("display.homesection5", jsonResponse.CustomPrefs["homesection5"])
-        end if
-        if jsonResponse.CustomPrefs["homesection6"] <> invalid
-            set_user_setting("display.homesection6", jsonResponse.CustomPrefs["homesection6"])
-        end if
+        for i = 0 to 6
+            if jsonResponse.CustomPrefs["homesection" + i.ToStr()] <> invalid
+                set_user_setting("display.homesection" + i.ToStr(), jsonResponse.CustomPrefs["homesection" + i.ToStr()])
+            end if
+        end for
     else
-        unset_user_setting("display.livetv.landing")
-        unset_user_setting("display.homesection0")
-        unset_user_setting("display.homesection1")
-        unset_user_setting("display.homesection2")
-        unset_user_setting("display.homesection3")
-        unset_user_setting("display.homesection4")
-        unset_user_setting("display.homesection5")
-        unset_user_setting("display.homesection6")
+        setHomeScreenDefaults()
     end if
 
     ' Actual user settings for getting ordered views
@@ -185,6 +162,16 @@ sub LoadUserPreferences()
         set_user_setting("display.userConfig", FormatJson(jsonResponse))
     end if
 
+end sub
+
+sub setHomeScreenDefaults()
+    set_user_setting("display.homesection0", "smalllibrarytiles")
+    set_user_setting("display.homesection1", "resume")
+    set_user_setting("display.homesection2", "resumeaudio")
+    set_user_setting("display.homesection3", "resumebook")
+    set_user_setting("display.homesection4", "livetv")
+    set_user_setting("display.homesection5", "nextup")
+    set_user_setting("display.homesection6", "latestmedia")
 end sub
 
 sub LoadUserAbilities(user)

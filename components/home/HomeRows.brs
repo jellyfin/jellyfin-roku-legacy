@@ -10,11 +10,11 @@ sub init()
     m.top.rowLabelOffset = [0, 20]
     m.top.showRowCounter = [true]
 
-    m.top.latestMediaCount = 0
-    m.top.latestMediaInt = 0
-    m.top.latestMediaNode = ""
-    m.top.sectionCount = 0
-    m.top.sectionIgnores = []
+    m.latestMediaCount = 0
+    m.latestMediaInt = 0
+    m.latestMediaNode = ""
+    m.sectionCount = 0
+    m.sectionIgnores = []
 
     updateSize()
 
@@ -66,11 +66,11 @@ sub updateSize()
 end sub
 
 sub onLibrariesLoaded()
-    m.LoadHomeSectionTask.observeField("content", "loadHomeSection0")
+    m.LoadHomeSectionTask.observeField("content", "loadHomeSections")
     m.LoadHomeSectionTask.control = "RUN"
 end sub
 
-sub loadHomeSection0()
+sub loadHomeSections()
     m.libraryData = m.LoadLibrariesTask.content
     m.LoadLibrariesTask.unobserveField("content")
     content = CreateObject("roSGNode", "ContentNode")
@@ -78,311 +78,50 @@ sub loadHomeSection0()
 
     createHoldingChildren()
 
-    m.top.latestMediaInt = getHomeSectionInt("latestmedia")
-    m.top.sectionCount = getHomeSectionCount()
+    m.latestMediaInt = getHomeSectionInt("latestmedia")
+    m.sectionCount = getHomeSectionCount()
 
-    homesection0 = get_user_setting("display.homesection0")
+    for i = 0 to 6
+        content = m.top.content
+        homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
 
-    if homesection0 = "smalllibrarytiles"
-        m.LoadMyMediaTask.observeField("content", "updateMyMedia")
-        m.LoadMyMediaTask.control = "RUN"
-        m.LoadMyMediaTask.observeField("state", "onUpdateMyMediaComplete")
-    else if homesection0 = "librarybuttons"
-        m.LoadMyMediaSmallTask.observeField("content", "updateMyMediaSmall")
-        m.LoadMyMediaSmallTask.control = "RUN"
-        m.LoadMyMediaSmallTask.observeField("state", "onUpdateMyMediaSmallComplete")
-    else if homesection0 = "latestmedia"
-        m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
-        m.LoadLatestMediaTask.control = "RUN"
-        m.LoadLatestMediaTask.observeField("state", "onUpdateLatestMediaComplete")
-    else if homesection0 = "resume"
-        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
-        m.LoadContinueVideoTask.control = "RUN"
-        m.LoadContinueVideoTask.observeField("state", "onUpdateContinueVideoItemsComplete")
-    else if homesection0 = "resumeaudio"
-        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
-        m.LoadContinueAudioTask.control = "RUN"
-        m.LoadContinueAudioTask.observeField("state", "onUpdateContinueAudioItemsComplete")
-    else if homesection0 = "resumebook"
-        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
-        m.LoadContinueBookTask.control = "RUN"
-        m.LoadContinueBookTask.observeField("state", "onUpdateContinueBookItemsComplete")
-    else if homesection0 = "nextup"
-        m.LoadNextUpTask.observeField("content", "updateNextUpItems")
-        m.LoadNextUpTask.control = "RUN"
-        m.LoadNextUpTask.observeField("state", "onUpdateNextUpItemsComplete")
-    else if homesection0 = "livetv"
-        m.LoadOnNowTask.observeField("content", "updateOnNowItems")
-        m.LoadOnNowTask.control = "RUN"
-        m.LoadOnNowTask.observeField("state", "onUpdateOnNowItemsComplete")
-    else
-        removeHoldingChild(1)
-    end if
-    m.top.content = content
-    loadHomeSection1()
-end sub
-
-sub loadHomeSection1()
-    content = m.top.content
-
-    homesection1 = get_user_setting("display.homesection1")
-
-    if homesection1 = "smalllibrarytiles"
-        m.LoadMyMediaTask.observeField("content", "updateMyMedia")
-        m.LoadMyMediaTask.control = "RUN"
-        m.LoadMyMediaTask.observeField("state", "onUpdateMyMediaComplete")
-    else if homesection1 = "librarybuttons"
-        m.LoadMyMediaSmallTask.observeField("content", "updateMyMediaSmall")
-        m.LoadMyMediaSmallTask.control = "RUN"
-        m.LoadMyMediaSmallTask.observeField("state", "onUpdateMyMediaSmallComplete")
-    else if homesection1 = "latestmedia"
-        m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
-        m.LoadLatestMediaTask.control = "RUN"
-        m.LoadLatestMediaTask.observeField("state", "onUpdateLatestMediaComplete")
-    else if homesection1 = "resume"
-        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
-        m.LoadContinueVideoTask.control = "RUN"
-        m.LoadContinueVideoTask.observeField("state", "onUpdateContinueVideoItemsComplete")
-    else if homesection1 = "resumeaudio"
-        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
-        m.LoadContinueAudioTask.control = "RUN"
-        m.LoadContinueAudioTask.observeField("state", "onUpdateContinueAudioItemsComplete")
-    else if homesection1 = "resumebook"
-        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
-        m.LoadContinueBookTask.control = "RUN"
-        m.LoadContinueBookTask.observeField("state", "onUpdateContinueBookItemsComplete")
-    else if homesection1 = "nextup"
-        m.LoadNextUpTask.observeField("content", "updateNextUpItems")
-        m.LoadNextUpTask.control = "RUN"
-        m.LoadNextUpTask.observeField("state", "onUpdateNextUpItemsComplete")
-    else if homesection1 = "livetv"
-        m.LoadOnNowTask.observeField("content", "updateOnNowItems")
-        m.LoadOnNowTask.control = "RUN"
-        m.LoadOnNowTask.observeField("state", "onUpdateOnNowItemsComplete")
-    else
-        removeHoldingChild(2)
-    end if
-    m.top.content = content
-    loadHomeSection2()
-end sub
-
-sub loadHomeSection2()
-    content = m.top.content
-
-    homesection2 = get_user_setting("display.homesection2")
-
-    if homesection2 = "smalllibrarytiles"
-        m.LoadMyMediaTask.observeField("content", "updateMyMedia")
-        m.LoadMyMediaTask.control = "RUN"
-        m.LoadMyMediaTask.observeField("state", "onUpdateMyMediaComplete")
-    else if homesection2 = "librarybuttons"
-        m.LoadMyMediaSmallTask.observeField("content", "updateMyMediaSmall")
-        m.LoadMyMediaSmallTask.control = "RUN"
-        m.LoadMyMediaSmallTask.observeField("state", "onUpdateMyMediaSmallComplete")
-    else if homesection2 = "latestmedia"
-        m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
-        m.LoadLatestMediaTask.control = "RUN"
-        m.LoadLatestMediaTask.observeField("state", "onUpdateLatestMediaComplete")
-    else if homesection2 = "resume"
-        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
-        m.LoadContinueVideoTask.control = "RUN"
-        m.LoadContinueVideoTask.observeField("state", "onUpdateContinueVideoItemsComplete")
-    else if homesection2 = "resumeaudio"
-        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
-        m.LoadContinueAudioTask.control = "RUN"
-        m.LoadContinueAudioTask.observeField("state", "onUpdateContinueAudioItemsComplete")
-    else if homesection2 = "resumebook"
-        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
-        m.LoadContinueBookTask.control = "RUN"
-        m.LoadContinueBookTask.observeField("state", "onUpdateContinueBookItemsComplete")
-    else if homesection2 = "nextup"
-        m.LoadNextUpTask.observeField("content", "updateNextUpItems")
-        m.LoadNextUpTask.control = "RUN"
-        m.LoadNextUpTask.observeField("state", "onUpdateNextUpItemsComplete")
-    else if homesection2 = "livetv"
-        m.LoadOnNowTask.observeField("content", "updateOnNowItems")
-        m.LoadOnNowTask.control = "RUN"
-        m.LoadOnNowTask.observeField("state", "onUpdateOnNowItemsComplete")
-    else
-        removeHoldingChild(3)
-    end if
-    m.top.content = content
-    loadHomeSection3()
-end sub
-
-sub loadHomeSection3()
-    content = m.top.content
-
-    homesection3 = get_user_setting("display.homesection3")
-
-    if homesection3 = "smalllibrarytiles"
-        m.LoadMyMediaTask.observeField("content", "updateMyMedia")
-        m.LoadMyMediaTask.control = "RUN"
-        m.LoadMyMediaTask.observeField("state", "onUpdateMyMediaComplete")
-    else if homesection3 = "librarybuttons"
-        m.LoadMyMediaSmallTask.observeField("content", "updateMyMediaSmall")
-        m.LoadMyMediaSmallTask.control = "RUN"
-        m.LoadMyMediaSmallTask.observeField("state", "onUpdateMyMediaSmallComplete")
-    else if homesection3 = "latestmedia"
-        m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
-        m.LoadLatestMediaTask.control = "RUN"
-        m.LoadLatestMediaTask.observeField("state", "onUpdateLatestMediaComplete")
-    else if homesection3 = "resume"
-        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
-        m.LoadContinueVideoTask.control = "RUN"
-        m.LoadContinueVideoTask.observeField("state", "onUpdateContinueVideoItemsComplete")
-    else if homesection3 = "resumeaudio"
-        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
-        m.LoadContinueAudioTask.control = "RUN"
-        m.LoadContinueAudioTask.observeField("state", "onUpdateContinueAudioItemsComplete")
-    else if homesection3 = "resumebook"
-        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
-        m.LoadContinueBookTask.control = "RUN"
-        m.LoadContinueBookTask.observeField("state", "onUpdateContinueBookItemsComplete")
-    else if homesection3 = "nextup"
-        m.LoadNextUpTask.observeField("content", "updateNextUpItems")
-        m.LoadNextUpTask.control = "RUN"
-        m.LoadNextUpTask.observeField("state", "onUpdateNextUpItemsComplete")
-    else if homesection3 = "livetv"
-        m.LoadOnNowTask.observeField("content", "updateOnNowItems")
-        m.LoadOnNowTask.control = "RUN"
-        m.LoadOnNowTask.observeField("state", "onUpdateOnNowItemsComplete")
-    else
-        removeHoldingChild(4)
-    end if
-    m.top.content = content
-    loadHomeSection4()
-end sub
-
-sub loadHomeSection4()
-    content = m.top.content
-
-    homesection4 = get_user_setting("display.homesection4")
-
-    if homesection4 = "smalllibrarytiles"
-        m.LoadMyMediaTask.observeField("content", "updateMyMedia")
-        m.LoadMyMediaTask.control = "RUN"
-        m.LoadMyMediaTask.observeField("state", "onUpdateMyMediaComplete")
-    else if homesection4 = "librarybuttons"
-        m.LoadMyMediaSmallTask.observeField("content", "updateMyMediaSmall")
-        m.LoadMyMediaSmallTask.control = "RUN"
-        m.LoadMyMediaSmallTask.observeField("state", "onUpdateMyMediaSmallComplete")
-    else if homesection4 = "latestmedia"
-        m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
-        m.LoadLatestMediaTask.control = "RUN"
-        m.LoadLatestMediaTask.observeField("state", "onUpdateLatestMediaComplete")
-    else if homesection4 = "resume"
-        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
-        m.LoadContinueVideoTask.control = "RUN"
-        m.LoadContinueVideoTask.observeField("state", "onUpdateContinueVideoItemsComplete")
-    else if homesection4 = "resumeaudio"
-        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
-        m.LoadContinueAudioTask.control = "RUN"
-        m.LoadContinueAudioTask.observeField("state", "onUpdateContinueAudioItemsComplete")
-    else if homesection4 = "resumebook"
-        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
-        m.LoadContinueBookTask.control = "RUN"
-        m.LoadContinueBookTask.observeField("state", "onUpdateContinueBookItemsComplete")
-    else if homesection4 = "nextup"
-        m.LoadNextUpTask.observeField("content", "updateNextUpItems")
-        m.LoadNextUpTask.control = "RUN"
-        m.LoadNextUpTask.observeField("state", "onUpdateNextUpItemsComplete")
-    else if homesection4 = "livetv"
-        m.LoadOnNowTask.observeField("content", "updateOnNowItems")
-        m.LoadOnNowTask.control = "RUN"
-        m.LoadOnNowTask.observeField("state", "onUpdateOnNowItemsComplete")
-    else
-        removeHoldingChild(5)
-    end if
-    m.top.content = content
-    loadHomeSection5()
-end sub
-
-sub loadHomeSection5()
-    content = m.top.content
-
-    homesection5 = get_user_setting("display.homesection5")
-
-    if homesection5 = "smalllibrarytiles"
-        m.LoadMyMediaTask.observeField("content", "updateMyMedia")
-        m.LoadMyMediaTask.control = "RUN"
-        m.LoadMyMediaTask.observeField("state", "onUpdateMyMediaComplete")
-    else if homesection5 = "librarybuttons"
-        m.LoadMyMediaSmallTask.observeField("content", "updateMyMediaSmall")
-        m.LoadMyMediaSmallTask.control = "RUN"
-        m.LoadMyMediaSmallTask.observeField("state", "onUpdateMyMediaSmallComplete")
-    else if homesection5 = "latestmedia"
-        m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
-        m.LoadLatestMediaTask.control = "RUN"
-        m.LoadLatestMediaTask.observeField("state", "onUpdateLatestMediaComplete")
-    else if homesection5 = "resume"
-        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
-        m.LoadContinueVideoTask.control = "RUN"
-        m.LoadContinueVideoTask.observeField("state", "onUpdateContinueVideoItemsComplete")
-    else if homesection5 = "resumeaudio"
-        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
-        m.LoadContinueAudioTask.control = "RUN"
-        m.LoadContinueAudioTask.observeField("state", "onUpdateContinueAudioItemsComplete")
-    else if homesection5 = "resumebook"
-        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
-        m.LoadContinueBookTask.control = "RUN"
-        m.LoadContinueBookTask.observeField("state", "onUpdateContinueBookItemsComplete")
-    else if homesection5 = "nextup"
-        m.LoadNextUpTask.observeField("content", "updateNextUpItems")
-        m.LoadNextUpTask.control = "RUN"
-        m.LoadNextUpTask.observeField("state", "onUpdateNextUpItemsComplete")
-    else if homesection5 = "livetv"
-        m.LoadOnNowTask.observeField("content", "updateOnNowItems")
-        m.LoadOnNowTask.control = "RUN"
-        m.LoadOnNowTask.observeField("state", "onUpdateOnNowItemsComplete")
-    else
-        removeHoldingChild(6)
-    end if
-
-    m.top.content = content
-    loadHomeSection6()
-end sub
-
-sub loadHomeSection6()
-    content = m.top.content
-
-    homesection6 = get_user_setting("display.homesection6")
-
-    if homesection6 = "smalllibrarytiles"
-        m.LoadMyMediaTask.observeField("content", "updateMyMedia")
-        m.LoadMyMediaTask.control = "RUN"
-        m.LoadMyMediaTask.observeField("state", "onUpdateMyMediaComplete")
-    else if homesection6 = "librarybuttons"
-        m.LoadMyMediaSmallTask.observeField("content", "updateMyMediaSmall")
-        m.LoadMyMediaSmallTask.control = "RUN"
-        m.LoadMyMediaSmallTask.observeField("state", "onUpdateMyMediaSmallComplete")
-    else if homesection6 = "latestmedia"
-        m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
-        m.LoadLatestMediaTask.control = "RUN"
-        m.LoadLatestMediaTask.observeField("state", "onUpdateLatestMediaComplete")
-    else if homesection6 = "resume"
-        m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
-        m.LoadContinueVideoTask.control = "RUN"
-        m.LoadContinueVideoTask.observeField("state", "onUpdateContinueVideoItemsComplete")
-    else if homesection6 = "resumeaudio"
-        m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
-        m.LoadContinueAudioTask.control = "RUN"
-        m.LoadContinueAudioTask.observeField("state", "onUpdateContinueAudioItemsComplete")
-    else if homesection6 = "resumebook"
-        m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
-        m.LoadContinueBookTask.control = "RUN"
-        m.LoadContinueBookTask.observeField("state", "onUpdateContinueBookItemsComplete")
-    else if homesection6 = "nextup"
-        m.LoadNextUpTask.observeField("content", "updateNextUpItems")
-        m.LoadNextUpTask.control = "RUN"
-        m.LoadNextUpTask.observeField("state", "onUpdateNextUpItemsComplete")
-    else if homesection6 = "livetv"
-        m.LoadOnNowTask.observeField("content", "updateOnNowItems")
-        m.LoadOnNowTask.control = "RUN"
-        m.LoadOnNowTask.observeField("state", "onUpdateOnNowItemsComplete")
-    end if
-
-    m.top.content = content
+        if homesection = "smalllibrarytiles"
+            m.LoadMyMediaTask.observeField("content", "updateMyMedia")
+            m.LoadMyMediaTask.control = "RUN"
+            m.LoadMyMediaTask.observeField("state", "onUpdateMyMediaComplete")
+        else if homesection = "librarybuttons"
+            m.LoadMyMediaSmallTask.observeField("content", "updateMyMediaSmall")
+            m.LoadMyMediaSmallTask.control = "RUN"
+            m.LoadMyMediaSmallTask.observeField("state", "onUpdateMyMediaSmallComplete")
+        else if homesection = "latestmedia"
+            m.LoadLatestMediaTask.observeField("content", "updateLatestMedia")
+            m.LoadLatestMediaTask.control = "RUN"
+            m.LoadLatestMediaTask.observeField("state", "onUpdateLatestMediaComplete")
+        else if homesection = "resume"
+            m.LoadContinueVideoTask.observeField("content", "updateContinueVideoItems")
+            m.LoadContinueVideoTask.control = "RUN"
+            m.LoadContinueVideoTask.observeField("state", "onUpdateContinueVideoItemsComplete")
+        else if homesection = "resumeaudio"
+            m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
+            m.LoadContinueAudioTask.control = "RUN"
+            m.LoadContinueAudioTask.observeField("state", "onUpdateContinueAudioItemsComplete")
+        else if homesection = "resumebook"
+            m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
+            m.LoadContinueBookTask.control = "RUN"
+            m.LoadContinueBookTask.observeField("state", "onUpdateContinueBookItemsComplete")
+        else if homesection = "nextup"
+            m.LoadNextUpTask.observeField("content", "updateNextUpItems")
+            m.LoadNextUpTask.control = "RUN"
+            m.LoadNextUpTask.observeField("state", "onUpdateNextUpItemsComplete")
+        else if homesection = "livetv"
+            m.LoadOnNowTask.observeField("content", "updateOnNowItems")
+            m.LoadOnNowTask.control = "RUN"
+            m.LoadOnNowTask.observeField("state", "onUpdateOnNowItemsComplete")
+        else
+            removeHoldingChild(i + 1)
+        end if
+        m.top.content = content
+    end for
 
     ' consider home screen loaded when above rows are loaded
     if m.global.app_loaded = false
@@ -393,12 +132,12 @@ end sub
 
 sub onUpdateMyMediaComplete(event)
     data = event.GetData()
-    ignores = m.top.sectionIgnores
+    ignores = m.sectionIgnores
     if data = "stop"
         itemData = m.LoadMyMediaTask.content
         if itemData.count() = 0
             ignores.push("smalllibrarytiles")
-            m.top.sectionIgnores = ignores
+            m.sectionIgnores = ignores
             section = getHomeSectionInt("smalllibrarytiles")
             index_section = section + 1
             row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
@@ -414,12 +153,12 @@ end sub
 
 sub onUpdateMyMediaSmallComplete(event)
     data = event.GetData()
-    ignores = m.top.sectionIgnores
+    ignores = m.sectionIgnores
     if data = "stop"
         itemData = m.LoadMyMediaSmallTask.content
         if itemData.count() = 0
             ignores.push("librarybuttons")
-            m.top.sectionIgnores = ignores
+            m.sectionIgnores = ignores
             section = getHomeSectionInt("librarybuttons")
             index_section = section + 1
             row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
@@ -435,12 +174,12 @@ end sub
 
 sub onUpdateLatestMediaComplete(event)
     data = event.GetData()
-    ignores = m.top.sectionIgnores
+    ignores = m.sectionIgnores
     if data = "stop"
         itemData = m.LoadLatestMediaTask.content
         if itemData.count() = 0
             ignores.push("latestmedia")
-            m.top.sectionIgnores = ignores
+            m.sectionIgnores = ignores
             section = getHomeSectionInt("latestmedia")
             index_section = section + 1
             row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
@@ -456,12 +195,12 @@ end sub
 
 sub onUpdateContinueVideoItemsComplete(event)
     data = event.GetData()
-    ignores = m.top.sectionIgnores
+    ignores = m.sectionIgnores
     if data = "stop"
         itemData = m.LoadContinueVideoTask.content
         if itemData.count() = 0
             ignores.push("resume")
-            m.top.sectionIgnores = ignores
+            m.sectionIgnores = ignores
             section = getHomeSectionInt("resume")
             index_section = section + 1
             row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
@@ -477,12 +216,12 @@ end sub
 
 sub onUpdateContinueAudioItemsComplete(event)
     data = event.GetData()
-    ignores = m.top.sectionIgnores
+    ignores = m.sectionIgnores
     if data = "stop"
         itemData = m.LoadContinueAudioTask.content
         if itemData.count() = 0
             ignores.push("resumeaudio")
-            m.top.sectionIgnores = ignores
+            m.sectionIgnores = ignores
             section = getHomeSectionInt("resumeaudio")
             index_section = section + 1
             row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
@@ -498,12 +237,12 @@ end sub
 
 sub onUpdateContinueBookItemsComplete(event)
     data = event.GetData()
-    ignores = m.top.sectionIgnores
+    ignores = m.sectionIgnores
     if data = "stop"
         itemData = m.LoadContinueBookTask.content
         if itemData.count() = 0
             ignores.push("resumebook")
-            m.top.sectionIgnores = ignores
+            m.sectionIgnores = ignores
             section = getHomeSectionInt("resumebook")
             index_section = section + 1
             row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
@@ -519,12 +258,12 @@ end sub
 
 sub onUpdateNextUpItemsComplete(event)
     data = event.GetData()
-    ignores = m.top.sectionIgnores
+    ignores = m.sectionIgnores
     if data = "stop"
         itemData = m.LoadNextUpTask.content
         if itemData.count() = 0
             ignores.push("nextup")
-            m.top.sectionIgnores = ignores
+            m.sectionIgnores = ignores
             section = getHomeSectionInt("nextup")
             index_section = section + 1
             row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
@@ -540,12 +279,12 @@ end sub
 
 sub onUpdateOnNowItemsComplete(event)
     data = event.GetData()
-    ignores = m.top.sectionIgnores
+    ignores = m.sectionIgnores
     if data = "stop"
         itemData = m.LoadOnNowTask.content
         if itemData.count() = 0
             ignores.push("livetv")
-            m.top.sectionIgnores = ignores
+            m.sectionIgnores = ignores
             section = getHomeSectionInt("livetv")
             index_section = section + 1
             row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
@@ -595,7 +334,7 @@ end sub
 
 sub rebuildItemArray()
     section_count = getHomeSectionCount()
-    ignores = m.top.sectionIgnores
+    ignores = m.sectionIgnores
     m.top.rowItemSize = []
     newSizeArray = []
     homesections = []
@@ -690,8 +429,8 @@ sub updateMyMedia()
 
     itemSize = [464, 261]
 
-    latest_media_int = m.top.latestMediaInt
-    latestMediaCount = m.top.latestMediaCount - 1
+    latest_media_int = m.latestMediaInt
+    latestMediaCount = m.latestMediaCount - 1
     if latest_media_int < section
         if latestMediaCount > 0
             section = section + latestMediaCount
@@ -722,8 +461,8 @@ sub updateMyMediaSmall()
 
     itemSize = [464, 100]
 
-    latest_media_int = m.top.latestMediaInt
-    latestMediaCount = m.top.latestMediaCount - 1
+    latest_media_int = m.latestMediaInt
+    latestMediaCount = m.latestMediaCount - 1
     if latest_media_int < section
         if latestMediaCount > 0
             section = section + latestMediaCount
@@ -791,7 +530,7 @@ sub updateLatestMedia()
             end for
         end for
     end if
-    m.top.latestMediaCount = latest_count
+    m.latestMediaCount = latest_count
 end sub
 
 sub updateContinueVideoItems()
@@ -802,8 +541,8 @@ sub updateContinueVideoItems()
 
     itemSize = [464, 331]
 
-    latest_media_int = m.top.latestMediaInt
-    latestMediaCount = m.top.latestMediaCount - 1
+    latest_media_int = m.latestMediaInt
+    latestMediaCount = m.latestMediaCount - 1
     if latest_media_int < section
         if latestMediaCount > 0
             section = section + latestMediaCount
@@ -844,8 +583,8 @@ sub updateContinueAudioItems()
 
     itemSize = [464, 331]
 
-    latest_media_int = m.top.latestMediaInt
-    latestMediaCount = m.top.latestMediaCount - 1
+    latest_media_int = m.latestMediaInt
+    latestMediaCount = m.latestMediaCount - 1
     if latest_media_int < section
         if latestMediaCount > 0
             section = section + latestMediaCount
@@ -885,8 +624,8 @@ sub updateContinueBookItems()
 
     itemSize = [200, 270]
 
-    latest_media_int = m.top.latestMediaInt
-    latestMediaCount = m.top.latestMediaCount - 1
+    latest_media_int = m.latestMediaInt
+    latestMediaCount = m.latestMediaCount - 1
     if latest_media_int < section
         if latestMediaCount > 0
             section = section + latestMediaCount
@@ -928,8 +667,8 @@ sub updateNextUpItems()
     homeRows = m.top.content
     section = getHomeSectionInt("nextup")
 
-    latest_media_int = m.top.latestMediaInt
-    latestMediaCount = m.top.latestMediaCount - 1
+    latest_media_int = m.latestMediaInt
+    latestMediaCount = m.latestMediaCount - 1
     if latest_media_int < section
         if latestMediaCount > 0
             section = section + latestMediaCount
@@ -1004,8 +743,8 @@ sub updateOnNowItems()
     homeRows = m.top.content
     section = getHomeSectionInt("livetv")
 
-    latest_media_int = m.top.latestMediaInt
-    latestMediaCount = m.top.latestMediaCount - 1
+    latest_media_int = m.latestMediaInt
+    latestMediaCount = m.latestMediaCount - 1
     if latest_media_int < section
         if latestMediaCount > 0
             section = section + latestMediaCount

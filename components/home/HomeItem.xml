@@ -2,7 +2,7 @@
 <component name="HomeItem" extends="Group">
   <children>
     <Rectangle id="backdrop" width="464" height="270" translation="[8,0]" />
-    <Poster id="itemIcon" width="100" height="100" translation="[0,0]" loadDisplayMode="scaleToFit" />
+    <Poster id="itemIcon" width="100" height="100" translation="[190,85]" loadDisplayMode="scaleToFit" />
     <Poster id="itemPoster" width="464" height="270" translation="[0,0]" loadDisplayMode="scaleToFit" />
     <ScrollingLabel id="itemText" horizAlign="center" vertAlign="center" font="font:SmallBoldSystemFont" height="64" maxWidth="456" translation="[8,280]" repeatCount="0" />
     <Label id="itemTextExtra" horizAlign="left" vertAlign="center" font="font:SmallBoldSystemFont" height="32" width="456" translation="[8,319]" visible="true" color="#777777FF" />

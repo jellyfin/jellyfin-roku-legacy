@@ -3,12 +3,6 @@
   <interface>
     <field id="selectedItem" type="node" alwaysNotify="true" />
     <field id="userConfig" type="assocarray" />
-    <field id="latestMediaCount" type="integer" />
-    <field id="latestMediaInt" type="integer" />
-    <field id="latestMediaNode" type="string" />
-    <field id="sectionCount" type="integer" />
-    <field id="sectionIgnores" type="array" />
-    <field id="completed" type="bool" value="false" />
     <field id="quickPlayNode" type="node" alwaysNotify="true" />
     <function name="updateHomeRows" />
     <function name="loadLibraries" />

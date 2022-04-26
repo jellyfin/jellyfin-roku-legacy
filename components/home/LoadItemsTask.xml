@@ -8,7 +8,6 @@
     <field id="metadata" type="assocarray" />
     <field id="peopleList" type="array" />
     <field id="content" type="array" />
-    <field id="completed" type="bool" />
   </interface>
   <script type="text/brightscript" uri="LoadItemsTask.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
