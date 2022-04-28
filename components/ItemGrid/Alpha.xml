@@ -11,6 +11,9 @@
         itemSize="[28,28]"
         numRows="27"
         textHorizAlign="center"
+        focusBitmapUri = "pkg:/images/white.9.png"
+        focusBitmapBlendColor = "#FFFFFF"
+        focusFootprintBlendColor = "#666666"
     >
     <ContentNode id="alphatext" role = "content" >
       <ContentNode title = "#" />
