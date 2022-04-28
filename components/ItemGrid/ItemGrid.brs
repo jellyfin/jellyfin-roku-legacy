@@ -75,6 +75,12 @@ sub loadInitialItems()
         m.sortAscending = false
     end if
 
+    if m.top.AlphaSelected = "#"
+        m.top.AlphaSelected = "%23"
+    end if
+    m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
+    m.emptyText.visible = false
+
     updateTitle()
 
     m.loadItemsTask.itemId = m.top.parentItem.Id
@@ -82,12 +88,6 @@ sub loadInitialItems()
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
     m.loadItemsTask.startIndex = 0
-
-    if m.top.AlphaSelected = "#"
-        m.top.AlphaSelected = "%23"
-    end if
-    m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
-    m.emptyText.visible = false
 
     if m.top.parentItem.collectionType = "movies"
         m.loadItemsTask.itemType = "Movie"
@@ -510,6 +510,9 @@ sub updateTitle()
     else if m.filter = "Favorites"
         m.top.overhangTitle = m.top.parentItem.title + " (Favorites)"
     else
+        m.top.overhangTitle = m.top.parentItem.title + " (Filtered)"
+    end if
+    if m.top.AlphaSelected <> ""
         m.top.overhangTitle = m.top.parentItem.title + " (Filtered)"
     end if
 end sub
