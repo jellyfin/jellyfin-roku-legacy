@@ -278,6 +278,8 @@ sub onItemFocused()
     focusedRow = CInt(m.itemGrid.itemFocused / m.itemGrid.numColumns) + 1
 
     itemInt = m.itemGrid.itemFocused
+    m.actInt = m.itemGrid.itemFocused + 1
+    m.top.overhangTitle = m.top.parentItem.title + StrI(m.actInt) + " of" + StrI(m.loadItemsTask.totalRecordCount)
 
     ' If no selected item, set background to parent backdrop
     if itemInt = -1
@@ -481,8 +483,8 @@ sub updateTitle()
     if m.filter = "All"
         m.top.overhangTitle = m.top.parentItem.title
     else if m.filter = "Favorites"
-        m.top.overhangTitle = m.top.parentItem.title + " (Favorites)"
+        m.top.overhangTitle = m.top.parentItem.title + " (Favorites) " + StrI(m.actInt) + " of " + StrI(m.loadItemsTask.totalRecordCount)
     else
-        m.top.overhangTitle = m.top.parentItem.title + " (Filtered)"
+        m.top.overhangTitle = m.top.parentItem.title + " (Filtered)" + StrI(m.actInt) + " of " + StrI(m.loadItemsTask.totalRecordCount)
     end if
 end sub
