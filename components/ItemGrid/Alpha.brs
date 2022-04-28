@@ -19,7 +19,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             m.top.itemAlphaSelected = ""
             m.Alphamenu.focusFootprintBitmapUri = ""
         else
-            m.Alphamenu.focusFootprintBitmapUri = "pkg:/images/white.9.png"
+            m.Alphamenu.focusFootprintBitmapUri = "pkg:/images/white.png"
             m.top.itemAlphaSelected = child.title
         end if
         return true
