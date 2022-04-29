@@ -75,9 +75,6 @@ sub loadInitialItems()
         m.sortAscending = false
     end if
 
-    if m.top.AlphaSelected = "#"
-        m.top.AlphaSelected = "%23"
-    end if
     m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
     m.emptyText.visible = false
 
