@@ -150,6 +150,9 @@ sub LoadUserPreferences()
                 set_user_setting("display.homesection" + i.ToStr(), jsonResponse.CustomPrefs["homesection" + i.ToStr()])
             end if
         end for
+        if jsonResponse.CustomPrefs["homesection0"] = invalid
+            setHomeScreenDefaults()
+        end if
     else
         setHomeScreenDefaults()
     end if

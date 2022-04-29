@@ -508,7 +508,7 @@ sub updateLatestMedia()
             end for
         end if
     end if
-    if filteredOrderedViews <> invalid
+    if filteredOrderedViews.count() <> 0
         for i = 0 to filteredOrderedViews.count() - 1
             for each lib in filteredLatest
                 if filteredOrderedViews[i] = lib.id
@@ -528,6 +528,24 @@ sub updateLatestMedia()
                     end if
                 end if
             end for
+        end for
+    else
+        latest_count = 0
+        for each lib in filteredLatest
+            if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv"
+                loadLatest = createObject("roSGNode", "LoadItemsTask")
+                loadLatest.itemsToLoad = "latest"
+                loadLatest.itemId = lib.id
+                loadLatest.nodeNumber = latest_count
+                latest_count = latest_count + 1
+
+                metadata = { "title": lib.name }
+                metadata.Append({ "contentType": lib.json.CollectionType })
+                loadLatest.metadata = metadata
+
+                loadLatest.observeField("content", "updateLatestItems")
+                loadLatest.control = "RUN"
+            end if
         end for
     end if
     m.latestMediaCount = latest_count
