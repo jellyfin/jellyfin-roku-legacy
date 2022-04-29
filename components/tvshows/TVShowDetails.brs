@@ -135,17 +135,22 @@ function round(f as float) as integer
 end function
 
 function onKeyEvent(key as string, press as boolean) as boolean
+    if not press then return false
+
+    overview = m.top.findNode("overview")
     topGrp = m.top.findNode("seasons")
     bottomGrp = m.top.findNode("extrasGrid")
 
-
-    if key = "down" and topGrp.isinFocusChain()
+    if key = "down" and overview.hasFocus()
+        topGrp.setFocus(true)
+        return true
+    else if key = "down" and topGrp.hasFocus()
         bottomGrp.setFocus(true)
         m.top.findNode("VertSlider").reverse = false
         m.top.findNode("extrasFader").reverse = false
         m.top.findNode("pplAnime").control = "start"
         return true
-    else if key = "up" and bottomGrp.isinFocusChain()
+    else if key = "up" and bottomGrp.hasFocus()
         if bottomGrp.itemFocused = 0
             m.top.findNode("VertSlider").reverse = true
             m.top.findNode("extrasFader").reverse = true
@@ -153,6 +158,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
             topGrp.setFocus(true)
             return true
         end if
+    else if key = "up" and topGrp.hasFocus()
+        overview.setFocus(true)
+        return true
     end if
+
     return false
 end function
