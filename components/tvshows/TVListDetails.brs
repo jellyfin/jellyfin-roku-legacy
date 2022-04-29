@@ -30,23 +30,34 @@ sub itemContentChanged()
 
     videoIdx = invalid
     audioIdx = invalid
+
     if itemData.MediaStreams <> invalid
         for i = 0 to itemData.MediaStreams.Count() - 1
             if itemData.MediaStreams[i].Type = "Video" and videoIdx = invalid
                 videoIdx = i
-                m.top.findNode("video_codec").text = tr("Video") + ": " + itemData.mediaStreams[i].DisplayTitle
+                m.top.findNode("video_codec").text = tr("Video") + ": " + itemData.mediaStreams[videoIdx].DisplayTitle
             else if itemData.MediaStreams[i].Type = "Audio" and audioIdx = invalid
                 if item.selectedAudioStreamIndex > 1
                     audioIdx = item.selectedAudioStreamIndex
                 else
                     audioIdx = i
                 end if
+                <<<<<< < HEAD
+                = = = = = = =
+                m.top.findNode("audio_codec").text = tr("Audio") + ": " + itemData.mediaStreams[audioIdx].DisplayTitle
+                >>>>>> > d932961 (Merge fixup)
             end if
             if videoIdx <> invalid and audioIdx <> invalid then exit for
         end for
     end if
 
-    DisplayAudioAvailable(itemData.mediaStreams)
+    m.top.findNode("video_codec").visible = videoIdx <> invalid
+    if audioIdx <> invalid
+        m.top.findNode("audio_codec").visible = true
+        DisplayAudioAvailable(itemData.mediaStreams)
+    else
+        m.top.findNode("audio_codec").visible = false
+    end if
 end sub
 
 sub DisplayAudioAvailable(streams)
