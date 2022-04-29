@@ -121,6 +121,16 @@ telnet ${ROKU_DEV_TARGET} 8085
 
 To exit telnet: `CTRL + ]` and then type `quit + ENTER`
 
+### Committing
+
+Before commiting your code, please run:
+
+```bash
+make prep_commit
+```
+
+This will format your code and run the CI checks locally to ensure you will pass the CI tests.
+
 ### (Optional) Update Images
 
 This repo already contains all necessary images for the app. This script only needs to be run when the [official Jellyfin images](https://github.com/jellyfin/jellyfin-ux) are changed to allow us to update the repo images.

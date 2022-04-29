@@ -34,7 +34,7 @@
     </message>
     <message>
         <source>Login attempt failed.</source>
-        <translation>Inicio de sesión falló.</translation>
+        <translation>Falló el inicio de sesión.</translation>
     </message>
     <message>
         <source>OK</source>
