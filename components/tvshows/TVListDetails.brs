@@ -1,6 +1,9 @@
 sub init()
     m.title = m.top.findNode("title")
     m.title.text = tr("Loading...")
+    m.overview = m.top.findNode("overview")
+
+    m.deviceInfo = CreateObject("roDeviceInfo")
 end sub
 
 sub itemContentChanged()
@@ -11,9 +14,9 @@ sub itemContentChanged()
     else
         indexNumber = ""
     end if
-    m.top.findNode("title").text = indexNumber + item.title
+    m.title.text = indexNumber + item.title
     m.top.findNode("poster").uri = item.posterURL
-    m.top.findNode("overview").text = item.overview
+    m.overview.text = item.overview
 
     if type(itemData.RunTimeTicks) = "LongInteger"
         m.top.findNode("runtime").text = stri(getRuntime()).trim() + " mins"
@@ -65,3 +68,15 @@ function getEndTime() as string
 
     return formatTime(date)
 end function
+
+sub focusChanged()
+    if m.top.itemHasFocus = true
+        ' text to speech for accessibility
+        if m.deviceInfo.IsAudioGuideEnabled() = true
+            txt2Speech = CreateObject("roTextToSpeech")
+            txt2Speech.Flush()
+            txt2Speech.Say(m.title.text)
+            txt2Speech.Say(m.overview.text)
+        end if
+    end if
+end sub

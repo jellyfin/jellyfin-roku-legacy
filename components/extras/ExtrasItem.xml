@@ -2,31 +2,9 @@
 <component name="ExtrasItem" extends="JFGroup">
   <interface>
     <field id="itemContent" type="node" onChange="showContent" />
+    <field id="itemHasFocus" type="boolean" onChange="focusChanged" />
   </interface>
-  <script type="text/brightscript">
-  <![CDATA[
-    function init() as void
-      m.posterImg = m.top.findNode("posterImg")
-      m.name = m.top.findNode("pLabel")
-      m.role = m.top.findNode("subTitle")
-    end function
-
-    sub showContent()
-      if m.top.itemContent <> Invalid
-        cont = m.top.itemContent
-        m.name.text = cont.labelText
-        m.name.maxWidth = cont.imageWidth
-        m.role.Width = cont.imageWidth
-        m.posterImg.uri = cont.posterUrl
-        m.posterImg.width = cont.imageWidth
-        m.role.Text = cont.subTitle
-      else
-        m.role.text = "Who??"
-        m.posterImg.uri = "pkg:/images/baseline_person_white_48dp.png"
-      end if
-    end sub
-  ]]>
-  </script>
+  <script type="text/brightscript" uri="ExtrasItem.brs" />
   <children>
     <LayoutGroup layoutDirection="vert" >
       <Poster id="posterImg" width="234" height="300" translation="[8,243]" failedBitmapUri="pkg:/images/baseline_person_white_48dp.png" />
