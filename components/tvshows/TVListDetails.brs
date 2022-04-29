@@ -47,12 +47,18 @@ sub init()
                     else
                         audioIdx = i
                     end if
+                    m.top.findNode("audio_codec").text = tr("Audio") + ": " + itemData.mediaStreams[audioIdx].DisplayTitle
                 end if
-                if videoIdx <> invalid and audioIdx <> invalid then exit for
             end for
         end if
 
-        DisplayAudioAvailable(itemData.mediaStreams)
+        m.top.findNode("video_codec").visible = videoIdx <> invalid
+        if audioIdx <> invalid
+            m.top.findNode("audio_codec").visible = true
+            DisplayAudioAvailable(itemData.mediaStreams)
+        else
+            m.top.findNode("audio_codec").visible = false
+        end if
     end sub
 
     sub DisplayAudioAvailable(streams)
@@ -62,41 +68,36 @@ sub init()
             if streams[i].Type = "Audio"
                 count++
             end if
-        end for
 
-        if count > 1
-            m.top.findnode("audio_codec_count").text = "+" + stri(count - 1).trim()
-        end if
+        end sub
 
-    end sub
+        function getRuntime() as integer
+            itemData = m.top.itemContent.json
 
-    function getRuntime() as integer
-        itemData = m.top.itemContent.json
+            ' A tick is .1ms, so 1/10,000,000 for ticks to seconds,
+            ' then 1/60 for seconds to minutess... 1/600,000,000
+            return int(itemData.RunTimeTicks / 600000000.0)
+        end function
 
-        ' A tick is .1ms, so 1/10,000,000 for ticks to seconds,
-        ' then 1/60 for seconds to minutess... 1/600,000,000
-        return int(itemData.RunTimeTicks / 600000000.0)
-    end function
+        function getEndTime() as string
+            itemData = m.top.itemContent.json
+            date = CreateObject("roDateTime")
+            duration_s = int(itemData.RunTimeTicks / 10000000.0)
+            date.fromSeconds(date.asSeconds() + duration_s)
+            date.toLocalTime()
 
-    function getEndTime() as string
-        itemData = m.top.itemContent.json
-        date = CreateObject("roDateTime")
-        duration_s = int(itemData.RunTimeTicks / 10000000.0)
-        date.fromSeconds(date.asSeconds() + duration_s)
-        date.toLocalTime()
+            return formatTime(date)
+        end function
 
-        return formatTime(date)
-    end function
-
-    sub focusChanged()
-        if m.top.itemHasFocus = true
-            ' text to speech for accessibility
-            if m.deviceInfo.IsAudioGuideEnabled() = true
-                txt2Speech = CreateObject("roTextToSpeech")
-                txt2Speech.Flush()
-                txt2Speech.Say(m.title.text)
-                txt2Speech.Say(m.overview.text)
+        sub focusChanged()
+            if m.top.itemHasFocus = true
+                ' text to speech for accessibility
+                if m.deviceInfo.IsAudioGuideEnabled() = true
+                    txt2Speech = CreateObject("roTextToSpeech")
+                    txt2Speech.Flush()
+                    txt2Speech.Say(m.title.text)
+                    txt2Speech.Say(m.overview.text)
+                end if
             end if
-        end if
-    end sub
-    
+        end sub
+        
