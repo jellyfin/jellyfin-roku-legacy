@@ -88,7 +88,7 @@ sub Main (args as dynamic) as void
             itemNode = reportingNode.quickPlayNode
             if itemNode = invalid or itemNode.id = "" then return
             if itemNode.type = "Episode" or itemNode.type = "Movie" or itemNode.type = "Video"
-                if itemNode.type = "Episode" and itemNode.selectedAudioStreamIndex > 1
+                if itemNode.type = "Episode" and itemNode.selectedAudioStreamIndex <> invalid and itemNode.selectedAudioStreamIndex > 1
                     video = CreateVideoPlayerGroup(itemNode.id, invalid, itemNode.selectedAudioStreamIndex)
                 else
                     video = CreateVideoPlayerGroup(itemNode.id)
@@ -107,7 +107,7 @@ sub Main (args as dynamic) as void
                 ' play episode
                 ' todo: create an episode page to link here
                 video_id = selectedItem.id
-                if selectedItem.selectedAudioStreamIndex > 1
+                if selectedItem.selectedAudioStreamIndex <> invalid and selectedItem.selectedAudioStreamIndex > 1
                     video = CreateVideoPlayerGroup(video_id, invalid, selectedItem.selectedAudioStreamIndex)
                 else
                     video = CreateVideoPlayerGroup(video_id)
@@ -170,7 +170,7 @@ sub Main (args as dynamic) as void
             ' If you select a TV Episode from ANYWHERE, follow this flow
             node = getMsgPicker(msg, "picker")
             video_id = node.id
-            if node.selectedAudioStreamIndex > 1
+            if node.selectedAudioStreamIndex <> invalid and node.selectedAudioStreamIndex > 1
                 video = CreateVideoPlayerGroup(video_id, invalid, node.selectedAudioStreamIndex)
             else
                 video = CreateVideoPlayerGroup(video_id)

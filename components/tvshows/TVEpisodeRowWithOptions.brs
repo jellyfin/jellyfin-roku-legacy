@@ -35,7 +35,7 @@ end sub
 '
 'Check if options updated and any reloading required
 sub audioOptionsClosed()
-    if m.tvListOptions.audioStreamIndex <> m.top.selectedAudioStreamIndex
+    if m.currentSelected <> invalid and m.tvListOptions.audioStreamIndex <> m.top.selectedAudioStreamIndex
         m.top.objects.items[m.currentSelected].selectedAudioStreamIndex = m.tvListOptions.audioStreamIndex
     end if
 end sub
