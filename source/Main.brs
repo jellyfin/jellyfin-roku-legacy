@@ -10,6 +10,13 @@ sub Main (args as dynamic) as void
     ' Set global constants
     setConstants()
 
+    ' Temporary code to migrate MPEG2 setting from device setting to user setting
+    ' Added for 1.4.13 release and should probably be removed for 1.4.15
+    if get_setting("playback.mpeg2") <> invalid and registry_read("playback.mpeg2", get_setting("active_user")) = invalid
+        set_user_setting("playback.mpeg2", get_setting("playback.mpeg2"))
+    end if
+    ' End Temporary code
+
     m.port = CreateObject("roMessagePort")
     m.screen.setMessagePort(m.port)
     m.scene = m.screen.CreateScene("JFScene")
@@ -274,16 +281,6 @@ sub Main (args as dynamic) as void
                 SignOut()
                 sceneManager.callFunc("clearScenes")
                 goto app_start
-            else if button.id = "play_mpeg2"
-                playMpeg2 = get_setting("playback.mpeg2")
-                if playMpeg2 = "true"
-                    playMpeg2 = "false"
-                    button.title = tr("MPEG2 Support: Off")
-                else
-                    playMpeg2 = "true"
-                    button.title = tr("MPEG2 Support: On")
-                end if
-                set_setting("playback.mpeg2", playMpeg2)
             else if button.id = "settings"
                 ' Exit out of the side panel
                 panel = group.findNode("options")
