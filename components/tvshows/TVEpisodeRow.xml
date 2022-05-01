@@ -3,6 +3,7 @@
   <interface>
     <field id="objects" type="assocarray" onChange="setupRows" />
     <field id="escapeButton" type="string" alwaysNotify="true" />
+    <field id="doneLoading" type="boolean" />
   </interface>
   <script type="text/brightscript" uri="TVEpisodeRow.brs" />
 </component>
