@@ -3,6 +3,7 @@
   <interface>
     <function name="pushScene" />
     <function name="popScene" />
+    <function name="settings" />
     <function name="getActiveScene" />
     <function name="clearScenes" />
     <function name="resetTime" />

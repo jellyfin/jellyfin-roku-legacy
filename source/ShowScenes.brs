@@ -274,6 +274,13 @@ function CreateHomeGroup()
     o.observeField("optionSelected", m.port)
     new_options.push(o)
 
+    ' Add temporary settings option to menu
+    o = CreateObject("roSGNode", "OptionsButton")
+    o.title = "Settings"
+    o.id = "settings"
+    o.observeField("optionSelected", m.port)
+    new_options.push(o)
+
     ' And a profile button
     user_node = CreateObject("roSGNode", "OptionsData")
     user_node.id = "active_user"

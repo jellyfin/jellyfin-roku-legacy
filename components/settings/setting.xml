@@ -1,0 +1,5 @@
+<component name="Setting" extends="ContentNode">
+    <interface>
+        <field id="type" type="string" />
+    </interface>
+</component>

@@ -284,6 +284,16 @@ sub Main (args as dynamic) as void
                     button.title = tr("MPEG2 Support: On")
                 end if
                 set_setting("playback.mpeg2", playMpeg2)
+            else if button.id = "settings"
+                ' Exit out of the side panel
+                panel = group.findNode("options")
+                panel.visible = false
+                if group.lastFocus <> invalid
+                    group.lastFocus.setFocus(true)
+                else
+                    group.setFocus(true)
+                end if
+                sceneManager.callFunc("settings")
             end if
         else if isNodeEvent(msg, "selectSubtitlePressed")
             node = m.scene.focusedChild
