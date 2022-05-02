@@ -31,7 +31,7 @@
                itemSpacings="[50]"
              >
 
-                <ScrollingLabel font="font:LargeSystemFont" id="settingTitle" width="750" />
+                <ScrollingLabel font="font:LargeSystemFont" id="settingTitle" maxWidth="750" />
 
                 <Label id="settingDesc" width="750" wrap = "true" />
 

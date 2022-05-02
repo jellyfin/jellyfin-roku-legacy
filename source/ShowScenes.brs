@@ -258,7 +258,7 @@ function CreateHomeGroup()
         new_options.push(o)
     end for
 
-    ' Add temporary settings option to menu
+    ' Add settings option to menu
     o = CreateObject("roSGNode", "OptionsButton")
     o.title = "Settings"
     o.id = "settings"
