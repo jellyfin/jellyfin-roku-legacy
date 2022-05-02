@@ -279,7 +279,6 @@ sub onItemFocused()
     focusedRow = m.itemGrid.currFocusRow
 
     itemInt = m.itemGrid.itemFocused
-    print m.Loading
     ' If no selected item, set background to parent backdrop
     if itemInt = -1
         return
