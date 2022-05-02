@@ -101,7 +101,15 @@ sub SetUpVideoOptions(streams)
 
     for i = 0 to streams.Count() - 1
         if streams[i].VideoType = "VideoFile"
-            videos.push({ "Title": streams[i].Name, "Description": tr("Video"), "Selected": m.top.selectedVideoStreamId = streams[i].id, "StreamID": streams[i].id, "video_codec": streams[i].mediaStreams[0].displayTitle })
+            codec = ""
+            if streams[i].mediaStreams <> invalid and streams[i].mediaStreams.Count() > 0 then codec = streams[i].mediaStreams[0].displayTitle
+            videos.push({
+                "Title": streams[i].Name,
+                "Description": tr("Video"),
+                "Selected": m.top.selectedVideoStreamId = streams[i].id,
+                "StreamID": streams[i].id,
+                "video_codec": codec
+            })
         end if
     end for
 

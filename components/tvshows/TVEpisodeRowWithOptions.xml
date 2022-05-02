@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="TVEpisodeRowWithOptions" extends="Group">
+  <children>
+    <TVEpisodeRow id="tvEpisodeRow" visible="true" />
+    <TVListOptions id="tvListOptions" visible="false" />
+  </children>
+  <interface>
+    <field id="objects" type="assocarray" onChange="setupRows"/>
+    <field id="itemSelected" type="integer" />
+    <field id="doneLoading" type="boolean" />
+  </interface>
+  <script type="text/brightscript" uri="TVEpisodeRowWithOptions.brs" />
+</component>
