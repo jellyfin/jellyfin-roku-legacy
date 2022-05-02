@@ -10,6 +10,7 @@
     <field id="overview" type="string" />
     <field id="type" type="string" value="Episode" />
     <field id="json" type="assocarray" onChange="setFields" />
+    <field id="selectedAudioStreamIndex" type="integer" />
   </interface>
   <script type="text/brightscript" uri="TVEpisodeData.brs" />
 </component>
