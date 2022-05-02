@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="SearchResults" extends="JFGroup">
   <children>
-    <SearchBox id="SearchBox" visible="true" translation="[300, 300]" />
-    <SearchRow id="SearchSelect" visible="true" translation="[1200, 0]" />
-    <Spinner id = "SearchSpinner"  visible="false" translation="[1200, 0]"/>    
-
-    <OptionsSlider id="options" />
+  <Rectangle width="1920" height="1080" color="#000000" opacity="0.75" />
+    <LayoutGroup layoutDirection="horiz"  id="SearchAlphabox" translation="[0, 150]">
+      <SearchBox id="SearchBox" visible="true"   />
+    </LayoutGroup>
+      <LayoutGroup layoutDirection="horiz"  id="SearchAlphabox" translation="[800, 150]" >
+        <Label id = "Search_Help_text" text="You can search for Titles, People, Live TV Channels and more"/>
+        <SearchRow id="SearchSelect" visible="true"/>
+      </LayoutGroup>    
+      <OptionsSlider id="options" />
+  <Spinner id = "SearchSpinner"  visible="true" translation="[1250, 500]"/>
   </children>
   <interface>
     <field id="query" type="string" alwaysNotify="true" />

@@ -180,12 +180,10 @@ sub Main (args as dynamic) as void
             end if
         else if isNodeEvent(msg, "search_value")
             query = msg.getRoSGNode().search_value
-            print "Main.brs Query = " query
             group.findNode("SearchBox").visible = true
             options = group.findNode("SearchSelect")
             options.visible = true
             'options.setFocus(true)
-            print "Main.brs Loading search data"
             group.findNode("SearchSpinner").visible = true
             'dialog = createObject("roSGNode", "ProgressDialog")
             'dialog.title = tr("Loading Search Data")
