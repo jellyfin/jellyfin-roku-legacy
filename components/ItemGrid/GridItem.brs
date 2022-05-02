@@ -10,6 +10,9 @@ sub init()
 
     m.itemText.translation = [0, m.itemPoster.height + 7]
 
+    m.alwaysShowTitles = get_user_setting("itemgrid.alwaysShowTitles")
+    m.itemText.visible = m.alwaysShowTitles
+
     'Parent is MarkupGrid and it's parent is the ItemGrid
     topParent = m.top.GetParent().GetParent()
     'Get the imageDisplayMode for these grid items
@@ -77,10 +80,10 @@ end sub
 sub focusChanged()
 
     if m.top.itemHasFocus = true
-        ' m.itemText.visible = true
+        m.itemText.visible = true
         m.itemText.repeatCount = -1
     else
-        'm.itemText.visible = false
+        m.itemText.visible = m.alwaysShowTitles
         m.itemText.repeatCount = 0
     end if
 
