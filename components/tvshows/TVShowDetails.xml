@@ -17,6 +17,11 @@
           <Label id="tagline" />
           <Label id="overview" wrap="true" width="1400" maxLines="4" />
           <Label id="history" />
+          <ButtonGroupHoriz id="buttons" itemSpacings="[10]">
+            <Button text="Play" id="play-button" iconUri="" focusedIconUri="" />
+            <Button text="Shuffle" id="shuffle-button" iconUri="" focusedIconUri=""  />
+            <Button text="Favorite" id="favorite-button" iconUri="" focusedIconUri="" />
+        </ButtonGroupHoriz>
         </LayoutGroup>
       </LayoutGroup>
       <TVSeasonRow id="seasons" />
