@@ -180,16 +180,18 @@ sub Main (args as dynamic) as void
             end if
         else if isNodeEvent(msg, "search_value")
             query = msg.getRoSGNode().search_value
-            group.findNode("SearchBox").visible = false
+            print "Main.brs Query = " query
+            group.findNode("SearchBox").visible = true
             options = group.findNode("SearchSelect")
             options.visible = true
-            options.setFocus(true)
-
-            dialog = createObject("roSGNode", "ProgressDialog")
-            dialog.title = tr("Loading Search Data")
-            m.scene.dialog = dialog
+            'options.setFocus(true)
+            print "Main.brs Loading search data"
+            group.findNode("SearchSpinner").visible = true
+            'dialog = createObject("roSGNode", "ProgressDialog")
+            'dialog.title = tr("Loading Search Data")
+            'm.scene.dialog = dialog
             results = SearchMedia(query)
-            dialog.close = true
+            group.findNode("SearchSpinner").visible = false
             options.itemData = results
             options.query = query
         else if isNodeEvent(msg, "itemSelected")
@@ -262,8 +264,8 @@ sub Main (args as dynamic) as void
                 end if
                 group = CreateSearchPage()
                 sceneManager.callFunc("pushScene", group)
-                group.findNode("SearchBox").findNode("search-input").setFocus(true)
-                group.findNode("SearchBox").findNode("search-input").active = true
+                group.findNode("SearchBox").findNode("search_Key").setFocus(true)
+                group.findNode("SearchBox").findNode("search_Key").active = true
             else if button.id = "change_server"
                 unset_setting("server")
                 unset_setting("port")

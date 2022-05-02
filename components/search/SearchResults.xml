@@ -2,12 +2,19 @@
 <component name="SearchResults" extends="JFGroup">
   <children>
     <SearchBox id="SearchBox" visible="true" translation="[300, 300]" />
-    <SearchRow id="SearchSelect" visible="true" translation="[300, 900]" />
+    <SearchRow id="SearchSelect" visible="true" translation="[1200, 0]" />
+    <Spinner id = "SearchSpinner"  visible="false" translation="[1200, 0]"/>    
 
     <OptionsSlider id="options" />
   </children>
   <interface>
     <field id="query" type="string" alwaysNotify="true" />
+    <field id="SearchAlpha" type="string" alias="SearchBox.search_values" alwaysNotify="true" onChange="SearchMedias" />
+
   </interface>
   <script type="text/brightscript" uri="SearchResults.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
 </component>

@@ -359,7 +359,7 @@ function CreateSearchPage()
     group = CreateObject("roSGNode", "SearchResults")
 
     search = group.findNode("SearchBox")
-    search.observeField("search_value", m.port)
+    search.observeField("search_values", m.port)
 
     options = group.findNode("SearchSelect")
     options.observeField("itemSelected", m.port)
