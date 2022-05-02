@@ -1,6 +1,9 @@
 sub init()
     m.title = m.top.findNode("title")
     m.title.text = tr("Loading...")
+    m.options = m.top.findNode("tvListOptions")
+    m.overview = m.top.findNode("overview")
+    m.deviceInfo = CreateObject("roDeviceInfo")
 end sub
 
 sub itemContentChanged()
@@ -11,9 +14,9 @@ sub itemContentChanged()
     else
         indexNumber = ""
     end if
-    m.top.findNode("title").text = indexNumber + item.title
+    m.title.text = indexNumber + item.title
     m.top.findNode("poster").uri = item.posterURL
-    m.top.findNode("overview").text = item.overview
+    m.overview.text = item.overview
 
     if type(itemData.RunTimeTicks) = "LongInteger"
         m.top.findNode("runtime").text = stri(getRuntime()).trim() + " mins"
@@ -27,25 +30,48 @@ sub itemContentChanged()
         m.top.findNode("star").visible = false
     end if
 
+    videoIdx = invalid
+    audioIdx = invalid
+
     if itemData.MediaStreams <> invalid
-        videoIdx = invalid
-        audioIdx = invalid
         for i = 0 to itemData.MediaStreams.Count() - 1
             if itemData.MediaStreams[i].Type = "Video" and videoIdx = invalid
                 videoIdx = i
+                m.top.findNode("video_codec").text = tr("Video") + ": " + itemData.mediaStreams[videoIdx].DisplayTitle
             else if itemData.MediaStreams[i].Type = "Audio" and audioIdx = invalid
-                audioIdx = i
+                if item.selectedAudioStreamIndex > 1
+                    audioIdx = item.selectedAudioStreamIndex
+                else
+                    audioIdx = i
+                end if
+                m.top.findNode("audio_codec").text = tr("Audio") + ": " + itemData.mediaStreams[audioIdx].DisplayTitle
             end if
             if videoIdx <> invalid and audioIdx <> invalid then exit for
         end for
-        m.top.findNode("video_codec").text = tr("Video") + ": " + itemData.mediaStreams[videoIdx].DisplayTitle
-        m.top.findNode("audio_codec").text = tr("Audio") + ": " + itemData.mediaStreams[audioIdx].DisplayTitle
-        m.top.findNode("video_codec").visible = true
+    end if
+
+    m.top.findNode("video_codec").visible = videoIdx <> invalid
+    if audioIdx <> invalid
         m.top.findNode("audio_codec").visible = true
+        DisplayAudioAvailable(itemData.mediaStreams)
     else
-        m.top.findNode("video_codec").visible = false
         m.top.findNode("audio_codec").visible = false
     end if
+end sub
+
+sub DisplayAudioAvailable(streams)
+
+    count = 0
+    for i = 0 to streams.Count() - 1
+        if streams[i].Type = "Audio"
+            count++
+        end if
+    end for
+
+    if count > 1
+        m.top.findnode("audio_codec_count").text = "+" + stri(count - 1).trim()
+    end if
+
 end sub
 
 function getRuntime() as integer
@@ -65,3 +91,15 @@ function getEndTime() as string
 
     return formatTime(date)
 end function
+
+sub focusChanged()
+    if m.top.itemHasFocus = true
+        ' text to speech for accessibility
+        if m.deviceInfo.IsAudioGuideEnabled() = true
+            txt2Speech = CreateObject("roTextToSpeech")
+            txt2Speech.Flush()
+            txt2Speech.Say(m.title.text)
+            txt2Speech.Say(m.overview.text)
+        end if
+    end if
+end sub

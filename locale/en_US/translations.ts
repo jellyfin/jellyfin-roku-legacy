@@ -432,6 +432,11 @@
         <extracomment>Title of message box when the requested content is not found on the server</extracomment>
     </message>
     <message>
+        <source>Unknown</source>
+        <translation>Unknown</translation>
+        <extracomment>Title for a cast member for which we have no information for</extracomment>
+    </message>
+    <message>
         <source>The requested content does not exist on the server</source>
         <translation>The requested content does not exist on the server</translation>
         <extracomment>Content of message box when the requested content is not found on the server</extracomment>
@@ -464,6 +469,29 @@
     <message>
         <source>Version</source>
         <translation>Version</translation>
+    </message>
+    <message>
+        <source>Playback</source>
+        <translation>Playback</translation>
+        <extracomment>Title for Playback section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>MPEG 2 Support</source>
+        <translation>MPEG 2 Support</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
+    <message>
+        <source>Support direct play of MPEG 2 content (e.g. Live TV). This will prevent transcoding of MPEG 2 content, but uses significantly more bandwidth</source>
+        <translation>Support direct play of MPEG 2 content (e.g. Live TV). This will prevent transcoding of MPEG 2 content, but uses significantly more bandwidth</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation>Enabled</translation>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation>Disabled</translation>
     </message>
 </context>
 </TS>

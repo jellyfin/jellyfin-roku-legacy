@@ -114,6 +114,12 @@ sub clearScenes()
     m.groups = []
 end sub
 
+'
+' Display user/device settings screen
+sub settings()
+    settingsScreen = createObject("roSGNode", "Settings")
+    pushScene(settingsScreen)
+end sub
 
 '
 ' Register observers for overhang data
@@ -176,7 +182,7 @@ end sub
 ' Update username in overhang
 sub updateUser()
     ' Passthrough to overhang
-    m.overhang.currentUser = m.top.currentUser
+    if m.overhang <> invalid then m.overhang.currentUser = m.top.currentUser
 end sub
 
 

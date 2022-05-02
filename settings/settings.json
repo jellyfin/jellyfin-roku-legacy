@@ -1,0 +1,15 @@
+[
+    {
+        "title": "Playback",
+        "description": "Settings related to playback and supported codec and media types",
+        "children": [
+            {
+                "title": "MPEG 2 Support",
+                "description": "Support direct play of MPEG 2 content (e.g. Live TV). This will prevent transcoding of MPEG 2 content, but uses significantly more bandwidth",
+                "settingName": "playback.mpeg2",
+                "type": "bool",
+                "default": "false"
+            }        
+        ]
+    }
+]

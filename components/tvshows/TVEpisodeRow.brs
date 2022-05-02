@@ -52,6 +52,8 @@ function setData()
         row.appendChild(item)
     end for
 
+    m.top.doneLoading = true
+
     return data
 end function
 
