@@ -1,6 +1,7 @@
 sub init()
 
     m.options = m.top.findNode("options")
+
     m.tvGuide = invalid
 
     m.itemGrid = m.top.findNode("itemGrid")
@@ -32,6 +33,7 @@ sub init()
     m.sortAscending = true
 
     m.filter = "All"
+    m.favorite = "Favorite"
 
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
 
@@ -121,6 +123,7 @@ sub SetUpOptions()
 
     options = {}
     options.filter = []
+    options.favorite = []
 
     'Movies
     if m.top.parentItem.collectionType = "movies"
@@ -183,6 +186,9 @@ sub SetUpOptions()
             { "Title": tr("All"), "Name": "All" },
             { "Title": tr("Favorites"), "Name": "Favorites" }
         ]
+        options.favorite = [
+            { "Title": tr("Favorite"), "Name": "Favorite" }
+        ]
     else if m.top.parentItem.collectionType = "photoalbum" or m.top.parentItem.collectionType = "photo" or m.top.parentItem.collectionType = "homevideos"
         ' For some reason, my photo library shows up as "homevideos", maybe because it has some mp4 mixed in with the jpgs?
 
@@ -224,6 +230,12 @@ sub SetUpOptions()
         if o.Name = m.filter
             o.Selected = true
             m.options.filter = o.Name
+        end if
+    end for
+
+    for each o in options.favorite
+        if o.Name = m.favorite
+            m.options.favorite = o.Name
         end if
     end for
 
@@ -462,6 +474,11 @@ function onKeyEvent(key as string, press as boolean) as boolean
             m.top.removeChild(m.options)
             optionsClosed()
         else
+            markupGrid = m.top.getChild(2)
+            channelSelected = markupGrid.content.getChild(markupGrid.itemFocused)
+            if channelSelected.type = "TvChannel"
+                m.options.selectedChannel = channelSelected
+            end if
             m.options.visible = true
             m.top.appendChild(m.options)
             m.options.setFocus(true)

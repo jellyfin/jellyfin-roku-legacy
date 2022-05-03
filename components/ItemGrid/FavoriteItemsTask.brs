@@ -8,6 +8,8 @@ sub loadFavorites()
 
     if task = "Favorite"
         MarkItemFavorite(m.top.itemId)
+    else if task = "Unfavorite"
+        UnmarkItemFavorite(m.top.itemId)
     end if
 
 end sub

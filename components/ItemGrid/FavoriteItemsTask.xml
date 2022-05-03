@@ -6,6 +6,7 @@
     <field id="favTask" type="string" value="" />
   </interface>
   <script type="text/brightscript" uri="FavoriteItemsTask.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/UserLibrary.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

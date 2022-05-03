@@ -5,8 +5,13 @@ sub init()
     m.buttons.selectedIndex = 1
     m.buttons.setFocus(true)
 
+    m.favoriteMenu = m.top.findNode("favoriteMenu")
+    m.selectedChannel = m.top.findNode("selectedChannel")
+
     m.selectedSortIndex = 0
     m.selectedItem = 1
+    m.endOfItems = false
+    m.tmpContent = ""
 
     m.menus = []
     m.menus.push(m.top.findNode("viewMenu"))
@@ -23,6 +28,9 @@ sub init()
     m.fadeInAnimOpacity = m.top.findNode("inOpacity")
 
     m.buttons.observeField("focusedIndex", "buttonFocusChanged")
+    m.favoriteMenu.observeField("buttonSelected", "toggleFavorite")
+
+    m.favItemsTask = createObject("roSGNode", "FavoriteItemsTask")
 
 end sub
 
@@ -105,17 +113,86 @@ sub optionsSet()
         m.menus[2].content = filterContent
         m.menus[2].checkedItem = 0
     end if
-
-
 end sub
 
 ' Switch menu shown when button focus changes
 sub buttonFocusChanged()
-    if m.buttons.focusedIndex = m.selectedItem then return
+    if m.buttons.focusedIndex = m.selectedItem
+        if m.top.findNode("buttons").hasFocus()
+            m.buttons.setFocus(false)
+            m.menus[2].setFocus(false)
+            m.tmpContent = m.menus[2].content
+            m.menus[2].content = ""
+            m.top.findNode("favoriteMenu").setFocus(true)
+        end if
+    end if
     m.fadeOutAnimOpacity.fieldToInterp = m.menus[m.selectedItem].id + ".opacity"
     m.fadeInAnimOpacity.fieldToInterp = m.menus[m.buttons.focusedIndex].id + ".opacity"
     m.fadeAnim.control = "start"
     m.selectedItem = m.buttons.focusedIndex
+end sub
+
+sub toggleFavorite()
+    fav_menu = m.top.findNode("favoriteMenu")
+    if fav_menu.iconUri = "pkg:/images/icons/favorite.png"
+        fav_menu.iconUri = "pkg:/images/icons/favorite_selected.png"
+        fav_menu.focusedIconUri = "pkg:/images/icons/favorite_selected.png"
+        ' Run the task to actually favorite it via API
+        m.favItemsTask.favTask = "Favorite"
+        m.favItemsTask.itemId = m.selectedChannel.id
+        m.favItemsTask.control = "RUN"
+    else
+        fav_menu.iconUri = "pkg:/images/icons/favorite.png"
+        fav_menu.focusedIconUri = "pkg:/images/icons/favorite.png"
+        m.favItemsTask.favTask = "Unfavorite"
+        m.favItemsTask.itemId = m.selectedChannel.id
+        m.favItemsTask.control = "RUN"
+    end if
+    ' Make sure we set the Favorite Heart color for the appropriate child
+    for i = 0 to 6
+        node = m.top.findNode("favoriteMenu").getChild(i)
+        if node <> invalid
+            if node.uri <> invalid and node.uri = "pkg:/images/icons/favorite_selected.png"
+                m.top.findNode("favoriteMenu").getChild(i).blendColor = "#cc3333"
+            end if
+        end if
+    end for
+    m.favoriteMenu = fav_menu
+end sub
+
+sub saveChannelSelected(msg)
+    data = msg.GetData()
+    m.selectedChannel = data
+    ' Favorite button
+    if m.selectedChannel <> invalid
+        if m.selectedChannel.favorite = true
+            fav_menu = m.top.findNode("favoriteMenu")
+            fav_menu.iconUri = "pkg:/images/icons/favorite_selected.png"
+            fav_menu.focusedIconUri = "pkg:/images/icons/favorite_selected.png"
+            ' Make sure we set the Favorite Heart color for the appropriate child
+            for i = 0 to 6
+                node = m.top.findNode("favoriteMenu").getChild(i)
+                if node <> invalid
+                    if node.uri <> invalid and node.uri = "pkg:/images/icons/favorite_selected.png"
+                        m.top.findNode("favoriteMenu").getChild(i).blendColor = "#cc3333"
+                    end if
+                end if
+            end for
+        else
+            fav_menu = m.top.findNode("favoriteMenu")
+            fav_menu.iconUri = "pkg:/images/icons/favorite.png"
+            fav_menu.focusedIconUri = "pkg:/images/icons/favorite.png"
+            ' Make sure we set the Favorite Heart color for the appropriate child
+            for i = 0 to 6
+                node = m.top.findNode("favoriteMenu").getChild(i)
+                if node <> invalid
+                    if node.uri <> invalid and node.uri = "pkg:/images/icons/favorite.png"
+                        m.top.findNode("favoriteMenu").getChild(i).blendColor = "#000000"
+                    end if
+                end if
+            end for
+        end if
+    end if
 end sub
 
 
@@ -134,6 +211,12 @@ function onKeyEvent(key as string, press as boolean) as boolean
         end if
 
         return true
+    else if key = "left"
+        if m.top.findNode("favoriteMenu").hasFocus()
+            m.top.findNode("favoriteMenu").setFocus(false)
+            m.menus[2].content = m.tmpContent
+            m.top.findNode("buttons").setFocus(true)
+        end if
     else if key = "OK"
         if m.menus[m.selectedItem].isInFocusChain()
             ' Handle View Screen
