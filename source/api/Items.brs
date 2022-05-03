@@ -49,8 +49,14 @@ function SearchMedia(query as string)
         "IncludeItemTypes": "TvChannel,Movie,BoxSet,Series,Episode,Video"
         "EnableTotalRecordCount": false,
         "ImageTypeLimit": 1,
-        "Recursive": true
+        "Recursive": true,
+        "limit": 25
     })
+
+    ' TODO/FIXME:
+    ' Notice the Limit = 25.  My first attempt returned over 1000 results.
+    ' Even at 25 it takes a good 3 or 4 seconds to return... so you may have
+    ' to pause data entry or something while results come back...
 
     data = getJson(resp)
     results = []

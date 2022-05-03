@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="SearchRow" extends="RowList">
+
+<component name="SearchTask" extends="Task">
   <interface>
-    <field id="rowSize" type="int" />
-    <field id="itemData" type="assocarray" onChange="getData" />
     <field id="query" type="string" />
-    <field id="itemSelected" type="int" />
+    <field id="results" type="assocarray" />
   </interface>
-  <script type="text/brightscript" uri="SearchRow.brs" />
+  <script type="text/brightscript" uri="SearchTask.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
