@@ -20,18 +20,20 @@ sub updateSize()
 
     dimensions = m.top.getScene().currentDesignResolution
 
-    border = 75
+    border = 50
     m.top.translation = [border, border + 115]
 
     textHeight = 80
-    itemWidth = (dimensions["width"] - border * 2) / m.top.rowSize
-    itemHeight = itemWidth * 1.5 + textHeight
+    itemWidth = (dimensions["width"] - border) / m.top.rowSize
+    itemHeight = itemWidth  + textHeight
 
-    m.top.itemSize = [dimensions["width"] - border * 2, itemHeight]
+    m.top.itemSize = [dimensions["width"] - border, itemHeight]
     m.top.itemSpacing = [0, 50]
 
     m.top.rowItemSize = [itemWidth, itemHeight]
     m.top.rowItemSpacing = [0, 0]
+    m.top.numRows = 2
+    m.top.translation="[12,18]"
 end sub
 
 function getData()
@@ -84,3 +86,16 @@ sub addRow(data, title, type_filter)
         end if
     end for
 end sub
+
+function onKeyEvent(key as string, press as boolean) as boolean
+    
+    m.ResultsRow = m.top.findNode("SearchSelect")
+    m.SearchAlphabox = m.top.findNode("SearchAlphabox")
+
+        if key = "left" and m.ResultsRow.isinFocusChain()
+            m.SearchAlphabox.setFocus(true)
+            return true
+        end if
+    return false
+
+end function

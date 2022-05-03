@@ -5,11 +5,12 @@
     <LayoutGroup layoutDirection="horiz"  id="SearchAlphabox" translation="[0, 150]">
       <SearchBox id="SearchBox" visible="true"   />
     </LayoutGroup>
-      <LayoutGroup layoutDirection="horiz"  id="SearchAlphabox" translation="[800, 150]" >
+      <LayoutGroup layoutDirection="horiz"  id="SearchAlphabox" translation="[600, 150]" >
         <Label id = "Search_Help_text" text="You can search for Titles, People, Live TV Channels and more"/>
-        <SearchRow id="SearchSelect" visible="true"/>
+        
       </LayoutGroup>    
       <OptionsSlider id="options" />
+  <SearchRow id="SearchSelect" visible="true" translation="[600, 200]"/>
   <Spinner id = "SearchSpinner"  visible="true" translation="[1250, 500]"/>
   </children>
   <interface>
