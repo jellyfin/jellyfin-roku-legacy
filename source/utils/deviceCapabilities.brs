@@ -17,7 +17,7 @@ end function
 
 
 function getDeviceProfile() as object
-    playMpeg2 = get_setting("playback.mpeg2") = "true"
+    playMpeg2 = get_user_setting("playback.mpeg2") = "true"
 
     'Check if 5.1 Audio Output connected
     maxAudioChannels = 2
@@ -165,7 +165,7 @@ function GetDirectPlayProfiles() as object
     mkvAudio = "mp3,pcm,lpcm,wav"
     audio = "mp3,pcm,lpcm,wav"
 
-    playMpeg2 = get_setting("playback.mpeg2") = "true"
+    playMpeg2 = get_user_setting("playback.mpeg2") = "true"
 
     di = CreateObject("roDeviceInfo")
 

@@ -108,6 +108,7 @@ prep_staging:
 	cp -r $(SOURCEREL)/source $(STAGINGREL)
 	cp -r $(SOURCEREL)/components $(STAGINGREL)
 	cp -r $(SOURCEREL)/images $(STAGINGREL)
+	cp -r $(SOURCEREL)/settings $(STAGINGREL)
 	
 	# Copy only supported languages over to staging
 	mkdir $(STAGINGREL)/locale
