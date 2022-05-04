@@ -14,6 +14,7 @@ sub init()
 
     m.buttonGrp = m.top.findNode("buttons")
     m.buttonGrp.setFocus(true)
+    m.top.lastFocus = m.buttonGrp
 
     m.top.observeField("itemContent", "itemContentChanged")
 end sub
