@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="Settings" extends="JFGroup">
+  <children>
+
+         <Label id="path" translation = "[95,175]" font="font:SmallestBoldSystemFont" />
+
+        <LabelList
+            translation = "[120,250]"
+            id = "settingsMenu"
+            itemSize = "[440,48]"
+            vertFocusAnimationStyle = "floatingFocus"
+            focusBitmapBlendColor = "#006fab"
+            focusedColor = "#ffffff"
+            itemSpacing = "[0,5]"
+            />
+
+            <Poster
+               translation = "[710,250]"
+               id="testRectangle"
+               width="880"
+               height="700"
+               uri="pkg:/images/white.9.png"
+               blendColor = "#3f3f3f"
+             />
+
+             <LayoutGroup
+               translation = "[1150,275]"
+               id="settingDetail"
+               vertAlignment="top"
+               horizAlignment="center"
+               itemSpacings="[50]"
+             >
+
+                <ScrollingLabel font="font:LargeSystemFont" id="settingTitle" maxWidth="750" />
+
+                <Label id="settingDesc" width="750" wrap = "true" />
+
+                <RadioButtonList id="boolSetting" vertFocusAnimationStyle="floatingFocus">
+                  <ContentNode role="content">
+                    <ContentNode title="Disabled" />
+                    <ContentNode title="Enabled" />
+                  </ContentNode>
+                </RadioButtonList>
+
+             </LayoutGroup>
+
+
+  </children>
+  <script type="text/brightscript" uri="settings.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+</component>
