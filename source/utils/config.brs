@@ -1,5 +1,10 @@
 ' "Registry" is where Roku stores config
 
+' Read config tree from json config file and return
+function GetConfigTree()
+    return ParseJSON(ReadAsciiFile("pkg:/settings/settings.json"))
+end function
+
 
 ' Generic registry accessors
 function registry_read(key, section = invalid)
@@ -44,7 +49,19 @@ end sub
 function get_user_setting(key, default = invalid)
     if get_setting("active_user") = invalid then return default
     value = registry_read(key, get_setting("active_user"))
-    if value = invalid then return default
+    if value = invalid
+
+        ' Check for default in Config Tree
+        configTree = GetConfigTree()
+        configKey = findConfigTreeKey(key, configTree)
+
+        if configKey <> invalid and configKey.default <> invalid
+            set_user_setting(key, configKey.default) ' Set user setting to default
+            return configKey.default
+        end if
+
+        return default
+    end if
     return value
 end function
 
@@ -57,3 +74,20 @@ sub unset_user_setting(key)
     if get_setting("active_user") = invalid then return
     registry_delete(key, get_setting("active_user"))
 end sub
+
+
+' Recursivly search the config tree for entry with settingname equal to key
+function findConfigTreeKey(key as string, tree)
+    for each item in tree
+        if item.settingName <> invalid and item.settingName = key then return item
+
+        if item.children <> invalid and item.children.Count() > 0
+            result = findConfigTreeKey(key, item.children)
+            if result <> invalid then return result
+        end if
+    end for
+
+    return invalid
+end function
+
+

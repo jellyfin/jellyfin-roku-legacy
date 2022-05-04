@@ -1705,5 +1705,13 @@ não contém itens</translation>
         <source>Change Server</source>
         <translation>Mudar servidor</translation>
     </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Sair</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Mudar Servidor</translation>
+    </message>
 </context>
 </TS>
