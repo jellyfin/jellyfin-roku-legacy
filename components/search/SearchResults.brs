@@ -9,11 +9,11 @@ end sub
 
 sub SearchMedias()
     m.SearchSpinner.visible = true
-    query = m.top.SearchAlpha
+    query = m.top.query + m.top.SearchAlpha
     ' This appears to be done differently on the web now
     ' For each potential type, a separate query is done:
     ' varying item types, and artists, and people
-    print m.top.SearchAlpha
+    print "SearchMedias sub in searchResults.brs" query
 
     m.searchTask.observeField("results", "loadResults")
     m.searchTask.query = query
@@ -32,4 +32,18 @@ sub loadResults()
 
     m.searchSelect.itemdata = m.searchTask.results
     m.searchSelect.query = m.top.SearchAlpha
+    m.searchSelect.setFocus(true)
 end sub
+
+function onKeyEvent(key as string, press as boolean) as boolean
+    
+    m.SearchAlphabox = m.top.findNode("search_Key")
+
+        if key = "left" and m.searchSelect.isinFocusChain() and m.searchSelect.currFocusColumn = 0
+            m.SearchAlphabox.setFocus(true)
+            print "searchbox set focus"
+            return true
+        end if
+    return false
+
+end function

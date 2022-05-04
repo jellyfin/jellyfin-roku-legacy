@@ -11,12 +11,12 @@ sub init()
     ' TODO - Define a failed to load image background
     ' m.top.failedBitmapURI
 
-    m.top.setFocus(true)
+    'm.top.setFocus(true)
 end sub
 
 sub updateSize()
     ' In search results, rowSize only dictates how many are on screen at once
-    m.top.rowSize = 5
+    m.top.rowSize = 3
 
     dimensions = m.top.getScene().currentDesignResolution
 
@@ -24,11 +24,12 @@ sub updateSize()
     m.top.translation = [border, border + 115]
 
     textHeight = 80
-    itemWidth = (dimensions["width"] - border) / m.top.rowSize
+    itemWidth = (dimensions["width"] - border) / 6
     itemHeight = itemWidth  + textHeight
 
-    m.top.itemSize = [dimensions["width"] - border, itemHeight]
-    m.top.itemSpacing = [0, 50]
+    m.top.itemSize = [1500, itemHeight]
+   ' m.top.itemSize = [dimensions["width"] - border, itemHeight]
+    m.top.itemSpacing = [0, 105]
 
     m.top.rowItemSize = [itemWidth, itemHeight]
     m.top.rowItemSpacing = [0, 0]
@@ -87,15 +88,3 @@ sub addRow(data, title, type_filter)
     end for
 end sub
 
-function onKeyEvent(key as string, press as boolean) as boolean
-    
-    m.ResultsRow = m.top.findNode("SearchSelect")
-    m.SearchAlphabox = m.top.findNode("SearchAlphabox")
-
-        if key = "left" and m.ResultsRow.isinFocusChain()
-            m.SearchAlphabox.setFocus(true)
-            return true
-        end if
-    return false
-
-end function

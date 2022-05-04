@@ -3,14 +3,14 @@
   <children>
   <Rectangle width="1920" height="1080" color="#000000" opacity="0.75" />
     <LayoutGroup layoutDirection="horiz"  id="SearchAlphabox" translation="[0, 150]">
-      <SearchBox id="SearchBox" visible="true"   />
+      <SearchBox id="SearchBox" visible="true" focusable="true"/>
     </LayoutGroup>
       <LayoutGroup layoutDirection="horiz"  id="SearchAlphabox" translation="[600, 150]" >
         <Label id = "Search_Help_text" text="You can search for Titles, People, Live TV Channels and more"/>
         
       </LayoutGroup>    
       <OptionsSlider id="options" />
-  <SearchRow id="SearchSelect" visible="true" translation="[600, 200]"/>
+  <SearchRow id="SearchSelect" visible="true" translation="[600, 200]" focusable="true"/>
   <Spinner id = "SearchSpinner"  visible="true" translation="[1250, 500]"/>
   </children>
   <interface>
