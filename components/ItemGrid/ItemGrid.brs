@@ -3,6 +3,7 @@ sub init()
     m.options = m.top.findNode("options")
 
     m.tvGuide = invalid
+    m.channelFocused = invalid
 
     m.itemGrid = m.top.findNode("itemGrid")
     m.backdrop = m.top.findNode("backdrop")
@@ -450,6 +451,7 @@ sub showTVGuide()
         m.tvGuide = createObject("roSGNode", "Schedule")
         m.top.signalBeacon("EPGLaunchInitiate") ' Required Roku Performance monitoring
         m.tvGuide.observeField("watchChannel", "onChannelSelected")
+        m.tvGuide.observeField("focusedChannel", "onChannelFocused")
     end if
     m.tvGuide.filter = m.filter
     m.top.appendChild(m.tvGuide)
@@ -465,6 +467,11 @@ sub onChannelSelected(msg)
     end if
 end sub
 
+sub onChannelFocused(msg)
+    node = msg.getRoSGNode()
+    m.channelFocused = node.focusedChannel
+end sub
+
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
     topGrp = m.top.findNode("itemGrid")
@@ -475,9 +482,11 @@ function onKeyEvent(key as string, press as boolean) as boolean
             optionsClosed()
         else
             markupGrid = m.top.getChild(2)
-            channelSelected = markupGrid.content.getChild(markupGrid.itemFocused)
-            if channelSelected.type = "TvChannel"
-                m.options.selectedChannel = channelSelected
+            channelSelected = m.channelFocused
+            if channelSelected <> invalid
+                if channelSelected.type = "TvChannel"
+                    m.options.selectedChannel = channelSelected
+                end if
             end if
             m.options.visible = true
             m.top.appendChild(m.options)

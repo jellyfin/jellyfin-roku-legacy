@@ -28,6 +28,9 @@ sub loadChannels()
     for each item in data.Items
         channel = createObject("roSGNode", "ChannelData")
         channel.json = item
+        if item.UserData <> invalid and item.UserData.isFavorite <> invalid
+            channel.favorite = item.UserData.isFavorite
+        end if
         results.push(channel)
     end for
 
