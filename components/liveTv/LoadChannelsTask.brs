@@ -30,8 +30,14 @@ sub loadChannels()
         channel.json = item
         if item.UserData <> invalid and item.UserData.isFavorite <> invalid
             channel.favorite = item.UserData.isFavorite
+            if channel.favorite = true
+                results.Unshift(channel)
+            else
+                results.push(channel)
+            end if
+        else
+            results.push(channel)
         end if
-        results.push(channel)
     end for
 
     m.top.channels = results
