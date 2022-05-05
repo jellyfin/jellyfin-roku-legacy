@@ -38,7 +38,11 @@ function SearchMedia(query as string)
     ' This appears to be done differently on the web now
     ' For each potential type, a separate query is done:
     ' varying item types, and artists, and people
-    resp = APIRequest(Substitute("Users/{0}/Items", get_setting("active_user")), {
+
+    if query = ""
+        
+    else
+    resp = APIRequest(Substitute("Search/Hints", get_setting("active_user")), {
         "searchTerm": query,
         "IncludePeople": true,
         "IncludeMedia": true,
@@ -50,7 +54,7 @@ function SearchMedia(query as string)
         "EnableTotalRecordCount": false,
         "ImageTypeLimit": 1,
         "Recursive": true,
-        "limit": 25
+        "limit": 100
     })
 
     ' TODO/FIXME:
@@ -60,7 +64,7 @@ function SearchMedia(query as string)
 
     data = getJson(resp)
     results = []
-    for each item in data.Items
+    for each item in data.SearchHints
         tmp = CreateObject("roSGNode", "SearchData")
         tmp.image = PosterImage(item.id)
         tmp.json = item
@@ -68,6 +72,8 @@ function SearchMedia(query as string)
     end for
     data.SearchHints = results
     return data
+    end if
+    return []
 end function
 
 ' MetaData about an item
