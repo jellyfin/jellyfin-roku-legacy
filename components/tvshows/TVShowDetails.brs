@@ -142,9 +142,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
     bottomGrp = m.top.findNode("extrasGrid")
 
     if key = "down" and overview.hasFocus()
-        topGrp.setFocus(true)
-        return true
-    else if key = "down" and topGrp.hasFocus()
+    topGrp.setFocus(true)
+    return true
+else if key = "down" and topGrp.hasFocus()
     buttonGrp = m.top.findNode("buttons")
 
     if key = "down" and topGrp.isinFocusChain()
@@ -169,9 +169,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
         overview.setFocus(true)
         return true
     else if key = "up" and topGrp.isinFocusChain()
-            buttonGrp.setFocus(true)
-            return true
+        buttonGrp.setFocus(true)
+        return true
     end if
-
+end if
     return false
 end function
