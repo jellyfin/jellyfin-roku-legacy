@@ -70,7 +70,7 @@ sub ReportPlayback(state = "update" as string)
         })
         m.bufferCheckTimer.duration = 30
     end if
-print m.bufferCheckTimer.duration
+    print m.bufferCheckTimer.duration
     ' Report playstate via worker task
     playstateTask = m.global.playstateTask
     playstateTask.setFields({ status: state, params: params })
