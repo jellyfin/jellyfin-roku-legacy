@@ -6,7 +6,7 @@ sub init()
     m.buttons.setFocus(true)
 
     m.favoriteMenu = m.top.findNode("favoriteMenu")
-    m.selectedChannel = m.top.findNode("selectedChannel")
+    m.selectedFavoriteItem = m.top.findNode("selectedFavoriteItem")
 
     m.selectedSortIndex = 0
     m.selectedItem = 1
@@ -139,13 +139,13 @@ sub toggleFavorite()
         fav_menu.focusedIconUri = "pkg:/images/icons/favorite_selected.png"
         ' Run the task to actually favorite it via API
         m.favItemsTask.favTask = "Favorite"
-        m.favItemsTask.itemId = m.selectedChannel.id
+        m.favItemsTask.itemId = m.selectedFavoriteItem.id
         m.favItemsTask.control = "RUN"
     else
         fav_menu.iconUri = "pkg:/images/icons/favorite.png"
         fav_menu.focusedIconUri = "pkg:/images/icons/favorite.png"
         m.favItemsTask.favTask = "Unfavorite"
-        m.favItemsTask.itemId = m.selectedChannel.id
+        m.favItemsTask.itemId = m.selectedFavoriteItem.id
         m.favItemsTask.control = "RUN"
     end if
     ' Make sure we set the Favorite Heart color for the appropriate child
@@ -160,12 +160,12 @@ sub toggleFavorite()
     m.favoriteMenu = fav_menu
 end sub
 
-sub saveChannelSelected(msg)
+sub saveFavoriteItemSelected(msg)
     data = msg.GetData()
-    m.selectedChannel = data
+    m.selectedFavoriteItem = data
     ' Favorite button
-    if m.selectedChannel <> invalid
-        if m.selectedChannel.favorite = true
+    if m.selectedFavoriteItem <> invalid
+        if m.selectedFavoriteItem.favorite = true
             fav_menu = m.top.findNode("favoriteMenu")
             fav_menu.iconUri = "pkg:/images/icons/favorite_selected.png"
             fav_menu.focusedIconUri = "pkg:/images/icons/favorite_selected.png"

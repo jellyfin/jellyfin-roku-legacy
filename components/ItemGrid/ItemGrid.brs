@@ -303,6 +303,8 @@ sub onItemFocused()
         return
     end if
 
+    m.selectedFavoriteItem = m.itemGrid.content.getChild(m.itemGrid.itemFocused)
+
     ' Set Background to item backdrop
     SetBackground(m.itemGrid.content.getChild(m.itemGrid.itemFocused).backdropUrl)
 
@@ -483,10 +485,14 @@ function onKeyEvent(key as string, press as boolean) as boolean
         else
             markupGrid = m.top.getChild(2)
             channelSelected = m.channelFocused
+            itemSelected = m.selectedFavoriteItem
             if channelSelected <> invalid
                 if channelSelected.type = "TvChannel"
-                    m.options.selectedChannel = channelSelected
+                    m.options.selectedFavoriteItem = channelSelected
                 end if
+            end if
+            if itemSelected <> invalid
+                m.options.selectedFavoriteItem = itemSelected
             end if
             m.options.visible = true
             m.top.appendChild(m.options)

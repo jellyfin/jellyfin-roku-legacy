@@ -29,7 +29,7 @@
   <interface>
     <field id="buttons" type="nodearray" />
     <field id="options" type="assocarray" onChange="optionsSet" />
-    <field id="selectedChannel" type="node" onChange="saveChannelSelected" />
+    <field id="selectedFavoriteItem" type="node" onChange="saveFavoriteItemSelected" />
 
     <field id="view" type="string" />
     <field id="sortField" type="string" value="SortName" />
