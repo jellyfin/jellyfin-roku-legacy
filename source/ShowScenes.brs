@@ -333,7 +333,6 @@ end function
 
 function CreateSeasonDetailsGroup(series, season)
     group = CreateObject("roSGNode", "TVEpisodes")
-    'group.overhangTitle = series.title + " " + season.title
     group.optionsAvailable = false
     m.global.sceneManager.callFunc("pushScene", group)
 
