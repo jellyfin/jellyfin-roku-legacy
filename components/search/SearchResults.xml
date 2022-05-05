@@ -11,10 +11,13 @@
       </LayoutGroup>    
       <OptionsSlider id="options" />
   <SearchRow id="SearchSelect" visible="true" translation="[600, 200]" focusable="true"/>
-  <Spinner id = "SearchSpinner"  visible="true" translation="[1250, 500]"/>
+  <Spinner id = "SearchSpinner"  visible="false" translation="[1250, 500]"/>
   </children>
   <interface>
     <field id="query" type="string" alwaysNotify="true" />
+    <field id="selectedItem" type="node" alwaysNotify="true" />
+    <field id="quickPlayNode" type="node" alwaysNotify="true" />
+    <field id="imageDisplayMode" type="string" value="scaleToZoom" />
     <field id="SearchAlpha" type="string" alias="SearchBox.search_values" alwaysNotify="true" onChange="SearchMedias" />
 
   </interface>

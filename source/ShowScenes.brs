@@ -357,7 +357,7 @@ function CreateSearchPage()
     'search.observeField("search_values", m.port)
 
     options = group.findNode("SearchSelect")
-    'options.observeField("itemSelected", m.port)
+    options.observeField("itemSelected", m.port)
 
     return group
 end function

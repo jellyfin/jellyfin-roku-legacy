@@ -1,6 +1,7 @@
 sub init()
     m.title = m.top.findNode("title")
     m.staticTitle = m.top.findNode("staticTitle")
+    m.Series = m.top.findNode("Series")
     m.poster = m.top.findNode("poster")
 
     m.backdrop = m.top.findNode("backdrop")
@@ -39,6 +40,8 @@ sub updateSize()
     m.staticTitle.height = m.title.height
     m.staticTitle.translation = m.title.translation
 
+    m.Series.maxWidth = maxSize[0]
+
     m.poster.width = int(maxSize[0]) - 4
     m.poster.height = int(maxSize[1]) - m.title.height 'Set poster height to available space
 
@@ -53,6 +56,8 @@ sub itemContentChanged() as void
     m.title.text = itemData.title
     if itemData.json.lookup("Type") = "Episode" and itemData.json.IndexNumber <> invalid
         m.title.text = StrI(itemData.json.IndexNumber) + ". " + m.title.text
+        m.Series.text = itemData.json.Series
+        m.Series.visible = true
     end if
     m.staticTitle.text = m.title.text
 
@@ -67,6 +72,7 @@ sub focusChanged()
 
     if m.top.itemHasFocus = true
         m.title.repeatCount = -1
+        m.Series.repeatCount= -1
         m.staticTitle.visible = false
         m.title.visible = true
 
@@ -79,6 +85,7 @@ sub focusChanged()
 
     else
         m.title.repeatCount = 0
+        m.Series.repeatCount= 0
         m.staticTitle.visible = true
         m.title.visible = false
     end if

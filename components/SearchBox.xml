@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="SearchBox" extends="LayoutGroup">
   <children>
-        <Label id = "text" text="Search now"        />
+        <Label id = "text" text="Search now"/>
         <MiniKeyboard id = "search_Key"/>
   </children>
   <interface>

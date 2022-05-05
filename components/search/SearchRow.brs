@@ -11,7 +11,6 @@ sub init()
     ' TODO - Define a failed to load image background
     ' m.top.failedBitmapURI
 
-    'm.top.setFocus(true)
 end sub
 
 sub updateSize()
