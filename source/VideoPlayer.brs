@@ -117,7 +117,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     m.Series_tmp = item
                 end for
                 'Create Season Scene
-                 group = CreateSeasonDetailsGroup(m.Series_tmp, m.Season_tmp)
+                group = CreateSeasonDetailsGroup(m.Series_tmp, m.Season_tmp)
                 video.content = invalid
                 return
 
