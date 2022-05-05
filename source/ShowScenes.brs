@@ -315,7 +315,6 @@ end function
 
 function CreateSeriesDetailsGroup(series)
     group = CreateObject("roSGNode", "TVShowDetails")
-    'group.overhangTitle = series.title
     group.optionsAvailable = false
     m.global.sceneManager.callFunc("pushScene", group)
 
