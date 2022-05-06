@@ -117,8 +117,6 @@ sub loadHomeSections()
             m.LoadOnNowTask.observeField("content", "updateOnNowItems")
             m.LoadOnNowTask.control = "RUN"
             m.LoadOnNowTask.observeField("state", "onUpdateOnNowItemsComplete")
-        else
-            removeHoldingChild(i + 1)
         end if
         m.top.content = content
     end for
