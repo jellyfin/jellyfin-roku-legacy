@@ -24,16 +24,16 @@ sub updateSize()
 
     textHeight = 80
     itemWidth = (dimensions["width"] - border) / 6
-    itemHeight = itemWidth  + textHeight
+    itemHeight = itemWidth + textHeight
 
     m.top.itemSize = [1500, itemHeight]
-   ' m.top.itemSize = [dimensions["width"] - border, itemHeight]
+    ' m.top.itemSize = [dimensions["width"] - border, itemHeight]
     m.top.itemSpacing = [0, 105]
 
     m.top.rowItemSize = [itemWidth, itemHeight]
     m.top.rowItemSpacing = [0, 0]
     m.top.numRows = 2
-    m.top.translation="[12,18]"
+    m.top.translation = "[12,18]"
 end sub
 
 function getData()

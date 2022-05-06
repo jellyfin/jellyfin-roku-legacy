@@ -40,38 +40,38 @@ function SearchMedia(query as string)
     ' varying item types, and artists, and people
 
     if query = ""
-        
+
     else
-    resp = APIRequest(Substitute("Search/Hints", get_setting("active_user")), {
-        "searchTerm": query,
-        "IncludePeople": true,
-        "IncludeMedia": true,
-        "IncludeShows": true,
-        "IncludeGenres": false,
-        "IncludeStudios": false,
-        "IncludeArtists": false,
-        "IncludeItemTypes": "TvChannel,Movie,BoxSet,Series,Episode,Video"
-        "EnableTotalRecordCount": false,
-        "ImageTypeLimit": 1,
-        "Recursive": true,
-        "limit": 100
-    })
+        resp = APIRequest(Substitute("Search/Hints", get_setting("active_user")), {
+            "searchTerm": query,
+            "IncludePeople": true,
+            "IncludeMedia": true,
+            "IncludeShows": true,
+            "IncludeGenres": false,
+            "IncludeStudios": false,
+            "IncludeArtists": false,
+            "IncludeItemTypes": "TvChannel,Movie,BoxSet,Series,Episode,Video"
+            "EnableTotalRecordCount": false,
+            "ImageTypeLimit": 1,
+            "Recursive": true,
+            "limit": 100
+        })
 
-    ' TODO/FIXME:
-    ' Notice the Limit = 25.  My first attempt returned over 1000 results.
-    ' Even at 25 it takes a good 3 or 4 seconds to return... so you may have
-    ' to pause data entry or something while results come back...
+        ' TODO/FIXME:
+        ' Notice the Limit = 25.  My first attempt returned over 1000 results.
+        ' Even at 25 it takes a good 3 or 4 seconds to return... so you may have
+        ' to pause data entry or something while results come back...
 
-    data = getJson(resp)
-    results = []
-    for each item in data.SearchHints
-        tmp = CreateObject("roSGNode", "SearchData")
-        tmp.image = PosterImage(item.id)
-        tmp.json = item
-        results.push(tmp)
-    end for
-    data.SearchHints = results
-    return data
+        data = getJson(resp)
+        results = []
+        for each item in data.SearchHints
+            tmp = CreateObject("roSGNode", "SearchData")
+            tmp.image = PosterImage(item.id)
+            tmp.json = item
+            results.push(tmp)
+        end for
+        data.SearchHints = results
+        return data
     end if
     return []
 end function

@@ -72,7 +72,7 @@ sub focusChanged()
 
     if m.top.itemHasFocus = true
         m.title.repeatCount = -1
-        m.Series.repeatCount= -1
+        m.Series.repeatCount = -1
         m.staticTitle.visible = false
         m.title.visible = true
 
@@ -85,7 +85,7 @@ sub focusChanged()
 
     else
         m.title.repeatCount = 0
-        m.Series.repeatCount= 0
+        m.Series.repeatCount = 0
         m.staticTitle.visible = true
         m.title.visible = false
     end if

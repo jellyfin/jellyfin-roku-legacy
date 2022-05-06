@@ -5,11 +5,11 @@ sub init()
     m.top.visible = false
     m.searchText = m.top.findNode("search_Key")
     m.searchText.ObserveField("text", "SearchMedias")
-    m.searchSelect = m.top.findNode("SearchSelect")   
-    
+    m.searchSelect = m.top.findNode("SearchSelect")
+
 end sub
 
 sub SearchMedias()
 
-m.top.search_values = m.searchText.text
+    m.top.search_values = m.searchText.text
 end sub
