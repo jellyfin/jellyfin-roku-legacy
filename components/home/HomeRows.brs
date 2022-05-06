@@ -309,27 +309,6 @@ sub createHoldingChildren()
     m.top.content = content
 end sub
 
-sub removeHoldingChild(child as integer)
-    content = m.top.content
-    row_index = getRowIndex(Substitute("Loading Section {0}...", child.toStr()))
-    if row_index <> invalid
-        row = content.getChild(row_index)
-        content.removeChild(row)
-        m.top.content = content
-    end if
-end sub
-
-sub removeHoldingChildren()
-    home_section_count = getHomeSectionCount()
-    content = m.top.content
-    for i = 1 to home_section_count
-        row_index = getRowIndex(Substitute("Loading Section {0}...", i.toStr()))
-        row = content.getChild(row_index)
-        content.removeChild(row)
-    end for
-    m.top.content = content
-end sub
-
 sub rebuildItemArray()
     section_count = getHomeSectionCount()
     ignores = m.sectionIgnores
