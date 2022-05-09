@@ -7,7 +7,7 @@
             <Poster id="image" height="375" width="500" loadDisplayMode="scaleToFit" />
         </maskGroup>
 
-        <Poster id="favorite" translation="[1220, 300]" uri="pkg:/images/icons/favorite_selected.png" visible="false" />
+        <Poster id="favorite" translation="[1335, 165]" uri="pkg:/images/icons/favorite_selected.png" visible="false" />
 
         <Group id="detailsView" visible="false">
 

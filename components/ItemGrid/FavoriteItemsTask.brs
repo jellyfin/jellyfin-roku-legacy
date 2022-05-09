@@ -1,8 +1,8 @@
 sub init()
-    m.top.functionName = "loadFavorites"
+    m.top.functionName = "setFavoriteStatus"
 end sub
 
-sub loadFavorites()
+sub setFavoriteStatus()
 
     task = m.top.favTask
 

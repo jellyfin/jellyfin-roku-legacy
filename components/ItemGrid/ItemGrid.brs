@@ -236,11 +236,11 @@ sub SetUpOptions()
         end if
     end for
 
-    for each o in options.favorite
-        if o.Name = m.favorite
-            m.options.favorite = o.Name
-        end if
-    end for
+    ' for each o in options.favorite
+    '     if o.Name = m.favorite
+    '         m.options.favorite = o.Name
+    '     end if
+    ' end for
 
     m.options.options = options
 
@@ -484,16 +484,15 @@ function onKeyEvent(key as string, press as boolean) as boolean
             m.top.removeChild(m.options)
             optionsClosed()
         else
-            markupGrid = m.top.getChild(2)
             channelSelected = m.channelFocused
             itemSelected = m.selectedFavoriteItem
+            if itemSelected <> invalid
+                m.options.selectedFavoriteItem = itemSelected
+            end if
             if channelSelected <> invalid
                 if channelSelected.type = "TvChannel"
                     m.options.selectedFavoriteItem = channelSelected
                 end if
-            end if
-            if itemSelected <> invalid
-                m.options.selectedFavoriteItem = itemSelected
             end if
             m.options.visible = true
             m.top.appendChild(m.options)

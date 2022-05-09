@@ -124,11 +124,7 @@ sub channelUpdated()
         if m.top.programDetails = invalid
             m.image.uri = m.top.channel.posterURL
         end if
-        if m.top.channel.favorite = true
-            m.favorite.visible = "true"
-        else
-            m.favorite.visible = "false"
-        end if
+        m.favorite.visible = m.top.channel.favorite
     end if
 end sub
 

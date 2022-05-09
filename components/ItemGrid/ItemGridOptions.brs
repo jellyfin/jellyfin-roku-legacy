@@ -149,15 +149,24 @@ sub toggleFavorite()
         m.favItemsTask.control = "RUN"
     end if
     ' Make sure we set the Favorite Heart color for the appropriate child
-    for i = 0 to 6
-        node = m.top.findNode("favoriteMenu").getChild(i)
-        if node <> invalid
-            if node.uri <> invalid and node.uri = "pkg:/images/icons/favorite_selected.png"
-                m.top.findNode("favoriteMenu").getChild(i).blendColor = "#cc3333"
-            end if
-        end if
-    end for
+    setHeartColor("#cc3333")
     m.favoriteMenu = fav_menu
+end sub
+
+sub setHeartColor(color as string)
+    error = []
+    try
+        for i = 0 to 6
+            node = m.top.findNode("favoriteMenu").getChild(i)
+            if node <> invalid
+                if node.uri <> invalid and node.uri = "pkg:/images/icons/favorite_selected.png"
+                    m.top.findNode("favoriteMenu").getChild(i).blendColor = color
+                end if
+            end if
+        end for
+    catch error
+        print error
+    end try
 end sub
 
 sub saveFavoriteItemSelected(msg)
@@ -166,35 +175,18 @@ sub saveFavoriteItemSelected(msg)
     ' Favorite button
     if m.selectedFavoriteItem <> invalid
         if m.selectedFavoriteItem.favorite = true
-            fav_menu = m.top.findNode("favoriteMenu")
-            fav_menu.iconUri = "pkg:/images/icons/favorite_selected.png"
-            fav_menu.focusedIconUri = "pkg:/images/icons/favorite_selected.png"
+            m.favoriteMenu.iconUri = "pkg:/images/icons/favorite_selected.png"
+            m.favoriteMenu.focusedIconUri = "pkg:/images/icons/favorite_selected.png"
             ' Make sure we set the Favorite Heart color for the appropriate child
-            for i = 0 to 6
-                node = m.top.findNode("favoriteMenu").getChild(i)
-                if node <> invalid
-                    if node.uri <> invalid and node.uri = "pkg:/images/icons/favorite_selected.png"
-                        m.top.findNode("favoriteMenu").getChild(i).blendColor = "#cc3333"
-                    end if
-                end if
-            end for
+            setHeartColor("#cc3333")
         else
-            fav_menu = m.top.findNode("favoriteMenu")
-            fav_menu.iconUri = "pkg:/images/icons/favorite.png"
-            fav_menu.focusedIconUri = "pkg:/images/icons/favorite.png"
+            m.favoriteMenu.iconUri = "pkg:/images/icons/favorite.png"
+            m.favoriteMenu.focusedIconUri = "pkg:/images/icons/favorite.png"
             ' Make sure we set the Favorite Heart color for the appropriate child
-            for i = 0 to 6
-                node = m.top.findNode("favoriteMenu").getChild(i)
-                if node <> invalid
-                    if node.uri <> invalid and node.uri = "pkg:/images/icons/favorite.png"
-                        m.top.findNode("favoriteMenu").getChild(i).blendColor = "#000000"
-                    end if
-                end if
-            end for
+            setHeartColor("#cc3333")
         end if
     end if
 end sub
-
 
 function onKeyEvent(key as string, press as boolean) as boolean
 
