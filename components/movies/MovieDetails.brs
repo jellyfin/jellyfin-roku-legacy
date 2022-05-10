@@ -19,11 +19,11 @@ sub init()
     m.top.observeField("itemContent", "itemContentChanged")
 end sub
 
-sub OnScreenShown() 
+sub OnScreenShown()
     ' set focus to button group
     m.buttonGrp.setFocus(true)
 end sub
-   
+
 
 sub itemContentChanged()
     ' Updates video metadata

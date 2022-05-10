@@ -10,7 +10,7 @@ sub OnScreenShown()
 end sub
 
 ' Function called when the screen is hidden by the screen manager
-' It is expected that screens override this function if required, 
+' It is expected that screens override this function if required,
 ' to handle focus any actions required on the screen being hidden
 sub OnScreenHidden()
 end sub
