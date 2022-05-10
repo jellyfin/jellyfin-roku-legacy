@@ -32,7 +32,7 @@ sub init()
     'Get spinner
     m.spinner = m.top.findNode("ItemSpinner")
 
-    'backdrop 
+    'backdrop
     m.newBackdrop.observeField("loadStatus", "newBGLoaded")
 
     'Background Image Queued for loading
@@ -97,7 +97,7 @@ sub loadInitialItems()
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
     m.loadItemsTask.startIndex = 0
-    
+
 
     if m.top.parentItem.collectionType = "movies"
         m.loadItemsTask.itemType = "Movie"
