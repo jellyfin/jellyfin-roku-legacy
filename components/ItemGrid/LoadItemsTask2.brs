@@ -35,9 +35,9 @@ sub loadItems()
     end if
 
     'Append voice search when there is text
-        if m.top.searchTerm <> ""
-            params.searchTerm = m.top.searchTerm
-        end if
+    if m.top.searchTerm <> ""
+        params.searchTerm = m.top.searchTerm
+    end if
 
     filter = m.top.filter
     if filter = "All" or filter = "all"
@@ -90,5 +90,5 @@ sub loadItems()
     end if
 
     m.top.content = results
- print "Params" params
+    print "Params" params
 end sub

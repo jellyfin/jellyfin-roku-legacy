@@ -32,7 +32,7 @@ sub init()
     'Get spinner
     m.spinner = m.top.findNode("ItemSpinner")
 
-    'backdrop
+    'backdrop 
     m.newBackdrop.observeField("loadStatus", "newBGLoaded")
 
     'Background Image Queued for loading
@@ -97,7 +97,7 @@ sub loadInitialItems()
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
     m.loadItemsTask.startIndex = 0
-
+    
 
     if m.top.parentItem.collectionType = "movies"
         m.loadItemsTask.itemType = "Movie"
@@ -371,7 +371,6 @@ sub onVoiceFilter()
     m.loadedItems = 0
     m.data = CreateObject("roSGNode", "ContentNode")
     m.itemGrid.content = m.data
-    print "Voicebox sub data = " m.VoiceBox.text
     m.loadItemsTask.searchTerm = m.VoiceBox.text
     loadInitialItems()
 end sub
