@@ -32,7 +32,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     m.SearchAlphabox = m.top.findNode("search_Key")
 
-    if key = "left" and m.searchSelect.isinFocusChain() and m.searchSelect.currFocusColumn = -1 or m.searchSelect.currFocusColumn = 0
+    if key = "left" and m.searchSelect.isinFocusChain() and (m.searchSelect.currFocusColumn = -1 or m.searchSelect.currFocusColumn = 0)
         m.SearchAlphabox.setFocus(true)
         return true
     else if key = "right"
