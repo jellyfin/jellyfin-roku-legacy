@@ -105,7 +105,7 @@ sub ScanForServersComplete(event)
 end sub
 
 sub ShowKeyboard()
-    dialog = createObject("roSGNode", "KeyboardDialog")
+    dialog = createObject("roSGNode", "StandardKeyboardDialog")
     dialog.title = tr("Enter the server name or ip address")
     dialog.buttons = [tr("OK"), tr("Cancel")]
     dialog.text = m.serverUrlTextbox.text

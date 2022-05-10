@@ -22,7 +22,8 @@ sub loadItems()
         SortBy: sort_field,
         SortOrder: sort_order,
         recursive: m.top.recursive,
-        Fields: "Overview"
+        Fields: "Overview",
+        searchTerm: m.top.searchTerm
     }
 
     ' Handle special case when getting names starting with numeral
@@ -85,5 +86,5 @@ sub loadItems()
     end if
 
     m.top.content = results
-
+ print "Params" params
 end sub

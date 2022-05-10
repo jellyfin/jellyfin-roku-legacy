@@ -23,6 +23,7 @@
       itemSize = "[ 290, 425 ]" 
       itemSpacing = "[ 0, 45 ]" 
       drawFocusFeedback = "false" />  
+      <VoiceTextEditBox id="VoiceBox" visible="true" width = "780" hintText = "Use voice remote to search" />
       <Label translation="[0,540]" id="emptyText" font="font:LargeSystemFont" width="1920" horizAlign="center" vertAlign="center" height="64" visible="false" />
     <ItemGridOptions id="options" visible="false" />
     <Animation  id="backroundSwapAnimation"  duration="1"  repeat="false"  easeFunction="linear" >
@@ -30,6 +31,7 @@
         <FloatFieldInterpolator id = "fadeoutLoaded" key="[0.0, 1.0]" keyValue="[ 0.25, 0.00 ]" fieldToInterp="backdrop.opacity" />
     </Animation>
     <Alpha id="AlphaMenu" />
+    
   </children>
   <interface>
     <field id="parentItem" type="node" onChange="loadInitialItems" />
@@ -37,6 +39,7 @@
     <field id="quickPlayNode" type="node" alwaysNotify="true" />
     <field id="imageDisplayMode" type="string" value="scaleToZoom" />
     <field id="AlphaSelected" type="string" alias="AlphaMenu.itemAlphaSelected" alwaysNotify="true" onChange="onItemAlphaSelected" />
+    <field id="VoiceFilter" type="string" alias="VoiceBox.text" alwaysNotify="true" onChange="onVoiceFilter" />  
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />

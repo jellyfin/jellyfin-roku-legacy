@@ -22,6 +22,14 @@ sub init()
     m.itemGrid.observeField("itemFocused", "onItemFocused")
     m.itemGrid.observeField("itemSelected", "onItemSelected")
     m.itemGrid.observeField("AlphaSelected", "onItemAlphaSelected")
+
+    'Voice filter setup
+    m.VoiceBox = m.top.findNode("VoiceBox")
+    m.VoiceBox.voiceEnabled = true
+    m.VoiceBox.active = true
+    m.VoiceBox.observeField("VoiceFilter", "onVoiceFilter")
+
+    'backdrop 
     m.newBackdrop.observeField("loadStatus", "newBGLoaded")
 
     'Background Image Queued for loading
@@ -76,6 +84,7 @@ sub loadInitialItems()
     end if
 
     m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
+    m.loadItemsTask.searchTerm = m.VoiceBox.text
     m.emptyText.visible = false
 
     updateTitle()
@@ -85,6 +94,7 @@ sub loadInitialItems()
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
     m.loadItemsTask.startIndex = 0
+    
 
     if m.top.parentItem.collectionType = "movies"
         m.loadItemsTask.itemType = "Movie"
@@ -349,7 +359,16 @@ sub onItemAlphaSelected()
     m.loadedRows = 0
     m.loadedItems = 0
     m.data = CreateObject("roSGNode", "ContentNode")
+    m.loadItemsTask.searchTerm = ""
     m.itemGrid.content = m.data
+    loadInitialItems()
+end sub
+
+sub onVoiceFilter()
+    m.loadedRows = 0
+    m.loadedItems = 0
+    print "Voicebox sub data = " m.VoiceBox.text
+    m.loadItemsTask.searchTerm = m.VoiceBox.text
     loadInitialItems()
 end sub
 
