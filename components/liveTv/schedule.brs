@@ -66,10 +66,10 @@ sub onScheduleLoaded()
 
         channel = m.scheduleGrid.content.GetChild(m.channelIndex[item.ChannelId])
 
-        if channel.PosterUrl <> "" 
+        if channel.PosterUrl <> ""
             item.channelLogoUri = channel.PosterUrl
         end if
-        if channel.Title <> "" 
+        if channel.Title <> ""
             item.channelName = channel.Title
         end if
 
@@ -88,14 +88,14 @@ sub onProgramFocused()
     m.detailsPane.channel = channel
 
     ' Exit if Channels not yet loaded
-    if channel.getChildCount() = 0 
+    if channel.getChildCount() = 0
         m.detailsPane.programDetails = invalid
         return
     end if
 
     prog = channel.GetChild(m.scheduleGrid.programFocusedDetails.focusIndex)
 
-    if prog <> invalid and prog.fullyLoaded = false 
+    if prog <> invalid and prog.fullyLoaded = false
         m.LoadProgramDetailsTask.programId = prog.Id
         m.LoadProgramDetailsTask.channelIndex = m.scheduleGrid.programFocusedDetails.focusChannelIndex
         m.LoadProgramDetailsTask.programIndex = m.scheduleGrid.programFocusedDetails.focusIndex
@@ -108,22 +108,22 @@ end sub
 ' Update the Program Details with full information
 sub onProgramDetailsLoaded()
     if m.LoadProgramDetailsTask.programDetails = invalid
-    channel = m.scheduleGrid.content.GetChild(m.LoadProgramDetailsTask.programDetails.channelIndex)
+        channel = m.scheduleGrid.content.GetChild(m.LoadProgramDetailsTask.programDetails.channelIndex)
 
-    ' If TV Show does not have its own image, use the channel logo
-    if m.LoadProgramDetailsTask.programDetails.PosterUrl = invalid or m.LoadProgramDetailsTask.programDetails.PosterUrl = "" 
-        m.LoadProgramDetailsTask.programDetails.PosterUrl = channel.PosterUrl
+        ' If TV Show does not have its own image, use the channel logo
+        if m.LoadProgramDetailsTask.programDetails.PosterUrl = invalid or m.LoadProgramDetailsTask.programDetails.PosterUrl = ""
+            m.LoadProgramDetailsTask.programDetails.PosterUrl = channel.PosterUrl
+        end if
+
+        channel.ReplaceChild(m.LoadProgramDetailsTask.programDetails, m.LoadProgramDetailsTask.programDetails.programIndex)
+        m.LoadProgramDetailsTask.programDetails = invalid
     end if
-
-    channel.ReplaceChild(m.LoadProgramDetailsTask.programDetails, m.LoadProgramDetailsTask.programDetails.programIndex)
-    m.LoadProgramDetailsTask.programDetails = invalid
-end if
 end sub
 
 
 sub onProgramSelected()
     ' If there is no program data - view the channel
-    if m.detailsPane.programDetails = invalid 
+    if m.detailsPane.programDetails = invalid
         m.top.watchChannel = m.scheduleGrid.content.GetChild(m.scheduleGrid.programFocusedDetails.focusChannelIndex)
         return
     end if
@@ -139,7 +139,7 @@ sub focusProgramDetails(setFocused)
     if h < 400 then h = 400
     h = h + 160 + 80
 
-    if setFocused = true 
+    if setFocused = true
         m.gridMoveAnimationPosition.keyValue = [[0, 600], [0, h]]
         m.detailsPane.setFocus(true)
         m.detailsPane.hasFocus = true
@@ -169,10 +169,10 @@ end sub
 sub onGridScrolled()
 
     ' If we're within 12 hours of end of grid, load next 24hrs of data
-    if m.scheduleGrid.leftEdgeTargetTime + (12 * 60 * 60) > m.gridEndDate.AsSeconds() 
+    if m.scheduleGrid.leftEdgeTargetTime + (12 * 60 * 60) > m.gridEndDate.AsSeconds()
 
         ' Ensure the task is not already (still) running,
-        if m.LoadScheduleTask.state <> "run" 
+        if m.LoadScheduleTask.state <> "run"
             m.LoadScheduleTask.startTime = m.gridEndDate.ToISOString()
             m.gridEndDate.FromSeconds(m.gridEndDate.AsSeconds() + (24 * 60 * 60))
             m.LoadScheduleTask.endTime = m.gridEndDate.ToISOString()
@@ -184,7 +184,7 @@ end sub
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
 
-    if key = "back" or key = "down" and m.detailsPane.isInFocusChain() 
+    if key = "back" or key = "down" and m.detailsPane.isInFocusChain()
         focusProgramDetails(false)
         return true
     end if
