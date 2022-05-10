@@ -6,7 +6,7 @@
     <name>default</name>
     <message>
         <source>192.168.1.100:8096 or https://example.com/jellyfin</source>
-        <translation>192.168.1.100:8096 ou https://exemplo.com/jellyfin</translation>
+        <translation>padrão 192.168.1.100:8096 ou https://exemplo.com/jellyfin</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -1712,6 +1712,22 @@ não contém itens</translation>
     <message>
         <source>Change Server</source>
         <translation>Mudar Servidor</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Remover salvo</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Salvar credenciais?</translation>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Sair</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Mudar servidor</translation>
     </message>
 </context>
 </TS>
