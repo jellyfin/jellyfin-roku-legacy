@@ -349,7 +349,7 @@ function CreateSearchPage()
     ' Search + Results Page
     group = CreateObject("roSGNode", "SearchResults")
 
-    search = group.findNode("SearchBox")
+    'search = group.findNode("SearchBox")
     ' TODO/FIXME: This will need to be cleaned up.
     ' These observeFields currently take precedence over the new
     ' observeFields in SearchTask/SearchResults
