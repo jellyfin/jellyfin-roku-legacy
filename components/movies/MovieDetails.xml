@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="MovieDetails" extends="JFGroup">
+<component name="MovieDetails" extends="JFScreen">
   <children>
     <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[30]">
       <Poster id="moviePoster"
