@@ -22,8 +22,7 @@ sub loadItems()
         SortBy: sort_field,
         SortOrder: sort_order,
         recursive: m.top.recursive,
-        Fields: "Overview",
-        searchTerm: m.top.searchTerm
+        Fields: "Overview"
     }
 
     ' Handle special case when getting names starting with numeral
@@ -34,6 +33,11 @@ sub loadItems()
             params.NameStartsWith = m.top.nameStartsWith
         end if
     end if
+
+    'Append voice search when there is text
+        if m.top.searchTerm <> ""
+            params.searchTerm = m.top.searchTerm
+        end if
 
     filter = m.top.filter
     if filter = "All" or filter = "all"

@@ -29,6 +29,9 @@ sub init()
     m.VoiceBox.active = true
     m.VoiceBox.observeField("VoiceFilter", "onVoiceFilter")
 
+    'Get spinner
+    m.spinner = m.top.findNode("ItemSpinner")
+
     'backdrop 
     m.newBackdrop.observeField("loadStatus", "newBGLoaded")
 
@@ -50,7 +53,7 @@ end sub
 '
 'Load initial set of Data
 sub loadInitialItems()
-
+    m.spinner.visible = true
     if m.top.parentItem.backdropUrl <> invalid
         SetBackground(m.top.parentItem.backdropUrl)
     end if
@@ -271,7 +274,7 @@ sub ItemDataLoaded(msg)
     end if
 
     m.itemGrid.setFocus(true)
-
+    m.spinner.visible = false
 end sub
 
 '
@@ -359,7 +362,6 @@ sub onItemAlphaSelected()
     m.loadedRows = 0
     m.loadedItems = 0
     m.data = CreateObject("roSGNode", "ContentNode")
-    m.loadItemsTask.searchTerm = ""
     m.itemGrid.content = m.data
     loadInitialItems()
 end sub
@@ -367,6 +369,8 @@ end sub
 sub onVoiceFilter()
     m.loadedRows = 0
     m.loadedItems = 0
+    m.data = CreateObject("roSGNode", "ContentNode")
+    m.itemGrid.content = m.data
     print "Voicebox sub data = " m.VoiceBox.text
     m.loadItemsTask.searchTerm = m.VoiceBox.text
     loadInitialItems()
@@ -528,7 +532,7 @@ sub updateTitle()
     else
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered)")
     end if
-    if m.top.AlphaSelected <> ""
+    if m.top.AlphaSelected <> "" or m.VoiceBox.text <> ""
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered)")
     end if
 end sub
