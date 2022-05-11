@@ -24,6 +24,6 @@
   <script type="text/brightscript" uri="JFVideo.brs" />
   <children>
     <timer id="playbackTimer" repeat="true" duration="30" />
-    <timer id="bufferCheckTimer" repeat="true" duration="10" />
+    <timer id="bufferCheckTimer" repeat="true" />
   </children>
 </component>
