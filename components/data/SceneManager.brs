@@ -114,6 +114,12 @@ sub clearScenes()
     m.groups = []
 end sub
 
+'
+' Display user/device settings screen
+sub settings()
+    settingsScreen = createObject("roSGNode", "Settings")
+    pushScene(settingsScreen)
+end sub
 
 '
 ' Register observers for overhang data

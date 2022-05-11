@@ -10,6 +10,13 @@ sub Main (args as dynamic) as void
     ' Set global constants
     setConstants()
 
+    ' Temporary code to migrate MPEG2 setting from device setting to user setting
+    ' Added for 1.4.13 release and should probably be removed for 1.4.15
+    if get_setting("playback.mpeg2") <> invalid and registry_read("playback.mpeg2", get_setting("active_user")) = invalid
+        set_user_setting("playback.mpeg2", get_setting("playback.mpeg2"))
+    end if
+    ' End Temporary code
+
     m.port = CreateObject("roMessagePort")
     m.screen.setMessagePort(m.port)
     m.scene = m.screen.CreateScene("JFScene")
@@ -88,7 +95,11 @@ sub Main (args as dynamic) as void
             itemNode = reportingNode.quickPlayNode
             if itemNode = invalid or itemNode.id = "" then return
             if itemNode.type = "Episode" or itemNode.type = "Movie" or itemNode.type = "Video"
-                video = CreateVideoPlayerGroup(itemNode.id)
+                if itemNode.type = "Episode" and itemNode.selectedAudioStreamIndex <> invalid and itemNode.selectedAudioStreamIndex > 1
+                    video = CreateVideoPlayerGroup(itemNode.id, invalid, itemNode.selectedAudioStreamIndex)
+                else
+                    video = CreateVideoPlayerGroup(itemNode.id)
+                end if
                 if video <> invalid
                     sceneManager.callFunc("pushScene", video)
                 end if
@@ -103,7 +114,11 @@ sub Main (args as dynamic) as void
                 ' play episode
                 ' todo: create an episode page to link here
                 video_id = selectedItem.id
-                video = CreateVideoPlayerGroup(video_id)
+                if selectedItem.selectedAudioStreamIndex <> invalid and selectedItem.selectedAudioStreamIndex > 1
+                    video = CreateVideoPlayerGroup(video_id, invalid, selectedItem.selectedAudioStreamIndex)
+                else
+                    video = CreateVideoPlayerGroup(video_id)
+                end if
                 if video <> invalid
                     sceneManager.callFunc("pushScene", video)
                 end if
@@ -162,7 +177,11 @@ sub Main (args as dynamic) as void
             ' If you select a TV Episode from ANYWHERE, follow this flow
             node = getMsgPicker(msg, "picker")
             video_id = node.id
-            video = CreateVideoPlayerGroup(video_id)
+            if node.selectedAudioStreamIndex <> invalid and node.selectedAudioStreamIndex > 1
+                video = CreateVideoPlayerGroup(video_id, invalid, node.selectedAudioStreamIndex)
+            else
+                video = CreateVideoPlayerGroup(video_id)
+            end if
             if video <> invalid
                 sceneManager.callFunc("pushScene", video)
             end if
@@ -262,16 +281,16 @@ sub Main (args as dynamic) as void
                 SignOut()
                 sceneManager.callFunc("clearScenes")
                 goto app_start
-            else if button.id = "play_mpeg2"
-                playMpeg2 = get_setting("playback.mpeg2")
-                if playMpeg2 = "true"
-                    playMpeg2 = "false"
-                    button.title = tr("MPEG2 Support: Off")
+            else if button.id = "settings"
+                ' Exit out of the side panel
+                panel = group.findNode("options")
+                panel.visible = false
+                if group.lastFocus <> invalid
+                    group.lastFocus.setFocus(true)
                 else
-                    playMpeg2 = "true"
-                    button.title = tr("MPEG2 Support: On")
+                    group.setFocus(true)
                 end if
-                set_setting("playback.mpeg2", playMpeg2)
+                sceneManager.callFunc("settings")
             end if
         else if isNodeEvent(msg, "selectSubtitlePressed")
             node = m.scene.focusedChild
