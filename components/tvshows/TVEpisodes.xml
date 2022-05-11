@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="TVEpisodes" extends="JFGroup">
   <children>
-    <TVEpisodeRow id="picker" visible="true" />
+    <TVEpisodeRowWithOptions id="picker" visible="true" />
   </children>
   <interface>
     <field id="episodeSelected" alias="picker.itemSelected" />
     <field id="quickPlayNode" type="node" alwaysNotify="true" />
-    <field id="seasonData" type="assocarray" onChange="setSeason" />
+    <field id="seasonData" type="assocarray" onChange="setSeasonLoading" />
     <field id="objects" alias="picker.objects" />
   </interface>
   <script type="text/brightscript" uri="TVEpisodes.brs" />

@@ -6,7 +6,7 @@ sub init()
 
     m.top.showRowLabel = [false]
     m.top.showRowCounter = [true]
-    m.top.rowLabelOffset = [0, 5]
+    m.top.rowLabelOffset = [0, 0]
 
     updateSize()
 
@@ -15,12 +15,12 @@ end sub
 
 sub updateSize()
     itemWidth = 200
-    itemHeight = 380 ' width * 1.5 + text
+    itemHeight = 320 ' width * 1.5 + text
 
     m.top.visible = true
 
     ' size of the whole row
-    m.top.itemSize = [1700, itemHeight]
+    m.top.itemSize = [1800, (itemHeight + 40)]
     ' spacing between rows
     m.top.itemSpacing = [0, 0]
 
