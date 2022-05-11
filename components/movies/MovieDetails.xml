@@ -33,7 +33,7 @@
         <ButtonGroupHoriz id="buttons" itemSpacings="[10]">
           <Button text="Play" id="play-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
           <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
-          <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
+          <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="300" />
           <Button text="Favorite" id="favorite-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
         </ButtonGroupHoriz>
         <Label id="tagline" />

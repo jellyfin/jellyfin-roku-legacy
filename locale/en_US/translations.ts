@@ -493,5 +493,15 @@
         <source>Disabled</source>
         <translation>Disabled</translation>
     </message>
+    <message>
+        <source>Set Favorite</source>
+        <translation>Set Favorite</translation>
+        <extracomment>Button Text - When pressed, sets item as Favorite</extracomment>
+    </message>
+    <message>
+        <source>Set Watched</source>
+        <translation>Set Watched</translation>
+        <extracomment>Button Text - When pressed, marks item as Warched</extracomment>
+    </message>
 </context>
 </TS>
