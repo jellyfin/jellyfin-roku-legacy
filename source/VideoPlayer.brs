@@ -19,8 +19,8 @@ end function
 sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1)
 
     video.content = createObject("RoSGNode", "ContentNode")
-
     meta = ItemMetaData(video.id)
+    m.videotype = meta.type
     if meta = invalid
         video.content = invalid
         return
@@ -240,10 +240,10 @@ end function
 
 'Opens dialog asking user if they want to resume video or start playback over
 function startPlayBackOver(time as longinteger) as integer
-    if m.scene.focusedChild.overhangTitle = "Home"
+    if m.videotype = "Episode" or m.videotype = "Series"
         return option_dialog([tr("Resume playing at ") + ticksToHuman(time) + ".", tr("Start over from the beginning."), tr("Watched"), tr("Go to series"), tr("Go to season"), tr("Go to episode")])
     else
-        return option_dialog(["Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning.", "Watched", "Go to series", "Go to season", "Go to episode"])
+        return option_dialog(["Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning."])
     end if
 end function
 
