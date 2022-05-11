@@ -145,33 +145,23 @@ function onKeyEvent(key as string, press as boolean) as boolean
         topGrp.setFocus(true)
         return true
     else if key = "down" and topGrp.hasFocus()
-        buttonGrp = m.top.findNode("buttons")
-
-        if key = "down" and topGrp.isinFocusChain()
-            bottomGrp.setFocus(true)
-            m.top.findNode("VertSlider").reverse = false
-            m.top.findNode("extrasFader").reverse = false
+        bottomGrp.setFocus(true)
+        m.top.findNode("VertSlider").reverse = false
+        m.top.findNode("extrasFader").reverse = false
+        m.top.findNode("pplAnime").control = "start"
+        return true
+    else if key = "up" and bottomGrp.hasFocus()
+        if bottomGrp.itemFocused = 0
+            m.top.findNode("VertSlider").reverse = true
+            m.top.findNode("extrasFader").reverse = true
             m.top.findNode("pplAnime").control = "start"
-            return true
-        else if key = "down" and buttonGrp.isinFocusChain()
             topGrp.setFocus(true)
             return true
         end if
-        if key = "up" and bottomGrp.isinFocusChain()
-            if bottomGrp.itemFocused = 0
-                m.top.findNode("VertSlider").reverse = true
-                m.top.findNode("extrasFader").reverse = true
-                m.top.findNode("pplAnime").control = "start"
-                topGrp.setFocus(true)
-                return true
-            end if
-        else if key = "up" and topGrp.hasFocus()
-            overview.setFocus(true)
-            return true
-        else if key = "up" and topGrp.isinFocusChain()
-            buttonGrp.setFocus(true)
-            return true
-        end if
+    else if key = "up" and topGrp.hasFocus()
+        overview.setFocus(true)
+        return true
     end if
+
     return false
 end function
