@@ -217,7 +217,7 @@ sub setWatchedColor()
     else
         watched_button.textColor = "0xddddddff"
         watched_button.focusedTextColor = "#262626ff"
-        watched_button.text = tr("Set watched")
+        watched_button.text = tr("Set Watched")
     end if
 end sub
 
