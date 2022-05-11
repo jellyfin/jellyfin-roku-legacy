@@ -112,7 +112,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
         protocol = LCase(playbackInfo.MediaSources[0].Protocol)
         if protocol <> "file"
             uriRegex = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
-            uri = uriRegex.Match(playbackInfo.MediaSources[0].Path)
+            uri = uriRegex.Match(playbackinfo.MediaSources[0].Path)
             ' proto $1, host $2, port $3, the-rest $4
             localhost = CreateObject("roRegex", "^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*\:)*?:?0*1$", "i")
             ' https://stackoverflow.com/questions/8426171/what-regex-will-match-all-loopback-addresses
@@ -123,7 +123,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 video.content.url = buildURL(uri[4])
             else
                 fully_external = true
-                video.content.url = playbackInfo.MediaSources[0].Path
+                video.content.url = playbackinfo.MediaSources[0].Path
             end if
         else:
             params.append({
