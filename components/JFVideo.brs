@@ -6,6 +6,7 @@ sub init()
     m.bufferPercentage = 0 ' Track whether content is being loaded
     m.playReported = false
     m.top.transcodeReasons = []
+    m.bufferCheckTimer.duration = 10
 
 end sub
 
@@ -67,6 +68,7 @@ sub ReportPlayback(state = "update" as string)
             "MediaSourceId": m.top.transcodeParams.MediaSourceId,
             "LiveStreamId": m.top.transcodeParams.LiveStreamId
         })
+        m.bufferCheckTimer.duration = 30
     end if
 
     ' Report playstate via worker task
@@ -85,12 +87,13 @@ sub bufferCheck(msg)
         m.bufferCheckTimer.unobserveField("fire")
         return
     end if
-
     if m.top.bufferingStatus <> invalid
 
         ' Check that the buffering percentage is increasing
         if m.top.bufferingStatus["percentage"] > m.bufferPercentage
             m.bufferPercentage = m.top.bufferingStatus["percentage"]
+        else if m.top.content.live = true
+            m.top.callFunc("refresh")
         else
             ' If buffering has stopped Display dialog
             dialog = createObject("roSGNode", "Dialog")

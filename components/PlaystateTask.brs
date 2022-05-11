@@ -41,8 +41,11 @@ function PlaystateDefaults(params = {} as object)
         '"PlaySessionId": "",
         '"RepeatMode": "RepeatNone"
     }
-    for each p in params.items()
-        new_params[p.key] = p.value
+
+    paramsArray = params.items()
+    for i = 0 to paramsArray.count() - 1
+        item = paramsArray[i]
+        new_params[item.key] = item.value
     end for
     return FormatJson(new_params)
 end function
