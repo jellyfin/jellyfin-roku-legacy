@@ -140,31 +140,17 @@ function onKeyEvent(key as string, press as boolean) as boolean
     overview = m.top.findNode("overview")
     topGrp = m.top.findNode("seasons")
     bottomGrp = m.top.findNode("extrasGrid")
-<<<<<<< HEAD
 
     if key = "down" and overview.hasFocus()
         topGrp.setFocus(true)
         return true
     else if key = "down" and topGrp.hasFocus()
-=======
-    buttonGrp = m.top.findNode("buttons")
-
-    if key = "down" and topGrp.isinFocusChain()
->>>>>>> 8d8ba50 (Added Buttons to TVShowDetails.brs - Need to add logic for buttons)
         bottomGrp.setFocus(true)
         m.top.findNode("VertSlider").reverse = false
         m.top.findNode("extrasFader").reverse = false
         m.top.findNode("pplAnime").control = "start"
         return true
-<<<<<<< HEAD
     else if key = "up" and bottomGrp.hasFocus()
-=======
-    else if key = "down" and buttonGrp.isinFocusChain()
-        topGrp.setFocus(true)
-        return true
-    end if
-    if key = "up" and bottomGrp.isinFocusChain()
->>>>>>> 8d8ba50 (Added Buttons to TVShowDetails.brs - Need to add logic for buttons)
         if bottomGrp.itemFocused = 0
             m.top.findNode("VertSlider").reverse = true
             m.top.findNode("extrasFader").reverse = true
@@ -172,15 +158,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
             topGrp.setFocus(true)
             return true
         end if
-<<<<<<< HEAD
     else if key = "up" and topGrp.hasFocus()
         overview.setFocus(true)
         return true
-=======
-    else if key = "up" and topGrp.isinFocusChain()
-            buttonGrp.setFocus(true)
-            return true
->>>>>>> 8d8ba50 (Added Buttons to TVShowDetails.brs - Need to add logic for buttons)
     end if
 
     return false
