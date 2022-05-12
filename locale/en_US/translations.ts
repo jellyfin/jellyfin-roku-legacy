@@ -503,5 +503,20 @@
         <translation>Set Watched</translation>
         <extracomment>Button Text - When pressed, marks item as Warched</extracomment>
     </message>
+    <message>
+        <source>Go to series</source>
+        <translation>Go to series</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Series Detail Page</extracomment>
+    </message>
+    <message>
+        <source>Go to season</source>
+        <translation>Go to season</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Season Page</extracomment>
+    </message>
+    <message>
+        <source>Go to episode</source>
+        <translation>Go to episode</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Episode Detail Page</extracomment>
+    </message>
 </context>
 </TS>
