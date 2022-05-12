@@ -33,7 +33,9 @@ sub init()
     m.filter = "All"
 
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
-
+    'set inital counts for overhang before content is loaded.
+    m.actInt = 0
+    m.loadItemsTask.totalRecordCount = 0
 end sub
 
 '
@@ -279,7 +281,13 @@ sub onItemFocused()
 
     itemInt = m.itemGrid.itemFocused
     m.actInt = m.itemGrid.itemFocused + 1
-    m.top.overhangTitle = m.top.parentItem.title + StrI(m.actInt) + " of" + StrI(m.loadItemsTask.totalRecordCount)
+    if m.filter = "All"
+        m.top.overhangTitle = m.top.parentItem.title + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
+    else if m.filter = "Favorites"
+        m.top.overhangTitle = m.top.parentItem.title + " Favorites" + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
+    else
+        m.top.overhangTitle = m.top.parentItem.title + " Filtered" + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
+    end if
 
     ' If no selected item, set background to parent backdrop
     if itemInt = -1
@@ -400,7 +408,6 @@ sub optionsClosed()
         m.filter = m.options.filter
         updateTitle()
         reload = true
-
         'Store filter setting
         if m.top.parentItem.collectionType = "livetv"
             set_user_setting("display.livetv.filter", m.options.filter)
@@ -481,10 +488,10 @@ end function
 
 sub updateTitle()
     if m.filter = "All"
-        m.top.overhangTitle = m.top.parentItem.title
+        m.top.overhangTitle = m.top.parentItem.title + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
     else if m.filter = "Favorites"
-        m.top.overhangTitle = m.top.parentItem.title + " (Favorites) " + StrI(m.actInt) + " of " + StrI(m.loadItemsTask.totalRecordCount)
+        m.top.overhangTitle = m.top.parentItem.title + " Favorites" + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
     else
-        m.top.overhangTitle = m.top.parentItem.title + " (Filtered)" + StrI(m.actInt) + " of " + StrI(m.loadItemsTask.totalRecordCount)
+        m.top.overhangTitle = m.top.parentItem.title + " Filtered" + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
     end if
 end sub
