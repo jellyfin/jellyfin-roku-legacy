@@ -25,16 +25,17 @@ sub loadItems()
         params = {}
         params["Limit"] = 16
         params["ParentId"] = m.top.itemId
-        params["EnableImageTypes"] = "Primary"
+        params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
         params["ImageTypeLimit"] = 1
         params["fields"] = "PrimaryImageAspectRatio,BasicSyncInfo,Path"
-        params["MaxWidth"] = 180
+        params["MaxWidth"] = 416
+        params["MaxHeight"] = 416
         resp = APIRequest(url, params)
         data = getJson(resp)
 
         for each item in data
             tmp = CreateObject("roSGNode", "HomeData")
-            item.ImageURL = ImageURL(item.Id)
+            item.ImageURL = ImageURL(item.Id, "Primary", params)
             if item.type = "Episode"
                 item.ImageURL = ImageURL(item.SeriesId)
             end if

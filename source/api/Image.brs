@@ -38,11 +38,11 @@ end function
 function ImageURL(id, version = "Primary", params = {})
     ' set defaults
     if params.maxHeight = invalid
-        param = { "maxHeight": "331" }
+        param = { "fillHeight": "331" }
         params.append(param)
     end if
     if params.maxWidth = invalid
-        param = { "maxWidth": "464" }
+        param = { "fillWidth": "464" }
         params.append(param)
     end if
     if params.quality = invalid

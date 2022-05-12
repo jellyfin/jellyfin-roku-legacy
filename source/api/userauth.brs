@@ -145,9 +145,21 @@ sub LoadUserPreferences()
         if jsonResponse.CustomPrefs["landing-livetv"] <> invalid
             set_user_setting("display.livetv.landing", jsonResponse.CustomPrefs["landing-livetv"])
         end if
+        ' Take into account nones, if nones are in the middle then resort them to the end to be removed later in HomeRows
+        nones = 0
         for i = 0 to 6
             if jsonResponse.CustomPrefs["homesection" + i.ToStr()] <> invalid
-                set_user_setting("display.homesection" + i.ToStr(), jsonResponse.CustomPrefs["homesection" + i.ToStr()])
+                if jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "none"
+                    nones += 1
+                else
+                    if nones > 0
+                        j = i - nones
+                        set_user_setting("display.homesection" + i.ToStr(), "none")
+                        set_user_setting("display.homesection" + j.ToStr(), jsonResponse.CustomPrefs["homesection" + i.ToStr()])
+                    else
+                        set_user_setting("display.homesection" + i.ToStr(), jsonResponse.CustomPrefs["homesection" + i.ToStr()])
+                    end if
+                end if
             end if
         end for
         if jsonResponse.CustomPrefs["homesection0"] = invalid
