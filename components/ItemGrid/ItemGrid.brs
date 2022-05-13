@@ -34,6 +34,7 @@ sub init()
     m.filter = "All"
 
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
+    m.LoadNetworksTask = createObject("roSGNode", "LoadNetworksTask")
     m.spinner = m.top.findNode("spinner")
     m.spinner.visible = true
 
@@ -77,6 +78,22 @@ sub loadInitialItems()
         m.sortAscending = false
     end if
 
+    'if view option is selected run LoadNetworksTask instead of LoadItemsTask2
+if m.options.view  = "Networks"
+        m.LoadNetworksTask.nameStartsWith = m.top.AlphaSelected
+        m.LoadNetworksTask.itemId = m.top.parentItem.Id
+        m.LoadNetworksTask.sortField = m.sortField
+        m.LoadNetworksTask.sortAscending = m.sortAscending
+        m.LoadNetworksTask.filter = m.filter
+        m.LoadNetworksTask.startIndex = 0
+        if m.top.parentItem.collectionType = "movies"
+            m.LoadNetworksTask.itemType = "Movie"
+        else if m.top.parentItem.collectionType = "tvshows"
+            m.LoadNetworksTask.itemType = "Series"
+        end if
+        updateTitle()
+    else
+
     m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
     m.emptyText.visible = false
 
@@ -110,9 +127,17 @@ sub loadInitialItems()
     else
         print "[ItemGrid] Unknown Type: " m.top.parentItem
     end if
+end if
 
-    m.loadItemsTask.observeField("content", "ItemDataLoaded")
-    m.loadItemsTask.control = "RUN"
+   
+    if m.options.view  = "Networks"
+        print "running LoadNetworksTask"
+        m.LoadNetworksTask.observeField("content", "ItemDataLoaded")
+        m.LoadNetworksTask.control = "Run"
+    else
+        m.loadItemsTask.observeField("content", "ItemDataLoaded")
+        m.loadItemsTask.control = "RUN"
+    end if
 
     SetUpOptions()
 
@@ -159,7 +184,11 @@ sub SetUpOptions()
         ]
         'TV Shows
     else if m.top.parentItem.collectionType = "tvshows"
-        options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
+        options.views = [
+            { "Title": tr("Shows"), "Name": "shows" },
+            { "Title": tr("Networks"), "Name": "Networks" },
+            { "Title": tr("Episodes"), "Name": "Episodes" }
+        ]
         options.sort = [
             { "Title": tr("TITLE"), "Name": "SortName" },
             { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
@@ -239,8 +268,14 @@ end sub
 sub ItemDataLoaded(msg)
 
     itemData = msg.GetData()
-    m.loadItemsTask.unobserveField("content")
-    m.loadItemsTask.content = []
+    
+    if m.options.view = "Networks"
+        m.LoadNetworksTask.unobserveField("content")
+        m.LoadNetworksTask.content = []
+    else
+        m.loadItemsTask.unobserveField("content")
+        m.loadItemsTask.content = []
+    end if
 
     if itemData = invalid
         m.Loading = false
@@ -358,7 +393,7 @@ end sub
 '
 'Check if options updated and any reloading required
 sub optionsClosed()
-
+    print "m.options.view = " m.options.view 
     if m.top.parentItem.collectionType = "livetv" and m.options.view <> m.view
         if m.options.view = "tvGuide"
             m.view = "tvGuide"
@@ -389,6 +424,12 @@ sub optionsClosed()
     end if
 
     reload = false
+    'rload and store view setting
+    if m.options.view <> m.view
+        m.view = m.options.view
+        reload = true
+    end if
+
     if m.options.sortField <> m.sortField or m.options.sortAscending <> m.sortAscending
         m.sortField = m.options.sortField
         m.sortAscending = m.options.sortAscending
@@ -512,5 +553,8 @@ sub updateTitle()
     end if
     if m.top.AlphaSelected <> ""
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered)")
+    end if
+    if m.options.view = "Networks"
+        m.top.overhangTitle = tr(" (Networks)")
     end if
 end sub

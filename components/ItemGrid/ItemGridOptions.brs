@@ -46,6 +46,8 @@ sub optionsSet()
         end for
         m.menus[0].content = viewContent
         m.menus[0].checkedItem = selectedViewIndex
+
+        
     end if
 
     ' Sort Tab
@@ -140,6 +142,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             if m.selectedItem = 0
                 m.selectedViewIndex = m.menus[0].itemSelected
                 m.top.view = m.viewNames[m.selectedViewIndex]
+                print m.selectedViewIndex
             end if
 
             ' Handle Sort screen
