@@ -175,6 +175,13 @@ sub Main (args as dynamic) as void
             series = msg.getRoSGNode()
             node = series.seasonData.items[ptr[1]]
             group = CreateSeasonDetailsGroup(series.itemContent, node)
+        else if isNodeEvent(msg, "musicAlbumSelected")
+            ' If you select a Music Album from ANYWHERE, follow this flow
+            ptr = msg.getData()
+            ' ptr is for [row, col] of selected item... but we only have 1 row
+            albums = msg.getRoSGNode()
+            node = albums.musicArtistAlbumData.items[ptr[1]]
+            group = CreateMusicAlbumDetailsGroup(node)
         else if isNodeEvent(msg, "episodeSelected")
             ' If you select a TV Episode from ANYWHERE, follow this flow
             node = getMsgPicker(msg, "picker")

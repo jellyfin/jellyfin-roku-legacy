@@ -136,7 +136,30 @@ function MusicAlbums(id as string)
     resp = APIRequest(url, { 
         "UserId": get_setting("active_user"),
         "parentId": id,
-        "includeitemtypes": "MusicAlbum"
+        "includeitemtypes": "MusicAlbum",
+        "sortBy": "SortName"
+    })
+
+    data = getJson(resp)
+    results = []
+    for each item in data.Items
+        tmp = CreateObject("roSGNode", "TVEpisodeData")
+        tmp.image = PosterImage(item.id)
+        tmp.json = item
+        results.push(tmp)
+    end for
+    data.Items = results
+    return data
+end function
+
+' Music Songs on a Specified Album
+function MusicSongs(id as string)
+    url = Substitute("Users/{0}/Items", get_setting("active_user"), id)
+    resp = APIRequest(url, { 
+        "UserId": get_setting("active_user"),
+        "parentId": id,
+        "includeitemtypes": "Audio"
+        "sortBy": "SortName"
     })
 
     data = getJson(resp)

@@ -328,7 +328,22 @@ function CreateMusicArtistDetailsGroup(musicartist)
     group.itemContent = ItemMetaData(musicartist.id)
     group.musicArtistAlbumData = MusicAlbums(musicartist.id)
 
-    group.observeField("seasonSelected", m.port)
+    group.observeField("musicAlbumSelected", m.port)
+
+    extras = group.findNode("extrasGrid")
+    extras.observeField("selectedItem", m.port)
+
+    return group
+end function
+
+function CreateMusicAlbumDetailsGroup(album)
+    group = CreateObject("roSGNode", "MusicArtistDetails")
+    m.global.sceneManager.callFunc("pushScene", group)
+
+    group.itemContent = ItemMetaData(album.id)
+    group.musicArtistAlbumData = MusicSongs(album.id)
+
+    group.observeField("musicAlbumSelected", m.port)
 
     extras = group.findNode("extrasGrid")
     extras.observeField("selectedItem", m.port)

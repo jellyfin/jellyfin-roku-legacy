@@ -15,7 +15,7 @@
   <interface>
     <field id="itemContent" type="node" onChange="itemContentChanged" />
     <field id="musicArtistAlbumData" type="assocarray" alias="seasons.MusicArtistAlbumData" />
-    <field id="seasonSelected" alias="seasons.rowItemSelected" />
+    <field id="musicAlbumSelected" alias="seasons.rowItemSelected" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="MusicArtistDetails.brs" />
