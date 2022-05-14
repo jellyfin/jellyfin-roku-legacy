@@ -326,12 +326,9 @@ function CreateMusicArtistDetailsGroup(musicartist)
     m.global.sceneManager.callFunc("pushScene", group)
 
     group.itemContent = ItemMetaData(musicartist.id)
-    group.musicArtistAlbumData = MusicAlbums(musicartist.id)
+    group.musicArtistAlbumData = MusicAlbumList(musicartist.id)
 
     group.observeField("musicAlbumSelected", m.port)
-
-    extras = group.findNode("extrasGrid")
-    extras.observeField("selectedItem", m.port)
 
     return group
 end function
@@ -341,12 +338,9 @@ function CreateMusicAlbumDetailsGroup(album)
     m.global.sceneManager.callFunc("pushScene", group)
 
     group.itemContent = ItemMetaData(album.id)
-    group.musicArtistAlbumData = MusicSongs(album.id)
+    group.musicArtistAlbumData = MusicSongList(album.id)
 
     group.observeField("musicSongSelected", m.port)
-
-    extras = group.findNode("extrasGrid")
-    extras.observeField("selectedItem", m.port)
 
     return group
 end function

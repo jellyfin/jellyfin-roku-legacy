@@ -9,12 +9,12 @@ function getData()
         return data
     end if
 
-    seasonData = m.top.MusicArtistAlbumData
+    albumData = m.top.MusicArtistAlbumData
     data = CreateObject("roSGNode", "ContentNode")
     
-    for each item in seasonData.items
-        itemcontent = data.createChild("ContentNode")
-        itemcontent.title = item.title
+    for each song in albumData.items
+        songcontent = data.createChild("ContentNode")
+        songcontent.title = song.title
     end for
 
     m.top.content = data

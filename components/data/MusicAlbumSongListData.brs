@@ -2,10 +2,8 @@ sub setFields()
     json = m.top.json
     m.top.id = json.id
     m.top.favorite = json.UserData.isFavorite
-    m.top.Type = "MusicArtist"
+    m.top.Type = "MusicAlbum"
     setPoster()
-
-    m.top.title = json.name
 end sub
 
 sub setPoster()
