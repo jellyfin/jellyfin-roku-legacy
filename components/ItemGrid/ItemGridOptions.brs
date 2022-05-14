@@ -10,8 +10,6 @@ sub init()
 
     m.selectedSortIndex = 0
     m.selectedItem = 1
-    m.endOfItems = false
-    m.tmpContent = ""
 
     m.menus = []
     m.menus.push(m.top.findNode("viewMenu"))
@@ -199,9 +197,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
         return true
     else if key = "left"
-            m.menus[2].content = m.tmpContent
         if m.favoriteMenu.hasFocus()
             m.favoriteMenu.setFocus(false)
+            m.menus[m.selectedItem].visible = true
             m.buttons.setFocus(true)
         end if
     else if key = "OK"
@@ -242,12 +240,14 @@ function onKeyEvent(key as string, press as boolean) as boolean
         end if
         return true
     else if key = "back" or key = "up"
+        m.menus[2].visible = true ' Show Filter contents in case hidden by favorite button
         if m.menus[m.selectedItem].isInFocusChain()
             m.buttons.setFocus(true)
             m.menus[m.selectedItem].drawFocusFeedback = false
             return true
         end if
     else if key = "options"
+        m.menus[2].visible = true ' Show Filter contents in case hidden by favorite button
         m.menus[m.selectedItem].drawFocusFeedback = false
         return false
     end if
