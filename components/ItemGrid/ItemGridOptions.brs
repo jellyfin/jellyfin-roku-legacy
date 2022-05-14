@@ -29,9 +29,6 @@ sub init()
 
     m.buttons.observeField("focusedIndex", "buttonFocusChanged")
     m.favoriteMenu.observeField("buttonSelected", "toggleFavorite")
-
-    m.favItemsTask = createObject("roSGNode", "FavoriteItemsTask")
-
 end sub
 
 
@@ -137,6 +134,7 @@ sub toggleFavorite()
     if fav_menu.iconUri = "pkg:/images/icons/favorite.png"
         fav_menu.iconUri = "pkg:/images/icons/favorite_selected.png"
         fav_menu.focusedIconUri = "pkg:/images/icons/favorite_selected.png"
+    m.favItemsTask = createObject("roSGNode", "FavoriteItemsTask")
         ' Run the task to actually favorite it via API
         m.favItemsTask.favTask = "Favorite"
         m.favItemsTask.itemId = m.selectedFavoriteItem.id
