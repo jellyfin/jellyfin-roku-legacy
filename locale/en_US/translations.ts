@@ -493,5 +493,54 @@
         <source>Disabled</source>
         <translation>Disabled</translation>
     </message>
+    <message>
+        <source>User Interface</source>
+        <translation>User Interface</translation>
+        <extracomment>Title for User Interface section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Media Grid</source>
+        <translation>Media Grid</translation>
+        <extracomment>UI -> Media Grid section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Media Grid Options</source>
+        <translation>Media Grid Options</translation>
+    </message>
+    <message>
+        <source>Item Titles</source>
+        <translation>Item Titles</translation>
+        <extracomment>UI -> Media Grid -> Item Title in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Always show the titles below the poster images. (If disabled, title will be shown under hilighted item only)</source>
+        <translation>Always show the titles below the poster images. (If disabled, title will be shown under hilighted item only)</translation>
+        <extracomment>Description for option in Setting Screen</extracomment>
+    </message>
+    <message>
+        <source>Set Favorite</source>
+        <translation>Set Favorite</translation>
+        <extracomment>Button Text - When pressed, sets item as Favorite</extracomment>
+    </message>
+    <message>
+        <source>Set Watched</source>
+        <translation>Set Watched</translation>
+        <extracomment>Button Text - When pressed, marks item as Warched</extracomment>
+    </message>
+    <message>
+        <source>Go to series</source>
+        <translation>Go to series</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Series Detail Page</extracomment>
+    </message>
+    <message>
+        <source>Go to season</source>
+        <translation>Go to season</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Season Page</extracomment>
+    </message>
+    <message>
+        <source>Go to episode</source>
+        <translation>Go to episode</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Episode Detail Page</extracomment>
+    </message>
 </context>
 </TS>
