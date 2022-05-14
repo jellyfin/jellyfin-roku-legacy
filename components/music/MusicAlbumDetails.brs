@@ -10,7 +10,7 @@ sub itemContentChanged()
 
     m.top.findNode("musicartistPoster").uri = item.posterURL
 
-    m.top.overhangTitle = item.json.name
+    m.top.overhangTitle = item.json.AlbumArtist + " / " + item.json.name
 
     setFieldText("overview", item.json.overview)
     setFieldText("numberofsongs", stri(item.json.ChildCount) + " Tracks")

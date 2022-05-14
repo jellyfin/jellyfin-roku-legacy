@@ -321,6 +321,7 @@ function CreateSeriesDetailsGroup(series)
     return group
 end function
 
+' Shows details on selected artist. Bio, image, and list of available albums
 function CreateMusicArtistDetailsGroup(musicartist)
     group = CreateObject("roSGNode", "MusicArtistDetails")
     m.global.sceneManager.callFunc("pushScene", group)
@@ -333,6 +334,7 @@ function CreateMusicArtistDetailsGroup(musicartist)
     return group
 end function
 
+' Shows details on selected album. Description text, image, and list of available songs
 function CreateMusicAlbumDetailsGroup(album)
     group = CreateObject("roSGNode", "MusicAlbumDetails")
     m.global.sceneManager.callFunc("pushScene", group)
