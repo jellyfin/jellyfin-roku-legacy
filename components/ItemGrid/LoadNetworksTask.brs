@@ -28,7 +28,7 @@ sub LoadNetworks()
         userId: get_setting("active_user"),
         IncludeItemTypes: m.top.ItemType
     }
-    
+
 
     ' Handle special case when getting names starting with numeral
     if m.top.NameStartsWith <> ""
@@ -80,8 +80,8 @@ sub LoadNetworks()
             end if
         end for
     end if
-
+    print params
     m.top.content = results
-    
+
 
 end sub

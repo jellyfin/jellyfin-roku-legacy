@@ -47,7 +47,7 @@ sub optionsSet()
         m.menus[0].content = viewContent
         m.menus[0].checkedItem = selectedViewIndex
 
-        
+
     end if
 
     ' Sort Tab

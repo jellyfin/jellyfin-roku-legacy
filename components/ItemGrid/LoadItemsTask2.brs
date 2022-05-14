@@ -23,6 +23,7 @@ sub loadItems()
         SortOrder: sort_order,
         recursive: m.top.recursive,
         Fields: "Overview"
+        StudioIds: m.top.StudioIds
     }
 
     ' Handle special case when getting names starting with numeral
