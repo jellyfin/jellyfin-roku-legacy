@@ -118,11 +118,37 @@ function ItemMetaData(id as string)
         tmp.image = PosterImage(data.id, { "MaxWidth": 300, "MaxHeight": 450 })
         tmp.json = data
         return tmp
+    else if data.type = "MusicArtist"
+        tmp = CreateObject("roSGNode", "MusicArtistData")
+        tmp.image = PosterImage(data.id)
+        tmp.json = data
+        return tmp
     else
         print "Items.brs::ItemMetaData processed unhandled type: " data.type
         ' Return json if we don't know what it is
         return data
     end if
+end function
+
+' Music Albums Belonging to an Artist
+function MusicAlbums(id as string)
+    url = Substitute("Users/{0}/Items", get_setting("active_user"), id)
+    resp = APIRequest(url, { 
+        "UserId": get_setting("active_user"),
+        "parentId": id,
+        "includeitemtypes": "MusicAlbum"
+    })
+
+    data = getJson(resp)
+    results = []
+    for each item in data.Items
+        tmp = CreateObject("roSGNode", "TVEpisodeData")
+        tmp.image = PosterImage(item.id)
+        tmp.json = item
+        results.push(tmp)
+    end for
+    data.Items = results
+    return data
 end function
 
 ' Seasons for a TV Show

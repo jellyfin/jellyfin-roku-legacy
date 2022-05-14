@@ -321,6 +321,21 @@ function CreateSeriesDetailsGroup(series)
     return group
 end function
 
+function CreateMusicArtistDetailsGroup(musicartist)
+    group = CreateObject("roSGNode", "MusicArtistDetails")
+    m.global.sceneManager.callFunc("pushScene", group)
+
+    group.itemContent = ItemMetaData(musicartist.id)
+    group.musicArtistAlbumData = MusicAlbums(musicartist.id)
+
+    group.observeField("seasonSelected", m.port)
+
+    extras = group.findNode("extrasGrid")
+    extras.observeField("selectedItem", m.port)
+
+    return group
+end function
+
 function CreateSeasonDetailsGroup(series, season)
     group = CreateObject("roSGNode", "TVEpisodes")
     group.optionsAvailable = false

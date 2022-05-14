@@ -100,6 +100,8 @@ sub loadInitialItems()
         m.loadItemsTask.itemType = "Movie"
     else if m.top.parentItem.collectionType = "tvshows"
         m.loadItemsTask.itemType = "Series"
+    else if m.top.parentItem.collectionType = "music"
+        m.loadItemsTask.itemType = "MusicArtist"
     else if m.top.parentItem.collectionType = "livetv"
         m.loadItemsTask.itemType = "LiveTV"
 
@@ -208,6 +210,19 @@ sub SetUpOptions()
         options.views = []
         options.sort = []
         options.filter = []
+        'Music
+    else if m.top.parentItem.collectionType = "music"
+        options.views = [{ "Title": tr("Music"), "Name": "music" }]
+        options.sort = [
+            { "Title": tr("TITLE"), "Name": "SortName" },
+            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+            { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+            { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+        ]
+        options.filter = [
+            { "Title": tr("All"), "Name": "All" },
+            { "Title": tr("Favorites"), "Name": "Favorites" }
+        ]
     else
         options.views = [
             { "Title": tr("Default"), "Name": "default" }
