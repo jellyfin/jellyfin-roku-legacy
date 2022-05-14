@@ -115,12 +115,11 @@ end sub
 ' Switch menu shown when button focus changes
 sub buttonFocusChanged()
     if m.buttons.focusedIndex = m.selectedItem
-        if m.top.findNode("buttons").hasFocus()
+        if m.buttons.hasFocus()
             m.buttons.setFocus(false)
-            m.menus[2].setFocus(false)
-            m.tmpContent = m.menus[2].content
-            m.menus[2].content = ""
-            m.top.findNode("favoriteMenu").setFocus(true)
+            m.menus[m.selectedItem].setFocus(false)
+            m.menus[m.selectedItem].visible = false
+            m.favoriteMenu.setFocus(true)
         end if
     end if
     m.fadeOutAnimOpacity.fieldToInterp = m.menus[m.selectedItem].id + ".opacity"
@@ -130,35 +129,33 @@ sub buttonFocusChanged()
 end sub
 
 sub toggleFavorite()
-    fav_menu = m.top.findNode("favoriteMenu")
-    if fav_menu.iconUri = "pkg:/images/icons/favorite.png"
-        fav_menu.iconUri = "pkg:/images/icons/favorite_selected.png"
-        fav_menu.focusedIconUri = "pkg:/images/icons/favorite_selected.png"
     m.favItemsTask = createObject("roSGNode", "FavoriteItemsTask")
+    if m.favoriteMenu.iconUri = "pkg:/images/icons/favorite.png"
+        m.favoriteMenu.iconUri = "pkg:/images/icons/favorite_selected.png"
+        m.favoriteMenu.focusedIconUri = "pkg:/images/icons/favorite_selected.png"
         ' Run the task to actually favorite it via API
         m.favItemsTask.favTask = "Favorite"
         m.favItemsTask.itemId = m.selectedFavoriteItem.id
         m.favItemsTask.control = "RUN"
     else
-        fav_menu.iconUri = "pkg:/images/icons/favorite.png"
-        fav_menu.focusedIconUri = "pkg:/images/icons/favorite.png"
+        m.favoriteMenu.iconUri = "pkg:/images/icons/favorite.png"
+        m.favoriteMenu.focusedIconUri = "pkg:/images/icons/favorite.png"
         m.favItemsTask.favTask = "Unfavorite"
         m.favItemsTask.itemId = m.selectedFavoriteItem.id
         m.favItemsTask.control = "RUN"
     end if
     ' Make sure we set the Favorite Heart color for the appropriate child
     setHeartColor("#cc3333")
-    m.favoriteMenu = fav_menu
 end sub
 
 sub setHeartColor(color as string)
     error = []
     try
         for i = 0 to 6
-            node = m.top.findNode("favoriteMenu").getChild(i)
+            node = m.favoriteMenu.getChild(i)
             if node <> invalid
                 if node.uri <> invalid and node.uri = "pkg:/images/icons/favorite_selected.png"
-                    m.top.findNode("favoriteMenu").getChild(i).blendColor = color
+                    m.favoriteMenu.getChild(i).blendColor = color
                 end if
             end if
         end for
@@ -188,8 +185,8 @@ end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
 
-    if key = "down" or (key = "OK" and m.top.findNode("buttons").hasFocus())
-        m.top.findNode("buttons").setFocus(false)
+    if key = "down" or (key = "OK" and m.buttons.hasFocus())
+        m.buttons.setFocus(false)
         m.menus[m.selectedItem].setFocus(true)
         m.menus[m.selectedItem].drawFocusFeedback = true
 
@@ -202,10 +199,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
         return true
     else if key = "left"
-        if m.top.findNode("favoriteMenu").hasFocus()
-            m.top.findNode("favoriteMenu").setFocus(false)
             m.menus[2].content = m.tmpContent
-            m.top.findNode("buttons").setFocus(true)
+        if m.favoriteMenu.hasFocus()
+            m.favoriteMenu.setFocus(false)
+            m.buttons.setFocus(true)
         end if
     else if key = "OK"
         if m.menus[m.selectedItem].isInFocusChain()
