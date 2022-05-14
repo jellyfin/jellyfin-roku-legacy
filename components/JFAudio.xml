@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="JFAudio" extends="Audio">
+  <interface>
+    <field id="backPressed" type="boolean" alwaysNotify="true" />
+    <field id="selectSubtitlePressed" type="boolean" alwaysNotify="true" />
+    <field id="PlaySessionId" type="string" />
+    <field id="Subtitles" type="array" />
+    <field id="SelectedSubtitle" type="integer" />
+    <field id="captionMode" type="string" />
+    <field id="container" type="string" />
+    <field id="directPlaySupported" type="boolean" />
+    <field id="systemOverlay" type="boolean" value="false" />
+    <field id="showID" type="string" />
+
+    <field id="transcodeParams" type="assocarray" />
+    <field id="isTranscoded" type="boolean" />
+    <field id="transcodeReasons" type="array" />
+    
+    <field id="videoId" type="string" />
+    <field id="mediaSourceId" type="string" />
+    <field id="audioIndex" type="integer" />
+
+  </interface>
+  <script type="text/brightscript" uri="JFAudio.brs" />
+  <children>
+    <timer id="playbackTimer" repeat="true" duration="30" />
+    <timer id="bufferCheckTimer" repeat="true" />
+  </children>
+</component>

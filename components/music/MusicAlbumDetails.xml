@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="MusicAlbumDetails" extends="JFGroup">
+  <children>
+    <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[-10]" >
+      <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[15]" >
+        <Poster id="musicartistPoster" width="450" height="450" />
+        <LayoutGroup layoutDirection="vert" itemSpacings="[15]">
+          <Label id="overview" wrap="true" width="1250" maxLines="5" />
+          <MusicAlbumSongList id="songList" itemSize="[ 1250, 60 ]" numRows="8" />
+        </LayoutGroup>
+      </LayoutGroup>
+      <MusicArtistAlbumRow id="seasons" />
+    </LayoutGroup>
+    <ExtrasSlider id="tvSeasonExtras" />
+  </children>
+  <interface>
+    <field id="itemContent" type="node" onChange="itemContentChanged" />
+    <field id="musicArtistAlbumData" type="assocarray" alias="songList.MusicArtistAlbumData" />
+    <field id="musicSongSelected" alias="songList.itemSelected" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+  <script type="text/brightscript" uri="MusicAlbumDetails.brs" />
+</component>

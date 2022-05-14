@@ -337,13 +337,13 @@ function CreateMusicArtistDetailsGroup(musicartist)
 end function
 
 function CreateMusicAlbumDetailsGroup(album)
-    group = CreateObject("roSGNode", "MusicArtistDetails")
+    group = CreateObject("roSGNode", "MusicAlbumDetails")
     m.global.sceneManager.callFunc("pushScene", group)
 
     group.itemContent = ItemMetaData(album.id)
     group.musicArtistAlbumData = MusicSongs(album.id)
 
-    group.observeField("musicAlbumSelected", m.port)
+    group.observeField("musicSongSelected", m.port)
 
     extras = group.findNode("extrasGrid")
     extras.observeField("selectedItem", m.port)
@@ -400,6 +400,16 @@ function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_
     video.observeField("state", m.port)
 
     return video
+end function
+
+function CreateAudioPlayerGroup(audio_id, mediaSourceId = invalid, audio_stream_idx = 1)
+    ' Audio is Playing
+    audio = AudioPlayer(audio_id, mediaSourceId, audio_stream_idx)
+    if audio = invalid then return invalid
+    audio.observeField("selectSubtitlePressed", m.port)
+    audio.observeField("state", m.port)
+
+    return audio
 end function
 
 function CreatePersonView(personData as object) as object
