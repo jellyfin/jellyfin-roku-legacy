@@ -156,6 +156,8 @@ sub Main (args as dynamic) as void
                 ' Nothing to do here, handled in ItemGrid
             else if selectedItem.type = "MusicArtist"
                 group = CreateMusicArtistDetailsGroup(selectedItem.json)
+            else if selectedItem.type = "MusicAlbum"
+                group = CreateMusicAlbumDetailsGroup(selectedItem.json)
             else
                 ' TODO - switch on more node types
                 message_dialog("This type is not yet supported: " + selectedItem.type + ".")
