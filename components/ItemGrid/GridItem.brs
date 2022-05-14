@@ -10,8 +10,11 @@ sub init()
 
     m.itemText.translation = [0, m.itemPoster.height + 7]
 
-    m.alwaysShowTitles = get_user_setting("itemgrid.alwaysShowTitles")
+    m.alwaysShowTitles = get_user_setting("itemgrid.alwaysShowTitles") = "true"
     m.itemText.visible = m.alwaysShowTitles
+
+    ' Add some padding space when Item Titles are always showing
+    if m.alwaysShowTitles then m.itemText.maxWidth = 250
 
     'Parent is MarkupGrid and it's parent is the ItemGrid
     topParent = m.top.GetParent().GetParent()
@@ -82,7 +85,6 @@ sub focusChanged()
     if m.top.itemHasFocus = true
         m.itemText.visible = true
         m.itemText.repeatCount = -1
-        
     else
         m.itemText.visible = m.alwaysShowTitles
         m.itemText.repeatCount = 0
