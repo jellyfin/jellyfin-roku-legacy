@@ -185,7 +185,7 @@ sub Main (args as dynamic) as void
             node = albums.musicArtistAlbumData.items[ptr[1]]
             group = CreateMusicAlbumDetailsGroup(node)
         else if isNodeEvent(msg, "musicSongSelected")
-            
+
             ' Bypass for now
             if false
 
@@ -202,7 +202,7 @@ sub Main (args as dynamic) as void
                 if audio <> invalid
                     sceneManager.callFunc("pushScene", audio)
                 end if
-                
+
             end if
 
         else if isNodeEvent(msg, "episodeSelected")
@@ -394,7 +394,7 @@ sub Main (args as dynamic) as void
 end sub
 
 sub controlaudioplay()
-    if (m.audio.state = "finished") 
+    if (m.audio.state = "finished")
         m.audio.control = "stop"
         m.audio.control = "none"
     end if

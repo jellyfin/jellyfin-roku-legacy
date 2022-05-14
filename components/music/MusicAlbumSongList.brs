@@ -11,7 +11,7 @@ function getData()
 
     albumData = m.top.MusicArtistAlbumData
     data = CreateObject("roSGNode", "ContentNode")
-    
+
     for each song in albumData.items
         songcontent = data.createChild("ContentNode")
         songcontent.title = song.title

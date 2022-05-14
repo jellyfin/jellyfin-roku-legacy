@@ -18,7 +18,7 @@ sub updateSize()
 
     ' size of the whole row
     m.top.itemSize = [1700, (itemHeight + 40)]
-    
+
     ' spacing between rows
     m.top.itemSpacing = [0, 0]
 

@@ -142,7 +142,7 @@ end function
 ' Get list of albums belonging to an artist
 function MusicAlbumList(id as string)
     url = Substitute("Users/{0}/Items", get_setting("active_user"), id)
-    resp = APIRequest(url, { 
+    resp = APIRequest(url, {
         "UserId": get_setting("active_user"),
         "parentId": id,
         "includeitemtypes": "MusicAlbum",
@@ -164,7 +164,7 @@ end function
 ' Get Songs that are on an Album
 function MusicSongList(id as string)
     url = Substitute("Users/{0}/Items", get_setting("active_user"), id)
-    resp = APIRequest(url, { 
+    resp = APIRequest(url, {
         "UserId": get_setting("active_user"),
         "parentId": id,
         "includeitemtypes": "Audio"
