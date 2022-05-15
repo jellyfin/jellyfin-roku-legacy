@@ -198,12 +198,20 @@ function AudioItem(id as string)
 
     data = getJson(resp)
     results = []
-    for each item in data.Items
+    if data.Items <> invalid
+        for each item in data.Items
+            tmp = CreateObject("roSGNode", "MusicSongData")
+            tmp.image = PosterImage(item.id)
+            tmp.json = item
+            results.push(tmp)
+        end for
+    else
         tmp = CreateObject("roSGNode", "MusicSongData")
-        tmp.image = PosterImage(item.id)
-        tmp.json = item
+        tmp.image = PosterImage(data.id)
+        tmp.json = data
         results.push(tmp)
-    end for
+    end if
+    
     data.Items = results
     return data
 end function

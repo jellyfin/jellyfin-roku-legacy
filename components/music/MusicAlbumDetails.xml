@@ -8,8 +8,8 @@
           <Label id="numberofsongs" width="450" height="25" />
           <Label id="genres" width="450" height="25" />
           <Label id="runtime" width="450" height="25" />
-          
           <Label id="released" width="450" height="25" />
+          <JFButton id="playAlbum" minChars="8" text="Play"></JFButton>
         </LayoutGroup>
         <LayoutGroup layoutDirection="vert" itemSpacings="[15]">
           <Label id="overview" wrap="true" width="1250" maxLines="5" />
@@ -22,6 +22,7 @@
     <field id="itemContent" type="node" onChange="itemContentChanged" />
     <field id="musicArtistAlbumData" type="assocarray" alias="songList.MusicArtistAlbumData" />
     <field id="musicSongSelected" alias="songList.itemSelected" />
+    <field id="playAllSelected" alias="playAlbum.buttonSelected" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="MusicAlbumDetails.brs" />

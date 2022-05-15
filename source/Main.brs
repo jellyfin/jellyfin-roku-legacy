@@ -191,6 +191,10 @@ sub Main (args as dynamic) as void
             selectedIndex = msg.getData()
             songs = msg.getRoSGNode()
             group = CreateAudioPlayerGroup(songs.MusicArtistAlbumData.items[selectedIndex])
+        else if isNodeEvent(msg, "playAllSelected")
+            ' User selected Play All button
+            songs = msg.getRoSGNode()
+            group = CreateAudioPlayerGroup(songs.MusicArtistAlbumData.items)
         else if isNodeEvent(msg, "episodeSelected")
             ' If you select a TV Episode from ANYWHERE, follow this flow
             node = getMsgPicker(msg, "picker")

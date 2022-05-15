@@ -2,6 +2,8 @@ sub init()
     m.top.optionsAvailable = false
     main = m.top.findNode("toplevel")
     main.translation = [96, 175]
+    m.playAlbum = m.top.findNode("playAlbum")
+    m.songList = m.top.findNode("songList")
 end sub
 
 ' Set values for displayed values on screen
@@ -68,6 +70,14 @@ end function
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
+
+    if key = "right" and m.playAlbum.hasFocus()
+        m.songList.setFocus(true)
+        return true
+    else if key = "left" and m.songList.hasFocus()
+        m.playAlbum.setFocus(true)
+        return true
+    end if
 
     return false
 end function

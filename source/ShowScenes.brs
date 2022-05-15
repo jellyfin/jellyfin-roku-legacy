@@ -356,6 +356,9 @@ function CreateMusicAlbumDetailsGroup(album)
     ' Watch for user clicking on a song
     group.observeField("musicSongSelected", m.port)
 
+    ' Watch for user click on Play button on album
+    group.observeField("playAllSelected", m.port)
+
     return group
 end function
 
@@ -410,39 +413,70 @@ function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_
     return video
 end function
 
-sub controlaudioplay()
-    if m.audio.state = "finished"
+' Play Audio
+function CreateAudioPlayerGroup(audiodata)
+
+    if type(audiodata) = "roArray"
+        ' Passed data is an array of audio, setup playback as a playlist
+
+        m.audio = createObject("RoSGNode", "Audio")
+        m.audio.contentIsPlaylist = true
+
+        audioPlaylistContent = createObject("RoSGNode", "ContentNode")
+
+        for each song in audiodata
+            songContent = audioPlaylistContent.CreateChild("ContentNode")
+            songData = AudioItem(song.id)
+
+            params = {}
+
+            params.append({
+                "Static": "true",
+                "Container": songData.mediaSources[0].container,
+            })
+
+            params.MediaSourceId = songData.mediaSources[0].id
+
+            songContent.url = buildURL(Substitute("Audio/{0}/stream", song.id), params)
+            songContent.title = song.title
+            songContent.streamformat = songData.mediaSources[0].container
+        end for
+
+        m.audio.content = audioPlaylistContent
+
         m.audio.control = "stop"
         m.audio.control = "none"
+        m.audio.control = "play"
+
+    else if type(audiodata) = "roSGNode"
+        ' Passed data is a single node
+
+        if audiodata.subtype() = "MusicSongData"
+            ' Passed data is data for a single song, setup playback as a single song
+
+            m.audio = createObject("RoSGNode", "Audio")
+            m.audio.content = createObject("RoSGNode", "ContentNode")
+
+            songData = AudioItem(audiodata.id)
+
+            params = {}
+
+            params.append({
+                "Static": "true",
+                "Container": songData.mediaSources[0].container,
+            })
+
+            params.MediaSourceId = songData.mediaSources[0].id
+
+            m.audio.content.url = buildURL(Substitute("Audio/{0}/stream", audiodata.id), params)
+            m.audio.content.title = audiodata.title
+            m.audio.content.streamformat = songData.mediaSources[0].container
+
+            m.audio.control = "stop"
+            m.audio.control = "none"
+            m.audio.control = "play"
+        end if
     end if
-end sub
-
-' Play Audio
-function CreateAudioPlayerGroup(audio)
-    print "[INFO] Playing ", audio.title
-
-    songData = AudioItem(audio.id)
-
-    m.audio = createObject("RoSGNode", "Audio")
-    m.audio.observeField("state", "controlaudioplay")
-    m.audio.content = createObject("RoSGNode", "ContentNode")
-
-    params = {}
-
-    params.append({
-        "Static": "true",
-        "Container": songData.mediaSources[0].container,
-    })
-
-    params.MediaSourceId = songData.mediaSources[0].id
-
-    m.audio.content.url = buildURL(Substitute("Audio/{0}/stream", audio.id), params)
-    m.audio.content.title = audio.title
-    m.audio.content.streamformat = songData.mediaSources[0].container
-
-    m.audio.control = "stop"
-    m.audio.control = "none"
-    m.audio.control = "play"
 
     return ""
 end function
