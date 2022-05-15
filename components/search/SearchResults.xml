@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="SearchResults" extends="JFGroup">
   <children>
-    <SearchBox id="SearchBox" visible="true" translation="[960, 145]" />
+     <SearchBox id="SearchBox" visible="true" translation="[960, 145]" />
     <SearchRow id="SearchSelect" visible="false" />
 
     <OptionsSlider id="options" />
