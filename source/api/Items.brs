@@ -131,7 +131,8 @@ function ItemMetaData(id as string)
         tmp.json = data
         return tmp
     else if data.type = "Audio"
-
+        print "Items.brs::ItemMetaData for Audio not yet supported"
+        return data
     else
         print "Items.brs::ItemMetaData processed unhandled type: " data.type
         ' Return json if we don't know what it is

@@ -186,24 +186,8 @@ sub Main (args as dynamic) as void
             group = CreateMusicAlbumDetailsGroup(node)
         else if isNodeEvent(msg, "musicSongSelected")
 
-            ' Bypass for now
-            if false
-
-                ' If you select a Music Song from ANYWHERE, follow this flow
-                ptr = msg.getData()
-                ' ptr is for [row, col] of selected item... but we only have 1 row
-                songs = msg.getRoSGNode()
-                node = albums.musicArtistAlbumData.items[ptr[1]]
-
-                audio_id = node.id
-
-                audio = CreateAudioPlayerGroup(audio_id)
-
-                if audio <> invalid
-                    sceneManager.callFunc("pushScene", audio)
-                end if
-
-            end if
+            ' Enjoy the silence
+            message_dialog("Playing songs is not yet supported.")
 
         else if isNodeEvent(msg, "episodeSelected")
             ' If you select a TV Episode from ANYWHERE, follow this flow
@@ -391,13 +375,6 @@ sub Main (args as dynamic) as void
         end if
     end while
 
-end sub
-
-sub controlaudioplay()
-    if (m.audio.state = "finished")
-        m.audio.control = "stop"
-        m.audio.control = "none"
-    end if
 end sub
 
 function LoginFlow(startOver = false as boolean)

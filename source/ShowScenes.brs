@@ -398,16 +398,6 @@ function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_
     return video
 end function
 
-function CreateAudioPlayerGroup(audio_id, mediaSourceId = invalid, audio_stream_idx = 1)
-    ' Audio is Playing
-    audio = AudioPlayer(audio_id, mediaSourceId, audio_stream_idx)
-    if audio = invalid then return invalid
-    audio.observeField("selectSubtitlePressed", m.port)
-    audio.observeField("state", m.port)
-
-    return audio
-end function
-
 function CreatePersonView(personData as object) as object
     person = CreateObject("roSGNode", "PersonDetails")
     m.global.SceneManager.callFunc("pushScene", person)
