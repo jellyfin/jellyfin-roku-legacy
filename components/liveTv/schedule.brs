@@ -100,6 +100,7 @@ sub onScheduleLoaded()
 end sub
 
 sub onProgramFocused()
+
     m.top.watchChannel = invalid
     channel = m.scheduleGrid.content.GetChild(m.scheduleGrid.programFocusedDetails.focusChannelIndex)
     m.detailsPane.channel = channel
