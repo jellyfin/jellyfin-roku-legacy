@@ -158,6 +158,8 @@ sub Main (args as dynamic) as void
                 group = CreateMusicArtistDetailsGroup(selectedItem.json)
             else if selectedItem.type = "MusicAlbum"
                 group = CreateMusicAlbumDetailsGroup(selectedItem.json)
+            else if selectedItem.type = "Audio"
+                group = CreateAudioPlayerGroup(selectedItem.json)
             else
                 ' TODO - switch on more node types
                 message_dialog("This type is not yet supported: " + selectedItem.type + ".")
@@ -185,10 +187,10 @@ sub Main (args as dynamic) as void
             node = albums.musicArtistAlbumData.items[ptr[1]]
             group = CreateMusicAlbumDetailsGroup(node)
         else if isNodeEvent(msg, "musicSongSelected")
-
-            ' Enjoy the silence
-            message_dialog("Playing songs is not yet supported.")
-
+            ' If you select a Song from ANYWHERE, follow this flow
+            selectedIndex = msg.getData()
+            songs = msg.getRoSGNode()
+            group = CreateAudioPlayerGroup(songs.MusicArtistAlbumData.items[selectedIndex])
         else if isNodeEvent(msg, "episodeSelected")
             ' If you select a TV Episode from ANYWHERE, follow this flow
             node = getMsgPicker(msg, "picker")

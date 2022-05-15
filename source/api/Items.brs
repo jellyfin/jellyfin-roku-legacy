@@ -131,8 +131,11 @@ function ItemMetaData(id as string)
         tmp.json = data
         return tmp
     else if data.type = "Audio"
-        print "Items.brs::ItemMetaData for Audio not yet supported"
-        return data
+        ' User clicked on a song and wants it to play
+        tmp = CreateObject("roSGNode", "MusicSongData")
+        tmp.image = PosterImage(data.id)
+        tmp.json = data
+        return tmp
     else
         print "Items.brs::ItemMetaData processed unhandled type: " data.type
         ' Return json if we don't know what it is
@@ -168,6 +171,27 @@ function MusicSongList(id as string)
     resp = APIRequest(url, {
         "UserId": get_setting("active_user"),
         "parentId": id,
+        "includeitemtypes": "Audio"
+        "sortBy": "SortName"
+    })
+
+    data = getJson(resp)
+    results = []
+    for each item in data.Items
+        tmp = CreateObject("roSGNode", "MusicSongData")
+        tmp.image = PosterImage(item.id)
+        tmp.json = item
+        results.push(tmp)
+    end for
+    data.Items = results
+    return data
+end function
+
+' Get Songs that are on an Album
+function AudioItem(id as string)
+    url = Substitute("Users/{0}/Items/{1}", get_setting("active_user"), id)
+    resp = APIRequest(url, {
+        "UserId": get_setting("active_user"),
         "includeitemtypes": "Audio"
         "sortBy": "SortName"
     })

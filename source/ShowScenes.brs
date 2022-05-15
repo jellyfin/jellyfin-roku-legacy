@@ -342,6 +342,7 @@ function CreateMusicAlbumDetailsGroup(album)
     group.itemContent = ItemMetaData(album.id)
     group.musicArtistAlbumData = MusicSongList(album.id)
 
+    ' Watch for user clicking on a song
     group.observeField("musicSongSelected", m.port)
 
     return group
@@ -396,6 +397,43 @@ function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_
     video.observeField("state", m.port)
 
     return video
+end function
+
+sub controlaudioplay()
+    if (m.audio.state = "finished") 
+        m.audio.control = "stop"
+        m.audio.control = "none"
+    end if
+end sub
+
+' Play Audio
+function CreateAudioPlayerGroup(audio)
+    print "[INFO] Playing ", audio.title
+    
+    songData = AudioItem(audio.id)
+
+    m.audio = createObject("RoSGNode", "Audio")
+    m.audio.observeField("state", "controlaudioplay")
+    m.audio.content = createObject("RoSGNode", "ContentNode")
+
+    params = {}
+
+    params.append({
+        "Static": "true",
+        "Container": songData.mediaSources[0].container,
+    })
+
+    params.MediaSourceId = songData.mediaSources[0].id
+
+    m.audio.content.url = buildURL(Substitute("Audio/{0}/stream", audio.id), params)
+    m.audio.content.title = audio.title
+    m.audio.content.streamformat = songData.mediaSources[0].container
+
+    m.audio.control = "stop"
+    m.audio.control = "none"
+    m.audio.control = "play"
+
+    return ""
 end function
 
 function CreatePersonView(personData as object) as object
