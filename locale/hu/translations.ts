@@ -2524,7 +2524,7 @@ elemeket</translation>
         <translation>Sajátosságok</translation>
         <message>
             <source>Press &apos;OK&apos; to Close</source>
-            <translation>Press &apos;OK&apos; to Close</translation>
+            <translation>Nyomj &apos;OK&apos; -t a bezáráshoz</translation>
         </message>
     </message>
     <message>
@@ -2643,6 +2643,10 @@ elemeket</translation>
     <message>
         <source>Delete Saved</source>
         <translation>Mentettek Törlése</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Hitelesítő adatok mentése?</translation>
     </message>
     <message>
         <source>Save Credentials?</source>

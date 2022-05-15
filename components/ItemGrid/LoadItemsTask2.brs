@@ -49,13 +49,12 @@ sub loadItems()
 
     if m.top.ItemType = "LiveTV"
         url = "LiveTv/Channels"
-        params.append({ userId: get_setting("active_user") })
+        params.append({ UserId: get_setting("active_user") })
     else
         url = Substitute("Users/{0}/Items/", get_setting("active_user"))
     end if
     resp = APIRequest(url, params)
     data = getJson(resp)
-
     if data <> invalid
 
         if data.TotalRecordCount <> invalid then m.top.totalRecordCount = data.TotalRecordCount
@@ -80,6 +79,9 @@ sub loadItems()
 
             if tmp <> invalid
                 tmp.json = item
+                if item.UserData <> invalid and item.UserData.isFavorite <> invalid
+                    tmp.favorite = item.UserData.isFavorite
+                end if
                 results.push(tmp)
             end if
         end for
