@@ -4,7 +4,7 @@ sub init()
     m.top.vertAlignment = "top"
     m.top.visible = false
 
-    'show_dialog()
+    show_dialog()
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
@@ -23,7 +23,7 @@ function onDialogButton()
     d = m.top.getScene().dialog
     button_text = d.buttons[d.buttonSelected]
 
-    if button_text = tr("Search Box")
+    if button_text = tr("Search")
         m.top.search_value = d.text
         dismiss_dialog()
         return true
