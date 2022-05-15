@@ -336,7 +336,7 @@ function CreateMusicArtistDetailsGroup(musicartist)
         ' Albums...
         group = CreateObject("roSGNode", "MusicArtistDetails")
         group.itemContent = ItemMetaData(musicartist.id)
-        group.musicArtistAlbumData = musicData 
+        group.musicArtistAlbumData = musicData
         group.observeField("musicAlbumSelected", m.port)
     end if
 
