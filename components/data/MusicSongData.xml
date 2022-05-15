@@ -8,6 +8,7 @@
     <field id="overview" type="string" />
     <field id="type" type="string" value="Song" />
     <field id="json" type="assocarray" onChange="setFields" />
+    <field id="favorite" type="boolean" />
   </interface>
   <script type="text/brightscript" uri="MusicSongData.brs" />
 </component>

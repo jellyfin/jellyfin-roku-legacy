@@ -323,13 +323,24 @@ end function
 
 ' Shows details on selected artist. Bio, image, and list of available albums
 function CreateMusicArtistDetailsGroup(musicartist)
-    group = CreateObject("roSGNode", "MusicArtistDetails")
+    musicData = MusicAlbumList(musicartist.id)
+
+    ' User could have albums or just songs under artists
+    if musicData = invalid or musicData.Items.Count() = 0
+        ' Just songs under artists...
+        group = CreateObject("roSGNode", "MusicAlbumDetails")
+        group.itemContent = ItemMetaData(musicartist.id)
+        group.musicArtistAlbumData = MusicSongList(musicartist.id)
+        group.observeField("musicSongSelected", m.port)
+    else
+        ' Albums...
+        group = CreateObject("roSGNode", "MusicArtistDetails")
+        group.itemContent = ItemMetaData(musicartist.id)
+        group.musicArtistAlbumData = musicData 
+        group.observeField("musicAlbumSelected", m.port)
+    end if
+
     m.global.sceneManager.callFunc("pushScene", group)
-
-    group.itemContent = ItemMetaData(musicartist.id)
-    group.musicArtistAlbumData = MusicAlbumList(musicartist.id)
-
-    group.observeField("musicAlbumSelected", m.port)
 
     return group
 end function
