@@ -103,7 +103,6 @@ sub onProgramFocused()
     m.top.watchChannel = invalid
     channel = m.scheduleGrid.content.GetChild(m.scheduleGrid.programFocusedDetails.focusChannelIndex)
     m.detailsPane.channel = channel
-    m.top.focusedChannel = channel
 
     ' Exit if Channels not yet loaded
     if channel.getChildCount() = 0
