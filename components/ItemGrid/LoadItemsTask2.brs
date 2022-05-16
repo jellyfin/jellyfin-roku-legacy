@@ -59,11 +59,12 @@ sub loadItems()
 
         if data.TotalRecordCount <> invalid then m.top.totalRecordCount = data.TotalRecordCount
 
-        ' When loading the music collection, if no artists are found, try searching by albums
-        if m.top.collectionType = "music"
-            if m.top.ItemType = "MusicArtist"
-                if data.TotalRecordCount = 0
-                    m.top.ItemType = "MusicAlbum"
+        ' When loading a collection, if no results are found, try searching by fallback type
+        if data.TotalRecordCount = 0
+            if m.top.FallbackType <> ""
+                ' Ensure we didn't just search by the fallback type - prevent infinite loop
+                if m.top.ItemType <> m.top.FallbackType
+                    m.top.ItemType = m.top.FallbackType
                     loadItems()
                 end if
             end if
