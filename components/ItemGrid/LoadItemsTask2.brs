@@ -53,10 +53,21 @@ sub loadItems()
         url = Substitute("Users/{0}/Items/", get_setting("active_user"))
     end if
     resp = APIRequest(url, params)
-    data = getJson(resp)
+    data = getJson(resp)    
+
     if data <> invalid
 
         if data.TotalRecordCount <> invalid then m.top.totalRecordCount = data.TotalRecordCount
+
+        ' When loading the music collection, if no artists are found, try searching by albums
+        if m.top.collectionType = "music"
+            if m.top.ItemType = "MusicArtist"
+                if data.TotalRecordCount = 0
+                    m.top.ItemType = "MusicAlbum"
+                    loadItems()
+                end if
+            end if
+        end if
 
         for each item in data.Items
             tmp = invalid
