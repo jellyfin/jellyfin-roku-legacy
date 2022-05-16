@@ -1982,5 +1982,9 @@
         <source>Save Credentials?</source>
         <translation>Enregistrer les identifiants ?</translation>
     </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Sauvegarder les informations d&apos;identification ?</translation>
+    </message>
 </context>
 </TS>
