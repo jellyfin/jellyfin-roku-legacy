@@ -57,7 +57,7 @@ sub updateSize()
     m.top.itemSize = [1703, itemHeight]
 
     ' spacing between rows
-    m.top.itemSpacing = [0, 105]
+    m.top.itemSpacing = [0, 55]
 
     ' spacing between items in a row
     m.top.rowItemSpacing = [20, 0]
@@ -122,10 +122,8 @@ sub loadHomeSections()
             child = i + 1
             latest_media_int = m.latestMediaInt
             latestMediaCount = m.latestMediaCount - 1
-            if latest_media_int < i + 1
-                if latestMediaCount > 0
-                    child = child + latestMediaCount
-                end if
+            if latest_media_int < i + 1 and latestMediaCount > 0
+                child = child + latestMediaCount
             end if
             removeHoldingChild(child)
         end if
@@ -618,8 +616,8 @@ sub updateContinueVideoItems()
         row = homeRows.getChild(row_index)
         row.title = tr("Continue Watching")
         item_count = itemData.count()
-        if item_count > 1000
-            item_count = 1000
+        if item_count > 50
+            item_count = 50
         end if
         if item_count = 0
             homeRows.removeChild(row)
