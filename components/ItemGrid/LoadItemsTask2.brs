@@ -25,7 +25,7 @@ sub loadItems()
         Fields: "Overview"
         StudioIds: m.top.StudioIds
     }
-
+    print params
     ' Handle special case when getting names starting with numeral
     if m.top.NameStartsWith <> ""
         if m.top.NameStartsWith = "#"

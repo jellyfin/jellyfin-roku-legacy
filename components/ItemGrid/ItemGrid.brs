@@ -47,7 +47,6 @@ end sub
 '
 'Load initial set of Data
 sub loadInitialItems()
-
     if m.top.parentItem.backdropUrl <> invalid
         SetBackground(m.top.parentItem.backdropUrl)
     end if
@@ -82,7 +81,7 @@ sub loadInitialItems()
     end if
 
     'if view option is selected run LoadNetworksTask instead of LoadItemsTask2
-    if m.view = "Networks" or m.options.view = "Networks"
+    if  m.top.parentItem.type <> "Folder" and ( m.view = "Networks" or m.options.view = "Networks")
         m.LoadNetworksTask.nameStartsWith = m.top.AlphaSelected
         m.LoadNetworksTask.itemId = m.top.parentItem.Id
         m.LoadNetworksTask.sortField = m.sortField
@@ -96,16 +95,16 @@ sub loadInitialItems()
             m.LoadNetworksTask.itemType = "Series"
         end if
         updateTitle()
+        
     else
-
 
         m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
         m.emptyText.visible = false
 
-        print m.view
         'Set Stuido Id if view is anything other than 'shows'
-        if m.view = "" or m.view = "default"
+        if  m.view = "Networks" or m.top.parentItem.json.type = "Studio" 
             m.loadItemsTask.StudioIds = m.top.parentItem.Id
+            m.loadItemsTask.itemId = "" 'TODO need to get the collectionfolder ID
         else if m.view = "Movies"
             m.loadItemsTask.StudioIds = ""
         end if
@@ -123,10 +122,10 @@ sub loadInitialItems()
 
         if m.top.parentItem.collectionType = "movies"
             m.loadItemsTask.itemType = "Movie"
-            m.loadItemsTask.itemId = m.top.parentItem.id
+            m.loadItemsTask.itemId = m.top.parentItem.Id
         else if m.top.parentItem.collectionType = "tvshows"
             m.loadItemsTask.itemType = "Series"
-            m.loadItemsTask.itemId = m.top.parentItem.id
+            m.loadItemsTask.itemId = m.top.parentItem.Id
         else if m.top.parentItem.collectionType = "livetv"
             m.loadItemsTask.itemType = "LiveTV"
 
@@ -140,7 +139,7 @@ sub loadInitialItems()
         else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Channel"
             ' Non-recursive, to not show subfolder contents
             m.loadItemsTask.recursive = false
-            m.loadItemsTask.itemId = m.top.parentItem.id
+            m.loadItemsTask.itemId = m.top.parentItem.Id
         else if m.top.parentItem.collectionType = "Channel"
             m.top.imageDisplayMode = "scaleToFit"
         else
@@ -149,7 +148,7 @@ sub loadInitialItems()
     end if
 
 
-    if m.options.view = "Networks" or m.view = "Networks"
+    if  m.top.parentItem.type <> "Folder" and ( m.options.view = "Networks" or m.view = "Networks" )
         m.LoadNetworksTask.observeField("content", "ItemDataLoaded")
         m.LoadNetworksTask.control = "Run"
         m.spinner.visible = true
@@ -399,9 +398,8 @@ end sub
 sub loadMoreData()
     m.spinner.visible = true
     if m.Loading = true then return
-
     m.Loading = true
-    if m.options.view = "Networks"
+    if m.options.view = "Networks" or m.view = "Networks" or m.top.parentItem.json.type = "Studio"
         m.LoadNetworksTask.startIndex = m.loadedItems
         m.LoadNetworksTask.observeField("content", "ItemDataLoaded")
         m.LoadNetworksTask.control = "RUN"
@@ -608,7 +606,7 @@ sub updateTitle()
     if m.top.AlphaSelected <> ""
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered)")
     end if
-    if m.options.view = "Networks"
+    if m.options.view = "Networks" or m.view = "Networks"
         m.top.overhangTitle = tr(" (Networks)")
     end if
 end sub
