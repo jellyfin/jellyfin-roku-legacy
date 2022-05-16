@@ -81,7 +81,7 @@ sub loadInitialItems()
     end if
 
     'if view option is selected run LoadNetworksTask instead of LoadItemsTask2
-    if  m.top.parentItem.type <> "Folder" and ( m.view = "Networks" or m.options.view = "Networks")
+    if m.top.parentItem.type <> "Folder" and (m.view = "Networks" or m.options.view = "Networks")
         m.LoadNetworksTask.nameStartsWith = m.top.AlphaSelected
         m.LoadNetworksTask.itemId = m.top.parentItem.Id
         m.LoadNetworksTask.sortField = m.sortField
@@ -95,14 +95,14 @@ sub loadInitialItems()
             m.LoadNetworksTask.itemType = "Series"
         end if
         updateTitle()
-        
+
     else
 
         m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
         m.emptyText.visible = false
 
         'Set Stuido Id if view is anything other than 'shows'
-        if  m.view = "Networks" or m.top.parentItem.json.type = "Studio" 
+        if m.view = "Networks" or m.top.parentItem.json.type = "Studio"
             m.loadItemsTask.StudioIds = m.top.parentItem.Id
             m.loadItemsTask.itemId = "" 'TODO need to get the collectionfolder ID
         else if m.view = "Movies"
@@ -148,7 +148,7 @@ sub loadInitialItems()
     end if
 
 
-    if  m.top.parentItem.type <> "Folder" and ( m.options.view = "Networks" or m.view = "Networks" )
+    if m.top.parentItem.type <> "Folder" and (m.options.view = "Networks" or m.view = "Networks")
         m.LoadNetworksTask.observeField("content", "ItemDataLoaded")
         m.LoadNetworksTask.control = "Run"
         m.spinner.visible = true
