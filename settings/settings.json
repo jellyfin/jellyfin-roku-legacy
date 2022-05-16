@@ -9,7 +9,26 @@
                 "settingName": "playback.mpeg2",
                 "type": "bool",
                 "default": "false"
-            }        
+            }
+        ]
+    },
+    {
+        "title": "User Interface",
+        "description": "Settings relating to how the how the applications looks",
+        "children": [
+            {
+                "title": "Media Grid",
+                "description": "Media Grid Options",
+                "children": [
+                    {
+                        "title": "Item Titles",
+                        "description": "Always show the titles below the poster images. (If disabled, title will be shown under hilighted item only)",
+                        "settingName": "itemgrid.alwaysShowTitles",
+                        "type": "bool",
+                        "default": "false"
+                    }
+                ]
+            }
         ]
     }
 ]

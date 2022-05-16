@@ -20,6 +20,7 @@ sub init()
     m.duration = m.top.findNode("duration")
     m.channelName = m.top.findNode("channelName")
     m.image = m.top.findNode("image")
+    m.favorite = m.top.findNode("favorite")
 
     m.viewChannelFocusAnimationOpacity = m.top.findNode("viewChannelFocusAnimationOpacity")
     m.recordFocusAnimationOpacity = m.top.findNode("recordFocusAnimationOpacity")
@@ -123,6 +124,7 @@ sub channelUpdated()
         if m.top.programDetails = invalid
             m.image.uri = m.top.channel.posterURL
         end if
+        m.favorite.visible = m.top.channel.favorite
     end if
 end sub
 
