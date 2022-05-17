@@ -34,6 +34,7 @@
     <Alpha id="AlphaMenu" />
   </children>
   <interface>
+    <field id="HomeLibraryItem" type="string"/>
     <field id="parentItem" type="node" onChange="loadInitialItems" />
     <field id="selectedItem" type="node" alwaysNotify="true" />
     <field id="quickPlayNode" type="node" alwaysNotify="true" />

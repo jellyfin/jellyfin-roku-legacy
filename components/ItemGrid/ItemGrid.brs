@@ -1,5 +1,5 @@
 sub init()
-
+    
     m.options = m.top.findNode("options")
 
     m.tvGuide = invalid
@@ -47,6 +47,12 @@ end sub
 '
 'Load initial set of Data
 sub loadInitialItems()
+    print m.top.parentItem.json.Type
+if  m.top.parentItem.json.Type = "CollectionFolder"
+    m.top.HomeLibraryItem = m.top.parentItem.Id
+    print "Home libry ID  b/c not studio" m.top.HomeLibraryItem 
+end if
+
     if m.top.parentItem.backdropUrl <> invalid
         SetBackground(m.top.parentItem.backdropUrl)
     end if
@@ -97,14 +103,15 @@ sub loadInitialItems()
         updateTitle()
 
     else
-
+        print "doing else statement"
         m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
         m.emptyText.visible = false
-
+        print m.top.parentItem.json.type
         'Set Stuido Id if view is anything other than 'shows'
-        if m.view = "Networks" or m.top.parentItem.json.type = "Studio"
+        if  m.top.parentItem.json.type = "Studio"
             m.loadItemsTask.StudioIds = m.top.parentItem.Id
-            m.loadItemsTask.itemId = "" 'TODO need to get the collectionfolder ID
+            m.loadItemsTask.itemId = m.top.HomeLibraryItem 'TODO need to get the collectionfolder ID
+            print "If json = studio then get HomeLibraryItem " m.top.HomeLibraryItem
         else if m.view = "Movies"
             m.loadItemsTask.StudioIds = ""
         end if
@@ -142,6 +149,9 @@ sub loadInitialItems()
             m.loadItemsTask.itemId = m.top.parentItem.Id
         else if m.top.parentItem.collectionType = "Channel"
             m.top.imageDisplayMode = "scaleToFit"
+        else if m.top.parentItem.json.type = "Studio"
+            m.loadItemsTask.itemId = m.HomeLibraryItem
+            print "Setting itemID "m.HomeLibraryItem
         else
             print "[ItemGrid] Unknown Type: " m.top.parentItem
         end if
@@ -152,10 +162,13 @@ sub loadInitialItems()
         m.LoadNetworksTask.observeField("content", "ItemDataLoaded")
         m.LoadNetworksTask.control = "Run"
         m.spinner.visible = true
+        print "doing netowk loading"
     else
         m.loadItemsTask.observeField("content", "ItemDataLoaded")
         m.loadItemsTask.control = "RUN"
         m.spinner.visible = true
+        print "doing item loading"
+
     end if
 
     SetUpOptions()
