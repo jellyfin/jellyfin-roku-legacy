@@ -90,5 +90,4 @@ sub loadItems()
     end if
 
     m.top.content = results
-    print "Params" params
 end sub
