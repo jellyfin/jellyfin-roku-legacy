@@ -55,7 +55,10 @@ sub onChannelsLoaded()
     m.LoadProgramDetailsTask.observeField("programDetails", "onProgramDetailsLoaded")
 
     m.scheduleGrid.setFocus(true)
-    m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
+    if m.EPGLaunchCompleteSignaled = false
+        m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
+        m.EPGLaunchCompleteSignaled = true
+    end if
     m.LoadChannelsTask.channels = []
 end sub
 
@@ -178,6 +181,53 @@ sub onGridScrolled()
             m.LoadScheduleTask.endTime = m.gridEndDate.ToISOString()
             m.LoadScheduleTask.control = "RUN"
         end if
+    end if
+end sub
+
+' Handle user selecting "Record Channel" from Program Details
+sub onRecordChannelSelected()
+    if m.detailsPane.recordSelectedChannel = false then return
+
+    ' Set focus back to grid before showing channel, to ensure grid has focus when we return
+    focusProgramDetails(false)
+
+    m.scheduleGrid.showLoadingDataFeedback = true
+
+    m.RecordProgramTask = createObject("roSGNode", "RecordProgramTask")
+    m.RecordProgramTask.programDetails = m.detailsPane.programDetails
+    m.RecordProgramTask.recordSeries = false
+    m.RecordProgramTask.observeField("recordOperationDone", "onRecordOperationDone")
+    m.RecordProgramTask.control = "RUN"
+end sub
+
+' Handle user selecting "Record Series" from Program Details
+sub onRecordSeriesChannelSelected()
+    if m.detailsPane.recordSeriesSelectedChannel = false then return
+
+    ' Set focus back to grid before showing channel, to ensure grid has focus when we return
+    focusProgramDetails(false)
+
+    m.scheduleGrid.showLoadingDataFeedback = true
+
+    m.RecordProgramTask = createObject("roSGNode", "RecordProgramTask")
+    m.RecordProgramTask.programDetails = m.detailsPane.programDetails
+    m.RecordProgramTask.recordSeries = true
+    m.RecordProgramTask.observeField("recordOperationDone", "onRecordOperationDone")
+    m.RecordProgramTask.control = "RUN"
+end sub
+
+sub onRecordOperationDone()
+    if m.RecordProgramTask.recordSeries = true and m.LoadScheduleTask.state <> "run"
+        m.LoadScheduleTask.control = "RUN"
+    else
+        ' This reloads just the details for the currently selected program, so that we don't have to
+        ' reload the entire grid...
+        channel = m.scheduleGrid.content.GetChild(m.scheduleGrid.programFocusedDetails.focusChannelIndex)
+        prog = channel.GetChild(m.scheduleGrid.programFocusedDetails.focusIndex)
+        m.LoadProgramDetailsTask.programId = prog.Id
+        m.LoadProgramDetailsTask.channelIndex = m.scheduleGrid.programFocusedDetails.focusChannelIndex
+        m.LoadProgramDetailsTask.programIndex = m.scheduleGrid.programFocusedDetails.focusIndex
+        m.LoadProgramDetailsTask.control = "RUN"
     end if
 end sub
 
