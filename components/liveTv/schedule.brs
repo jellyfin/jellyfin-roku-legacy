@@ -1,10 +1,11 @@
 sub init()
-
+    m.EPGLaunchCompleteSignaled = false
     m.scheduleGrid = m.top.findNode("scheduleGrid")
     m.detailsPane = m.top.findNode("detailsPane")
 
     m.detailsPane.observeField("watchSelectedChannel", "onWatchChannelSelected")
-
+    m.detailsPane.observeField("recordSelectedChannel", "onRecordChannelSelected")
+    m.detailsPane.observeField("recordSeriesSelectedChannel", "onRecordSeriesChannelSelected")
     m.gridStartDate = CreateObject("roDateTime")
     m.scheduleGrid.contentStartTime = m.gridStartDate.AsSeconds() - 1800
     m.gridEndDate = createObject("roDateTime")
@@ -25,6 +26,18 @@ sub init()
     m.top.lastFocus = m.scheduleGrid
 
     m.channelIndex = {}
+end sub
+
+sub channelFilterSet()
+    print "Channel Filter set"
+    m.scheduleGrid.jumpToChannel = 0
+    if m.top.filter <> invalid and m.LoadChannelsTask.filter <> m.top.filter
+        if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
+
+        m.LoadChannelsTask.filter = m.top.filter
+        m.LoadChannelsTask.control = "RUN"
+    end if
+
 end sub
 
 ' Initial list of channels loaded
