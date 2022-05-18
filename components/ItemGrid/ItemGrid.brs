@@ -1,5 +1,5 @@
 sub init()
-    
+
     m.options = m.top.findNode("options")
 
     m.tvGuide = invalid
@@ -48,10 +48,10 @@ end sub
 'Load initial set of Data
 sub loadInitialItems()
     print m.top.parentItem.json.Type
-if  m.top.parentItem.json.Type = "CollectionFolder"
-    m.top.HomeLibraryItem = m.top.parentItem.Id
-    print "Home libry ID  b/c not studio" m.top.HomeLibraryItem 
-end if
+    if m.top.parentItem.json.Type = "CollectionFolder"
+        m.top.HomeLibraryItem = m.top.parentItem.Id
+        print "Home libry ID  b/c not studio" m.top.HomeLibraryItem
+    end if
 
     if m.top.parentItem.backdropUrl <> invalid
         SetBackground(m.top.parentItem.backdropUrl)
@@ -108,7 +108,7 @@ end if
         m.emptyText.visible = false
         print m.top.parentItem.json.type
         'Set Stuido Id if view is anything other than 'shows'
-        if  m.top.parentItem.json.type = "Studio"
+        if m.top.parentItem.json.type = "Studio"
             m.loadItemsTask.StudioIds = m.top.parentItem.Id
             m.loadItemsTask.itemId = m.top.HomeLibraryItem 'TODO need to get the collectionfolder ID
             print "If json = studio then get HomeLibraryItem " m.top.HomeLibraryItem
@@ -184,6 +184,7 @@ sub SetUpOptions()
     if m.top.parentItem.collectionType = "movies"
         options.views = [
             { "Title": tr("Movies"), "Name": "movies" },
+            { "Title": tr("Networks"), "Name": "Networks" }
         ]
         options.sort = [
             { "Title": tr("TITLE"), "Name": "SortName" },
