@@ -27,5 +27,3 @@ sub setPoster()
 end sub
 
 'TODO Set network Poster image
-'network image url
-'https://tvapp.co/Items/556d538041af1fcc9d6a9ff9dc07ee76/Images/Thumb?maxWidth=480&tag=842c54c951a35bcbd7b897ce5696fbaa&quality=90

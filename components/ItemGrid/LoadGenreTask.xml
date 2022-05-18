@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<component name="LoadItemsTask2" extends="Task">
+<component name="LoadGenreTask" extends="Task">
   <interface>
     <field id="itemId" type="string" />
     <field id="startIndex" type="integer" value="0" />
@@ -12,13 +12,14 @@
     <field id="nameStartsWith" type="string" value="" />
     <field id="recursive" type="boolean" value="true" />
     <field id="filter" type="string" value="All" />
-    <field id="StudioIds" type="string" value="" />
-    <field id="genreIds" type="string" value="" />
+    <field id="IncludeItemTypes" type="string" value="" />
+    <field id="ParentId" type="string" value="" />
+
     <!-- Total records available from server-->
     <field id="totalRecordCount" type="int" value="-1" />
     <field id="content" type="array" />
   </interface>
-  <script type="text/brightscript" uri="LoadItemsTask2.brs" />
+  <script type="text/brightscript" uri="LoadGenreTask.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />

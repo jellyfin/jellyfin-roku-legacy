@@ -1,9 +1,9 @@
 sub init()
-    m.top.functionName = "LoadNetworks"
+    m.top.functionName = "LoadGenre"
 end sub
 
-sub LoadNetworks()
-    url = "Studios"
+sub LoadGenre()
+    url = "Genres"
 
     results = []
 
@@ -49,6 +49,7 @@ sub LoadNetworks()
 
     resp = APIRequest(url, params)
     data = getJson(resp)
+    print "Data: "data
 
     if data <> invalid
 
@@ -70,6 +71,8 @@ sub LoadNetworks()
                 tmp = CreateObject("roSGNode", "VideoData")
             else if item.Type = "Studio"
                 tmp = CreateObject("roSGNode", "FolderData")
+            else if item.Type = "Genre"
+                tmp = CreateObject("roSGNode", "FolderData")
             else
                 print "[LoadNetworks] Unknown Type: " item.Type
             end if
@@ -81,7 +84,7 @@ sub LoadNetworks()
             end if
         end for
     end if
-    print "LOAD NETWORK PARAMS: " params
+    print params
     m.top.content = results
 
 

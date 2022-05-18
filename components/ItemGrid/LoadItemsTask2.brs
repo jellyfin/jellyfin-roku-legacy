@@ -24,8 +24,9 @@ sub loadItems()
         recursive: m.top.recursive,
         Fields: "Overview"
         StudioIds: m.top.StudioIds
+        genreIds: m.top.genreIds
     }
-    print params
+    print "LOAD ITEMS PARAMS: " params
     ' Handle special case when getting names starting with numeral
     if m.top.NameStartsWith <> ""
         if m.top.NameStartsWith = "#"
@@ -78,6 +79,7 @@ sub loadItems()
             end if
 
             if tmp <> invalid
+                tmp.parentFolder = m.top.itemId
                 tmp.json = item
                 if item.UserData <> invalid and item.UserData.isFavorite <> invalid
                     tmp.favorite = item.UserData.isFavorite
@@ -88,5 +90,6 @@ sub loadItems()
     end if
 
     m.top.content = results
+    
 
 end sub
