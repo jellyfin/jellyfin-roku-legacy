@@ -40,7 +40,7 @@ sub init()
 
     'set inital counts for overhang before content is loaded.
     m.actInt = 0
-    m.loadItemsTask.totalRecordCount =
+    m.loadItemsTask.totalRecordCount = 0
     m.spinner = m.top.findNode("spinner")
     m.spinner.visible = true
 
@@ -548,18 +548,14 @@ end function
 
 sub updateTitle()
     if m.filter = "All"
-    m.top.overhangTitle = m.top.parentItem.title + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
-else if m.filter = "Favorites"
+        m.top.overhangTitle = m.top.parentItem.title + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
+    else if m.filter = "Favorites"
 
-    m.top.overhangTitle = m.top.parentItem.title + " Favorites" + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
-else
-    m.top.overhangTitle = m.top.parentItem.title + " Filtered" + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
-
-    m.top.overhangTitle = m.top.parentItem.title + tr(" (Favorites)")
-else
-    m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered)")
-end if
-if m.top.AlphaSelected <> ""
-    m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered)")
-end if
+        m.top.overhangTitle = m.top.parentItem.title + tr(" Favorites") + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
+    else
+        m.top.overhangTitle = m.top.parentItem.title + tr(" Filtered") + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
+    end if
+    if m.top.AlphaSelected <> ""
+        m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered)")
+    end if
 end sub
