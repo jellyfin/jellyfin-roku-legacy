@@ -7,6 +7,8 @@
             <Poster id="image" height="375" width="500" loadDisplayMode="scaleToFit" />
         </maskGroup>
 
+        <Poster id="favorite" translation="[1335, 165]" uri="pkg:/images/icons/favorite_selected.png" visible="false" />
+
         <Group id="detailsView" visible="false">
 
             <Group translation = "[ 96, 160 ]">
@@ -77,6 +79,7 @@
         <field id="recordSelectedChannel" type="boolean" value="false" />
         <field id="recordSeriesSelectedChannel" type="boolean" value="false" />
         <field id="channel" type="node" onchange="channelUpdated" />
+        <field id="favorite" type="node" onchange="channelUpdated" />
         <field id="programDetails" type="node" onchange="programUpdated" />
         <field id="height" type="integer" />
         <field id="hasFocus" type="boolean" onChange="focusChanged" />

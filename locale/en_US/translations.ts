@@ -432,6 +432,11 @@
         <extracomment>Title of message box when the requested content is not found on the server</extracomment>
     </message>
     <message>
+        <source>Unknown</source>
+        <translation>Unknown</translation>
+        <extracomment>Title for a cast member for which we have no information for</extracomment>
+    </message>
+    <message>
         <source>The requested content does not exist on the server</source>
         <translation>The requested content does not exist on the server</translation>
         <extracomment>Content of message box when the requested content is not found on the server</extracomment>
@@ -464,6 +469,78 @@
     <message>
         <source>Version</source>
         <translation>Version</translation>
+    </message>
+    <message>
+        <source>Playback</source>
+        <translation>Playback</translation>
+        <extracomment>Title for Playback section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>MPEG 2 Support</source>
+        <translation>MPEG 2 Support</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
+    <message>
+        <source>Support direct play of MPEG 2 content (e.g. Live TV). This will prevent transcoding of MPEG 2 content, but uses significantly more bandwidth</source>
+        <translation>Support direct play of MPEG 2 content (e.g. Live TV). This will prevent transcoding of MPEG 2 content, but uses significantly more bandwidth</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation>Enabled</translation>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation>Disabled</translation>
+    </message>
+    <message>
+        <source>User Interface</source>
+        <translation>User Interface</translation>
+        <extracomment>Title for User Interface section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Media Grid</source>
+        <translation>Media Grid</translation>
+        <extracomment>UI -> Media Grid section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Media Grid Options</source>
+        <translation>Media Grid Options</translation>
+    </message>
+    <message>
+        <source>Item Titles</source>
+        <translation>Item Titles</translation>
+        <extracomment>UI -> Media Grid -> Item Title in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Always show the titles below the poster images. (If disabled, title will be shown under hilighted item only)</source>
+        <translation>Always show the titles below the poster images. (If disabled, title will be shown under hilighted item only)</translation>
+        <extracomment>Description for option in Setting Screen</extracomment>
+    </message>
+    <message>
+        <source>Set Favorite</source>
+        <translation>Set Favorite</translation>
+        <extracomment>Button Text - When pressed, sets item as Favorite</extracomment>
+    </message>
+    <message>
+        <source>Set Watched</source>
+        <translation>Set Watched</translation>
+        <extracomment>Button Text - When pressed, marks item as Warched</extracomment>
+    </message>
+    <message>
+        <source>Go to series</source>
+        <translation>Go to series</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Series Detail Page</extracomment>
+    </message>
+    <message>
+        <source>Go to season</source>
+        <translation>Go to season</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Season Page</extracomment>
+    </message>
+    <message>
+        <source>Go to episode</source>
+        <translation>Go to episode</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Episode Detail Page</extracomment>
     </message>
 </context>
 </TS>

@@ -1,7 +1,9 @@
 sub init()
 
     m.options = m.top.findNode("options")
+
     m.tvGuide = invalid
+    m.channelFocused = invalid
 
     m.itemGrid = m.top.findNode("itemGrid")
     m.backdrop = m.top.findNode("backdrop")
@@ -21,6 +23,7 @@ sub init()
 
     m.itemGrid.observeField("itemFocused", "onItemFocused")
     m.itemGrid.observeField("itemSelected", "onItemSelected")
+    m.itemGrid.observeField("AlphaSelected", "onItemAlphaSelected")
     m.newBackdrop.observeField("loadStatus", "newBGLoaded")
 
     'Background Image Queued for loading
@@ -31,11 +34,18 @@ sub init()
     m.sortAscending = true
 
     m.filter = "All"
+    m.favorite = "Favorite"
 
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
+
     'set inital counts for overhang before content is loaded.
     m.actInt = 0
-    m.loadItemsTask.totalRecordCount = 0
+    m.loadItemsTask.totalRecordCount = 
+    m.spinner = m.top.findNode("spinner")
+    m.spinner.visible = true
+
+    m.Alpha = m.top.findNode("AlphaMenu")
+    m.AlphaSelected = m.top.findNode("AlphaSelected")
 end sub
 
 '
@@ -73,6 +83,9 @@ sub loadInitialItems()
     else
         m.sortAscending = false
     end if
+
+    m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
+    m.emptyText.visible = false
 
     updateTitle()
 
@@ -117,6 +130,7 @@ sub SetUpOptions()
 
     options = {}
     options.filter = []
+    options.favorite = []
 
     'Movies
     if m.top.parentItem.collectionType = "movies"
@@ -179,6 +193,9 @@ sub SetUpOptions()
             { "Title": tr("All"), "Name": "All" },
             { "Title": tr("Favorites"), "Name": "Favorites" }
         ]
+        options.favorite = [
+            { "Title": tr("Favorite"), "Name": "Favorite" }
+        ]
     else if m.top.parentItem.collectionType = "photoalbum" or m.top.parentItem.collectionType = "photo" or m.top.parentItem.collectionType = "homevideos"
         ' For some reason, my photo library shows up as "homevideos", maybe because it has some mp4 mixed in with the jpgs?
 
@@ -223,6 +240,12 @@ sub SetUpOptions()
         end if
     end for
 
+    ' for each o in options.favorite
+    '     if o.Name = m.favorite
+    '         m.options.favorite = o.Name
+    '     end if
+    ' end for
+
     m.options.options = options
 
 end sub
@@ -257,7 +280,7 @@ sub ItemDataLoaded(msg)
     end if
 
     m.itemGrid.setFocus(true)
-
+    m.spinner.visible = false
 end sub
 
 '
@@ -277,9 +300,10 @@ end sub
 'Handle new item being focused
 sub onItemFocused()
 
-    focusedRow = CInt(m.itemGrid.itemFocused / m.itemGrid.numColumns) + 1
+    focusedRow = m.itemGrid.currFocusRow
 
     itemInt = m.itemGrid.itemFocused
+
     m.actInt = m.itemGrid.itemFocused + 1
     if m.filter = "All"
         m.top.overhangTitle = m.top.parentItem.title + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
@@ -294,11 +318,13 @@ sub onItemFocused()
         return
     end if
 
+    m.selectedFavoriteItem = m.itemGrid.content.getChild(m.itemGrid.itemFocused)
+
     ' Set Background to item backdrop
     SetBackground(m.itemGrid.content.getChild(m.itemGrid.itemFocused).backdropUrl)
 
     ' Load more data if focus is within last 3 rows, and there are more items to load
-    if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.loadItemsTask.totalRecordCount
+    if focusedRow >= m.loadedRows - 5 and m.loadeditems < m.loadItemsTask.totalRecordCount
         loadMoreData()
     end if
 end sub
@@ -347,6 +373,14 @@ end sub
 'Item Selected
 sub onItemSelected()
     m.top.selectedItem = m.itemGrid.content.getChild(m.itemGrid.itemSelected)
+end sub
+
+sub onItemAlphaSelected()
+    m.loadedRows = 0
+    m.loadedItems = 0
+    m.data = CreateObject("roSGNode", "ContentNode")
+    m.itemGrid.content = m.data
+    loadInitialItems()
 end sub
 
 
@@ -433,6 +467,7 @@ sub showTVGuide()
         m.tvGuide = createObject("roSGNode", "Schedule")
         m.top.signalBeacon("EPGLaunchInitiate") ' Required Roku Performance monitoring
         m.tvGuide.observeField("watchChannel", "onChannelSelected")
+        m.tvGuide.observeField("focusedChannel", "onChannelFocused")
     end if
     m.tvGuide.filter = m.filter
     m.top.appendChild(m.tvGuide)
@@ -448,16 +483,30 @@ sub onChannelSelected(msg)
     end if
 end sub
 
+sub onChannelFocused(msg)
+    node = msg.getRoSGNode()
+    m.channelFocused = node.focusedChannel
+end sub
+
 function onKeyEvent(key as string, press as boolean) as boolean
-
     if not press then return false
-
+    topGrp = m.top.findNode("itemGrid")
     if key = "options"
         if m.options.visible = true
             m.options.visible = false
             m.top.removeChild(m.options)
             optionsClosed()
         else
+            channelSelected = m.channelFocused
+            itemSelected = m.selectedFavoriteItem
+            if itemSelected <> invalid
+                m.options.selectedFavoriteItem = itemSelected
+            end if
+            if channelSelected <> invalid
+                if channelSelected.type = "TvChannel"
+                    m.options.selectedFavoriteItem = channelSelected
+                end if
+            end if
             m.options.visible = true
             m.top.appendChild(m.options)
             m.options.setFocus(true)
@@ -472,6 +521,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     else if key = "play" or key = "OK"
         markupGrid = m.top.getChild(2)
         itemToPlay = markupGrid.content.getChild(markupGrid.itemFocused)
+
         if itemToPlay <> invalid and (itemToPlay.type = "Movie" or itemToPlay.type = "Episode")
             m.top.quickPlayNode = itemToPlay
             return true
@@ -482,6 +532,16 @@ function onKeyEvent(key as string, press as boolean) as boolean
             photoPlayer.control = "RUN"
             return true
         end if
+    else if key = "right" and topGrp.isinFocusChain()
+        topGrp.setFocus(false)
+        alpha = m.Alpha.getChild(0).findNode("Alphamenu")
+        alpha.setFocus(true)
+        return true
+    else if key = "left" and m.Alpha.isinFocusChain()
+        m.Alpha.setFocus(false)
+        m.Alpha.visible = true
+        topGrp.setFocus(true)
+        return true
     end if
     return false
 end function
@@ -490,8 +550,16 @@ sub updateTitle()
     if m.filter = "All"
         m.top.overhangTitle = m.top.parentItem.title + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
     else if m.filter = "Favorites"
+
         m.top.overhangTitle = m.top.parentItem.title + " Favorites" + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
     else
         m.top.overhangTitle = m.top.parentItem.title + " Filtered" + StrI(m.actInt) + tr(" of") + StrI(m.loadItemsTask.totalRecordCount)
+
+        m.top.overhangTitle = m.top.parentItem.title + tr(" (Favorites)")
+    else
+        m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered)")
+    end if
+    if m.top.AlphaSelected <> ""
+        m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered)")
     end if
 end sub

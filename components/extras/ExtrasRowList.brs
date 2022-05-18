@@ -49,7 +49,7 @@ sub onPeopleLoaded()
         row = data.createChild("ContentNode")
         row.Title = tr("Cast & Crew")
         for each person in people
-            if person.json.type = "Actor"
+            if person.json.type = "Actor" and person.json.Role <> invalid
                 person.subTitle = "as " + person.json.Role
             else
                 person.subTitle = person.json.Type

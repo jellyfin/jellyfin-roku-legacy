@@ -18,6 +18,7 @@
   </children>
   <interface>
         <field id="watchChannel" type="node" alwaysNotify="false" />
+        <field id="focusedChannel" type="node" alwaysNotify="false" />
         <field id="filter" type="string" value="All" onChange="channelFilterSet" />
   </interface>
   <script type="text/brightscript" uri="schedule.brs" />

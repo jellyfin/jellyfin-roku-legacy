@@ -6,7 +6,7 @@
     <name>default</name>
     <message>
         <source>192.168.1.100:8096 or https://example.com/jellyfin</source>
-        <translation>192.168.1.100:8096 ou https://exemplo.com/jellyfin</translation>
+        <translation>padrão 192.168.1.100:8096 ou https://exemplo.com/jellyfin</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -1700,6 +1700,65 @@ não contém itens</translation>
         <source>An error was encountered while playing this item.</source>
         <translation>Foi encontrado um erro ao reproduzir este item.</translation>
         <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Mudar servidor</translation>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Sair</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Mudar Servidor</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Remover salvo</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Salvar credenciais?</translation>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Sair</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Mudar servidor</translation>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Ocorreu um erro ao recuperar os dados para este item do servidor.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Erro Durante a Reprodução</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Erro ao Recuperar Conteúdo</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Ligado agora</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Remover salvo</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Salvar credenciais?</translation>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Sair</translation>
     </message>
     <message>
         <source>Change Server</source>

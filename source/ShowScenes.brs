@@ -258,19 +258,10 @@ function CreateHomeGroup()
         new_options.push(o)
     end for
 
-    ' Add option for mpeg-2 playback
-    playMpeg2 = get_setting("playback.mpeg2")
-    if playMpeg2 = invalid
-        playMpeg2 = "true"
-        set_setting("playback.mpeg2", playMpeg2)
-    end if
+    ' Add settings option to menu
     o = CreateObject("roSGNode", "OptionsButton")
-    if playMpeg2 = "true"
-        o.title = tr("MPEG2 Support: On")
-    else
-        o.title = tr("MPEG2 Support: Off")
-    end if
-    o.id = "play_mpeg2"
+    o.title = "Settings"
+    o.id = "settings"
     o.observeField("optionSelected", m.port)
     new_options.push(o)
 
@@ -315,7 +306,6 @@ end function
 
 function CreateSeriesDetailsGroup(series)
     group = CreateObject("roSGNode", "TVShowDetails")
-    group.overhangTitle = series.title
     group.optionsAvailable = false
     m.global.sceneManager.callFunc("pushScene", group)
 
@@ -333,7 +323,6 @@ end function
 
 function CreateSeasonDetailsGroup(series, season)
     group = CreateObject("roSGNode", "TVEpisodes")
-    group.overhangTitle = series.title + " " + season.title
     group.optionsAvailable = false
     m.global.sceneManager.callFunc("pushScene", group)
 

@@ -108,6 +108,7 @@ prep_staging:
 	cp -r $(SOURCEREL)/source $(STAGINGREL)
 	cp -r $(SOURCEREL)/components $(STAGINGREL)
 	cp -r $(SOURCEREL)/images $(STAGINGREL)
+	cp -r $(SOURCEREL)/settings $(STAGINGREL)
 	
 	# Copy only supported languages over to staging
 	mkdir $(STAGINGREL)/locale
@@ -168,6 +169,12 @@ prep_tests:
 	cp -r $(SOURCEREL)/tests/components/* $(STAGINGREL)/components/tests/;\
 	cp -r $(SOURCEREL)/tests/source/* $(STAGINGREL)/source/tests/;\
 	./node_modules/.bin/rooibos-cli i tests/.rooibosrc.json
+
+prep_commit:
+	npm run format
+	npm ci
+	npm run validate
+	npm run check-formatting
 
 install: prep_staging package home
 	@echo "Installing $(APPNAME)-$(BUILD) to host $(ROKU_DEV_TARGET)"

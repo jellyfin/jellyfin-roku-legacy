@@ -1,0 +1,34 @@
+[
+    {
+        "title": "Playback",
+        "description": "Settings related to playback and supported codec and media types",
+        "children": [
+            {
+                "title": "MPEG 2 Support",
+                "description": "Support direct play of MPEG 2 content (e.g. Live TV). This will prevent transcoding of MPEG 2 content, but uses significantly more bandwidth",
+                "settingName": "playback.mpeg2",
+                "type": "bool",
+                "default": "false"
+            }
+        ]
+    },
+    {
+        "title": "User Interface",
+        "description": "Settings relating to how the how the applications looks",
+        "children": [
+            {
+                "title": "Media Grid",
+                "description": "Media Grid Options",
+                "children": [
+                    {
+                        "title": "Item Titles",
+                        "description": "Always show the titles below the poster images. (If disabled, title will be shown under hilighted item only)",
+                        "settingName": "itemgrid.alwaysShowTitles",
+                        "type": "bool",
+                        "default": "false"
+                    }
+                ]
+            }
+        ]
+    }
+]
