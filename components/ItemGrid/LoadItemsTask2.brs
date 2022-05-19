@@ -56,10 +56,6 @@ sub loadItems()
         params.append({ parentid: "" })
         params.append({ NameStartsWith: "" })
         params.append({ searchTerm: m.top.nameStartsWith })
-        ' url = "LiveTv/Channels"
-        ' params.append({ userId: get_setting("active_user") })
-        'else
-        'url = Substitute("Users/{0}/Items/", get_setting("active_user"))
     end if
     url = Substitute("Users/{0}/Items/", get_setting("active_user"))
     resp = APIRequest(url, params)

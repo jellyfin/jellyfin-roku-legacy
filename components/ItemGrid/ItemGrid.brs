@@ -64,8 +64,11 @@ sub loadInitialItems()
         viewSetting = get_user_setting("display.livetv.landing")
         if viewSetting = "guide"
             m.view = "tvGuide"
+            'Hide VoiceBox if TV Guide
+            m.VoiceBox.visible = "false"
         else
             m.view = "livetv"
+            m.VoiceBox.visible = "false"
         end if
         m.sortField = get_user_setting("display.livetv.sortField")
         sortAscendingStr = get_user_setting("display.livetv.sortAscending")
