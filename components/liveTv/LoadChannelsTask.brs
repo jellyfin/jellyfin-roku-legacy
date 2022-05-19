@@ -6,15 +6,40 @@ sub loadChannels()
 
     results = []
 
+    sort_field = m.top.sortField
+
+    if m.top.sortAscending = true
+        sort_order = "Ascending"
+    else
+        sort_order = "Descending"
+    end if
+
     params = {
-        UserId: get_setting("active_user"),
+        includeItemTypes: "LiveTvChannel",
+        SortBy: sort_field,
+        SortOrder: sort_order,
+        recursive: m.top.recursive,
     }
+
+    ' Handle special case when getting names starting with numeral
+    if m.top.NameStartsWith <> ""
+        if m.top.NameStartsWith = "#"
+            params.NameLessThan = "A"
+        else
+            params.NameStartsWith = m.top.nameStartsWith
+        end if
+    end if
+
+    'Append voice search when there is text
+    if m.top.searchTerm <> ""
+        params.searchTerm = m.top.searchTerm
+    end if
 
     if m.top.filter = "Favorites"
         params.append({ isFavorite: true })
     end if
 
-    url = "LiveTv/Channels"
+    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
 
     resp = APIRequest(url, params)
     data = getJson(resp)
@@ -30,7 +55,7 @@ sub loadChannels()
         channel.json = item
         results.push(channel)
     end for
-
+    print "Loaded Channels Task Params: " params
     m.top.channels = results
 
 end sub

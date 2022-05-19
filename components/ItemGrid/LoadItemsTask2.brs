@@ -52,11 +52,16 @@ sub loadItems()
     end if
 
     if m.top.ItemType = "LiveTV"
-        url = "LiveTv/Channels"
-        params.append({ userId: get_setting("active_user") })
-    else
-        url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+        params.append({ IncludeItemTypes: "LiveTvChannel" })
+        params.append({ parentid: "" })
+        params.append({ NameStartsWith: "" })
+        params.append({ searchTerm: m.top.nameStartsWith })
+        ' url = "LiveTv/Channels"
+        ' params.append({ userId: get_setting("active_user") })
+        'else
+        'url = Substitute("Users/{0}/Items/", get_setting("active_user"))
     end if
+    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
     resp = APIRequest(url, params)
     data = getJson(resp)
 
@@ -81,7 +86,6 @@ sub loadItems()
             else
                 print "[LoadItems] Unknown Type: " item.Type
             end if
-
             if tmp <> invalid
                 tmp.json = item
                 results.push(tmp)
