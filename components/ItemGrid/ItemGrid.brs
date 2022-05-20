@@ -65,10 +65,10 @@ sub loadInitialItems()
         if viewSetting = "guide"
             m.view = "tvGuide"
             'Hide VoiceBox if TV Guide
-            m.VoiceBox.visible = "false"
+            'm.VoiceBox.visible = "false"
         else
             m.view = "livetv"
-            m.VoiceBox.visible = "false"
+            'm.VoiceBox.visible = "false"
         end if
         m.sortField = get_user_setting("display.livetv.sortField")
         sortAscendingStr = get_user_setting("display.livetv.sortAscending")
@@ -465,6 +465,7 @@ sub showTVGuide()
         m.tvGuide.observeField("watchChannel", "onChannelSelected")
     end if
     m.tvGuide.filter = m.filter
+    m.tvGuide.searchTerm = m.VoiceBox.text
     m.top.appendChild(m.tvGuide)
     m.tvGuide.lastFocus.setFocus(true)
 end sub
@@ -481,6 +482,16 @@ end sub
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
     topGrp = m.top.findNode("itemGrid")
+    searchGrp = m.top.findNode("VoiceBox")
+
+    if key = "up" and topGrp.isinFocusChain()
+        topGrp.setFocus(false)
+        searchGrp.setFocus(true)
+    end if   
+    if key = "down" and searchGrp.isinFocusChain()
+        topGrp.setFocus(true)
+        searchGrp.setFocus(false)
+    end if  
     if key = "options"
         if m.options.visible = true
             m.options.visible = false

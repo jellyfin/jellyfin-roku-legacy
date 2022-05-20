@@ -50,12 +50,18 @@ sub loadItems()
     if m.top.ItemType <> ""
         params.append({ IncludeItemTypes: m.top.ItemType })
     end if
-
+ print "ItemType: " m.top.ItemType
+ print "search Term: " m.top.searchTerm
+if m.top.searchTerm <> ""
+ m.livetvsearch = m.top.searchTerm
+else
+    m.livetvsearch = m.top.nameStartsWith
+end if
     if m.top.ItemType = "LiveTV"
         params.append({ IncludeItemTypes: "LiveTvChannel" })
         params.append({ parentid: "" })
         params.append({ NameStartsWith: "" })
-        params.append({ searchTerm: m.top.nameStartsWith })
+        params.append({ searchTerm: m.livetvsearch })
     end if
     url = Substitute("Users/{0}/Items/", get_setting("active_user"))
     resp = APIRequest(url, params)

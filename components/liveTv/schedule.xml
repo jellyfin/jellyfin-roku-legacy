@@ -19,6 +19,7 @@
   <interface>
         <field id="watchChannel" type="node" alwaysNotify="false" />
         <field id="filter" type="string" value="All" onChange="channelFilterSet" />
+        <field id="searchTerm" type="string" value="" onChange="channelsearchTermSet" />
   </interface>
   <script type="text/brightscript" uri="schedule.brs" />
 </component>
