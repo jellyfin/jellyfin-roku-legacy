@@ -53,7 +53,7 @@ sub loadItems()
         url = Substitute("Users/{0}/Items/", get_setting("active_user"))
     end if
     resp = APIRequest(url, params)
-    data = getJson(resp)    
+    data = getJson(resp)
 
     if data <> invalid
 

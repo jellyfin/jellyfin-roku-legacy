@@ -416,6 +416,9 @@ end function
 ' Play Audio
 function CreateAudioPlayerGroup(audiodata)
 
+    group = CreateObject("roSGNode", "NowPlaying")
+    songMetaDataArray = CreateObject("roArray", 0, true)
+
     if type(audiodata) = "roArray"
         ' Passed data is an array of audio, setup playback as a playlist
 
@@ -427,6 +430,8 @@ function CreateAudioPlayerGroup(audiodata)
         for each song in audiodata
             songContent = audioPlaylistContent.CreateChild("ContentNode")
             songData = AudioItem(song.id)
+
+            songMetaDataArray.push(ItemMetaData(song.id))
 
             params = {}
 
@@ -444,10 +449,6 @@ function CreateAudioPlayerGroup(audiodata)
 
         m.audio.content = audioPlaylistContent
 
-        m.audio.control = "stop"
-        m.audio.control = "none"
-        m.audio.control = "play"
-
     else if type(audiodata) = "roSGNode"
         ' Passed data is a single node
 
@@ -458,6 +459,8 @@ function CreateAudioPlayerGroup(audiodata)
             m.audio.content = createObject("RoSGNode", "ContentNode")
 
             songData = AudioItem(audiodata.id)
+
+            songMetaDataArray.push(ItemMetaData(audiodata.id))
 
             params = {}
 
@@ -471,14 +474,20 @@ function CreateAudioPlayerGroup(audiodata)
             m.audio.content.url = buildURL(Substitute("Audio/{0}/stream", audiodata.id), params)
             m.audio.content.title = audiodata.title
             m.audio.content.streamformat = songData.mediaSources[0].container
-
-            m.audio.control = "stop"
-            m.audio.control = "none"
-            m.audio.control = "play"
         end if
     end if
 
-    return ""
+    group.musicArtistAlbumData = audiodata
+    group.audio = m.audio
+    group.audio.control = "stop"
+    group.audio.control = "none"
+    group.audio.control = "play"
+
+    group.itemContent = songMetaDataArray
+
+    m.global.sceneManager.callFunc("pushScene", group)
+
+    return group
 end function
 
 function CreatePersonView(personData as object) as object
