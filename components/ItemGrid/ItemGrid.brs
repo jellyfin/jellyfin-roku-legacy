@@ -366,6 +366,7 @@ sub onItemAlphaSelected()
     m.loadedItems = 0
     m.data = CreateObject("roSGNode", "ContentNode")
     m.itemGrid.content = m.data
+    m.VoiceBox.text = ""
     loadInitialItems()
 end sub
 
@@ -484,10 +485,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
     topGrp = m.top.findNode("itemGrid")
     searchGrp = m.top.findNode("VoiceBox")
 
-    if key = "up" and topGrp.isinFocusChain()
-        topGrp.setFocus(false)
-        searchGrp.setFocus(true)
-    end if   
     if key = "down" and searchGrp.isinFocusChain()
         topGrp.setFocus(true)
         searchGrp.setFocus(false)
