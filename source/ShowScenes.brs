@@ -418,12 +418,12 @@ function CreateAudioPlayerGroup(audiodata)
 
     group = CreateObject("roSGNode", "NowPlaying")
     songMetaDataArray = CreateObject("roArray", 0, true)
+    content = createObject("RoSGNode", "ContentNode")
 
     if type(audiodata) = "roArray"
         ' Passed data is an array of audio, setup playback as a playlist
 
-        m.audio = createObject("RoSGNode", "Audio")
-        m.audio.contentIsPlaylist = true
+        group.audio.contentIsPlaylist = true
 
         audioPlaylistContent = createObject("RoSGNode", "ContentNode")
 
@@ -447,16 +447,13 @@ function CreateAudioPlayerGroup(audiodata)
             songContent.streamformat = songData.mediaSources[0].container
         end for
 
-        m.audio.content = audioPlaylistContent
+        content = audioPlaylistContent
 
     else if type(audiodata) = "roSGNode"
         ' Passed data is a single node
 
         if audiodata.subtype() = "MusicSongData"
             ' Passed data is data for a single song, setup playback as a single song
-
-            m.audio = createObject("RoSGNode", "Audio")
-            m.audio.content = createObject("RoSGNode", "ContentNode")
 
             songData = AudioItem(audiodata.id)
 
@@ -471,19 +468,21 @@ function CreateAudioPlayerGroup(audiodata)
 
             params.MediaSourceId = songData.mediaSources[0].id
 
-            m.audio.content.url = buildURL(Substitute("Audio/{0}/stream", audiodata.id), params)
-            m.audio.content.title = audiodata.title
-            m.audio.content.streamformat = songData.mediaSources[0].container
+            content.url = buildURL(Substitute("Audio/{0}/stream", audiodata.id), params)
+            content.title = audiodata.title
+            content.streamformat = songData.mediaSources[0].container
         end if
     end if
 
+    group.itemContent = songMetaDataArray
+
     group.musicArtistAlbumData = audiodata
-    group.audio = m.audio
+    group.audio.content = content
     group.audio.control = "stop"
     group.audio.control = "none"
     group.audio.control = "play"
 
-    group.itemContent = songMetaDataArray
+
 
     m.global.sceneManager.callFunc("pushScene", group)
 

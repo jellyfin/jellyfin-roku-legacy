@@ -10,6 +10,9 @@ sub init()
     m.buttons.selectedIndex = 1
     m.buttons.focusedIndex = 1
     m.buttons.setFocus(true)
+
+    m.top.audio = createObject("RoSGNode", "Audio")
+    m.top.audio.observeField("contentIndex", "audioIndexChanged")
 end sub
 
 sub audioIndexChanged()
@@ -43,14 +46,15 @@ end sub
 
 ' Set values for displayed values on screen
 sub itemContentChanged()
+    if m.top.audio.contentIndex = -1 then return
+
     item = m.top.itemContent[m.top.audio.contentIndex]
 
     m.top.findNode("musicartistPoster").uri = item.posterURL
     m.top.overhangTitle = item.json.AlbumArtist + " / " + item.json.name
 
-    m.top.audio.observeField("contentIndex", "audioIndexChanged")
     setFieldText("numberofsongs", "Track " + stri(m.top.audio.contentIndex + 1) + "/" + stri(m.top.itemContent.count()))
-    setFieldText("artist", item.json.AlbumArtist)
+    setFieldText("artist", item.json.Artists[0])
     setFieldText("album", item.json.album)
     setFieldText("song", item.json.name)
 end sub
