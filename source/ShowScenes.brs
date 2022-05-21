@@ -482,8 +482,6 @@ function CreateAudioPlayerGroup(audiodata)
     group.audio.control = "none"
     group.audio.control = "play"
 
-
-
     m.global.sceneManager.callFunc("pushScene", group)
 
     return group
