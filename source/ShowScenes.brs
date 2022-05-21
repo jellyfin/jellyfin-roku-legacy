@@ -329,13 +329,13 @@ function CreateMusicArtistDetailsGroup(musicartist)
     if musicData = invalid or musicData.Items.Count() = 0
         ' Just songs under artists...
         group = CreateObject("roSGNode", "MusicAlbumDetails")
-        group.itemContent = ItemMetaData(musicartist.id)
+        group.pageContent = ItemMetaData(musicartist.id)
         group.musicArtistAlbumData = MusicSongList(musicartist.id)
-        group.observeField("musicSongSelected", m.port)
+        group.observeField("playSong", m.port)
     else
         ' Albums...
         group = CreateObject("roSGNode", "MusicArtistDetails")
-        group.itemContent = ItemMetaData(musicartist.id)
+        group.pageContent = ItemMetaData(musicartist.id)
         group.musicArtistAlbumData = musicData
         group.observeField("musicAlbumSelected", m.port)
     end if
@@ -350,11 +350,11 @@ function CreateMusicAlbumDetailsGroup(album)
     group = CreateObject("roSGNode", "MusicAlbumDetails")
     m.global.sceneManager.callFunc("pushScene", group)
 
-    group.itemContent = ItemMetaData(album.id)
-    group.musicArtistAlbumData = MusicSongList(album.id)
+    group.pageContent = ItemMetaData(album.id)
+    group.albumData = MusicSongList(album.id)
 
     ' Watch for user clicking on a song
-    group.observeField("musicSongSelected", m.port)
+    group.observeField("playSong", m.port)
 
     ' Watch for user click on Play button on album
     group.observeField("playAllSelected", m.port)
@@ -481,7 +481,7 @@ function CreateAudioPlayerGroup(audiodata)
     end if
 
     group.backgroundContent = songBackdropArray
-    group.itemContent = songMetaDataArray
+    group.pageContent = songMetaDataArray
 
     group.musicArtistAlbumData = audiodata
     group.audio.content = content

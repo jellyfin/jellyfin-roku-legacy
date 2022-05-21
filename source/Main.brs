@@ -186,15 +186,15 @@ sub Main (args as dynamic) as void
             albums = msg.getRoSGNode()
             node = albums.musicArtistAlbumData.items[ptr[1]]
             group = CreateMusicAlbumDetailsGroup(node)
-        else if isNodeEvent(msg, "musicSongSelected")
-            ' If you select a Song from ANYWHERE, follow this flow
+        else if isNodeEvent(msg, "playSong")
+            ' User has selected audio they want us to play
             selectedIndex = msg.getData()
-            songs = msg.getRoSGNode()
-            group = CreateAudioPlayerGroup(songs.MusicArtistAlbumData.items[selectedIndex])
+            screenContent = msg.getRoSGNode()
+            group = CreateAudioPlayerGroup(screenContent.albumData.items[selectedIndex])
         else if isNodeEvent(msg, "playAllSelected")
-            ' User selected Play All button
-            songs = msg.getRoSGNode()
-            group = CreateAudioPlayerGroup(songs.MusicArtistAlbumData.items)
+            ' User has selected playlist of of audio they want us to play
+            screenContent = msg.getRoSGNode()
+            group = CreateAudioPlayerGroup(screenContent.albumData.items)
         else if isNodeEvent(msg, "episodeSelected")
             ' If you select a TV Episode from ANYWHERE, follow this flow
             node = getMsgPicker(msg, "picker")

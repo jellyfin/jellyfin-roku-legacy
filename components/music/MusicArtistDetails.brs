@@ -1,37 +1,42 @@
 sub init()
     m.top.optionsAvailable = false
+    setupMainNode()
+end sub
+
+sub setupMainNode()
     main = m.top.findNode("toplevel")
     main.translation = [96, 175]
 end sub
 
-sub itemContentChanged()
-    item = m.top.itemContent
-    itemData = item.json
+' Event fired when page data is loaded
+sub pageContentChanged()
+    item = m.top.pageContent
 
     ' Populate scene data
-    m.top.overhangTitle = itemData.name
-    m.top.findNode("musicArtistPoster").uri = m.top.itemContent.posterURL
-    setFieldText("overview", itemData.overview)
+    setScreenTitle(item.json)
+    setPosterImage(item.posterURL)
+    setOnScreenTextValues(item.json)
 end sub
 
-sub setFieldText(field, value)
-    node = m.top.findNode(field)
-    if node = invalid or value = invalid then return
-
-    ' Handle non strings... Which _shouldn't_ happen, but hey
-    if type(value) = "roInt" or type(value) = "Integer"
-        value = str(value).trim()
-    else if type(value) = "roFloat" or type(value) = "Float"
-        value = str(value).trim()
-    else if type(value) <> "roString" and type(value) <> "String"
-        value = ""
+sub setScreenTitle(json)
+    if isValid(json)
+        m.top.overhangTitle = json.name
     end if
+end sub
 
-    node.text = value
+sub setPosterImage(posterURL)
+    if isValid(posterURL)
+        m.top.findNode("artistImage").uri = posterURL
+    end if
+end sub
+
+' Populate on screen text variables
+sub setOnScreenTextValues(json)
+    if isValid(json)
+        setFieldTextValue("overview", json.overview)
+    end if
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
-    if not press then return false
-
     return false
 end function

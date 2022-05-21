@@ -5,7 +5,7 @@
     <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[-10]" >
       <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[15]" >
         <LayoutGroup layoutDirection="vert" itemSpacings="[15]">
-          <Poster id="musicartistPoster" width="450" height="450" />
+          <Poster id="albumCover" width="450" height="450" />
           <Label id="numberofsongs" width="450" height="25" horizAlign="left" />
         </LayoutGroup>
         <LayoutGroup layoutDirection="vert" horizAlignment="left" itemSpacings="[15]">
@@ -21,7 +21,7 @@
   </children>
   <interface>
     <field id="backgroundContent" type="array" />
-    <field id="itemContent" type="nodearray" onChange="itemContentChanged" />
+    <field id="pageContent" type="nodearray" onChange="pageContentChanged" />
     <field id="audio" type="node" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />

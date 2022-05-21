@@ -1,72 +1,58 @@
 sub init()
     m.top.optionsAvailable = false
-    main = m.top.findNode("toplevel")
-    main.translation = [96, 175]
+    setupMainNode()
+
     m.playAlbum = m.top.findNode("playAlbum")
     m.songList = m.top.findNode("songList")
 end sub
 
+sub setupMainNode()
+    main = m.top.findNode("toplevel")
+    main.translation = [96, 175]
+end sub
+
 ' Set values for displayed values on screen
-sub itemContentChanged()
-    item = m.top.itemContent
+sub pageContentChanged()
+    item = m.top.pageContent
 
-    m.top.findNode("musicartistPoster").uri = item.posterURL
+    setPosterImage(item.posterURL)
+    setScreenTitle(item.json)
+    setOnScreenTextValues(item.json)
+end sub
 
-    m.top.overhangTitle = item.json.AlbumArtist + " / " + item.json.name
-
-    setFieldText("overview", item.json.overview)
-    setFieldText("numberofsongs", stri(item.json.ChildCount) + " Tracks")
-
-    if type(item.json.ProductionYear) = "roInt"
-        setFieldText("released", "Released " + stri(item.json.ProductionYear))
-    end if
-
-    if item.json.genres.count() > 0
-        setFieldText("genres", item.json.genres.join(", "))
-    end if
-
-    if type(item.json.RunTimeTicks) = "LongInteger"
-        setFieldText("runtime", stri(getRuntime()) + " mins")
+' Set poster image on screen
+sub setPosterImage(posterURL)
+    if isValid(posterURL)
+        m.top.findNode("albumCover").uri = posterURL
     end if
 end sub
 
-sub setFieldText(field, value)
-    node = m.top.findNode(field)
-    if node = invalid or value = invalid then return
-
-    ' Handle non strings... Which _shouldn't_ happen, but hey
-    if type(value) = "roInt" or type(value) = "Integer"
-        value = str(value).trim()
-    else if type(value) = "roFloat" or type(value) = "Float"
-        value = str(value).trim()
-    else if type(value) <> "roString" and type(value) <> "String"
-        value = ""
+' Set screen's title text
+sub setScreenTitle(json)
+    if isValid(json)
+        m.top.overhangTitle = json.AlbumArtist + " / " + json.name
     end if
-
-    node.text = value
 end sub
 
-function getRuntime() as integer
-    itemData = m.top.itemContent.json
+' Populate on screen text variables
+sub setOnScreenTextValues(json)
+    if isValid(json)
+        setFieldTextValue("overview", json.overview)
+        setFieldTextValue("numberofsongs", stri(json.ChildCount) + " Tracks")
 
-    ' A tick is .1ms, so 1/10,000,000 for ticks to seconds,
-    ' then 1/60 for seconds to minutes... 1/600,000,000
-    return round(itemData.RunTimeTicks / 600000000.0)
-end function
+        if type(json.ProductionYear) = "roInt"
+            setFieldTextValue("released", "Released " + stri(json.ProductionYear))
+        end if
 
-function round(f as float) as integer
-    ' BrightScript only has a "floor" round
-    ' This compares floor to floor + 1 to find which is closer
-    m = int(f)
-    n = m + 1
-    x = abs(f - m)
-    y = abs(f - n)
-    if y > x
-        return m
-    else
-        return n
+        if json.genres.count() > 0
+            setFieldTextValue("genres", json.genres.join(", "))
+        end if
+
+        if type(json.RunTimeTicks) = "LongInteger"
+            setFieldTextValue("runtime", stri(getMinutes(json.RunTimeTicks)) + " mins")
+        end if
     end if
-end function
+end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
