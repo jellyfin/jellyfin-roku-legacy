@@ -14,9 +14,16 @@ sub init()
 
     m.buttonGrp = m.top.findNode("buttons")
     m.buttonGrp.setFocus(true)
+    m.top.lastFocus = m.buttonGrp
 
     m.top.observeField("itemContent", "itemContentChanged")
 end sub
+
+sub OnScreenShown()
+    ' set focus to button group
+    m.buttonGrp.setFocus(true)
+end sub
+
 
 sub itemContentChanged()
     ' Updates video metadata
