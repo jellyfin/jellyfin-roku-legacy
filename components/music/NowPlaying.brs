@@ -57,6 +57,11 @@ sub itemContentChanged()
     setFieldText("artist", item.json.Artists[0])
     setFieldText("album", item.json.album)
     setFieldText("song", item.json.name)
+
+    ' Add Backdrop Image
+    if m.top.backgroundContent[m.top.audio.contentIndex] <> invalid
+        m.top.findNode("backdrop").uri = m.top.backgroundContent[m.top.audio.contentIndex]
+    end if
 end sub
 
 sub setFieldText(field, value)

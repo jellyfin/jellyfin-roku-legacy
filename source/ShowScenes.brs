@@ -418,6 +418,7 @@ function CreateAudioPlayerGroup(audiodata)
 
     group = CreateObject("roSGNode", "NowPlaying")
     songMetaDataArray = CreateObject("roArray", 0, true)
+    songBackdropArray = CreateObject("roArray", 0, true)
     content = createObject("RoSGNode", "ContentNode")
 
     if type(audiodata) = "roArray"
@@ -432,6 +433,9 @@ function CreateAudioPlayerGroup(audiodata)
             songData = AudioItem(song.id)
 
             songMetaDataArray.push(ItemMetaData(song.id))
+            imgParams = { "maxHeight": "720", "maxWidth": "1280" }
+
+            songBackdropArray.push(ImageURL(song.json.ArtistItems[0].id, "Backdrop", imgParams))
 
             params = {}
 
@@ -458,6 +462,8 @@ function CreateAudioPlayerGroup(audiodata)
             songData = AudioItem(audiodata.id)
 
             songMetaDataArray.push(ItemMetaData(audiodata.id))
+            imgParams = { "maxHeight": "720", "maxWidth": "1280" }
+            songBackdropArray.push(ImageURL(audiodata.json.ArtistItems[0].id, "Backdrop", imgParams))
 
             params = {}
 
@@ -474,6 +480,7 @@ function CreateAudioPlayerGroup(audiodata)
         end if
     end if
 
+    group.backgroundContent = songBackdropArray
     group.itemContent = songMetaDataArray
 
     group.musicArtistAlbumData = audiodata

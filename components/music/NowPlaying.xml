@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="NowPlaying" extends="JFGroup">
   <children>
+    <Poster id="backdrop" opacity=".5" loadDisplayMode="scaleToFit" blendColor="#3f3f3f" />
     <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[-10]" >
       <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[15]" >
         <LayoutGroup layoutDirection="vert" itemSpacings="[15]">
           <Poster id="musicartistPoster" width="450" height="450" />
-          <Label id="numberofsongs" width="450" height="25" />
+          <Label id="numberofsongs" width="450" height="25" horizAlign="left" />
         </LayoutGroup>
         <LayoutGroup layoutDirection="vert" itemSpacings="[15]">
-          <Label id="artist" width="450" height="25" />
-          <Label id="song" width="450" height="25" />
-          <Label id="album" width="450" height="25" />
+          <Label id="artist" width="450" height="25" horizAlign="left" />
+          <Label id="song" width="450" height="25"  horizAlign="left" />
+          <Label id="album" width="450" height="25"  horizAlign="left" />
           <MusicAlbumSongList id="songList" itemSize="[ 1250, 60 ]" numRows="8" />
           <LayoutGroup id="controlButtons" layoutDirection="horiz" itemSpacings="[15]" >
             <JFButtons id="buttons" />
@@ -20,6 +21,7 @@
     </LayoutGroup>
   </children>
   <interface>
+    <field id="backgroundContent" type="array" />
     <field id="itemContent" type="nodearray" onChange="itemContentChanged" />
     <field id="musicArtistAlbumData" type="assocarray" alias="songList.MusicArtistAlbumData" />
     <field id="musicSongSelected" alias="songList.itemSelected" />
@@ -27,4 +29,7 @@
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="NowPlaying.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>
