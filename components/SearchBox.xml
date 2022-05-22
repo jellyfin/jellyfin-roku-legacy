@@ -2,7 +2,7 @@
 <component name="SearchBox" extends="LayoutGroup">
   <children>
        <Label id = "text" text="Search now" visible="false"	/>
-        <DynamicMiniKeyboard id="search_Key"/>
+        <DynamicMiniKeyboard id="search_Key" maxTextLength="75"/>
   </children>
   <interface>
     <field id="search_values" type="string" alwaysNotify="true" />
