@@ -332,6 +332,7 @@ function CreateMusicArtistDetailsGroup(musicartist)
         group.pageContent = ItemMetaData(musicartist.id)
         group.albumData = MusicSongList(musicartist.id)
         group.observeField("playSong", m.port)
+        group.observeField("playAllSelected", m.port)
     else
         ' User has albums under artists
         group = CreateObject("roSGNode", "MusicArtistDetails")

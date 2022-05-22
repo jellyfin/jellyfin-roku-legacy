@@ -101,7 +101,7 @@ sub loadInitialItems()
     else if m.top.parentItem.collectionType = "tvshows"
         m.loadItemsTask.itemType = "Series"
     else if m.top.parentItem.collectionType = "music"
-        m.loadItemsTask.itemType = "MusicArtist"
+        m.loadItemsTask.itemType = "MusicArtist,MusicAlbum"
         m.loadItemsTask.fallbackType = "MusicAlbum"
         m.loadItemsTask.recursive = false
     else if m.top.parentItem.collectionType = "livetv"
