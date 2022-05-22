@@ -14,9 +14,16 @@ sub init()
 
     m.buttonGrp = m.top.findNode("buttons")
     m.buttonGrp.setFocus(true)
+    m.top.lastFocus = m.buttonGrp
 
     m.top.observeField("itemContent", "itemContentChanged")
 end sub
+
+sub OnScreenShown()
+    ' set focus to button group
+    m.buttonGrp.setFocus(true)
+end sub
+
 
 sub itemContentChanged()
     ' Updates video metadata
@@ -199,9 +206,11 @@ sub setFavoriteColor()
     if fave <> invalid and fave
         fave_button.textColor = "#00ff00ff"
         fave_button.focusedTextColor = "#269926ff"
+        fave_button.text = tr("Favorite")
     else
         fave_button.textColor = "0xddddddff"
         fave_button.focusedTextColor = "#262626ff"
+        fave_button.text = tr("Set Favorite")
     end if
 end sub
 
@@ -211,9 +220,11 @@ sub setWatchedColor()
     if watched
         watched_button.textColor = "#ff0000ff"
         watched_button.focusedTextColor = "#992626ff"
+        watched_button.text = tr("Watched")
     else
         watched_button.textColor = "0xddddddff"
         watched_button.focusedTextColor = "#262626ff"
+        watched_button.text = tr("Set Watched")
     end if
 end sub
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="MovieDetails" extends="JFGroup">
+<component name="MovieDetails" extends="JFScreen">
   <children>
     <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[30]">
       <Poster id="moviePoster"
@@ -33,7 +33,7 @@
         <ButtonGroupHoriz id="buttons" itemSpacings="[10]">
           <Button text="Play" id="play-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
           <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
-          <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
+          <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="300" />
           <Button text="Favorite" id="favorite-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
         </ButtonGroupHoriz>
         <Label id="tagline" />

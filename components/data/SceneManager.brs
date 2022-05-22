@@ -28,6 +28,11 @@ sub pushScene(newGroup)
         end if
 
         currentGroup.visible = false
+
+        if currentGroup.isSubType("JFScreen")
+            currentGroup.callFunc("OnScreenHidden")
+        end if
+
     end if
 
     m.groups.push(newGroup)
@@ -36,6 +41,10 @@ sub pushScene(newGroup)
         m.content.replaceChild(newGroup, 0)
     else
         m.content.appendChild(newGroup)
+    end if
+
+    if newGroup.isSubType("JFScreen")
+        newGroup.callFunc("OnScreenShown")
     end if
 
     'observe info about new group, set overhang title, etc.
@@ -65,6 +74,12 @@ sub popScene()
             ' Stop video to make sure app communicates stop playstate to server
             group.control = "stop"
         end if
+
+        group.visible = false
+
+        if group.isSubType("JFScreen")
+            group.callFunc("OnScreenHidden")
+        end if
     else
         ' Exit app if for some reason we don't have anything on the stack
         m.scene.exit = true
@@ -86,11 +101,16 @@ sub popScene()
 
         m.content.replaceChild(group, 0)
 
-        ' Restore focus
-        if group.lastFocus <> invalid
-            group.lastFocus.setFocus(true)
+        if group.isSubType("JFScreen")
+            group.callFunc("OnScreenShown")
         else
-            group.setFocus(true)
+
+            ' Restore focus
+            if group.lastFocus <> invalid
+                group.lastFocus.setFocus(true)
+            else
+                group.setFocus(true)
+            end if
         end if
     else
         ' Exit app if the stack is empty after removing group

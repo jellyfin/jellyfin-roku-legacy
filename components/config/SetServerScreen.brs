@@ -38,11 +38,13 @@ function onKeyEvent(key as string, press as boolean) as boolean
     else if key = "down" and m.serverUrlContainer.hasFocus()
         m.submit.setFocus(true)
     else if key = "options"
-        serverName = m.serverPicker.content.getChild(m.serverPicker.itemFocused).name
-        if m.servers.Count() > 0 and Instr(1, serverName, "Saved") > 0
-            'Can only delete previously saved servers, not locally discovered ones
-            'So if we are on a "Saved" item, let the options dialog be shown (handled elsewhere)
-            handled = false
+        if m.serverPicker.itemFocused >= 0 and m.serverPicker.itemFocused < m.serverPicker.content.getChildCount()
+            serverName = m.serverPicker.content.getChild(m.serverPicker.itemFocused).name
+            if m.servers.Count() > 0 and Instr(1, serverName, "Saved") > 0
+                'Can only delete previously saved servers, not locally discovered ones
+                'So if we are on a "Saved" item, let the options dialog be shown (handled elsewhere)
+                handled = false
+            end if
         end if
     else
         handled = false

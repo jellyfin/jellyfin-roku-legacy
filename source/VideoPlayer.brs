@@ -19,8 +19,8 @@ end function
 sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1)
 
     video.content = createObject("RoSGNode", "ContentNode")
-
     meta = ItemMetaData(video.id)
+    m.videotype = meta.type
     if meta = invalid
         video.content = invalid
         return
@@ -58,9 +58,89 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 group.callFunc("refresh")
                 video.content = invalid
                 return
+            else if dialogResult = 3
+                'get series ID based off episiode ID
+                params = {
+                    ids: video.Id
+                }
+                url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                resp = APIRequest(url, params)
+                data = getJson(resp)
+                for each item in data.Items
+                    m.series_id = item.SeriesId
+                end for
+                'Get series json data
+                params = {
+                    ids: m.series_id
+                }
+                url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                resp = APIRequest(url, params)
+                data = getJson(resp)
+                for each item in data.Items
+                    m.tmp = item
+                end for
+                'Create Series Scene
+                group = CreateSeriesDetailsGroup(m.tmp)
+                video.content = invalid
+                return
+
+            else if dialogResult = 4
+                'get Season/Series ID based off episiode ID
+                params = {
+                    ids: video.Id
+                }
+                url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                resp = APIRequest(url, params)
+                data = getJson(resp)
+                for each item in data.Items
+                    m.season_id = item.SeasonId
+                    m.series_id = item.SeriesId
+                end for
+                'Get Series json data
+                params = {
+                    ids: m.season_id
+                }
+                url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                resp = APIRequest(url, params)
+                data = getJson(resp)
+                for each item in data.Items
+                    m.Season_tmp = item
+                end for
+                'Get Season json data
+                params = {
+                    ids: m.series_id
+                }
+                url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                resp = APIRequest(url, params)
+                data = getJson(resp)
+                for each item in data.Items
+                    m.Series_tmp = item
+                end for
+                'Create Season Scene
+                group = CreateSeasonDetailsGroup(m.Series_tmp, m.Season_tmp)
+                video.content = invalid
+                return
+
+            else if dialogResult = 5
+                'get  episiode ID
+                params = {
+                    ids: video.Id
+                }
+                url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                resp = APIRequest(url, params)
+                data = getJson(resp)
+                for each item in data.Items
+                    m.episode_id = item
+                end for
+                'Create Episode Scene
+                group = CreateMovieDetailsGroup(m.episode_id)
+                video.content = invalid
+                return
             end if
         end if
     end if
+
+
     video.content.PlayStart = int(playbackPosition / 10000000)
 
     ' Call PlayInfo from server
@@ -178,8 +258,8 @@ end function
 
 'Opens dialog asking user if they want to resume video or start playback over
 function startPlayBackOver(time as longinteger) as integer
-    if m.scene.focusedChild.overhangTitle = "Home"
-        return option_dialog(["Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning.", "Watched"])
+    if m.videotype = "Episode" or m.videotype = "Series"
+        return option_dialog([tr("Resume playing at ") + ticksToHuman(time) + ".", tr("Start over from the beginning."), tr("Watched"), tr("Go to series"), tr("Go to season"), tr("Go to episode")])
     else
         return option_dialog(["Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning."])
     end if

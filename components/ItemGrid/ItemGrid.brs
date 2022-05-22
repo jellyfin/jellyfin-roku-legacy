@@ -1,7 +1,9 @@
 sub init()
 
     m.options = m.top.findNode("options")
+
     m.tvGuide = invalid
+    m.channelFocused = invalid
 
     m.itemGrid = m.top.findNode("itemGrid")
     m.backdrop = m.top.findNode("backdrop")
@@ -43,8 +45,11 @@ sub init()
     m.sortAscending = true
 
     m.filter = "All"
+    m.favorite = "Favorite"
 
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
+    m.spinner = m.top.findNode("spinner")
+    m.spinner.visible = true
 
     m.Alpha = m.top.findNode("AlphaMenu")
     m.AlphaSelected = m.top.findNode("AlphaSelected")
@@ -137,6 +142,7 @@ sub SetUpOptions()
 
     options = {}
     options.filter = []
+    options.favorite = []
 
     'Movies
     if m.top.parentItem.collectionType = "movies"
@@ -199,6 +205,9 @@ sub SetUpOptions()
             { "Title": tr("All"), "Name": "All" },
             { "Title": tr("Favorites"), "Name": "Favorites" }
         ]
+        options.favorite = [
+            { "Title": tr("Favorite"), "Name": "Favorite" }
+        ]
     else if m.top.parentItem.collectionType = "photoalbum" or m.top.parentItem.collectionType = "photo" or m.top.parentItem.collectionType = "homevideos"
         ' For some reason, my photo library shows up as "homevideos", maybe because it has some mp4 mixed in with the jpgs?
 
@@ -242,6 +251,12 @@ sub SetUpOptions()
             m.options.filter = o.Name
         end if
     end for
+
+    ' for each o in options.favorite
+    '     if o.Name = m.favorite
+    '         m.options.favorite = o.Name
+    '     end if
+    ' end for
 
     m.options.options = options
 
@@ -297,20 +312,21 @@ end sub
 'Handle new item being focused
 sub onItemFocused()
 
-    focusedRow = CInt(m.itemGrid.itemFocused / m.itemGrid.numColumns) + 1
+    focusedRow = m.itemGrid.currFocusRow
 
     itemInt = m.itemGrid.itemFocused
-
     ' If no selected item, set background to parent backdrop
     if itemInt = -1
         return
     end if
 
+    m.selectedFavoriteItem = m.itemGrid.content.getChild(m.itemGrid.itemFocused)
+
     ' Set Background to item backdrop
     SetBackground(m.itemGrid.content.getChild(m.itemGrid.itemFocused).backdropUrl)
 
     ' Load more data if focus is within last 3 rows, and there are more items to load
-    if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.loadItemsTask.totalRecordCount
+    if focusedRow >= m.loadedRows - 5 and m.loadeditems < m.loadItemsTask.totalRecordCount
         loadMoreData()
     end if
 end sub
@@ -464,6 +480,7 @@ sub showTVGuide()
         m.tvGuide = createObject("roSGNode", "Schedule")
         m.top.signalBeacon("EPGLaunchInitiate") ' Required Roku Performance monitoring
         m.tvGuide.observeField("watchChannel", "onChannelSelected")
+        m.tvGuide.observeField("focusedChannel", "onChannelFocused")
     end if
     m.tvGuide.filter = m.filter
     m.tvGuide.searchTerm = m.VoiceBox.text
@@ -478,6 +495,11 @@ sub onChannelSelected(msg)
         ' Clone the node when it's reused/update in the TimeGrid it doesn't automatically start playing
         m.top.selectedItem = node.watchChannel.clone(false)
     end if
+end sub
+
+sub onChannelFocused(msg)
+    node = msg.getRoSGNode()
+    m.channelFocused = node.focusedChannel
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
@@ -495,6 +517,16 @@ function onKeyEvent(key as string, press as boolean) as boolean
             m.top.removeChild(m.options)
             optionsClosed()
         else
+            channelSelected = m.channelFocused
+            itemSelected = m.selectedFavoriteItem
+            if itemSelected <> invalid
+                m.options.selectedFavoriteItem = itemSelected
+            end if
+            if channelSelected <> invalid
+                if channelSelected.type = "TvChannel"
+                    m.options.selectedFavoriteItem = channelSelected
+                end if
+            end if
             m.options.visible = true
             m.top.appendChild(m.options)
             m.options.setFocus(true)

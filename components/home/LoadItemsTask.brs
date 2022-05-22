@@ -76,9 +76,12 @@ sub loadItems()
         resp = APIRequest(url, params)
         data = getJson(resp)
         for each item in data.Items
-            tmp = CreateObject("roSGNode", "HomeData")
-            tmp.json = item
-            results.push(tmp)
+            ' Skip Books for now as we don't support it (issue #558)
+            if item.Type <> "Book"
+                tmp = CreateObject("roSGNode", "HomeData")
+                tmp.json = item
+                results.push(tmp)
+            end if
         end for
 
     else if m.top.itemsToLoad = "onNow"

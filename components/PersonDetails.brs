@@ -118,9 +118,11 @@ sub setFavoriteColor()
     if fave <> invalid and fave
         fave_button.textColor = "#00ff00ff"
         fave_button.focusedTextColor = "#269926ff"
+        fave_button.text = tr("Favorite")
     else
         fave_button.textColor = "0xddddddff"
         fave_button.focusedTextColor = "#262626ff"
+        fave_button.text = tr("Set Favorite")
     end if
 end sub
 
