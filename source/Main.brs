@@ -194,6 +194,8 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "playAllSelected")
             ' User has selected playlist of of audio they want us to play
             screenContent = msg.getRoSGNode()
+            m.spinner = screenContent.findNode("spinner")
+            m.spinner.visible = true
             group = CreateAudioPlayerGroup(screenContent.albumData.items)
         else if isNodeEvent(msg, "episodeSelected")
             ' If you select a TV Episode from ANYWHERE, follow this flow

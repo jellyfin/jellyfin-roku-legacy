@@ -4,6 +4,9 @@ sub init()
 
     m.playAlbum = m.top.findNode("playAlbum")
     m.songList = m.top.findNode("songList")
+
+    m.spinner = m.top.findNode("spinner")
+    m.spinner.visible = false
 end sub
 
 sub setupMainNode()
@@ -87,3 +90,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     return false
 end function
+
+sub OnScreenHidden()
+    m.spinner.visible = false
+end sub

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="MusicAlbumDetails" extends="JFGroup">
+<component name="MusicAlbumDetails" extends="JFScreen">
   <children>
     <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[-10]" >
       <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[15]" >
@@ -17,6 +17,7 @@
         </LayoutGroup>
       </LayoutGroup>
     </LayoutGroup>
+    <Spinner id="spinner" translation="[920, 540]" visible="false" />
   </children>
   <interface>
     <field id="pageContent" type="node" onChange="pageContentChanged" />
