@@ -34,9 +34,19 @@ end sub
 
 ' Set screen's title text
 sub setScreenTitle(json)
+    newTitle = ""
     if isValid(json)
-        m.top.overhangTitle = json.AlbumArtist + " / " + json.name
+        if isValid(json.AlbumArtist)
+            newTitle = json.AlbumArtist
+        end if
+        if isValid(json.AlbumArtist) and isValid(json.name)
+            newTitle = newTitle + " / "
+        end if
+        if isValid(json.name)
+            newTitle = newTitle + json.name
+        end if
     end if
+    m.top.overhangTitle = newTitle
 end sub
 
 ' Populate on screen text variables

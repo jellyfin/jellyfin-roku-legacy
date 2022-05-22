@@ -436,7 +436,9 @@ function CreateAudioPlayerGroup(audiodata)
             songMetaDataArray.push(ItemMetaData(song.id))
             imgParams = { "maxHeight": "720", "maxWidth": "1280" }
 
-            songBackdropArray.push(ImageURL(song.json.ArtistItems[0].id, "Backdrop", imgParams))
+            if isValid(song.json.ArtistItems[0])
+                songBackdropArray.push(ImageURL(song.json.ArtistItems[0].id, "Backdrop", imgParams))
+            end if
 
             params = {}
 
@@ -464,7 +466,10 @@ function CreateAudioPlayerGroup(audiodata)
 
             songMetaDataArray.push(ItemMetaData(audiodata.id))
             imgParams = { "maxHeight": "720", "maxWidth": "1280" }
-            songBackdropArray.push(ImageURL(audiodata.json.ArtistItems[0].id, "Backdrop", imgParams))
+
+            if isValid(audiodata.json.ArtistItems[0])
+                songBackdropArray.push(ImageURL(audiodata.json.ArtistItems[0].id, "Backdrop", imgParams))
+            end if
 
             params = {}
 

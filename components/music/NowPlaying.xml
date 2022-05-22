@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="NowPlaying" extends="JFGroup">
   <children>
-    <Poster id="backdrop" opacity=".5" loadDisplayMode="scaleToFit" blendColor="#3f3f3f" />
+    <Poster id="backdrop" opacity=".5" loadDisplayMode="scaleToZoom" width="2000" height="1200" blendColor="#3f3f3f" />
     <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[-10]" >
       <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[15]" >
         <LayoutGroup layoutDirection="vert" itemSpacings="[15]">
