@@ -325,15 +325,15 @@ end function
 function CreateMusicArtistDetailsGroup(musicartist)
     musicData = MusicAlbumList(musicartist.id)
 
-    ' User could have albums or just songs under artists
+    ' User only has songs under artists
     if musicData = invalid or musicData.Items.Count() = 0
         ' Just songs under artists...
         group = CreateObject("roSGNode", "MusicAlbumDetails")
         group.pageContent = ItemMetaData(musicartist.id)
-        group.musicArtistAlbumData = MusicSongList(musicartist.id)
+        group.albumData = MusicSongList(musicartist.id)
         group.observeField("playSong", m.port)
     else
-        ' Albums...
+        ' User has albums under artists
         group = CreateObject("roSGNode", "MusicArtistDetails")
         group.pageContent = ItemMetaData(musicartist.id)
         group.musicArtistAlbumData = musicData

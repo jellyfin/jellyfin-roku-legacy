@@ -18,6 +18,11 @@ sub pageContentChanged()
     setPosterImage(item.posterURL)
     setScreenTitle(item.json)
     setOnScreenTextValues(item.json)
+
+    ' Only 1 song shown, so hide Play Album button
+    if item.json.ChildCount = 1
+        m.top.findNode("playAlbum").visible = false
+    end if
 end sub
 
 ' Set poster image on screen
@@ -56,6 +61,11 @@ end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
+
+    ' Play Album is hidden, so there are no navigation needs here
+    if m.top.pageContent.json.ChildCount = 1
+        return false
+    end if
 
     if key = "right" and m.playAlbum.hasFocus()
         m.songList.setFocus(true)
