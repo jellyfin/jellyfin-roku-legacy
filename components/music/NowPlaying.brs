@@ -52,7 +52,7 @@ function nextClicked() as boolean
     if m.top.audio.contentIsPlaylist
         m.top.audio.control = "skipcontent"
     end if
-    
+
     return true
 end function
 
