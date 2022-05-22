@@ -50,13 +50,12 @@ sub loadItems()
     if m.top.ItemType <> ""
         params.append({ IncludeItemTypes: m.top.ItemType })
     end if
- print "ItemType: " m.top.ItemType
- print "search Term: " m.top.searchTerm
-if m.top.searchTerm <> ""
- m.livetvsearch = m.top.searchTerm
-else
-    m.livetvsearch = m.top.nameStartsWith
-end if
+
+    if m.top.searchTerm <> ""
+        m.livetvsearch = m.top.searchTerm
+    else
+        m.livetvsearch = m.top.nameStartsWith
+    end if
     if m.top.ItemType = "LiveTV"
         params.append({ IncludeItemTypes: "LiveTvChannel" })
         params.append({ parentid: "" })

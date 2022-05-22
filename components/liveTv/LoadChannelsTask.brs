@@ -5,7 +5,7 @@ end sub
 sub loadChannels()
 
     results = []
-    
+
     sort_field = m.top.sortField
 
     if m.top.sortAscending = true
@@ -21,8 +21,8 @@ sub loadChannels()
         recursive: m.top.recursive,
     }
 
-       ' Handle special case when getting names starting with numeral
-       if m.top.NameStartsWith <> ""
+    ' Handle special case when getting names starting with numeral
+    if m.top.NameStartsWith <> ""
         if m.top.NameStartsWith = "#"
             params.NameLessThan = "A"
         else

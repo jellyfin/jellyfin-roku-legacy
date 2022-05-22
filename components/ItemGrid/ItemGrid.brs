@@ -488,7 +488,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if key = "down" and searchGrp.isinFocusChain()
         topGrp.setFocus(true)
         searchGrp.setFocus(false)
-    end if  
+    end if
     if key = "options"
         if m.options.visible = true
             m.options.visible = false
