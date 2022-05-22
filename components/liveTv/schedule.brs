@@ -259,9 +259,16 @@ end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
+    detailsGrp = m.top.findNode("detailsPane")
+    gridGrp = m.top.findNode("scheduleGrid")
 
-    if key = "back" or key = "down" and m.detailsPane.isInFocusChain()
+    if key = "back" and detailsGrp.isInFocusChain()
         focusProgramDetails(false)
+        detailsGrp.setFocus(false)
+        gridGrp.setFocus(true)
+        return true
+    else if key = "back"
+        m.global.sceneManager.callFunc("popScene")
         return true
     end if
 
