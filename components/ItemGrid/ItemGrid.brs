@@ -545,8 +545,6 @@ sub updateTitle()
         m.top.overhangTitle = m.top.parentItem.title
     else if m.filter = "Favorites"
         m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Favorites)")
-    else
-        m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Filtered)")
     end if
 
     if m.top.AlphaSelected <> ""
