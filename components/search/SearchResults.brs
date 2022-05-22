@@ -26,7 +26,6 @@ sub loadResults()
     m.SearchSpinner.visible = false
     m.searchSelect.itemdata = m.searchTask.results
     m.searchSelect.query = m.top.SearchAlpha
-    print "Search Results: " m.searchSelect.itemdata
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
