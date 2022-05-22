@@ -1,3 +1,22 @@
+' Roku translates the info provided in subtitleTracks into availableSubtitleTracks
+' Including ignoring tracks, if they are not understood, thus making indexing unpredictable.
+' This function translates between our internel selected subtitle index
+' and the corresponding index in availableSubtitleTracks.
+function availSubtitleTrackIdx(video, sub_idx) as integer
+    url = video.Subtitles[sub_idx].Track.TrackName
+    idx = 0
+    for each availTrack in video.availableSubtitleTracks
+        ' The TrackName must contain the URL we supplied originally, though
+        ' Roku mangles the name a bit, so we check if the URL is a substring, rather
+        ' than strict equality
+        if Instr(1, availTrack.TrackName, url)
+            return idx
+        end if
+        idx = idx + 1
+    end for
+    return -1
+end function
+
 ' Identify the default subtitle track for a given video id
 ' returns the server-side track index for the appriate subtitle
 function defaultSubtitleTrackFromVid(video_id) as integer
@@ -65,7 +84,7 @@ function setupSubtitle(video, subtitles, subtitle_idx = -1) as integer
     else
         ' If this is a text-based subtitle, set relevant settings for roku captions
         video.globalCaptionMode = "On"
-        video.subtitleTrack = video.availableSubtitleTracks[selectedSubtitle.TextIndex].TrackName
+        video.subtitleTrack = video.availableSubtitleTracks[availSubtitleTrackIdx(video, subtitleSelIdx)].TrackName
     end if
 
     return subtitleSelIdx
@@ -140,7 +159,7 @@ sub changeSubtitleDuringPlayback(newid)
     else
         ' Switching from text to text (or none to text) does not require stopping playback
         video.globalCaptionMode = "On"
-        video.subtitleTrack = video.availableSubtitleTracks[newSubtitles.TextIndex].TrackName
+        video.subtitleTrack = video.availableSubtitleTracks[availSubtitleTrackIdx(video, newid)].TrackName
     end if
 
     video.SelectedSubtitle = newid
@@ -204,7 +223,6 @@ function sortSubtitles(id as string, MediaStreams)
     textTracks = []
     for i = 0 to tracks["forced"].count() - 1
         if tracks["forced"][i].IsTextSubtitleStream
-            tracks["forced"][i].TextIndex = textTracks.count()
             textTracks.push(tracks["forced"][i].Track)
         end if
     end for
