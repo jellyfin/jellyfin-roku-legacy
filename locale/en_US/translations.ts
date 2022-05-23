@@ -518,6 +518,16 @@
         <extracomment>Description for option in Setting Screen</extracomment>
     </message>
     <message>
+        <source>Item Count</source>
+        <translation>Item Count</translation>
+        <extracomment>UI -> Media Grid -> Item Count in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Show item count in the library, and index of selected item.</source>
+        <translation>Show item count in the library, and index of selected item.</translation>
+        <extracomment>Description for option in Setting Screen</extracomment>
+    </message>
+    <message>
         <source>Set Favorite</source>
         <translation>Set Favorite</translation>
         <extracomment>Button Text - When pressed, sets item as Favorite</extracomment>
@@ -541,6 +551,11 @@
         <source>Go to episode</source>
         <translation>Go to episode</translation>
         <extracomment>Continue Watching Popup Menu - Navigate to the Episode Detail Page</extracomment>
+    </message>
+    <message>
+        <source>%1 of %2</source>
+        <translation>%1 of %2</translation>
+        <extracomment>Item position and count.  %1 = current item.  %2 = total number of items</extracomment>
     </message>
 </context>
 </TS>

@@ -231,6 +231,10 @@ sub Main (args as dynamic) as void
                 if video <> invalid
                     sceneManager.callFunc("pushScene", video)
                 end if
+
+                if group.lastFocus <> invalid
+                    group.lastFocus.setFocus(true)
+                end if
             else if btn <> invalid and btn.id = "watched-button"
                 movie = group.itemContent
                 if movie.watched
