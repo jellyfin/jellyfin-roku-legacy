@@ -2,6 +2,8 @@ sub init()
 
     m.options = m.top.findNode("options")
 
+    m.showItemCount = get_user_setting("itemgrid.showItemCount") = "true"
+
     m.tvGuide = invalid
     m.channelFocused = invalid
 
@@ -39,6 +41,11 @@ sub init()
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
     m.LoadNetworksTask = createObject("roSGNode", "LoadNetworksTask")
     m.LoadGenreTask = createObject("roSGNode", "LoadGenreTask")
+
+
+    'set inital counts for overhang before content is loaded.
+    m.loadItemsTask.totalRecordCount = 0
+
     m.spinner = m.top.findNode("spinner")
     m.spinner.visible = true
     m.Alpha = m.top.findNode("AlphaMenu")
@@ -390,6 +397,9 @@ sub onItemFocused()
     focusedRow = m.itemGrid.currFocusRow
 
     itemInt = m.itemGrid.itemFocused
+
+    updateTitle()
+
     ' If no selected item, set background to parent backdrop
     if itemInt = -1
         return
@@ -537,7 +547,6 @@ sub optionsClosed()
         m.filter = m.options.filter
         updateTitle()
         reload = true
-
         'Store filter setting
         if m.top.parentItem.collectionType = "livetv"
             set_user_setting("display.livetv.filter", m.options.filter)
@@ -646,18 +655,22 @@ sub updateTitle()
     if m.filter = "All"
         m.top.overhangTitle = m.top.parentItem.title
     else if m.filter = "Favorites"
-        m.top.overhangTitle = m.top.parentItem.title + tr(" (Favorites)")
-    else
-        m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered)")
+        m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Favorites)")
     end if
+
     if m.top.AlphaSelected <> ""
-        m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered)")
+        m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Filtered)")
     end if
+
     if m.options.view = "Networks" or m.view = "Networks"
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Networks)")
     end if
     if m.options.view = "Genre" or m.view = "Genre"
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Genre)")
+    end if
+    actInt = m.itemGrid.itemFocused + 1
+    if m.showItemCount and m.loadItemsTask.totalRecordCount > 0
+        m.top.overhangTitle += " (" + tr("%1 of %2").Replace("%1", actInt.toStr()).Replace("%2", m.loadItemsTask.totalRecordCount.toStr()) + ")"
     end if
 
 end sub

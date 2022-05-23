@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="JFScreen" extends="JFGroup">
+  <interface>
+    <function name="OnScreenShown" />
+    <function name="OnScreenHidden" />
+  </interface>
+  <script type="text/brightscript" uri="JFScreen.brs" />
+</component>

@@ -364,7 +364,7 @@ end sub
 
 function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_idx = 1)
     ' Video is Playing
-    video = VideoPlayer(video_id, mediaSourceId, audio_stream_idx)
+    video = VideoPlayer(video_id, mediaSourceId, audio_stream_idx, defaultSubtitleTrackFromVid(video_id))
     if video = invalid then return invalid
     video.observeField("selectSubtitlePressed", m.port)
     video.observeField("state", m.port)

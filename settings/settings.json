@@ -21,6 +21,13 @@
                 "description": "Media Grid Options",
                 "children": [
                     {
+                        "title": "Item Count",
+                        "description": "Show item count in the library, and index of selected item.",
+                        "settingName": "itemgrid.showItemCount",
+                        "type": "bool",
+                        "default": "false"
+                    },
+                    {
                         "title": "Item Titles",
                         "description": "Always show the titles below the poster images. (If disabled, title will be shown under hilighted item only)",
                         "settingName": "itemgrid.alwaysShowTitles",

@@ -184,7 +184,6 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     video.content.SubtitleTracks = subtitles["text"]
 
     ' 'TODO: allow user selection of subtitle track before playback initiated, for now set to no subtitles
-    video.SelectedSubtitle = -1
 
     video.directPlaySupported = playbackInfo.MediaSources[0].SupportsDirectPlay
     fully_external = false
@@ -234,6 +233,10 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
 
     video.content.setCertificatesFile("common:/certs/ca-bundle.crt")
     video.audioTrack = (audio_stream_idx + 1).ToStr() ' Roku's track indexes count from 1. Our index is zero based
+
+    ' Perform relevant setup work for selected subtitle, and return the index of the subtitle
+    ' is enabled/will be enabled, indexed on the provided list of subtitles
+    video.SelectedSubtitle = setupSubtitle(video, video.Subtitles, subtitle_idx)
 
     if not fully_external
         video.content = authorize_request(video.content)
