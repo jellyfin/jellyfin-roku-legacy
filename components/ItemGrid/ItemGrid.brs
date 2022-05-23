@@ -51,7 +51,6 @@ sub loadInitialItems()
     if m.top.parentItem.json.Type = "CollectionFolder" or m.top.parentItem.json.Type = "Folder"
         m.top.HomeLibraryItem = m.top.parentItem.Id
     end if
-    print "m.top.parentitem.json.type: "m.top.parentItem.json.Type
     if m.top.parentItem.backdropUrl <> invalid
         SetBackground(m.top.parentItem.backdropUrl)
     end if
@@ -99,7 +98,7 @@ sub loadInitialItems()
             m.LoadNetworksTask.itemType = "Series"
         end if
         updateTitle()
-    
+
     else if m.top.parentItem.type <> "Folder" and (m.view = "Genre" or m.options.view = "Genre")
         m.LoadGenreTask.nameStartsWith = m.top.AlphaSelected
         m.LoadGenreTask.itemId = m.top.parentItem.Id
@@ -121,11 +120,10 @@ sub loadInitialItems()
         'Set Stuido Id
         if m.top.parentItem.json.type = "Studio"
             m.loadItemsTask.StudioIds = m.top.parentItem.Id
-            m.loadItemsTask.itemId = m.top.parentItem.parentFolder 
+            m.loadItemsTask.itemId = m.top.parentItem.parentFolder
             m.loadItemsTask.genreIds = ""
-        'set Genre Id
-        else if m.top.parentItem.json.type = "Genre" 
-            print "Setting Genre Params"
+            'set Genre Id
+        else if m.top.parentItem.json.type = "Genre"
             m.loadItemsTask.genreIds = m.top.parentItem.Id
             m.loadItemsTask.itemId = m.top.parentItem.parentFolder
             m.loadItemsTask.StudioIds = ""
@@ -172,10 +170,8 @@ sub loadInitialItems()
             m.top.imageDisplayMode = "scaleToFit"
         else if m.top.parentItem.json.type = "Studio"
             m.loadItemsTask.itemId = m.top.parentItem.parentFolder
-            print "Setting itemID Studio: "m.top.parentItem.parentFolder
         else if m.top.parentItem.json.type = "Genre"
             m.loadItemsTask.itemId = m.top.parentItem.parentFolder
-            print "Setting itemID Genre: "m.top.parentItem.parentFolder
         else
             print "[ItemGrid] Unknown Type: " m.top.parentItem
         end if
@@ -186,17 +182,14 @@ sub loadInitialItems()
         m.LoadNetworksTask.observeField("content", "ItemDataLoaded")
         m.LoadNetworksTask.control = "Run"
         m.spinner.visible = true
-        print "doing netowk loading"
     else if m.top.parentItem.type <> "Folder" and (m.options.view = "Genre" or m.view = "Genre")
         m.LoadGenreTask.observeField("content", "ItemDataLoaded")
         m.LoadGenreTask.control = "Run"
         m.spinner.visible = true
-        print "doing Genre loading"
     else
         m.loadItemsTask.observeField("content", "ItemDataLoaded")
         m.loadItemsTask.control = "RUN"
         m.spinner.visible = true
-        print "doing item loading"
 
     end if
 
@@ -344,15 +337,12 @@ sub ItemDataLoaded(msg)
     if m.options.view = "Networks"
         m.LoadNetworksTask.unobserveField("content")
         m.LoadNetworksTask.content = []
-        print "Handle loaded Network Data"
     else if m.options.view = "Genre"
         m.LoadGenreTask.unobserveField("content")
         m.LoadGenreTask.content = []
-        print "Handle loaded Genre Data"
     else
         m.loadItemsTask.unobserveField("content")
         m.loadItemsTask.content = []
-        print "Handle loaded item Data"
 
     end if
 
@@ -411,11 +401,11 @@ sub onItemFocused()
     SetBackground(m.itemGrid.content.getChild(m.itemGrid.itemFocused).backdropUrl)
 
     ' Load more data if focus is within last 3 rows, and there are more items to load
-if focusedRow > 1
-    if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.loadItemsTask.totalRecordCount
-        loadMoreData()
+    if focusedRow > 1
+        if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.loadItemsTask.totalRecordCount
+            loadMoreData()
+        end if
     end if
-end if
 end sub
 
 '
@@ -456,13 +446,11 @@ sub loadMoreData()
         m.LoadNetworksTask.startIndex = m.loadedItems
         m.LoadNetworksTask.observeField("content", "ItemDataLoaded")
         m.LoadNetworksTask.control = "RUN"
-    else if m.top.parentItem.json.type = "Folder" and (m.options.view = "Genre" or m.view = "Genre") 
-        print "Loading more Genres: " m.top.parentItem.json.type
+    else if m.top.parentItem.json.type = "Folder" and (m.options.view = "Genre" or m.view = "Genre")
         m.LoadGenreTask.startIndex = m.loadedItems
         m.LoadGenreTask.observeField("content", "ItemDataLoaded")
         m.LoadGenreTask.control = "RUN"
     else
-        print "Loading more items: "
         m.loadItemsTask.startIndex = m.loadedItems
         m.loadItemsTask.observeField("content", "ItemDataLoaded")
         m.loadItemsTask.control = "RUN"
@@ -667,9 +655,9 @@ sub updateTitle()
     end if
     if m.options.view = "Networks" or m.view = "Networks"
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Networks)")
-    end if 
+    end if
     if m.options.view = "Genre" or m.view = "Genre"
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Genre)")
     end if
-    
+
 end sub

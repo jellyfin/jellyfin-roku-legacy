@@ -49,7 +49,6 @@ sub LoadGenre()
 
     resp = APIRequest(url, params)
     data = getJson(resp)
-    print "Data: "data
 
     if data <> invalid
 
@@ -84,7 +83,6 @@ sub LoadGenre()
             end if
         end for
     end if
-    print params
     m.top.content = results
 
 

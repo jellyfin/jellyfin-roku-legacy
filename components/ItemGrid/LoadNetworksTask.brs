@@ -81,7 +81,6 @@ sub LoadNetworks()
             end if
         end for
     end if
-    print "LOAD NETWORK PARAMS: " params
     m.top.content = results
 
 
