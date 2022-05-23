@@ -518,6 +518,16 @@
         <extracomment>Description for option in Setting Screen</extracomment>
     </message>
     <message>
+        <source>Item Count</source>
+        <translation>Item Count</translation>
+        <extracomment>UI -> Media Grid -> Item Count in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Show item count in the library, and index of selected item.</source>
+        <translation>Show item count in the library, and index of selected item.</translation>
+        <extracomment>Description for option in Setting Screen</extracomment>
+    </message>
+    <message>
         <source>Set Favorite</source>
         <translation>Set Favorite</translation>
         <extracomment>Button Text - When pressed, sets item as Favorite</extracomment>
@@ -548,19 +558,23 @@
         <extracomment>Help text in search voice text box</extracomment>
     </message>
     <message>
-    <source>Enter Search Query</source>
-    <translation>Enter Search Query</translation>
-    <extracomment>Help text in search Keyboard</extracomment>
-</message>
-<message>
-<source>Search now</source>
-<translation>Search now</translation>
-<extracomment>Help text in search Box</extracomment>
-</message>
-<message>
-<source>You can search for Titles, People, Live TV Channels and more</source>
-<translation>You can search for Titles, People, Live TV Channels and more</translation>
-<extracomment>Help text in search results</extracomment>
-</message>
+        <source>Enter Search Query</source>
+        <translation>Enter Search Query</translation>
+        <extracomment>Help text in search Keyboard</extracomment>
+    </message>
+    <message>
+        <source>Search now</source>
+        <translation>Search now</translation>
+        <extracomment>Help text in search Box</extracomment>
+    </message>
+    <message>
+        <source>You can search for Titles, People, Live TV Channels and more</source>
+        <translation>You can search for Titles, People, Live TV Channels and more</translation>
+        <extracomment>Help text in search results</extracomment>
+    </message>
+        <source>%1 of %2</source>
+        <translation>%1 of %2</translation>
+        <extracomment>Item position and count.  %1 = current item.  %2 = total number of items</extracomment>
+    </message>
 </context>
 </TS>
