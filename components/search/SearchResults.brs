@@ -4,6 +4,10 @@ sub init()
     m.searchSelect = m.top.findnode("searchSelect")
     m.searchTask = CreateObject("roSGNode", "SearchTask")
 
+    'set label text
+    m.Search_Help_text = m.top.findNode("Search_Help_text")
+    m.Search_Help_text.text = tr("You can search for Titles, People, Live TV Channels and more")
+
 end sub
 
 sub SearchMedias()

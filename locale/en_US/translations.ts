@@ -547,5 +547,20 @@
         <translation>Use voice remote to search</translation>
         <extracomment>Help text in search voice text box</extracomment>
     </message>
+    <message>
+    <source>Enter Search Query</source>
+    <translation>Enter Search Query</translation>
+    <extracomment>Help text in search Keyboard</extracomment>
+</message>
+<message>
+<source>Search now</source>
+<translation>Search now</translation>
+<extracomment>Help text in search Box</extracomment>
+</message>
+<message>
+<source>You can search for Titles, People, Live TV Channels and more</source>
+<translation>You can search for Titles, People, Live TV Channels and more</translation>
+<extracomment>Help text in search results</extracomment>
+</message>
 </context>
 </TS>

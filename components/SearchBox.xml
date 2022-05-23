@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="SearchBox" extends="LayoutGroup">
   <children>
-       <Label id = "text" text="Search now" visible="false"	/>
-        <DynamicMiniKeyboard id="search_Key" maxTextLength="75"/>
+       <Label id = "text" text="" visible="false"	/>
+        <DynamicMiniKeyboard id="search_Key" />
   </children>
   <interface>
     <field id="search_values" type="string" alwaysNotify="true" />

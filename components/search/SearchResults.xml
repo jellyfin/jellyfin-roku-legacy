@@ -6,7 +6,7 @@
       <SearchBox id="SearchBox" visible="true" focusable="true"/>
     </LayoutGroup>
       <LayoutGroup layoutDirection="horiz"  id="SearchAlphabox" translation="[600, 150]" >
-        <Label id = "Search_Help_text" text="You can search for Titles, People, Live TV Channels and more"/>
+        <Label id = "Search_Help_text" text=""/>
         
       </LayoutGroup>    
       <OptionsSlider id="options" />
