@@ -123,7 +123,7 @@ sub onProgramFocused()
 
     prog = channel.GetChild(m.scheduleGrid.programFocusedDetails.focusIndex)
 
-    if prog <> invalid and prog.fullyLoaded = false 
+    if prog <> invalid and prog.fullyLoaded = false
         m.LoadProgramDetailsTask.programId = prog.Id
         m.LoadProgramDetailsTask.channelIndex = m.scheduleGrid.programFocusedDetails.focusChannelIndex
         m.LoadProgramDetailsTask.programIndex = m.scheduleGrid.programFocusedDetails.focusIndex
@@ -136,16 +136,16 @@ end sub
 ' Update the Program Details with full information
 sub onProgramDetailsLoaded()
     if m.LoadProgramDetailsTask.programDetails = invalid then return
-        channel = m.scheduleGrid.content.GetChild(m.LoadProgramDetailsTask.programDetails.channelIndex)
+    channel = m.scheduleGrid.content.GetChild(m.LoadProgramDetailsTask.programDetails.channelIndex)
 
-        ' If TV Show does not have its own image, use the channel logo
-        if m.LoadProgramDetailsTask.programDetails.PosterUrl = invalid or m.LoadProgramDetailsTask.programDetails.PosterUrl = ""
-            m.LoadProgramDetailsTask.programDetails.PosterUrl = channel.PosterUrl
-        end if
+    ' If TV Show does not have its own image, use the channel logo
+    if m.LoadProgramDetailsTask.programDetails.PosterUrl = invalid or m.LoadProgramDetailsTask.programDetails.PosterUrl = ""
+        m.LoadProgramDetailsTask.programDetails.PosterUrl = channel.PosterUrl
+    end if
 
-        channel.ReplaceChild(m.LoadProgramDetailsTask.programDetails, m.LoadProgramDetailsTask.programDetails.programIndex)
-        m.LoadProgramDetailsTask.programDetails = invalid
-        m.scheduleGrid.showLoadingDataFeedback = false
+    channel.ReplaceChild(m.LoadProgramDetailsTask.programDetails, m.LoadProgramDetailsTask.programDetails.programIndex)
+    m.LoadProgramDetailsTask.programDetails = invalid
+    m.scheduleGrid.showLoadingDataFeedback = false
 end sub
 
 
