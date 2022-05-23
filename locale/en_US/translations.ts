@@ -542,5 +542,10 @@
         <translation>Go to episode</translation>
         <extracomment>Continue Watching Popup Menu - Navigate to the Episode Detail Page</extracomment>
     </message>
+    <message>
+        <source>Use voice remote to search</source>
+        <translation>Use voice remote to search</translation>
+        <extracomment>Help text in search voice text box</extracomment>
+    </message>
 </context>
 </TS>

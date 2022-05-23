@@ -30,6 +30,8 @@ sub init()
     m.VoiceBox.voiceEnabled = true
     m.VoiceBox.active = true
     m.VoiceBox.observeField("VoiceFilter", "onVoiceFilter")
+    'set voice help text
+    m.VoiceBox.hintText = tr("Use voice remote to search")
 
     'backdrop
     m.newBackdrop.observeField("loadStatus", "newBGLoaded")
