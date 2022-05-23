@@ -31,9 +31,6 @@ sub init()
     m.VoiceBox.active = true
     m.VoiceBox.observeField("VoiceFilter", "onVoiceFilter")
 
-    'Get spinner
-    m.spinner = m.top.findNode("ItemSpinner")
-
     'backdrop
     m.newBackdrop.observeField("loadStatus", "newBGLoaded")
 
@@ -48,6 +45,7 @@ sub init()
     m.favorite = "Favorite"
 
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
+    'Get spinner
     m.spinner = m.top.findNode("spinner")
     m.spinner.visible = true
 
