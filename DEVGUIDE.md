@@ -58,11 +58,7 @@ Note: You only have to run this command once if you are not a developer. The Jel
 
 ## Method 3: Visual Studio Code
 
-Users of Visual Studio Code will find a community developed extension for BrightScript that makes installing and testing Jellyfin builds straightforward.
-
-The extension can be found [HERE](https://marketplace.visualstudio.com/items?itemName=RokuCommunity.brightscript) and more information on
-setting up developer enviornments can be found on [Roku's website](https://developer.roku.com/docs/developer-program/getting-started/developer-setup.md)
-
+See Developer setup below.
 ## Bug/Crash Reports
 
 Did the app crash? Find a nasty bug? Use the this command to view the error log and [report it to the developers](https://github.com/jellyfin/jellyfin-roku/issues):
@@ -87,11 +83,14 @@ Deploy the app:
 make install
 ```
 
-## Developer Setup
+## Developer Setup (Visual Studio Code)
 
-Read below and also checkout the [Development Guide For New Devs](DEVGUIDE.md)
+Users of Visual Studio Code will find a community developed extension for BrightScript that makes installing and testing Jellyfin builds straightforward.
 
-### Workflow
+The extension can be found [HERE](https://marketplace.visualstudio.com/items?itemName=RokuCommunity.brightscript) and more information on
+setting up developer enviornments can be found on [Roku's website](https://developer.roku.com/docs/developer-program/getting-started/developer-setup.md)
+
+### Command Line Workflow
 
 Modify code -> `make install` -> Use Roku remote to test changes -> `telnet ${ROKU_DEV_TARGET} 8085` -> `CTRL + ]` -> `quit + ENTER`
 
