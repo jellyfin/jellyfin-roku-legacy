@@ -56,6 +56,13 @@ make install
 
 Note: You only have to run this command once if you are not a developer. The Jellyfin channel will still be installed after rebooting your Roku device.
 
+## Method 3: Visual Studio Code
+
+Users of Visual Studio Code will find a community developed extension for BrightScript that makes installing and testing Jellyfin builds straightforward.
+
+The extension can be found [HERE](https://marketplace.visualstudio.com/items?itemName=RokuCommunity.brightscript) and more information on
+setting up developer enviornments can be found on [Roku's website](https://developer.roku.com/docs/developer-program/getting-started/developer-setup.md)
+
 ## Bug/Crash Reports
 
 Did the app crash? Find a nasty bug? Use the this command to view the error log and [report it to the developers](https://github.com/jellyfin/jellyfin-roku/issues):
