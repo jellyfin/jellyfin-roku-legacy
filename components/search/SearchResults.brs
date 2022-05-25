@@ -17,7 +17,7 @@ sub SearchMedias()
 
     m.searchTask.control = "stop"
     if query <> invalid and query <> ""
-    m.SearchSpinner.visible = true
+        m.SearchSpinner.visible = true
     end if
     m.searchTask.observeField("results", "loadResults")
     m.searchTask.query = query

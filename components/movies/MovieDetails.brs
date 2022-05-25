@@ -34,7 +34,7 @@ sub itemContentChanged()
 
     ' Set default video source
     if itemData.MediaSources <> invalid
-    m.top.selectedVideoStreamId = itemData.MediaSources[0].id
+        m.top.selectedVideoStreamId = itemData.MediaSources[0].id
     end if
     ' Find first Audio Stream and set that as default
     SetDefaultAudioTrack(itemData)
