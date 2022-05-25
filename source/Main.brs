@@ -128,7 +128,7 @@ sub Main (args as dynamic) as void
                 ' open movie detail page
                 group = CreateMovieDetailsGroup(selectedItem)
             else if selectedItem.type = "Person"
-                CreatePersonView(selectedItem)
+                group = CreatePersonView(selectedItem)
             else if selectedItem.type = "TvChannel" or selectedItem.type = "Video" or selectedItem.type = "Program"
                 ' play channel feed
                 video_id = selectedItem.id
@@ -203,11 +203,14 @@ sub Main (args as dynamic) as void
             ' Search item selected
             node = getMsgPicker(msg)
             ' TODO - swap this based on target.mediatype
-            ' types: [ Series (Show), Episode, Movie, Audio, Person, Studio, MusicArtist ]
+            ' types: [ Audio, Studio, MusicArtist ]
             if node.type = "Series"
                 group = CreateSeriesDetailsGroup(node)
-            else
+            else if node.type = "Movie"
                 group = CreateMovieDetailsGroup(node)
+            else if node.type = "Person"
+                group = CreatePersonView(node)
+                print"Creating person view"
             end if
         else if isNodeEvent(msg, "buttonSelected")
             ' If a button is selected, we have some determining to do
