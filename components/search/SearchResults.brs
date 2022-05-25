@@ -31,6 +31,8 @@ sub loadResults()
     m.searchSelect.itemdata = m.searchTask.results
     m.searchSelect.query = m.top.SearchAlpha
     m.Search_Help_text.visible = false
+    m.SearchAlphabox = m.top.findnode("SearchResults")
+    m.SearchAlphabox.translation = "[470, 85]"
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
