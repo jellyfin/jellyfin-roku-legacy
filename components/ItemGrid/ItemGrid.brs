@@ -570,6 +570,18 @@ function onKeyEvent(key as string, press as boolean) as boolean
         topGrp.setFocus(true)
         return true
     end if
+    if key = "replay"
+        m.spinner.visible = true
+        m.loadItemsTask.searchTerm = ""
+        m.loadItemsTask.nameStartsWith = ""
+        m.VoiceBox.text = ""
+        m.top.AlphaSelected = ""
+        m.loadItemsTask.filter = "All"
+        m.filter = "All"
+        m.loadItemsTask.observeField("content", "ItemDataLoaded")
+        m.loadItemsTask.control = "RUN"
+        return true
+    end if
     return false
 end function
 
@@ -579,8 +591,11 @@ sub updateTitle()
     else if m.filter = "Favorites"
         m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Favorites)")
     end if
-    if m.top.AlphaSelected <> "" or m.VoiceBox.text <> ""
-        m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered)")
+    if m.VoiceBox.text <> ""
+        m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered by ") + m.loadItemsTask.searchTerm + ")"
+    end if
+    if m.top.AlphaSelected <> ""
+        m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered by ") + m.loadItemsTask.nameStartsWith + ")"
     end if
 
     actInt = m.itemGrid.itemFocused + 1
