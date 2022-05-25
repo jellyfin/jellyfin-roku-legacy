@@ -210,7 +210,6 @@ sub Main (args as dynamic) as void
                 group = CreateMovieDetailsGroup(node)
             else if node.type = "Person"
                 group = CreatePersonView(node)
-                print"Creating person view"
             end if
         else if isNodeEvent(msg, "buttonSelected")
             ' If a button is selected, we have some determining to do
