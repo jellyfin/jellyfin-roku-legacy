@@ -30,6 +30,7 @@ sub loadResults()
     m.SearchSpinner.visible = false
     m.searchSelect.itemdata = m.searchTask.results
     m.searchSelect.query = m.top.SearchAlpha
+    m.Search_Help_text.visible = false
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
