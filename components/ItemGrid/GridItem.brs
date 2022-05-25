@@ -37,15 +37,19 @@ sub itemContentChanged()
 
     if itemData.type = "Movie"
         m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "Series"
         m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "Boxset"
         m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "TvChannel"
         m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "Folder"
         m.itemPoster.uri = itemData.PosterUrl
@@ -53,9 +57,11 @@ sub itemContentChanged()
         m.itemText.text = itemData.Title
     else if itemData.type = "Video"
         m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "Photo"
         m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else
         print "Unhandled Grid Item Type: " + itemData.type
