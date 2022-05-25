@@ -17,10 +17,10 @@ sub init()
     if m.alwaysShowTitles then m.itemText.maxWidth = 250
 
     'Parent is MarkupGrid and it's parent is the ItemGrid
-    topParent = m.top.GetParent().GetParent()
+    m.topParent = m.top.GetParent().GetParent()
     'Get the imageDisplayMode for these grid items
-    if topParent.imageDisplayMode <> invalid
-        m.itemPoster.loadDisplayMode = topParent.imageDisplayMode
+    if m.topParent.imageDisplayMode <> invalid
+        m.itemPoster.loadDisplayMode = m.topParent.imageDisplayMode
     end if
 
 end sub
@@ -55,6 +55,7 @@ sub itemContentChanged()
         m.itemPoster.uri = itemData.PosterUrl
         m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
+        m.itemPoster.loadDisplayMode = m.topParent.imageDisplayMode
     else if itemData.type = "Video"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemIcon.uri = itemData.iconUrl

@@ -177,6 +177,7 @@ sub loadInitialItems()
             m.top.imageDisplayMode = "scaleToFit"
         else if m.top.parentItem.json.type = "Studio"
             m.loadItemsTask.itemId = m.top.parentItem.parentFolder
+            m.top.imageDisplayMode = "scaleToFit"
         else if m.top.parentItem.json.type = "Genre"
             m.loadItemsTask.itemId = m.top.parentItem.parentFolder
         else
@@ -186,6 +187,7 @@ sub loadInitialItems()
 
 
     if m.top.parentItem.type <> "Folder" and (m.options.view = "Networks" or m.view = "Networks")
+        m.top.imageDisplayMode = "scaleToFit"
         m.LoadNetworksTask.observeField("content", "ItemDataLoaded")
         m.LoadNetworksTask.control = "Run"
         m.spinner.visible = true
@@ -340,7 +342,6 @@ end sub
 sub ItemDataLoaded(msg)
 
     itemData = msg.GetData()
-
     if m.options.view = "Networks"
         m.LoadNetworksTask.unobserveField("content")
         m.LoadNetworksTask.content = []
@@ -366,7 +367,6 @@ sub ItemDataLoaded(msg)
     m.loadedItems = m.itemGrid.content.getChildCount()
     m.loadedRows = m.loadedItems / m.itemGrid.numColumns
     m.Loading = false
-
     'If there are no items to display, show message
     if m.loadedItems = 0
         m.emptyText.text = tr("NO_ITEMS").Replace("%1", m.top.parentItem.Type)
