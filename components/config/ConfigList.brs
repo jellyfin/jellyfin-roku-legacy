@@ -49,6 +49,11 @@ sub show_dialog(configField)
     m.configField = configField
     dialog.title = "Enter the " + configField.label
     dialog.buttons = [tr("OK"), tr("Cancel")]
+    m.greenPalette = createObject("roSGNode", "RSGPalette")
+    m.greenPalette.colors = {
+        DialogBackgroundColor: "#2A2B2A"
+    }
+    dialog.palette = m.greenPalette
 
     if configField.type = "password"
         dialog.textEditBox.secureMode = true
