@@ -210,7 +210,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
             if m.selectedItem = 0
                 m.selectedViewIndex = m.menus[0].itemSelected
                 m.top.view = m.viewNames[m.selectedViewIndex]
-                print m.selectedViewIndex
             end if
 
             ' Handle Sort screen
