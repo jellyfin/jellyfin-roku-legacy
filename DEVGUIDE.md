@@ -1,5 +1,5 @@
 ## Developing The Jellyfin Roku App
-Follow the steps below to install the app on your personal Roku device for development. 
+Follow the steps below to install the app on your personal Roku device for development.
 
 ### Developer Mode
 
@@ -58,7 +58,7 @@ Note: You only have to run this command once if you are not a developer. The Jel
 
 ## Method 3: Visual Studio Code
 
-See Developer setup below.
+See the [Visual Studio Code setup section](#developer-setup-visual-studio-code) below.
 ## Bug/Crash Reports
 
 Did the app crash? Find a nasty bug? Use the this command to view the error log and [report it to the developers](https://github.com/jellyfin/jellyfin-roku/issues):
@@ -89,6 +89,20 @@ Users of Visual Studio Code will find a community developed extension for Bright
 
 The extension can be found [HERE](https://marketplace.visualstudio.com/items?itemName=RokuCommunity.brightscript) and more information on
 setting up developer enviornments can be found on [Roku's website](https://developer.roku.com/docs/developer-program/getting-started/developer-setup.md)
+
+
+### Hardcoding Roku Information
+Out of the box, the VSCode extension will prompt you to pick a Roku from your device and enter a password on every launch. If you'd prefer to hardcode this information rather than entering it every time, you can set these values in your vscode user settings:
+
+```js
+{
+    "brightscript.debug.host": "YOUR_ROKU_HOST_HERE",
+    "brightscript.debug.password": "YOUR_ROKU_DEV_PASSWORD_HERE",
+}
+```
+
+Example:
+![image](https://user-images.githubusercontent.com/2544493/170485209-0dbe6787-8026-47e7-9095-1df96cda8a0a.png)
 
 ### Command Line Workflow
 
