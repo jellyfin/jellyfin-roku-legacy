@@ -74,8 +74,8 @@ sub loadInitialItems()
         viewSetting = get_user_setting("display.livetv.landing")
         if viewSetting = "guide"
             m.view = "tvGuide"
-            'Hide VoiceBox if TV Guide
-            'm.VoiceBox.visible = "false"
+            'Move mic to be visiable on TV Guide screen
+            m.VoiceBox.translation = "[1845, 90]"
         else
             m.view = "livetv"
             'm.VoiceBox.visible = "false"
