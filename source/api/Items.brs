@@ -133,7 +133,7 @@ function ItemMetaData(id as string)
     else if data.type = "Audio"
         ' User clicked on a song and wants it to play
         tmp = CreateObject("roSGNode", "MusicSongData")
-        
+
         ' Try using song's parent for poster image
         tmp.image = PosterImage(data.ParentId)
 
