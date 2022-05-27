@@ -37,7 +37,7 @@ That's it! vscode will auto-package the project, sideload it to the specified de
 
 
 ### Hardcoding Roku Information
-Out of the box, the VSCode extension will prompt you to pick a Roku from your device and enter a password on every launch. If you'd prefer to hardcode this information rather than entering it every time, you can set these values in your vscode user settings:
+Out of the box, the VSCode extension will prompt you to pick a Roku device (from devices found on your local network) and enter a password on every launch. If you'd prefer to hardcode this information rather than entering it every time, you can set these values in your vscode user settings:
 
 ```js
 {
