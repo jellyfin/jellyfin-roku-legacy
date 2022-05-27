@@ -133,7 +133,15 @@ function ItemMetaData(id as string)
     else if data.type = "Audio"
         ' User clicked on a song and wants it to play
         tmp = CreateObject("roSGNode", "MusicSongData")
-        tmp.image = PosterImage(data.id)
+        
+        ' Try using song's parent for poster image
+        tmp.image = PosterImage(data.ParentId)
+
+        ' Song's parent poster image is no good, try using the song's poster image
+        if tmp.image = invalid
+            tmp.image = PosterImage(data.id)
+        end if
+
         tmp.json = data
         return tmp
     else

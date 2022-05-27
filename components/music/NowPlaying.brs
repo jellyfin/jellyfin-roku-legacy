@@ -4,6 +4,7 @@ sub init()
     setupMainNode()
     setupAudioNode()
     setupButtons()
+    setupInfoNodes()
 end sub
 
 sub setupMainNode()
@@ -23,6 +24,11 @@ sub setupButtons()
     m.buttons.selectedIndex = 1
     m.buttons.focusedIndex = 1
     m.buttons.setFocus(true)
+end sub
+
+sub setupInfoNodes()
+    m.albumCover = m.top.findNode("albumCover")
+    m.backDrop = m.top.findNode("backdrop")
 end sub
 
 sub audioIndexChanged()
@@ -72,7 +78,9 @@ end sub
 ' Set poster image on screen
 sub setPosterImage(posterURL)
     if isValid(posterURL)
-        m.top.findNode("albumCover").uri = posterURL
+        if m.albumCover.uri <> posterURL
+            m.albumCover.uri = posterURL
+        end if
     end if
 end sub
 
@@ -90,7 +98,10 @@ sub setScreenTitle(json)
             newTitle = newTitle + json.name
         end if
     end if
-    m.top.overhangTitle = newTitle
+
+    if m.top.overhangTitle <> newTitle
+        m.top.overhangTitle = newTitle
+    end if
 end sub
 
 ' Populate on screen text variables
@@ -106,7 +117,9 @@ end sub
 ' Add backdrop image to screen
 sub setBackdropImage()
     if isValid(m.top.backgroundContent[m.top.audio.contentIndex])
-        m.top.findNode("backdrop").uri = m.top.backgroundContent[m.top.audio.contentIndex]
+        if m.backDrop.uri <> m.top.backgroundContent[m.top.audio.contentIndex]
+            m.backDrop.uri = m.top.backgroundContent[m.top.audio.contentIndex]
+        end if
     end if
 end sub
 
@@ -129,7 +142,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     end if
 
     ' Key bindings for button group
-    if m.top.findNode("buttons").hasFocus()
+    if m.buttons.hasFocus()
         if key = "OK"
             if m.buttons.buttons[m.buttons.focusedIndex] = tr("Play/Pause")
                 return playAction()
