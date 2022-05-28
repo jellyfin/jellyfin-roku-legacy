@@ -190,13 +190,10 @@ sub Main (args as dynamic) as void
             group.findNode("SearchBox").visible = true
             options = group.findNode("SearchSelect")
             options.visible = true
-            'options.setFocus(true)
-            group.findNode("SearchSpinner").visible = true
-            'dialog = createObject("roSGNode", "ProgressDialog")
-            'dialog.title = tr("Loading Search Data")
-            'm.scene.dialog = dialog
+            searchSpinner = group.findNode("SearchSpinner")
+            searchSpinner.visible = true
             results = SearchMedia(query)
-            group.findNode("SearchSpinner").visible = false
+            searchSpinner.visible = false
             options.itemData = results
             options.query = query
         else if isNodeEvent(msg, "itemSelected")

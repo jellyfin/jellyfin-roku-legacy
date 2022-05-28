@@ -28,7 +28,7 @@ sub init()
     m.itemGrid.observeField("AlphaSelected", "onItemAlphaSelected")
 
     'Voice filter setup
-    m.VoiceBox = m.top.findNode("VoiceBox")
+    m.voiceBox = m.top.findNode("VoiceBox")
     m.VoiceBox.voiceEnabled = true
     m.VoiceBox.active = true
     m.VoiceBox.observeField("VoiceFilter", "onVoiceFilter")

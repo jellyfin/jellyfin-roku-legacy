@@ -39,9 +39,7 @@ function SearchMedia(query as string)
     ' For each potential type, a separate query is done:
     ' varying item types, and artists, and people
 
-    if query = ""
-
-    else
+    if query <> ""
         resp = APIRequest(Substitute("Search/Hints", get_setting("active_user")), {
             "searchTerm": query,
             "IncludePeople": true,
