@@ -39,8 +39,8 @@ sub init()
     m.favorite = "Favorite"
 
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
-    m.LoadNetworksTask = createObject("roSGNode", "LoadNetworksTask")
-    m.LoadGenreTask = createObject("roSGNode", "LoadGenreTask")
+    m.loadNetworksTask = createObject("roSGNode", "LoadNetworksTask")
+    m.loadGenreTask = createObject("roSGNode", "LoadGenreTask")
 
 
     'set inital counts for overhang before content is loaded.
