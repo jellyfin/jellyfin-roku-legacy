@@ -63,6 +63,7 @@ end sub
 '
 'Load initial set of Data
 sub loadInitialItems()
+    m.loadItemsTask.control = "stop"
     m.spinner.visible = true
     if m.top.parentItem.backdropUrl <> invalid
         SetBackground(m.top.parentItem.backdropUrl)
@@ -126,7 +127,7 @@ sub loadInitialItems()
             showTvGuide()
         end if
 
-    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
+    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "Boxsets" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
         ' Non-recursive, to not show subfolder contents
         m.loadItemsTask.recursive = false
     else if m.top.parentItem.collectionType = "Channel"
@@ -544,6 +545,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
             m.options.visible = false
             optionsClosed()
             return true
+        else
+            m.global.sceneManager.callfunc("popScene")
+            m.loadItemsTask.control = "stop"
+        return true
         end if
     else if key = "play" or key = "OK"
         markupGrid = m.top.getChild(2)
