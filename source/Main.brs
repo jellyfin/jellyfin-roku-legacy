@@ -159,7 +159,7 @@ sub Main (args as dynamic) as void
             else if selectedItem.type = "MusicAlbum"
                 group = CreateMusicAlbumDetailsGroup(selectedItem.json)
             else if selectedItem.type = "Audio"
-                group = CreateAudioPlayerGroup(selectedItem.json)
+                group = CreateAudioPlayerGroup([selectedItem.json])
             else
                 ' TODO - switch on more node types
                 message_dialog("This type is not yet supported: " + selectedItem.type + ".")
@@ -190,7 +190,7 @@ sub Main (args as dynamic) as void
             ' User has selected audio they want us to play
             selectedIndex = msg.getData()
             screenContent = msg.getRoSGNode()
-            group = CreateAudioPlayerGroup(screenContent.albumData.items[selectedIndex])
+            group = CreateAudioPlayerGroup([screenContent.albumData.items[selectedIndex]])
         else if isNodeEvent(msg, "playAllSelected")
             ' User has selected playlist of of audio they want us to play
             screenContent = msg.getRoSGNode()

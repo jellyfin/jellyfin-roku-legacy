@@ -152,6 +152,12 @@ sub loadItems()
         getPersonVideos("Episode", results, { MaxWidth: 502, MaxHeight: 300 })
     else if m.top.itemsToLoad = "personSeries"
         getPersonVideos("Series", results, {})
+    else if m.top.itemsToLoad = "metaData"
+        results.push(ItemMetaData(m.top.itemId))
+    else if m.top.itemsToLoad = "audioStream"
+        results.push(AudioStream(m.top.itemId))
+    else if m.top.itemsToLoad = "backdropImage"
+        results.push(BackdropImage(m.top.itemId))
     end if
 
     m.top.content = results

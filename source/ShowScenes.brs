@@ -418,82 +418,16 @@ end function
 function CreateAudioPlayerGroup(audiodata)
 
     group = CreateObject("roSGNode", "NowPlaying")
-    songMetaDataArray = CreateObject("roArray", 0, true)
-    songBackdropArray = CreateObject("roArray", 0, true)
-    content = createObject("RoSGNode", "ContentNode")
+    group.observeField("state", m.port)
+    songIDArray = CreateObject("roArray", 0, true)
 
-    if type(audiodata) = "roArray"
-        ' Passed data is an array of audio, setup playback as a playlist
+    ' All we need is an array of Song IDs the user selected to play.
+    for each song in audiodata
+        songIDArray.push(song.id)
+    end for
 
-        group.audio.contentIsPlaylist = true
-
-        audioPlaylistContent = createObject("RoSGNode", "ContentNode")
-
-        for each song in audiodata
-            songContent = audioPlaylistContent.CreateChild("ContentNode")
-            songData = AudioItem(song.id)
-
-            songMetaDataArray.push(ItemMetaData(song.id))
-            imgParams = { "maxHeight": "720", "maxWidth": "1280" }
-
-            if isValid(song.json.ArtistItems[0])
-                songBackdropArray.push(ImageURL(song.json.ArtistItems[0].id, "Backdrop", imgParams))
-            end if
-
-            params = {}
-
-            params.append({
-                "Static": "true",
-                "Container": songData.mediaSources[0].container,
-            })
-
-            params.MediaSourceId = songData.mediaSources[0].id
-
-            songContent.url = buildURL(Substitute("Audio/{0}/stream", song.id), params)
-            songContent.title = song.title
-            songContent.streamformat = songData.mediaSources[0].container
-        end for
-
-        content = audioPlaylistContent
-
-    else if type(audiodata) = "roSGNode"
-        ' Passed data is a single node
-
-        if audiodata.subtype() = "MusicSongData"
-            ' Passed data is data for a single song, setup playback as a single song
-
-            songData = AudioItem(audiodata.id)
-
-            songMetaDataArray.push(ItemMetaData(audiodata.id))
-            imgParams = { "maxHeight": "720", "maxWidth": "1280" }
-
-            if isValid(audiodata.json.ArtistItems[0])
-                songBackdropArray.push(ImageURL(audiodata.json.ArtistItems[0].id, "Backdrop", imgParams))
-            end if
-
-            params = {}
-
-            params.append({
-                "Static": "true",
-                "Container": songData.mediaSources[0].container,
-            })
-
-            params.MediaSourceId = songData.mediaSources[0].id
-
-            content.url = buildURL(Substitute("Audio/{0}/stream", audiodata.id), params)
-            content.title = audiodata.title
-            content.streamformat = songData.mediaSources[0].container
-        end if
-    end if
-
-    group.backgroundContent = songBackdropArray
-    group.pageContent = songMetaDataArray
-
+    group.pageContent = songIDArray
     group.musicArtistAlbumData = audiodata
-    group.audio.content = content
-    group.audio.control = "stop"
-    group.audio.control = "none"
-    group.audio.control = "play"
 
     m.global.sceneManager.callFunc("pushScene", group)
 

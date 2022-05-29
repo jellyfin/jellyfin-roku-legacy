@@ -204,24 +204,33 @@ function AudioItem(id as string)
         "sortBy": "SortName"
     })
 
-    data = getJson(resp)
-    results = []
-    if data.Items <> invalid
-        for each item in data.Items
-            tmp = CreateObject("roSGNode", "MusicSongData")
-            tmp.image = PosterImage(item.id)
-            tmp.json = item
-            results.push(tmp)
-        end for
-    else
-        tmp = CreateObject("roSGNode", "MusicSongData")
-        tmp.image = PosterImage(data.id)
-        tmp.json = data
-        results.push(tmp)
-    end if
+    return getJson(resp)
+end function
 
-    data.Items = results
-    return data
+function AudioStream(id as string)
+    songData = AudioItem(id)
+
+    content = createObject("RoSGNode", "ContentNode")
+
+    params = {}
+
+    params.append({
+        "Static": "true",
+        "Container": songData.mediaSources[0].container,
+    })
+
+    params.MediaSourceId = songData.mediaSources[0].id
+
+    content.url = buildURL(Substitute("Audio/{0}/stream", songData.id), params)
+    content.title = songData.title
+    content.streamformat = songData.mediaSources[0].container
+
+    return content
+end function
+
+function BackdropImage(id as string)
+    imgParams = { "maxHeight": "720", "maxWidth": "1280" }
+    return ImageURL(id, "Backdrop", imgParams)
 end function
 
 ' Seasons for a TV Show

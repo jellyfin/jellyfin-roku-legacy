@@ -1,29 +1,41 @@
 sub init()
     m.top.optionsAvailable = false
 
-    setupMainNode()
     setupAudioNode()
     setupButtons()
     setupInfoNodes()
-end sub
 
-sub setupMainNode()
-    main = m.top.findNode("toplevel")
-    main.translation = [96, 175]
+    m.LoadMetaDataTask = CreateObject("roSGNode", "LoadItemsTask")
+    m.LoadMetaDataTask.itemsToLoad = "metaData"
+
+    m.LoadBackdropImageTask = CreateObject("roSGNode", "LoadItemsTask")
+    m.LoadBackdropImageTask.itemsToLoad = "backdropImage"
+
+    m.LoadAudioStreamTask = CreateObject("roSGNode", "LoadItemsTask")
+    m.LoadAudioStreamTask.itemsToLoad = "audioStream"
+
+    m.currentSongIndex = 0
+    m.buttonsNeedToBeLoaded = true
 end sub
 
 sub setupAudioNode()
     m.top.audio = createObject("RoSGNode", "Audio")
-    m.top.audio.observeField("contentIndex", "audioIndexChanged")
+    m.top.audio.observeField("state", "audioStateChanged")
 end sub
 
 sub setupButtons()
     m.buttons = m.top.findNode("buttons")
-    m.buttons.buttons = [tr("Previous"), tr("Play/Pause"), tr("Next")]
+    m.top.observeField("selectedButtonIndex", "selectedButtonChanged")
+    m.previouslySelectedButtonIndex = 1
+    m.top.selectedButtonIndex = 1
+end sub
 
-    m.buttons.selectedIndex = 1
-    m.buttons.focusedIndex = 1
-    m.buttons.setFocus(true)
+sub selectedButtonChanged()
+    selectedButton = m.buttons.getChild(m.previouslySelectedButtonIndex)
+    selectedButton.uri = selectedButton.uri.Replace("-selected", "-default")
+
+    selectedButton = m.buttons.getChild(m.top.selectedButtonIndex)
+    selectedButton.uri = selectedButton.uri.Replace("-default", "-selected")
 end sub
 
 sub setupInfoNodes()
@@ -31,8 +43,16 @@ sub setupInfoNodes()
     m.backDrop = m.top.findNode("backdrop")
 end sub
 
-sub audioIndexChanged()
-    pageContentChanged()
+sub audioStateChanged()
+    ' Song Finished, attempt to move to next song
+    if m.top.audio.state = "finished"
+        if m.currentSongIndex < m.top.pageContent.count() - 1
+            LoadNextSong()
+        else
+            ' Return to previous screen
+            m.top.state = "finished"
+        end if
+    end if
 end sub
 
 function playAction() as boolean
@@ -46,33 +66,80 @@ function playAction() as boolean
 end function
 
 function previousClicked() as boolean
-    if m.top.audio.contentIndex > 0
-        m.top.audio.nextContentIndex = m.top.audio.contentIndex - 1
-        m.top.audio.control = "skipcontent"
+    if m.currentSongIndex > 0
+        m.currentSongIndex--
+        pageContentChanged()
     end if
 
     return true
 end function
 
 function nextClicked() as boolean
-    if m.top.audio.contentIsPlaylist
-        m.top.audio.control = "skipcontent"
+    if m.currentSongIndex < m.top.pageContent.count() - 1
+        LoadNextSong()
     end if
 
     return true
 end function
 
+sub LoadNextSong()
+    m.currentSongIndex++
+    pageContentChanged()
+end sub
+
 ' Update values on screen when page content changes
 sub pageContentChanged()
-    ' If audio isn't playing yet, skip because we have nothing to update
-    if m.top.audio.contentIndex = -1 then return
+    m.LoadMetaDataTask.itemId = m.top.pageContent[m.currentSongIndex]
+    m.LoadMetaDataTask.observeField("content", "onMetaDataLoaded")
+    m.LoadMetaDataTask.control = "RUN"
 
-    item = m.top.pageContent[m.top.audio.contentIndex]
+    m.LoadAudioStreamTask.itemId = m.top.pageContent[m.currentSongIndex]
+    m.LoadAudioStreamTask.observeField("content", "onAudioStreamLoaded")
+    m.LoadAudioStreamTask.control = "RUN"
+end sub
 
-    setPosterImage(item.posterURL)
-    setScreenTitle(item.json)
-    setOnScreenTextValues(item.json)
-    setBackdropImage()
+sub onAudioStreamLoaded()
+    data = m.LoadAudioStreamTask.content[0]
+    m.LoadAudioStreamTask.unobserveField("content")
+    if data <> invalid and data.count() > 0
+        m.top.audio.content = data
+        m.top.audio.control = "stop"
+        m.top.audio.control = "none"
+        m.top.audio.control = "play"
+    end if
+end sub
+
+sub onBackdropImageLoaded()
+    data = m.LoadBackdropImageTask.content[0]
+    m.LoadBackdropImageTask.unobserveField("content")
+    if isValid(data) and data <> ""
+        setBackdropImage(data)
+    end if
+end sub
+
+sub onMetaDataLoaded()
+    data = m.LoadMetaDataTask.content[0]
+    m.LoadMetaDataTask.unobserveField("content")
+    if data <> invalid and data.count() > 0
+
+        ' Use metadata to load backdrop image
+        m.LoadBackdropImageTask.itemId = data.json.ArtistItems[0].id
+        m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
+        m.LoadBackdropImageTask.control = "RUN"
+
+        setPosterImage(data.posterURL)
+        setScreenTitle(data.json)
+        setOnScreenTextValues(data.json)
+
+        ' If we have more and 1 song to play, fade in the next and previous controls
+        if m.buttonsNeedToBeLoaded
+            if m.top.pageContent.count() > 1
+                m.floatanimation = m.top.FindNode("displayButtonsAnimation")
+                m.floatanimation.control = "start"
+            end if
+            m.buttonsNeedToBeLoaded = false
+        end if
+    end if
 end sub
 
 ' Set poster image on screen
@@ -107,18 +174,17 @@ end sub
 ' Populate on screen text variables
 sub setOnScreenTextValues(json)
     if isValid(json)
-        setFieldTextValue("numberofsongs", "Track " + stri(m.top.audio.contentIndex + 1) + "/" + stri(m.top.pageContent.count()))
+        setFieldTextValue("numberofsongs", "Track " + stri(m.currentSongIndex + 1) + "/" + stri(m.top.pageContent.count()))
         setFieldTextValue("artist", json.Artists[0])
-        setFieldTextValue("album", json.album)
         setFieldTextValue("song", json.name)
     end if
 end sub
 
 ' Add backdrop image to screen
-sub setBackdropImage()
-    if isValid(m.top.backgroundContent[m.top.audio.contentIndex])
-        if m.backDrop.uri <> m.top.backgroundContent[m.top.audio.contentIndex]
-            m.backDrop.uri = m.top.backgroundContent[m.top.audio.contentIndex]
+sub setBackdropImage(data)
+    if isValid(data)
+        if m.backDrop.uri <> data
+            m.backDrop.uri = data
         end if
     end if
 end sub
@@ -136,19 +202,26 @@ function onKeyEvent(key as string, press as boolean) as boolean
             return previousClicked()
         else if key = "fastforward"
             return nextClicked()
-        end if
+        else if key = "left"
+            if m.top.pageContent.count() = 1 then return false
+            
+            if m.top.selectedButtonIndex > 0 
+                m.previouslySelectedButtonIndex = m.top.selectedButtonIndex
+                m.top.selectedButtonIndex = m.top.selectedButtonIndex - 1
+            end if
+            return true
+        else if key = "right"
+            if m.top.pageContent.count() = 1 then return false
 
-        return false
-    end if
-
-    ' Key bindings for button group
-    if m.buttons.hasFocus()
-        if key = "OK"
-            if m.buttons.buttons[m.buttons.focusedIndex] = tr("Play/Pause")
+            m.previouslySelectedButtonIndex = m.top.selectedButtonIndex
+            if m.top.selectedButtonIndex < 2 then m.top.selectedButtonIndex = m.top.selectedButtonIndex + 1
+            return true
+        else if key = "OK"
+            if m.buttons.getChild(m.top.selectedButtonIndex).id = "play"
                 return playAction()
-            else if m.buttons.buttons[m.buttons.focusedIndex] = tr("Previous")
+            else if m.buttons.getChild(m.top.selectedButtonIndex).id = "previous"
                 return previousClicked()
-            else if m.buttons.buttons[m.buttons.focusedIndex] = tr("Next")
+            else if m.buttons.getChild(m.top.selectedButtonIndex).id = "next"
                 return nextClicked()
             end if
         end if

@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="NowPlaying" extends="JFGroup">
   <children>
-    <Poster id="backdrop" opacity=".5" loadDisplayMode="scaleToZoom" width="2000" height="1200" blendColor="#3f3f3f" />
-    <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[-10]" >
-      <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[15]" >
-        <LayoutGroup layoutDirection="vert" itemSpacings="[15]">
-          <Poster id="albumCover" width="450" height="450" />
-          <Label id="numberofsongs" width="450" height="25" horizAlign="left" />
-        </LayoutGroup>
-        <LayoutGroup layoutDirection="vert" horizAlignment="left" itemSpacings="[15]">
-          <Label id="artist" width="450" height="25" horizAlign="left" />
-          <Label id="song" width="450" height="25"  horizAlign="left" />
-          <Label id="album" width="450" height="25"  horizAlign="left" />
-          <LayoutGroup id="controlButtons" layoutDirection="horiz" itemSpacings="[15]">
-            <JFButtons id="buttons" />
-          </LayoutGroup>
-        </LayoutGroup>
+    <Poster id="backdrop" opacity=".5" loadDisplayMode="scaleToZoom" width="1920" height="1200" blendColor="#3f3f3f" />
+    <LayoutGroup id="toplevel" layoutDirection="vert" horizAlignment="center" translation="[900,175]" itemSpacings="[40]">
+      <LayoutGroup id="main_group" layoutDirection="vert" horizAlignment="center" itemSpacings="[15]">
+          <Poster id="albumCover" width="500" height="500" />
+          <Label id="artist" width="900" height="25" horizAlign="center" />
+          <Label id="song" width="900" height="25"  horizAlign="center" />
+          <Label id="numberofsongs" width="500" height="25" horizAlign="center" font="font:SmallestSystemFont" color="#999999" />
       </LayoutGroup>
+      <LayoutGroup id="buttons" layoutDirection="horiz" horizAlignment="center" itemSpacings="[45]">
+        <Poster id="previous" width="64" height="64" uri="pkg:/images/icons/previous-default.png" opacity="0" />
+        <Poster id="play" width="64" height="64" uri="pkg:/images/icons/play-default.png" />
+        <Poster id="next" width="64" height="64" uri="pkg:/images/icons/next-default.png" opacity="0" />
+      </LayoutGroup>
+      <Animation id="displayButtonsAnimation" duration="1" repeat="false" easeFunction="linear">
+        <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0.0, 1.0]" fieldToInterp="previous.opacity" />
+        <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0.0, 1.0]" fieldToInterp="next.opacity" />
+      </Animation>
     </LayoutGroup>
+    <!-- Preload selected icons to prevent flicker -->
+    <Poster width="0" height="0" uri="pkg:/images/icons/previous-selected.png" visible="false" />
+    <Poster width="0" height="0" uri="pkg:/images/icons/play-selected.png" visible="false" />
+    <Poster width="0" height="0" uri="pkg:/images/icons/next-selected.png" visible="false" />
   </children>
   <interface>
-    <field id="backgroundContent" type="array" />
-    <field id="pageContent" type="nodearray" onChange="pageContentChanged" />
+    <field id="pageContent" type="array" onChange="pageContentChanged" />
     <field id="audio" type="node" />
+    <field id="state" type="string" />
+    <field id="selectedButtonIndex" type="integer" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="NowPlaying.brs" />
