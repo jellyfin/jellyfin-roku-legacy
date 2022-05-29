@@ -63,7 +63,7 @@ end sub
 '
 'Load initial set of Data
 sub loadInitialItems()
-    m.loadItemsTask.control = "stop"    
+    m.loadItemsTask.control = "stop"
     m.spinner.visible = true
     if m.top.parentItem.backdropUrl <> invalid
         SetBackground(m.top.parentItem.backdropUrl)
@@ -551,7 +551,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         else
             m.global.sceneManager.callfunc("popScene")
             m.loadItemsTask.control = "stop"
-        return true
+            return true
         end if
     else if key = "play" or key = "OK"
         markupGrid = m.top.getChild(2)
