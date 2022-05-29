@@ -40,8 +40,8 @@
     <field id="selectedItem" type="node" alwaysNotify="true" />
     <field id="quickPlayNode" type="node" alwaysNotify="true" />
     <field id="imageDisplayMode" type="string" value="scaleToZoom" />
-    <field id="AlphaSelected" type="string" alias="AlphaMenu.itemAlphaSelected" alwaysNotify="true" onChange="onItemAlphaSelected" />
-    <field id="VoiceFilter" type="string" alias="VoiceBox.text" alwaysNotify="true" onChange="onVoiceFilter" />  
+    <field id="alphaSelected" type="string" alias="AlphaMenu.itemAlphaSelected" alwaysNotify="true" onChange="onItemAlphaSelected" />
+    <field id="voiceFilter" type="string" alias="VoiceBox.text" alwaysNotify="true" onChange="onVoiceFilter" />  
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
