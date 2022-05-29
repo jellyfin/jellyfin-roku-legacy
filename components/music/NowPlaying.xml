@@ -2,7 +2,7 @@
 <component name="NowPlaying" extends="JFGroup">
   <children>
     <Poster id="backdrop" opacity=".5" loadDisplayMode="scaleToZoom" width="1920" height="1200" blendColor="#3f3f3f" />
-    <LayoutGroup id="toplevel" layoutDirection="vert" horizAlignment="center" translation="[900,175]" itemSpacings="[40]">
+    <LayoutGroup id="toplevel" layoutDirection="vert" horizAlignment="center" translation="[960,175]" itemSpacings="[40]">
       <LayoutGroup id="main_group" layoutDirection="vert" horizAlignment="center" itemSpacings="[15]">
           <Poster id="albumCover" width="500" height="500" />
           <Label id="artist" width="900" height="25" horizAlign="center" />

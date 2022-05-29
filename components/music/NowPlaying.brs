@@ -4,36 +4,48 @@ sub init()
     setupAudioNode()
     setupButtons()
     setupInfoNodes()
-
-    m.LoadMetaDataTask = CreateObject("roSGNode", "LoadItemsTask")
-    m.LoadMetaDataTask.itemsToLoad = "metaData"
-
-    m.LoadBackdropImageTask = CreateObject("roSGNode", "LoadItemsTask")
-    m.LoadBackdropImageTask.itemsToLoad = "backdropImage"
-
-    m.LoadAudioStreamTask = CreateObject("roSGNode", "LoadItemsTask")
-    m.LoadAudioStreamTask.itemsToLoad = "audioStream"
+    setupDataTasks()
 
     m.currentSongIndex = 0
     m.buttonsNeedToBeLoaded = true
 end sub
 
+' Creates tasks to gather data needed to renger NowPlaying Scene and play song
+sub setupDataTasks()
+    ' Load meta data
+    m.LoadMetaDataTask = CreateObject("roSGNode", "LoadItemsTask")
+    m.LoadMetaDataTask.itemsToLoad = "metaData"
+
+    ' Load background image
+    m.LoadBackdropImageTask = CreateObject("roSGNode", "LoadItemsTask")
+    m.LoadBackdropImageTask.itemsToLoad = "backdropImage"
+
+    ' Load audio stream
+    m.LoadAudioStreamTask = CreateObject("roSGNode", "LoadItemsTask")
+    m.LoadAudioStreamTask.itemsToLoad = "audioStream"
+end sub
+
+' Creates audio node used to play song(s)
 sub setupAudioNode()
     m.top.audio = createObject("RoSGNode", "Audio")
     m.top.audio.observeField("state", "audioStateChanged")
 end sub
 
+' Setup playback buttons, default to Play button selected
 sub setupButtons()
     m.buttons = m.top.findNode("buttons")
-    m.top.observeField("selectedButtonIndex", "selectedButtonChanged")
+    m.top.observeField("selectedButtonIndex", "onButtonSelectedChange")
     m.previouslySelectedButtonIndex = 1
     m.top.selectedButtonIndex = 1
 end sub
 
-sub selectedButtonChanged()
+' Event handler when user selected a different playback button
+sub onButtonSelectedChange()
+    ' Change previously selected button back to default image
     selectedButton = m.buttons.getChild(m.previouslySelectedButtonIndex)
     selectedButton.uri = selectedButton.uri.Replace("-selected", "-default")
 
+    ' Change selected button image to selected image
     selectedButton = m.buttons.getChild(m.top.selectedButtonIndex)
     selectedButton.uri = selectedButton.uri.Replace("-default", "-selected")
 end sub
@@ -204,8 +216,8 @@ function onKeyEvent(key as string, press as boolean) as boolean
             return nextClicked()
         else if key = "left"
             if m.top.pageContent.count() = 1 then return false
-            
-            if m.top.selectedButtonIndex > 0 
+
+            if m.top.selectedButtonIndex > 0
                 m.previouslySelectedButtonIndex = m.top.selectedButtonIndex
                 m.top.selectedButtonIndex = m.top.selectedButtonIndex - 1
             end if
