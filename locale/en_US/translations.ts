@@ -557,5 +557,21 @@
         <translation>%1 of %2</translation>
         <extracomment>Item position and count.  %1 = current item.  %2 = total number of items</extracomment>
     </message>
+    <message>
+        <source>Quick Connect</source>
+        <translation>Quick Connect</translation>
+    </message>
+    <message>
+        <source>Here is your Quick Connect code:</source>
+        <translation>Here is your Quick Connect code:</translation>
+    </message>
+    <message>
+        <source>(Dialog will close automatically)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>There was an error authenticating via Quick Connect.</source>
+        <translation>There was an error authenticating via Quick Connect.</translation>
+    </message>
 </context>
 </TS>

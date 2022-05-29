@@ -135,7 +135,7 @@ end function
 
 function CreateSigninGroup(user = "")
     ' Get and Save Jellyfin user login credentials
-    group = CreateObject("roSGNode", "ConfigScene")
+    group = CreateObject("roSGNode", "LoginScene")
     m.global.sceneManager.callFunc("pushScene", group)
     port = CreateObject("roMessagePort")
 
@@ -185,6 +185,10 @@ function CreateSigninGroup(user = "")
     items.appendChild(saveCheckBox)
     checkbox.content = items
     checkbox.checkedState = [true]
+    ' Add option for Quick Connect
+    quickConnect = group.findNode("quickConnect")
+    quickConnect.text = tr("Quick Connect")
+    quickConnect.observeField("buttonSelected", port)
 
     items = [username_field, password_field]
     config.configItems = items
@@ -224,6 +228,23 @@ function CreateSigninGroup(user = "")
                 end if
                 print "Login attempt failed..."
                 group.findNode("alert").text = tr("Login attempt failed.")
+            else if node = "quickConnect"
+                json = initQuickConnect()
+                if json = invalid
+                    group.findNode("alert").text = tr("Quick Connect not available.")
+                    return "false"
+                end if
+                ' Server user is talking to is at least 10.8 and has quick connect enabled...
+                m.quickConnectDialog = createObject("roSGNode", "QuickConnectDialog")
+                m.quickConnectDialog.quickConnectJson = json
+                m.quickConnectDialog.title = tr("Quick Connect")
+                m.quickConnectDialog.message = [tr("Here is your Quick Connect code: ") + json.Code, tr("(Dialog will close automatically)")]
+                m.quickConnectDialog.buttons = [tr("Cancel")]
+                m.quickConnectDialog.observeField("authenticated", port)
+                m.scene.dialog = m.quickConnectDialog
+            else if msg.getField() = "authenticated"
+                ' Quick connect authentication was successful...
+                return "true"
             end if
         end if
     end while
