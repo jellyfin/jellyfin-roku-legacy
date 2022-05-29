@@ -3,7 +3,6 @@ sub init()
 end sub
 
 sub loadItems()
-    print "ParentID: " m.top.itemId
     results = []
 
     sort_field = m.top.sortField

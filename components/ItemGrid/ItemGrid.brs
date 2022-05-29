@@ -77,6 +77,7 @@ sub loadInitialItems()
             m.view = "tvGuide"
             'Move mic to be visiable on TV Guide screen
             m.VoiceBox.translation = "[1845, 90]"
+            print "View Setting: " viewSetting
         else
             m.view = "livetv"
             'm.VoiceBox.visible = "false"
@@ -391,7 +392,8 @@ sub onItemalphaSelected()
     m.loadedItems = 0
     m.data = CreateObject("roSGNode", "ContentNode")
     m.itemGrid.content = m.data
-    m.loadItemsTask.nameStartsWith = m.alpha.alphaSelected
+    m.loadItemsTask.nameStartsWith = m.Alpha.itemAlphaSelected
+    m.top.alphaSelected = m.Alpha.itemAlphaSelected
     m.loadItemsTask.searchTerm = ""
     m.VoiceBox.text = ""
     loadInitialItems()
