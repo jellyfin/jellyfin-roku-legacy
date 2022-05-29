@@ -25,13 +25,13 @@ sub init()
 
     m.itemGrid.observeField("itemFocused", "onItemFocused")
     m.itemGrid.observeField("itemSelected", "onItemSelected")
-    m.itemGrid.observeField("AlphaSelected", "onItemAlphaSelected")
+    m.itemGrid.observeField("alphaSelected", "onItemalphaSelected")
 
     'Voice filter setup
     m.voiceBox = m.top.findNode("VoiceBox")
     m.VoiceBox.voiceEnabled = true
     m.VoiceBox.active = true
-    m.VoiceBox.observeField("VoiceFilter", "onVoiceFilter")
+    m.VoiceBox.observeField("voiceFilter", "onvoiceFilter")
     'set voice help text
     m.VoiceBox.hintText = tr("Use voice remote to search")
 
@@ -57,13 +57,13 @@ sub init()
     m.spinner.visible = true
 
     m.Alpha = m.top.findNode("AlphaMenu")
-    m.AlphaSelected = m.top.findNode("AlphaSelected")
+    m.alphaSelected = m.top.findNode("alphaSelected")
 end sub
 
 '
 'Load initial set of Data
 sub loadInitialItems()
-    m.loadItemsTask.control = "stop"
+    m.loadItemsTask.control = "stop"    
     m.spinner.visible = true
     if m.top.parentItem.backdropUrl <> invalid
         SetBackground(m.top.parentItem.backdropUrl)
@@ -100,7 +100,7 @@ sub loadInitialItems()
         m.sortAscending = false
     end if
 
-    m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
+    m.loadItemsTask.nameStartsWith = m.top.alphaSelected
     m.loadItemsTask.searchTerm = m.VoiceBox.text
     m.emptyText.visible = false
 
@@ -127,7 +127,7 @@ sub loadInitialItems()
             showTvGuide()
         end if
 
-    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "Boxsets" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
+    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
         ' Non-recursive, to not show subfolder contents
         m.loadItemsTask.recursive = false
     else if m.top.parentItem.collectionType = "Channel"
@@ -386,20 +386,23 @@ sub onItemSelected()
     m.top.selectedItem = m.itemGrid.content.getChild(m.itemGrid.itemSelected)
 end sub
 
-sub onItemAlphaSelected()
+sub onItemalphaSelected()
     m.loadedRows = 0
     m.loadedItems = 0
     m.data = CreateObject("roSGNode", "ContentNode")
     m.itemGrid.content = m.data
+    m.loadItemsTask.nameStartsWith = m.alpha.alphaSelected
+    m.loadItemsTask.searchTerm = ""
     m.VoiceBox.text = ""
     loadInitialItems()
 end sub
 
-sub onVoiceFilter()
+sub onvoiceFilter()
     m.loadedRows = 0
     m.loadedItems = 0
     m.data = CreateObject("roSGNode", "ContentNode")
     m.itemGrid.content = m.data
+    m.top.alphaSelected = ""
     m.loadItemsTask.searchTerm = m.VoiceBox.text
     loadInitialItems()
 end sub
@@ -515,7 +518,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     topGrp = m.top.findNode("itemGrid")
     searchGrp = m.top.findNode("VoiceBox")
 
-    if key = "down" and searchGrp.isinFocusChain()
+    if key = "left" and searchGrp.isinFocusChain()
         topGrp.setFocus(true)
         searchGrp.setFocus(false)
     end if
@@ -580,7 +583,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.loadItemsTask.searchTerm = ""
         m.loadItemsTask.nameStartsWith = ""
         m.VoiceBox.text = ""
-        m.top.AlphaSelected = ""
+        m.top.alphaSelected = ""
         m.loadItemsTask.filter = "All"
         m.filter = "All"
         m.loadItemsTask.observeField("content", "ItemDataLoaded")
@@ -599,7 +602,7 @@ sub updateTitle()
     if m.VoiceBox.text <> ""
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered by ") + m.loadItemsTask.searchTerm + ")"
     end if
-    if m.top.AlphaSelected <> ""
+    if m.top.alphaSelected <> ""
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered by ") + m.loadItemsTask.nameStartsWith + ")"
     end if
 
