@@ -243,8 +243,26 @@ function CreateSigninGroup(user = "")
                     m.scene.dialog = m.quickConnectDialog
                 end if
             else if msg.getField() = "authenticated"
-                ' Quick connect authentication was successful...
-                return "true"
+                authenticated = msg.getData()
+                if authenticated = true
+                    ' Quick connect authentication was successful...
+                    return "true"
+                else
+                    dialog = createObject("roSGNode", "Dialog")
+                    dialog.id = "QuickConnectError"
+                    dialog.title = tr("Quick Connect")
+                    dialog.buttons = [tr("OK")]
+                    dialog.message = tr("There was an error authenticating via Quick Connect.")
+                    m.scene.dialog = dialog
+                    m.scene.dialog.observeField("buttonSelected", port)
+                end if
+            else
+                ' If there are no other button matches, check if this is a simple "OK" Dialog & Close if so
+                dialog = msg.getRoSGNode()
+                if dialog.id = "QuickConnectError"
+                    dialog.unobserveField("buttonSelected")
+                    dialog.close = true
+                end if            
             end if
         end if
     end while

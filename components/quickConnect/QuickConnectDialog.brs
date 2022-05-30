@@ -33,11 +33,8 @@ sub OnAuthenticated()
             m.top.close = true
             m.top.authenticated = true
         else
-            dialog = createObject("roSGNode", "Dialog")
-            dialog.title = tr("Quick Connect")
-            dialog.buttons = [tr("OK")]
-            dialog.message = tr("There was an error authenticating via Quick Connect.")
-            m.scene.dialog = dialog
+            m.top.close = true
+            m.top.authenticated = false
         end if
     end if
 end sub
