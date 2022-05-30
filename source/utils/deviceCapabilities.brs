@@ -250,7 +250,7 @@ function GetDirectPlayProfiles() as object
         },
         {
             "Container": audio,
-            "Type": "Audio",
+            "Type": "Audio"
         }
     ]
 
