@@ -199,7 +199,7 @@ function sortSubtitles(id as string, MediaStreams)
                 "Index": stream.index,
                 "IsDefault": stream.IsDefault,
                 "IsForced": stream.IsForced,
-                "IsExternal": stream.IsExternal
+                "IsExternal": stream.IsExternal,
                 "IsEncoded": stream.DeliveryMethod = "Encode"
             }
             if stream.isForced

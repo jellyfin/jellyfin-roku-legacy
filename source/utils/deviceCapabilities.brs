@@ -89,7 +89,7 @@ function getDeviceProfile() as object
                 "VideoCodec": tsVideoCodecs,
                 "Context": "Streaming",
                 "Protocol": "hls",
-                "MaxAudioChannels": StrI(maxAudioChannels) ' Currently Jellyfin server expects this as a string
+                "MaxAudioChannels": StrI(maxAudioChannels), ' Currently Jellyfin server expects this as a string
                 "MinSegments": "1",
                 "BreakOnNonKeyFrames": true
             },
@@ -111,7 +111,7 @@ function getDeviceProfile() as object
                     {
                         "Condition": "LessThanEqual",
                         "Property": "AudioChannels",
-                        "Value": StrI(maxAudioChannels) ' Currently Jellyfin server expects this as a string
+                        "Value": StrI(maxAudioChannels), ' Currently Jellyfin server expects this as a string
                         "IsRequired": false
                     }
                 ]

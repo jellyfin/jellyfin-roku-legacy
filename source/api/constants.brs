@@ -16,7 +16,7 @@ sub setConstants()
                 ascending_black: "pkg:/images/icons/up_black.png",
                 ascending_white: "pkg:/images/icons/up_white.png",
                 descending_black: "pkg:/images/icons/down_black.png",
-                descending_white: "pkg:/images/icons/down_white.png"
+                descending_white: "pkg:/images/icons/down_white.png",
                 check_black: "pkg:/images/icons/check_black.png",
                 check_white: "pkg:/images/icons/check_white.png"
             }

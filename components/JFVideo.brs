@@ -58,7 +58,7 @@ sub ReportPlayback(state = "update" as string)
     if m.top.position = invalid then return
 
     params = {
-        "ItemId": m.top.id
+        "ItemId": m.top.id,
         "PlaySessionId": m.top.PlaySessionId,
         "PositionTicks": int(m.top.position) * 10000000&, 'Ensure a LongInteger is used
         "IsPaused": (m.top.state = "paused"),

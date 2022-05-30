@@ -6,7 +6,7 @@ sub loadItems()
     item = m.top.itemContent
     if item <> invalid
         params = {
-            maxHeight: 1080
+            maxHeight: 1080,
             maxWidth: 1920
         }
         m.top.results = ImageURL(item.Id, "Primary", params)
