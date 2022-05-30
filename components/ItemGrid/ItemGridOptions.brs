@@ -147,19 +147,12 @@ sub toggleFavorite()
 end sub
 
 sub setHeartColor(color as string)
-    error = []
-    try
-        for i = 0 to 6
-            node = m.favoriteMenu.getChild(i)
-            if node <> invalid
-                if node.uri <> invalid and node.uri = "pkg:/images/icons/favorite_selected.png"
-                    m.favoriteMenu.getChild(i).blendColor = color
-                end if
-            end if
-        end for
-    catch error
-        print error
-    end try
+    for i = 0 to 6
+        node = m.favoriteMenu.getChild(i)
+        if node <> invalid and node.uri <> invalid and node.uri = "pkg:/images/icons/favorite_selected.png"
+            m.favoriteMenu.getChild(i).blendColor = color
+        end if
+    end for
 end sub
 
 sub saveFavoriteItemSelected(msg)
