@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="SearchResults" extends="JFGroup">
+<component name="searchResults" extends="JFGroup">
   <children>
   <Rectangle width="1920" height="1080" color="#000000" opacity="0.75" />
     <LayoutGroup layoutDirection="horiz"  id="SearchAlphabox" translation="[70, 120]">
       <SearchBox id="SearchBox" visible="true" focusable="true"/>
     </LayoutGroup>
-      <LayoutGroup layoutDirection="vert"  id="SearchResults" translation="[470, 150]" >
+      <LayoutGroup layoutDirection="vert"  id="searchResults" translation="[470, 150]" >
         <Label id = "Search_Help_text" text=""/>
-        <SearchRow id="SearchSelect" visible="true" focusable="true"/>
+        <SearchRow id="searchSelect" visible="true" focusable="true"/>
       </LayoutGroup>    
       <OptionsSlider id="options" />
-        <Spinner id = "SearchSpinner"  visible="false" translation="[1050, 500]"/>
+        <Spinner id = "searchSpinner"  visible="false" translation="[1050, 500]"/>
   </children>
   <interface>
     <field id="query" type="string" alwaysNotify="true" />
     <field id="selectedItem" type="node" alwaysNotify="true" />
     <field id="quickPlayNode" type="node" alwaysNotify="true" />
     <field id="imageDisplayMode" type="string" value="scaleToZoom" />
-    <field id="SearchAlpha" type="string" alias="SearchBox.search_values" alwaysNotify="true" onChange="SearchMedias" />
+    <field id="searchAlpha" type="string" alias="SearchBox.search_values" alwaysNotify="true" onChange="searchMedias" />
 
   </interface>
   <script type="text/brightscript" uri="SearchResults.brs" />

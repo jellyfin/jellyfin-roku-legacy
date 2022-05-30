@@ -188,11 +188,11 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "search_value")
             query = msg.getRoSGNode().search_value
             group.findNode("SearchBox").visible = true
-            options = group.findNode("SearchSelect")
+            options = group.findNode("searchSelect")
             options.visible = true
-            searchSpinner = group.findNode("SearchSpinner")
+            searchSpinner = group.findNode("searchSpinner")
             searchSpinner.visible = true
-            results = SearchMedia(query)
+            results = searchMedia(query)
             searchSpinner.visible = false
             options.itemData = results
             options.query = query

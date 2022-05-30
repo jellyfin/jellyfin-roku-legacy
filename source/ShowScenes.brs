@@ -345,16 +345,16 @@ end function
 
 function CreateSearchPage()
     ' Search + Results Page
-    group = CreateObject("roSGNode", "SearchResults")
+    group = CreateObject("roSGNode", "searchResults")
 
-    'search = group.findNode("SearchBox")
+    'search = group.findNode("searchBox")
     ' TODO/FIXME: This will need to be cleaned up.
     ' These observeFields currently take precedence over the new
-    ' observeFields in SearchTask/SearchResults
+    ' observeFields in SearchTask/searchResults
 
     'search.observeField("search_values", m.port)
 
-    options = group.findNode("SearchSelect")
+    options = group.findNode("searchSelect")
     options.observeField("itemSelected", m.port)
 
     return group

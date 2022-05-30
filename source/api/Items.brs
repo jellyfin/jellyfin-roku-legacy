@@ -34,7 +34,7 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
 end function
 
 ' Search across all libraries
-function SearchMedia(query as string)
+function searchMedia(query as string)
     ' This appears to be done differently on the web now
     ' For each potential type, a separate query is done:
     ' varying item types, and artists, and people

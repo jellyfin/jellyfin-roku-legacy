@@ -8,8 +8,8 @@ sub init()
     m.searchText.keyGrid.keyDefinitionUri = "pkg:/components/data/CustomAddressKDF.json"
     m.searchText.textEditBox.voiceEnabled = true
     m.searchText.textEditBox.active = true
-    m.searchText.ObserveField("text", "SearchMedias")
-    m.searchSelect = m.top.findNode("SearchSelect")
+    m.searchText.ObserveField("text", "searchMedias")
+    m.searchSelect = m.top.findNode("searchSelect")
 
     'set lable text
     m.label = m.top.findNode("text")
@@ -17,7 +17,7 @@ sub init()
 
 end sub
 
-sub SearchMedias()
+sub searchMedias()
 
     m.top.search_values = m.searchText.text
 end sub
