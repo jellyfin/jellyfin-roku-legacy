@@ -77,8 +77,6 @@ sub bufferPositionChanged()
         bufferPositionBarWidth = m.seekBar.width * m.top.audio.bufferingStatus.percentage
     end if
 
-
-
     ' Ensure position bar is never wider than the seek bar
     if bufferPositionBarWidth > m.seekBar.width
         bufferPositionBarWidth = m.seekBar.width
@@ -153,6 +151,9 @@ end sub
 
 ' Update values on screen when page content changes
 sub pageContentChanged()
+    ' Reset buffer bar
+    m.bufferPosition.width = 0
+
     m.LoadMetaDataTask.itemId = m.top.pageContent[m.currentSongIndex]
     m.LoadMetaDataTask.observeField("content", "onMetaDataLoaded")
     m.LoadMetaDataTask.control = "RUN"
