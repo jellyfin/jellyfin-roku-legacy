@@ -1,6 +1,5 @@
 ' Set global constants
 sub setConstants()
-
     globals = m.screen.getGlobalNode()
 
     ' Set Global Constants
@@ -21,11 +20,6 @@ sub setConstants()
                 check_black: "pkg:/images/icons/check_black.png",
                 check_white: "pkg:/images/icons/check_white.png"
             }
-
-
         }
     })
-
-
-
 end sub
