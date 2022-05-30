@@ -2,12 +2,19 @@ sub init()
     m.top.optionsAvailable = false
 
     setupAudioNode()
+    setupAnimationTasks()
     setupButtons()
     setupInfoNodes()
     setupDataTasks()
 
     m.currentSongIndex = 0
     m.buttonsNeedToBeLoaded = true
+end sub
+
+sub setupAnimationTasks()
+    m.displayButtonsAnimation = m.top.FindNode("displayButtonsAnimation")
+    m.playPositionAnimation = m.top.FindNode("playPositionAnimation")
+    m.playPositionAnimationWidth = m.top.FindNode("playPositionAnimationWidth")
 end sub
 
 ' Creates tasks to gather data needed to renger NowPlaying Scene and play song
@@ -29,6 +36,7 @@ end sub
 sub setupAudioNode()
     m.top.audio = createObject("RoSGNode", "Audio")
     m.top.audio.observeField("state", "audioStateChanged")
+    m.top.audio.observeField("position", "audioPositionChanged")
 end sub
 
 ' Setup playback buttons, default to Play button selected
@@ -53,6 +61,26 @@ end sub
 sub setupInfoNodes()
     m.albumCover = m.top.findNode("albumCover")
     m.backDrop = m.top.findNode("backdrop")
+    m.playPosition = m.top.findNode("playPosition")
+    m.seekBar = m.top.findNode("seekBar")
+end sub
+
+sub audioPositionChanged()
+    if not isValid(m.top.audio.position)
+        m.playPosition.width = 0
+    end if
+
+    songPercentComplete = m.top.audio.position / m.top.audio.duration
+    playPositionBarWidth = m.seekBar.width * songPercentComplete
+
+    ' Ensure position bar is never wider than the seek bar
+    if playPositionBarWidth > m.seekBar.width
+        playPositionBarWidth = m.seekBar.width
+    end if
+
+    ' Use animation to make the display smooth
+    m.playPositionAnimationWidth.keyValue = [m.playPosition.width, playPositionBarWidth]
+    m.playPositionAnimation.control = "start"
 end sub
 
 sub audioStateChanged()
@@ -146,8 +174,7 @@ sub onMetaDataLoaded()
         ' If we have more and 1 song to play, fade in the next and previous controls
         if m.buttonsNeedToBeLoaded
             if m.top.pageContent.count() > 1
-                m.floatanimation = m.top.FindNode("displayButtonsAnimation")
-                m.floatanimation.control = "start"
+                m.displayButtonsAnimation.control = "start"
             end if
             m.buttonsNeedToBeLoaded = false
         end if
