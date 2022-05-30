@@ -38,15 +38,15 @@ end function
 function ImageURL(id, version = "Primary", params = {})
     ' set defaults
     if params.maxHeight = invalid
-        param = { "maxHeight": "384" }
+        param = { "fillHeight": "331" }
         params.append(param)
     end if
     if params.maxWidth = invalid
-        param = { "maxWidth": "196" }
+        param = { "fillWidth": "464" }
         params.append(param)
     end if
     if params.quality = invalid
-        param = { "quality": "90" }
+        param = { "quality": "96" }
         params.append(param)
     end if
     url = Substitute("Items/{0}/Images/{1}", id, version)
@@ -63,7 +63,7 @@ function UserImageURL(id, params = {})
         params.append({ "maxWidth": "300" })
     end if
     if params.quality = invalid
-        params.append({ "quality": "90" })
+        params.append({ "quality": "96" })
     end if
 
     url = Substitute("Users/{0}/Images/Primary", id)

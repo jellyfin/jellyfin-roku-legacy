@@ -141,11 +141,52 @@ sub LoadUserPreferences()
     resp = APIRequest(url)
     jsonResponse = getJson(resp)
 
-    if jsonResponse <> invalid and jsonResponse.CustomPrefs <> invalid and jsonResponse.CustomPrefs["landing-livetv"] <> invalid
-        set_user_setting("display.livetv.landing", jsonResponse.CustomPrefs["landing-livetv"])
+    if jsonResponse <> invalid and jsonResponse.CustomPrefs <> invalid
+        if jsonResponse.CustomPrefs["landing-livetv"] <> invalid
+            set_user_setting("display.livetv.landing", jsonResponse.CustomPrefs["landing-livetv"])
+        end if
+        ' Take into account nones, if nones are in the middle then resort them to the end to be removed later in HomeRows
+        nones = 0
+        for i = 0 to 6
+            if jsonResponse.CustomPrefs["homesection" + i.ToStr()] <> invalid
+                if jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "none"
+                    nones += 1
+                else
+                    if nones > 0
+                        j = i - nones
+                        set_user_setting("display.homesection" + i.ToStr(), "none")
+                        set_user_setting("display.homesection" + j.ToStr(), jsonResponse.CustomPrefs["homesection" + i.ToStr()])
+                    else
+                        set_user_setting("display.homesection" + i.ToStr(), jsonResponse.CustomPrefs["homesection" + i.ToStr()])
+                    end if
+                end if
+            end if
+        end for
+        if jsonResponse.CustomPrefs["homesection0"] = invalid
+            setHomeScreenDefaults()
+        end if
     else
-        unset_user_setting("display.livetv.landing")
+        setHomeScreenDefaults()
     end if
+
+    ' Actual user settings for getting ordered views
+    url = Substitute("Users/{0}", id)
+    resp = APIRequest(url)
+    jsonResponse = getJson(resp)
+    if jsonResponse <> invalid
+        set_user_setting("display.userConfig", FormatJson(jsonResponse))
+    end if
+
+end sub
+
+sub setHomeScreenDefaults()
+    set_user_setting("display.homesection0", "smalllibrarytiles")
+    set_user_setting("display.homesection1", "resume")
+    set_user_setting("display.homesection2", "resumeaudio")
+    set_user_setting("display.homesection3", "resumebook")
+    set_user_setting("display.homesection4", "livetv")
+    set_user_setting("display.homesection5", "nextup")
+    set_user_setting("display.homesection6", "latestmedia")
 end sub
 
 sub LoadUserAbilities(user)
