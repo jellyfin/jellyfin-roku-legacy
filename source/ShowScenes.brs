@@ -262,7 +262,7 @@ function CreateSigninGroup(user = "")
                 if dialog.id = "QuickConnectError"
                     dialog.unobserveField("buttonSelected")
                     dialog.close = true
-                end if            
+                end if
             end if
         end if
     end while
