@@ -15,6 +15,9 @@ sub setupAnimationTasks()
     m.displayButtonsAnimation = m.top.FindNode("displayButtonsAnimation")
     m.playPositionAnimation = m.top.FindNode("playPositionAnimation")
     m.playPositionAnimationWidth = m.top.FindNode("playPositionAnimationWidth")
+
+    m.bufferPositionAnimation = m.top.FindNode("bufferPositionAnimation")
+    m.bufferPositionAnimationWidth = m.top.FindNode("bufferPositionAnimationWidth")
 end sub
 
 ' Creates tasks to gather data needed to renger NowPlaying Scene and play song
@@ -37,6 +40,7 @@ sub setupAudioNode()
     m.top.audio = createObject("RoSGNode", "Audio")
     m.top.audio.observeField("state", "audioStateChanged")
     m.top.audio.observeField("position", "audioPositionChanged")
+    m.top.audio.observeField("bufferingStatus", "bufferPositionChanged")
 end sub
 
 ' Setup playback buttons, default to Play button selected
@@ -62,16 +66,36 @@ sub setupInfoNodes()
     m.albumCover = m.top.findNode("albumCover")
     m.backDrop = m.top.findNode("backdrop")
     m.playPosition = m.top.findNode("playPosition")
+    m.bufferPosition = m.top.findNode("bufferPosition")
     m.seekBar = m.top.findNode("seekBar")
+end sub
+
+sub bufferPositionChanged()
+    if not isValid(m.top.audio.bufferingStatus)
+        bufferPositionBarWidth = m.seekBar.width
+    else
+        bufferPositionBarWidth = m.seekBar.width * m.top.audio.bufferingStatus.percentage
+    end if
+
+
+
+    ' Ensure position bar is never wider than the seek bar
+    if bufferPositionBarWidth > m.seekBar.width
+        bufferPositionBarWidth = m.seekBar.width
+    end if
+
+    ' Use animation to make the display smooth
+    m.bufferPositionAnimationWidth.keyValue = [m.bufferPosition.width, bufferPositionBarWidth]
+    m.bufferPositionAnimation.control = "start"
 end sub
 
 sub audioPositionChanged()
     if not isValid(m.top.audio.position)
-        m.playPosition.width = 0
+        playPositionBarWidth = 0
+    else
+        songPercentComplete = m.top.audio.position / m.top.audio.duration
+        playPositionBarWidth = m.seekBar.width * songPercentComplete
     end if
-
-    songPercentComplete = m.top.audio.position / m.top.audio.duration
-    playPositionBarWidth = m.seekBar.width * songPercentComplete
 
     ' Ensure position bar is never wider than the seek bar
     if playPositionBarWidth > m.seekBar.width

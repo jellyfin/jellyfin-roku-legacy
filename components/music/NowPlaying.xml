@@ -9,7 +9,8 @@
           <Label id="song" width="900" height="25"  horizAlign="center" />
           <Label id="numberofsongs" width="500" height="25" horizAlign="center" font="font:SmallestSystemFont" color="#999999" />
       </LayoutGroup>
-      <Rectangle id="seekBar" color="0xFFFFFF44" width="500" height="10">
+      <Rectangle id="seekBar" color="0x00000099" width="500" height="10">
+        <Rectangle id="bufferPosition" color="0xFFFFFF44" height="10"></Rectangle>
         <Rectangle id="playPosition" color="#00a4dcFF" height="10"></Rectangle>
       </Rectangle>
       <LayoutGroup id="buttons" layoutDirection="horiz" horizAlignment="center" itemSpacings="[45]">
@@ -17,6 +18,9 @@
         <Poster id="play" width="64" height="64" uri="pkg:/images/icons/play-default.png" />
         <Poster id="next" width="64" height="64" uri="pkg:/images/icons/next-default.png" opacity="0" />
       </LayoutGroup>
+      <Animation id="bufferPositionAnimation" duration="1" repeat="false" easeFunction="linear">
+        <FloatFieldInterpolator id="bufferPositionAnimationWidth" key="[0.0, 1.0]" fieldToInterp="bufferPosition.width" />
+      </Animation>
       <Animation id="playPositionAnimation" duration="1" repeat="false" easeFunction="linear">
         <FloatFieldInterpolator id="playPositionAnimationWidth" key="[0.0, 1.0]" fieldToInterp="playPosition.width" />
       </Animation>
