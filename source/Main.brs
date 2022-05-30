@@ -156,7 +156,7 @@ sub Main (args as dynamic) as void
                 ' Nothing to do here, handled in ItemGrid
             else
                 ' TODO - switch on more node types
-                message_dialog("This type is not yet supported: " + selectedItem.type + ".")
+                message_dialog(Substitute(tr("{0} support is coming soon!"), selectedItem.type))
             end if
         else if isNodeEvent(msg, "movieSelected")
             ' If you select a movie from ANYWHERE, follow this flow
@@ -230,6 +230,10 @@ sub Main (args as dynamic) as void
                 video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx)
                 if video <> invalid
                     sceneManager.callFunc("pushScene", video)
+                end if
+
+                if group.lastFocus <> invalid
+                    group.lastFocus.setFocus(true)
                 end if
             else if btn <> invalid and btn.id = "watched-button"
                 movie = group.itemContent

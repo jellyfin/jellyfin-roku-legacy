@@ -1,5 +1,5 @@
 ## Developing The Jellyfin Roku App
-Follow the steps below to install the app on your personal Roku device for development. 
+Follow the steps below to install the app on your personal Roku device for development.
 
 ### Developer Mode
 
@@ -19,21 +19,52 @@ Open up the new folder:
 cd jellyfin-roku
 ```
 
+
+## Method 1: Visual Studio Code
+We recommend using Visual Studio Code when working on this project. The [BrightScript Language extension](https://marketplace.visualstudio.com/items?itemName=RokuCommunity.brightscript) provides a rich debugging experience, including in-editor syntax checking, debugging/breakpoint support, variable inspection at runtime, auto-formatting, an integrated remote control mode, and [much more](https://rokucommunity.github.io/vscode-brightscript-language/features.html).
+
+### Installation
+1. Download and install [Visual Studio Code](https://code.visualstudio.com/)
+2. Install the **BrightScript Language** extension within VSCode in the _Extensions_ panel or by downloading it from the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=RokuCommunity.brightscript).
+
+### Usage
+1. Open the `jellyfin-roku` folder in vscode
+2. Press `F5` on your keyboard or click `Run` -> `Start Debugging` from the vscode menu. ![image](https://user-images.githubusercontent.com/2544493/170696233-8ba49bf4-bebb-4655-88f3-ac45150dda02.png)
+
+3. Enter your Roku IP address and developer password when prompted
+
+That's it! vscode will auto-package the project, sideload it to the specified device, and the channel is up and running. (assuming you remembered to put your device in [developer mode](#developer-mode))
+
+
+### Hardcoding Roku Information
+Out of the box, the Brightscript extension will prompt you to pick a Roku device (from devices found on your local network) and enter a password on every launch. If you'd prefer to hardcode this information rather than entering it every time, you can set these values in your vscode user settings:
+
+```js
+{
+    "brightscript.debug.host": "YOUR_ROKU_HOST_HERE",
+    "brightscript.debug.password": "YOUR_ROKU_DEV_PASSWORD_HERE",
+}
+```
+
+Example:
+![image](https://user-images.githubusercontent.com/2544493/170485209-0dbe6787-8026-47e7-9095-1df96cda8a0a.png)
+
+## Method 2: Sideload to Roku Device Manually
+
 ### Install Necessary Packages
 
 ```bash
 sudo apt-get install wget make zip
 ```
 
-## Method 1: Sideload to Roku Device Manually
-
+### Build the package
 ```bash
 make dev
 ```
 
 This will create a zip in `out/apps/Jellyfin_Roku-dev.zip`. Login to your roku's device in your browser and upload the zip file then run install.
 
-## Method 2: Direct load to Roku Device
+## Method 3: Direct load to Roku Device
 
 ### Login Details
 
@@ -45,6 +76,12 @@ export ROKU_DEV_PASSWORD=password
 ```
 
 Normally you would have to open up your browser and upload a .zip file containing the app code. These commands enable the app to be zipped up and installed on the Roku automatically which is essential for developers and makes it easy to upgrade in the future for users.
+
+### Install Necessary Packages
+
+```bash
+sudo apt-get install wget make zip
+```
 
 ### Deploy
 
@@ -80,11 +117,7 @@ Deploy the app:
 make install
 ```
 
-## Developer Setup
-
-Read below and also checkout the [Development Guide For New Devs](DEVGUIDE.md)
-
-### Workflow
+### Command Line Workflow
 
 Modify code -> `make install` -> Use Roku remote to test changes -> `telnet ${ROKU_DEV_TARGET} 8085` -> `CTRL + ]` -> `quit + ENTER`
 

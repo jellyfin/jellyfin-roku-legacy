@@ -18,8 +18,6 @@ sub itemContentChanged()
     itemData = m.top.itemContent
     if itemData = invalid then return
     itemData.Title = itemData.name ' Temporarily required while we move from "HomeItem" to "JFContentItem"
-
-
     m.itemPoster.width = itemData.imageWidth
     m.itemText.maxWidth = itemData.imageWidth
     m.itemTextExtra.width = itemData.imageWidth
@@ -32,18 +30,32 @@ sub itemContentChanged()
         m.itemIcon.uri = itemData.iconUrl
     end if
 
+    if itemData.stretch = true
+        m.itemPoster.loadDisplayMode = "scaleToZoom"
+    end if
+
     ' Format the Data based on the type of Home Data
     if itemData.type = "CollectionFolder" or itemData.type = "UserView" or itemData.type = "Channel"
         m.itemText.text = itemData.name
-        m.itemPoster.uri = itemData.widePosterURL
+        if itemData.isSmall = true
+            m.backdrop.height = "100"
+            m.itemText.translation = [0, 20]
+            itemData.usePoster = false
+        end if
+        if itemData.usePoster = true
+            m.itemPoster.uri = itemData.widePosterURL
+        end if
         return
     end if
 
-    if itemData.type = "UserView"
+    if itemData.type = "UserView" and itemData.usePoster = true
         m.itemPoster.width = "96"
         m.itemPoster.height = "96"
         m.itemPoster.translation = "[192, 88]"
         m.itemText.text = itemData.name
+        if itemData.isSmall = true
+            m.itemText.translation = [8, 10]
+        end if
         m.itemPoster.uri = itemData.widePosterURL
         return
     end if
@@ -52,8 +64,7 @@ sub itemContentChanged()
     m.itemText.height = 34
     m.itemText.font.size = 25
     m.itemText.horizAlign = "left"
-    m.itemText.vertAlign = "bottom"
-    m.itemTextExtra.visible = true
+    ' m.itemText.vertAlign = "bottom"
     m.itemTextExtra.font.size = 22
 
     ' "Program" is from clicking on an "On Now" item on the Home Screen
@@ -75,9 +86,12 @@ sub itemContentChanged()
         m.itemText.text = itemData.json.SeriesName
 
         if itemData.usePoster = true
-            m.itemPoster.uri = itemData.widePosterURL
+            m.itemPoster.uri = itemData.posterURL
         else
-            m.itemPoster.uri = itemData.thumbnailURL
+            m.itemPoster.uri = itemData.widePosterURL
+        end if
+        if itemData.json.ImageURL <> invalid
+            m.itemPoster.uri = itemData.json.ImageURL
         end if
 
         ' Set Series and Episode Number for Extra Text
@@ -105,6 +119,9 @@ sub itemContentChanged()
         else
             m.itemPoster.uri = itemData.thumbnailURL
         end if
+        if itemData.json.ImageURL <> invalid
+            m.itemPoster.uri = itemData.json.ImageURL
+        end if
 
         ' Set Release Year and Age Rating for Extra Text
         textExtra = ""
@@ -131,22 +148,17 @@ sub itemContentChanged()
         else
             m.itemPoster.uri = itemData.thumbnailURL
         end if
+        if itemData.json.ImageURL <> invalid
+            m.itemPoster.uri = itemData.json.ImageURL
+        end if
         return
     end if
     if itemData.type = "Series"
-
         m.itemText.text = itemData.name
-
-        if itemData.usePoster = true
-            if itemData.imageWidth = 180
-                m.itemPoster.uri = itemData.posterURL
-            else
-                m.itemPoster.uri = itemData.widePosterURL
-            end if
-        else
-            m.itemPoster.uri = itemData.thumbnailURL
+        m.itemPoster.uri = itemData.posterURL
+        if itemData.json.ImageURL <> invalid
+            m.itemPoster.uri = itemData.json.ImageURL
         end if
-
         textExtra = ""
         if itemData.json.ProductionYear <> invalid
             textExtra = StrI(itemData.json.ProductionYear).trim()
@@ -163,10 +175,25 @@ sub itemContentChanged()
         return
     end if
 
-    if itemData.type = "MusicAlbum"
+    if itemData.type = "MusicAlbum" or itemData.type = "Audio" or itemData.type = "Book" or itemData.type = "AudioBook"
         m.itemText.text = itemData.name
         m.itemTextExtra.text = itemData.json.AlbumArtist
-        m.itemPoster.uri = itemData.posterURL
+        if itemData.usePoster = true
+            if itemData.posterURL <> ""
+                m.itemPoster.uri = itemData.posterURL
+            else
+                m.itemPoster.uri = itemData.json.ImageURL
+            end if
+        end if
+        return
+    end if
+
+    if itemData.type = "Photo" or itemData.type = "PhotoAlbum"
+        if itemData.usePoster = true
+            if itemData.json.ImageURL <> invalid
+                m.itemPoster.uri = itemData.json.ImageURL
+            end if
+        end if
         return
     end if
 
@@ -188,11 +215,13 @@ end sub
 
 'Hide backdrop and icon when poster loaded
 sub onPosterLoadStatusChanged()
-    if m.itemPoster.loadStatus = "ready" and m.itemPoster.uri <> ""
-        m.backdrop.visible = false
-        m.itemIcon.visible = false
-    else
-        m.backdrop.visible = true
-        m.itemIcon.visible = true
+    if m.itemPoster <> invalid
+        if m.itemPoster.loadStatus = "ready" and m.itemPoster.uri <> ""
+            m.backdrop.visible = false
+            m.itemIcon.visible = false
+        else
+            m.backdrop.visible = true
+            m.itemIcon.visible = true
+        end if
     end if
 end sub

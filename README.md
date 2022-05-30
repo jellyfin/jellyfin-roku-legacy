@@ -38,6 +38,6 @@ No matter what your interests or skill are, you can help to make this client bet
 
 Feature requests are always welcome too, but please have a read though the existing issues to see if someone has already raised one for something similar.
 
-If you can live with a slightly less stable version of the client, then install the beta version of the client from the *beta release* link above and give us some feedback.
-
 If you fancy some development, then read the [DEVGUIDE](DEVGUIDE.md) to find out the best ways to help.
+
+As Roku have severely limited their Beta channel programme, the best way to test pre-release versions is by following the [DEVGUIDE](DEVGUIDE.md) to install and test the latest changes.  Feedback is always welcome.
