@@ -79,7 +79,6 @@ sub loadInitialItems()
             m.VoiceBox.translation = "[1845, 90]"
         else
             m.view = "livetv"
-            'm.VoiceBox.visible = "false"
         end if
         m.sortField = get_user_setting("display.livetv.sortField")
         sortAscendingStr = get_user_setting("display.livetv.sortAscending")
