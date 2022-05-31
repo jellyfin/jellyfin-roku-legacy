@@ -6,7 +6,7 @@ sub init()
     m.songList = m.top.findNode("songList")
 
     m.spinner = m.top.findNode("spinner")
-    m.spinner.visible = false
+    m.spinner.visible = true
 end sub
 
 sub setupMainNode()
@@ -17,6 +17,7 @@ end sub
 ' Set values for displayed values on screen
 sub pageContentChanged()
     item = m.top.pageContent
+    m.spinner.visible = false
 
     setPosterImage(item.posterURL)
     setScreenTitle(item.json)
@@ -74,6 +75,8 @@ end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
+
+    if m.spinner.visible then return false
 
     ' Play Album is hidden, so there are no navigation needs here
     if m.top.pageContent.json.ChildCount = 1
