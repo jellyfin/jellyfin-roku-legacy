@@ -567,7 +567,7 @@
     </message>
     <message>
         <source>(Dialog will close automatically)</source>
-        <translation></translation>
+        <translation>(Dialog will close automatically)</translation>
     </message>
     <message>
         <source>There was an error authenticating via Quick Connect.</source>
