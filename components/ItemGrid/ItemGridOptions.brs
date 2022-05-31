@@ -147,6 +147,7 @@ sub toggleFavorite()
 end sub
 
 sub setHeartColor(color as string)
+    e = ""
     try
         for i = 0 to 6
             node = m.favoriteMenu.getChild(i)
