@@ -41,7 +41,6 @@ end sub
 
 'Voice Search set
 sub channelsearchTermSet()
-    print "Channel Filter set"
     m.scheduleGrid.jumpToChannel = 0
     if m.top.searchTerm <> invalid and m.LoadChannelsTask.searchTerm <> m.top.searchTerm
         if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
