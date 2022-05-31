@@ -412,7 +412,7 @@ sub onItemFocused()
 
     ' Load more data if focus is within last 3 rows, and there are more items to load
     if focusedRow > 1
-        if  m.options.view = "Networks"
+        if m.options.view = "Networks"
             if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.LoadNetworksTask.totalRecordCount
                 loadMoreData()
             end if
@@ -420,7 +420,7 @@ sub onItemFocused()
             if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.LoadGenreTask.totalRecordCount
                 loadMoreData()
             end if
-        else 
+        else
             if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.loadItemsTask.totalRecordCount
                 loadMoreData()
             end if
