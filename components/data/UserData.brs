@@ -30,7 +30,7 @@ sub saveToRegistry()
         users.push({
             id: m.top.id,
             username: m.top.username,
-            server: get_setting("server"),
+            server: get_setting("server")
         })
         set_setting("available_users", formatJson(users))
     end if

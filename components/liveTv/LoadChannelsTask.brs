@@ -19,6 +19,7 @@ sub loadChannels()
         SortBy: sort_field,
         SortOrder: sort_order,
         recursive: m.top.recursive,
+        UserId: get_setting("active_user")
     }
 
     ' Handle special case when getting names starting with numeral
