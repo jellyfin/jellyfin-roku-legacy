@@ -5,8 +5,8 @@ sub init()
     m.searchTask = CreateObject("roSGNode", "SearchTask")
 
     'set label text
-    m.Search_Help_text = m.top.findNode("Search_Help_text")
-    m.Search_Help_text.text = tr("You can search for Titles, People, Live TV Channels and more")
+    m.searchHelpText = m.top.findNode("SearchHelpText")
+    m.searchHelpText.text = tr("You can search for Titles, People, Live TV Channels and more")
 
 end sub
 
@@ -31,7 +31,7 @@ sub loadResults()
     m.searchSpinner.visible = false
     m.searchSelect.itemdata = m.searchTask.results
     m.searchSelect.query = m.top.SearchAlpha
-    m.Search_Help_text.visible = false
+    m.searchHelpText.visible = false
     m.searchAlphabox = m.top.findnode("searchResults")
     m.searchAlphabox.translation = "[470, 85]"
 end sub

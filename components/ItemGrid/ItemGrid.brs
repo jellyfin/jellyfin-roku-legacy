@@ -29,11 +29,11 @@ sub init()
 
     'Voice filter setup
     m.voiceBox = m.top.findNode("VoiceBox")
-    m.VoiceBox.voiceEnabled = true
-    m.VoiceBox.active = true
-    m.VoiceBox.observeField("voiceFilter", "onvoiceFilter")
+    m.voiceBox.voiceEnabled = true
+    m.voiceBox.active = true
+    m.voiceBox.observeField("voiceFilter", "onvoiceFilter")
     'set voice help text
-    m.VoiceBox.hintText = tr("Use voice remote to search")
+    m.voiceBox.hintText = tr("Use voice remote to search")
 
     'backdrop
     m.newBackdrop.observeField("loadStatus", "newBGLoaded")
@@ -56,7 +56,7 @@ sub init()
     m.spinner = m.top.findNode("spinner")
     m.spinner.visible = true
 
-    m.Alpha = m.top.findNode("AlphaMenu")
+    m.alpha = m.top.findNode("AlphaMenu")
     m.alphaSelected = m.top.findNode("alphaSelected")
 end sub
 
@@ -76,7 +76,7 @@ sub loadInitialItems()
         if viewSetting = "guide"
             m.view = "tvGuide"
             'Move mic to be visiable on TV Guide screen
-            m.VoiceBox.translation = "[1845, 90]"
+            m.voiceBox.translation = "[1845, 90]"
         else
             m.view = "livetv"
         end if
@@ -100,7 +100,7 @@ sub loadInitialItems()
     end if
 
     m.loadItemsTask.nameStartsWith = m.top.alphaSelected
-    m.loadItemsTask.searchTerm = m.VoiceBox.text
+    m.loadItemsTask.searchTerm = m.voiceBox.text
     m.emptyText.visible = false
 
     updateTitle()
@@ -390,10 +390,10 @@ sub onItemalphaSelected()
     m.loadedItems = 0
     m.data = CreateObject("roSGNode", "ContentNode")
     m.itemGrid.content = m.data
-    m.loadItemsTask.nameStartsWith = m.Alpha.itemAlphaSelected
-    m.top.alphaSelected = m.Alpha.itemAlphaSelected
+    m.loadItemsTask.nameStartsWith = m.alpha.itemAlphaSelected
+    m.top.alphaSelected = m.alpha.itemAlphaSelected
     m.loadItemsTask.searchTerm = ""
-    m.VoiceBox.text = ""
+    m.voiceBox.text = ""
     loadInitialItems()
 end sub
 
@@ -403,7 +403,7 @@ sub onvoiceFilter()
     m.data = CreateObject("roSGNode", "ContentNode")
     m.itemGrid.content = m.data
     m.top.alphaSelected = ""
-    m.loadItemsTask.searchTerm = m.VoiceBox.text
+    m.loadItemsTask.searchTerm = m.voiceBox.text
     loadInitialItems()
 end sub
 
@@ -494,7 +494,7 @@ sub showTVGuide()
         m.tvGuide.observeField("focusedChannel", "onChannelFocused")
     end if
     m.tvGuide.filter = m.filter
-    m.tvGuide.searchTerm = m.VoiceBox.text
+    m.tvGuide.searchTerm = m.voiceBox.text
     m.top.appendChild(m.tvGuide)
     m.tvGuide.lastFocus.setFocus(true)
 end sub
@@ -569,12 +569,12 @@ function onKeyEvent(key as string, press as boolean) as boolean
         end if
     else if key = "right" and topGrp.isinFocusChain()
         topGrp.setFocus(false)
-        alpha = m.Alpha.getChild(0).findNode("Alphamenu")
+        alpha = m.alpha.getChild(0).findNode("Alphamenu")
         alpha.setFocus(true)
         return true
-    else if key = "left" and m.Alpha.isinFocusChain()
-        m.Alpha.setFocus(false)
-        m.Alpha.visible = true
+    else if key = "left" and m.alpha.isinFocusChain()
+        m.alpha.setFocus(false)
+        m.alpha.visible = true
         topGrp.setFocus(true)
         return true
     end if
@@ -582,7 +582,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.spinner.visible = true
         m.loadItemsTask.searchTerm = ""
         m.loadItemsTask.nameStartsWith = ""
-        m.VoiceBox.text = ""
+        m.voiceBox.text = ""
         m.top.alphaSelected = ""
         m.loadItemsTask.filter = "All"
         m.filter = "All"
@@ -599,7 +599,7 @@ sub updateTitle()
     else if m.filter = "Favorites"
         m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Favorites)")
     end if
-    if m.VoiceBox.text <> ""
+    if m.voiceBox.text <> ""
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered by ") + m.loadItemsTask.searchTerm + ")"
     end if
     if m.top.alphaSelected <> ""

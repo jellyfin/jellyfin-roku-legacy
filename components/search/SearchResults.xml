@@ -6,7 +6,7 @@
       <SearchBox id="SearchBox" visible="true" focusable="true"/>
     </LayoutGroup>
       <LayoutGroup layoutDirection="vert"  id="searchResults" translation="[470, 150]" >
-        <Label id = "Search_Help_text" text=""/>
+        <Label id = "SearchHelpText" text=""/>
         <SearchRow id="searchSelect" visible="true" focusable="true"/>
       </LayoutGroup>    
       <OptionsSlider id="options" />
