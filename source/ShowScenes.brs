@@ -50,33 +50,33 @@ function CreateServerGroup()
                 dialog.title = tr("Connecting to Server")
                 m.scene.dialog = dialog
 
-                serverInfoResult = ServerInfo()
+                m.serverInfoResult = ServerInfo()
 
                 dialog.close = true
 
-                if serverInfoResult = invalid
+                if m.serverInfoResult = invalid
                     ' Maybe don't unset setting, but offer as a prompt
                     ' Server not found, is it online? New values / Retry
                     print "Server not found, is it online? New values / Retry"
                     screen.errorMessage = tr("Server not found, is it online?")
                     SignOut(false)
-                else if serverInfoResult.Error <> invalid and serverInfoResult.Error
+                else if m.serverInfoResult.Error <> invalid and m.serverInfoResult.Error
                     ' If server redirected received, update the URL
-                    if serverInfoResult.UpdatedUrl <> invalid
-                        serverUrl = serverInfoResult.UpdatedUrl
+                    if m.serverInfoResult.UpdatedUrl <> invalid
+                        serverUrl = m.serverInfoResult.UpdatedUrl
                         set_setting("server", serverUrl)
                     end if
                     ' Display Error Message to user
                     message = tr("Error: ")
-                    if serverInfoResult.ErrorCode <> invalid
-                        message = message + "[" + serverInfoResult.ErrorCode.toStr() + "] "
+                    if m.serverInfoResult.ErrorCode <> invalid
+                        message = message + "[" + m.serverInfoResult.ErrorCode.toStr() + "] "
                     end if
-                    screen.errorMessage = message + tr(serverInfoResult.ErrorMessage)
+                    screen.errorMessage = message + tr(m.serverInfoResult.ErrorMessage)
                     SignOut(false)
                 else
                     screen.visible = false
-                    if serverInfoResult.serverName <> invalid
-                        return serverInfoResult.ServerName + " (Saved)"
+                    if m.serverInfoResult.serverName <> invalid
+                        return m.serverInfoResult.ServerName + " (Saved)"
                     else
                         return "Saved"
                     end if
@@ -185,10 +185,18 @@ function CreateSigninGroup(user = "")
     items.appendChild(saveCheckBox)
     checkbox.content = items
     checkbox.checkedState = [true]
-    ' Add option for Quick Connect
     quickConnect = group.findNode("quickConnect")
-    quickConnect.text = tr("Quick Connect")
-    quickConnect.observeField("buttonSelected", port)
+    if m.serverInfoResult = invalid
+        m.serverInfoResult = ServerInfo()
+    end if
+    ' Quick Connect only supported for server version 10.8+ right now...
+    if InStr(1, m.serverInfoResult.Version, "10.7") = 0
+        ' Add option for Quick Connect
+        quickConnect.text = tr("Quick Connect")
+        quickConnect.observeField("buttonSelected", port)
+    else
+        quickConnect.visible = false
+    end if
 
     items = [username_field, password_field]
     config.configItems = items

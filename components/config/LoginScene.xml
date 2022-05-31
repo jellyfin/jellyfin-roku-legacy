@@ -14,11 +14,9 @@
     <Button
       id="submit"
       text="Submit"
-      showFocusFootprint="false"
       translation="[150, 550]" />
     <Button
       id="quickConnect"
-      showFocusFootprint="false"
       translation="[550, 550]"
     />
     <label text=""
