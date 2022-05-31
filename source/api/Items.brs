@@ -46,7 +46,7 @@ function SearchMedia(query as string)
         "IncludeGenres": false,
         "IncludeStudios": false,
         "IncludeArtists": false,
-        "IncludeItemTypes": "TvChannel,Movie,BoxSet,Series,Episode,Video"
+        "IncludeItemTypes": "TvChannel,Movie,BoxSet,Series,Episode,Video",
         "EnableTotalRecordCount": false,
         "ImageTypeLimit": 1,
         "Recursive": true

@@ -4,7 +4,7 @@ sub init()
 end sub
 
 sub refresh()
-    m.top.findNode("homeRows").callFunc("updateHomeRows")
+    m.top.findNode("homeRows").callFunc("loadLibraries")
 end sub
 
 sub loadLibraries()

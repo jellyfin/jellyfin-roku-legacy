@@ -37,7 +37,7 @@ sub setData()
         imgParams.Append({ "maxHeight": 261 })
         imgParams.Append({ "maxWidth": 464 })
 
-        m.top.thumbnailURL = ImageURL(datum.id, "Primary", imgParams)
+        m.top.thumbnailURL = ImageURL(datum.SeriesId, "Primary", imgParams)
 
         ' Add Wide Poster  (Series Backdrop)
         if datum.ParentThumbImageTag <> invalid
@@ -45,7 +45,7 @@ sub setData()
         else if datum.ParentBackdropImageTags <> invalid
             m.top.widePosterUrl = ImageURL(datum.ParentBackdropItemId, "Backdrop", imgParams)
         else if datum.ImageTags.Primary <> invalid
-            m.top.widePosterUrl = ImageURL(datum.id, "Primary", imgParams)
+            m.top.posterUrl = ImageURL(datum.SeriesId, "Primary", imgParams)
         end if
 
     else if datum.type = "Series"
@@ -82,7 +82,7 @@ sub setData()
 
         if datum.ImageTags <> invalid and datum.imageTags.Thumb <> invalid
             m.top.thumbnailUrl = ImageURL(datum.Id, "Thumb", imgParams)
-        else if datum.BackdropImageTags[0] <> invalid
+        else if datum.BackdropImageTags <> invalid and datum.BackdropImageTags[0] <> invalid
             m.top.thumbnailUrl = ImageURL(datum.id, "Backdrop", imgParams)
         end if
 
@@ -106,7 +106,7 @@ sub setData()
         else if datum.BackdropImageTags[0] <> invalid
             m.top.thumbnailUrl = ImageURL(datum.id, "Backdrop", imgParams)
         end if
-    else if datum.type = "MusicAlbum"
+    else if datum.type = "MusicAlbum" or datum.type = "Audio" or datum.type = "Book"
         params = { "maxHeight": 261, "maxWidth": 261 }
         m.top.thumbnailURL = ImageURL(datum.id, "Primary", params)
         m.top.widePosterUrl = m.top.thumbnailURL

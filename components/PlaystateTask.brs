@@ -31,7 +31,7 @@ function PlaystateDefaults(params = {} as object)
         '"SubtitleStreamIndex": 0,
         "IsPaused": false,
         '"IsMuted": false,
-        "PositionTicks": 0,
+        "PositionTicks": 0
         '"PlaybackStartTimeTicks": 0,
         '"VolumeLevel": 100,
         '"Brightness": 100,

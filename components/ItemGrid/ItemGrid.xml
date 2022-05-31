@@ -3,13 +3,13 @@
   <children>
   
     <poster id="backdrop" 
-      loadDisplayMode="scaleToFill"
+      loadDisplayMode="scaleToFit"
       width="1920"
       height="1080" 
       opacity="0.25"
       />
     <poster id="backdropTransition" 
-      loadDisplayMode="scaleToFill"
+      loadDisplayMode="scaleToFit"
       width="1920"
       height="1080" 
       opacity="0.25"
