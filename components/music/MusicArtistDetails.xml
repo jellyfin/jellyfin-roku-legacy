@@ -4,7 +4,7 @@
     <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[-10]" >
       <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[15]" >
         <Poster id="artistImage" width="450" height="450" />
-        <Label id="overview" wrap="true" width="1250" maxLines="8" />
+        <Label id="overview" wrap="true" maxLines="8" width="1250" ellipsisText=" ...  (Press * to read more)" />
       </LayoutGroup>
       <MusicArtistAlbumRow id="albums" />
     </LayoutGroup>
