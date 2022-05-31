@@ -7,7 +7,7 @@ sub loadChannels()
     results = []
 
     params = {
-        UserId: get_setting("active_user"),
+        UserId: get_setting("active_user")
     }
 
     if m.top.filter = "Favorites"

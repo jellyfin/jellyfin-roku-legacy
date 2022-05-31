@@ -4,6 +4,7 @@
   <interface>
     <field id="itemsToLoad" type="string" value="libraries" />
     <field id="itemId" type="string" />
+    <field id="nodeNumber" type="integer" />
     <field id="metadata" type="assocarray" />
     <field id="peopleList" type="array" />
     <field id="content" type="array" />

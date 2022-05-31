@@ -13,12 +13,9 @@ sub loadItems()
         resp = APIRequest(url)
         data = getJson(resp)
         for each item in data.Items
-            ' Skip Books for now as we don't support it (issue #525)
-            if item.CollectionType <> "books"
-                tmp = CreateObject("roSGNode", "HomeData")
-                tmp.json = item
-                results.push(tmp)
-            end if
+            tmp = CreateObject("roSGNode", "HomeData")
+            tmp.json = item
+            results.push(tmp)
         end for
 
         ' Load Latest Additions to Libraries
@@ -30,17 +27,20 @@ sub loadItems()
         params["ParentId"] = m.top.itemId
         params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
         params["ImageTypeLimit"] = 1
-
+        params["fields"] = "PrimaryImageAspectRatio,BasicSyncInfo,Path"
+        params["MaxWidth"] = 416
+        params["MaxHeight"] = 416
         resp = APIRequest(url, params)
         data = getJson(resp)
 
         for each item in data
-            ' Skip Books for now as we don't support it (issue #525)
-            if item.Type <> "Book"
-                tmp = CreateObject("roSGNode", "HomeData")
-                tmp.json = item
-                results.push(tmp)
+            tmp = CreateObject("roSGNode", "HomeData")
+            item.ImageURL = ImageURL(item.Id, "Primary", params)
+            if item.type = "Episode"
+                item.ImageURL = ImageURL(item.SeriesId)
             end if
+            tmp.json = item
+            results.push(tmp)
         end for
 
         ' Load Next Up
@@ -48,6 +48,7 @@ sub loadItems()
 
         url = "Shows/NextUp"
         params = {}
+        params["Limit"] = 30
         params["recursive"] = true
         params["SortBy"] = "DatePlayed"
         params["SortOrder"] = "Descending"
@@ -58,38 +59,96 @@ sub loadItems()
         data = getJson(resp)
         for each item in data.Items
             tmp = CreateObject("roSGNode", "HomeData")
+            if item.type = "Episode"
+                item.ImageURL = ImageURL(item.SeriesId, "Backdrop")
+            else
+                item.ImageURL = ImageURL(item.Id, "Backdrop")
+            end if
+            item.stretch = true
             tmp.json = item
             results.push(tmp)
         end for
 
         ' Load Continue Watching
-    else if m.top.itemsToLoad = "continue"
+    else if m.top.itemsToLoad = "continueVideo"
 
         url = Substitute("Users/{0}/Items/Resume", get_setting("active_user"))
 
         params = {}
+        params["Limit"] = 30
         params["recursive"] = true
         params["SortBy"] = "DatePlayed"
         params["SortOrder"] = "Descending"
         params["Filters"] = "IsResumable"
+        params["MediaTypes"] = "Video"
+        params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
+        params["ImageTypeLimit"] = 1
 
         resp = APIRequest(url, params)
         data = getJson(resp)
         for each item in data.Items
-            ' Skip Books for now as we don't support it (issue #558)
-            if item.Type <> "Book"
-                tmp = CreateObject("roSGNode", "HomeData")
-                tmp.json = item
-                results.push(tmp)
+            tmp = CreateObject("roSGNode", "HomeData")
+            if item.type = "Episode"
+                item.ImageURL = ImageURL(item.SeriesId, "Backdrop")
+            else
+                item.ImageURL = ImageURL(item.Id, "Backdrop")
             end if
+            item.stretch = true
+            tmp.json = item
+            results.push(tmp)
+        end for
+
+    else if m.top.itemsToLoad = "continueAudio"
+
+        url = Substitute("Users/{0}/Items/Resume", get_setting("active_user"))
+
+        params = {}
+        params["Limit"] = 30
+        params["recursive"] = true
+        params["SortBy"] = "DatePlayed"
+        params["SortOrder"] = "Descending"
+        params["Filters"] = "IsResumable"
+        params["MediaTypes"] = "Audio"
+        params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
+        params["ImageTypeLimit"] = 1
+
+        resp = APIRequest(url, params)
+        data = getJson(resp)
+        for each item in data.Items
+            tmp = CreateObject("roSGNode", "HomeData")
+            item.ImageURL = ImageURL(item.Id, "Backdrop")
+            tmp.json = item
+            results.push(tmp)
+        end for
+
+    else if m.top.itemsToLoad = "continueBook"
+
+        url = Substitute("Users/{0}/Items/Resume", get_setting("active_user"))
+
+        params = {}
+        params["Limit"] = 30
+        params["recursive"] = true
+        params["SortBy"] = "DatePlayed"
+        params["SortOrder"] = "Descending"
+        params["Filters"] = "IsResumable"
+        params["MediaTypes"] = "Book"
+        params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
+
+        resp = APIRequest(url, params)
+        data = getJson(resp)
+        for each item in data.Items
+            tmp = CreateObject("roSGNode", "HomeData")
+            item.ImageURL = ImageURL(item.Id, "Backdrop")
+            tmp.json = item
+            results.push(tmp)
         end for
 
     else if m.top.itemsToLoad = "onNow"
         url = "LiveTv/Programs/Recommended"
         params = {}
+        params["Limit"] = 30
         params["userId"] = get_setting("active_user")
         params["isAiring"] = true
-        params["limit"] = 16 ' 16 to be consistent with "Latest In"
         params["imageTypeLimit"] = 1
         params["enableImageTypes"] = "Primary,Thumb,Backdrop"
         params["enableTotalRecordCount"] = false
