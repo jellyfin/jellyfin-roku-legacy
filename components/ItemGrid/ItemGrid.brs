@@ -77,7 +77,6 @@ sub loadInitialItems()
             m.view = "tvGuide"
             'Move mic to be visiable on TV Guide screen
             m.VoiceBox.translation = "[1845, 90]"
-            print "View Setting: " viewSetting
         else
             m.view = "livetv"
             'm.VoiceBox.visible = "false"
