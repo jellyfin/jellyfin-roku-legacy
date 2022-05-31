@@ -7,9 +7,9 @@
     "test": "tests"
   },
   "devDependencies": {
-    "@rokucommunity/bslint": "^0.4.0",
-    "brighterscript": "^0.39.4",
-    "rooibos-cli": "^1.0.1"
+    "@rokucommunity/bslint": "^0.7.1",
+    "brighterscript": "^0.51.2",
+    "rooibos-cli": "^1.4.0"
   },
   "scripts": {
     "validate": "npx bsc --copy-to-staging=false --create-package=false",
