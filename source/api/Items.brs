@@ -179,7 +179,7 @@ function MusicSongList(id as string)
     resp = APIRequest(url, {
         "UserId": get_setting("active_user"),
         "parentId": id,
-        "includeitemtypes": "Audio"
+        "includeitemtypes": "Audio",
         "sortBy": "SortName"
     })
 
@@ -200,7 +200,7 @@ function AudioItem(id as string)
     url = Substitute("Users/{0}/Items/{1}", get_setting("active_user"), id)
     resp = APIRequest(url, {
         "UserId": get_setting("active_user"),
-        "includeitemtypes": "Audio"
+        "includeitemtypes": "Audio",
         "sortBy": "SortName"
     })
 
@@ -216,7 +216,7 @@ function AudioStream(id as string)
 
     params.append({
         "Static": "true",
-        "Container": songData.mediaSources[0].container,
+        "Container": songData.mediaSources[0].container
     })
 
     params.MediaSourceId = songData.mediaSources[0].id
