@@ -91,33 +91,33 @@ sub loadInitialItems()
         m.sortAscending = false
     end if
 
-    'if view option is selected run LoadNetworksTask instead of LoadItemsTask2
+    'if view option is selected run loadNetworksTask instead of LoadItemsTask2
     if m.top.parentItem.type <> "Folder" and (m.view = "Networks" or m.options.view = "Networks")
-        m.LoadNetworksTask.nameStartsWith = m.top.AlphaSelected
-        m.LoadNetworksTask.itemId = m.top.parentItem.Id
-        m.LoadNetworksTask.sortField = m.sortField
-        m.LoadNetworksTask.sortAscending = m.sortAscending
-        m.LoadNetworksTask.filter = m.filter
-        m.LoadNetworksTask.startIndex = 0
+        m.loadNetworksTask.nameStartsWith = m.top.AlphaSelected
+        m.loadNetworksTask.itemId = m.top.parentItem.Id
+        m.loadNetworksTask.sortField = m.sortField
+        m.loadNetworksTask.sortAscending = m.sortAscending
+        m.loadNetworksTask.filter = m.filter
+        m.loadNetworksTask.startIndex = 0
         if m.top.parentItem.collectionType = "movies"
-            m.LoadNetworksTask.itemType = "Movie"
+            m.loadNetworksTask.itemType = "Movie"
         else if m.top.parentItem.collectionType = "tvshows"
-            m.LoadNetworksTask.itemType = "Series"
+            m.loadNetworksTask.itemType = "Series"
         end if
         updateTitle()
 
     else if m.top.parentItem.type <> "Folder" and (m.view = "Genre" or m.options.view = "Genre")
-        m.LoadGenreTask.nameStartsWith = m.top.AlphaSelected
-        m.LoadGenreTask.itemId = m.top.parentItem.Id
-        m.LoadGenreTask.sortField = m.sortField
-        m.LoadGenreTask.sortAscending = m.sortAscending
-        m.LoadGenreTask.filter = m.filter
-        m.LoadGenreTask.startIndex = 0
+        m.loadGenreTask.nameStartsWith = m.top.AlphaSelected
+        m.loadGenreTask.itemId = m.top.parentItem.Id
+        m.loadGenreTask.sortField = m.sortField
+        m.loadGenreTask.sortAscending = m.sortAscending
+        m.loadGenreTask.filter = m.filter
+        m.loadGenreTask.startIndex = 0
         'm.loadItemsTask.StudioIds = m.top.parentItem.Id
         if m.top.parentItem.collectionType = "movies"
-            m.LoadNetworksTask.itemType = "Movie"
+            m.loadNetworksTask.itemType = "Movie"
         else if m.top.parentItem.collectionType = "tvshows"
-            m.LoadNetworksTask.itemType = "Series"
+            m.loadNetworksTask.itemType = "Series"
         end if
         updateTitle()
 
@@ -188,12 +188,12 @@ sub loadInitialItems()
 
     if m.top.parentItem.type <> "Folder" and (m.options.view = "Networks" or m.view = "Networks")
         m.top.imageDisplayMode = "scaleToFit"
-        m.LoadNetworksTask.observeField("content", "ItemDataLoaded")
-        m.LoadNetworksTask.control = "Run"
+        m.loadNetworksTask.observeField("content", "ItemDataLoaded")
+        m.loadNetworksTask.control = "Run"
         m.spinner.visible = true
     else if m.top.parentItem.type <> "Folder" and (m.options.view = "Genre" or m.view = "Genre")
-        m.LoadGenreTask.observeField("content", "ItemDataLoaded")
-        m.LoadGenreTask.control = "Run"
+        m.loadGenreTask.observeField("content", "ItemDataLoaded")
+        m.loadGenreTask.control = "Run"
         m.spinner.visible = true
     else
         m.loadItemsTask.observeField("content", "ItemDataLoaded")
@@ -343,11 +343,11 @@ sub ItemDataLoaded(msg)
 
     itemData = msg.GetData()
     if m.options.view = "Networks"
-        m.LoadNetworksTask.unobserveField("content")
-        m.LoadNetworksTask.content = []
+        m.loadNetworksTask.unobserveField("content")
+        m.loadNetworksTask.content = []
     else if m.options.view = "Genre"
-        m.LoadGenreTask.unobserveField("content")
-        m.LoadGenreTask.content = []
+        m.loadGenreTask.unobserveField("content")
+        m.loadGenreTask.content = []
     else
         m.loadItemsTask.unobserveField("content")
         m.loadItemsTask.content = []
@@ -413,11 +413,11 @@ sub onItemFocused()
     ' Load more data if focus is within last 3 rows, and there are more items to load
     if focusedRow > 1
         if m.options.view = "Networks"
-            if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.LoadNetworksTask.totalRecordCount
+            if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.loadNetworksTask.totalRecordCount
                 loadMoreData()
             end if
         else if m.options.view = "Genre"
-            if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.LoadGenreTask.totalRecordCount
+            if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.loadGenreTask.totalRecordCount
                 loadMoreData()
             end if
         else
@@ -463,13 +463,13 @@ sub loadMoreData()
     if m.Loading = true then return
     m.Loading = true
     if m.options.view = "Networks" or m.view = "Networks" or m.top.parentItem.json.type = "Studio"
-        m.LoadNetworksTask.startIndex = m.loadedItems
-        m.LoadNetworksTask.observeField("content", "ItemDataLoaded")
-        m.LoadNetworksTask.control = "RUN"
+        m.loadNetworksTask.startIndex = m.loadedItems
+        m.loadNetworksTask.observeField("content", "ItemDataLoaded")
+        m.loadNetworksTask.control = "RUN"
     else if m.top.parentItem.json.type = "Folder" and (m.options.view = "Genre" or m.view = "Genre")
-        m.LoadGenreTask.startIndex = m.loadedItems
-        m.LoadGenreTask.observeField("content", "ItemDataLoaded")
-        m.LoadGenreTask.control = "RUN"
+        m.loadGenreTask.startIndex = m.loadedItems
+        m.loadGenreTask.observeField("content", "ItemDataLoaded")
+        m.loadGenreTask.control = "RUN"
     else
         m.loadItemsTask.startIndex = m.loadedItems
         m.loadItemsTask.observeField("content", "ItemDataLoaded")

@@ -1,8 +1,8 @@
 sub init()
-    m.top.functionName = "LoadNetworks"
+    m.top.functionName = "loadNetworks"
 end sub
 
-sub LoadNetworks()
+sub loadNetworks()
     url = "Studios"
 
     results = []

@@ -1,8 +1,8 @@
 sub init()
-    m.top.functionName = "LoadGenre"
+    m.top.functionName = "loadGenre"
 end sub
 
-sub LoadGenre()
+sub loadGenre()
     url = "Genres"
 
     results = []
