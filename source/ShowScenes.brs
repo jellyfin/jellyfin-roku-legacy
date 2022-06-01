@@ -190,9 +190,7 @@ function CreateSigninGroup(user = "")
         m.serverInfoResult = ServerInfo()
     end if
     ' Quick Connect only supported for server version 10.8+ right now...
-    regEx = CreateObject("roRegex", "\.", "") ' split on period
-    ver = regEx.split(m.serverInfoResult.Version)
-    if ver.Count() >= 2 and ver[0].toInt() >= 10 and ver[1].toInt() >= 8
+    if versionChecker(m.serverInfoResult.Version, "10.8.0")
         ' Add option for Quick Connect
         quickConnect.text = tr("Quick Connect")
         quickConnect.observeField("buttonSelected", port)
