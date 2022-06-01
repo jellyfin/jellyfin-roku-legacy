@@ -272,7 +272,7 @@ sub Main (args as dynamic) as void
                 end if
                 group = CreateSearchPage()
                 sceneManager.callFunc("pushScene", group)
-	        searchKey = group.findNode("SearchBox").findNode("search_Key")
+                searchKey = group.findNode("SearchBox").findNode("search_Key")
                 searchKey.setFocus(true)
                 searchKey.active = true
             else if button.id = "change_server"
