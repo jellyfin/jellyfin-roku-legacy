@@ -6,7 +6,7 @@ sub setFields()
     m.top.Description = json.overview
     m.top.favorite = json.UserData.isFavorite
     m.top.watched = json.UserData.played
-    m.top.Type = "Episode"
+    m.top.Type = json.Type
 
     setPoster()
 end sub
