@@ -84,6 +84,4 @@ sub loadGenre()
         end for
     end if
     m.top.content = results
-
-
 end sub

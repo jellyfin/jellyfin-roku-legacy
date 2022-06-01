@@ -77,6 +77,8 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "PhotoData")
             else if item.type = "PhotoAlbum"
                 tmp = CreateObject("roSGNode", "FolderData")
+            else if item.type = "Episode"
+                tmp = CreateObject("roSGNode", "TVEpisode")
             else
                 print "[LoadItems] Unknown Type: " item.Type
             end if
