@@ -3267,7 +3267,7 @@ elemeket</translation>
         <translation>Sajátosságok</translation>
         <message>
             <source>Press &apos;OK&apos; to Close</source>
-            <translation>Press &apos;OK&apos; to Close</translation>
+            <translation>Nyomd meg az „OK” gombot a bezáráshoz</translation>
         </message>
     </message>
     <message>
@@ -3390,6 +3390,46 @@ elemeket</translation>
     <message>
         <source>Save Credentials?</source>
         <translation>Hitelesítő adatok mentése?</translation>
+    </message>
+    <message>
+        <source>%1 of %2</source>
+        <translation>%1 a 2% -ból</translation>
+        <extracomment>Item position and count.  %1 = current item.  %2 = total number of items</extracomment>
+    </message>
+    <message>
+        <source>Go to episode</source>
+        <translation>Ugrás az epizódra</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Episode Detail Page</extracomment>
+    </message>
+    <message>
+        <source>Go to season</source>
+        <translation>Ugrás az évadra</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Season Page</extracomment>
+    </message>
+    <message>
+        <source>Go to series</source>
+        <translation>Ugrás a sorozatra</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Series Detail Page</extracomment>
+    </message>
+    <message>
+        <source>Set Watched</source>
+        <translation>Megnézve</translation>
+        <extracomment>Button Text - When pressed, marks item as Warched</extracomment>
+    </message>
+    <message>
+        <source>Set Favorite</source>
+        <translation>Kedvenc hozzáadása</translation>
+        <extracomment>Button Text - When pressed, sets item as Favorite</extracomment>
+    </message>
+    <message>
+        <source>Show item count in the library, and index of selected item.</source>
+        <translation>Elemszám megjelenítése a könyvtárban.</translation>
+        <extracomment>Description for option in Setting Screen</extracomment>
+    </message>
+    <message>
+        <source>Item Count</source>
+        <translation>Elemek száma</translation>
+        <extracomment>UI -&gt; Media Grid -&gt; Item Count in user setting screen.</extracomment>
     </message>
 </context>
 </TS>
