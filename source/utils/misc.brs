@@ -170,7 +170,7 @@ end function
 
 '
 ' Returns whether or not a version number (e.g. 10.7.7) is greater or equal
-' to some minimum version alloed (e.g. 10.8.0)
+' to some minimum version allowed (e.g. 10.8.0)
 function versionChecker(versionToCheck as string, minVersionAccepted as string)
     leftHand = CreateObject("roLongInteger")
     rightHand = CreateObject("roLongInteger")
