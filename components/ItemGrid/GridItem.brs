@@ -64,6 +64,10 @@ sub itemContentChanged()
         m.itemPoster.uri = itemData.PosterUrl
         m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
+    else if itemData.type = "Episode"
+        m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
+        m.itemText.text = itemData.json.SeriesName + " - " + itemData.Title
     else
         print "Unhandled Grid Item Type: " + itemData.type
     end if

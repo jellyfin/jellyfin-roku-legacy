@@ -37,7 +37,7 @@ sub loadItems()
             tmp = CreateObject("roSGNode", "HomeData")
             item.ImageURL = ImageURL(item.Id, "Primary", params)
             if item.type = "Episode"
-                item.ImageURL = ImageURL(item.SeriesId)
+                item.ImageURL = ImageURL(item.Id)
             end if
             tmp.json = item
             results.push(tmp)
