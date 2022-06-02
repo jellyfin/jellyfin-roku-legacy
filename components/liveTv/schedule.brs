@@ -66,10 +66,10 @@ sub onScheduleLoaded()
 
         channel = m.scheduleGrid.content.GetChild(m.channelIndex[item.ChannelId])
         
-        if channel.PosterUrl <> "" then 
+        if channel.PosterUrl <> "" 
             item.channelLogoUri = channel.PosterUrl
         end if
-        if channel.Title <> "" then 
+        if channel.Title <> "" 
             item.channelName = channel.Title
         end if
 
@@ -88,14 +88,14 @@ sub onProgramFocused()
     m.top.focusedChannel = channel
 
     ' Exit if Channels not yet loaded
-    if channel.getChildCount() = 0 then
+    if channel.getChildCount() = 0
         m.detailsPane.programDetails = invalid
         return
     end if
 
     prog = channel.GetChild(m.scheduleGrid.programFocusedDetails.focusIndex)
 
-    if prog <> invalid and prog.fullyLoaded = false then
+    if prog <> invalid and prog.fullyLoaded = false
         m.LoadProgramDetailsTask.programId = prog.Id
         m.LoadProgramDetailsTask.channelIndex = m.scheduleGrid.programFocusedDetails.focusChannelIndex
         m.LoadProgramDetailsTask.programIndex = m.scheduleGrid.programFocusedDetails.focusIndex
@@ -111,7 +111,7 @@ sub onProgramDetailsLoaded()
     channel = m.scheduleGrid.content.GetChild(m.LoadProgramDetailsTask.programDetails.channelIndex)
 
     ' If TV Show does not have its own image, use the channel logo
-    if m.LoadProgramDetailsTask.programDetails.PosterUrl = invalid or m.LoadProgramDetailsTask.programDetails.PosterUrl = "" then
+    if m.LoadProgramDetailsTask.programDetails.PosterUrl = invalid or m.LoadProgramDetailsTask.programDetails.PosterUrl = ""
         m.LoadProgramDetailsTask.programDetails.PosterUrl = channel.PosterUrl
     end if
 
@@ -122,7 +122,7 @@ end sub
 
 sub onProgramSelected()
     ' If there is no program data - view the channel
-    if m.detailsPane.programDetails = invalid then
+    if m.detailsPane.programDetails = invalid
         m.top.watchChannel = m.scheduleGrid.content.GetChild(m.scheduleGrid.programFocusedDetails.focusChannelIndex)
         return
     end if
@@ -138,7 +138,7 @@ sub focusProgramDetails(setFocused)
     if h < 400 then h = 400
     h = h + 160 + 80
 
-    if setFocused = true then
+    if setFocused = true
         m.gridMoveAnimationPosition.keyValue = [ [0,600], [0, h] ]
         m.detailsPane.setFocus(true)
         m.detailsPane.hasFocus = true
@@ -168,10 +168,10 @@ end sub
 sub onGridScrolled()
 
     ' If we're within 12 hours of end of grid, load next 24hrs of data
-    if m.scheduleGrid.leftEdgeTargetTime + (12 * 60 * 60) > m.gridEndDate.AsSeconds() then
+    if m.scheduleGrid.leftEdgeTargetTime + (12 * 60 * 60) > m.gridEndDate.AsSeconds()
 
         ' Ensure the task is not already (still) running, 
-        if  m.LoadScheduleTask.state <> "run" then 
+        if  m.LoadScheduleTask.state <> "run" 
             m.LoadScheduleTask.startTime = m.gridEndDate.ToISOString()
             m.gridEndDate.FromSeconds(m.gridEndDate.AsSeconds() + (24 * 60 * 60))
             m.LoadScheduleTask.endTime = m.gridEndDate.ToISOString()
@@ -183,7 +183,7 @@ end sub
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
 
-    if key = "back" or key = "down" and m.detailsPane.isInFocusChain() then
+    if key = "back" and m.detailsPane.isInFocusChain()
         focusProgramDetails(false)
         return true
     end if
