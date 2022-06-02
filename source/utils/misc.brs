@@ -167,3 +167,31 @@ function standardize_jellyfin_url(url as string)
     end if
     return url
 end function
+
+'
+' Returns whether or not a version number (e.g. 10.7.7) is greater or equal
+' to some minimum version allowed (e.g. 10.8.0)
+function versionChecker(versionToCheck as string, minVersionAccepted as string)
+    leftHand = CreateObject("roLongInteger")
+    rightHand = CreateObject("roLongInteger")
+
+    regEx = CreateObject("roRegex", "\.", "")
+    version = regEx.Split(versionToCheck)
+    if version.Count() < 3
+        for i = version.Count() to 3 step 1
+            version.AddTail("0")
+        end for
+    end if
+
+    minVersion = regEx.Split(minVersionAccepted)
+    if minVersion.Count() < 3
+        for i = minVersion.Count() to 3 step 1
+            minVersion.AddTail("0")
+        end for
+    end if
+
+    leftHand = (version[0].ToInt() * 10000) + (version[1].ToInt() * 100) + (version[2].ToInt() * 10)
+    rightHand = (minVersion[0].ToInt() * 10000) + (minVersion[1].ToInt() * 100) + (minVersion[2].ToInt() * 10)
+
+    return leftHand >= rightHand
+end function

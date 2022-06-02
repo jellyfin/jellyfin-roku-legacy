@@ -50,33 +50,33 @@ function CreateServerGroup()
                 dialog.title = tr("Connecting to Server")
                 m.scene.dialog = dialog
 
-                serverInfoResult = ServerInfo()
+                m.serverInfoResult = ServerInfo()
 
                 dialog.close = true
 
-                if serverInfoResult = invalid
+                if m.serverInfoResult = invalid
                     ' Maybe don't unset setting, but offer as a prompt
                     ' Server not found, is it online? New values / Retry
                     print "Server not found, is it online? New values / Retry"
                     screen.errorMessage = tr("Server not found, is it online?")
                     SignOut(false)
-                else if serverInfoResult.Error <> invalid and serverInfoResult.Error
+                else if m.serverInfoResult.Error <> invalid and m.serverInfoResult.Error
                     ' If server redirected received, update the URL
-                    if serverInfoResult.UpdatedUrl <> invalid
-                        serverUrl = serverInfoResult.UpdatedUrl
+                    if m.serverInfoResult.UpdatedUrl <> invalid
+                        serverUrl = m.serverInfoResult.UpdatedUrl
                         set_setting("server", serverUrl)
                     end if
                     ' Display Error Message to user
                     message = tr("Error: ")
-                    if serverInfoResult.ErrorCode <> invalid
-                        message = message + "[" + serverInfoResult.ErrorCode.toStr() + "] "
+                    if m.serverInfoResult.ErrorCode <> invalid
+                        message = message + "[" + m.serverInfoResult.ErrorCode.toStr() + "] "
                     end if
-                    screen.errorMessage = message + tr(serverInfoResult.ErrorMessage)
+                    screen.errorMessage = message + tr(m.serverInfoResult.ErrorMessage)
                     SignOut(false)
                 else
                     screen.visible = false
-                    if serverInfoResult.serverName <> invalid
-                        return serverInfoResult.ServerName + " (Saved)"
+                    if m.serverInfoResult.serverName <> invalid
+                        return m.serverInfoResult.ServerName + " (Saved)"
                     else
                         return "Saved"
                     end if
@@ -135,7 +135,7 @@ end function
 
 function CreateSigninGroup(user = "")
     ' Get and Save Jellyfin user login credentials
-    group = CreateObject("roSGNode", "ConfigScene")
+    group = CreateObject("roSGNode", "LoginScene")
     m.global.sceneManager.callFunc("pushScene", group)
     port = CreateObject("roMessagePort")
 
@@ -185,6 +185,18 @@ function CreateSigninGroup(user = "")
     items.appendChild(saveCheckBox)
     checkbox.content = items
     checkbox.checkedState = [true]
+    quickConnect = group.findNode("quickConnect")
+    if m.serverInfoResult = invalid
+        m.serverInfoResult = ServerInfo()
+    end if
+    ' Quick Connect only supported for server version 10.8+ right now...
+    if versionChecker(m.serverInfoResult.Version, "10.8.0")
+        ' Add option for Quick Connect
+        quickConnect.text = tr("Quick Connect")
+        quickConnect.observeField("buttonSelected", port)
+    else
+        quickConnect.visible = false
+    end if
 
     items = [username_field, password_field]
     config.configItems = items
@@ -224,6 +236,41 @@ function CreateSigninGroup(user = "")
                 end if
                 print "Login attempt failed..."
                 group.findNode("alert").text = tr("Login attempt failed.")
+            else if node = "quickConnect"
+                json = initQuickConnect()
+                if json = invalid
+                    group.findNode("alert").text = tr("Quick Connect not available.")
+                else
+                    ' Server user is talking to is at least 10.8 and has quick connect enabled...
+                    m.quickConnectDialog = createObject("roSGNode", "QuickConnectDialog")
+                    m.quickConnectDialog.quickConnectJson = json
+                    m.quickConnectDialog.title = tr("Quick Connect")
+                    m.quickConnectDialog.message = [tr("Here is your Quick Connect code: ") + json.Code, tr("(Dialog will close automatically)")]
+                    m.quickConnectDialog.buttons = [tr("Cancel")]
+                    m.quickConnectDialog.observeField("authenticated", port)
+                    m.scene.dialog = m.quickConnectDialog
+                end if
+            else if msg.getField() = "authenticated"
+                authenticated = msg.getData()
+                if authenticated = true
+                    ' Quick connect authentication was successful...
+                    return "true"
+                else
+                    dialog = createObject("roSGNode", "Dialog")
+                    dialog.id = "QuickConnectError"
+                    dialog.title = tr("Quick Connect")
+                    dialog.buttons = [tr("OK")]
+                    dialog.message = tr("There was an error authenticating via Quick Connect.")
+                    m.scene.dialog = dialog
+                    m.scene.dialog.observeField("buttonSelected", port)
+                end if
+            else
+                ' If there are no other button matches, check if this is a simple "OK" Dialog & Close if so
+                dialog = msg.getRoSGNode()
+                if dialog.id = "QuickConnectError"
+                    dialog.unobserveField("buttonSelected")
+                    dialog.close = true
+                end if
             end if
         end if
     end while
