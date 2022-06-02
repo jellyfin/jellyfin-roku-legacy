@@ -6,9 +6,40 @@ sub init()
     setupButtons()
     setupInfoNodes()
     setupDataTasks()
+    setupScreenSaver()
 
     m.currentSongIndex = 0
     m.buttonsNeedToBeLoaded = true
+
+    m.previousAudioPosition = 0
+    m.screenSaverTimeout = 300
+
+    m.LoadScreenSaverTimeoutTask.observeField("content", "onScreensaverTimeoutLoaded")
+    m.LoadScreenSaverTimeoutTask.control = "RUN"
+end sub
+
+sub onScreensaverTimeoutLoaded()
+    data = m.LoadScreenSaverTimeoutTask.content
+    m.LoadScreenSaverTimeoutTask.unobserveField("content")
+    if isValid(data)
+        m.screenSaverTimeout = data
+    end if
+end sub
+
+sub setupScreenSaver()
+    m.screenSaverBackground = m.top.FindNode("screenSaverBackground")
+
+    ' Album Art Screensaver
+    m.screenSaverAlbumCover = m.top.FindNode("screenSaverAlbumCover")
+    m.screenSaverAlbumAnimation = m.top.findNode("screenSaverAlbumAnimation")
+
+    ' Jellyfin Screensaver
+    m.PosterOne = m.top.findNode("PosterOne")
+    m.PosterOne.uri = "pkg:/images/logo.png"
+    m.BounceAnimation = m.top.findNode("BounceAnimation")
+
+    m.screenSaverCounter = 1
+    m.keepAwakeCounter = 1
 end sub
 
 sub setupAnimationTasks()
@@ -18,6 +49,8 @@ sub setupAnimationTasks()
 
     m.bufferPositionAnimation = m.top.FindNode("bufferPositionAnimation")
     m.bufferPositionAnimationWidth = m.top.FindNode("bufferPositionAnimationWidth")
+
+    m.screenSaverStartAnimation = m.top.FindNode("screenSaverStartAnimation")
 end sub
 
 ' Creates tasks to gather data needed to renger NowPlaying Scene and play song
@@ -33,6 +66,9 @@ sub setupDataTasks()
     ' Load audio stream
     m.LoadAudioStreamTask = CreateObject("roSGNode", "LoadItemsTask")
     m.LoadAudioStreamTask.itemsToLoad = "audioStream"
+
+    m.KeepAwakeTask = CreateObject("roSGNode", "KeepAwakeTask")
+    m.LoadScreenSaverTimeoutTask = CreateObject("roSGNode", "LoadScreenSaverTimeoutTask")
 end sub
 
 ' Creates audio node used to play song(s)
@@ -88,6 +124,11 @@ sub bufferPositionChanged()
 end sub
 
 sub audioPositionChanged()
+    if m.top.audio.position = 0
+        m.playPosition.width = 0
+        m.previousAudioPosition = 0
+    end if
+
     if not isValid(m.top.audio.position)
         playPositionBarWidth = 0
     else
@@ -103,6 +144,56 @@ sub audioPositionChanged()
     ' Use animation to make the display smooth
     m.playPositionAnimationWidth.keyValue = [m.playPosition.width, playPositionBarWidth]
     m.playPositionAnimation.control = "start"
+
+    m.screenSaverCounter = m.screenSaverCounter + (m.top.audio.position - m.previousAudioPosition)
+    print "[m.screenSaverCounter]", m.screenSaverCounter
+    m.keepAwakeCounter = m.keepAwakeCounter + 1
+
+    ' Only fall into screensaver logic if the user has screensaver enabled in Roku settings
+    if m.screenSaverTimeout > 0
+        if m.screenSaverCounter >= m.screenSaverTimeout
+            if not screenSaverActive()
+                startScreenSaver()
+            end if
+        end if
+    end if
+
+    ' Send keep awake command every 45 ticks to prevent default screensaver
+    if m.keepAwakeCounter mod 45 = 0
+        m.KeepAwakeTask.control = "RUN"
+        m.keepAwakeCounter = 1
+    end if
+
+    m.previousAudioPosition = m.top.audio.position
+end sub
+
+function screenSaverActive() as boolean
+    return m.screenSaverBackground.visible
+end function
+
+sub startScreenSaver()
+    m.screenSaverBackground.visible = true
+    m.top.overhangVisible = false
+
+    if m.albumCover.uri = ""
+        ' Jellyfin Logo Screensaver
+        m.PosterOne.visible = true
+        m.BounceAnimation.control = "start"
+    else
+        ' Album Art Screensaver
+        m.screenSaverAlbumCover.visible = true
+        m.screenSaverAlbumAnimation.control = "start"
+    end if
+end sub
+
+sub endScreenSaver()
+    m.screenSaverBackground.visible = false
+    m.screenSaverAlbumCover.visible = false
+    m.PosterOne.visible = false
+    m.top.overhangVisible = true
+    m.screenSaverCounter = 1
+    m.screenSaverAlbumAnimation.control = "pause"
+    m.BounceAnimation.control = "pause"
 end sub
 
 sub audioStateChanged()
@@ -145,13 +236,15 @@ function nextClicked() as boolean
 end function
 
 sub LoadNextSong()
+    ' Reset playPosition bar without animation
+    m.playPosition.width = 0
     m.currentSongIndex++
     pageContentChanged()
 end sub
 
 ' Update values on screen when page content changes
 sub pageContentChanged()
-    ' Reset buffer bar
+    ' Reset buffer bar without animation
     m.bufferPosition.width = 0
 
     m.LoadMetaDataTask.itemId = m.top.pageContent[m.currentSongIndex]
@@ -211,6 +304,7 @@ sub setPosterImage(posterURL)
     if isValid(posterURL)
         if m.albumCover.uri <> posterURL
             m.albumCover.uri = posterURL
+            m.screenSaverAlbumCover.uri = posterURL
         end if
     end if
 end sub
@@ -258,6 +352,18 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     ' Key bindings for remote control buttons
     if press
+        ' Don't let keep awake key press turn off screensaver
+        if key <> "Lit_X"
+            ' If user presses key to turn off screensaver, don't do anything else with it
+            if screenSaverActive()
+                endScreenSaver()
+                return true
+            end if
+
+            ' Any key press resets the screensaver counter
+            m.screenSaverCounter = 0
+        end if
+
         if key = "play"
             return playAction()
         else if key = "back"
