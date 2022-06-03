@@ -205,8 +205,14 @@ end sub
 function playAction() as boolean
     if m.top.audio.state = "playing"
         m.top.audio.control = "pause"
+        ' Allow screen to go to real screensaver
+        WriteAsciiFile("tmp:/scene.temp", "nowplaying-paused")
+        MoveFile("tmp:/scene.temp", "tmp:/scene")
     else if m.top.audio.state = "paused"
         m.top.audio.control = "resume"
+        ' Write screen tracker for screensaver
+        WriteAsciiFile("tmp:/scene.temp", "nowplaying")
+        MoveFile("tmp:/scene.temp", "tmp:/scene")
     end if
 
     return true
