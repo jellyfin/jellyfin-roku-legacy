@@ -10,6 +10,10 @@ sub Main (args as dynamic) as void
     ' Set global constants
     setConstants()
 
+    ' Write screen tracker for screensaver
+    WriteAsciiFile("tmp:/scene.temp", "")
+    MoveFile("tmp:/scene.temp", "tmp:/scene")
+
     ' Temporary code to migrate MPEG2 setting from device setting to user setting
     ' Added for 1.4.13 release and should probably be removed for 1.4.15
     if get_setting("playback.mpeg2") <> invalid and registry_read("playback.mpeg2", get_setting("active_user")) = invalid
@@ -526,6 +530,10 @@ end sub
 
 sub RunScreenSaver()
     print "Starting screensaver..."
+
+    scene = ReadAsciiFile("tmp:/scene")
+    if scene = "nowplaying" then return
+
     screen = createObject("roSGScreen")
     m.port = createObject("roMessagePort")
     screen.setMessagePort(m.port)

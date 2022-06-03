@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="NowPlaying" extends="JFGroup">
+<component name="NowPlaying" extends="JFScreen">
   <children>
     <Poster id="backdrop" opacity=".5" loadDisplayMode="scaleToZoom" width="1920" height="1200" blendColor="#3f3f3f" />
     <LayoutGroup id="toplevel" layoutDirection="vert" horizAlignment="center" translation="[960,175]" itemSpacings="[40]">
@@ -30,8 +30,16 @@
       </Animation>
     </LayoutGroup>
     <Rectangle id="screenSaverBackground" width="1920" height="1080" color="#000000" visible="false" />
-    <Poster id="screenSaverAlbumCover" width="500" height="500" translation="[960,575]" visible="false" />
-    <Poster id="PosterOne" width="389" height="104" translation="[960,540]" visible="false" />	
+    <Poster id="screenSaverAlbumCover" width="500" height="500" translation="[960,575]" opacity="0" />
+    <Poster id="PosterOne" width="389" height="104" translation="[960,540]" opacity="0" />
+
+    <Animation id="screenSaverAlbumCoverFadeIn" duration="4" repeat="false" easeFunction="linear">
+      <FloatFieldInterpolator key="[0.0, 0.75, 1.0]" keyValue="[0.0, 0.0, 1.0]" fieldToInterp="screenSaverAlbumCover.opacity" />
+    </Animation>
+
+    <Animation id="PosterOneFadeIn" duration="4" repeat="false" easeFunction="linear">
+      <FloatFieldInterpolator key="[0.0, 0.75, 1.0]" keyValue="[0.0, 0.0, 1.0]" fieldToInterp="PosterOne.opacity" />
+    </Animation>
 
     <!-- AlbumArt ScreenSaver -->
     <SequentialAnimation id="screenSaverAlbumAnimation" repeat="true">

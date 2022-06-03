@@ -16,6 +16,10 @@ sub init()
 
     m.LoadScreenSaverTimeoutTask.observeField("content", "onScreensaverTimeoutLoaded")
     m.LoadScreenSaverTimeoutTask.control = "RUN"
+
+    ' Write screen tracker for screensaver
+    WriteAsciiFile("tmp:/scene.temp", "nowplaying")
+    MoveFile("tmp:/scene.temp", "tmp:/scene")
 end sub
 
 sub onScreensaverTimeoutLoaded()
@@ -32,14 +36,15 @@ sub setupScreenSaver()
     ' Album Art Screensaver
     m.screenSaverAlbumCover = m.top.FindNode("screenSaverAlbumCover")
     m.screenSaverAlbumAnimation = m.top.findNode("screenSaverAlbumAnimation")
+    m.screenSaverAlbumCoverFadeIn = m.top.findNode("screenSaverAlbumCoverFadeIn")
 
     ' Jellyfin Screensaver
     m.PosterOne = m.top.findNode("PosterOne")
     m.PosterOne.uri = "pkg:/images/logo.png"
     m.BounceAnimation = m.top.findNode("BounceAnimation")
+    m.PosterOneFadeIn = m.top.findNode("PosterOneFadeIn")
 
     m.screenSaverCounter = 1
-    m.keepAwakeCounter = 1
 end sub
 
 sub setupAnimationTasks()
@@ -67,7 +72,6 @@ sub setupDataTasks()
     m.LoadAudioStreamTask = CreateObject("roSGNode", "LoadItemsTask")
     m.LoadAudioStreamTask.itemsToLoad = "audioStream"
 
-    m.KeepAwakeTask = CreateObject("roSGNode", "KeepAwakeTask")
     m.LoadScreenSaverTimeoutTask = CreateObject("roSGNode", "LoadScreenSaverTimeoutTask")
 end sub
 
@@ -146,22 +150,14 @@ sub audioPositionChanged()
     m.playPositionAnimation.control = "start"
 
     m.screenSaverCounter = m.screenSaverCounter + (m.top.audio.position - m.previousAudioPosition)
-    print "[m.screenSaverCounter]", m.screenSaverCounter
-    m.keepAwakeCounter = m.keepAwakeCounter + 1
 
     ' Only fall into screensaver logic if the user has screensaver enabled in Roku settings
     if m.screenSaverTimeout > 0
-        if m.screenSaverCounter >= m.screenSaverTimeout
+        if m.screenSaverCounter >= m.screenSaverTimeout - 2
             if not screenSaverActive()
                 startScreenSaver()
             end if
         end if
-    end if
-
-    ' Send keep awake command every 45 ticks to prevent default screensaver
-    if m.keepAwakeCounter mod 45 = 0
-        m.KeepAwakeTask.control = "RUN"
-        m.keepAwakeCounter = 1
     end if
 
     m.previousAudioPosition = m.top.audio.position
@@ -178,18 +174,19 @@ sub startScreenSaver()
     if m.albumCover.uri = ""
         ' Jellyfin Logo Screensaver
         m.PosterOne.visible = true
+        m.PosterOneFadeIn.control = "start"
         m.BounceAnimation.control = "start"
     else
         ' Album Art Screensaver
-        m.screenSaverAlbumCover.visible = true
+        m.screenSaverAlbumCoverFadeIn.control = "start"
         m.screenSaverAlbumAnimation.control = "start"
     end if
 end sub
 
 sub endScreenSaver()
     m.screenSaverBackground.visible = false
-    m.screenSaverAlbumCover.visible = false
-    m.PosterOne.visible = false
+    m.screenSaverAlbumCover.opacity = "0"
+    m.PosterOne.opacity = "0"
     m.top.overhangVisible = true
     m.screenSaverCounter = 1
     m.screenSaverAlbumAnimation.control = "pause"
@@ -352,17 +349,14 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     ' Key bindings for remote control buttons
     if press
-        ' Don't let keep awake key press turn off screensaver
-        if key <> "Lit_X"
-            ' If user presses key to turn off screensaver, don't do anything else with it
-            if screenSaverActive()
-                endScreenSaver()
-                return true
-            end if
-
-            ' Any key press resets the screensaver counter
-            m.screenSaverCounter = 0
+        ' If user presses key to turn off screensaver, don't do anything else with it
+        if screenSaverActive()
+            endScreenSaver()
+            return true
         end if
+
+        ' Any key press resets the screensaver counter
+        m.screenSaverCounter = 0
 
         if key = "play"
             return playAction()
@@ -399,3 +393,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     return false
 end function
+
+sub OnScreenHidden()
+    ' Write screen tracker for screensaver
+    WriteAsciiFile("tmp:/scene.temp", "")
+    MoveFile("tmp:/scene.temp", "tmp:/scene")
+end sub

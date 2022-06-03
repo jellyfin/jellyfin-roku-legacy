@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-
-<component name="KeepAwakeTask" extends="Task">
-  <script type="text/brightscript" uri="KeepAwakeTask.brs" />
-</component>
