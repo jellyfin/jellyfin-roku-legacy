@@ -17,6 +17,8 @@ sub init()
     m.LoadScreenSaverTimeoutTask.observeField("content", "onScreensaverTimeoutLoaded")
     m.LoadScreenSaverTimeoutTask.control = "RUN"
 
+    m.di = CreateObject("roDeviceInfo")
+
     ' Write screen tracker for screensaver
     WriteAsciiFile("tmp:/scene.temp", "nowplaying")
     MoveFile("tmp:/scene.temp", "tmp:/scene")
@@ -43,8 +45,6 @@ sub setupScreenSaver()
     m.PosterOne.uri = "pkg:/images/logo.png"
     m.BounceAnimation = m.top.findNode("BounceAnimation")
     m.PosterOneFadeIn = m.top.findNode("PosterOneFadeIn")
-
-    m.screenSaverCounter = 1
 end sub
 
 sub setupAnimationTasks()
@@ -149,11 +149,9 @@ sub audioPositionChanged()
     m.playPositionAnimationWidth.keyValue = [m.playPosition.width, playPositionBarWidth]
     m.playPositionAnimation.control = "start"
 
-    m.screenSaverCounter = m.screenSaverCounter + (m.top.audio.position - m.previousAudioPosition)
-
     ' Only fall into screensaver logic if the user has screensaver enabled in Roku settings
     if m.screenSaverTimeout > 0
-        if m.screenSaverCounter >= m.screenSaverTimeout - 2
+        if m.di.TimeSinceLastKeypress() >= m.screenSaverTimeout - 2
             if not screenSaverActive()
                 startScreenSaver()
             end if
@@ -188,7 +186,6 @@ sub endScreenSaver()
     m.screenSaverAlbumCover.opacity = "0"
     m.PosterOne.opacity = "0"
     m.top.overhangVisible = true
-    m.screenSaverCounter = 1
     m.screenSaverAlbumAnimation.control = "pause"
     m.BounceAnimation.control = "pause"
 end sub
@@ -354,9 +351,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
             endScreenSaver()
             return true
         end if
-
-        ' Any key press resets the screensaver counter
-        m.screenSaverCounter = 0
 
         if key = "play"
             return playAction()
