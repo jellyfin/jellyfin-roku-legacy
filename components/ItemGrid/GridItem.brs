@@ -77,12 +77,8 @@ end sub
 '
 'Use FocusPercent to animate scaling of Poser Image
 sub focusChanging()
-    if m.topParent.alphaActive = "true"
-        m.posterMask.scale = [0.85, 0.85]
-    else
-        scaleFactor = 0.85 + (m.top.focusPercent * 0.15)
-        m.posterMask.scale = [scaleFactor, scaleFactor]
-    end if
+    scaleFactor = 0.85 + (m.top.focusPercent * 0.15)
+    m.posterMask.scale = [scaleFactor, scaleFactor]
 end sub
 
 '
@@ -91,14 +87,14 @@ sub focusChanged()
     if m.top.itemHasFocus = true
         m.itemText.visible = true
         m.itemText.repeatCount = -1
-        scaleFactor = 0.85 + (m.top.focusPercent * 0.15)
-        m.posterMask.scale = [scaleFactor, scaleFactor]
+        m.posterMask.scale = [1, 1]
     else
         m.itemText.visible = m.alwaysShowTitles
         m.itemText.repeatCount = 0
-        m.posterMask.scale = [0.85, 0.85]
+        if m.topParent.alphaActive = true
+            m.posterMask.scale = [0.85, 0.85]
+        end if
     end if
-
 end sub
 
 'Hide backdrop and text when poster loaded
