@@ -140,8 +140,10 @@ sub audioPositionChanged()
 
     if not isValid(m.top.audio.position)
         playPositionBarWidth = 0
+    else if not isValid(m.songDuration)
+        playPositionBarWidth = 0
     else
-        songPercentComplete = m.top.audio.position / m.top.audio.duration
+        songPercentComplete = m.top.audio.position / m.songDuration
         playPositionBarWidth = m.seekBar.width * songPercentComplete
     end if
 
@@ -385,6 +387,8 @@ sub onMetaDataLoaded()
         setPosterImage(data.posterURL)
         setScreenTitle(data.json)
         setOnScreenTextValues(data.json)
+
+        m.songDuration = data.json.RunTimeTicks / 10000000.0
 
         ' If we have more and 1 song to play, fade in the next and previous controls
         if m.buttonsNeedToBeLoaded
