@@ -2,8 +2,8 @@
 <component name="NowPlaying" extends="JFScreen">
   <children>
     <Poster id="backdrop" opacity=".5" loadDisplayMode="scaleToZoom" width="1920" height="1200" blendColor="#3f3f3f" />
-    <Poster id="shuffleIndicator" width="64" height="64" uri="pkg:/images/icons/shuffleIndicator-off.png" translation="[1150,685]" opacity="0" />
-    <Poster id="loopIndicator" width="64" height="64" uri="pkg:/images/icons/loopIndicator-off.png" translation="[700,680]" opacity="0" />
+    <Poster id="shuffleIndicator" width="64" height="64" uri="pkg:/images/icons/shuffleIndicator-off.png" translation="[1150,775]" opacity="0" />
+    <Poster id="loopIndicator" width="64" height="64" uri="pkg:/images/icons/loopIndicator-off.png" translation="[700,775]" opacity="0" />
     <LayoutGroup id="toplevel" layoutDirection="vert" horizAlignment="center" translation="[960,175]" itemSpacings="[40]">
       <LayoutGroup id="main_group" layoutDirection="vert" horizAlignment="center" itemSpacings="[15]">
         <Poster id="albumCover" width="500" height="500" />
