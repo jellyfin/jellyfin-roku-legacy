@@ -10,8 +10,11 @@ sub init()
 
     m.currentSongIndex = 0
     m.buttonsNeedToBeLoaded = true
+    m.shuffleEnabled = false
+    m.loopMode = ""
+    m.shuffleEvent = ""
+    m.buttonCount = m.buttons.getChildCount()
 
-    m.previousAudioPosition = 0
     m.screenSaverTimeout = 300
 
     m.LoadScreenSaverTimeoutTask.observeField("content", "onScreensaverTimeoutLoaded")
@@ -88,7 +91,7 @@ sub setupButtons()
     m.buttons = m.top.findNode("buttons")
     m.top.observeField("selectedButtonIndex", "onButtonSelectedChange")
     m.previouslySelectedButtonIndex = 1
-    m.top.selectedButtonIndex = 1
+    m.top.selectedButtonIndex = 2
 end sub
 
 ' Event handler when user selected a different playback button
@@ -108,6 +111,9 @@ sub setupInfoNodes()
     m.playPosition = m.top.findNode("playPosition")
     m.bufferPosition = m.top.findNode("bufferPosition")
     m.seekBar = m.top.findNode("seekBar")
+    m.numberofsongsField = m.top.findNode("numberofsongs")
+    m.shuffleIndicator = m.top.findNode("shuffleIndicator")
+    m.loopIndicator = m.top.findNode("loopIndicator")
 end sub
 
 sub bufferPositionChanged()
@@ -130,7 +136,6 @@ end sub
 sub audioPositionChanged()
     if m.top.audio.position = 0
         m.playPosition.width = 0
-        m.previousAudioPosition = 0
     end if
 
     if not isValid(m.top.audio.position)
@@ -157,12 +162,10 @@ sub audioPositionChanged()
             end if
         end if
     end if
-
-    m.previousAudioPosition = m.top.audio.position
 end sub
 
 function screenSaverActive() as boolean
-    return m.screenSaverBackground.visible
+    return m.screenSaverBackground.visible or m.screenSaverAlbumCover.opacity > 0 or m.PosterOne.opacity > 0
 end function
 
 sub startScreenSaver()
@@ -182,17 +185,26 @@ sub startScreenSaver()
 end sub
 
 sub endScreenSaver()
+    m.screenSaverAlbumAnimation.control = "pause"
+    m.BounceAnimation.control = "pause"
     m.screenSaverBackground.visible = false
     m.screenSaverAlbumCover.opacity = "0"
     m.PosterOne.opacity = "0"
     m.top.overhangVisible = true
-    m.screenSaverAlbumAnimation.control = "pause"
-    m.BounceAnimation.control = "pause"
 end sub
 
 sub audioStateChanged()
     ' Song Finished, attempt to move to next song
     if m.top.audio.state = "finished"
+        if m.loopMode = "one"
+            playAction()
+            return
+        else if m.loopMode = "all"
+            m.currentSongIndex = -1
+            LoadNextSong()
+            return
+        end if
+            
         if m.currentSongIndex < m.top.pageContent.count() - 1
             LoadNextSong()
         else
@@ -213,6 +225,11 @@ function playAction() as boolean
         ' Write screen tracker for screensaver
         WriteAsciiFile("tmp:/scene.temp", "nowplaying")
         MoveFile("tmp:/scene.temp", "tmp:/scene")
+    else if m.top.audio.state = "finished"
+        m.top.audio.control = "play"
+        ' Write screen tracker for screensaver
+        WriteAsciiFile("tmp:/scene.temp", "nowplaying")
+        MoveFile("tmp:/scene.temp", "tmp:/scene")
     end if
 
     return true
@@ -227,10 +244,84 @@ function previousClicked() as boolean
     return true
 end function
 
+function loopClicked() as boolean
+
+    if m.loopMode = ""
+        m.loopIndicator.opacity = "1"
+        m.loopIndicator.uri = m.loopIndicator.uri.Replace("-off", "-on")
+        m.loopMode = "all"
+    else if m.loopMode = "all"
+        m.loopIndicator.uri = m.loopIndicator.uri.Replace("-on", "1-on")
+        m.loopMode = "one"
+    else
+        m.loopIndicator.uri = m.loopIndicator.uri.Replace("1-on", "-off")
+        m.loopMode = ""
+    end if
+
+    return true
+end function
+
 function nextClicked() as boolean
     if m.currentSongIndex < m.top.pageContent.count() - 1
         LoadNextSong()
     end if
+
+    return true
+end function
+
+sub toggleShuffleEnabled()
+    m.shuffleEnabled = not m.shuffleEnabled
+end sub
+
+function findCurrentSongIndex(songList) as integer
+    for i = 0 to songList.count() - 1
+        if songList[i] = m.top.pageContent[m.currentSongIndex]
+            return i
+        end if
+    end for
+
+    return 0
+end function
+
+function shuffleClicked() as boolean
+    
+    toggleShuffleEnabled()
+
+    if not m.shuffleEnabled
+        m.shuffleIndicator.opacity = ".4"
+        m.shuffleIndicator.uri = m.shuffleIndicator.uri.Replace("-on", "-off")
+
+        m.shuffleEvent = "enabled"
+        m.currentSongIndex = findCurrentSongIndex(m.originalSongList)
+        m.top.pageContent = m.originalSongList
+        setFieldTextValue("numberofsongs", "Track " + stri(m.currentSongIndex + 1) + "/" + stri(m.top.pageContent.count()))
+
+        return true
+    end if
+
+    m.shuffleIndicator.opacity = "1"
+    m.shuffleIndicator.uri = m.shuffleIndicator.uri.Replace("-off", "-on")
+    
+    m.originalSongList = m.top.pageContent
+
+    songIDArray = m.top.pageContent
+
+    ' Move the currently playing song to the front of the queue
+    temp = m.top.pageContent[0]
+    songIDArray[0] = m.top.pageContent[m.currentSongIndex]
+    songIDArray[m.currentSongIndex] = temp
+
+    for i = 1 to songIDArray.count() - 1
+        j = Rnd(songIDArray.count()-1)
+        temp = songIDArray[i]
+        songIDArray[i] = songIDArray[j]
+        songIDArray[j] = temp
+    end for
+
+    m.currentSongIndex = 0
+    m.shuffleEvent = "enabled"
+
+    m.top.pageContent = songIDArray
 
     return true
 end function
@@ -244,6 +335,12 @@ end sub
 
 ' Update values on screen when page content changes
 sub pageContentChanged()
+    ' pageContent Changed due to shuffle event, don't update screen values
+    if m.shuffleEvent = "enabled"
+        m.shuffleEvent = ""
+        return
+    end if
+    
     ' Reset buffer bar without animation
     m.bufferPosition.width = 0
 
@@ -292,6 +389,8 @@ sub onMetaDataLoaded()
         ' If we have more and 1 song to play, fade in the next and previous controls
         if m.buttonsNeedToBeLoaded
             if m.top.pageContent.count() > 1
+                m.shuffleIndicator.opacity = ".4"
+                m.loopIndicator.opacity = ".4"
                 m.displayButtonsAnimation.control = "start"
             end if
             m.buttonsNeedToBeLoaded = false
@@ -332,7 +431,12 @@ end sub
 ' Populate on screen text variables
 sub setOnScreenTextValues(json)
     if isValid(json)
-        setFieldTextValue("numberofsongs", "Track " + stri(m.currentSongIndex + 1) + "/" + stri(m.top.pageContent.count()))
+        currentSongIndex = m.currentSongIndex
+
+        if m.shuffleEnabled
+            currentSongIndex = findCurrentSongIndex(m.originalSongList)
+        end if
+        setFieldTextValue("numberofsongs", "Track " + stri(currentSongIndex + 1) + "/" + stri(m.top.pageContent.count()))
         setFieldTextValue("artist", json.Artists[0])
         setFieldTextValue("song", json.name)
     end if
@@ -378,7 +482,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             if m.top.pageContent.count() = 1 then return false
 
             m.previouslySelectedButtonIndex = m.top.selectedButtonIndex
-            if m.top.selectedButtonIndex < 2 then m.top.selectedButtonIndex = m.top.selectedButtonIndex + 1
+            if m.top.selectedButtonIndex < m.buttonCount - 1 then m.top.selectedButtonIndex = m.top.selectedButtonIndex + 1
             return true
         else if key = "OK"
             if m.buttons.getChild(m.top.selectedButtonIndex).id = "play"
@@ -387,6 +491,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
                 return previousClicked()
             else if m.buttons.getChild(m.top.selectedButtonIndex).id = "next"
                 return nextClicked()
+            else if m.buttons.getChild(m.top.selectedButtonIndex).id = "shuffle"
+                return shuffleClicked()
+            else if m.buttons.getChild(m.top.selectedButtonIndex).id = "loop"
+                return loopClicked()
             end if
         end if
     end if

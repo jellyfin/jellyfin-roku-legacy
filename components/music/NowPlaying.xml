@@ -2,6 +2,8 @@
 <component name="NowPlaying" extends="JFScreen">
   <children>
     <Poster id="backdrop" opacity=".5" loadDisplayMode="scaleToZoom" width="1920" height="1200" blendColor="#3f3f3f" />
+    <Poster id="shuffleIndicator" width="64" height="64" uri="pkg:/images/icons/shuffleIndicator-off.png" translation="[1150,685]" opacity="0" />
+    <Poster id="loopIndicator" width="64" height="64" uri="pkg:/images/icons/loopIndicator-off.png" translation="[700,680]" opacity="0" />
     <LayoutGroup id="toplevel" layoutDirection="vert" horizAlignment="center" translation="[960,175]" itemSpacings="[40]">
       <LayoutGroup id="main_group" layoutDirection="vert" horizAlignment="center" itemSpacings="[15]">
         <Poster id="albumCover" width="500" height="500" />
@@ -14,9 +16,11 @@
         <Rectangle id="playPosition" color="#00a4dcFF" height="10"></Rectangle>
       </Rectangle>
       <LayoutGroup id="buttons" layoutDirection="horiz" horizAlignment="center" itemSpacings="[45]">
+        <Poster id="loop" width="64" height="64" uri="pkg:/images/icons/loop-default.png" opacity="0" />
         <Poster id="previous" width="64" height="64" uri="pkg:/images/icons/previous-default.png" opacity="0" />
         <Poster id="play" width="64" height="64" uri="pkg:/images/icons/play-default.png" />
         <Poster id="next" width="64" height="64" uri="pkg:/images/icons/next-default.png" opacity="0" />
+        <Poster id="shuffle" width="64" height="64" uri="pkg:/images/icons/shuffle-default.png" opacity="0" />
       </LayoutGroup>
       <Animation id="bufferPositionAnimation" duration="1" repeat="false" easeFunction="linear">
         <FloatFieldInterpolator id="bufferPositionAnimationWidth" key="[0.0, 1.0]" fieldToInterp="bufferPosition.width" />
@@ -27,6 +31,8 @@
       <Animation id="displayButtonsAnimation" duration="1" repeat="false" easeFunction="linear">
         <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0.0, 1.0]" fieldToInterp="previous.opacity" />
         <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0.0, 1.0]" fieldToInterp="next.opacity" />
+        <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0.0, 1.0]" fieldToInterp="shuffle.opacity" />
+        <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0.0, 1.0]" fieldToInterp="loop.opacity" />
       </Animation>
     </LayoutGroup>
     <Rectangle id="screenSaverBackground" width="1920" height="1080" color="#000000" visible="false" />
@@ -107,6 +113,10 @@
     <Poster width="0" height="0" uri="pkg:/images/icons/previous-selected.png" visible="false" />
     <Poster width="0" height="0" uri="pkg:/images/icons/play-selected.png" visible="false" />
     <Poster width="0" height="0" uri="pkg:/images/icons/next-selected.png" visible="false" />
+    <Poster width="0" height="0" uri="pkg:/images/icons/shuffle-selected.png" visible="false" />
+    <Poster width="0" height="0" uri="pkg:/images/icons/shuffleIndicator-on.png" visible="false" />
+    <Poster width="0" height="0" uri="pkg:/images/icons/loopIndicator-on.png" visible="false" />
+    <Poster width="0" height="0" uri="pkg:/images/icons/loopIndicator1-on.png" visible="false" />
   </children>
   <interface>
     <field id="pageContent" type="array" onChange="pageContentChanged" />

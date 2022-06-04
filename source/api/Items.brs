@@ -71,9 +71,11 @@ function ItemMetaData(id as string)
     data = getJson(resp)
     if data = invalid then return invalid
     imgParams = {}
-    if data.UserData.PlayedPercentage <> invalid
-        param = { "PercentPlayed": data.UserData.PlayedPercentage }
-        imgParams.Append(param)
+    if data.type <> "Audio"
+        if data.UserData.PlayedPercentage <> invalid
+            param = { "PercentPlayed": data.UserData.PlayedPercentage }
+            imgParams.Append(param)
+        end if
     end if
     if data.type = "Movie"
         tmp = CreateObject("roSGNode", "MovieData")
