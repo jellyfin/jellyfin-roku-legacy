@@ -204,7 +204,7 @@ sub audioStateChanged()
             LoadNextSong()
             return
         end if
-            
+
         if m.currentSongIndex < m.top.pageContent.count() - 1
             LoadNextSong()
         else
@@ -284,7 +284,7 @@ function findCurrentSongIndex(songList) as integer
 end function
 
 function shuffleClicked() as boolean
-    
+
     toggleShuffleEnabled()
 
     if not m.shuffleEnabled
@@ -301,7 +301,7 @@ function shuffleClicked() as boolean
 
     m.shuffleIndicator.opacity = "1"
     m.shuffleIndicator.uri = m.shuffleIndicator.uri.Replace("-off", "-on")
-    
+
     m.originalSongList = m.top.pageContent
 
     songIDArray = m.top.pageContent
@@ -312,7 +312,7 @@ function shuffleClicked() as boolean
     songIDArray[m.currentSongIndex] = temp
 
     for i = 1 to songIDArray.count() - 1
-        j = Rnd(songIDArray.count()-1)
+        j = Rnd(songIDArray.count() - 1)
         temp = songIDArray[i]
         songIDArray[i] = songIDArray[j]
         songIDArray[j] = temp
@@ -340,7 +340,7 @@ sub pageContentChanged()
         m.shuffleEvent = ""
         return
     end if
-    
+
     ' Reset buffer bar without animation
     m.bufferPosition.width = 0
 
