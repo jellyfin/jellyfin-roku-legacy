@@ -187,11 +187,13 @@ sub startScreenSaver()
 end sub
 
 sub endScreenSaver()
+    m.PosterOneFadeIn.control = "pause"
+    m.screenSaverAlbumCoverFadeIn.control = "pause"
     m.screenSaverAlbumAnimation.control = "pause"
     m.BounceAnimation.control = "pause"
     m.screenSaverBackground.visible = false
-    m.screenSaverAlbumCover.opacity = "0"
-    m.PosterOne.opacity = "0"
+    m.screenSaverAlbumCover.opacity = 0
+    m.PosterOne.opacity = 0
     m.top.overhangVisible = true
 end sub
 
