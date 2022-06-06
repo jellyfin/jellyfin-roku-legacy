@@ -48,7 +48,7 @@ function searchMedia(query as string)
             "IncludeGenres": true,
             "IncludeStudios": true,
             "IncludeArtists": true,
-            "IncludeItemTypes": "LiveTvChannel,Movie,BoxSet,Series,Episode,Video,Person",
+            "IncludeItemTypes": "LiveTvChannel,Movie,BoxSet,Series,Episode,Video,Person,Audio,MusicAlbum,MusicArtist,Playlist",
             "EnableTotalRecordCount": false,
             "ImageTypeLimit": 1,
             "Recursive": true,
@@ -104,7 +104,7 @@ function ItemMetaData(id as string)
         tmp.image = PosterImage(data.id, imgParams)
         tmp.json = data
         return tmp
-    else if data.type = "BoxSet"
+    else if data.type = "BoxSet" or data.type = "Playlist"
         tmp = CreateObject("roSGNode", "CollectionData")
         tmp.image = PosterImage(data.id, imgParams)
         tmp.json = data
