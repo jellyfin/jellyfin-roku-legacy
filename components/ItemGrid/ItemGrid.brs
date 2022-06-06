@@ -676,7 +676,7 @@ sub updateTitle()
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Networks)")
     end if
     if m.options.view = "Genre" or m.view = "Genre"
-        m.top.overhangTitle = m.top.parentItem.title + tr(" (Genre)")
+        m.top.overhangTitle =  "%s (%s)".Format(m.top.parentItem.title, tr("Genres"))
     end if
     actInt = m.itemGrid.itemFocused + 1
     if m.showItemCount and m.loadItemsTask.totalRecordCount > 0
