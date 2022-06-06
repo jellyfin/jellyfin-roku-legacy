@@ -197,3 +197,49 @@ sub LoadUserAbilities(user)
         set_user_setting("livetv.canrecord", "false")
     end if
 end sub
+
+function initQuickConnect()
+    resp = APIRequest("QuickConnect/Initiate")
+    jsonResponse = getJson(resp)
+    if jsonResponse = invalid
+        return invalid
+    end if
+
+    if jsonResponse.Secret = invalid
+        return invalid
+    end if
+
+    return jsonResponse
+end function
+
+function checkQuickConnect(secret)
+    url = Substitute("QuickConnect/Connect?secret={0}", secret)
+    resp = APIRequest(url)
+    jsonResponse = getJson(resp)
+    if jsonResponse = invalid
+        return false
+    end if
+
+    if jsonResponse.Authenticated <> invalid and jsonResponse.Authenticated = true
+        return true
+    end if
+
+    return false
+end function
+
+function AuthenticateViaQuickConnect(secret)
+    params = {
+        secret: secret
+    }
+    req = APIRequest("Users/AuthenticateWithQuickConnect")
+    jsonResponse = postJson(req, FormatJson(params))
+    if jsonResponse <> invalid and jsonResponse.AccessToken <> invalid
+        userdata = CreateObject("roSGNode", "UserData")
+        userdata.json = jsonResponse
+        userdata.callFunc("setActive")
+        userdata.callFunc("saveToRegistry")
+        return true
+    end if
+
+    return false
+end function

@@ -2,7 +2,7 @@
 <component name="Alpha" extends = "Group">
   <children>
     <LabelList 
-        translation="[1872, 185]"
+        translation="[50, 185]"
         vertFocusAnimationStyle="floatingFocus" 
         drawFocusFeedback="true"
         id = "Alphamenu"

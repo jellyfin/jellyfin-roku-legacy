@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="QuickConnectDialog" extends="StandardMessageDialog">
+    <children>
+        <Timer id="quickConnectTimer" duration="3" repeat="false" />
+    </children>
+    <interface>
+        <field id="quickConnectJson" type="assocarray" />
+        <field id="authenticated" type="boolean" alwaysNotify="true"/>
+    </interface>
+    <script type="text/brightscript" uri="QuickConnectDialog.brs" />
+    <script type="text/brightscript" uri="pkg:/source/api/userauth.brs" />
+    <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+</component>

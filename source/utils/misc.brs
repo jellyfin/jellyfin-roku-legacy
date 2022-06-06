@@ -167,3 +167,74 @@ function standardize_jellyfin_url(url as string)
     end if
     return url
 end function
+
+sub setFieldTextValue(field, value)
+    node = m.top.findNode(field)
+    if node = invalid or value = invalid then return
+
+    ' Handle non strings... Which _shouldn't_ happen, but hey
+    if type(value) = "roInt" or type(value) = "Integer"
+        value = str(value).trim()
+    else if type(value) = "roFloat" or type(value) = "Float"
+        value = str(value).trim()
+    else if type(value) <> "roString" and type(value) <> "String"
+        value = ""
+    end if
+
+    node.text = value
+end sub
+
+' Returns whether or not passed value is valid
+function isValid(input) as boolean
+    return input <> invalid
+end function
+
+' Rounds number to nearest integer
+function roundNumber(f as float) as integer
+    ' BrightScript only has a "floor" round
+    ' This compares floor to floor + 1 to find which is closer
+    m = int(f)
+    n = m + 1
+    x = abs(f - m)
+    y = abs(f - n)
+    if y > x
+        return m
+    else
+        return n
+    end if
+end function
+
+' Converts ticks to minutes
+function getMinutes(ticks) as integer
+    ' A tick is .1ms, so 1/10,000,000 for ticks to seconds,
+    ' then 1/60 for seconds to minutes... 1/600,000,000
+    return roundNumber(ticks / 600000000.0)
+end function
+
+'
+' Returns whether or not a version number (e.g. 10.7.7) is greater or equal
+' to some minimum version allowed (e.g. 10.8.0)
+function versionChecker(versionToCheck as string, minVersionAccepted as string)
+    leftHand = CreateObject("roLongInteger")
+    rightHand = CreateObject("roLongInteger")
+
+    regEx = CreateObject("roRegex", "\.", "")
+    version = regEx.Split(versionToCheck)
+    if version.Count() < 3
+        for i = version.Count() to 3 step 1
+            version.AddTail("0")
+        end for
+    end if
+
+    minVersion = regEx.Split(minVersionAccepted)
+    if minVersion.Count() < 3
+        for i = minVersion.Count() to 3 step 1
+            minVersion.AddTail("0")
+        end for
+    end if
+
+    leftHand = (version[0].ToInt() * 10000) + (version[1].ToInt() * 100) + (version[2].ToInt() * 10)
+    rightHand = (minVersion[0].ToInt() * 10000) + (minVersion[1].ToInt() * 100) + (minVersion[2].ToInt() * 10)
+
+    return leftHand >= rightHand
+end function

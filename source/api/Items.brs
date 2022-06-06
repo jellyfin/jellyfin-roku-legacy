@@ -71,9 +71,11 @@ function ItemMetaData(id as string)
     data = getJson(resp)
     if data = invalid then return invalid
     imgParams = {}
-    if data.UserData.PlayedPercentage <> invalid
-        param = { "PercentPlayed": data.UserData.PlayedPercentage }
-        imgParams.Append(param)
+    if data.type <> "Audio"
+        if data.UserData.PlayedPercentage <> invalid
+            param = { "PercentPlayed": data.UserData.PlayedPercentage }
+            imgParams.Append(param)
+        end if
     end if
     if data.type = "Movie"
         tmp = CreateObject("roSGNode", "MovieData")
@@ -118,11 +120,119 @@ function ItemMetaData(id as string)
         tmp.image = PosterImage(data.id, { "MaxWidth": 300, "MaxHeight": 450 })
         tmp.json = data
         return tmp
+    else if data.type = "MusicArtist"
+        ' User clicked on an artist and wants to see the list of their albums
+        tmp = CreateObject("roSGNode", "MusicArtistData")
+        tmp.image = PosterImage(data.id)
+        tmp.json = data
+        return tmp
+    else if data.type = "MusicAlbum"
+        ' User clicked on an album and wants to see the list of songs
+        tmp = CreateObject("roSGNode", "MusicAlbumSongListData")
+        tmp.image = PosterImage(data.id)
+        tmp.json = data
+        return tmp
+    else if data.type = "Audio"
+        ' User clicked on a song and wants it to play
+        tmp = CreateObject("roSGNode", "MusicSongData")
+
+        ' Try using song's parent for poster image
+        tmp.image = PosterImage(data.ParentId)
+
+        ' Song's parent poster image is no good, try using the song's poster image
+        if tmp.image = invalid
+            tmp.image = PosterImage(data.id)
+        end if
+
+        tmp.json = data
+        return tmp
     else
         print "Items.brs::ItemMetaData processed unhandled type: " data.type
         ' Return json if we don't know what it is
         return data
     end if
+end function
+
+' Get list of albums belonging to an artist
+function MusicAlbumList(id as string)
+    url = Substitute("Users/{0}/Items", get_setting("active_user"), id)
+    resp = APIRequest(url, {
+        "UserId": get_setting("active_user"),
+        "parentId": id,
+        "includeitemtypes": "MusicAlbum",
+        "sortBy": "SortName"
+    })
+
+    data = getJson(resp)
+    results = []
+    for each item in data.Items
+        tmp = CreateObject("roSGNode", "MusicAlbumData")
+        tmp.image = PosterImage(item.id)
+        tmp.json = item
+        results.push(tmp)
+    end for
+    data.Items = results
+    return data
+end function
+
+' Get Songs that are on an Album
+function MusicSongList(id as string)
+    url = Substitute("Users/{0}/Items", get_setting("active_user"), id)
+    resp = APIRequest(url, {
+        "UserId": get_setting("active_user"),
+        "parentId": id,
+        "includeitemtypes": "Audio",
+        "sortBy": "SortName"
+    })
+
+    data = getJson(resp)
+    results = []
+    for each item in data.Items
+        tmp = CreateObject("roSGNode", "MusicSongData")
+        tmp.image = PosterImage(item.id)
+        tmp.json = item
+        results.push(tmp)
+    end for
+    data.Items = results
+    return data
+end function
+
+' Get Songs that are on an Album
+function AudioItem(id as string)
+    url = Substitute("Users/{0}/Items/{1}", get_setting("active_user"), id)
+    resp = APIRequest(url, {
+        "UserId": get_setting("active_user"),
+        "includeitemtypes": "Audio",
+        "sortBy": "SortName"
+    })
+
+    return getJson(resp)
+end function
+
+function AudioStream(id as string)
+    songData = AudioItem(id)
+
+    content = createObject("RoSGNode", "ContentNode")
+
+    params = {}
+
+    params.append({
+        "Static": "true",
+        "Container": songData.mediaSources[0].container
+    })
+
+    params.MediaSourceId = songData.mediaSources[0].id
+
+    content.url = buildURL(Substitute("Audio/{0}/stream", songData.id), params)
+    content.title = songData.title
+    content.streamformat = songData.mediaSources[0].container
+
+    return content
+end function
+
+function BackdropImage(id as string)
+    imgParams = { "maxHeight": "720", "maxWidth": "1280" }
+    return ImageURL(id, "Backdrop", imgParams)
 end function
 
 ' Seasons for a TV Show

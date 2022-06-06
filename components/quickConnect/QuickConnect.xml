@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="QuickConnect" extends="Task">
+  <interface>
+    <field id="secret" type="string" />
+    <field id="authenticated" type="integer" value="0"/>
+  </interface>
+  <script type="text/brightscript" uri="QuickConnect.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/userauth.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+</component>

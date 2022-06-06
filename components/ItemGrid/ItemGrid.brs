@@ -116,6 +116,10 @@ sub loadInitialItems()
     else if m.top.parentItem.collectionType = "tvshows"
         m.loadItemsTask.itemType = "Series"
         m.loadItemsTask.itemId = m.top.parentItem.Id
+    else if m.top.parentItem.collectionType = "music"
+        m.loadItemsTask.itemType = "MusicArtist,MusicAlbum"
+        m.loadItemsTask.fallbackType = "MusicAlbum"
+        m.loadItemsTask.recursive = false
     else if m.top.parentItem.collectionType = "livetv"
         m.loadItemsTask.itemType = "LiveTV"
 
@@ -246,6 +250,19 @@ sub SetUpOptions()
         options.views = []
         options.sort = []
         options.filter = []
+        'Music
+    else if m.top.parentItem.collectionType = "music"
+        options.views = [{ "Title": tr("Music"), "Name": "music" }]
+        options.sort = [
+            { "Title": tr("TITLE"), "Name": "SortName" },
+            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+            { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+            { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+        ]
+        options.filter = [
+            { "Title": tr("All"), "Name": "All" },
+            { "Title": tr("Favorites"), "Name": "Favorites" }
+        ]
     else
         options.views = [
             { "Title": tr("Default"), "Name": "default" }
@@ -293,7 +310,7 @@ end sub
 '
 'Handle loaded data, and add to Grid
 sub ItemDataLoaded(msg)
-
+    m.top.alphaActive = false
     itemData = msg.GetData()
     m.loadItemsTask.unobserveField("content")
     m.loadItemsTask.content = []
@@ -572,12 +589,14 @@ function onKeyEvent(key as string, press as boolean) as boolean
             photoPlayer.control = "RUN"
             return true
         end if
-    else if key = "right" and topGrp.isinFocusChain()
+    else if key = "left" and topGrp.isinFocusChain()
+        m.top.alphaActive = true
         topGrp.setFocus(false)
         alpha = m.Alpha.getChild(0).findNode("Alphamenu")
         alpha.setFocus(true)
         return true
-    else if key = "left" and m.Alpha.isinFocusChain()
+    else if key = "right" and m.Alpha.isinFocusChain()
+        m.top.alphaActive = false
         m.Alpha.setFocus(false)
         m.Alpha.visible = true
         topGrp.setFocus(true)
