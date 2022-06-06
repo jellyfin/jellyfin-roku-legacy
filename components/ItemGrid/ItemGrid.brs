@@ -251,7 +251,7 @@ sub SetUpOptions()
         options.views = [
             { "Title": tr("Shows"), "Name": "shows" },
             { "Title": tr("Networks"), "Name": "Networks" },
-            { "Title": tr("Genre"), "Name": "Genre" }
+            { "Title": tr("Genres"), "Name": "Genres" }
             'TODO { "Title": tr("Episodes"), "Name": "Episodes" }
         ]
         options.sort = [
