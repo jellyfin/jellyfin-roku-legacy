@@ -672,7 +672,7 @@ sub updateTitle()
     end if
 
     if m.options.view = "Networks" or m.view = "Networks"
-        m.top.overhangTitle = m.top.parentItem.title + tr(" (Networks)")
+        m.top.overhangTitle =  "%s (%s)".Format(m.top.parentItem.title, tr("Networks"))
     end if
     if m.options.view = "Genre" or m.view = "Genre"
         m.top.overhangTitle =  "%s (%s)".Format(m.top.parentItem.title, tr("Genres"))
