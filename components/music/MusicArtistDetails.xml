@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="MusicArtistDetails" extends="JFGroup">
+  <children>
+    <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[-10]" >
+      <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[15]" >
+        <Poster id="artistImage" width="450" height="450" />
+        <Label id="overview" wrap="true" maxLines="8" width="1250" ellipsisText=" ...  (Press * to read more)" />
+      </LayoutGroup>
+      <MusicArtistAlbumRow id="albums" />
+    </LayoutGroup>
+  </children>
+  <interface>
+    <field id="pageContent" type="node" onChange="pageContentChanged" />
+    <field id="musicArtistAlbumData" type="assocarray" alias="albums.MusicArtistAlbumData" />
+    <field id="musicAlbumSelected" alias="albums.rowItemSelected" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+  <script type="text/brightscript" uri="MusicArtistDetails.brs" />
+</component>

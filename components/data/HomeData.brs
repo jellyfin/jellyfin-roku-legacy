@@ -37,7 +37,7 @@ sub setData()
         imgParams.Append({ "maxHeight": 261 })
         imgParams.Append({ "maxWidth": 464 })
 
-        m.top.thumbnailURL = ImageURL(datum.SeriesId, "Primary", imgParams)
+        m.top.thumbnailURL = ImageURL(datum.Id, "Primary", imgParams)
 
         ' Add Wide Poster  (Series Backdrop)
         if datum.ParentThumbImageTag <> invalid

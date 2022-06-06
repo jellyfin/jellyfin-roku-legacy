@@ -17,10 +17,10 @@ sub init()
     if m.alwaysShowTitles then m.itemText.maxWidth = 250
 
     'Parent is MarkupGrid and it's parent is the ItemGrid
-    topParent = m.top.GetParent().GetParent()
+    m.topParent = m.top.GetParent().GetParent()
     'Get the imageDisplayMode for these grid items
-    if topParent.imageDisplayMode <> invalid
-        m.itemPoster.loadDisplayMode = topParent.imageDisplayMode
+    if m.topParent.imageDisplayMode <> invalid
+        m.itemPoster.loadDisplayMode = m.topParent.imageDisplayMode
     end if
 
 end sub
@@ -57,6 +57,9 @@ sub itemContentChanged()
     else if itemData.type = "Photo"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title
+    else if itemData.type = "MusicArtist"
+        m.itemPoster.uri = itemData.PosterUrl
+        m.itemText.text = itemData.Title
     else
         print "Unhandled Grid Item Type: " + itemData.type
     end if
@@ -81,15 +84,17 @@ end sub
 '
 'Display or hide title Visibility on focus change
 sub focusChanged()
-
     if m.top.itemHasFocus = true
         m.itemText.visible = true
         m.itemText.repeatCount = -1
+        m.posterMask.scale = [1, 1]
     else
         m.itemText.visible = m.alwaysShowTitles
         m.itemText.repeatCount = 0
+        if m.topParent.alphaActive = true
+            m.posterMask.scale = [0.85, 0.85]
+        end if
     end if
-
 end sub
 
 'Hide backdrop and text when poster loaded
