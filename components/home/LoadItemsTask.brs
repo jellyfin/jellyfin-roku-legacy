@@ -121,28 +121,6 @@ sub loadItems()
             results.push(tmp)
         end for
 
-    else if m.top.itemsToLoad = "continueBook"
-
-        url = Substitute("Users/{0}/Items/Resume", get_setting("active_user"))
-
-        params = {}
-        params["Limit"] = 30
-        params["recursive"] = true
-        params["SortBy"] = "DatePlayed"
-        params["SortOrder"] = "Descending"
-        params["Filters"] = "IsResumable"
-        params["MediaTypes"] = "Book"
-        params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
-
-        resp = APIRequest(url, params)
-        data = getJson(resp)
-        for each item in data.Items
-            tmp = CreateObject("roSGNode", "HomeData")
-            item.ImageURL = ImageURL(item.Id, "Backdrop")
-            tmp.json = item
-            results.push(tmp)
-        end for
-
     else if m.top.itemsToLoad = "onNow"
         url = "LiveTv/Programs/Recommended"
         params = {}

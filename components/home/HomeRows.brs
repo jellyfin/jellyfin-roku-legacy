@@ -37,8 +37,6 @@ sub init()
     m.LoadContinueVideoTask.itemsToLoad = "continueVideo"
     m.LoadContinueAudioTask = createObject("roSGNode", "LoadItemsTask")
     m.LoadContinueAudioTask.itemsToLoad = "continueAudio"
-    m.LoadContinueBookTask = createObject("roSGNode", "LoadItemsTask")
-    m.LoadContinueBookTask.itemsToLoad = "continueBook"
     m.LoadNextUpTask = createObject("roSGNode", "LoadItemsTask")
     m.LoadNextUpTask.itemsToLoad = "nextUp"
     m.LoadOnNowTask = createObject("roSGNode", "LoadItemsTask")
@@ -106,10 +104,6 @@ sub loadHomeSections()
             m.LoadContinueAudioTask.observeField("content", "updateContinueAudioItems")
             m.LoadContinueAudioTask.control = "RUN"
             m.LoadContinueAudioTask.observeField("state", "onUpdateContinueAudioItemsComplete")
-        else if homesection = "resumebook"
-            m.LoadContinueBookTask.observeField("content", "updateContinueBookItems")
-            m.LoadContinueBookTask.control = "RUN"
-            m.LoadContinueBookTask.observeField("state", "onUpdateContinueBookItemsComplete")
         else if homesection = "nextup"
             m.LoadNextUpTask.observeField("content", "updateNextUpItems")
             m.LoadNextUpTask.control = "RUN"
@@ -151,7 +145,7 @@ sub setLatestMediaCount()
             for i = 0 to orderedViews.count() - 1
                 for j = 0 to filteredLatest.count() - 1
                     if filteredLatest[j].id = orderedViews[i]
-                        if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders"
+                        if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders" and filteredLatest[j].collectionType <> "books"
                             filteredOrderedViews.push(orderedViews[i])
                             exit for
                         end if
@@ -164,7 +158,7 @@ sub setLatestMediaCount()
         for i = 0 to filteredOrderedViews.count() - 1
             for each lib in filteredLatest
                 if filteredOrderedViews[i] = lib.id
-                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders"
+                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
                         latest_count = latest_count + 1
                     end if
                 end if
@@ -173,7 +167,7 @@ sub setLatestMediaCount()
     else
         latest_count = 0
         for each lib in filteredLatest
-            if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders"
+            if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
                 latest_count = latest_count + 1
             end if
         end for
@@ -228,6 +222,11 @@ sub onUpdateLatestMediaComplete(event)
     ignores = m.sectionIgnores
     if data = "stop"
         itemData = m.LoadLatestMediaTask.content
+        for each item in itemData
+            if item.collectionType = "books"
+                ignores.push("latestbooks")
+            end if
+        end for
         if itemData.count() = 0
             ignores.push("latestmedia")
             m.sectionIgnores = ignores
@@ -274,27 +273,6 @@ sub onUpdateContinueAudioItemsComplete(event)
             ignores.push("resumeaudio")
             m.sectionIgnores = ignores
             section = getHomeSectionInt("resumeaudio")
-            index_section = section + 1
-            row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
-            if row_index <> invalid
-                homeRows = m.top.content
-                row = homeRows.getChild(row_index)
-                homeRows.removeChild(row)
-            end if
-        end if
-        rebuildItemArray()
-    end if
-end sub
-
-sub onUpdateContinueBookItemsComplete(event)
-    data = event.GetData()
-    ignores = m.sectionIgnores
-    if data = "stop"
-        itemData = m.LoadContinueBookTask.content
-        if itemData.count() = 0
-            ignores.push("resumebook")
-            m.sectionIgnores = ignores
-            section = getHomeSectionInt("resumebook")
             index_section = section + 1
             row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
             if row_index <> invalid
@@ -411,15 +389,12 @@ sub rebuildItemArray()
                 itemSize = [464, 261]
                 if homesection = "librarybuttons"
                     itemSize = [464, 100]
-                else if homesection = "resumebook" or homesection = "livetv"
+                else if homesection = "livetv"
                     itemSize = [200, 270]
                 end if
                 newSizeArray.push(itemSize)
             end if
         end if
-    end for
-    for each size in newSizeArray
-        ' print "SIZE: " size
     end for
     m.top.rowItemSize = newSizeArray
 end sub
@@ -457,7 +432,7 @@ function getHomeSectionCount()
     section_count = 0
     for i = 0 to 6
         homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
-        if homesection <> "latestmedia" and homesection <> "none"
+        if homesection <> "latestmedia" and homesection <> "none" and homesection <> "resumebook"
             section_count += 1
         end if
     end for
@@ -488,9 +463,11 @@ sub updateMyMedia()
         row.title = tr("My Media")
         row.id = section
         for each item in itemData
-            item.usePoster = true
-            item.imageWidth = 464
-            row.appendChild(item)
+            if item.CollectionType <> "books"
+                item.usePoster = true
+                item.imageWidth = 464
+                row.appendChild(item)
+            end if
         end for
         updateSizeArray(itemSize, section + latestMediaCount, "replace")
         row.update(row, false)
@@ -543,7 +520,7 @@ sub updateLatestMedia()
             for i = 0 to orderedViews.count() - 1
                 for j = 0 to filteredLatest.count() - 1
                     if filteredLatest[j].id = orderedViews[i]
-                        if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders"
+                        if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders" and filteredLatest[j].collectionType <> "books"
                             filteredOrderedViews.push(orderedViews[i])
                             exit for
                         end if
@@ -556,7 +533,7 @@ sub updateLatestMedia()
         for i = 0 to filteredOrderedViews.count() - 1
             for each lib in filteredLatest
                 if filteredOrderedViews[i] = lib.id
-                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders"
+                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
                         latest_count = latest_count + 1
                         loadLatest = createObject("roSGNode", "LoadItemsTask")
                         loadLatest.itemsToLoad = "latest"
@@ -576,7 +553,7 @@ sub updateLatestMedia()
     else
         latest_count = 0
         for each lib in filteredLatest
-            if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders"
+            if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
                 loadLatest = createObject("roSGNode", "LoadItemsTask")
                 loadLatest.itemsToLoad = "latest"
                 loadLatest.itemId = lib.id
@@ -674,48 +651,6 @@ sub updateContinueAudioItems()
 
         updateSizeArray(itemSize, section + latestMediaCount, "replace")
         row.update(row, false)
-    end if
-end sub
-
-sub updateContinueBookItems()
-    homeRows = m.top.content
-    section = getHomeSectionInt("resumebook")
-    itemData = m.LoadContinueBookTask.content
-    m.LoadContinueBookTask.unobserveField("content")
-
-    itemSize = [200, 270]
-
-    latest_media_int = m.latestMediaInt
-    latestMediaCount = m.latestMediaCount - 1
-    if latest_media_int < section
-        if latestMediaCount > 0
-            section = section + latestMediaCount
-        end if
-    end if
-
-    index_section = section + 1
-    row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
-    if row_index <> invalid
-        row = homeRows.getChild(row_index)
-        row.title = tr("Continue Reading")
-        item_count = itemData.count()
-        if item_count > 1000
-            item_count = 1000
-        end if
-        if item_count = 0
-            homeRows.removeChild(row)
-        end if
-        for i = 0 to item_count
-            if itemData[i] <> invalid
-                itemData[i].usePoster = true
-                itemData[i].imageWidth = 200
-                row.appendChild(itemData[i])
-
-            end if
-        end for
-
-        row.update(row, false)
-        updateSizeArray(itemSize, section + latestMediaCount, "replace")
     end if
 end sub
 
