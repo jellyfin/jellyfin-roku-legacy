@@ -75,7 +75,6 @@ sub loadInitialItems()
         sortAscendingStr = get_user_setting("display.livetv.sortAscending")
         m.filter = get_user_setting("display.livetv.filter")
     else
-        'm.view = invalid
         m.sortField = get_user_setting("display." + m.top.parentItem.Id + ".sortField")
         sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
         m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
