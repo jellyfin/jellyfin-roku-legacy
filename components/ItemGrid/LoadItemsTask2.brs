@@ -23,7 +23,7 @@ sub loadItems()
         SortOrder: sort_order,
         recursive: m.top.recursive,
         Fields: "Overview",
-        StudioIds: m.top.StudioIds,
+        StudioIds: m.top.studioIds,
         genreIds: m.top.genreIds
     }
     ' Handle special case when getting names starting with numeral
@@ -50,11 +50,19 @@ sub loadItems()
     if m.top.ItemType = "LiveTV"
         url = "LiveTv/Channels"
         params.append({ UserId: get_setting("active_user") })
+    else if m.top.view = "Networks"
+        url = "Studios"
+        params.append({ UserId: get_setting("active_user") })
+    else if m.top.view = "Genres"
+        url = "Genres"
+        params.append({ UserId: get_setting("active_user") })
     else
         url = Substitute("Users/{0}/Items/", get_setting("active_user"))
     end if
     resp = APIRequest(url, params)
     data = getJson(resp)
+    print "url: " url
+    print "params: " params
     if data <> invalid
 
         if data.TotalRecordCount <> invalid then m.top.totalRecordCount = data.TotalRecordCount
@@ -79,10 +87,14 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "FolderData")
             else if item.type = "Episode"
                 tmp = CreateObject("roSGNode", "TVEpisode")
+            else if item.Type = "Genre"
+                tmp = CreateObject("roSGNode", "FolderData")
+            else if item.Type = "Studio"
+                tmp = CreateObject("roSGNode", "FolderData")
             else
                 print "[LoadItems] Unknown Type: " item.Type
             end if
-
+            print "Data Type: " item.Type
             if tmp <> invalid
                 tmp.parentFolder = m.top.itemId
                 tmp.json = item
@@ -95,5 +107,6 @@ sub loadItems()
     end if
 
     m.top.content = results
+    print results
 
 end sub
