@@ -35,7 +35,7 @@ sub itemContentChanged()
     end if
 
     ' Format the Data based on the type of Home Data
-    if itemData.type = "CollectionFolder" or itemData.type = "UserView" or itemData.type = "Channel"
+    if itemData.type = "CollectionFolder" or itemData.type = "UserView" or itemData.type = "Channel" or itemData.type = "Playlist"
         m.itemText.text = itemData.name
         if itemData.isSmall = true
             m.backdrop.height = "100"

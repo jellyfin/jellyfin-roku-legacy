@@ -1,23 +1,16 @@
 {
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "BrightScript Debug: Launch",
             "type": "brightscript",
             "request": "launch",
-            "name": "Jellyfin Debug: Launch",
-            "stopOnEntry": false,
-            //WARNING: don't edit this value. Instead, set "brightscript.debug.host": "YOUR_HOST_HERE" in your vscode user settings
-            //"host": "${promptForHost}",
-            //WARNING: don't edit this value. Instead, set "brightscript.debug.password": "YOUR_PASSWORD_HERE" in your vscode user settings
-            //"password": "${promptForPassword}",
-            "files": [
-                "components/**/*",
-                "images/**/*",
-                "locale/**/*",
-                "settings/**/*",
-                "source/**/*",
-                "manifest"
-            ]
+            "host": "192.168.1.242",
+            "password": "Goodness",
+            "rootDir": "${workspaceFolder}"
         }
     ]
 }
