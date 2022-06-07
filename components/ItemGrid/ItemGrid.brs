@@ -53,7 +53,9 @@ end sub
 'Load initial set of Data
 sub loadInitialItems()
 
-    if m.top.parentItem.backdropUrl <> invalid
+    if m.top.parentItem.backdropUrl = ""
+        SetBackground(m.top.parentItem.posterUrl)
+    else if m.top.parentItem.backdropUrl <> invalid
         SetBackground(m.top.parentItem.backdropUrl)
     end if
 
@@ -115,7 +117,7 @@ sub loadInitialItems()
         end if
 
 
-    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel" or m.top.parentItem.Type = "playlist" or m.top.parentItem.collectionType = "boxsets"
+    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel" or m.top.parentItem.collectionType = "playlists" or m.top.parentItem.collectionType = "boxsets"
         ' Non-recursive, to not show subfolder contents
         m.loadItemsTask.recursive = false
     else if m.top.parentItem.collectionType = "Channel"
@@ -333,8 +335,9 @@ sub onItemFocused()
     m.selectedFavoriteItem = m.itemGrid.content.getChild(m.itemGrid.itemFocused)
 
     ' Set Background to item backdrop
+    if m.itemGrid.content.getChild(m.itemGrid.itemFocused).backdropUrl <> invalid
     SetBackground(m.itemGrid.content.getChild(m.itemGrid.itemFocused).backdropUrl)
-
+    end if
     ' Load more data if focus is within last 3 rows, and there are more items to load
     if focusedRow >= m.loadedRows - 5 and m.loadeditems < m.loadItemsTask.totalRecordCount
         loadMoreData()

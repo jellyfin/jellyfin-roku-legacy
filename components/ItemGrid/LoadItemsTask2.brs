@@ -92,6 +92,8 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "MusicArtistData")
             else if item.Type = "Audio"
                 tmp = CreateObject("roSGNode", "MusicSongData")
+            else if item.Type = "Episode"
+                tmp = CreateObject("roSGNode", "TVEpisodeData")
             else
                 print "[LoadItems] Unknown Type: " item.Type
             end if
