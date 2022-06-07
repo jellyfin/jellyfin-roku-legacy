@@ -53,9 +53,11 @@ end sub
 'Load initial set of Data
 sub loadInitialItems()
 
-    if m.top.parentItem.backdropUrl <> invalid
-        SetBackground(m.top.parentItem.backdropUrl)
-    end if
+        if m.top.parentItem.backdropUrl = ""
+           
+        else if m.top.parentItem.backdropUrl <> invalid
+            SetBackground(m.top.parentItem.backdropUrl)
+        end if
 
     ' Read view/sort/filter settings
     if m.top.parentItem.collectionType = "livetv"

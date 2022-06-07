@@ -41,7 +41,7 @@ sub itemContentChanged()
     else if itemData.type = "Series"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title
-    else if itemData.type = "Boxset"
+    else if itemData.type = "Boxset" or itemData.type = "Playlist"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "TvChannel"
@@ -57,7 +57,7 @@ sub itemContentChanged()
     else if itemData.type = "Photo"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title
-    else if itemData.type = "MusicArtist"
+    else if itemData.type = "MusicArtist" or itemData.type = "Audio"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title
     else
