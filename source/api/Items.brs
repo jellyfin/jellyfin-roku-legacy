@@ -99,6 +99,11 @@ function ItemMetaData(id as string)
         tmp.image = PosterImage(data.id, imgParams)
         tmp.json = data
         return tmp
+    else if data.type = "Playlist"
+        tmp = CreateObject("roSGNode", "CollectionData")
+        tmp.image = PosterImage(data.id, { "MaxWidth": 300, "MaxHeight": 450 })
+        tmp.json = data
+        return tmp
     else if data.type = "Season"
         tmp = CreateObject("roSGNode", "TVSeasonData")
         tmp.image = PosterImage(data.id)
