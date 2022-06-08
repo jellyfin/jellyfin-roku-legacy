@@ -61,7 +61,7 @@ sub itemContentChanged()
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title
         print "Episode data: " itemData
-    else if itemData.type = "MusicArtist" or itemData.type = "Audio" or itemData.type = "Song"
+    else if itemData.type = "MusicArtist" or itemData.type = "Audio" or itemData.type = "Song" or itemData.type = "AudioBook"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title
     else

@@ -90,7 +90,7 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "FolderData")
             else if item.Type = "MusicArtist" or item.Type = "MusicAlbum"
                 tmp = CreateObject("roSGNode", "MusicArtistData")
-            else if item.Type = "Audio"
+            else if item.Type = "Audio" or item.Type = "AudioBook"
                 tmp = CreateObject("roSGNode", "MusicSongData")
             else if item.Type = "Episode"
                 tmp = CreateObject("roSGNode", "TVEpisodeData")

@@ -382,7 +382,11 @@ sub onMetaDataLoaded()
     if data <> invalid and data.count() > 0
 
         ' Use metadata to load backdrop image
+        if data.type = "AudioBook" 
+            m.LoadBackdropImageTask.itemId = data.ArtistItems[0].id
+        else
         m.LoadBackdropImageTask.itemId = data.json.ArtistItems[0].id
+        end if
         m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
         m.LoadBackdropImageTask.control = "RUN"
 
@@ -390,7 +394,11 @@ sub onMetaDataLoaded()
         setScreenTitle(data.json)
         setOnScreenTextValues(data.json)
 
+        if data.type = "AudioBook"
+            m.songDuration = data.RunTimeTicks / 10000000.0
+        else
         m.songDuration = data.json.RunTimeTicks / 10000000.0
+        end if
 
         ' If we have more and 1 song to play, fade in the next and previous controls
         if m.buttonsNeedToBeLoaded
