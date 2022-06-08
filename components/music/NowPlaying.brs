@@ -390,14 +390,18 @@ sub onMetaDataLoaded()
         m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
         m.LoadBackdropImageTask.control = "RUN"
 
-        setPosterImage(data.posterURL)
-        setScreenTitle(data.json)
-        setOnScreenTextValues(data.json)
+        
 
         if data.type = "AudioBook"
             m.songDuration = data.RunTimeTicks / 10000000.0
+        setPosterImage(data.posterURL)
+        setScreenTitle(data)
+        setOnScreenTextValues(data)
         else
             m.songDuration = data.json.RunTimeTicks / 10000000.0
+        setPosterImage(data.posterURL)
+        setScreenTitle(data.json)
+        setOnScreenTextValues(data.json)
         end if
 
         ' If we have more and 1 song to play, fade in the next and previous controls
