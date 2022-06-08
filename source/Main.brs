@@ -162,7 +162,7 @@ sub Main (args as dynamic) as void
                 group = CreateMusicArtistDetailsGroup(selectedItem.json)
             else if selectedItem.type = "MusicAlbum"
                 group = CreateMusicAlbumDetailsGroup(selectedItem.json)
-            else if selectedItem.type = "Audio"
+            else if selectedItem.type = "Audio" or selectedItem.type = "Song"
                 group = CreateAudioPlayerGroup([selectedItem.json])
             else
                 ' TODO - switch on more node types
