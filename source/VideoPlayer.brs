@@ -170,6 +170,10 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
 
     video.container = getContainerType(meta)
 
+    if playbackInfo.MediaSources[0] = invalid
+        playbackInfo = meta.json
+    end if
+
     subtitles = sortSubtitles(meta.id, playbackInfo.MediaSources[0].MediaStreams)
     video.Subtitles = subtitles["all"]
 

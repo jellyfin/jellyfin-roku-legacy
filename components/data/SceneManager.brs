@@ -135,6 +135,12 @@ sub clearScenes()
 end sub
 
 '
+' Clear previous scene from group stack
+sub clearPreviousScene()
+    m.groups.pop()
+end sub
+
+'
 ' Display user/device settings screen
 sub settings()
     settingsScreen = createObject("roSGNode", "Settings")

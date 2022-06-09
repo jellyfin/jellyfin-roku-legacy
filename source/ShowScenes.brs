@@ -456,6 +456,31 @@ sub CreateSidePanel(buttons, options)
 end sub
 
 function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_idx = 1)
+    ' Check if server has intro videos setup
+    introVideos = GetIntroVideos(video_id)
+
+    if introVideos.TotalRecordCount > 0
+        introVideo = VideoPlayer(introVideos.items[0].id, introVideos.items[0].id, audio_stream_idx, defaultSubtitleTrackFromVid(video_id))
+
+        port = CreateObject("roMessagePort")
+        introVideo.observeField("state", port)
+        m.global.sceneManager.callFunc("pushScene", introVideo)
+        introPlaying = true
+
+        while introPlaying
+            msg = wait(0, port)
+            if type(msg) = "roSGNodeEvent"
+                if msg.GetData() = "finished"
+                    m.global.sceneManager.callFunc("clearPreviousScene")
+                    introPlaying = false
+                else if msg.GetData() = "stopped"
+                    introPlaying = false
+                    return invalid
+                end if
+            end if
+        end while
+    end if
+
     ' Video is Playing
     video = VideoPlayer(video_id, mediaSourceId, audio_stream_idx, defaultSubtitleTrackFromVid(video_id))
     if video = invalid then return invalid
