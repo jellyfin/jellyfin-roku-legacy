@@ -1986,5 +1986,9 @@
         <source>Save Credentials?</source>
         <translation>Sauvegarder les informations d&apos;identification ?</translation>
     </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Supprimer les valeurs enregistrées</translation>
+    </message>
 </context>
 </TS>
