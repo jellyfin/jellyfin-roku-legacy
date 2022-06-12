@@ -61,7 +61,6 @@ function getData()
     }
 
     for each item in itemData.searchHints
-        print "search data: " item.type
         if content_types[item.type] <> invalid
             content_types[item.type].count += 1
         end if
