@@ -149,6 +149,10 @@ sub LoadUserPreferences()
         nones = 0
         for i = 0 to 6
             if jsonResponse.CustomPrefs["homesection" + i.ToStr()] <> invalid
+                ' Need to ignore resumebook for now
+                if jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "resumebook"
+                    jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "none"
+                end if
                 if jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "none"
                     nones += 1
                 else
@@ -183,10 +187,9 @@ sub setHomeScreenDefaults()
     set_user_setting("display.homesection0", "smalllibrarytiles")
     set_user_setting("display.homesection1", "resume")
     set_user_setting("display.homesection2", "resumeaudio")
-    set_user_setting("display.homesection3", "resumebook")
-    set_user_setting("display.homesection4", "livetv")
-    set_user_setting("display.homesection5", "nextup")
-    set_user_setting("display.homesection6", "latestmedia")
+    set_user_setting("display.homesection3", "livetv")
+    set_user_setting("display.homesection4", "nextup")
+    set_user_setting("display.homesection5", "latestmedia")
 end sub
 
 sub LoadUserAbilities(user)

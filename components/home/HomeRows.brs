@@ -591,7 +591,6 @@ sub updateContinueVideoItems()
     row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
     if row_index <> invalid
         row = homeRows.getChild(row_index)
-        row.title = tr("Continue Watching")
         item_count = itemData.count()
         if item_count > 50
             item_count = 50
@@ -599,14 +598,17 @@ sub updateContinueVideoItems()
         if item_count = 0
             homeRows.removeChild(row)
         end if
-        for i = 0 to item_count
-            if itemData[i] <> invalid
-                itemData[i].usePoster = true
-                itemData[i].imageWidth = 464
-                itemData[i].stretch = true
-                row.appendChild(itemData[i])
-            end if
-        end for
+        if item_count > 0
+            row.title = tr("Continue Watching")
+            for i = 0 to item_count
+                if itemData[i] <> invalid
+                    itemData[i].usePoster = true
+                    itemData[i].imageWidth = 464
+                    itemData[i].stretch = true
+                    row.appendChild(itemData[i])
+                end if
+            end for
+        end if
 
         updateSizeArray(itemSize, section + latestMediaCount, "replace")
         row.update(row, false)
@@ -633,7 +635,6 @@ sub updateContinueAudioItems()
     row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
     if row_index <> invalid
         row = homeRows.getChild(row_index)
-        row.title = tr("Continue Listening")
         item_count = itemData.count()
         if item_count > 1000
             item_count = 1000
@@ -641,13 +642,16 @@ sub updateContinueAudioItems()
         if item_count = 0
             homeRows.removeChild(row)
         end if
-        for i = 0 to item_count
-            if itemData[i] <> invalid
-                itemData[i].usePoster = true
-                itemData[i].imageWidth = 464
-                row.appendChild(itemData[i])
-            end if
-        end for
+        if item_count > 0
+            row.title = tr("Continue Listening")
+            for i = 0 to item_count
+                if itemData[i] <> invalid
+                    itemData[i].usePoster = true
+                    itemData[i].imageWidth = 464
+                    row.appendChild(itemData[i])
+                end if
+            end for
+        end if
 
         updateSizeArray(itemSize, section + latestMediaCount, "replace")
         row.update(row, false)
@@ -744,7 +748,6 @@ sub updateOnNowItems()
     row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
     if row_index <> invalid
         row = homeRows.getChild(row_index)
-        row.title = tr("On Now")
         item_count = itemData.count()
         if item_count > 1000
             item_count = 1000
@@ -752,13 +755,16 @@ sub updateOnNowItems()
         if item_count = 0
             homeRows.removeChild(row)
         end if
-        for i = 0 to item_count
-            if itemData[i] <> invalid
-                itemData[i].usePoster = true
-                itemData[i].imageWidth = 200
-                row.appendChild(itemData[i])
-            end if
-        end for
+        if item_count > 0
+            row.title = tr("On Now")
+            for i = 0 to item_count
+                if itemData[i] <> invalid
+                    itemData[i].usePoster = true
+                    itemData[i].imageWidth = 200
+                    row.appendChild(itemData[i])
+                end if
+            end for
+        end if
         updateSizeArray(itemSize, section + latestMediaCount, "replace")
         row.update(row, false)
     end if
