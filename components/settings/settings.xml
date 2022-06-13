@@ -28,21 +28,24 @@
                id="settingDetail"
                vertAlignment="top"
                horizAlignment="center"
-               itemSpacings="[50]"
-             >
+               itemSpacings="[50]">
+             
 
                 <ScrollingLabel font="font:LargeSystemFont" id="settingTitle" maxWidth="750" />
-
                 <Label id="settingDesc" width="750" wrap = "true" />
-
-                <RadioButtonList id="boolSetting" vertFocusAnimationStyle="floatingFocus">
-                  <ContentNode role="content">
-                    <ContentNode title="Disabled" />
-                    <ContentNode title="Enabled" />
-                  </ContentNode>
-                </RadioButtonList>
-
-             </LayoutGroup>
+              </LayoutGroup>
+              <LayoutGroup translation = "[975,550]">
+                  <DynamicMiniKeyboard  id="pinPadSetting"/>
+              </LayoutGroup>
+              <LayoutGroup translation = "[875,600]">
+                  <RadioButtonList id="boolSetting" vertFocusAnimationStyle="floatingFocus">
+                    <ContentNode role="content">
+                      <ContentNode title="Disabled" />
+                      <ContentNode title="Enabled" />
+                    </ContentNode>
+                  </RadioButtonList>
+                </LayoutGroup>
+              
 
 
   </children>

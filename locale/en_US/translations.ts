@@ -583,5 +583,15 @@
     <translation>Use the replay button to slowly animate to the first item in the folder. (If disabled, The folder will reset to the first item immediately)</translation>
     <extracomment>Description for option in Setting Screen</extracomment>
 </message>
+<message>
+    <source>Items to Load</source>
+    <translation>Items to Load</translation>
+    <extracomment>UI -> Media Grid -> Item Title in user setting screen.</extracomment>
+</message>
+<message>
+    <source>Default Items that are laoded is 60. If you have network issues try reducing this number to help load items faster</source>
+    <translation>Default Items that are laoded is 60. If you have network issues try reducing this number to help load items faster</translation>
+    <extracomment>Description for option in Setting Screen</extracomment>
+</message>
 </context>
 </TS>
