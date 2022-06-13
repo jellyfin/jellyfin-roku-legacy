@@ -84,7 +84,7 @@ sub settingFocused()
         else
             m.boolSetting.checkedItem = 0
         end if
-    else if  selectedSetting.type = "integer"
+    else if selectedSetting.type = "integer"
         m.pinPadSetting.visible = true
     else
         print "Unknown setting type " + selectedSetting.type
@@ -121,7 +121,7 @@ sub boolSettingChanged()
     if m.boolSetting.focusedChild = invalid then return
     selectedSetting = m.userLocation.peek().children[m.settingsMenu.itemFocused]
 
-    'set user setting for Boolean Input 
+    'set user setting for Boolean Input
     if m.boolSetting.checkedItem
         set_user_setting(selectedSetting.settingName, "true")
     else
@@ -135,7 +135,7 @@ sub pinSettingChanged()
     if m.pinPadSetting.focusedChild = invalid then return
     selectedSetting = m.userLocation.peek().children[m.settingsMenu.itemFocused]
 
-    'set user setting for Boolean Input 
+    'set user setting for Boolean Input
     set_user_setting(selectedSetting.settingName, m.pinPadSetting.text)
 end sub
 
