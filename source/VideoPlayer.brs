@@ -351,12 +351,15 @@ sub autoPlayNextEpisode(videoID as string, showID as string)
                 m.global.sceneManager.callFunc("pushScene", nextVideo)
             else
                 m.global.sceneManager.callFunc("popScene")
+                MarkItemWatched(showID)
             end if
         else
             ' can't play next episode
             m.global.sceneManager.callFunc("popScene")
+            MarkItemWatched(showID)
         end if
     else
         m.global.sceneManager.callFunc("popScene")
+        MarkItemWatched(showID)
     end if
 end sub
