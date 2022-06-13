@@ -12,18 +12,16 @@ sub init()
 end sub
 
 sub updateSize()
-    dimensions = m.top.getScene().currentDesignResolution
+    m.top.translation = [450, 180]
 
-    border = 96
-    m.top.translation = [border, 75 + 115]
-
-    itemWidth = (dimensions["width"] - border * 2)
-    itemHeight = 400
+    itemWidth = 1360
+    itemHeight = 300
 
     m.top.visible = true
 
     ' Size of the individual rows
-    m.top.itemSize = [dimensions["width"] - border * 2, itemHeight]
+    m.top.itemSize = [itemWidth, itemHeight]
+
     ' Spacing between Rows
     m.top.itemSpacing = [0, 40]
 

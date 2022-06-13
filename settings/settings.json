@@ -33,6 +33,13 @@
                         "settingName": "itemgrid.alwaysShowTitles",
                         "type": "bool",
                         "default": "false"
+                    },
+                    {
+                        "title": "Return to Top",
+                        "description": "Use the replay button to slowly animate to the first item in the folder. (If disabled, The folder will reset to the first item immediately)",
+                        "settingName": "itemgrid.reset",
+                        "type": "bool",
+                        "default": "true"
                     }
                 ]
             }
