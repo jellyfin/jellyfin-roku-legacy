@@ -344,6 +344,7 @@ sub autoPlayNextEpisode(videoID as string, showID as string)
         if data <> invalid and data.Items.Count() = 2
             ' remove finished video node
             m.global.sceneManager.callFunc("popScene")
+            MarkItemWatched(showID)
             ' setup new video node
             nextVideo = CreateVideoPlayerGroup(data.Items[1].Id)
             if nextVideo <> invalid
