@@ -201,6 +201,13 @@ sub Main (args as dynamic) as void
             m.spinner = screenContent.findNode("spinner")
             m.spinner.visible = true
             group = CreateAudioPlayerGroup(screenContent.albumData.items)
+        else if isNodeEvent(msg, "instantMixSelected")
+            ' User has selected instant mix
+            ' User has selected playlist of of audio they want us to play
+            screenContent = msg.getRoSGNode()
+            m.spinner = screenContent.findNode("spinner")
+            m.spinner.visible = true
+            group = CreateInstantMixGroup(screenContent.albumData.items)
         else if isNodeEvent(msg, "episodeSelected")
             ' If you select a TV Episode from ANYWHERE, follow this flow
             node = getMsgPicker(msg, "picker")

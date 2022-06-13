@@ -59,17 +59,6 @@ sub loadItems()
 
         if data.TotalRecordCount <> invalid then m.top.totalRecordCount = data.TotalRecordCount
 
-        ' When loading a collection, if no results are found, try searching by fallback type
-        if data.TotalRecordCount = 0
-            if m.top.FallbackType <> ""
-                ' Ensure we didn't just search by the fallback type - prevent infinite loop
-                if m.top.ItemType <> m.top.FallbackType
-                    m.top.ItemType = m.top.FallbackType
-                    loadItems()
-                end if
-            end if
-        end if
-
         for each item in data.Items
             tmp = invalid
             if item.Type = "Movie"

@@ -380,6 +380,7 @@ function CreateMusicArtistDetailsGroup(musicartist)
         group.albumData = MusicSongList(musicartist.id)
         group.observeField("playSong", m.port)
         group.observeField("playAllSelected", m.port)
+        group.observeField("instantMixSelected", m.port)
     else
         ' User has albums under artists
         group = CreateObject("roSGNode", "MusicArtistDetails")
@@ -406,6 +407,9 @@ function CreateMusicAlbumDetailsGroup(album)
 
     ' Watch for user click on Play button on album
     group.observeField("playAllSelected", m.port)
+
+    ' Watch for user click on Instant Mix button on album
+    group.observeField("instantMixSelected", m.port)
 
     return group
 end function
@@ -475,6 +479,30 @@ function CreateAudioPlayerGroup(audiodata)
 
     group.pageContent = songIDArray
     group.musicArtistAlbumData = audiodata
+
+    m.global.sceneManager.callFunc("pushScene", group)
+
+    return group
+end function
+
+' Play Instant Mix
+function CreateInstantMixGroup(audiodata)
+
+    songList = CreateInstantMix(audiodata[0].id)
+
+    group = CreateObject("roSGNode", "NowPlaying")
+    group.observeField("state", m.port)
+    songIDArray = CreateObject("roArray", 0, true)
+
+    ' All we need is an array of Song IDs the user selected to play.
+    for each song in songList.items
+        songIDArray.push(song.id)
+    end for
+
+    songIDArray.shift()
+
+    group.pageContent = songIDArray
+    group.musicArtistAlbumData = songList.items
 
     m.global.sceneManager.callFunc("pushScene", group)
 
