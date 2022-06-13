@@ -12,12 +12,16 @@ sub init()
     m.path = m.top.findNode("path")
 
     m.boolSetting = m.top.findNode("boolSetting")
+    m.pinPadSetting = m.top.findNode("pinPadSetting")
+    m.pinPadSetting.keyGrid.keyDefinitionUri = "pkg:/components/data/CustomPinPad.json"
+    m.pinPadSetting.textEditBox.voiceEnabled = true
 
     m.settingsMenu.setFocus(true)
     m.settingsMenu.observeField("itemFocused", "settingFocused")
     m.settingsMenu.observeField("itemSelected", "settingSelected")
 
     m.boolSetting.observeField("checkedItem", "boolSettingChanged")
+    m.pinPadSetting.observeField("text", "pinSettingChanged")
 
     ' Load Configuration Tree
     m.configTree = GetConfigTree()
@@ -68,7 +72,7 @@ sub settingFocused()
 
     ' Hide Settings
     m.boolSetting.visible = false
-
+    m.pinPadSetting.visible = false
     if selectedSetting.type = invalid
         return
     else if selectedSetting.type = "bool"
@@ -80,6 +84,8 @@ sub settingFocused()
         else
             m.boolSetting.checkedItem = 0
         end if
+    else if  selectedSetting.type = "integer"
+        m.pinPadSetting.visible = true
     else
         print "Unknown setting type " + selectedSetting.type
     end if
@@ -95,6 +101,8 @@ sub settingSelected()
     if selectedItem.type <> invalid ' Show setting
         if selectedItem.type = "bool"
             m.boolSetting.setFocus(true)
+        else if selectedItem.type = "integer"
+            m.pinPadSetting.setFocus(true)
         end if
     else if selectedItem.children <> invalid and selectedItem.children.Count() > 0 ' Show sub menu
         LoadMenu(selectedItem)
@@ -113,12 +121,22 @@ sub boolSettingChanged()
     if m.boolSetting.focusedChild = invalid then return
     selectedSetting = m.userLocation.peek().children[m.settingsMenu.itemFocused]
 
+    'set user setting for Boolean Input 
     if m.boolSetting.checkedItem
         set_user_setting(selectedSetting.settingName, "true")
     else
         set_user_setting(selectedSetting.settingName, "false")
     end if
 
+end sub
+
+sub pinSettingChanged()
+    'set user setting for PinPad Input
+    if m.pinPadSetting.focusedChild = invalid then return
+    selectedSetting = m.userLocation.peek().children[m.settingsMenu.itemFocused]
+
+    'set user setting for Boolean Input 
+    set_user_setting(selectedSetting.settingName, m.pinPadSetting.text)
 end sub
 
 

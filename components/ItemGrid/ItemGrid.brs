@@ -341,8 +341,6 @@ end sub
 'Handle new item being focused
 sub onItemFocused()
 
-    focusedRow = m.itemGrid.currFocusRow
-
     itemInt = m.itemGrid.itemFocused
 
     updateTitle()
@@ -357,8 +355,9 @@ sub onItemFocused()
     ' Set Background to item backdrop
     SetBackground(m.itemGrid.content.getChild(m.itemGrid.itemFocused).backdropUrl)
 
-    ' Load more data if focus is within last 3 rows, and there are more items to load
-    if focusedRow >= m.loadedRows - 5 and m.loadeditems < m.loadItemsTask.totalRecordCount
+    ' if user moves down grid and there are more items to load
+    if m.loadeditems < m.loadItemsTask.totalRecordCount
+       
         loadMoreData()
     end if
 end sub
@@ -394,7 +393,6 @@ end sub
 '
 'Load next set of items
 sub loadMoreData()
-
     if m.Loading = true then return
 
     m.Loading = true
@@ -598,6 +596,8 @@ function onKeyEvent(key as string, press as boolean) as boolean
         else
             m.itemGrid.jumpToItem = 0
         end if
+    else if key = "down" and topGrp.isinFocusChain()
+        onItemFocused()
     end if
 
     return false
