@@ -1,9 +1,34 @@
 function API()
     instance = {}
 
+    instance["auth"] = authActions()
     instance["branding"] = brandingActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
+
+    return instance
+end function
+
+function authActions()
+    instance = {}
+
+    ' Get all keys.
+    instance.getkeys = function()
+        req = _APIRequest("/auth/keys")
+        return _getJson(req)
+    end function
+
+    ' Create a new api key.
+    instance.postkeys = function(params = {} as object)
+        req = _APIRequest("/auth/keys", params)
+        return _postVoid(req)
+    end function
+
+    ' Remove an api key.
+    instance.deletekeys = function(key as string)
+        req = _APIRequest(Substitute("/auth/keys/{0}", key))
+        return _deleteVoid(req)
+    end function
 
     return instance
 end function
