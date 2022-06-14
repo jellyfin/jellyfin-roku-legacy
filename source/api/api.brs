@@ -6,6 +6,7 @@ function API()
     instance["auth"] = authActions()
     instance["branding"] = brandingActions()
     instance["channels"] = channelsActions()
+    instance["clientlog"] = clientlogActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
 
@@ -148,6 +149,18 @@ function channelsActions()
     instance.getlatestitems = function(params = {} as object)
         req = _APIRequest("/channels/items/latest", params)
         return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function clientlogActions()
+    instance = {}
+
+    ' Upload a document.
+    instance.document = function(params = {} as object)
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
     end function
 
     return instance
