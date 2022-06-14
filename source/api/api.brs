@@ -7,6 +7,7 @@ function API()
     instance["branding"] = brandingActions()
     instance["channels"] = channelsActions()
     instance["clientlog"] = clientlogActions()
+    instance["collections"] = collectionsActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
 
@@ -166,6 +167,30 @@ function clientlogActions()
     return instance
 end function
 
+function collectionsActions()
+    instance = {}
+
+    ' Creates a new collection.
+    instance.create = function(params = {} as object)
+        req = _APIRequest("/collections", params)
+        return _postJson(req)
+    end function
+
+    ' Adds items to a collection.
+    instance.additems = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/collections/{0}/items", id), params)
+        return _postVoid(req)
+    end function
+
+    ' Removes items from a collection.
+    instance.deleteitems = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/collections/{0}/items", id), params)
+        return _deleteVoid(req)
+    end function
+
+    return instance
+end function
+
 function systemActions()
     instance = {}
 
@@ -259,9 +284,8 @@ function usersActions()
     end function
 
     ' Creates a user.
-    instance.postnew = function(body = {} as object)
+    instance.create = function(body = {} as object)
         req = _APIRequest("/users/new")
-        req.SetRequest("POST")
         return _postJson(req, FormatJson(body))
     end function
 
