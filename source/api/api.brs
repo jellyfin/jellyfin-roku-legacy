@@ -1,10 +1,35 @@
 function API()
     instance = {}
 
+    instance["artists"] = artistsActions()
     instance["auth"] = authActions()
     instance["branding"] = brandingActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
+
+    return instance
+end function
+
+function artistsActions()
+    instance = {}
+
+    ' Gets all artists from a given item, folder, or the entire library.
+    instance.get = function(params = {} as object)
+        req = _APIRequest("/artists", params)
+        return _getJson(req)
+    end function
+
+    ' Gets an artist by name.
+    instance.getbyname = function(name as string, params = {} as object)
+        req = _APIRequest(Substitute("/artists/{0}", name), params)
+        return _getJson(req)
+    end function
+
+    ' Gets all album artists from a given item, folder, or the entire library.
+    instance.getalbumartists = function(params = {} as object)
+        req = _APIRequest("/artists/albumartists", params)
+        return _getJson(req)
+    end function
 
     return instance
 end function
