@@ -1,12 +1,37 @@
 function API()
     instance = {}
 
-    instance["audio"] = audioActions()
     instance["artists"] = artistsActions()
+    instance["audio"] = audioActions()
     instance["auth"] = authActions()
     instance["branding"] = brandingActions()
+    instance["channels"] = channelsActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
+
+    return instance
+end function
+
+function artistsActions()
+    instance = {}
+
+    ' Gets all artists from a given item, folder, or the entire library.
+    instance.get = function(params = {} as object)
+        req = _APIRequest("/artists", params)
+        return _getJson(req)
+    end function
+
+    ' Gets an artist by name.
+    instance.getbyname = function(name as string, params = {} as object)
+        req = _APIRequest(Substitute("/artists/{0}", name), params)
+        return _getJson(req)
+    end function
+
+    ' Gets all album artists from a given item, folder, or the entire library.
+    instance.getalbumartists = function(params = {} as object)
+        req = _APIRequest("/artists/albumartists", params)
+        return _getJson(req)
+    end function
 
     return instance
 end function
@@ -39,30 +64,6 @@ function audioActions()
     return instance
 end function
 
-function artistsActions()
-    instance = {}
-
-    ' Gets all artists from a given item, folder, or the entire library.
-    instance.get = function(params = {} as object)
-        req = _APIRequest("/artists", params)
-        return _getJson(req)
-    end function
-
-    ' Gets an artist by name.
-    instance.getbyname = function(name as string, params = {} as object)
-        req = _APIRequest(Substitute("/artists/{0}", name), params)
-        return _getJson(req)
-    end function
-
-    ' Gets all album artists from a given item, folder, or the entire library.
-    instance.getalbumartists = function(params = {} as object)
-        req = _APIRequest("/artists/albumartists", params)
-        return _getJson(req)
-    end function
-
-    return instance
-end function
-
 function authActions()
     instance = {}
 
@@ -82,6 +83,71 @@ function authActions()
     instance.deletekeys = function(key as string)
         req = _APIRequest(Substitute("/auth/keys/{0}", key))
         return _deleteVoid(req)
+    end function
+
+    return instance
+end function
+
+function brandingActions()
+    instance = {}
+
+    ' Get user's splashscreen image
+    instance.getsplashscreen = function(params = {} as object)
+        return _buildURL("/branding/splashscreen", params)
+    end function
+
+    ' Gets branding configuration.
+    instance.getconfiguration = function()
+        req = _APIRequest("/branding/configuration")
+        return _getJson(req)
+    end function
+
+    ' Gets branding css.
+    instance.getcss = function()
+        req = _APIRequest("/branding/css")
+        return _getJson(req)
+    end function
+
+    ' Gets branding css.
+    instance.getcsswithextension = function()
+        req = _APIRequest("/branding/css.css")
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function channelsActions()
+    instance = {}
+
+    ' Gets available channels.
+    instance.get = function(params = {} as object)
+        req = _APIRequest("/channels", params)
+        return _getJson(req)
+    end function
+
+    ' Get channel features.
+    instance.getfeatures = function(id as string)
+        req = _APIRequest(Substitute("/channels/{0}/features", id))
+        return _getJson(req)
+    end function
+
+    ' Get channel items.
+    instance.getitems = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/channels/{0}/items", id), params)
+        return _getJson(req)
+    end function
+
+    ' Get all channel features.
+    instance.getallfeatures = function()
+        req = _APIRequest("/channels/features")
+        return _getJson(req)
+    end function
+
+    ' Gets latest channel items.
+    instance.getlatestitems = function(params = {} as object)
+        req = _APIRequest("/channels/items/latest", params)
+        return _getJson(req)
     end function
 
     return instance
@@ -148,29 +214,6 @@ function systemActions()
     instance.shutdown = function()
         req = _APIRequest("/system/shutdown")
         return _postVoid(req)
-    end function
-
-    return instance
-end function
-
-function brandingActions()
-    instance = {}
-
-    ' Get user's splashscreen image
-    instance.getsplashscreen = function(params = {} as object)
-        return _buildURL("/branding/splashscreen", params)
-    end function
-
-    ' Gets branding configuration.
-    instance.getconfiguration = function()
-        req = _APIRequest("/branding/configuration")
-        return _getJson(req)
-    end function
-
-    ' Gets branding css.
-    instance.getcss = function()
-        req = _APIRequest("/branding/css")
-        return _getJson(req)
     end function
 
     return instance
