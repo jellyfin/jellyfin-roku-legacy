@@ -2,7 +2,74 @@ function API()
     instance = {}
 
     instance["branding"] = brandingActions()
+    instance["system"] = systemActions()
     instance["users"] = usersActions()
+
+    return instance
+end function
+
+function systemActions()
+    instance = {}
+
+    ' Gets activity log entries.
+    instance.getactivitylogentries = function(params = {} as object)
+        req = _APIRequest("/system/activitylog/entries", params)
+        return _getJson(req)
+    end function
+
+    ' Gets information about the request endpoint.
+    instance.getendpoint = function()
+        req = _APIRequest("/system/endpoint")
+        return _getJson(req)
+    end function
+
+    ' Gets information about the server.
+    instance.getinfo = function()
+        req = _APIRequest("/system/info")
+        return _getJson(req)
+    end function
+
+    ' Gets public information about the server.
+    instance.getpublicinfo = function()
+        req = _APIRequest("/system/info/public")
+        return _getJson(req)
+    end function
+
+    ' Gets a list of available server log files.
+    instance.getlogs = function()
+        req = _APIRequest("/system/logs")
+        return _getJson(req)
+    end function
+
+    ' Gets a log file.
+    instance.getlog = function(params = {} as object)
+        req = _APIRequest("/system/logs/log", params)
+        return _getString(req)
+    end function
+
+    ' Pings the system.
+    instance.getping = function()
+        req = _APIRequest("/system/ping")
+        return _getString(req)
+    end function
+
+    ' Pings the system.
+    instance.postping = function()
+        req = _APIRequest("/system/ping")
+        return _postString(req)
+    end function
+
+    ' Restarts the application.
+    instance.restart = function()
+        req = _APIRequest("/system/restart")
+        return _postVoid(req)
+    end function
+
+    ' Shuts down the application.
+    instance.shutdown = function()
+        req = _APIRequest("/system/shutdown")
+        return _postVoid(req)
+    end function
 
     return instance
 end function
@@ -289,6 +356,10 @@ function _postVoid(req, data = "" as string) as boolean
         return true
     end if
 
+    if resp.GetResponseCode() = 204
+        return true
+    end if
+
     return false
 end function
 
@@ -301,4 +372,21 @@ function _getJson(req)
     end if
     json = ParseJson(data)
     return json
+end function
+
+function _getString(req)
+    data = req.GetToString()
+    return data
+end function
+
+function _postString(req, data = "" as string)
+    req.setMessagePort(CreateObject("roMessagePort"))
+    req.AddHeader("Content-Type", "application/json")
+    req.AsyncPostFromString(data)
+    resp = wait(30000, req.GetMessagePort())
+    if type(resp) <> "roUrlEvent"
+        return invalid
+    end if
+
+    return resp.getString()
 end function
