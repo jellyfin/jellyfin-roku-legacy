@@ -200,6 +200,42 @@ function systemActions()
         return _getJson(req)
     end function
 
+    ' Gets application configuration.
+    instance.getconfiguration = function()
+        req = _APIRequest("/system/configuration")
+        return _getJson(req)
+    end function
+
+    ' Updates application configuration.
+    instance.updateconfiguration = function(body = {} as object)
+        req = _APIRequest("/system/configuration")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' Gets a named configuration.
+    instance.getconfigurationbyname = function(name as string)
+        req = _APIRequest(Substitute("/system/configuration/{0}", name))
+        return _getJson(req)
+    end function
+
+    ' Updates named configuration.
+    instance.updateconfigurationbyname = function(name as string)
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Gets a default MetadataOptions object.
+    instance.getdefaultmetadataoptions = function()
+        req = _APIRequest("/system/configuration/metadataoptions/default")
+        return _getJson(req)
+    end function
+
+    ' Updates the path to the media encoder.
+    instance.updatemediaencoderpath = function(body = {} as object)
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
     ' Gets information about the request endpoint.
     instance.getendpoint = function()
         req = _APIRequest("/system/endpoint")
