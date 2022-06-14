@@ -1,11 +1,40 @@
 function API()
     instance = {}
 
+    instance["audio"] = audioActions()
     instance["artists"] = artistsActions()
     instance["auth"] = authActions()
     instance["branding"] = brandingActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
+
+    return instance
+end function
+
+function audioActions()
+    instance = {}
+
+    ' Gets an audio stream.
+    instance.getstreamurl = function(id as string, params = {} as object)
+        return buildURL(Substitute("Audio/{0}/stream", id), params)
+    end function
+
+    ' Gets an audio stream.
+    instance.headstreamurl = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("Audio/{0}/stream", id), params)
+        return _headVoid(req)
+    end function
+
+    ' Gets an audio stream.
+    instance.getstreamurlwithcontainer = function(id as string, container as string, params = {} as object)
+        return buildURL(Substitute("Audio/{0}/stream.{1}", id, container), params)
+    end function
+
+    ' Gets an audio stream.
+    instance.headstreamurlwithcontainer = function(id as string, container as string, params = {} as object)
+        req = _APIRequest(Substitute("Audio/{0}/stream.{1}", id, container), params)
+        return _headVoid(req)
+    end function
 
     return instance
 end function
@@ -407,6 +436,22 @@ function _postVoid(req, data = "" as string) as boolean
     end if
 
     if resp.GetResponseCode() = 204
+        return true
+    end if
+
+    return false
+end function
+
+function _headVoid(req) as boolean
+    req.setMessagePort(CreateObject("roMessagePort"))
+    req.AddHeader("Content-Type", "application/json")
+    req.AsyncHead()
+    resp = wait(30000, req.GetMessagePort())
+    if type(resp) <> "roUrlEvent"
+        return false
+    end if
+
+    if resp.GetResponseCode() = 200
         return true
     end if
 
