@@ -573,5 +573,13 @@
         <source>There was an error authenticating via Quick Connect.</source>
         <translation>There was an error authenticating via Quick Connect.</translation>
     </message>
+    <message>
+        <source>Networks</source>
+        <translation>Networks</translation>
+    </message>
+    <message>
+        <source>Shows</source>
+        <translation>Shows</translation>
+    </message>
 </context>
 </TS>
