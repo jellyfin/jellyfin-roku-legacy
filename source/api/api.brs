@@ -10,6 +10,7 @@ function API()
     instance["collections"] = collectionsActions()
     instance["devices"] = devicesActions()
     instance["displaypreferences"] = displaypreferencesActions()
+    instance["dlna"] = dlnaActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
     instance["web"] = webActions()
@@ -247,6 +248,48 @@ function displaypreferencesActions()
     instance.update = function(id, params = {} as object, body = {} as object)
         req = _APIRequest(Substitute("/displaypreferences/{0}", id), params)
         return _postVoid(req, FormatJson(body))
+    end function
+
+    return instance
+end function
+
+function dlnaActions()
+    instance = {}
+
+    ' Get profile infos.
+    instance.getprofileinfos = function()
+        req = _APIRequest("/dlna/profileinfos")
+        return _getJson(req)
+    end function
+
+    ' Creates a profile.
+    instance.createprofile = function(body = {} as object)
+        req = _APIRequest("/dlna/profiles")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' Updates a profile.
+    instance.updateprofile = function(id as string, body = {} as object)
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Gets a single profile.
+    instance.getprofilebyid = function(id as string)
+        req = _APIRequest(Substitute("/dlna/profiles/{0}", id))
+        return _getJson(req)
+    end function
+
+    ' Deletes a profile.
+    instance.deleteprofile = function(id as string)
+        req = _APIRequest(Substitute("/dlna/profiles/{0}", id))
+        return _deleteVoid(req)
+    end function
+
+    ' Gets the default profile.
+    instance.getdefaultprofile = function()
+        req = _APIRequest("/dlna/profiles/default")
+        return _getJson(req)
     end function
 
     return instance
