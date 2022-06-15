@@ -259,7 +259,7 @@ end sub
 
 ' Return parent collection type
 function getCollectionType() as string
-    return m.top.parentItem.collectionType
+    return m.top.parentItem.Type
 end function
 
 ' Search string array for search value. Return if it's found
