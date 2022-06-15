@@ -9,6 +9,7 @@ function API()
     instance["clientlog"] = clientlogActions()
     instance["collections"] = collectionsActions()
     instance["devices"] = devicesActions()
+    instance["displaypreferences"] = displaypreferencesActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
     instance["web"] = webActions()
@@ -224,6 +225,28 @@ function devicesActions()
     instance.delete = function(params = {} as object)
         req = _APIRequest("/devices", params)
         return _deleteVoid(req)
+    end function
+
+    return instance
+end function
+
+function displaypreferencesActions()
+    instance = {}
+
+    ' Get Display Preferences.
+    '  m.api.displaypreferences.get("usersettings", {
+    '    "userid": "bde7e54f2d7f45d79525265640239c03",
+    '    "client": "roku"
+    '})
+    instance.get = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/displaypreferences/{0}", id), params)
+        return _getJson(req)
+    end function
+
+    ' Update Display Preferences.
+    instance.update = function(id, params = {} as object, body = {} as object)
+        req = _APIRequest(Substitute("/displaypreferences/{0}", id), params)
+        return _postVoid(req, FormatJson(body))
     end function
 
     return instance
