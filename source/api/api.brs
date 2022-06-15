@@ -8,6 +8,7 @@ function API()
     instance["channels"] = channelsActions()
     instance["clientlog"] = clientlogActions()
     instance["collections"] = collectionsActions()
+    instance["devices"] = devicesActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
     instance["web"] = webActions()
@@ -186,6 +187,42 @@ function collectionsActions()
     ' Removes items from a collection.
     instance.deleteitems = function(id as string, params = {} as object)
         req = _APIRequest(Substitute("/collections/{0}/items", id), params)
+        return _deleteVoid(req)
+    end function
+
+    return instance
+end function
+
+function devicesActions()
+    instance = {}
+
+    ' Get Devices.
+    instance.get = function(params = {} as object)
+        req = _APIRequest("/devices", params)
+        return _getJson(req)
+    end function
+
+    ' Get info for a device.
+    instance.getinfo = function(params = {} as object)
+        req = _APIRequest("/devices/info", params)
+        return _getJson(req)
+    end function
+
+    ' Get options for a device.
+    instance.getoptions = function(params = {} as object)
+        req = _APIRequest("/devices/options", params)
+        return _getJson(req)
+    end function
+
+    ' Update device options.
+    instance.updateoptions = function(params = {} as object, body = {} as object)
+        req = _APIRequest("/devices/options", params)
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' Deletes a device.
+    instance.delete = function(params = {} as object)
+        req = _APIRequest("/devices", params)
         return _deleteVoid(req)
     end function
 
