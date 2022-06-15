@@ -10,6 +10,7 @@ function API()
     instance["collections"] = collectionsActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
+    instance["web"] = webActions()
 
     return instance
 end function
@@ -386,6 +387,24 @@ function usersActions()
         req = _APIRequest("users/forgotpassword/pin")
         json = _postJson(req, FormatJson(body))
         return json
+    end function
+
+    return instance
+end function
+
+function webActions()
+    instance = {}
+
+    ' Gets a dashboard configuration page.
+    instance.getconfigurationpage = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Gets a dashboard configuration page.
+    instance.getconfigurationpages = function()
+        req = _APIRequest("/web/configurationpages")
+        return _getJson(req)
     end function
 
     return instance
