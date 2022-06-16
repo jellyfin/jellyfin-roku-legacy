@@ -69,6 +69,17 @@ function audioActions()
         return _headVoid(req)
     end function
 
+    ' Gets an audio stream.
+    instance.getuniversalurl = function(id as string, params = {} as object)
+        return buildURL(Substitute("Audio/{0}/universal", id), params)
+    end function
+
+    ' Gets an audio stream.
+    instance.headuniversalurl = function(id as string, params = {} as object)
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
     return instance
 end function
 
