@@ -11,7 +11,9 @@ function API()
     instance["devices"] = devicesActions()
     instance["displaypreferences"] = displaypreferencesActions()
     instance["dlna"] = dlnaActions()
+    instance["environment"] = environmentActions()
     instance["getutctime"] = getutctimeActions()
+    instance["items"] = itemsActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
     instance["web"] = webActions()
@@ -302,6 +304,60 @@ function dlnaActions()
     ' Gets the default profile.
     instance.getdefaultprofile = function()
         req = _APIRequest("/dlna/profiles/default")
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function environmentActions()
+    instance = {}
+
+    ' Get Default directory browser.
+    instance.getdefaultdirectorybrowser = function()
+        req = _APIRequest("/environment/defaultdirectorybrowser")
+        return _getJson(req)
+    end function
+
+    ' Gets the contents of a given directory in the file system.
+    instance.getdirectorycontents = function(params = {} as object)
+        req = _APIRequest("/environment/directorycontents", params)
+        return _getJson(req)
+    end function
+
+    ' Gets the parent path of a given path.
+    instance.getparentpath = function(params = {} as object)
+        req = _APIRequest("/environment/parentpath", params)
+        return _getJson(req)
+    end function
+
+    ' Gets available drives from the server's file system.
+    instance.getdrives = function()
+        req = _APIRequest("/environment/drives")
+        return _getJson(req)
+    end function
+
+    ' Validates path.
+    instance.validatepath = function(body = {} as object)
+        req = _APIRequest("/environment/validatepath")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    return instance
+end function
+
+function itemsActions()
+    instance = {}
+
+    ' Gets legacy query filters.
+    instance.getfilters = function(params = {} as object)
+        req = _APIRequest("/items/filters", params)
+        return _getJson(req)
+    end function
+
+    ' Gets query filters.
+    instance.getfilters2 = function(params = {} as object)
+        req = _APIRequest("/items/filters2", params)
         return _getJson(req)
     end function
 
