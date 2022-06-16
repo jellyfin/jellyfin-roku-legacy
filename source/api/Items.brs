@@ -209,6 +209,17 @@ function AudioItem(id as string)
     return getJson(resp)
 end function
 
+' Get Instant Mix based on item
+function CreateInstantMix(id as string)
+    url = Substitute("/Items/{0}/InstantMix", id)
+    resp = APIRequest(url, {
+        "UserId": get_setting("active_user"),
+        "Limit": 201
+    })
+
+    return getJson(resp)
+end function
+
 function AudioStream(id as string)
     songData = AudioItem(id)
 
@@ -264,7 +275,7 @@ function TVEpisodes(show_id as string, season_id as string)
     data = getJson(resp)
     results = []
     for each item in data.Items
-        imgParams = { "AddPlayedIndicator": item.UserData.Played, "maxWidth": 712, "maxheight": 400 }
+        imgParams = { "AddPlayedIndicator": item.UserData.Played, "maxWidth": 400, "maxheight": 250 }
         if item.UserData.PlayedPercentage <> invalid
             param = { "PercentPlayed": item.UserData.PlayedPercentage }
             imgParams.Append(param)
@@ -272,7 +283,7 @@ function TVEpisodes(show_id as string, season_id as string)
         tmp = CreateObject("roSGNode", "TVEpisodeData")
         tmp.image = PosterImage(item.id, imgParams)
         if tmp.image <> invalid
-            tmp.image.posterDisplayMode = "scaleToFit"
+            tmp.image.posterDisplayMode = "scaleToZoom"
         end if
         tmp.json = item
         tmp.overview = ItemMetaData(item.id).overview
