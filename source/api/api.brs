@@ -15,6 +15,7 @@ function API()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
     instance["web"] = webActions()
+    instance["years"] = yearsActions()
 
     return instance
 end function
@@ -520,6 +521,24 @@ function webActions()
     ' Gets a dashboard configuration page.
     instance.getconfigurationpages = function()
         req = _APIRequest("/web/configurationpages")
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function yearsActions()
+    instance = {}
+
+    ' Gets years
+    instance.get = function(params = {} as object)
+        req = _APIRequest("/years", params)
+        return _getJson(req)
+    end function
+
+    ' Gets a year.
+    instance.getyear = function(year as string, params = {} as object)
+        req = _APIRequest(Substitute("/years/{0}", year), params)
         return _getJson(req)
     end function
 
