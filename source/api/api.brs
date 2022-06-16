@@ -13,6 +13,7 @@ function API()
     instance["dlna"] = dlnaActions()
     instance["environment"] = environmentActions()
     instance["getutctime"] = getutctimeActions()
+    instance["genres"] = genresActions()
     instance["items"] = itemsActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
@@ -346,18 +347,18 @@ function environmentActions()
     return instance
 end function
 
-function itemsActions()
+function genresActions()
     instance = {}
 
-    ' Gets legacy query filters.
-    instance.getfilters = function(params = {} as object)
-        req = _APIRequest("/items/filters", params)
+    ' Gets all genres from a given item, folder, or the entire library.
+    instance.get = function(params = {} as object)
+        req = _APIRequest("/genres", params)
         return _getJson(req)
     end function
 
-    ' Gets query filters.
-    instance.getfilters2 = function(params = {} as object)
-        req = _APIRequest("/items/filters2", params)
+    ' Gets a genre, by name.
+    instance.getbyname = function(name as string, params = {} as object)
+        req = _APIRequest(Substitute("/genres/{0}", name), params)
         return _getJson(req)
     end function
 
@@ -370,6 +371,24 @@ function getutctimeActions()
     ' Get profile infos.
     instance.get = function()
         req = _APIRequest("/getutctime")
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function itemsActions()
+    instance = {}
+
+    ' Gets legacy query filters.
+    instance.getfilters = function(params = {} as object)
+        req = _APIRequest("/items/filters", params)
+        return _getJson(req)
+    end function
+
+    ' Gets query filters.
+    instance.getfilters2 = function(params = {} as object)
+        req = _APIRequest("/items/filters2", params)
         return _getJson(req)
     end function
 
