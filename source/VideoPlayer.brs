@@ -55,7 +55,11 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 video.content.watched = not video.content.watched
                 group = m.scene.focusedChild
                 group.timeLastRefresh = CreateObject("roDateTime").AsSeconds()
-                group.callFunc("refresh")
+                m.global.sceneManager.callFunc("clearScenes")
+                group = CreateHomeGroup()
+                group.userConfig = m.user.configuration
+                group.callFunc("loadLibraries")
+                m.global.sceneManager.callFunc("pushScene", group)
                 video.content = invalid
                 return
             else if dialogResult = 3
