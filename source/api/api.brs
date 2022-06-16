@@ -11,6 +11,7 @@ function API()
     instance["devices"] = devicesActions()
     instance["displaypreferences"] = displaypreferencesActions()
     instance["dlna"] = dlnaActions()
+    instance["getutctime"] = getutctimeActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
     instance["web"] = webActions()
@@ -289,6 +290,18 @@ function dlnaActions()
     ' Gets the default profile.
     instance.getdefaultprofile = function()
         req = _APIRequest("/dlna/profiles/default")
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function getutctimeActions()
+    instance = {}
+
+    ' Get profile infos.
+    instance.get = function()
+        req = _APIRequest("/getutctime")
         return _getJson(req)
     end function
 
