@@ -43,7 +43,7 @@
                     },
                     {
                         "title": "Items to Load",
-                        "description": "Default Items that are laoded is 60. If you have network issues try reducing this number to help load items faster",
+                        "description": "Default Items that are loaded is 60. If you have network issues try reducing this number to help load items faster",
                         "settingName": "itemgrid.Limit",
                         "type": "integer",
                         "default": 60
