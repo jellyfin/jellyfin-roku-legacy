@@ -5,7 +5,6 @@ sub init()
     else
         m.top.limit = get_user_setting("itemgrid.Limit")
     end if
-    print "Load Grid Items Limit: " m.top.limit
 end sub
 
 sub loadItems()
