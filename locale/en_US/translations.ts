@@ -589,8 +589,8 @@
     <extracomment>UI -> Media Grid -> Item Title in user setting screen.</extracomment>
 </message>
 <message>
-    <source>Default Items that are laoded is 60. If you have network issues try reducing this number to help load items faster</source>
-    <translation>Default Items that are laoded is 60. If you have network issues try reducing this number to help load items faster</translation>
+    <source>Default Items that are loaded is 60. If you have network issues try reducing this number to help load items faster</source>
+    <translation>Default Items that are loaded is 60. If you have network issues try reducing this number to help load items faster</translation>
     <extracomment>Description for option in Setting Screen</extracomment>
 </message>
 </context>
