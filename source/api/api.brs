@@ -1106,9 +1106,9 @@ function usersActions()
 
     ' Gets items based on a query.
     instance.getresumeitemsbyquery = function(id as string, params = {} as object)
-    req = _APIRequest(Substitute("/users/{0}/items/resume", id), params)
+        req = _APIRequest(Substitute("/users/{0}/items/resume", id), params)
         return _getJson(req)
-    end function  
+    end function
 
     return instance
 end function
@@ -1219,7 +1219,7 @@ end function
 
 function _get_url()
     base = get_setting("server")
-    
+
     ' Remove trailing slash
     if base.right(1) = "/"
         base = base.left(base.len() - 1)
