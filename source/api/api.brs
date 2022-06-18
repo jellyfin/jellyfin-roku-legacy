@@ -17,12 +17,17 @@ function API()
     instance["genres"] = genresActions()
     instance["images"] = imagesActions()
     instance["items"] = itemsActions()
+    instance["libraries"] = librariesActions()
+    instance["library"] = libraryActions()
+    instance["movies"] = moviesActions()
     instance["musicgenres"] = musicgenresActions()
     instance["persons"] = personsActions()
     instance["playlists"] = playlistsActions()
+    instance["shows"] = showsActions()
     instance["songs"] = songsActions()
     instance["studios"] = studiosActions()
     instance["system"] = systemActions()
+    instance["trailers"] = trailersActions()
     instance["users"] = usersActions()
     instance["web"] = webActions()
     instance["years"] = yearsActions()
@@ -36,6 +41,12 @@ function albumsActions()
     ' Creates an instant playlist based on a given album.
     instance.getinstantmix = function(id as string, params = {} as object)
         req = _APIRequest(Substitute("/albums/{0}/instantmix", id), params)
+        return _getJson(req)
+    end function
+
+    ' Gets similar items.
+    instance.getsimilar = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/albums/{0}/similar", id), params)
         return _getJson(req)
     end function
 
@@ -80,6 +91,12 @@ function artistsActions()
         return _getJson(req)
     end function
 
+    ' Gets similar items.
+    instance.getsimilar = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/artists/{0}/similar", id), params)
+        return _getJson(req)
+    end function
+
     return instance
 end function
 
@@ -114,7 +131,7 @@ function audioActions()
     end function
 
     ' Gets an audio stream.
-    instance.headuniversalurl = function(id as string, params = {} as object)
+    instance.headuniversalurl = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
@@ -155,7 +172,7 @@ function brandingActions()
     end function
 
     ' Uploads a custom splashscreen.
-    instance.postsplashscreen = function(body = {} as object)
+    instance.postsplashscreen = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
@@ -221,7 +238,7 @@ function clientlogActions()
     instance = {}
 
     ' Upload a document.
-    instance.document = function(params = {} as object)
+    instance.document = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
@@ -327,7 +344,7 @@ function dlnaActions()
     end function
 
     ' Updates a profile.
-    instance.updateprofile = function(id as string, body = {} as object)
+    instance.updateprofile = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
@@ -491,13 +508,13 @@ function itemsActions()
     end function
 
     ' Delete an item's image.
-    instance.deleteimage = function(id as string, imagetype as string)
+    instance.deleteimage = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
 
     ' Set item image.
-    instance.postimage = function(id as string, imagetype as string, body = {} as object)
+    instance.postimage = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
@@ -514,7 +531,7 @@ function itemsActions()
     end function
 
     ' Delete an item's image.
-    instance.deleteimagebyindex = function(id as string, imagetype = "primary" as string, imageindex = 0 as integer)
+    instance.deleteimagebyindex = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
@@ -538,7 +555,7 @@ function itemsActions()
     end function
 
     ' Applies search criteria to an item and refreshes metadata.
-    instance.applysearchresult = function(id as string, params = {} as object, body = {} as object)
+    instance.applysearchresult = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
@@ -599,7 +616,7 @@ function itemsActions()
 
     ' Refreshes metadata for an item.
     instance.refreshmetadata = function(id as string, params = {} as object)
-        req = _APIRequest("/items/{0}/refresh", params)
+        req = _APIRequest(Substitute("/items/{0}/refresh", id), params)
         return _postVoid(req)
     end function
 
@@ -607,6 +624,143 @@ function itemsActions()
     ' requires userid param
     instance.getbyquery = function(params = {} as object)
         req = _APIRequest("/items/", params)
+        return _getJson(req)
+    end function
+
+    ' Deletes items from the library and filesystem.
+    instance.delete = function(params = {} as object)
+        req = _APIRequest("/items/", params)
+        return _deleteVoid(req)
+    end function
+
+    ' Deletes an item from the library and filesystem.
+    instance.deletebyid = function(id as string)
+        req = _APIRequest(Substitute("/items/{0}", id))
+        return _deleteVoid(req)
+    end function
+
+    ' Gets all parents of an item.
+    instance.getancestors = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/items/{0}/ancestors", id), params)
+        return _getJson(req)
+    end function
+
+    ' Downloads item media.
+    instance.getdownload = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Get the original file of an item.
+    instance.getoriginalfile = function(id as string)
+        return _buildURL(Substitute("/items/{0}/file", id))
+    end function
+
+    ' Gets similar items.
+    instance.getsimilar = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/items/{0}/similar", id), params)
+        return _getJson(req)
+    end function
+
+    ' Get theme songs and videos for an item.
+    instance.getthememedia = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/items/{0}/thememedia", id), params)
+        return _getJson(req)
+    end function
+
+    ' Get theme songs for an item.
+    instance.getthemesongs = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/items/{0}/themesongs", id), params)
+        return _getJson(req)
+    end function
+
+    ' Get theme videos for an item.
+    instance.getthemevideos = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/items/{0}/themevideos", id), params)
+        return _getJson(req)
+    end function
+
+    ' Get item counts.
+    instance.getcounts = function(params = {} as object)
+        req = _APIRequest("/items/counts", params)
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function librariesActions()
+    instance = {}
+
+    ' Gets the library options info.
+    instance.getavailableoptions = function(params = {} as object)
+        req = _APIRequest("/libraries/availableoptions", params)
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function libraryActions()
+    instance = {}
+
+    ' Reports that new movies have been added by an external source.
+    instance.reportmediaupdated = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Gets all user media folders.
+    instance.getmediafolders = function(params = {} as object)
+        req = _APIRequest("/library/mediafolders", params)
+        return _getJson(req)
+    end function
+
+    ' Reports that new movies have been added by an external source.
+    instance.reportmoviesadded = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Reports that new movies have been added by an external source.
+    instance.reportmoviesupdated = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Gets a list of physical paths from virtual folders.
+    instance.getphysicalpaths = function()
+        req = _APIRequest("/library/physicalpaths")
+        return _getJson(req)
+    end function
+
+    ' Starts a library scan.
+    instance.refresh = function()
+        req = _APIRequest("/library/refresh")
+        return _postVoid(req)
+    end function
+
+    ' Reports that new episodes of a series have been added by an external source.
+    instance.reporttvseriesadded = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Reports that new episodes of a series have been added by an external source.
+    instance.reporttvseriesupdated = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    return instance
+end function
+
+function moviesActions()
+    instance = {}
+
+    ' Gets similar items.
+    instance.getsimilar = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/movies/{0}/similar", id), params)
         return _getJson(req)
     end function
 
@@ -671,6 +825,18 @@ function playlistsActions()
     return instance
 end function
 
+function showsActions()
+    instance = {}
+
+    ' Gets similar items.
+    instance.getsimilar = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/shows/{0}/similar", id), params)
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
 function songsActions()
     instance = {}
 
@@ -728,7 +894,7 @@ function systemActions()
     end function
 
     ' Updates named configuration.
-    instance.updateconfigurationbyname = function(name as string)
+    instance.updateconfigurationbyname = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
@@ -740,7 +906,7 @@ function systemActions()
     end function
 
     ' Updates the path to the media encoder.
-    instance.updatemediaencoderpath = function(body = {} as object)
+    instance.updatemediaencoderpath = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
@@ -797,6 +963,18 @@ function systemActions()
     instance.shutdown = function()
         req = _APIRequest("/system/shutdown")
         return _postVoid(req)
+    end function
+
+    return instance
+end function
+
+function trailersActions()
+    instance = {}
+
+    ' Gets similar items.
+    instance.getsimilar = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/trailers/{0}/similar", id), params)
+        return _getJson(req)
     end function
 
     return instance
@@ -878,7 +1056,7 @@ function usersActions()
     end function
 
     ' Authenticates a user with quick connect.
-    instance.authenticatewithquickconnect = function(body = {} as object)
+    instance.authenticatewithquickconnect = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
@@ -898,13 +1076,13 @@ function usersActions()
     end function
 
     ' Sets the user image.
-    instance.updateimage = function(id as string, imagetype as string, imageindex = 0 as integer, body = {} as object)
+    instance.updateimage = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
 
     ' Delete the user's image.
-    instance.deleteimage = function(id as string, imagetype as string, imageindex = 0 as integer)
+    instance.deleteimage = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
