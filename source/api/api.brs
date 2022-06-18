@@ -14,6 +14,7 @@ function API()
     instance["environment"] = environmentActions()
     instance["getutctime"] = getutctimeActions()
     instance["genres"] = genresActions()
+    instance["images"] = imagesActions()
     instance["items"] = itemsActions()
     instance["musicgenres"] = musicgenresActions()
     instance["persons"] = personsActions()
@@ -403,6 +404,45 @@ function getutctimeActions()
     instance.get = function()
         req = _APIRequest("/getutctime")
         return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function imagesActions()
+    instance = {}
+
+    ' Get all general images.
+    instance.getgeneral = function()
+        req = _APIRequest("/images/general")
+        return _getJson(req)
+    end function
+
+    ' Get General Image.
+    instance.getgeneralurlbyname = function(name as string, imagetype = "primary" as string)
+        return _buildURL(Substitute("/images/general/{0}/{1}", name, imagetype))
+    end function
+
+    ' Get all media info images.
+    instance.getmediainfo = function()
+        req = _APIRequest("/images/mediainfo")
+        return _getJson(req)
+    end function
+
+    ' Get media info image.
+    instance.getmediainfourl = function(theme as string, name as string)
+        return _buildURL(Substitute("/images/mediainfo/{0}/{1}", theme, name))
+    end function
+
+    ' Get all general images.
+    instance.getratings = function()
+        req = _APIRequest("/images/ratings")
+        return _getJson(req)
+    end function
+
+    ' Get rating image.
+    instance.getratingsurl = function(theme as string, name as string)
+        return _buildURL(Substitute("/images/ratings/{0}/{1}", theme, name))
     end function
 
     return instance
