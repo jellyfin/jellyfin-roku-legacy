@@ -686,6 +686,24 @@ function itemsActions()
         return _getJson(req)
     end function
 
+    ' Updates an item.
+    instance.update = function(id as string, body = {} as object)
+        req = _APIRequest(Substitute("/items/{0}", id))
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' Updates an item's content type.
+    instance.update = function(id as string, body = {} as object)
+        req = _APIRequest(Substitute("/items/{0}/contenttype", id))
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' Gets metadata editor info for an item.
+    instance.getmedadataeditor = function(id as string)
+        req = _APIRequest(Substitute("/items/{0}/metadataeditor", id))
+        return _getJson(req)
+    end function
+
     return instance
 end function
 
