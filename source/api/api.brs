@@ -15,6 +15,9 @@ function API()
     instance["getutctime"] = getutctimeActions()
     instance["genres"] = genresActions()
     instance["items"] = itemsActions()
+    instance["musicgenres"] = musicgenresActions()
+    instance["persons"] = personsActions()
+    instance["studios"] = studiosActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
     instance["web"] = webActions()
@@ -44,6 +47,17 @@ function artistsActions()
         return _getJson(req)
     end function
 
+    ' Get artist image by name.
+    instance.getimageurlbyname = function(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+        return _buildURL(Substitute("/artists/{0}/images/{1}/{2}", name, imagetype, imageindex.ToStr()), params)
+    end function
+
+    ' Get artist image by name.
+    instance.headimageurlbyname = function(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+        req = _APIRequest(Substitute("/artists/{0}/images/{1}/{2}", name, imagetype, imageindex.ToStr()), params)
+        return _headVoid(req)
+    end function
+
     return instance
 end function
 
@@ -52,7 +66,7 @@ function audioActions()
 
     ' Gets an audio stream.
     instance.getstreamurl = function(id as string, params = {} as object)
-        return buildURL(Substitute("Audio/{0}/stream", id), params)
+        return _buildURL(Substitute("Audio/{0}/stream", id), params)
     end function
 
     ' Gets an audio stream.
@@ -63,7 +77,7 @@ function audioActions()
 
     ' Gets an audio stream.
     instance.getstreamurlwithcontainer = function(id as string, container as string, params = {} as object)
-        return buildURL(Substitute("Audio/{0}/stream.{1}", id, container), params)
+        return _buildURL(Substitute("Audio/{0}/stream.{1}", id, container), params)
     end function
 
     ' Gets an audio stream.
@@ -74,7 +88,7 @@ function audioActions()
 
     ' Gets an audio stream.
     instance.getuniversalurl = function(id as string, params = {} as object)
-        return buildURL(Substitute("Audio/{0}/universal", id), params)
+        return _buildURL(Substitute("Audio/{0}/universal", id), params)
     end function
 
     ' Gets an audio stream.
@@ -116,6 +130,12 @@ function brandingActions()
     ' Get user's splashscreen image
     instance.getsplashscreen = function(params = {} as object)
         return _buildURL("/branding/splashscreen", params)
+    end function
+
+    ' Uploads a custom splashscreen.
+    instance.postsplashscreen = function(body = {} as object)
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
     end function
 
     ' Gets branding configuration.
@@ -362,6 +382,17 @@ function genresActions()
         return _getJson(req)
     end function
 
+    ' Get genre image by name.
+    instance.getimageurlbyname = function(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+        return _buildURL(Substitute("/genres/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+    end function
+
+    ' Get genre image by name.
+    instance.headimageurlbyname = function(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+        req = _APIRequest(Substitute("/genres/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+        return _headVoid(req)
+    end function
+
     return instance
 end function
 
@@ -390,6 +421,98 @@ function itemsActions()
     instance.getfilters2 = function(params = {} as object)
         req = _APIRequest("/items/filters2", params)
         return _getJson(req)
+    end function
+
+    ' Get item image infos.
+    instance.getimages = function(id as string)
+        req = _APIRequest(Substitute("/items/{0}/images", id))
+        return _getJson(req)
+    end function
+
+    ' Delete an item's image.
+    instance.deleteimage = function(id as string, imagetype as string)
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Set item image.
+    instance.postimage = function(id as string, imagetype as string, body = {} as object)
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Gets the item's image.
+    instance.getimageurl = function(id as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+        return _buildURL(Substitute("/items/{0}/images/{1}/{2}", id, imagetype, imageindex.toStr()), params)
+    end function
+
+    ' Gets the item's image.
+    instance.headimageurlbyname = function(id as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+        req = _APIRequest(Substitute("/items/{0}/images/{1}/{2}", id, imagetype, imageindex.toStr()), params)
+        return _headVoid(req)
+    end function
+
+    ' Delete an item's image.
+    instance.deleteimagebyindex = function(id as string, imagetype = "primary" as string, imageindex = 0 as integer)
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Updates the index for an item image.
+    instance.updateimageindex = function(id as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+        req = _APIRequest(Substitute("/items/{0}/images/{1}/{2}/index", id, imagetype, imageindex.toStr()), params)
+        return _postVoid(req)
+    end function
+
+    return instance
+end function
+
+function musicgenresActions()
+    instance = {}
+
+    ' Get music genre image by name.
+    instance.getimageurlbyname = function(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+        return _buildURL(Substitute("/musicgenres/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+    end function
+
+    ' Get music genre image by name.
+    instance.headimageurlbyname = function(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+        req = _APIRequest(Substitute("/musicgenres/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+        return _headVoid(req)
+    end function
+
+    return instance
+end function
+
+function personsActions()
+    instance = {}
+
+    ' Get person image by name.
+    instance.getimageurlbyname = function(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+        return _buildURL(Substitute("/persons/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+    end function
+
+    ' Get person image by name.
+    instance.headimageurlbyname = function(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+        req = _APIRequest(Substitute("/persons/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+        return _headVoid(req)
+    end function
+
+    return instance
+end function
+
+function studiosActions()
+    instance = {}
+
+    ' Get studio image by name.
+    instance.getimageurlbyname = function(name as string, imagetype = "thumb" as string, imageindex = 0 as integer, params = {} as object)
+        return _buildURL(Substitute("/studios/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+    end function
+
+    ' Get studio image by name.
+    instance.headimageurlbyname = function(name as string, imagetype = "thumb" as string, imageindex = 0 as integer, params = {} as object)
+        req = _APIRequest(Substitute("/studios/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+        return _headVoid(req)
     end function
 
     return instance
@@ -592,6 +715,29 @@ function usersActions()
         return json
     end function
 
+    ' Sets the user image.
+    instance.updateimage = function(id as string, imagetype as string, imageindex = 0 as integer, body = {} as object)
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Delete the user's image.
+    instance.deleteimage = function(id as string, imagetype as string, imageindex = 0 as integer)
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Get user profile image.
+    instance.getimageurl = function(id as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+        return _buildURL(Substitute("/users/{0}/images/{1}/{2}", id, imagetype, imageindex.toStr()), params)
+    end function
+
+    ' Get music genre image by name.
+    instance.headimageurl = function(id as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+        req = _APIRequest(Substitute("/users/{0}/images/{1}/{2}", id, imagetype, imageindex.toStr()), params)
+        return _headVoid(req)
+    end function
+
     return instance
 end function
 
@@ -647,6 +793,8 @@ end function
 
 function _buildURL(path as string, params = {} as object) as string
 
+    path = path.Replace(" ", "%20")
+
     ' Add intial '/' if path does not start with one
     if path.Left(1) = "/"
         full_url = _get_url() + path
@@ -699,33 +847,33 @@ end function
 
 function _get_url()
     base = get_setting("server")
+    
+    ' Remove trailing slash
     if base.right(1) = "/"
         base = base.left(base.len() - 1)
     end if
 
-    ' append http:// to the start if not specified
+    ' Ensure protocol is at beginning of URL
     if base.left(7) <> "http://" and base.left(8) <> "https://"
         base = "http://" + base
     end if
 
     return base
-
 end function
 
 function _authorize_request(request)
     devinfo = CreateObject("roDeviceInfo")
     appinfo = CreateObject("roAppInfo")
 
-    auth = "MediaBrowser"
-
-    client = "Jellyfin Roku"
-    auth = auth + " Client=" + Chr(34) + client + Chr(34)
+    auth = "MediaBrowser Client=" + Chr(34) + "Jellyfin Roku" + Chr(34)
 
     device = devinfo.getModelDisplayName()
     friendly = devinfo.getFriendlyName()
+
     ' remove special characters
     regex = CreateObject("roRegex", "[^a-zA-Z0-9\ \-\_]", "")
     friendly = regex.ReplaceAll(friendly, "")
+
     auth = auth + ", Device=" + Chr(34) + device + " (" + friendly + ")" + Chr(34)
 
     device_id = devinfo.getChannelClientID()
@@ -734,8 +882,7 @@ function _authorize_request(request)
     end if
     auth = auth + ", DeviceId=" + Chr(34) + device_id + Chr(34)
 
-    version = appinfo.GetVersion()
-    auth = auth + ", Version=" + Chr(34) + version + Chr(34)
+    auth = auth + ", Version=" + Chr(34) + appinfo.GetVersion() + Chr(34)
 
     user = get_setting("active_user")
     if user <> invalid and user <> ""
@@ -758,24 +905,6 @@ function _deleteVoid(req)
     req.GetToString()
 
     return true
-end function
-
-function _postJson(req, data = "" as string)
-    req.setMessagePort(CreateObject("roMessagePort"))
-    req.AddHeader("Content-Type", "application/json")
-    req.AsyncPostFromString(data)
-    resp = wait(30000, req.GetMessagePort())
-    if type(resp) <> "roUrlEvent"
-        return invalid
-    end if
-
-    if resp.getString() = ""
-        return invalid
-    end if
-
-    json = ParseJson(resp.GetString())
-
-    return json
 end function
 
 function _postVoid(req, data = "" as string) as boolean
@@ -815,13 +944,29 @@ function _headVoid(req) as boolean
 end function
 
 function _getJson(req)
-    'req.retainBodyOnError(True)
-    'print req.GetToString()
     data = req.GetToString()
     if data = invalid or data = ""
         return invalid
     end if
     json = ParseJson(data)
+    return json
+end function
+
+function _postJson(req, data = "" as string)
+    req.setMessagePort(CreateObject("roMessagePort"))
+    req.AddHeader("Content-Type", "application/json")
+    req.AsyncPostFromString(data)
+    resp = wait(30000, req.GetMessagePort())
+    if type(resp) <> "roUrlEvent"
+        return invalid
+    end if
+
+    if resp.getString() = ""
+        return invalid
+    end if
+
+    json = ParseJson(resp.GetString())
+
     return json
 end function
 
