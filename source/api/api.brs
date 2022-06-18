@@ -531,6 +531,72 @@ function itemsActions()
         return _getJson(req)
     end function
 
+    ' Get the item's external id info.
+    instance.getexternalidinfos = function(id as string)
+        req = _APIRequest(Substitute("/items/{0}/externalidinfos", id))
+        return _getJson(req)
+    end function
+
+    ' Applies search criteria to an item and refreshes metadata.
+    instance.applysearchresult = function(id as string, params = {} as object, body = {} as object)
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Get book remote search.
+    instance.getbookremotesearch = function(body = {} as object)
+        req = _APIRequest("/items/remotesearch/book")
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Get box set remote search.
+    instance.getboxsetremotesearch = function(body = {} as object)
+        req = _APIRequest("/items/remotesearch/boxset")
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Get movie remote search.
+    instance.getmovieremotesearch = function(body = {} as object)
+        req = _APIRequest("/items/remotesearch/movie")
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Get music album remote search.
+    instance.getmusicalbumremotesearch = function(body = {} as object)
+        req = _APIRequest("/items/remotesearch/musicalbum")
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Get music artist remote search.
+    instance.getmusicartistremotesearch = function(body = {} as object)
+        req = _APIRequest("/items/remotesearch/musicartist")
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Get music video remote search.
+    instance.getmusicvideoremotesearch = function(body = {} as object)
+        req = _APIRequest("/items/remotesearch/musicvideo")
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Get person remote search.
+    instance.getpersonremotesearch = function(body = {} as object)
+        req = _APIRequest("/items/remotesearch/person")
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Get series remote search.
+    instance.getseriesremotesearch = function(body = {} as object)
+        req = _APIRequest("/items/remotesearch/series")
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Get trailer remote search.
+    instance.gettrailerremotesearch = function(body = {} as object)
+        req = _APIRequest("/items/remotesearch/trailer")
+        return _postJson(req, FormatJson(body))
+    end function
+
     return instance
 end function
 
