@@ -597,6 +597,19 @@ function itemsActions()
         return _postJson(req, FormatJson(body))
     end function
 
+    ' Refreshes metadata for an item.
+    instance.refreshmetadata = function(id as string, params = {} as object)
+        req = _APIRequest("/items/{0}/refresh", params)
+        return _postVoid(req)
+    end function
+
+    ' Gets items based on a query.
+    ' requires userid param
+    instance.getbyquery = function(params = {} as object)
+        req = _APIRequest("/items/", params)
+        return _getJson(req)
+    end function
+
     return instance
 end function
 
@@ -907,6 +920,18 @@ function usersActions()
         return _headVoid(req)
     end function
 
+    ' Gets items based on a query.
+    instance.getitemsbyquery = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/users/{0}/items", id), params)
+        return _getJson(req)
+    end function
+
+    ' Gets items based on a query.
+    instance.getresumeitemsbyquery = function(id as string, params = {} as object)
+    req = _APIRequest(Substitute("/users/{0}/items/resume", id), params)
+        return _getJson(req)
+    end function  
+
     return instance
 end function
 
@@ -1126,6 +1151,7 @@ function _postJson(req, data = "" as string)
     req.AddHeader("Content-Type", "application/json")
     req.AsyncPostFromString(data)
     resp = wait(30000, req.GetMessagePort())
+
     if type(resp) <> "roUrlEvent"
         return invalid
     end if
