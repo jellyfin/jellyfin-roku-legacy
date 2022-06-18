@@ -1,6 +1,7 @@
 function API()
     instance = {}
 
+    instance["albums"] = albumsActions()
     instance["artists"] = artistsActions()
     instance["audio"] = audioActions()
     instance["auth"] = authActions()
@@ -18,11 +19,25 @@ function API()
     instance["items"] = itemsActions()
     instance["musicgenres"] = musicgenresActions()
     instance["persons"] = personsActions()
+    instance["playlists"] = playlistsActions()
+    instance["songs"] = songsActions()
     instance["studios"] = studiosActions()
     instance["system"] = systemActions()
     instance["users"] = usersActions()
     instance["web"] = webActions()
     instance["years"] = yearsActions()
+
+    return instance
+end function
+
+function albumsActions()
+    instance = {}
+
+    ' Creates an instant playlist based on a given album.
+    instance.getinstantmix = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/albums/{0}/instantmix", id), params)
+        return _getJson(req)
+    end function
 
     return instance
 end function
@@ -57,6 +72,12 @@ function artistsActions()
     instance.headimageurlbyname = function(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
         req = _APIRequest(Substitute("/artists/{0}/images/{1}/{2}", name, imagetype, imageindex.ToStr()), params)
         return _headVoid(req)
+    end function
+
+    ' Creates an instant playlist based on a given artist.
+    instance.getinstantmix = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/artists/{0}/instantmix", id), params)
+        return _getJson(req)
     end function
 
     return instance
@@ -504,6 +525,12 @@ function itemsActions()
         return _postVoid(req)
     end function
 
+    ' Creates an instant playlist based on a given item.
+    instance.getinstantmix = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/items/{0}/instantmix", id), params)
+        return _getJson(req)
+    end function
+
     return instance
 end function
 
@@ -521,6 +548,18 @@ function musicgenresActions()
         return _headVoid(req)
     end function
 
+    ' Creates an instant playlist based on a given genre.
+    instance.getinstantmix = function(name as string, params = {} as object)
+        req = _APIRequest(Substitute("/musicgenres/{0}/instantmix", name), params)
+        return _getJson(req)
+    end function
+
+    ' Creates an instant playlist based on a given genre.
+    instance.getinstantmix = function(params = {} as object)
+        req = _APIRequest("/musicgenres/instantmix", params)
+        return _getJson(req)
+    end function
+
     return instance
 end function
 
@@ -536,6 +575,30 @@ function personsActions()
     instance.headimageurlbyname = function(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
         req = _APIRequest(Substitute("/persons/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
         return _headVoid(req)
+    end function
+
+    return instance
+end function
+
+function playlistsActions()
+    instance = {}
+
+    ' Creates an instant playlist based on a given playlist.
+    instance.getinstantmix = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/playlists/{0}/instantmix", id), params)
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function songsActions()
+    instance = {}
+
+    ' Creates an instant playlist based on a given song.
+    instance.getinstantmix = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/songs/{0}/instantmix", id), params)
+        return _getJson(req)
     end function
 
     return instance
