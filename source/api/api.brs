@@ -1,3 +1,4 @@
+' Next: gets a live tv recording stream
 function API()
     instance = {}
 
@@ -19,6 +20,7 @@ function API()
     instance["items"] = itemsActions()
     instance["libraries"] = librariesActions()
     instance["library"] = libraryActions()
+    instance["livetv"] = livetvActions()
     instance["movies"] = moviesActions()
     instance["musicgenres"] = musicgenresActions()
     instance["persons"] = personsActions()
@@ -816,6 +818,78 @@ function libraryActions()
     instance.updatepath = function(body = {} as object)
         req = _APIRequest("/library/virtualfolders/paths/update")
         return _postVoid(req, FormatJson(body))
+    end function
+
+    return instance
+end function
+
+function livetvActions()
+    instance = {}
+
+    ' Get channel mapping options
+    instance.getchannelmappingoptions = function(params = {} as object)
+        req = _APIRequest("/livetv/channelmappingoptions", params)
+        return _getJson(req)
+    end function
+
+    ' Set channel mappings
+    instance.setchannelmappings = function(body = {} as object)
+        req = _APIRequest("livetv/channelmappings")
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Gets available live tv channels
+    instance.getchannels = function(params = {} as object)
+        req = _APIRequest("/livetv/channels", params)
+        return _getJson(req)
+    end function
+
+    ' Gets a live tv channel
+    instance.getchannelbyid = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/livetv/channels/{0}", id), params)
+        return _getJson(req)
+    end function
+
+    ' Get guide info.
+    instance.getguideinfo = function()
+        req = _APIRequest("/livetv/guideinfo")
+        return _getJson(req)
+    end function
+
+    ' Gets available live tv services.
+    instance.getinfo = function()
+        req = _APIRequest("/livetv/info")
+        return _getJson(req)
+    end function
+
+    ' Adds a listings provider
+    instance.addlistingprovider = function(params = {} as object, body = {} as object)
+        req = _APIRequest("/livetv/listingproviders", params)
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Delete listing provider
+    instance.deletelistingprovider = function(id as string)
+        req = _APIRequest(Substitute("livetv/listingproviders", id))
+        return _deleteVoid(req)
+    end function
+
+    ' Gets default listings provider info.
+    instance.getdefaultlistingprovider = function()
+        req = _APIRequest("/livetv/listingproviders/default")
+        return _getJson(req)
+    end function
+
+    'Gets available lineups.
+    instance.getlineups = function(params = {} as object)
+        req = _APIRequest("/livetv/listingproviders/lineups", params)
+        return _getJson(req)
+    end function
+
+    ' Gets available countries.
+    instance.getcountries = function()
+        req = _APIRequest("/livetv/listingproviders/schedulesdirect/countries")
+        return _getJson(req)
     end function
 
     return instance
