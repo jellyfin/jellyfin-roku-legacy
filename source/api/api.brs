@@ -770,6 +770,54 @@ function libraryActions()
         return false
     end function
 
+    ' Gets all virtual folders.
+    instance.getvirtualfolders = function()
+        req = _APIRequest("/library/virtualfolders")
+        return _getJson(req)
+    end function
+
+    ' Adds a virtual folder.
+    instance.addvirtualfolder = function(params as object, body = {} as object)
+        req = _APIRequest("/library/virtualfolders", params)
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' Removes a virtual folder.
+    instance.deletevirtualfolder = function(params as object)
+        req = _APIRequest("/library/virtualfolders", params)
+        return _deleteVoid(req)
+    end function
+
+    ' Update library options.
+    instance.updateoptions = function(body = {} as object)
+        req = _APIRequest("/library/virtualfolders/libraryoptions")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' Renames a virtual folder.
+    instance.renamevirtualfolder = function(params as object)
+        req = _APIRequest("/library/virtualfolders/name", params)
+        return _postVoid(req)
+    end function
+
+    ' Add a media path to a library.
+    instance.addpath = function(params as object, body = {} as object)
+        req = _APIRequest("/library/virtualfolders/paths", params)
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' Remove a media path.
+    instance.deletepath = function(params as object)
+        req = _APIRequest("/library/virtualfolders/paths", params)
+        return _deleteVoid(req)
+    end function
+
+    ' Updates a media path.
+    instance.updatepath = function(body = {} as object)
+        req = _APIRequest("/library/virtualfolders/paths/update")
+        return _postVoid(req, FormatJson(body))
+    end function
+
     return instance
 end function
 
