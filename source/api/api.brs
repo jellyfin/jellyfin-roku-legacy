@@ -625,7 +625,7 @@ function itemsActions()
     end function
 
     ' Gets items based on a query.
-    ' requires userid param
+    ' requires userid passed in params
     instance.getbyquery = function(params = {} as object)
         req = _APIRequest("/items/", params)
         return _getJson(req)
@@ -1129,6 +1129,13 @@ function moviesActions()
     ' Gets similar items.
     instance.getsimilar = function(id as string, params = {} as object)
         req = _APIRequest(Substitute("/movies/{0}/similar", id), params)
+        return _getJson(req)
+    end function
+
+    ' Gets movie recommendations.
+    ' Requires userid passed in params
+    instance.getrecommendations = function(params = {} as object)
+        req = _APIRequest("/movies/recommendations", params)
         return _getJson(req)
     end function
 
