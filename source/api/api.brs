@@ -1,4 +1,3 @@
-' Next: Package
 function API()
     instance = {}
 
@@ -1271,6 +1270,18 @@ function personsActions()
     instance.headimageurlbyname = function(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
         req = _APIRequest(Substitute("/persons/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
         return _headVoid(req)
+    end function
+
+    ' Gets all persons.
+    instance.get = function(params = {} as object)
+        req = _APIRequest("/persons", params)
+        return _getJson(req)
+    end function
+
+    ' Get person by name.
+    instance.getbyname = function(name as string, params = {} as object)
+        req = _APIRequest(Substitute("/persons/{0}", name), params)
+        return _getJson(req)
     end function
 
     return instance
