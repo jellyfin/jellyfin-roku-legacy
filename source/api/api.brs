@@ -20,6 +20,7 @@ function API()
     instance["libraries"] = librariesActions()
     instance["library"] = libraryActions()
     instance["livetv"] = livetvActions()
+    instance["localization"] = localizationActions()
     instance["movies"] = moviesActions()
     instance["musicgenres"] = musicgenresActions()
     instance["persons"] = personsActions()
@@ -1054,6 +1055,36 @@ function livetvActions()
     ' Discvover tuners :D
     instance.gettunersdiscvover = function(params = {} as object)
         req = _APIRequest("/livetv/tuners/discvover", params)
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function localizationActions()
+    instance = {}
+
+    ' Gets known countries.
+    instance.getcountries = function()
+        req = _APIRequest("/localization/countries")
+        return _getJson(req)
+    end function
+
+    ' Gets known cultures.
+    instance.getcultures = function()
+        req = _APIRequest("/localization/cultures")
+        return _getJson(req)
+    end function
+
+    ' Gets localization options.
+    instance.getoptions = function()
+        req = _APIRequest("/localization/options")
+        return _getJson(req)
+    end function
+
+    ' Gets known parental ratings.
+    instance.getparentalratings = function()
+        req = _APIRequest("/localization/parentalratings")
         return _getJson(req)
     end function
 
