@@ -1,4 +1,3 @@
-' Next: gets a live tv recording stream
 function API()
     instance = {}
 
@@ -889,6 +888,172 @@ function livetvActions()
     ' Gets available countries.
     instance.getcountries = function()
         req = _APIRequest("/livetv/listingproviders/schedulesdirect/countries")
+        return _getJson(req)
+    end function
+
+    ' Gets a live tv recording stream.
+    instance.getrecordingstream = function(id as string)
+        return _buildURL(Substitute("/livetv/listingproviders/{0}/stream", id))
+    end function
+
+    ' Gets a live tv channel stream.
+    instance.getchannelstream = function(id as string, container as string)
+        return _buildURL(Substitute("/livetv/livestreamfiles/{0}/stream.{1}", id, container))
+    end function
+
+    ' Gets available live tv epgs.
+    instance.getprograms = function(params = {} as object)
+        req = _APIRequest("/livetv/programs", params)
+        return _getJson(req)
+    end function
+
+    ' Gets available live tv epgs.
+    instance.postprograms = function(body = {} as object)
+        req = _APIRequest("/livetv/programs")
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Gets a live tv program.
+    instance.getprogrambyid = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/livetv/programs/{0}", id), params)
+        return _getJson(req)
+    end function
+
+    ' Gets recommended live tv epgs.
+    instance.getrecommendedprograms = function(params = {} as object)
+        req = _APIRequest("/livetv/programs/recommended", params)
+        return _getJson(req)
+    end function
+
+    ' Gets live tv recordings.
+    instance.getrecordings = function(params = {} as object)
+        req = _APIRequest("/livetv/recordings", params)
+        return _getJson(req)
+    end function
+
+    ' Gets a live tv recording.
+    instance.getrecordingbyid = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/livetv/recordings/{0}", id), params)
+        return _getJson(req)
+    end function
+
+    ' Deletes a live tv recording.
+    instance.deleterecordingbyid = function(id as string)
+        req = _APIRequest(Substitute("/livetv/recordings/{0}", id))
+        return _deleteVoid(req)
+    end function
+
+    ' Gets recording folders.
+    instance.getrecordingsfolders = function(params = {} as object)
+        req = _APIRequest("/livetv/recordings/folders", params)
+        return _getJson(req)
+    end function
+
+    ' Gets live tv series timers.
+    instance.getseriestimers = function(params = {} as object)
+        req = _APIRequest("/livetv/seriestimers", params)
+        return _getJson(req)
+    end function
+
+    ' Creates a live tv series timer.
+    instance.createseriestimer = function(body = {} as object)
+        req = _APIRequest("/livetv/seriestimers")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' Gets a live tv series timer.
+    instance.getseriestimerbyid = function(id as string)
+        req = _APIRequest(Substitute("/livetv/seriestimers/{0}", id))
+        return _getJson(req)
+    end function
+
+    ' Cancels a live tv series timer.
+    instance.deleteseriestimer = function(id as string)
+        req = _APIRequest(Substitute("/livetv/seriestimers/{0}", id))
+        return _deleteVoid(req)
+    end function
+
+    ' Updates a live tv series timer.
+    instance.updateseriestimer = function(id as string, body = {} as object)
+        req = _APIRequest(Substitute("/livetv/seriestimers/{0}", id))
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' Gets the live tv timers.
+    instance.gettimers = function(params = {} as object)
+        req = _APIRequest("/livetv/timers", params)
+        return _getJson(req)
+    end function
+
+    ' Creates a live tv timer.
+    instance.createtimer = function(body = {} as object)
+        req = _APIRequest("/livetv/timers")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' Gets a timer.
+    instance.gettimerbyid = function(id as string)
+        req = _APIRequest(Substitute("/livetv/timers/{0}", id))
+        return _getJson(req)
+    end function
+
+    ' Cancels a live tv timer.
+    instance.deletetimer = function(id as string)
+        req = _APIRequest(Substitute("/livetv/timers/{0}", id))
+        return _deleteVoid(req)
+    end function
+
+    ' Updates a live tv timer.
+    instance.updatetimer = function(id as string, body = {} as object)
+        req = _APIRequest(Substitute("/livetv/timers/{0}", id))
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' Gets the default values for a new timer.
+    instance.gettimerdefaults = function()
+        req = _APIRequest("/livetv/timers/defaults")
+        return _getJson(req)
+    end function
+
+    ' Adds a tuner host.
+    instance.addtunerhost = function(body = {} as object)
+        req = _APIRequest("/livetv/tunerhosts")
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Deletes a tuner host.
+    instance.deletetimer = function(params = {} as object)
+        req = _APIRequest("/livetv/tunerhosts", params)
+        return _deleteVoid(req)
+    end function
+
+    ' Get tuner host types.
+    instance.gettunerhosttypes = function()
+        req = _APIRequest("/livetv/tunerhosts/types")
+        return _getJson(req)
+    end function
+
+    ' Get tuner host types.
+    instance.gettunerhosttypes = function()
+        req = _APIRequest("/livetv/tunerhosts/types")
+        return _getJson(req)
+    end function
+
+    ' Resets a tv tuner.
+    instance.addtunerhost = function(id as string)
+        req = _APIRequest(Substitute("/livetv/tuners/{0}/reset", id))
+        return _postVoid(req)
+    end function
+
+    ' Discover tuners.
+    instance.gettunersdiscover = function(params = {} as object)
+        req = _APIRequest("/livetv/tuners/discover", params)
+        return _getJson(req)
+    end function
+
+    ' Discvover tuners :D
+    instance.gettunersdiscvover = function(params = {} as object)
+        req = _APIRequest("/livetv/tuners/discvover", params)
         return _getJson(req)
     end function
 
