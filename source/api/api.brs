@@ -1308,12 +1308,42 @@ function playlistsActions()
         return _getJson(req)
     end function
 
+    ' Creates a new playlist.
+    instance.create = function(body = {} as object)
+        req = _APIRequest("/playlists")
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Adds items to a playlist.
+    instance.add = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/playlists/{0}/items", id), params)
+        return _postVoid(req)
+    end function
+
+    ' Removes items from a playlist.
+    instance.remove = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/playlists/{0}/items", id), params)
+        return _deleteVoid(req)
+    end function
+
+    ' Gets the original items of a playlist.
+    instance.getitems = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/playlists/{0}/items", id), params)
+        return _getJson(req)
+    end function
+
+    ' Moves a playlist item.
+    instance.move = function(playlistid as string, itemid as string, newindex as integer)
+        req = _APIRequest(Substitute("/playlists/{0}/items/{1}/move/{2}", playlistid, itemid, newindex))
+        return _postVoid(req)
+    end function
+
     return instance
 end function
 
 function repositoriesActions()
     instance = {}
-    
+
     ' Gets all package repositories.
     instance.get = function()
         req = _APIRequest("/repositories")
@@ -1325,8 +1355,8 @@ function repositoriesActions()
         req = _APIRequest("/repositories")
         return _postVoid(req, FormatJson(body))
     end function
-    
-        return instance
+
+    return instance
 end function
 
 function showsActions()
