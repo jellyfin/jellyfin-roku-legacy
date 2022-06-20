@@ -1,3 +1,4 @@
+' Next: Package
 function API()
     instance = {}
 
@@ -25,9 +26,11 @@ function API()
     instance["movies"] = moviesActions()
     instance["musicgenres"] = musicgenresActions()
     instance["notifications"] = notificationsActions()
+    instance["packages"] = packagesActions()
     instance["persons"] = personsActions()
     instance["playback"] = playbackActions()
     instance["playlists"] = playlistsActions()
+    instance["repositories"] = repositoriesActions()
     instance["shows"] = showsActions()
     instance["songs"] = songsActions()
     instance["studios"] = studiosActions()
@@ -1226,6 +1229,36 @@ function notificationsActions()
     return instance
 end function
 
+function packagesActions()
+    instance = {}
+
+    ' Gets available packages.
+    instance.get = function()
+        req = _APIRequest("/packages")
+        return _getJson(req)
+    end function
+
+    ' Gets a package by name or assembly GUID.
+    instance.getbyname = function(name as string, params = {} as object)
+        req = _APIRequest(Substitute("/packages/{0}", name), params)
+        return _getJson(req)
+    end function
+
+    ' Installs a package.
+    instance.install = function(name as string, params = {} as object)
+        req = _APIRequest(Substitute("/packages/installed/{0}", name), params)
+        return _postVoid(req)
+    end function
+
+    ' Cancels a package installation.
+    instance.cancelinstall = function(id as string)
+        req = _APIRequest(Substitute("/packages/installing/{0}", id))
+        return _deleteVoid(req)
+    end function
+
+    return instance
+end function
+
 function personsActions()
     instance = {}
 
@@ -1265,6 +1298,24 @@ function playlistsActions()
     end function
 
     return instance
+end function
+
+function repositoriesActions()
+    instance = {}
+    
+    ' Gets all package repositories.
+    instance.get = function()
+        req = _APIRequest("/repositories")
+        return _getJson(req)
+    end function
+
+    ' Sets the enabled and existing package repositories.
+    instance.set = function(body = {} as object)
+        req = _APIRequest("/repositories")
+        return _postVoid(req, FormatJson(body))
+    end function
+    
+        return instance
 end function
 
 function showsActions()
