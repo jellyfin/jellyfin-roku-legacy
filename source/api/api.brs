@@ -1168,6 +1168,12 @@ function musicgenresActions()
         return _getJson(req)
     end function
 
+    ' Gets a music genre, by name.
+    instance.getbyname = function(name as string, params = {} as object)
+        req = _APIRequest(Substitute("/musicgenres/{0}", name), params)
+        return _getJson(req)
+    end function
+
     return instance
 end function
 
