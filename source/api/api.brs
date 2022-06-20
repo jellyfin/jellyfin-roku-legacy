@@ -24,6 +24,7 @@ function API()
     instance["localization"] = localizationActions()
     instance["movies"] = moviesActions()
     instance["musicgenres"] = musicgenresActions()
+    instance["notifications"] = notificationsActions()
     instance["persons"] = personsActions()
     instance["playback"] = playbackActions()
     instance["playlists"] = playlistsActions()
@@ -1171,6 +1172,54 @@ function musicgenresActions()
     ' Gets a music genre, by name.
     instance.getbyname = function(name as string, params = {} as object)
         req = _APIRequest(Substitute("/musicgenres/{0}", name), params)
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function notificationsActions()
+    instance = {}
+
+    ' Gets a user's notifications.
+    instance.get = function(id as string)
+        req = _APIRequest(Substitute("/notifications/{0}", id))
+        return _getJson(req)
+    end function
+
+    ' Sets notifications as read.
+    instance.markread = function(id as string)
+        req = _APIRequest(Substitute("/notifications/{0}/read", id))
+        return _postVoid(req)
+    end function
+
+    ' Gets a user's notification summary.
+    instance.getsummary = function(id as string)
+        req = _APIRequest(Substitute("/notifications/{0}/summary", id))
+        return _getJson(req)
+    end function
+
+    ' Sets notifications as unread.
+    instance.markunread = function(id as string)
+        req = _APIRequest(Substitute("/notifications/{0}/unread", id))
+        return _postVoid(req)
+    end function
+
+    ' Sends a notification to all admins.
+    instance.notifyadmins = function(body = {} as object)
+        req = _APIRequest("/notifications/admin")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' Gets notification services.
+    instance.getservices = function()
+        req = _APIRequest("/notifications/services")
+        return _getJson(req)
+    end function
+
+    ' Gets notification types.
+    instance.gettypes = function()
+        req = _APIRequest("/notifications/types")
         return _getJson(req)
     end function
 
