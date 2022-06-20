@@ -19,11 +19,13 @@ function API()
     instance["items"] = itemsActions()
     instance["libraries"] = librariesActions()
     instance["library"] = libraryActions()
+    instance["livestreams"] = livestreamsActions()
     instance["livetv"] = livetvActions()
     instance["localization"] = localizationActions()
     instance["movies"] = moviesActions()
     instance["musicgenres"] = musicgenresActions()
     instance["persons"] = personsActions()
+    instance["playback"] = playbackActions()
     instance["playlists"] = playlistsActions()
     instance["shows"] = showsActions()
     instance["songs"] = songsActions()
@@ -706,6 +708,18 @@ function itemsActions()
         return _getJson(req)
     end function
 
+    ' Gets live playback media info for an item.
+    instance.getplaybackinfo = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/items/{0}/playbackinfo", id), params)
+        return _getJson(req)
+    end function
+
+    ' Gets live playback media info for an item.
+    instance.postplaybackinfo = function(id as string, body = {} as object)
+        req = _APIRequest(Substitute("/items/{0}/playbackinfo", id))
+        return _postJson(req, FormatJson(body))
+    end function
+
     return instance
 end function
 
@@ -818,6 +832,24 @@ function libraryActions()
     instance.updatepath = function(body = {} as object)
         req = _APIRequest("/library/virtualfolders/paths/update")
         return _postVoid(req, FormatJson(body))
+    end function
+
+    return instance
+end function
+
+function livestreamsActions()
+    instance = {}
+
+    ' Opens a media source.
+    instance.open = function(params = {} as object, body = {} as object)
+        req = _APIRequest("/livestreams/open", params)
+        return _postJson(req, FormatJson(body))
+    end function
+
+    ' Closes a media source.
+    instance.close = function(params = {} as object)
+        req = _APIRequest("/livestreams/close", params)
+        return _postVoid(req)
     end function
 
     return instance
@@ -1144,6 +1176,18 @@ function personsActions()
     instance.headimageurlbyname = function(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
         req = _APIRequest(Substitute("/persons/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
         return _headVoid(req)
+    end function
+
+    return instance
+end function
+
+function playbackActions()
+    instance = {}
+
+    ' Tests the network with a request with the size of the bitrate.
+    instance.bitratetest = function(params = {} as object)
+        req = _APIRequest("/playback/bitratetest", params)
+        return _getVoid(req)
     end function
 
     return instance
@@ -1613,6 +1657,23 @@ function _deleteVoid(req)
     req.GetToString()
 
     return true
+end function
+
+function _getVoid(req) as boolean
+    req.setMessagePort(CreateObject("roMessagePort"))
+    req.AddHeader("Content-Type", "application/json")
+    req.AsyncGetToString()
+    resp = wait(30000, req.GetMessagePort())
+
+    if type(resp) <> "roUrlEvent"
+        return false
+    end if
+
+    if resp.GetResponseCode() = 200
+        return true
+    end if
+
+    return false
 end function
 
 function _postVoid(req, data = "" as string) as boolean
