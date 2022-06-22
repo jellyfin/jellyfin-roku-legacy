@@ -357,7 +357,7 @@ sub onItemFocused()
 
     ' if user moves down grid and there are more items to load
     if m.loadeditems < m.loadItemsTask.totalRecordCount
-
+        m.Loading = false
         loadMoreData()
     end if
 end sub

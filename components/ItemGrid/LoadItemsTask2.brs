@@ -8,7 +8,6 @@ sub init()
 end sub
 
 sub loadItems()
-
     results = []
 
     sort_field = m.top.sortField

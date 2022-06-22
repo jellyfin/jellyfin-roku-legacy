@@ -26,6 +26,14 @@ sub init()
     ' Load Configuration Tree
     m.configTree = GetConfigTree()
     LoadMenu({ children: m.configTree })
+
+    'set default "items to load" in textedit box
+    defaultItems = get_user_setting("itemgrid.Limit", m.pinPadSetting.text)
+    if defaultItems <> invalid
+        m.pinPadSetting.textEditBox.hintText = defaultItems
+    else
+        m.pinPadSetting.textEditBox.hintText = 60
+    end if
 end sub
 
 
@@ -95,24 +103,24 @@ end sub
 
 sub settingSelected()
 
-    selectedItem = m.userLocation.peek().children[m.settingsMenu.itemFocused]
+    m.selectedItem = m.userLocation.peek().children[m.settingsMenu.itemFocused]
 
 
-    if selectedItem.type <> invalid ' Show setting
-        if selectedItem.type = "bool"
+    if m.selectedItem.type <> invalid ' Show setting
+        if m.selectedItem.type = "bool"
             m.boolSetting.setFocus(true)
-        else if selectedItem.type = "integer"
+        else if m.selectedItem.type = "integer"
             m.pinPadSetting.setFocus(true)
         end if
-    else if selectedItem.children <> invalid and selectedItem.children.Count() > 0 ' Show sub menu
-        LoadMenu(selectedItem)
+    else if m.selectedItem.children <> invalid and m.selectedItem.children.Count() > 0 ' Show sub menu
+        LoadMenu(m.selectedItem)
         m.settingsMenu.setFocus(true)
     else
         return
     end if
 
     m.settingDesc.text = m.settingsMenu.content.GetChild(m.settingsMenu.itemFocused).Description
-
+    print "Setting menu focuschild: " m.settingsMenu.focusedChild
 end sub
 
 
@@ -143,10 +151,19 @@ end sub
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
 
+    'if ((key = "back" or key = "left") and m.selectedItem.type = "integer") and (m.selectedItem.currFocusColumn = -1 or m.selectedItem.currFocusColumn = 0)
+    'm.settingsMenu.setFocus(true)
+    'end if
     if (key = "back" or key = "left") and m.settingsMenu.focusedChild <> invalid and m.userLocation.Count() > 1
         LoadMenu({})
+        print "load menu"
         return true
     else if (key = "back" or key = "left") and m.settingDetail.focusedChild <> invalid
+        m.settingsMenu.setFocus(true)
+        print "Set focus"
+        return true
+    else if (key = "back" or key = "left") and m.userLocation.Count() > 1
+        print "userLocation: " m.userLocation.Count()
         m.settingsMenu.setFocus(true)
         return true
     end if
