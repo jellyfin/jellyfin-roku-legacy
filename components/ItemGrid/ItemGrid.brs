@@ -149,7 +149,9 @@ sub loadInitialItems()
             showTvGuide()
         end if
 
-    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Channel"
+
+    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
+
         ' Non-recursive, to not show subfolder contents
         m.loadItemsTask.recursive = false
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
@@ -257,7 +259,11 @@ end sub
 
 ' Set Music view, sort, and filter options
 sub setMusicOptions(options)
-    options.views = [{ "Title": tr("Music"), "Name": "music" }]
+    options.views = [
+        { "Title": tr("Default"), "Name": "music-default" },
+        { "Title": tr("Artists"), "Name": "music-artist" },
+        { "Title": tr("Albums"), "Name": "music-album" },
+    ]
     options.sort = [
         { "Title": tr("TITLE"), "Name": "SortName" },
         { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
@@ -293,7 +299,11 @@ end sub
 
 ' Return parent collection type
 function getCollectionType() as string
-    return m.top.parentItem.collectionType
+    if m.top.parentItem.collectionType = invalid
+        return m.top.parentItem.Type
+    else
+        return m.top.parentItem.CollectionType
+    end if
 end function
 
 ' Search string array for search value. Return if it's found
@@ -309,6 +319,7 @@ sub SetUpOptions()
     options = {}
     options.filter = []
     options.favorite = []
+
 
     'Movies
     if m.top.parentItem.collectionType = "movies"
@@ -405,6 +416,20 @@ sub SetUpOptions()
             { "Title": tr("All"), "Name": "All" },
             { "Title": tr("Favorites"), "Name": "Favorites" }
         ]
+
+    if getCollectionType() = "movies"
+        setMoviesOptions(options)
+    else if inStringArray(["boxsets", "Boxset"], getCollectionType())
+        setBoxsetsOptions(options)
+    else if getCollectionType() = "tvshows"
+        setTvShowsOptions(options)
+    else if getCollectionType() = "livetv"
+        setLiveTvOptions(options)
+    else if inStringArray(["photoalbum", "photo", "homevideos"], getCollectionType())
+        setPhotoAlbumOptions(options)
+    else if getCollectionType() = "music"
+        setMusicOptions(options)
+
     else
         setDefaultOptions(options)
     end if
