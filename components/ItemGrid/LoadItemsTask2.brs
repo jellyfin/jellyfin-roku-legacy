@@ -96,7 +96,6 @@ sub loadItems()
             else
                 print "[LoadItems] Unknown Type: " item.Type
             end if
-            print "Data Type: " item.Type
             if tmp <> invalid
                 tmp.parentFolder = m.top.itemId
                 tmp.json = item
@@ -107,6 +106,5 @@ sub loadItems()
             end if
         end for
     end if
-
     m.top.content = results
 end sub

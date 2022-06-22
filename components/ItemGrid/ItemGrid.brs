@@ -55,7 +55,7 @@ end sub
 '
 'Load initial set of Data
 sub loadInitialItems()
-    if m.top.parentItem.json.Type = "CollectionFolder" or m.top.parentItem.json.Type = "Folder"
+    if m.top.parentItem.json.Type = "CollectionFolder" 'or m.top.parentItem.json.Type = "Folder"
         m.top.HomeLibraryItem = m.top.parentItem.Id
     end if
     if m.top.parentItem.backdropUrl <> invalid
@@ -94,13 +94,12 @@ sub loadInitialItems()
     else
         m.sortAscending = false
     end if
-
     'Set Stuido Id
     if m.top.parentItem.json.type = "Studio"
         m.loadItemsTask.studioIds = m.top.parentItem.Id
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
         m.loadItemsTask.genreIds = ""
-        'set Genre Id
+    'set Genre Id
     else if m.top.parentItem.json.type = "Genre"
         m.loadItemsTask.genreIds = m.top.parentItem.Id
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
@@ -117,7 +116,7 @@ sub loadInitialItems()
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
     m.loadItemsTask.startIndex = 0
-
+    'Load Item Types
     if m.top.parentItem.collectionType = "movies"
         m.loadItemsTask.itemType = "Movie"
         m.loadItemsTask.itemId = m.top.parentItem.Id
@@ -128,6 +127,7 @@ sub loadInitialItems()
         ' Default Settings
         m.loadItemsTask.recursive = false
         m.loadItemsTask.itemType = "MusicArtist,MusicAlbum"
+        m.loadItemsTask.itemId = m.top.parentItem.Id
 
         m.view = get_user_setting("display.music.view")
 
@@ -157,24 +157,26 @@ sub loadInitialItems()
         m.top.imageDisplayMode = "scaleToFit"
     else if m.top.parentItem.json.type = "Studio"
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
+        m.loadItemsTask.itemType = "Series,Movie"
         m.top.imageDisplayMode = "scaleToFit"
     else if m.top.parentItem.json.type = "Genre"
+        m.loadItemsTask.itemType = "Series,Movie"
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
     else
         print "[ItemGrid] Unknown Type: " m.top.parentItem
     end if
     'end if
 
-
-    if m.top.parentItem.type <> "Folder" and (m.options.view = "Networks" or m.view = "Networks")
+    if m.top.parentItem.type <> "Folder" and (m.options.view = "Networks" or m.view = "Networks" or m.options.view = "Studios" or m.view = "Studios")
         m.loadItemsTask.view = "Networks"
     else if m.top.parentItem.type <> "Folder" and (m.options.view = "Genres" or m.view = "Genres")
         m.loadItemsTask.StudioIds = m.top.parentItem.Id
         m.loadItemsTask.view = "Genres"
-    else
+    else if m.top.parentItem.type <> "Folder" and (m.options.view = "shows")
         m.loadItemsTask.studioIds = ""
         m.loadItemsTask.view = "Shows"
     end if
+
     m.loadItemsTask.observeField("content", "ItemDataLoaded")
     m.spinner.visible = true
     m.loadItemsTask.control = "RUN"
@@ -188,13 +190,13 @@ sub setMoviesOptions(options)
     ]
     options.sort = [
         { "Title": tr("TITLE"), "Name": "SortName" },
-        { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
-        { "Title": tr("CRITIC_RATING"), "Name": "CriticRating" },
-        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
-        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
-        { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
-        { "Title": tr("PLAY_COUNT"), "Name": "PlayCount" },
-        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+        { "Title": tr("IMDB RATING"), "Name": "CommunityRating" },
+        { "Title": tr("CRITIC RATING"), "Name": "CriticRating" },
+        { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("OFFICIAL RATING"), "Name": "OfficialRating" },
+        { "Title": tr("PLAY COUNT"), "Name": "PlayCount" },
+        { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
         { "Title": tr("RUNTIME"), "Name": "Runtime" }
     ]
     options.filter = [
@@ -208,9 +210,9 @@ sub setBoxsetsOptions(options)
     options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
     options.sort = [
         { "Title": tr("TITLE"), "Name": "SortName" },
-        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
-        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
-        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+        { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
@@ -223,11 +225,11 @@ sub setTvShowsOptions(options)
     options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
     options.sort = [
         { "Title": tr("TITLE"), "Name": "SortName" },
-        { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
-        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
-        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
-        { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
-        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+        { "Title": tr("IMDB RATING"), "Name": "CommunityRating" },
+        { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("OFFICIAL RATING"), "Name": "OfficialRating" },
+        { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
@@ -258,9 +260,9 @@ sub setMusicOptions(options)
     options.views = [{ "Title": tr("Music"), "Name": "music" }]
     options.sort = [
         { "Title": tr("TITLE"), "Name": "SortName" },
-        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
-        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
-        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+        { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
@@ -312,18 +314,18 @@ sub SetUpOptions()
     if m.top.parentItem.collectionType = "movies"
         options.views = [
             { "Title": tr("Movies"), "Name": "movies" },
-            { "Title": tr("Networks"), "Name": "Networks" },
+            { "Title": tr("Studios"), "Name": "Studios" },
             { "Title": tr("Genres"), "Name": "Genres" }
         ]
         options.sort = [
             { "Title": tr("TITLE"), "Name": "SortName" },
-            { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
-            { "Title": tr("CRITIC_RATING"), "Name": "CriticRating" },
-            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
-            { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
-            { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
-            { "Title": tr("PLAY_COUNT"), "Name": "PlayCount" },
-            { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+            { "Title": tr("IMDB RATING"), "Name": "CommunityRating" },
+            { "Title": tr("CRITIC RATING"), "Name": "CriticRating" },
+            { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
+            { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
+            { "Title": tr("OFFICIAL RATING"), "Name": "OfficialRating" },
+            { "Title": tr("PLAY COUNT"), "Name": "PlayCount" },
+            { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
             { "Title": tr("RUNTIME"), "Name": "Runtime" }
         ]
         options.filter = [
@@ -335,9 +337,9 @@ sub SetUpOptions()
         options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
         options.sort = [
             { "Title": tr("TITLE"), "Name": "SortName" },
-            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
-            { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
-            { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+            { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
+            { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
+            { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
         ]
         options.filter = [
             { "Title": tr("All"), "Name": "All" },
@@ -353,11 +355,11 @@ sub SetUpOptions()
         ]
         options.sort = [
             { "Title": tr("TITLE"), "Name": "SortName" },
-            { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
-            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
-            { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
-            { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
-            { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+            { "Title": tr("IMDB RATING"), "Name": "CommunityRating" },
+            { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
+            { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
+            { "Title": tr("OFFICIAL RATING"), "Name": "OfficialRating" },
+            { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
         ]
         options.filter = [
             { "Title": tr("All"), "Name": "All" },
@@ -395,9 +397,9 @@ sub SetUpOptions()
         options.views = [{ "Title": tr("Music"), "Name": "music" }]
         options.sort = [
             { "Title": tr("TITLE"), "Name": "SortName" },
-            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
-            { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
-            { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+            { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
+            { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
+            { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
         ]
         options.filter = [
             { "Title": tr("All"), "Name": "All" },
@@ -610,6 +612,14 @@ sub optionsClosed()
             set_user_setting("display.music.view", m.view)
             reload = true
         end if
+    else 
+        m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
+        if m.options.view <> m.view
+        'reload and store new view setting
+        m.view = m.options.view
+        set_user_setting("display." + m.top.parentItem.Id + ".landing", m.view)
+        reload = true
+        end if
     end if
 
     if m.options.sortField <> m.sortField or m.options.sortAscending <> m.sortAscending
@@ -762,6 +772,9 @@ sub updateTitle()
 
     if m.options.view = "Networks" or m.view = "Networks"
         m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Networks"))
+    end if
+    if m.options.view = "Studios" or m.view = "Studios"
+        m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Studios"))
     end if
     if m.options.view = "Genres" or m.view = "Genres"
         m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Genres"))

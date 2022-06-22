@@ -1,7 +1,7 @@
 sub init()
 
     m.buttons = m.top.findNode("buttons")
-    m.buttons.buttons = [tr("TAB_VIEW"), tr("TAB_SORT"), tr("TAB_FILTER")]
+    m.buttons.buttons = [tr("VIEW"), tr("SORT"), tr("FILTER")]
     m.buttons.selectedIndex = 1
     m.buttons.setFocus(true)
 
@@ -36,7 +36,7 @@ sub optionsSet()
     if m.top.options.views <> invalid
         viewContent = CreateObject("roSGNode", "ContentNode")
         index = 0
-        selectedViewIndex = 0
+        selectedViewIndex = m.selectedViewIndex
 
         for each view in m.top.options.views
             entry = viewContent.CreateChild("ContentNode")

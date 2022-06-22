@@ -578,6 +578,10 @@
         <translation>Networks</translation>
     </message>
     <message>
+        <source>Studios</source>
+        <translation>Studios</translation>
+    </message>
+    <message>
         <source>Shows</source>
         <translation>Shows</translation>
     </message>
