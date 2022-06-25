@@ -56,7 +56,18 @@ sub itemContentChanged() as void
     end if
     m.staticTitle.text = m.title.text
 
-    m.poster.uri = itemData.posterUrl
+    imageUrl = itemData.posterURL
+
+    if get_user_setting("ui.tvshows.blurunwatched") = "true"
+
+        if itemData.json.lookup("Type") = "Episode"
+            if not itemData.json.userdata.played
+                imageUrl = imageUrl + "&blur=15"
+            end if
+        end if
+    end if
+
+    m.poster.uri = imageUrl
 
     updateSize()
 end sub
