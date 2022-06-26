@@ -11,13 +11,13 @@ sub init()
 end sub
 
 sub updateSize()
-    itemWidth = 200
-    itemHeight = 320 ' width * 1.5 + text
+    itemWidth = 250
+    itemHeight = 250
 
     m.top.visible = true
 
     ' size of the whole row
-    m.top.itemSize = [1700, (itemHeight + 40)]
+    m.top.itemSize = [1650, 290]
 
     ' spacing between rows
     m.top.itemSpacing = [0, 0]
