@@ -335,6 +335,7 @@ function getAudioInfo(meta as object) as object
 end function
 
 sub autoPlayNextEpisode(videoID as string, showID as string)
+    MarkItemWatched(showID)
     ' use web client setting
     if m.user.Configuration.EnableNextEpisodeAutoPlay
         ' query API for next episode ID
@@ -348,22 +349,18 @@ sub autoPlayNextEpisode(videoID as string, showID as string)
         if data <> invalid and data.Items.Count() = 2
             ' remove finished video node
             m.global.sceneManager.callFunc("popScene")
-            MarkItemWatched(showID)
             ' setup new video node
             nextVideo = CreateVideoPlayerGroup(data.Items[1].Id)
             if nextVideo <> invalid
                 m.global.sceneManager.callFunc("pushScene", nextVideo)
             else
                 m.global.sceneManager.callFunc("popScene")
-                MarkItemWatched(showID)
             end if
         else
             ' can't play next episode
             m.global.sceneManager.callFunc("popScene")
-            MarkItemWatched(showID)
         end if
     else
         m.global.sceneManager.callFunc("popScene")
-        MarkItemWatched(showID)
     end if
 end sub
