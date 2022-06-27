@@ -42,6 +42,7 @@ sub itemContentChanged()
                 else
                     audioIdx = i
                 end if
+                m.top.findNode("audio_codec").text = tr("Audio") + ": " + itemData.mediaStreams[audioIdx].DisplayTitle
             end if
             if videoIdx <> invalid and audioIdx <> invalid then exit for
         end for

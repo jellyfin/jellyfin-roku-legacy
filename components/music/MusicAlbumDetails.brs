@@ -13,6 +13,7 @@ sub init()
     m.spinner.visible = true
 
     m.dscr = m.top.findNode("overview")
+    m.dscr.observeField("isTextEllipsized", "onEllipsisChanged")
     createDialogPallete()
 end sub
 
@@ -70,8 +71,8 @@ end sub
 ' Populate on screen text variables
 sub setOnScreenTextValues(json)
     if isValid(json)
-        if isValid(json.overview) and json.overview <> ""
-            ' We have overview text
+        if isValid(json.overview)
+            ' Have have overview text
             setFieldTextValue("overview", json.overview)
         else
             ' We don't have overview text
@@ -99,6 +100,11 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     if m.spinner.visible then return false
 
+    ' Play Album is hidden, so there are no navigation needs here
+    if m.top.pageContent.json.ChildCount = 1
+        return false
+    end if
+
     if key = "options"
         if m.dscr.isTextEllipsized
             createFullDscrDlg()
@@ -107,30 +113,29 @@ function onKeyEvent(key as string, press as boolean) as boolean
         return false
     end if
 
-    if key = "right"
-        if m.playAlbum.hasFocus() or m.instantMix.hasFocus()
-            m.songList.setFocus(true)
-            return true
-        end if
+    if key = "right" and m.playAlbum.hasFocus()
+        m.songList.setFocus(true)
+        return true
     else if key = "left" and m.songList.hasFocus()
-        if m.playAlbum.visible
-            m.playAlbum.setFocus(true)
-        else if m.instantMix.visible
-            m.instantMix.setFocus(true)
-        else
-            return false
-        end if
-        return true
-    else if key = "down" and m.playAlbum.hasFocus()
-        m.instantMix.setFocus(true)
-        return true
-    else if key = "up" and m.instantMix.hasFocus()
         m.playAlbum.setFocus(true)
         return true
     end if
 
     return false
 end function
+
+sub onEllipsisChanged()
+    if m.dscr.isTextEllipsized
+        dscrShowFocus()
+    end if
+end sub
+
+sub dscrShowFocus()
+    if m.dscr.isTextEllipsized
+        m.dscr.setFocus(true)
+        m.dscr.opacity = 1.0
+    end if
+end sub
 
 sub createFullDscrDlg()
     dlg = CreateObject("roSGNode", "OverviewDialog")

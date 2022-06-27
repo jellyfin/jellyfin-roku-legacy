@@ -319,6 +319,12 @@ sub SetUpOptions()
         end if
     end for
 
+    ' for each o in options.favorite
+    '     if o.Name = m.favorite
+    '         m.options.favorite = o.Name
+    '     end if
+    ' end for
+
     m.options.options = options
 end sub
 
