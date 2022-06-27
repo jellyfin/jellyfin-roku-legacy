@@ -1,3 +1,18 @@
+' TODO:
+
+' Playstate
+' Plugins
+' Quickconnect
+' RemoteImage
+' Scheduled Tasks
+' Session
+' Startup
+' Subtitle
+' SyncPlay
+' User Library
+' Video Attachments
+' Videos
+
 function API()
     instance = {}
 
@@ -30,10 +45,12 @@ function API()
     instance["playback"] = playbackActions()
     instance["playlists"] = playlistsActions()
     instance["repositories"] = repositoriesActions()
+    instance["search"] = searchActions()
     instance["shows"] = showsActions()
     instance["songs"] = songsActions()
     instance["studios"] = studiosActions()
     instance["system"] = systemActions()
+    instance["tmdb"] = tmdbActions()
     instance["trailers"] = trailersActions()
     instance["users"] = usersActions()
     instance["web"] = webActions()
@@ -1359,12 +1376,48 @@ function repositoriesActions()
     return instance
 end function
 
+function searchActions()
+    instance = {}
+
+    ' Gets the search hint result.
+    instance.gethints = function(params = {} as object)
+        req = _APIRequest("/search/hints", params)
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
 function showsActions()
     instance = {}
 
     ' Gets similar items.
     instance.getsimilar = function(id as string, params = {} as object)
         req = _APIRequest(Substitute("/shows/{0}/similar", id), params)
+        return _getJson(req)
+    end function
+
+    ' Gets episodes for a tv season.
+    instance.getepisodes = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/shows/{0}/episodes", id), params)
+        return _getJson(req)
+    end function
+
+    ' Gets seasons for a tv series.
+    instance.getseasons = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/shows/{0}/seasons", id), params)
+        return _getJson(req)
+    end function
+
+    ' Gets a list of next up episodes.
+    instance.getnextup = function(params = {} as object)
+        req = _APIRequest("/shows/nextup", params)
+        return _getJson(req)
+    end function
+
+    ' Gets a list of upcoming episodes.
+    instance.getupcoming = function(params = {} as object)
+        req = _APIRequest("/shows/upcoming", params)
         return _getJson(req)
     end function
 
@@ -1385,6 +1438,18 @@ end function
 
 function studiosActions()
     instance = {}
+
+    ' Gets all studios from a given item, folder, or the entire library.
+    instance.get = function(params = {} as object)
+        req = _APIRequest("/studios", params)
+        return _getJson(req)
+    end function
+
+    ' Gets a studio by name.
+    instance.getbyname = function(name as string, params = {} as object)
+        req = _APIRequest(Substitute("/studios/{0}", name), params)
+        return _getJson(req)
+    end function
 
     ' Get studio image by name.
     instance.getimageurlbyname = function(name as string, imagetype = "thumb" as string, imageindex = 0 as integer, params = {} as object)
@@ -1502,12 +1567,30 @@ function systemActions()
     return instance
 end function
 
+function tmdbActions()
+    instance = {}
+
+    ' Gets the TMDb image configuration options.
+    instance.getclientconfiguration = function()
+        req = _APIRequest("/tmdb/clientconfiguration")
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
 function trailersActions()
     instance = {}
 
     ' Gets similar items.
     instance.getsimilar = function(id as string, params = {} as object)
         req = _APIRequest(Substitute("/trailers/{0}/similar", id), params)
+        return _getJson(req)
+    end function
+
+    ' Finds movies and trailers similar to a given trailer.
+    instance.get = function(params = {} as object)
+        req = _APIRequest("/trailers/", params)
         return _getJson(req)
     end function
 
@@ -1642,6 +1725,24 @@ function usersActions()
     instance.getresumeitemsbyquery = function(id as string, params = {} as object)
         req = _APIRequest(Substitute("/users/{0}/items/resume", id), params)
         return _getJson(req)
+    end function
+
+    ' Gets suggestions.
+    instance.getsuggestions = function(id as string, params = {} as object)
+        resp = _APIRequest(Substitute("/users/{0}/suggestions", id), params)
+        return _getJson(resp)
+    end function
+
+    ' Get user view grouping options.
+    instance.getgroupingoptions = function(id as string)
+        resp = _APIRequest(Substitute("/users/{0}/groupingoptions", id))
+        return _getJson(resp)
+    end function
+
+    ' Get user views.
+    instance.getviews = function(id as string, params = {} as object)
+        resp = _APIRequest(Substitute("/users/{0}/views", id), params)
+        return _getJson(resp)
     end function
 
     return instance
