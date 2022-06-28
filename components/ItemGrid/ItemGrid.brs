@@ -99,7 +99,7 @@ sub loadInitialItems()
         m.loadItemsTask.studioIds = m.top.parentItem.Id
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
         m.loadItemsTask.genreIds = ""
-    'set Genre Id
+        'set Genre Id
     else if m.top.parentItem.json.type = "Genre"
         m.loadItemsTask.genreIds = m.top.parentItem.Id
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
@@ -639,13 +639,13 @@ sub optionsClosed()
             set_user_setting("display.music.view", m.view)
             reload = true
         end if
-    else 
+    else
         m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
         if m.options.view <> m.view
-        'reload and store new view setting
-        m.view = m.options.view
-        set_user_setting("display." + m.top.parentItem.Id + ".landing", m.view)
-        reload = true
+            'reload and store new view setting
+            m.view = m.options.view
+            set_user_setting("display." + m.top.parentItem.Id + ".landing", m.view)
+            reload = true
         end if
     end if
 
