@@ -3,15 +3,12 @@
 ' Playstate
 ' Plugins
 ' Quickconnect
-' RemoteImage
 ' Scheduled Tasks
 ' Session
 ' Startup
 ' Subtitle
 ' SyncPlay
 ' User Library
-' Video Attachments
-' Videos
 
 function API()
     instance = {}
@@ -53,8 +50,12 @@ function API()
     instance["tmdb"] = tmdbActions()
     instance["trailers"] = trailersActions()
     instance["users"] = usersActions()
+    instance["videos"] = videosActions()
     instance["web"] = webActions()
     instance["years"] = yearsActions()
+
+    ' 3rd Party Plugin Support
+    instance["introskipper"] = introskipperActions()
 
     return instance
 end function
@@ -738,6 +739,36 @@ function itemsActions()
     instance.postplaybackinfo = function(id as string, body = {} as object)
         req = _APIRequest(Substitute("/items/{0}/playbackinfo", id))
         return _postJson(req, FormatJson(body))
+    end function
+
+    ' Gets available remote images for an item.
+    instance.getremoteimages = function(id as string)
+        req = _APIRequest(Substitute("/items/{0}/remoteimages", id))
+        return _getJson(req)
+    end function
+
+    ' Gets available remote image providers for an item.
+    instance.getremoteimageproviders = function(id as string)
+        req = _APIRequest(Substitute("/items/{0}/remoteimages/providers", id))
+        return _getJson(req)
+    end function
+
+    ' Downloads a remote image for an item.
+    instance.downloadremoteimages = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    return instance
+end function
+
+function introskipperActions()
+    instance = {}
+
+    ' Get intro skipper plugin data
+    instance.get = function(id as string)
+        req = _APIRequest(Substitute("/episode/{0}/introtimestamps/v1", id))
+        return _getJson(req)
     end function
 
     return instance
@@ -1743,6 +1774,58 @@ function usersActions()
     instance.getviews = function(id as string, params = {} as object)
         resp = _APIRequest(Substitute("/users/{0}/views", id), params)
         return _getJson(resp)
+    end function
+
+    return instance
+end function
+
+function videosActions()
+    instance = {}
+
+    ' Gets additional parts for a video.
+    instance.getadditionalparts = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/videos/{0}/additionalparts", id), params)
+        return _getJson(req)
+    end function
+
+    ' Removes alternate video sources.
+    instance.deleteadditionalparts = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' Gets a video stream.
+    instance.getstreamurl = function(id as string, params = {} as object)
+        return _buildURL(Substitute("/videos/{0}/stream", id), params)
+    end function
+
+    ' Gets a video stream.
+    instance.headstreamurl = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("videos/{0}/stream", id), params)
+        return _headVoid(req)
+    end function
+
+    ' Gets an video stream.
+    instance.getstreamurlwithcontainer = function(id as string, container as string, params = {} as object)
+        return _buildURL(Substitute("videos/{0}/stream.{1}", id, container), params)
+    end function
+
+    ' Gets an video stream.
+    instance.headstreamurlwithcontainer = function(id as string, container as string, params = {} as object)
+        req = _APIRequest(Substitute("videos/{0}/stream.{1}", id, container), params)
+        return _headVoid(req)
+    end function
+
+    ' Merges videos into a single record.
+    instance.mergeversions = function(params = {} as object)
+        req = _APIRequest("videos/mergeversions", params)
+        return _postVoid(req)
+    end function
+
+    ' Get video attachment.
+    instance.getattachments = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
     end function
 
     return instance
