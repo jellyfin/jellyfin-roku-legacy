@@ -126,6 +126,8 @@ sub loadInitialItems()
     else if m.top.parentItem.collectionType = "music"
         ' Default Settings
         m.loadItemsTask.recursive = false
+        m.itemGrid.itemSize = "[290, 290]"
+        m.itemGrid.itemSpacing = "[ 0, 20]"
         m.loadItemsTask.itemType = "MusicArtist,MusicAlbum"
         m.loadItemsTask.itemId = m.top.parentItem.Id
 
@@ -138,7 +140,6 @@ sub loadInitialItems()
             m.loadItemsTask.itemType = "MusicAlbum"
             m.loadItemsTask.recursive = true
         end if
-
     else if m.top.parentItem.collectionType = "livetv"
         m.loadItemsTask.itemType = "LiveTV"
 
