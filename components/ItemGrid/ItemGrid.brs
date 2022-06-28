@@ -28,10 +28,10 @@ sub init()
     m.itemGrid.observeField("alphaSelected", "onItemalphaSelected")
 
     'Voice filter setup
-    m.voiceBox = m.top.findNode("VoiceBox")
+    m.voiceBox = m.top.findNode("voiceBox")
     m.voiceBox.voiceEnabled = true
     m.voiceBox.active = true
-    m.voiceBox.observeField("voiceFilter", "onvoiceFilter")
+    m.voiceBox.observeField("text", "onvoiceFilter")
     'set voice help text
     m.voiceBox.hintText = tr("Use voice remote to search")
 
@@ -128,7 +128,11 @@ sub loadInitialItems()
         m.loadItemsTask.itemType = "Series"
     else if m.top.parentItem.collectionType = "music"
         ' Default Settings
-        m.loadItemsTask.recursive = false
+        if m.voiceBox.text <> ""
+            m.loadItemsTask.recursive = true
+        else
+            m.loadItemsTask.recursive = false
+        end if
         m.loadItemsTask.itemType = "MusicArtist,MusicAlbum"
 
         m.view = get_user_setting("display.music.view")
@@ -477,6 +481,7 @@ sub onvoiceFilter()
     m.itemGrid.content = m.data
     m.top.alphaSelected = ""
     m.loadItemsTask.searchTerm = m.voiceBox.text
+    m.loadItemsTask.recursive = true
     loadInitialItems()
 end sub
 
@@ -603,7 +608,7 @@ end sub
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
     topGrp = m.top.findNode("itemGrid")
-    searchGrp = m.top.findNode("VoiceBox")
+    searchGrp = m.top.findNode("voiceBox")
 
     if key = "left" and searchGrp.isinFocusChain()
         topGrp.setFocus(true)
