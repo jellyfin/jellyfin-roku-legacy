@@ -1,9 +1,6 @@
 ' TODO:
 
 ' Playstate
-' Plugins
-' Quickconnect
-' Scheduled Tasks
 ' Session
 ' Startup
 ' Subtitle
@@ -40,7 +37,10 @@ function API()
     instance["persons"] = personsActions()
     instance["playback"] = playbackActions()
     instance["playlists"] = playlistsActions()
+    instance["plugins"] = pluginsActions()
+    instance["quickconnect"] = quickconnectActions()
     instance["repositories"] = repositoriesActions()
+    instance["scheduledtasks"] = scheduledtasksActions()
     instance["search"] = searchActions()
     instance["shows"] = showsActions()
     instance["songs"] = songsActions()
@@ -1383,6 +1383,126 @@ function playlistsActions()
     instance.move = function(playlistid as string, itemid as string, newindex as integer)
         req = _APIRequest(Substitute("/playlists/{0}/items/{1}/move/{2}", playlistid, itemid, newindex))
         return _postVoid(req)
+    end function
+
+    return instance
+end function
+
+function pluginsActions()
+    instance = {}
+
+    ' * Gets a list of currently installed plugins. 
+    instance.get = function()
+        req = _APIRequest("/plugins")
+        return _getJson(req)
+    end function
+
+    ' * Uninstalls a plugin by version. 
+    instance.uninstall = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' * Disable a plugin.
+    instance.disable = function(id as string, version as string)
+        req = _APIRequest(Substitute("/plugins/{0}/{1}/disable", id, version))
+        return _postVoid(req)
+    end function
+
+    ' * Enables a disabled plugin. 
+    instance.disable = function(id as string, version as string)
+        req = _APIRequest(Substitute("/plugins/{0}/{1}/enable", id, version))
+        return _postVoid(req)
+    end function
+
+    ' * Gets a plugin's image. 
+    instance.getimage = function(id as string, version as string)
+        req = _APIRequest(Substitute("/plugins/{0}/{1}/image", id, version))
+        return _getJson(req)
+    end function
+
+    ' * Gets plugin configuration.
+    instance.getconfiguration = function(id as string)
+        req = _APIRequest(Substitute("/plugins/{0}/configuration", id))
+        return _getJson(req)
+    end function
+
+    ' * Updates plugin configuration. 
+    instance.updateconfiguration = function(id as string, body = {} as object)
+        req = _APIRequest(Substitute("/plugins/{0}/configuration", id))
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Gets a plugin's manifest.
+    instance.getmanifest = function(id as string)
+        req = _APIRequest(Substitute("/plugins/{0}/manifest", id))
+        return _postJson(req)
+    end function
+
+    return instance
+end function
+
+function quickconnectActions()
+    instance = {}
+
+    ' * Authorizes a pending quick connect request. 
+    instance.authorize = function(params = {} as object)
+        req = _APIRequest("/quickconnect/authorize", params)
+        return _postString(req)
+    end function
+
+    ' * Attempts to retrieve authentication information. 
+    instance.connect = function()
+        req = _APIRequest("/quickconnect/connect")
+        return _getJson(req)
+    end function
+
+    ' * Gets the current quick connect state. 
+    instance.isenabled = function()
+        req = _APIRequest("/quickconnect/enabled")
+        return _getString(req)
+    end function
+
+    ' * Initiate a new quick connect request. 
+    instance.initiate = function()
+        req = _APIRequest("/quickconnect/initiate")
+        return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function scheduledtasksActions()
+    instance = {}
+
+    ' * Get tasks.
+    instance.get = function(params = {} as object)
+        req = _APIRequest("/scheduledtasks", params)
+        return _getJson(req)
+    end function
+
+    ' * Get task by id. 
+    instance.getbyid = function(id as string)
+        req = _APIRequest(Substitute("/scheduledtasks/{0}", id))
+        return _getJson(req)
+    end function
+
+    ' * Update specified task triggers. 
+    instance.updatetriggers = function(id as string, body = {} as object)
+        req = _APIRequest(Substitute("/scheduledtasks/{0}/triggers", id))
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Start specified task.
+    instance.start = function(id as string)
+        req = _APIRequest(Substitute("/scheduledtasks/running/{0}", id))
+        return _postVoid(req)
+    end function
+
+    ' * Stop specified task.
+    instance.stop = function(id as string)
+        req = _APIRequest(Substitute("/scheduledtasks/running/{0}", id))
+        return _deleteVoid(req)
     end function
 
     return instance
