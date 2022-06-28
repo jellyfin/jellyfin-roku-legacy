@@ -5,7 +5,7 @@
       <Poster id="moviePoster"
         translation="[250,150]"
         width="300" height="450" />
-      <LayoutGroup layoutDirection="vert" translation="[455, 150]" itemSpacings="[25]">
+      <LayoutGroup layoutDirection="vert" translation="[455, 150]" itemSpacings="[25]" id="details">
         <LayoutGroup layoutDirection="horiz" itemSpacings="[100]" id="infoGroup">
           <Label id="releaseYear" />
           <Label id="runtime" />
@@ -50,5 +50,6 @@
     <field id="selectedVideoStreamId" type="string" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
   <script type="text/brightscript" uri="MovieDetails.brs" />
 </component>
