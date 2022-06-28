@@ -8,7 +8,6 @@
 ' Startup
 ' Subtitle
 ' SyncPlay
-' User Library
 
 function API()
     instance = {}
@@ -1773,6 +1772,70 @@ function usersActions()
     ' Get user views.
     instance.getviews = function(id as string, params = {} as object)
         resp = _APIRequest(Substitute("/users/{0}/views", id), params)
+        return _getJson(resp)
+    end function
+
+    ' * Marks an item as a favorite.
+    instance.favorite = function(userid as string, itemid as string)
+        req = _APIRequest(Substitute("users/{0}/favoriteitems/{1}", userid, itemid))
+        json = _postJson(req)
+        return json
+    end function
+
+    ' * Unmarks item as a favorite.
+    instance.favorite = function(userid as string, itemid as string)
+        req = _APIRequest(Substitute("users/{0}/favoriteitems/{1}", userid, itemid))
+        json = _deleteVoid(req)
+        return json
+    end function
+
+    ' * Gets an item from a user's library.
+    instance.getitem = function(userid as string, itemid as string)
+        resp = _APIRequest(Substitute("/users/{0}/items/{1}", userid, itemid))
+        return _getJson(resp)
+    end function
+
+    ' * Gets intros to play before the main media item plays.
+    instance.getintros = function(userid as string, itemid as string)
+        resp = _APIRequest(Substitute("/users/{0}/items/{1}/intros", userid, itemid))
+        return _getJson(resp)
+    end function
+
+    ' * Gets local trailers for an item.
+    instance.getlocaltrailers = function(userid as string, itemid as string)
+        resp = _APIRequest(Substitute("/users/{0}/items/{1}/localtrailers", userid, itemid))
+        return _getJson(resp)
+    end function
+
+    ' * Deletes a user's saved personal rating for an item.
+    instance.deleterating = function(userid as string, itemid as string)
+        req = _APIRequest(Substitute("users/{0}/items/{1}/rating", userid, itemid))
+        json = _deleteVoid(req)
+        return json
+    end function
+
+    ' * Updates a user's rating for an item.
+    instance.updaterating = function(userid as string, itemid as string, params = {} as object)
+        req = _APIRequest(Substitute("users/{0}/items/{1}/rating", userid, itemid), params)
+        json = _postJson(req)
+        return json
+    end function
+
+    ' * Gets special features for an item.
+    instance.getspecialfeatures = function(userid as string, itemid as string)
+        resp = _APIRequest(Substitute("/users/{0}/items/{1}/specialfeatures", userid, itemid))
+        return _getJson(resp)
+    end function
+
+    ' * Gets latest media.
+    instance.getspecialfeatures = function(userid as string, params = {} as object)
+        resp = _APIRequest(Substitute("/users/{0}/items/latest", userid), params)
+        return _getJson(resp)
+    end function
+
+    ' * Gets the root folder from a user's library.
+    instance.getroot = function(userid as string)
+        resp = _APIRequest(Substitute("/users/{0}/items/root", userid))
         return _getJson(resp)
     end function
 
