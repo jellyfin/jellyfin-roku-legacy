@@ -1,7 +1,5 @@
 ' TODO:
 
-' Session
-' Startup
 ' Subtitle
 ' SyncPlay
 
@@ -44,6 +42,7 @@ function API()
     instance["sessions"] = sessionsActions()
     instance["shows"] = showsActions()
     instance["songs"] = songsActions()
+    instance["startup"] = startupActions()
     instance["studios"] = studiosActions()
     instance["system"] = systemActions()
     instance["tmdb"] = tmdbActions()
@@ -182,6 +181,18 @@ function authActions()
     instance.deletekeys = function(key as string)
         req = _APIRequest(Substitute("/auth/keys/{0}", key))
         return _deleteVoid(req)
+    end function
+
+    ' * Get all password reset providers. 
+    instance.getpasswordresetproviders = function()
+        req = _APIRequest("/auth/passwordresetproviders")
+        return _getJson(req)
+    end function
+
+    ' * Get all auth providers. 
+    instance.getauthproviders = function()
+        req = _APIRequest("/auth/providers")
+        return _getJson(req)
     end function
 
     return instance
@@ -1565,6 +1576,90 @@ function sessionsActions()
         return _postVoid(req, FormatJson(body))
     end function
 
+    ' * Gets a list of sessions. 
+    instance.get = function(params = {} as object)
+        req = _APIRequest("/sessions", params)
+        return _getJson(req)
+    end function
+
+    ' * Issues a full general command to a client. 
+    instance.postfullcommand = function(id as string, body = {} as object)
+        req = _APIRequest(Substitute("/sessions/{0}/command", id))
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Issues a general command to a client. 
+    instance.postcommand = function(id as string, command as string)
+        req = _APIRequest(Substitute("/sessions/{0}/command/{1}", id, command))
+        return _postVoid(req)
+    end function
+
+    ' * Issues a command to a client to display a message to the user. 
+    instance.postmessage = function(id as string, body = {} as object)
+        req = _APIRequest(Substitute("/sessions/{0}/message", id))
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Instructs a session to play an item.
+    instance.play = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/sessions/{0}/playing", id), params)
+        return _postVoid(req)
+    end function
+
+    ' * Issues a playstate command to a client. 
+    instance.playcommand = function(id as string, command as string)
+        req = _APIRequest(Substitute("/sessions/{0}/playing/{1}", id, command))
+        return _postVoid(req)
+    end function
+
+    ' * Issues a system command to a client. 
+    instance.systemcommand = function(id as string, command as string)
+        req = _APIRequest(Substitute("/sessions/{0}/system/{1}", id, command))
+        return _postVoid(req)
+    end function
+
+    ' * Adds an additional user to a session.
+    instance.adduser = function(id as string, userid as string)
+        req = _APIRequest(Substitute("/sessions/{0}/user/{1}", id, userid))
+        return _postVoid(req)
+    end function
+
+    ' * Removes an additional user from a session. 
+    instance.removeuser = function(id as string, userid as string)
+        req = _APIRequest(Substitute("/sessions/{0}/user/{1}", id, userid))
+        return _deleteVoid(req)
+    end function
+
+    ' * Instructs a session to browse to an item or view. 
+    instance.browseto = function(id as string, params = {} as object)
+        req = _APIRequest(Substitute("/sessions/{0}/viewing", id), params)
+        return _postVoid(req)
+    end function
+
+    ' * Updates capabilities for a device. 
+    instance.postcapabilities = function(params = {} as object)
+        req = _APIRequest("/sessions/capabilities", params)
+        return _postVoid(req)
+    end function
+
+    ' * Updates capabilities for a device. 
+    instance.postfullcapabilities = function(params = {} as object, body = {} as object)
+        req = _APIRequest("/sessions/capabilities/full", params)
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Reports that a session has ended. 
+    instance.logout = function()
+        req = _APIRequest("/sessions/logout")
+        return _postVoid(req)
+    end function
+
+    ' * Reports that a session is viewing an item. 
+    instance.postviewing = function(params = {} as object)
+        req = _APIRequest("/sessions/viewing", params)
+        return _postVoid(req)
+    end function
+
     return instance
 end function
 
@@ -1611,6 +1706,54 @@ function songsActions()
     instance.getinstantmix = function(id as string, params = {} as object)
         req = _APIRequest(Substitute("/songs/{0}/instantmix", id), params)
         return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function startupActions()
+    instance = {}
+
+    ' * Completes the startup wizard. 
+    instance.complete = function()
+        req = _APIRequest("/startup/complete")
+        return _postVoid(req)
+    end function
+
+    ' * Gets the initial startup wizard configuration. 
+    instance.getconfiguration = function()
+        req = _APIRequest("/startup/configuration")
+        return _getJson(req)
+    end function
+
+    ' * Sets the initial startup wizard configuration. 
+    instance.postconfiguration = function(body = {} as object)
+        req = _APIRequest("/startup/configuration")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Gets the first user. 
+    instance.getfirstuser = function()
+        req = _APIRequest("/startup/firstuser")
+        return _getJson(req)
+    end function
+
+    ' * Sets remote access and UPnP. 
+    instance.postconfiguration = function(body = {} as object)
+        req = _APIRequest("/startup/remoteaccess")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Gets the first user. 
+    instance.getuser = function()
+        req = _APIRequest("/startup/user")
+        return _getJson(req)
+    end function
+
+    ' * Sets the user name and password. 
+    instance.postuser = function(body = {} as object)
+        req = _APIRequest("/startup/user")
+        return _postVoid(req, FormatJson(body))
     end function
 
     return instance
