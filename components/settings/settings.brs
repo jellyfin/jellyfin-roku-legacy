@@ -30,10 +30,14 @@ sub init()
     'set default "items to load" in textedit box
     defaultItems = get_user_setting("itemgrid.Limit", m.pinPadSetting.text)
     if defaultItems <> invalid
-        m.pinPadSetting.textEditBox.hintText = defaultItems
+        m.pinPadSetting.TextEditBox.text = defaultItems.tostr()
     else
-        m.pinPadSetting.textEditBox.hintText = 60
+        m.pinPadSetting.TextEditBox.text = "60"
     end if
+    'Set cursor position to the end of the string
+    m.currStringLen = defaultItems.Len()
+    m.pinPadSetting.TextEditBox.cursorPosition = m.currStringLen + 1
+
 end sub
 
 
