@@ -1,6 +1,5 @@
 ' TODO:
 
-' Subtitle
 ' SyncPlay
 
 function API()
@@ -18,6 +17,7 @@ function API()
     instance["displaypreferences"] = displaypreferencesActions()
     instance["dlna"] = dlnaActions()
     instance["environment"] = environmentActions()
+    instance["fallbackfont"] = fallbackfontActions()
     instance["getutctime"] = getutctimeActions()
     instance["genres"] = genresActions()
     instance["images"] = imagesActions()
@@ -35,6 +35,7 @@ function API()
     instance["playback"] = playbackActions()
     instance["playlists"] = playlistsActions()
     instance["plugins"] = pluginsActions()
+    instance["providers"] = providersActions()
     instance["quickconnect"] = quickconnectActions()
     instance["repositories"] = repositoriesActions()
     instance["scheduledtasks"] = scheduledtasksActions()
@@ -441,6 +442,23 @@ function environmentActions()
     return instance
 end function
 
+function fallbackfontActions()
+    instance = {}
+
+    ' * Gets a list of available fallback font files. 
+    instance.getfonts = function()
+        req = _APIRequest("/fallbackfont/fonts")
+        return _getJson(req)
+    end function
+
+    ' * Gets a fallback font file. 
+    instance.getfonturl = function(name as string)
+        return _buildURL(Substitute("/fallbackfont/fonts/{0}", name))
+    end function
+
+    return instance
+end function
+
 function genresActions()
     instance = {}
 
@@ -765,6 +783,18 @@ function itemsActions()
 
     ' Downloads a remote image for an item.
     instance.downloadremoteimages = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' * Search remote subtitles. 
+    instance.searchremotesubtitles = function(id as string, language as string, params = {} as object)
+        req = _APIRequest(Substitute("/items/{0}/remotesearch/subtitles/{1}", id, language), params)
+        return _getJson(req)
+    end function
+
+    ' Downloads a remote subtitle. 
+    instance.downloadremotesubtitles = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
@@ -1448,6 +1478,18 @@ function pluginsActions()
     instance.getmanifest = function(id as string)
         req = _APIRequest(Substitute("/plugins/{0}/manifest", id))
         return _postJson(req)
+    end function
+
+    return instance
+end function
+
+function providersActions()
+    instance = {}
+
+    ' * Gets the remote subtitles. 
+    instance.getremotesubtitles = function(id as string)
+        req = _APIRequest(Substitute("/providers/subtitles/subtitles/{0}", id))
+        return _getJson(req)
     end function
 
     return instance
@@ -2202,7 +2244,7 @@ function videosActions()
         return _headVoid(req)
     end function
 
-    ' Merges videos into a single record.
+    ' * Merges videos into a single record.
     instance.mergeversions = function(params = {} as object)
         req = _APIRequest("videos/mergeversions", params)
         return _postVoid(req)
@@ -2212,6 +2254,34 @@ function videosActions()
     instance.getattachments = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
+    end function
+
+    ' * Gets an HLS subtitle playlist. 
+    instance.gethlssubtitleplaylisturl = function(id as string, streamindex as integer, mediasourceid as string, params = {} as object)
+        return _buildURL(Substitute("/videos/{0}/{1}/subtitles/{2}/subtitles.m3u8", id, streamindex, mediasourceid), params)
+    end function
+
+    ' * Upload an external subtitle file. 
+    instance.uploadsubtitle = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' * Deletes an external subtitle file. 
+    instance.deletesubtitle = function()
+        throw "System.NotImplementedException: The function is not implemented."
+        return false
+    end function
+
+    ' * Gets subtitles in a specified format. 
+    instance.getsubtitleswithstartposition = function(routeitemid as string, routemediasourceid as string, routeindex as integer, routestartpositionticks as integer, routeformat as string, params = {} as object)
+        ' We maxed out params for substitute() so we must manually add the routeformat value
+        return _buildURL(Substitute("/videos/{0}/{1}/subtitles/{2}/{3}/stream." + routeformat, routeitemid, routemediasourceid, routeindex, routestartpositionticks), params)
+    end function
+
+    ' * Gets subtitles in a specified format. 
+    instance.getsubtitles = function(routeitemid as string, routemediasourceid as string, routeindex as integer, routestartpositionticks as integer, routeformat as string, params = {} as object)
+        return _buildURL(Substitute("/videos/{0}/{1}/subtitles/{2}/stream.{3}" + routeformat, routeitemid, routemediasourceid, routeindex, routeformat), params)
     end function
 
     return instance
