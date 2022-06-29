@@ -14,8 +14,60 @@
     },
     {
         "title": "User Interface",
-        "description": "Settings relating to how the how the applications looks",
+        "description": "Settings relating to how the how the application looks",
         "children": [
+            {
+                "title": "Detail Page",
+                "description": "Options for details pages.",
+                "children": [
+                    {
+                        "title": "Hide Taglines",
+                        "description": "Hides tagline text on details pages.",
+                        "settingName": "ui.details.hidetagline",
+                        "type": "bool",
+                        "default": "false"
+                    }
+                ]
+            },     
+            {    
+                "title": "TV Shows",
+                "description": "Options for TV Shows.",
+                "children": [
+                    {
+                        "title": "Blur Unwatched Episodes",
+                        "description": "If enabled, images for unwatched episodes will be blurred.",
+                        "settingName": "ui.tvshows.blurunwatched",
+                        "type": "bool",
+                        "default": "false"
+                    }
+                ]
+            },     
+            {              
+                "title": "Screensaver",
+                "description": "Options for Jellyfin's screensaver.",
+                "children": [
+                    {
+                        "title": "Use Splashscreen as Screensaver Background",
+                        "description": "Use generated splashscreen image as Jellyfin's screensaver background.",
+                        "settingName": "ui.screensaver.splashBackground",
+                        "type": "bool",
+                        "default": "false"
+                    }
+                ]
+            },     
+            {
+                "title": "Design Elements",
+                "description": "Options that alter the design of Jellyfin.",
+                "children": [
+                    {
+                        "title": "Use Splashscreen as Home Background",
+                        "description": "Use generated splashscreen image as Jellyfin home background. Jellyfin will need to be closed and reopened for change to take effect.",
+                        "settingName": "ui.home.splashBackground",
+                        "type": "bool",
+                        "default": "false"
+                    }
+                ]
+            },
             {
                 "title": "Media Grid",
                 "description": "Media Grid Options",
@@ -33,6 +85,13 @@
                         "settingName": "itemgrid.alwaysShowTitles",
                         "type": "bool",
                         "default": "false"
+                    },
+                    {
+                        "title": "Return to Top",
+                        "description": "Use the replay button to slowly animate to the first item in the folder. (If disabled, The folder will reset to the first item immediately)",
+                        "settingName": "itemgrid.reset",
+                        "type": "bool",
+                        "default": "true"
                     }
                 ]
             }

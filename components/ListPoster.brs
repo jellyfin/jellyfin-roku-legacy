@@ -51,12 +51,27 @@ sub itemContentChanged() as void
     m.poster = m.top.findNode("poster")
     itemData = m.top.itemContent
     m.title.text = itemData.title
+
     if itemData.json.lookup("Type") = "Episode" and itemData.json.IndexNumber <> invalid
         m.title.text = StrI(itemData.json.IndexNumber) + ". " + m.title.text
+    else if itemData.json.lookup("Type") = "MusicAlbum"
+        m.title.font = "font:SmallestSystemFont"
+        m.staticTitle.font = "font:SmallestSystemFont"
     end if
     m.staticTitle.text = m.title.text
 
-    m.poster.uri = itemData.posterUrl
+    imageUrl = itemData.posterURL
+
+    if get_user_setting("ui.tvshows.blurunwatched") = "true"
+
+        if itemData.json.lookup("Type") = "Episode"
+            if not itemData.json.userdata.played
+                imageUrl = imageUrl + "&blur=15"
+            end if
+        end if
+    end if
+
+    m.poster.uri = imageUrl
 
     updateSize()
 end sub

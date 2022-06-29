@@ -892,6 +892,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
             end if
             handled = true
         end if
+
+        if key = "replay"
+            m.top.jumpToRowItem = [m.top.rowItemFocused[0], 0]
+        end if
     end if
     return handled
 end function

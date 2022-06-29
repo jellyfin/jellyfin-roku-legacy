@@ -40,6 +40,7 @@
     <field id="imageDisplayMode" type="string" value="scaleToZoom" />
     <field id="AlphaSelected" type="string" alias="AlphaMenu.itemAlphaSelected" alwaysNotify="true" onChange="onItemAlphaSelected" />
     <field id="alphaActive" type="boolean" value="false" />
+    <field id="jumpToItem" type="integer" value="" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
