@@ -70,8 +70,8 @@ end sub
 ' Populate on screen text variables
 sub setOnScreenTextValues(json)
     if isValid(json)
-        if isValid(json.overview)
-            ' Have have overview text
+        if isValid(json.overview) and json.overview <> ""
+            ' We have overview text
             setFieldTextValue("overview", json.overview)
         else
             ' We don't have overview text
