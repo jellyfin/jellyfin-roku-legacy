@@ -1,6 +1,5 @@
 ' TODO:
 
-' Playstate
 ' Session
 ' Startup
 ' Subtitle
@@ -42,6 +41,7 @@ function API()
     instance["repositories"] = repositoriesActions()
     instance["scheduledtasks"] = scheduledtasksActions()
     instance["search"] = searchActions()
+    instance["sessions"] = sessionsActions()
     instance["shows"] = showsActions()
     instance["songs"] = songsActions()
     instance["studios"] = studiosActions()
@@ -1472,6 +1472,24 @@ function quickconnectActions()
     return instance
 end function
 
+function repositoriesActions()
+    instance = {}
+
+    ' Gets all package repositories.
+    instance.get = function()
+        req = _APIRequest("/repositories")
+        return _getJson(req)
+    end function
+
+    ' Sets the enabled and existing package repositories.
+    instance.set = function(body = {} as object)
+        req = _APIRequest("/repositories")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    return instance
+end function
+
 function scheduledtasksActions()
     instance = {}
 
@@ -1508,24 +1526,6 @@ function scheduledtasksActions()
     return instance
 end function
 
-function repositoriesActions()
-    instance = {}
-
-    ' Gets all package repositories.
-    instance.get = function()
-        req = _APIRequest("/repositories")
-        return _getJson(req)
-    end function
-
-    ' Sets the enabled and existing package repositories.
-    instance.set = function(body = {} as object)
-        req = _APIRequest("/repositories")
-        return _postVoid(req, FormatJson(body))
-    end function
-
-    return instance
-end function
-
 function searchActions()
     instance = {}
 
@@ -1533,6 +1533,36 @@ function searchActions()
     instance.gethints = function(params = {} as object)
         req = _APIRequest("/search/hints", params)
         return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function sessionsActions()
+    instance = {}
+
+    ' * Reports playback has started within a session. 
+    instance.playing = function(body = {} as object)
+        req = _APIRequest("/sessions/playing")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Pings a playback session. 
+    instance.ping = function(params = {} as object)
+        req = _APIRequest("/sessions/playing/ping", params)
+        return _postVoid(req)
+    end function
+
+    ' * Reports playback progress within a session. 
+    instance.postprogress = function(body = {} as object)
+        req = _APIRequest("/sessions/playing/progress")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Reports playback has stopped within a session. 
+    instance.poststopped = function(body = {} as object)
+        req = _APIRequest("/sessions/playing/stopped")
+        return _postVoid(req, FormatJson(body))
     end function
 
     return instance
@@ -1957,6 +1987,36 @@ function usersActions()
     instance.getroot = function(userid as string)
         resp = _APIRequest(Substitute("/users/{0}/items/root", userid))
         return _getJson(resp)
+    end function
+
+    ' * Marks an item as played for user. 
+    instance.markplayed = function(userid as string, itemid as string, params = {} as object)
+        req = _APIRequest(Substitute("users/{0}/playeditems/{1}", userid, itemid), params)
+        return _postJson(req)
+    end function
+
+    ' * Marks an item as unplayed for user. 
+    instance.markunplayed = function(userid as string, itemid as string)
+        req = _APIRequest(Substitute("users/{0}/playeditems/{1}", userid, itemid))
+        return _deleteVoid(req)
+    end function
+
+    ' * Reports that a user has begun playing an item. 
+    instance.markplaying = function(userid as string, itemid as string, params = {} as object)
+        req = _APIRequest(Substitute("users/{0}/playingitems/{1}", userid, itemid), params)
+        return _postJson(req)
+    end function
+
+    ' * Reports that a user has stopped playing an item. 
+    instance.markstoppedplaying = function(userid as string, itemid as string, params = {} as object)
+        req = _APIRequest(Substitute("users/{0}/playingitems/{1}", userid, itemid), params)
+        return _deleteVoid(req)
+    end function
+
+    ' * Reports a user's playback progress. 
+    instance.reportplayprogress = function(userid as string, itemid as string, params = {} as object)
+        req = _APIRequest(Substitute("users/{0}/playingitems/{1}/progress", userid, itemid), params)
+        return _postJson(req)
     end function
 
     return instance
