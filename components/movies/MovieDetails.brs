@@ -12,6 +12,9 @@ sub init()
     overview = m.top.findNode("overview")
     overview.width = 1920 - 96 - 300 - 96 - 30
 
+    m.details = m.top.findNode("details")
+    m.tagline = m.top.findNode("tagline")
+
     m.buttonGrp = m.top.findNode("buttons")
     m.buttonGrp.setFocus(true)
     m.top.lastFocus = m.buttonGrp
@@ -90,9 +93,13 @@ sub itemContentChanged()
     if itemData.mediaStreams[0] <> invalid
         setFieldText("video_codec", tr("Video") + ": " + itemData.mediaStreams[0].displayTitle)
     end if
-    ' TODO - cmon now. these are buttons, not words
-    if itemData.taglines.count() > 0
-        setFieldText("tagline", itemData.taglines[0])
+
+    if get_user_setting("ui.details.hidetagline") = "false"
+        if itemData.taglines.count() > 0
+            setFieldText("tagline", itemData.taglines[0])
+        end if
+    else
+        m.details.removeChild(m.tagline)
     end if
 
     setFavoriteColor()

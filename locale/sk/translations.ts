@@ -568,5 +568,96 @@
         <source>Save Credentials?</source>
         <translation>Uložiť prihlasovacie údaje?</translation>
     </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Neznámy</translation>
+        <extracomment>Title for a cast member for which we have no information for</extracomment>
+    </message>
+    <message>
+        <source>Not found</source>
+        <translation>Nenájdené</translation>
+        <extracomment>Title of message box when the requested content is not found on the server</extracomment>
+    </message>
+    <message>
+        <source>Connecting to Server</source>
+        <translation>Pripájam sa k serveru</translation>
+        <extracomment>Message to display to user while client is attempting to connect to the server</extracomment>
+    </message>
+    <message>
+        <source>Cancel Recording</source>
+        <translation>Zrušiť Nahrávanie</translation>
+    </message>
+    <message>
+        <source>Record Series</source>
+        <translation>Nahrávať sériu</translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation>Nahrávať</translation>
+    </message>
+    <message>
+        <source>TV Guide</source>
+        <translation>TV sprievodca</translation>
+        <extracomment>Menu option for showing Live TV Guide / Schedule</extracomment>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation>Kanály</translation>
+        <extracomment>Menu option for showing Live TV Channel List</extracomment>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation type="unfinished">Repríza</translation>
+        <extracomment>If TV Shows has previously been broadcasted</extracomment>
+    </message>
+    <message>
+        <source>Live</source>
+        <translation>Naživo</translation>
+        <extracomment>If TV Show is being broadcast live (not pre-recorded)</extracomment>
+    </message>
+    <message>
+        <source>Ends at</source>
+        <translation>Končí o</translation>
+        <extracomment>(Past Tense) For defining a day and time when a program ended  (e.g.  Ended Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Ended at</source>
+        <translation>Skončilo o</translation>
+        <extracomment>(Past Tense) For defining time when a program will ended (e.g.  Ended at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Starts</source>
+        <translation>Začína</translation>
+        <extracomment>(Future Tense) For defining a day and time when a program will start (e.g.  Starts Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Starts at</source>
+        <translation>Začína o</translation>
+        <extracomment>(Future Tense) For defining time when a program will start today (e.g.  Starts at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation>Začalo</translation>
+        <extracomment>(Past Tense) For defining a day and time when a program started (e.g.  Started Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Started at</source>
+        <translation>Začalo o</translation>
+        <extracomment>(Past Tense) For defining time when a program started today (e.g.  Started at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Sobota</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>Piatok</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>More Like This</source>
+        <translation>Navrhované</translation>
+    </message>
 </context>
 </TS>

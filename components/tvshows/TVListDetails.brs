@@ -2,6 +2,9 @@ sub init()
     m.title = m.top.findNode("title")
     m.title.text = tr("Loading...")
     m.options = m.top.findNode("tvListOptions")
+    m.overview = m.top.findNode("overview")
+    m.poster = m.top.findNode("poster")
+    m.deviceInfo = CreateObject("roDeviceInfo")
 end sub
 
 sub itemContentChanged()
@@ -13,8 +16,19 @@ sub itemContentChanged()
         indexNumber = ""
     end if
     m.title.text = indexNumber + item.title
-    m.top.findNode("poster").uri = item.posterURL
     m.overview.text = item.overview
+
+    imageUrl = item.posterURL
+
+    if get_user_setting("ui.tvshows.blurunwatched") = "true"
+        if itemData.lookup("Type") = "Episode"
+            if not itemData.userdata.played
+                imageUrl = imageUrl + "&blur=15"
+            end if
+        end if
+    end if
+
+    m.poster.uri = imageUrl
 
     if type(itemData.RunTimeTicks) = "LongInteger"
         m.top.findNode("runtime").text = stri(getRuntime()).trim() + " mins"
@@ -42,10 +56,7 @@ sub itemContentChanged()
                 else
                     audioIdx = i
                 end if
-                <<<<<< < HEAD
-                = = = = = = =
                 m.top.findNode("audio_codec").text = tr("Audio") + ": " + itemData.mediaStreams[audioIdx].DisplayTitle
-                >>>>>> > d932961 (Merge fixup)
             end if
             if videoIdx <> invalid and audioIdx <> invalid then exit for
         end for

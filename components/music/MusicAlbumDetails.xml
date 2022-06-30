@@ -10,6 +10,7 @@
           <Label id="runtime" width="450" height="25" />
           <Label id="released" width="450" height="25" />
           <JFButton id="playAlbum" minChars="8" text="Play Album"></JFButton>
+          <JFButton id="instantMix" minChars="8" text="Instant Mix"></JFButton>
         </LayoutGroup>
         <LayoutGroup id="infoGroup" layoutDirection="vert" itemSpacings="[15]">
           <Label id="overview" wrap="true" height="310" width="1250" ellipsisText=" ...  (Press * to read more)" />
@@ -26,6 +27,7 @@
     <field id="albumData" type="assocarray" alias="songList.MusicArtistAlbumData" />
     <field id="playSong" alias="songList.itemSelected" />
     <field id="playAllSelected" alias="playAlbum.buttonSelected" />
+    <field id="instantMixSelected" alias="instantMix.buttonSelected" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="MusicAlbumDetails.brs" />
