@@ -60,6 +60,17 @@ sub itemContentChanged()
     else if itemData.type = "MusicArtist"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title
+
+        m.itemPoster.height = 290
+        m.itemPoster.width = 290
+
+        m.itemText.translation = [0, m.itemPoster.height + 7]
+
+        m.backdrop.height = 290
+        m.backdrop.width = 290
+
+        m.posterText.height = 200
+        m.posterText.width = 280
     else
         print "Unhandled Grid Item Type: " + itemData.type
     end if
