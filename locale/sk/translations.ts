@@ -655,5 +655,9 @@
         <translation>Piatok</translation>
         <extracomment>Day of Week</extracomment>
     </message>
+    <message>
+        <source>More Like This</source>
+        <translation>Navrhované</translation>
+    </message>
 </context>
 </TS>

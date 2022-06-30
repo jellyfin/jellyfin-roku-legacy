@@ -4,6 +4,7 @@
 <script type="text/brightscript" uri = "Screensaver.brs"/>
 
 <children>
+	<Poster id="backdrop" loadDisplayMode="scaleToZoom" width="1920" height="1200" />
 
 <!-- Makes 2 Posters on top of each other -->
 	<Poster
@@ -140,4 +141,6 @@
 	</SequentialAnimation>
 	
 </children>
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>
