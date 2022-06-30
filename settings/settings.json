@@ -9,6 +9,54 @@
                 "settingName": "playback.mpeg2",
                 "type": "bool",
                 "default": "false"
+            },
+            {
+                "title": "Enhanced subtitles",
+                "description": "Toggle subtitle formats that can cause transcoding or crashes. A disabled format is dropped and ignored.",
+                "children": [
+                    {
+                        "title": "ASS",
+                        "description": "Enable or disable displaying ASS subtitles.",
+                        "settingName": "showsub.ass",
+                        "type": "bool",
+                        "default": "true"
+                    },
+                    {
+                        "title": "SSA",
+                        "description": "Enable or disable displaying SSA subtitles",
+                        "settingName": "showsub.ssa",
+                        "type": "bool",
+                        "default": "true"
+                    },
+                    {
+                        "title": "SMI",
+                        "description": "Enable or disable displaying SMI subtitles",
+                        "settingName": "showsub.smi",
+                        "type": "bool",
+                        "default": "true"
+                    },
+                    {
+                        "title": "DVDSUB",
+                        "description": "Enable or disable displaying DVDSUB subtitles",
+                        "settingName": "showsub.dvdsub",
+                        "type": "bool",
+                        "default": "true"
+                    },
+                    {
+                        "title": "PGS",
+                        "description": "Enable or disable displaying PGS subtitles",
+                        "settingName": "showsub.pgs",
+                        "type": "bool",
+                        "default": "true"
+                    },
+                    {
+                        "title": "PGSSUB",
+                        "description": "Enable or disable displaying PGSSUB subtitles",
+                        "settingName": "showsub.pgssub",
+                        "type": "bool",
+                        "default": "true"
+                    }
+                ]
             }
         ]
     },

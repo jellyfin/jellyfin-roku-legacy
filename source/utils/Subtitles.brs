@@ -17,6 +17,16 @@ function availSubtitleTrackIdx(video, sub_idx) as integer
     return -1
 end function
 
+function subtitleCodecIsEnhanced(value as string) as boolean
+    esubs = ["ass", "ssa", "smi", "dvdsub", "pgs", "pgssub"]
+    for each entry in esubs
+        if entry = value
+            return true
+        end if
+    end for
+    return false
+end function
+
 ' Identify the default subtitle track for a given video id
 ' returns the server-side track index for the appriate subtitle
 function defaultSubtitleTrackFromVid(video_id) as integer
@@ -40,13 +50,14 @@ function defaultSubtitleTrack(sorted_subtitles, require_text = false) as integer
     if m.user.Configuration.SubtitleMode = "None"
         return -1 ' No subtitles desired: select none
     end if
-
     for each item in sorted_subtitles
+        ' Only auto-select subtitles that aren't disabled in local user settings
+        codecEnabled = ((not subtitleCodecIsEnhanced(item.Codec)) or (get_user_setting("showsub." + item.Codec) = "true"))
         ' Only auto-select subtitle if language matches preference
         languageMatch = (m.user.Configuration.SubtitleLanguagePreference = item.Track.Language)
         ' Ensure textuality of subtitle matches preferenced passed as arg
         matchTextReq = ((require_text and item.IsTextSubtitleStream) or not require_text)
-        if languageMatch and matchTextReq
+        if languageMatch and matchTextReq and codecEnabled
             if m.user.Configuration.SubtitleMode = "Default" and (item.isForced or item.IsDefault or item.IsExternal)
                 return item.Index ' Finds first forced, or default, or external subs in sorted list
             else if m.user.Configuration.SubtitleMode = "Always" and not item.IsForced
@@ -130,7 +141,9 @@ function selectSubtitleTrackDialog(tracks, currentTrack = -1)
         else
             language = "Undefined"
         end if
-        options.push(language + forced + default)
+        if (not subtitleCodecIsEnhanced(item.Codec)) or get_user_setting("showsub." + item.Codec) = "true"
+            options.push(language + forced + default)
+        end if
     end for
     return option_dialog(options, "Select a subtitle track", currentTrack + 1)
 end function
@@ -200,7 +213,8 @@ function sortSubtitles(id as string, MediaStreams)
                 "IsDefault": stream.IsDefault,
                 "IsForced": stream.IsForced,
                 "IsExternal": stream.IsExternal,
-                "IsEncoded": stream.DeliveryMethod = "Encode"
+                "IsEncoded": stream.DeliveryMethod = "Encode",
+                "Codec": stream.Codec
             }
             if stream.isForced
                 trackType = "forced"
