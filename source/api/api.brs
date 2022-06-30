@@ -1,7 +1,3 @@
-' TODO:
-
-' SyncPlay
-
 function API()
     instance = {}
 
@@ -45,6 +41,7 @@ function API()
     instance["songs"] = songsActions()
     instance["startup"] = startupActions()
     instance["studios"] = studiosActions()
+    instance["syncplay"] = syncplayActions()
     instance["system"] = systemActions()
     instance["tmdb"] = tmdbActions()
     instance["trailers"] = trailersActions()
@@ -184,13 +181,13 @@ function authActions()
         return _deleteVoid(req)
     end function
 
-    ' * Get all password reset providers. 
+    ' * Get all password reset providers.
     instance.getpasswordresetproviders = function()
         req = _APIRequest("/auth/passwordresetproviders")
         return _getJson(req)
     end function
 
-    ' * Get all auth providers. 
+    ' * Get all auth providers.
     instance.getauthproviders = function()
         req = _APIRequest("/auth/providers")
         return _getJson(req)
@@ -445,13 +442,13 @@ end function
 function fallbackfontActions()
     instance = {}
 
-    ' * Gets a list of available fallback font files. 
+    ' * Gets a list of available fallback font files.
     instance.getfonts = function()
         req = _APIRequest("/fallbackfont/fonts")
         return _getJson(req)
     end function
 
-    ' * Gets a fallback font file. 
+    ' * Gets a fallback font file.
     instance.getfonturl = function(name as string)
         return _buildURL(Substitute("/fallbackfont/fonts/{0}", name))
     end function
@@ -787,13 +784,13 @@ function itemsActions()
         return false
     end function
 
-    ' * Search remote subtitles. 
+    ' * Search remote subtitles.
     instance.searchremotesubtitles = function(id as string, language as string, params = {} as object)
         req = _APIRequest(Substitute("/items/{0}/remotesearch/subtitles/{1}", id, language), params)
         return _getJson(req)
     end function
 
-    ' Downloads a remote subtitle. 
+    ' Downloads a remote subtitle.
     instance.downloadremotesubtitles = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
@@ -1432,13 +1429,13 @@ end function
 function pluginsActions()
     instance = {}
 
-    ' * Gets a list of currently installed plugins. 
+    ' * Gets a list of currently installed plugins.
     instance.get = function()
         req = _APIRequest("/plugins")
         return _getJson(req)
     end function
 
-    ' * Uninstalls a plugin by version. 
+    ' * Uninstalls a plugin by version.
     instance.uninstall = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
@@ -1450,13 +1447,13 @@ function pluginsActions()
         return _postVoid(req)
     end function
 
-    ' * Enables a disabled plugin. 
+    ' * Enables a disabled plugin.
     instance.disable = function(id as string, version as string)
         req = _APIRequest(Substitute("/plugins/{0}/{1}/enable", id, version))
         return _postVoid(req)
     end function
 
-    ' * Gets a plugin's image. 
+    ' * Gets a plugin's image.
     instance.getimage = function(id as string, version as string)
         req = _APIRequest(Substitute("/plugins/{0}/{1}/image", id, version))
         return _getJson(req)
@@ -1468,7 +1465,7 @@ function pluginsActions()
         return _getJson(req)
     end function
 
-    ' * Updates plugin configuration. 
+    ' * Updates plugin configuration.
     instance.updateconfiguration = function(id as string, body = {} as object)
         req = _APIRequest(Substitute("/plugins/{0}/configuration", id))
         return _postVoid(req, FormatJson(body))
@@ -1486,7 +1483,7 @@ end function
 function providersActions()
     instance = {}
 
-    ' * Gets the remote subtitles. 
+    ' * Gets the remote subtitles.
     instance.getremotesubtitles = function(id as string)
         req = _APIRequest(Substitute("/providers/subtitles/subtitles/{0}", id))
         return _getJson(req)
@@ -1498,25 +1495,25 @@ end function
 function quickconnectActions()
     instance = {}
 
-    ' * Authorizes a pending quick connect request. 
+    ' * Authorizes a pending quick connect request.
     instance.authorize = function(params = {} as object)
         req = _APIRequest("/quickconnect/authorize", params)
         return _postString(req)
     end function
 
-    ' * Attempts to retrieve authentication information. 
+    ' * Attempts to retrieve authentication information.
     instance.connect = function()
         req = _APIRequest("/quickconnect/connect")
         return _getJson(req)
     end function
 
-    ' * Gets the current quick connect state. 
+    ' * Gets the current quick connect state.
     instance.isenabled = function()
         req = _APIRequest("/quickconnect/enabled")
         return _getString(req)
     end function
 
-    ' * Initiate a new quick connect request. 
+    ' * Initiate a new quick connect request.
     instance.initiate = function()
         req = _APIRequest("/quickconnect/initiate")
         return _getJson(req)
@@ -1552,13 +1549,13 @@ function scheduledtasksActions()
         return _getJson(req)
     end function
 
-    ' * Get task by id. 
+    ' * Get task by id.
     instance.getbyid = function(id as string)
         req = _APIRequest(Substitute("/scheduledtasks/{0}", id))
         return _getJson(req)
     end function
 
-    ' * Update specified task triggers. 
+    ' * Update specified task triggers.
     instance.updatetriggers = function(id as string, body = {} as object)
         req = _APIRequest(Substitute("/scheduledtasks/{0}/triggers", id))
         return _postVoid(req, FormatJson(body))
@@ -1594,49 +1591,49 @@ end function
 function sessionsActions()
     instance = {}
 
-    ' * Reports playback has started within a session. 
+    ' * Reports playback has started within a session.
     instance.playing = function(body = {} as object)
         req = _APIRequest("/sessions/playing")
         return _postVoid(req, FormatJson(body))
     end function
 
-    ' * Pings a playback session. 
+    ' * Pings a playback session.
     instance.ping = function(params = {} as object)
         req = _APIRequest("/sessions/playing/ping", params)
         return _postVoid(req)
     end function
 
-    ' * Reports playback progress within a session. 
+    ' * Reports playback progress within a session.
     instance.postprogress = function(body = {} as object)
         req = _APIRequest("/sessions/playing/progress")
         return _postVoid(req, FormatJson(body))
     end function
 
-    ' * Reports playback has stopped within a session. 
+    ' * Reports playback has stopped within a session.
     instance.poststopped = function(body = {} as object)
         req = _APIRequest("/sessions/playing/stopped")
         return _postVoid(req, FormatJson(body))
     end function
 
-    ' * Gets a list of sessions. 
+    ' * Gets a list of sessions.
     instance.get = function(params = {} as object)
         req = _APIRequest("/sessions", params)
         return _getJson(req)
     end function
 
-    ' * Issues a full general command to a client. 
+    ' * Issues a full general command to a client.
     instance.postfullcommand = function(id as string, body = {} as object)
         req = _APIRequest(Substitute("/sessions/{0}/command", id))
         return _postVoid(req, FormatJson(body))
     end function
 
-    ' * Issues a general command to a client. 
+    ' * Issues a general command to a client.
     instance.postcommand = function(id as string, command as string)
         req = _APIRequest(Substitute("/sessions/{0}/command/{1}", id, command))
         return _postVoid(req)
     end function
 
-    ' * Issues a command to a client to display a message to the user. 
+    ' * Issues a command to a client to display a message to the user.
     instance.postmessage = function(id as string, body = {} as object)
         req = _APIRequest(Substitute("/sessions/{0}/message", id))
         return _postVoid(req, FormatJson(body))
@@ -1648,13 +1645,13 @@ function sessionsActions()
         return _postVoid(req)
     end function
 
-    ' * Issues a playstate command to a client. 
+    ' * Issues a playstate command to a client.
     instance.playcommand = function(id as string, command as string)
         req = _APIRequest(Substitute("/sessions/{0}/playing/{1}", id, command))
         return _postVoid(req)
     end function
 
-    ' * Issues a system command to a client. 
+    ' * Issues a system command to a client.
     instance.systemcommand = function(id as string, command as string)
         req = _APIRequest(Substitute("/sessions/{0}/system/{1}", id, command))
         return _postVoid(req)
@@ -1666,37 +1663,37 @@ function sessionsActions()
         return _postVoid(req)
     end function
 
-    ' * Removes an additional user from a session. 
+    ' * Removes an additional user from a session.
     instance.removeuser = function(id as string, userid as string)
         req = _APIRequest(Substitute("/sessions/{0}/user/{1}", id, userid))
         return _deleteVoid(req)
     end function
 
-    ' * Instructs a session to browse to an item or view. 
+    ' * Instructs a session to browse to an item or view.
     instance.browseto = function(id as string, params = {} as object)
         req = _APIRequest(Substitute("/sessions/{0}/viewing", id), params)
         return _postVoid(req)
     end function
 
-    ' * Updates capabilities for a device. 
+    ' * Updates capabilities for a device.
     instance.postcapabilities = function(params = {} as object)
         req = _APIRequest("/sessions/capabilities", params)
         return _postVoid(req)
     end function
 
-    ' * Updates capabilities for a device. 
+    ' * Updates capabilities for a device.
     instance.postfullcapabilities = function(params = {} as object, body = {} as object)
         req = _APIRequest("/sessions/capabilities/full", params)
         return _postVoid(req, FormatJson(body))
     end function
 
-    ' * Reports that a session has ended. 
+    ' * Reports that a session has ended.
     instance.logout = function()
         req = _APIRequest("/sessions/logout")
         return _postVoid(req)
     end function
 
-    ' * Reports that a session is viewing an item. 
+    ' * Reports that a session is viewing an item.
     instance.postviewing = function(params = {} as object)
         req = _APIRequest("/sessions/viewing", params)
         return _postVoid(req)
@@ -1756,43 +1753,43 @@ end function
 function startupActions()
     instance = {}
 
-    ' * Completes the startup wizard. 
+    ' * Completes the startup wizard.
     instance.complete = function()
         req = _APIRequest("/startup/complete")
         return _postVoid(req)
     end function
 
-    ' * Gets the initial startup wizard configuration. 
+    ' * Gets the initial startup wizard configuration.
     instance.getconfiguration = function()
         req = _APIRequest("/startup/configuration")
         return _getJson(req)
     end function
 
-    ' * Sets the initial startup wizard configuration. 
+    ' * Sets the initial startup wizard configuration.
     instance.postconfiguration = function(body = {} as object)
         req = _APIRequest("/startup/configuration")
         return _postVoid(req, FormatJson(body))
     end function
 
-    ' * Gets the first user. 
+    ' * Gets the first user.
     instance.getfirstuser = function()
         req = _APIRequest("/startup/firstuser")
         return _getJson(req)
     end function
 
-    ' * Sets remote access and UPnP. 
+    ' * Sets remote access and UPnP.
     instance.postconfiguration = function(body = {} as object)
         req = _APIRequest("/startup/remoteaccess")
         return _postVoid(req, FormatJson(body))
     end function
 
-    ' * Gets the first user. 
+    ' * Gets the first user.
     instance.getuser = function()
         req = _APIRequest("/startup/user")
         return _getJson(req)
     end function
 
-    ' * Sets the user name and password. 
+    ' * Sets the user name and password.
     instance.postuser = function(body = {} as object)
         req = _APIRequest("/startup/user")
         return _postVoid(req, FormatJson(body))
@@ -1825,6 +1822,138 @@ function studiosActions()
     instance.headimageurlbyname = function(name as string, imagetype = "thumb" as string, imageindex = 0 as integer, params = {} as object)
         req = _APIRequest(Substitute("/studios/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
         return _headVoid(req)
+    end function
+
+    return instance
+end function
+
+function syncplayActions()
+    instance = {}
+
+    ' * Notify SyncPlay group that member is buffering.
+    instance.buffering = function(body = {} as object)
+        req = _APIRequest("/syncplay/buffering")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Join an existing SyncPlay group.
+    instance.join = function(body = {} as object)
+        req = _APIRequest("/syncplay/join")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Leave the joined SyncPlay group.
+    instance.leave = function(body = {} as object)
+        req = _APIRequest("/syncplay/leave")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Gets all SyncPlay groups.
+    instance.getlist = function()
+        req = _APIRequest("/syncplay/list")
+        return _getJson(req)
+    end function
+
+    ' * Request to move an item in the playlist in SyncPlay group.
+    instance.moveplaylistitem = function(body = {} as object)
+        req = _APIRequest("/syncplay/moveplaylistitem")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Create a new SyncPlay group.
+    instance.new = function(body = {} as object)
+        req = _APIRequest("/syncplay/new")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Request next item in SyncPlay group.
+    instance.next = function(body = {} as object)
+        req = _APIRequest("/syncplay/nextitem")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Request next item in SyncPlay group.
+    instance.pause = function()
+        req = _APIRequest("/syncplay/pause")
+        return _postVoid(req)
+    end function
+
+    ' * Update session ping.
+    instance.ping = function(body = {} as object)
+        req = _APIRequest("/syncplay/ping")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Request previous item in SyncPlay group.
+    instance.previous = function(body = {} as object)
+        req = _APIRequest("/syncplay/previousitem")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Request to queue items to the playlist of a SyncPlay group.
+    instance.queue = function(body = {} as object)
+        req = _APIRequest("/syncplay/queue")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Notify SyncPlay group that member is ready for playback.
+    instance.ready = function(body = {} as object)
+        req = _APIRequest("/syncplay/ready")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Request to remove items from the playlist in SyncPlay group.
+    instance.removefromplaylist = function(body = {} as object)
+        req = _APIRequest("/syncplay/removefromplaylist")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Request seek in SyncPlay group.
+    instance.seek = function(body = {} as object)
+        req = _APIRequest("/syncplay/seek")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Request SyncPlay group to ignore member during group-wait.
+    instance.setignorewait = function(body = {} as object)
+        req = _APIRequest("/syncplay/setignorewait")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Request to set new playlist in SyncPlay group.
+    instance.setnewqueue = function(body = {} as object)
+        req = _APIRequest("/syncplay/setnewqueue")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Request to change playlist item in SyncPlay group.
+    instance.setplaylistitem = function(body = {} as object)
+        req = _APIRequest("/syncplay/setplaylistitem")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Request to set repeat mode in SyncPlay group.
+    instance.setrepeatmode = function(body = {} as object)
+        req = _APIRequest("/syncplay/setrepeatmode")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Request to set shuffle mode in SyncPlay group.
+    instance.setshufflemode = function(body = {} as object)
+        req = _APIRequest("/syncplay/setshufflemode")
+        return _postVoid(req, FormatJson(body))
+    end function
+
+    ' * Request stop in SyncPlay group.
+    instance.stop = function()
+        req = _APIRequest("/syncplay/stop")
+        return _postVoid(req)
+    end function
+
+    ' * Request unpause in SyncPlay group.
+    instance.unpause = function()
+        req = _APIRequest("/syncplay/unpause")
+        return _postVoid(req)
     end function
 
     return instance
@@ -2174,31 +2303,31 @@ function usersActions()
         return _getJson(resp)
     end function
 
-    ' * Marks an item as played for user. 
+    ' * Marks an item as played for user.
     instance.markplayed = function(userid as string, itemid as string, params = {} as object)
         req = _APIRequest(Substitute("users/{0}/playeditems/{1}", userid, itemid), params)
         return _postJson(req)
     end function
 
-    ' * Marks an item as unplayed for user. 
+    ' * Marks an item as unplayed for user.
     instance.markunplayed = function(userid as string, itemid as string)
         req = _APIRequest(Substitute("users/{0}/playeditems/{1}", userid, itemid))
         return _deleteVoid(req)
     end function
 
-    ' * Reports that a user has begun playing an item. 
+    ' * Reports that a user has begun playing an item.
     instance.markplaying = function(userid as string, itemid as string, params = {} as object)
         req = _APIRequest(Substitute("users/{0}/playingitems/{1}", userid, itemid), params)
         return _postJson(req)
     end function
 
-    ' * Reports that a user has stopped playing an item. 
+    ' * Reports that a user has stopped playing an item.
     instance.markstoppedplaying = function(userid as string, itemid as string, params = {} as object)
         req = _APIRequest(Substitute("users/{0}/playingitems/{1}", userid, itemid), params)
         return _deleteVoid(req)
     end function
 
-    ' * Reports a user's playback progress. 
+    ' * Reports a user's playback progress.
     instance.reportplayprogress = function(userid as string, itemid as string, params = {} as object)
         req = _APIRequest(Substitute("users/{0}/playingitems/{1}/progress", userid, itemid), params)
         return _postJson(req)
@@ -2256,30 +2385,30 @@ function videosActions()
         return false
     end function
 
-    ' * Gets an HLS subtitle playlist. 
+    ' * Gets an HLS subtitle playlist.
     instance.gethlssubtitleplaylisturl = function(id as string, streamindex as integer, mediasourceid as string, params = {} as object)
         return _buildURL(Substitute("/videos/{0}/{1}/subtitles/{2}/subtitles.m3u8", id, streamindex, mediasourceid), params)
     end function
 
-    ' * Upload an external subtitle file. 
+    ' * Upload an external subtitle file.
     instance.uploadsubtitle = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
 
-    ' * Deletes an external subtitle file. 
+    ' * Deletes an external subtitle file.
     instance.deletesubtitle = function()
         throw "System.NotImplementedException: The function is not implemented."
         return false
     end function
 
-    ' * Gets subtitles in a specified format. 
+    ' * Gets subtitles in a specified format.
     instance.getsubtitleswithstartposition = function(routeitemid as string, routemediasourceid as string, routeindex as integer, routestartpositionticks as integer, routeformat as string, params = {} as object)
         ' We maxed out params for substitute() so we must manually add the routeformat value
         return _buildURL(Substitute("/videos/{0}/{1}/subtitles/{2}/{3}/stream." + routeformat, routeitemid, routemediasourceid, routeindex, routestartpositionticks), params)
     end function
 
-    ' * Gets subtitles in a specified format. 
+    ' * Gets subtitles in a specified format.
     instance.getsubtitles = function(routeitemid as string, routemediasourceid as string, routeindex as integer, routestartpositionticks as integer, routeformat as string, params = {} as object)
         return _buildURL(Substitute("/videos/{0}/{1}/subtitles/{2}/stream.{3}" + routeformat, routeitemid, routemediasourceid, routeindex, routeformat), params)
     end function
