@@ -17,13 +17,10 @@ sub pushScene(newGroup)
             while focused.hasFocus() = false
                 focused = focused.focusedChild
             end while
-            ' Don't override lastfocus with invalid
-            if focused <> invalid
-                currentGroup.lastFocus = focused
-                currentGroup.setFocus(false)
-            end if
+
+            currentGroup.lastFocus = focused
+            currentGroup.setFocus(false)
         else
-            currentGroup.lastFocus = invalid
             currentGroup.setFocus(false)
         end if
 
@@ -114,7 +111,7 @@ sub popScene()
             else
                 if group.focusedChild <> invalid
                     group.focusedChild.setFocus(true)
-                else 
+                else
                     group.setFocus(true)
                 end if
             end if

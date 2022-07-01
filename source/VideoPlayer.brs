@@ -268,7 +268,12 @@ function PlayIntroVideo(video_id, audio_stream_idx) as boolean
         ' Check if server has intro videos setup and available
         introVideos = GetIntroVideos(video_id)
 
+        if introVideos = invalid then return true
+
         if introVideos.TotalRecordCount > 0
+            ' Bypass joke pre-roll
+            if lcase(introVideos.items[0].name) = "rick roll'd" then return true
+
             introVideo = VideoPlayer(introVideos.items[0].id, introVideos.items[0].id, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), true)
 
             port = CreateObject("roMessagePort")
