@@ -141,16 +141,40 @@ function getDeviceProfile() as object
                 "Method": "External"
             },
             {
-                "Format": "srt",
-                "Method": "External"
+                "Format": "vtt",
+                "Method": "Embed"
             },
             {
                 "Format": "ttml",
                 "Method": "External"
             },
             {
+                "Format": "ttml",
+                "Method": "Embed"
+            },
+            {
                 "Format": "sub",
                 "Method": "External"
+            },
+            {
+                "Format": "sub",
+                "Method": "Embed"
+            },
+            {
+                "Format": "ass",
+                "Method": "External"
+            },
+            {
+                "Format": "ass",
+                "Method": "Embed"
+            },
+            {
+                "Format": "ssa",
+                "Method": "External"
+            },
+            {
+                "Format": "ssa",
+                "Method": "Embed"
             }
         ]
     }
