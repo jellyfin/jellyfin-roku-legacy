@@ -175,6 +175,22 @@ function getDeviceProfile() as object
             {
                 "Format": "ssa",
                 "Method": "Embed"
+            },
+            {
+                "Format": "smi",
+                "Method": "Encode"
+            },
+            {
+                "Format": "dvdsub",
+                "Method": "Encode"
+            },
+            {
+                "Format": "pgs",
+                "Method": "Encode"
+            },
+            {
+                "Format": "pgssub",
+                "Method": "Encode"
             }
         ]
     }
