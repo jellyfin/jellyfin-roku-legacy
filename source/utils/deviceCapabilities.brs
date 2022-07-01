@@ -161,6 +161,14 @@ function getDeviceProfile() as object
                 "Method": "Embed"
             },
             {
+                "Format": "srt",
+                "Method": "External"
+            },
+            {
+                "Format": "srt",
+                "Method": "Embed"
+            },
+            {
                 "Format": "ass",
                 "Method": "External"
             },
