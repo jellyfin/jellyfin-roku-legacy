@@ -1,9 +1,12 @@
-function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1)
-
+function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, isIntro = false)
     ' Get video controls and UI
     video = CreateObject("roSGNode", "JFVideo")
     video.id = id
-    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx)
+    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, isIntro)
+
+    if video.errorMsg = "introaborted"
+        return video
+    end if
 
     if video.content = invalid
         return invalid
@@ -16,7 +19,7 @@ function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle
     return video
 end function
 
-sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1)
+sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, isIntro = false)
 
     video.content = createObject("RoSGNode", "ContentNode")
     meta = ItemMetaData(video.id)
@@ -140,6 +143,16 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
         end if
     end if
 
+    ' Don't attempt to play an intro for an intro video
+    if not isIntro
+        ' Do not play intros when resuming playback
+        if playbackPosition = 0
+            if not PlayIntroVideo(video.id, audio_stream_idx)
+                video.errorMsg = "introaborted"
+                return
+            end if
+        end if
+    end if
 
     video.content.PlayStart = int(playbackPosition / 10000000)
 
@@ -247,6 +260,38 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     end if
 
 end sub
+
+function PlayIntroVideo(video_id, audio_stream_idx) as boolean
+    ' Intro videos only play if user has cinema mode setting enabled
+    if get_user_setting("playback.cinemamode") = "true"
+
+        ' Check if server has intro videos setup and available
+        introVideos = GetIntroVideos(video_id)
+
+        if introVideos.TotalRecordCount > 0
+            introVideo = VideoPlayer(introVideos.items[0].id, introVideos.items[0].id, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), true)
+
+            port = CreateObject("roMessagePort")
+            introVideo.observeField("state", port)
+            m.global.sceneManager.callFunc("pushScene", introVideo)
+            introPlaying = true
+
+            while introPlaying
+                msg = wait(0, port)
+                if type(msg) = "roSGNodeEvent"
+                    if msg.GetData() = "finished"
+                        m.global.sceneManager.callFunc("clearPreviousScene")
+                        introPlaying = false
+                    else if msg.GetData() = "stopped"
+                        introPlaying = false
+                        return false
+                    end if
+                end if
+            end while
+        end if
+    end if
+    return true
+end function
 
 '
 ' Extract array of Transcode Reasons from the content URL
