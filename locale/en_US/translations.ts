@@ -211,54 +211,54 @@
     </message>
     <message>
         <comment>Name or Title field of media item</comment>
-        <source>TITLE</source>
+        <source>Title</source>
         <translation>Name</translation>
     </message>
     <message>
-        <source>IMDB_RATING</source>
+        <source>IMDB_Rating</source>
         <translation>IMDb Rating</translation>
     </message>
     <message>
-        <source>CRITIC_RATING</source>
+        <source>Critic Rating</source>
         <translation>Critics Rating</translation>
     </message>
     <message>
-        <source>DATE_ADDED</source>
+        <source>Date Added</source>
         <translation>Date Added</translation>
     </message>
     <message>
-        <source>DATE_PLAYED</source>
+        <source>Date Played</source>
         <translation>Date Played</translation>
     </message>
     <message>
-        <source>OFFICIAL_RATING</source>
+        <source>Official Rating</source>
         <translation>Parental Rating</translation>
     </message>
     <message>
-        <source>PLAY_COUNT</source>
+        <source>Play Count</source>
         <translation>Play Count</translation>
     </message>
     <message>
-        <source>RELEASE_DATE</source>
+        <source>Release Date</source>
         <translation>Release Date</translation>
     </message>
     <message>
-        <source>RUNTIME</source>
+        <source>Runtime</source>
         <translation>Run Time</translation>
     </message>
     <message>
         <comment>Title of Tab for switching &quot;views&quot; when looking at a library</comment>
-        <source>TAB_VIEW</source>
+        <source>View</source>
         <translation>View</translation>
     </message>
     <message>
         <comment>Title of Tab for options to sort library content</comment>
-        <source>TAB_SORT</source>
+        <source>Sort</source>
         <translation>Sort</translation>
     </message>
     <message>
         <comment>Title of Tab for options to filter library content</comment>
-        <source>TAB_FILTER</source>
+        <source>Filter</source>
         <translation>Filter</translation>
     </message>
     <message>
