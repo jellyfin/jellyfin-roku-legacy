@@ -162,7 +162,11 @@ sub loadInitialItems()
     else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
 
         ' Non-recursive, to not show subfolder contents
-        m.loadItemsTask.recursive = false
+        if m.voiceBox.text <> ""
+            m.loadItemsTask.recursive = true
+        else
+            m.loadItemsTask.recursive = false
+        end if
     else if m.top.parentItem.collectionType = "Channel"
         m.top.imageDisplayMode = "scaleToFit"
     else
