@@ -210,6 +210,12 @@ function brandingActions()
         return false
     end function
 
+    ' Delete a custom splashscreen.
+    instance.deletesplashscreen = function()
+        req = _APIRequest("/branding/splashscreen")
+        return _deleteVoid(req)
+    end function
+
     ' Gets branding configuration.
     instance.getconfiguration = function()
         req = _APIRequest("/branding/configuration")
@@ -1242,12 +1248,6 @@ function musicgenresActions()
     instance.headimageurlbyname = function(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
         req = _APIRequest(Substitute("/musicgenres/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
         return _headVoid(req)
-    end function
-
-    ' Creates an instant playlist based on a given genre.
-    instance.getinstantmix = function(name as string, params = {} as object)
-        req = _APIRequest(Substitute("/musicgenres/{0}/instantmix", name), params)
-        return _getJson(req)
     end function
 
     ' Creates an instant playlist based on a given genre.
