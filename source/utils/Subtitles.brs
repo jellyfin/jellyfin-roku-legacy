@@ -21,14 +21,18 @@ end function
 ' returns the server-side track index for the appriate subtitle
 function defaultSubtitleTrackFromVid(video_id) as integer
     meta = ItemMetaData(video_id)
-    if meta = invalid then return invalid
-    subtitles = sortSubtitles(meta.id, meta.json.MediaSources[0].MediaStreams)
-    default_text_subs = defaultSubtitleTrack(subtitles["all"], true) ' Find correct subtitle track (forced text)
-    if default_text_subs <> -1
-        return default_text_subs
-    else
-        return defaultSubtitleTrack(subtitles["all"]) ' if no appropriate text subs exist, allow non-text
+    if meta.json.mediaSources <> invalid
+        subtitles = sortSubtitles(meta.id, meta.json.MediaSources[0].MediaStreams)
+        default_text_subs = defaultSubtitleTrack(subtitles["all"], true) ' Find correct subtitle track (forced text)
+        if default_text_subs <> -1
+            return default_text_subs
+        else
+            return defaultSubtitleTrack(subtitles["all"]) ' if no appropriate text subs exist, allow non-text
+        end if
     end if
+
+    ' No valid mediaSources (i.e. LiveTV)
+    return -1
 end function
 
 
