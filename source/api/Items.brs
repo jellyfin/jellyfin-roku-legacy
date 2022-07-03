@@ -55,10 +55,6 @@ function searchMedia(query as string)
             "limit": 100
         })
 
-        ' TODO/FIXME:
-        ' Notice the Limit = 25.  My first attempt returned over 1000 results.
-        ' Even at 25 it takes a good 3 or 4 seconds to return... so you may have
-        ' to pause data entry or something while results come back...
 
         data = getJson(resp)
         results = []
