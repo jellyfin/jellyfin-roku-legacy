@@ -72,7 +72,7 @@ sub itemContentChanged() as void
 
     if get_user_setting("ui.tvshows.blurunwatched") = "true"
 
-        if itemData.json.lookup("Type") = "Episode"
+        if itemData.json.lookup("Type") = "Episode" and itemData.json.userdata <> invalid
             if not itemData.json.userdata.played
                 imageUrl = imageUrl + "&blur=15"
             end if
