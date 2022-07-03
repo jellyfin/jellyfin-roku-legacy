@@ -12,9 +12,11 @@ end sub
 
 sub searchMedias()
     query = m.top.searchAlpha
-
+    'if user deletes the search string hide the spinner
+    if query.len() = 0
+        m.searchSpinner.visible = false
+    end if
     'if search task is running and user selectes another letter stop the search and load the next letter
-
     m.searchTask.control = "stop"
     if query <> invalid and query <> ""
         m.searchSpinner.visible = true

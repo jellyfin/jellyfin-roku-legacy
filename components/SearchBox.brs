@@ -8,7 +8,6 @@ sub init()
     m.searchText.keyGrid.keyDefinitionUri = "pkg:/components/data/CustomAddressKDF.json"
     m.searchText.textEditBox.voiceEnabled = true
     m.searchText.textEditBox.active = true
-    m.searchText.textEditBox.leadingEllipsis = true
     m.searchText.ObserveField("text", "searchMedias")
     m.searchSelect = m.top.findNode("searchSelect")
 
@@ -19,6 +18,10 @@ sub init()
 end sub
 
 sub searchMedias()
-
     m.top.search_values = m.searchText.text
+    if m.top.search_values.len() > 1
+        m.searchText.textEditBox.leadingEllipsis = true
+    else
+        m.searchText.textEditBox.leadingEllipsis = false
+    end if
 end sub
