@@ -91,8 +91,7 @@ function getDeviceProfile() as object
                 "Protocol": "hls",
                 "MaxAudioChannels": StrI(maxAudioChannels) ' Currently Jellyfin server expects this as a string
                 "MinSegments": "1",
-                "BreakOnNonKeyFrames": true,
-'                "VideoLevel": "42"
+                "BreakOnNonKeyFrames": true
             },
             {
                 "Container": "mp4",
