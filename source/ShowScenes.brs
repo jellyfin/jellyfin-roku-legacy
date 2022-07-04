@@ -428,6 +428,19 @@ function CreateSeasonDetailsGroup(series, season)
     return group
 end function
 
+function CreatePlaylistGroup(playlist_id)
+    group = CreateObject("roSGNode", "TVEpisodes")
+    group.optionsAvailable = false
+    m.global.sceneManager.callFunc("pushScene", group)
+    group.seasonData = ItemMetaData(playlist_id.id).json
+    group.objects = PlaylistsItems(playlist_id.id)
+
+    group.observeField("episodeSelected", m.port)
+    group.observeField("quickPlayNode", m.port)
+
+    return group
+end function
+
 function CreateItemGrid(libraryItem)
     group = CreateObject("roSGNode", "ItemGrid")
     group.parentItem = libraryItem

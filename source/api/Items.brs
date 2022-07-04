@@ -297,3 +297,28 @@ function TVEpisodes(show_id as string, season_id as string)
     data.Items = results
     return data
 end function
+
+function PlaylistsItems(playlist_id as string)
+    url = Substitute("Playlists/{0}/Items", playlist_id)
+    resp = APIRequest(url, { "UserId": get_setting("active_user"), "fields": "MediaStreams" })
+
+    data = getJson(resp)
+    results = []
+    for each item in data.Items
+        imgParams = { "AddPlayedIndicator": item.UserData.Played, "maxWidth": 400, "maxheight": 250 }
+        if item.UserData.PlayedPercentage <> invalid
+            param = { "PercentPlayed": item.UserData.PlayedPercentage }
+            imgParams.Append(param)
+        end if
+        tmp = CreateObject("roSGNode", "TVEpisodeData")
+        tmp.image = PosterImage(item.id, imgParams)
+        if tmp.image <> invalid
+            tmp.image.posterDisplayMode = "scaleToZoom"
+        end if
+        tmp.json = item
+        tmp.overview = ItemMetaData(item.id).overview
+        results.push(tmp)
+    end for
+    data.Items = results
+    return data
+end function

@@ -8,6 +8,7 @@ sub init()
 
 
     m.rows.observeField("doneLoading", "updateSeason")
+    setSeasonLoading()
 end sub
 
 sub setSeasonLoading()
@@ -15,10 +16,24 @@ sub setSeasonLoading()
 end sub
 
 sub updateSeason()
-    imgParams = { "maxHeight": 450, "maxWidth": 300 }
-    m.poster.uri = ImageURL(m.top.seasonData.Id, "Primary", imgParams)
+    'imgParams = { "maxHeight": 450, "maxWidth": 300 }
+    'm.poster.uri = ImageURL(m.top.seasonData.Id, "Primary", imgParams)
+    if m.top.seasonData.ImageTags.Primary <> invalid
+        imgParams = { "maxHeight": 450, "maxWidth": 300 }
+        m.poster.uri = ImageURL(m.top.seasonData.id, "Primary", imgParams)
+    else if m.top.seasonData.BackdropImageTags[0] <> invalid
+        imgParams = { "maxHeight": 450 }
+        m.poster.uri = ImageURL(m.top.seasonData.id, "Backdrop", imgParams)
+    else if m.top.seasonData.ParentThumbImageTag <> invalid and m.top.json.ParentThumbItemId <> invalid
+        imgParams = { "maxHeight": 450, "maxWidth": 300 }
+        m.poster.uri = ImageURL(m.top.seasonData.ParentThumbItemId, "Thumb", imgParams)
+    end if
     m.Random.visible = true
-    m.top.overhangTitle = m.top.seasonData.SeriesName + " - " + m.top.seasonData.name
+    if m.top.seasonData.Type = "Playlist"
+        m.top.overhangTitle = m.top.seasonData.Name
+    else
+        m.top.overhangTitle = m.top.seasonData.SeriesName + " - " + m.top.seasonData.name
+    end if
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
