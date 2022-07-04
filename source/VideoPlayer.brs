@@ -1,9 +1,9 @@
-function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1)
+function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, forceTranscoding = false)
 
     ' Get video controls and UI
     video = CreateObject("roSGNode", "JFVideo")
     video.id = id
-    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx)
+    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, forceTranscoding)
 
     if video.content = invalid
         return invalid
@@ -16,7 +16,7 @@ function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle
     return video
 end function
 
-sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1)
+sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false)
 
     video.content = createObject("RoSGNode", "ContentNode")
     meta = ItemMetaData(video.id)
@@ -187,6 +187,22 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
 
     video.directPlaySupported = playbackInfo.MediaSources[0].SupportsDirectPlay
     fully_external = false
+
+
+    ' For h264 video, Roku spec states that it supports and Encoding level 4.1 and 4.2.
+    ' The device can decode content with a Higher Encoding level but may play it back with certain
+    ' artifacts. If the user preference is set, and the only reason the server says we need to 
+    ' transcode is that the Envoding Level is not supported, then try to direct play but silently
+    ' fall back to the transcode if that fails.
+    video.retryWithTranscoding = false
+    if get_user_setting("playback.tryDirect.h264ProfileLevel") = "true" and playbackInfo.MediaSources[0].TranscodingUrl <> invalid and forceTranscoding = false and playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
+        transcodingReasons = getTranscodeReasons(playbackInfo.MediaSources[0].TranscodingUrl)
+        if transcodingReasons.Count() = 1 and transcodingReasons[0] = "VideoLevelNotSupported"
+            video.directPlaySupported = true
+            video.retryWithTranscoding = true
+        end if
+    end if 
+
     if video.directPlaySupported
         protocol = LCase(playbackInfo.MediaSources[0].Protocol)
         if protocol <> "file"

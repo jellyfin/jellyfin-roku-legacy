@@ -9,6 +9,13 @@
                 "settingName": "playback.mpeg2",
                 "type": "bool",
                 "default": "false"
+            },
+            {
+                "title": "Attempt Direct Play (Profile Lvl)",
+                "description": "Attempt Direct Play for h264 media with unsupported profile levels (> 4.2) before falling back to trancoding if it fails.",
+                "settingName": "playback.tryDirect.h264ProfileLevel",
+                "type": "bool",
+                "default": "true"
             }
         ]
     },
