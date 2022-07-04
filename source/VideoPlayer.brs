@@ -1,8 +1,8 @@
-function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, isIntro = false)
+function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, showIntro = true)
     ' Get video controls and UI
     video = CreateObject("roSGNode", "JFVideo")
     video.id = id
-    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, isIntro)
+    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, showIntro)
 
     if video.errorMsg = "introaborted"
         return video
@@ -19,7 +19,7 @@ function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle
     return video
 end function
 
-sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, isIntro = false)
+sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, showIntro = true)
 
     video.content = createObject("RoSGNode", "ContentNode")
     meta = ItemMetaData(video.id)
@@ -144,7 +144,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     end if
 
     ' Don't attempt to play an intro for an intro video
-    if not isIntro
+    if showIntro
         ' Do not play intros when resuming playback
         if playbackPosition = 0
             if not PlayIntroVideo(video.id, audio_stream_idx)
@@ -274,7 +274,7 @@ function PlayIntroVideo(video_id, audio_stream_idx) as boolean
             ' Bypass joke pre-roll
             if lcase(introVideos.items[0].name) = "rick roll'd" then return true
 
-            introVideo = VideoPlayer(introVideos.items[0].id, introVideos.items[0].id, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), true)
+            introVideo = VideoPlayer(introVideos.items[0].id, introVideos.items[0].id, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), false)
 
             port = CreateObject("roMessagePort")
             introVideo.observeField("state", port)
@@ -399,7 +399,7 @@ sub autoPlayNextEpisode(videoID as string, showID as string)
             ' remove finished video node
             m.global.sceneManager.callFunc("popScene")
             ' setup new video node
-            nextVideo = CreateVideoPlayerGroup(data.Items[1].Id)
+            nextVideo = CreateVideoPlayerGroup(data.Items[1].Id, invalid, 1, false)
             if nextVideo <> invalid
                 m.global.sceneManager.callFunc("pushScene", nextVideo)
             else

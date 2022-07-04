@@ -662,8 +662,8 @@
         <extracomment>Settings Menu - Title for option</extracomment>
     </message>
     <message>
-        <source>Cinema mode brings the theater experience straight to your living room with the ability to play trailers and custom intros before the main feature.</source>
-        <translation>Cinema mode brings the theater experience straight to your living room with the ability to play trailers and custom intros before the main feature.</translation>
+        <source>Cinema mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.</source>
+        <translation>Cinema mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.</translation>
         <extracomment>Settings Menu - Description for option</extracomment>
     </message>
 </context>
