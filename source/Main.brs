@@ -98,7 +98,9 @@ sub Main (args as dynamic) as void
             reportingNode = msg.getRoSGNode()
             itemNode = reportingNode.quickPlayNode
             if itemNode = invalid or itemNode.id = "" then return
-            if itemNode.type = "Episode" or itemNode.type = "Movie" or itemNode.type = "Video"
+            if itemNode.json.type = "Audio" or itemNode.json.type = "Song" or itemNode.json.type = "AudioBook"
+                group = CreateAudioPlayerGroup([itemNode.json])
+            else if itemNode.type = "Episode" or itemNode.type = "Movie" or itemNode.type = "Video"
                 if itemNode.type = "Episode" and itemNode.selectedAudioStreamIndex <> invalid and itemNode.selectedAudioStreamIndex > 1
                     video = CreateVideoPlayerGroup(itemNode.id, invalid, itemNode.selectedAudioStreamIndex)
                 else
@@ -111,7 +113,10 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "selectedItem")
             ' If you select a library from ANYWHERE, follow this flow
             selectedItem = msg.getData()
-            if selectedItem.type = "CollectionFolder" or selectedItem.type = "UserView" or selectedItem.type = "Folder" or selectedItem.type = "Channel" or selectedItem.type = "Boxset"
+            if selectedItem.json.Type = "Playlist"
+                group = CreatePlaylistGroup(selectedItem.json)
+                'sceneManager.callFunc("pushScene", group)
+            else if selectedItem.type = "CollectionFolder" or selectedItem.type = "UserView" or selectedItem.type = "Folder" or selectedItem.type = "Channel" or selectedItem.type = "Boxset"
                 group = CreateItemGrid(selectedItem)
                 sceneManager.callFunc("pushScene", group)
             else if selectedItem.type = "Episode"
@@ -179,6 +184,7 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "seasonSelected")
             ' If you select a TV Season from ANYWHERE, follow this flow
             ptr = msg.getData()
+            print "Season Slected: " ptr
             ' ptr is for [row, col] of selected item... but we only have 1 row
             series = msg.getRoSGNode()
             node = series.seasonData.items[ptr[1]]
