@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="Admin" extends="JFScreen">
+  <children>
+    <LabelList id="leftNav" vertFocusAnimationStyle="floatingFocus" textHorizAlign="left" translation="[90,170]" itemSize="[250,60]" itemSpacing="[0,20]" focusedColor="#EBEBEB" focusBitmapBlendColor="#00a4dcFF" focusFootprintBlendColor="#303030">
+      <ContentNode id="alternate" role="content">
+        <ContentNode title="Dashboard" />
+        <ContentNode title="General" />
+        <ContentNode title="Users" />
+        <ContentNode title="Libraries" />
+        <ContentNode title="Playback" />
+      </ContentNode>
+    </LabelList>
+
+    <LayoutGroup id="dashboard" translation="[390, 170]" itemSpacings="20" layoutDirection="vert">
+      <label text="Server" font="font:LargeBoldSystemFont" />
+      <Rectangle height="340" width="1420" color="0x202020ff">
+        <LayoutGroup layoutDirection="vert" translation="[15, 15]" itemSpacings="20">
+          <label id="server" text="Server: " font="font:SmallSystemFont" />
+          <label id="version" text="Version: " font="font:SmallSystemFont" />
+          <label id="os" text="Operating System: " font="font:SmallSystemFont" />
+          <label id="arch" text="Architecture: " font="font:SmallSystemFont" />
+        </LayoutGroup>
+        <ButtonGroupHoriz id="dashboardButtons" translation="[15,225]">
+          <JFButton id="btn.scan" text="Scan All Libraries" />
+          <JFButton id="btn.restart" text="Restart Server" />
+        </ButtonGroupHoriz>
+      </Rectangle>
+
+      <label text="Paths" font="font:LargeBoldSystemFont" />
+      <Rectangle height="300" width="1420" color="0x202020ff">
+        <LayoutGroup layoutDirection="vert" translation="[15, 15]" itemSpacings="20">
+          <label id="cachepath" text="Cache: " font="font:SmallSystemFont" />
+          <label id="logspath" text="Logs: " font="font:SmallSystemFont" />
+          <label id="metadatapath" text="Metadata: " font="font:SmallSystemFont" />
+          <label id="transcodespath" text="Transcodes: " font="font:SmallSystemFont" />
+          <label id="webpath" text="Web: " font="font:SmallSystemFont" />
+        </LayoutGroup>
+      </Rectangle>
+    </LayoutGroup>
+
+    <LayoutGroup id="general" visible="false" translation="[390, 170]">
+      <label text="General" font="font:LargeBoldSystemFont" />
+    </LayoutGroup>
+
+  </children>
+  <script type="text/brightscript" uri="admin.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+</component>

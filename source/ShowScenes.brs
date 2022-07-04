@@ -312,6 +312,13 @@ function CreateHomeGroup()
     o.observeField("optionSelected", m.port)
     new_options.push(o)
 
+    ' Add admin dashboard option to menu
+    o = CreateObject("roSGNode", "OptionsButton")
+    o.title = "Admin Dashboard"
+    o.id = "admin"
+    o.observeField("optionSelected", m.port)
+    new_options.push(o)
+
     ' And a profile button
     user_node = CreateObject("roSGNode", "OptionsData")
     user_node.id = "active_user"

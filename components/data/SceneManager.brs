@@ -142,6 +142,13 @@ sub settings()
 end sub
 
 '
+' Display admin screen
+sub admin()
+    adminScreen = createObject("roSGNode", "Admin")
+    pushScene(adminScreen)
+end sub
+
+'
 ' Register observers for overhang data
 sub registerOverhangData(group)
     if group.isSubType("JFGroup")
