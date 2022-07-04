@@ -184,7 +184,6 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "seasonSelected")
             ' If you select a TV Season from ANYWHERE, follow this flow
             ptr = msg.getData()
-            print "Season Slected: " ptr
             ' ptr is for [row, col] of selected item... but we only have 1 row
             series = msg.getRoSGNode()
             node = series.seasonData.items[ptr[1]]
