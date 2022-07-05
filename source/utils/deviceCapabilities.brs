@@ -147,7 +147,7 @@ function getDeviceProfile() as object
                     {
                         "Condition": "LessThanEqual",
                         "Property": "VideoLevel",
-                        "Value": "51",
+                        "Value": StrI(120 * 5.1),
                         "IsRequired": false
                     }
                 ]
