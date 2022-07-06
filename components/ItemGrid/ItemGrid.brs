@@ -233,7 +233,7 @@ sub setTvShowsOptions(options)
         { "Title": tr("Shows"), "Name": "Shows" },
         { "Title": tr("Networks"), "Name": "Networks" },
         { "Title": tr("Genres"), "Name": "Genres" }
-    
+
     ]
     options.sort = [
         { "Title": tr("TITLE"), "Name": "SortName" },
