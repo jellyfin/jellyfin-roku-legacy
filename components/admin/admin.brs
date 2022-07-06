@@ -74,12 +74,18 @@ end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if key = "right" and m.leftNav.hasFocus()
+        m.hideLeftNavAnimation = m.top.findNode("hideLeftNavAnimation")
+        m.hideLeftNavAnimation.control = "start"
+
         if m.dashboard.visible
             m.dashboardButtons.setFocus(true)
             return true
         end if
     else if key = "left" and m.dashboard.isInFocusChain() and m.dashboardButtons.buttonFocused = 0
         if not press then return false
+        m.showLeftNavAnimation = m.top.findNode("showLeftNavAnimation")
+        m.showLeftNavAnimation.control = "start"
+
         m.leftNav.setFocus(true)
         return true
     else if key = "OK"

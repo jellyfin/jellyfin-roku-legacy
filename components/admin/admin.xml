@@ -42,6 +42,13 @@
       <label text="General" font="font:LargeBoldSystemFont" />
     </LayoutGroup>
 
+    <Animation id="hideLeftNavAnimation" duration="0.25" repeat="false" easeFunction="outQuad">
+      <Vector2DFieldInterpolator id="focusWidth" key="[0.0, 1.0]" keyValue="[[90,170],[-200,170]]" fieldToInterp="leftNav.translation" />
+    </Animation>
+    <Animation id="showLeftNavAnimation" duration="0.25" repeat="false" easeFunction="outQuad">
+      <Vector2DFieldInterpolator id="focusWidth" key="[0.0, 1.0]" keyValue="[[-200,170], [90,170]]" fieldToInterp="leftNav.translation" />
+    </Animation>
+
   </children>
   <script type="text/brightscript" uri="admin.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
