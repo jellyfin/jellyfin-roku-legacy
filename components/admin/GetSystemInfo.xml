@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="GetSystemInfo" extends="Task">
+  <interface>
+    <field id="response" type="assocarray" />
+  </interface>
+  <script type="text/brightscript" uri="GetSystemInfo.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/api.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+</component>

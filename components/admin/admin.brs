@@ -1,4 +1,5 @@
 sub init()
+    m.api = API()
     m.top.overhangTitle = tr("Admin Dashboard")
     m.top.optionsAvailable = false
 
@@ -15,28 +16,33 @@ sub init()
     m.dashboard = m.top.findNode("dashboard")
     m.dashboardButtons = m.top.findNode("dashboardButtons")
 
-    m.LoadServerData = CreateObject("roSGNode", "LoadServerData")
-    m.LoadServerData.observeField("content", "onServerDataLoaded")
-    m.LoadServerData.control = "RUN"
+    m.GetSystemInfo = CreateObject("roSGNode", "GetSystemInfo")
+    m.GetSystemInfo.observeField("response", "onControllerResponse")
+    m.GetSystemInfo.control = "RUN"
 
-    m.btnRestart = m.top.findNode("btn.restart")
+    m.btnShutdown = m.top.findNode("btn.shutdown")
     m.btnScan = m.top.findNode("btn.scan")
 
     m.server = m.top.findNode("server")
     m.version = m.top.findNode("version")
     m.os = m.top.findNode("os")
     m.arch = m.top.findNode("arch")
+    m.scanpercent = m.top.findNode("scanpercent")
 
     m.cachepath = m.top.findNode("cachepath")
     m.logspath = m.top.findNode("logspath")
     m.metadatapath = m.top.findNode("metadatapath")
     m.transcodespath = m.top.findNode("transcodespath")
     m.webpath = m.top.findNode("webpath")
+
+    m.GetRunningTasks = CreateObject("roSGNode", "GetRunningTasks")
+    m.GetRunningTasks.observeField("response", "onRunningTaskResponse")
+    m.runningtaskcomplete = true
 end sub
 
-sub onServerDataLoaded()
-    data = m.LoadServerData.content
-    m.LoadServerData.unobserveField("content")
+sub onControllerResponse()
+    data = m.GetSystemInfo.response
+    m.GetSystemInfo.unobserveField("response")
     if isValid(data)
         m.server.text = m.server.text + data.ServerName
         m.version.text = m.version.text + data.Version
@@ -49,6 +55,32 @@ sub onServerDataLoaded()
         m.transcodespath.text = m.transcodespath.text + data.TranscodingTempPath
         m.webpath.text = m.webpath.text + data.WebPath
     end if
+end sub
+
+sub onRunningTaskResponse()
+    m.scanpercent.visible = true
+    data = m.GetRunningTasks.response
+
+    for each task in data
+        if task.name = "Scan Media Library"
+            if task.CurrentProgressPercentage = invalid
+                if not m.runningtaskcomplete
+                    m.runningtaskcomplete = true
+                    m.scanpercent.visible = false
+                    return
+                end if
+
+                m.GetRunningTasks.control = "STOP"
+                m.GetRunningTasks.control = "RUN"
+            else
+                m.runningtaskcomplete = false
+                m.scanpercent.text = task.CurrentProgressPercentage.toStr() + "%" 
+                m.GetRunningTasks.control = "STOP"
+                m.GetRunningTasks.control = "RUN"
+            end if
+        end if
+    end for
+
 end sub
 
 '
@@ -89,11 +121,15 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.leftNav.setFocus(true)
         return true
     else if key = "OK"
-        if m.btnRestart.hasFocus()
-            print "RESTART"
+        if m.btnShutdown.hasFocus()
+            m.ShutdownSystem = CreateObject("roSGNode", "ShutdownSystem")
+            m.ShutdownSystem.control = "RUN"
             return true
         else if m.btnScan.hasFocus()
-            print "START SCAN"
+            m.LibraryRefresh = CreateObject("roSGNode", "LibraryRefresh")
+            m.LibraryRefresh.control = "RUN"
+
+            m.GetRunningTasks.control = "RUN"
             return true
         end if
     end if

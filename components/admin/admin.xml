@@ -12,8 +12,11 @@
     </LabelList>
 
     <LayoutGroup id="dashboard" translation="[390, 170]" itemSpacings="20" layoutDirection="vert">
-      <label text="Server" font="font:LargeBoldSystemFont" />
-      <Rectangle height="340" width="1420" color="0x202020ff">
+      <LayoutGroup itemSpacings="20" layoutDirection="horiz">
+        <label text="Server" font="font:LargeBoldSystemFont" />
+        <label id="scanpercent" text="" font="font:SmallSystemFont" visible="false" />
+      </LayoutGroup>
+      <Rectangle height="340" width="1750" color="0x202020ff">
         <LayoutGroup layoutDirection="vert" translation="[15, 15]" itemSpacings="20">
           <label id="server" text="Server: " font="font:SmallSystemFont" />
           <label id="version" text="Version: " font="font:SmallSystemFont" />
@@ -22,12 +25,12 @@
         </LayoutGroup>
         <ButtonGroupHoriz id="dashboardButtons" translation="[15,225]">
           <JFButton id="btn.scan" text="Scan All Libraries" />
-          <JFButton id="btn.restart" text="Restart Server" />
+          <JFButton id="btn.shutdown" text="Shutdown Server" />
         </ButtonGroupHoriz>
       </Rectangle>
 
       <label text="Paths" font="font:LargeBoldSystemFont" />
-      <Rectangle height="300" width="1420" color="0x202020ff">
+      <Rectangle height="300" width="1750" color="0x202020ff">
         <LayoutGroup layoutDirection="vert" translation="[15, 15]" itemSpacings="20">
           <label id="cachepath" text="Cache: " font="font:SmallSystemFont" />
           <label id="logspath" text="Logs: " font="font:SmallSystemFont" />
@@ -43,14 +46,17 @@
     </LayoutGroup>
 
     <Animation id="hideLeftNavAnimation" duration="0.25" repeat="false" easeFunction="outQuad">
-      <Vector2DFieldInterpolator id="focusWidth" key="[0.0, 1.0]" keyValue="[[90,170],[-200,170]]" fieldToInterp="leftNav.translation" />
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[90,170],[-200,170]]" fieldToInterp="leftNav.translation" />
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[390, 170],[90, 170]]" fieldToInterp="dashboard.translation" />
     </Animation>
     <Animation id="showLeftNavAnimation" duration="0.25" repeat="false" easeFunction="outQuad">
-      <Vector2DFieldInterpolator id="focusWidth" key="[0.0, 1.0]" keyValue="[[-200,170], [90,170]]" fieldToInterp="leftNav.translation" />
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[-200,170], [90,170]]" fieldToInterp="leftNav.translation" />
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[90, 170],[390, 170]]" fieldToInterp="dashboard.translation" />
     </Animation>
 
   </children>
   <script type="text/brightscript" uri="admin.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/api.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="GetRunningTasks" extends="Task">
+  <interface>
+    <field id="response" type="array" />
+  </interface>
+  <script type="text/brightscript" uri="GetRunningTasks.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/api.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+</component>

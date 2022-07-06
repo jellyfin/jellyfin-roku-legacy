@@ -313,11 +313,13 @@ function CreateHomeGroup()
     new_options.push(o)
 
     ' Add admin dashboard option to menu
-    o = CreateObject("roSGNode", "OptionsButton")
-    o.title = "Admin Dashboard"
-    o.id = "admin"
-    o.observeField("optionSelected", m.port)
-    new_options.push(o)
+    if m.user.policy.isadministrator
+        o = CreateObject("roSGNode", "OptionsButton")
+        o.title = "Admin Dashboard"
+        o.id = "admin"
+        o.observeField("optionSelected", m.port)
+        new_options.push(o)
+    end if
 
     ' And a profile button
     user_node = CreateObject("roSGNode", "OptionsData")

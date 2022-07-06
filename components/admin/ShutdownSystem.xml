@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="ShutdownSystem" extends="Task">
+  <script type="text/brightscript" uri="ShutdownSystem.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/api.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+</component>
