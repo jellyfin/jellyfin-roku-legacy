@@ -169,15 +169,17 @@ sub loadInitialItems()
         print "[ItemGrid] Unknown Type: " m.top.parentItem
     end if
     'end if
-
     if m.top.parentItem.type <> "Folder" and (m.options.view = "Networks" or m.view = "Networks" or m.options.view = "Studios" or m.view = "Studios")
         m.loadItemsTask.view = "Networks"
     else if m.top.parentItem.type <> "Folder" and (m.options.view = "Genres" or m.view = "Genres")
         m.loadItemsTask.StudioIds = m.top.parentItem.Id
         m.loadItemsTask.view = "Genres"
-    else if m.top.parentItem.type <> "Folder" and (m.options.view = "shows")
+    else if m.top.parentItem.type <> "Folder" and (m.options.view = "Shows" or m.view = "Shows")
         m.loadItemsTask.studioIds = ""
         m.loadItemsTask.view = "Shows"
+    else if m.top.parentItem.type <> "Folder" and (m.options.view = "Movies" or m.view = "Movies")
+        m.loadItemsTask.studioIds = ""
+        m.loadItemsTask.view = "Movies"
     end if
 
     m.loadItemsTask.observeField("content", "ItemDataLoaded")
@@ -189,17 +191,19 @@ end sub
 ' Set Movies view, sort, and filter options
 sub setMoviesOptions(options)
     options.views = [
-        { "Title": tr("Movies"), "Name": "movies" },
+        { "Title": tr("Movies"), "Name": "Movies" },
+        { "Title": tr("Studios"), "Name": "Studios" },
+        { "Title": tr("Genres"), "Name": "Genres" }
     ]
     options.sort = [
         { "Title": tr("TITLE"), "Name": "SortName" },
-        { "Title": tr("IMDB RATING"), "Name": "CommunityRating" },
-        { "Title": tr("CRITIC RATING"), "Name": "CriticRating" },
-        { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
-        { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
-        { "Title": tr("OFFICIAL RATING"), "Name": "OfficialRating" },
-        { "Title": tr("PLAY COUNT"), "Name": "PlayCount" },
-        { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
+        { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
+        { "Title": tr("CRITIC_RATING"), "Name": "CriticRating" },
+        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
+        { "Title": tr("PLAY_COUNT"), "Name": "PlayCount" },
+        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
         { "Title": tr("RUNTIME"), "Name": "Runtime" }
     ]
     options.filter = [
@@ -213,9 +217,9 @@ sub setBoxsetsOptions(options)
     options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
     options.sort = [
         { "Title": tr("TITLE"), "Name": "SortName" },
-        { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
-        { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
-        { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
+        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
@@ -225,14 +229,19 @@ end sub
 
 ' Set TV Show view, sort, and filter options
 sub setTvShowsOptions(options)
-    options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
+    options.views = [
+        { "Title": tr("Shows"), "Name": "Shows" },
+        { "Title": tr("Networks"), "Name": "Networks" },
+        { "Title": tr("Genres"), "Name": "Genres" }
+    
+    ]
     options.sort = [
         { "Title": tr("TITLE"), "Name": "SortName" },
-        { "Title": tr("IMDB RATING"), "Name": "CommunityRating" },
-        { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
-        { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
-        { "Title": tr("OFFICIAL RATING"), "Name": "OfficialRating" },
-        { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
+        { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
+        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
+        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
@@ -267,9 +276,9 @@ sub setMusicOptions(options)
     ]
     options.sort = [
         { "Title": tr("TITLE"), "Name": "SortName" },
-        { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
-        { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
-        { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
+        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
@@ -320,104 +329,6 @@ sub SetUpOptions()
     options = {}
     options.filter = []
     options.favorite = []
-
-
-    'Movies
-    if m.top.parentItem.collectionType = "movies"
-        options.views = [
-            { "Title": tr("Movies"), "Name": "movies" },
-            { "Title": tr("Studios"), "Name": "Studios" },
-            { "Title": tr("Genres"), "Name": "Genres" }
-        ]
-        options.sort = [
-            { "Title": tr("TITLE"), "Name": "SortName" },
-            { "Title": tr("IMDB RATING"), "Name": "CommunityRating" },
-            { "Title": tr("CRITIC RATING"), "Name": "CriticRating" },
-            { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
-            { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
-            { "Title": tr("OFFICIAL RATING"), "Name": "OfficialRating" },
-            { "Title": tr("PLAY COUNT"), "Name": "PlayCount" },
-            { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
-            { "Title": tr("RUNTIME"), "Name": "Runtime" }
-        ]
-        options.filter = [
-            { "Title": tr("All"), "Name": "All" },
-            { "Title": tr("Favorites"), "Name": "Favorites" }
-        ]
-        'Boxsets
-    else if m.top.parentItem.collectionType = "boxsets"
-        options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
-        options.sort = [
-            { "Title": tr("TITLE"), "Name": "SortName" },
-            { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
-            { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
-            { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
-        ]
-        options.filter = [
-            { "Title": tr("All"), "Name": "All" },
-            { "Title": tr("Favorites"), "Name": "Favorites" }
-        ]
-        'TV Shows
-    else if m.top.parentItem.collectionType = "tvshows" or m.top.parentItem.collectionType = invalid
-        options.views = [
-            { "Title": tr("Shows"), "Name": "shows" },
-            { "Title": tr("Networks"), "Name": "Networks" },
-            { "Title": tr("Genres"), "Name": "Genres" }
-            'TODO { "Title": tr("Episodes"), "Name": "Episodes" }
-        ]
-        options.sort = [
-            { "Title": tr("TITLE"), "Name": "SortName" },
-            { "Title": tr("IMDB RATING"), "Name": "CommunityRating" },
-            { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
-            { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
-            { "Title": tr("OFFICIAL RATING"), "Name": "OfficialRating" },
-            { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
-        ]
-        options.filter = [
-            { "Title": tr("All"), "Name": "All" },
-            { "Title": tr("Favorites"), "Name": "Favorites" }
-        ]
-        'Live TV
-    else if m.top.parentItem.collectionType = "livetv"
-        options.views = [
-            { "Title": tr("Channels"), "Name": "livetv" },
-            { "Title": tr("TV Guide"), "Name": "tvGuide" }
-        ]
-        options.sort = [
-            { "Title": tr("TITLE"), "Name": "SortName" }
-        ]
-        options.filter = [
-            { "Title": tr("All"), "Name": "All" },
-            { "Title": tr("Favorites"), "Name": "Favorites" }
-        ]
-        options.favorite = [
-            { "Title": tr("Favorite"), "Name": "Favorite" }
-        ]
-    else if m.top.parentItem.collectionType = "photoalbum" or m.top.parentItem.collectionType = "photo" or m.top.parentItem.collectionType = "homevideos"
-        ' For some reason, my photo library shows up as "homevideos", maybe because it has some mp4 mixed in with the jpgs?
-
-        ' TODO/FIXME: Show shuffle options once implemented
-        ' options.views = [
-        '     { "Title": tr("Don't Shuffle"), "Name": "singlephoto"}
-        '     { "Title": tr("Shuffle"), "Name": "shufflephoto"}
-        ' ]
-        options.views = []
-        options.sort = []
-        options.filter = []
-        'Music
-    else if m.top.parentItem.collectionType = "music"
-        options.views = [{ "Title": tr("Music"), "Name": "music" }]
-        options.sort = [
-            { "Title": tr("TITLE"), "Name": "SortName" },
-            { "Title": tr("DATE ADDED"), "Name": "DateCreated" },
-            { "Title": tr("DATE PLAYED"), "Name": "DatePlayed" },
-            { "Title": tr("RELEASE DATE"), "Name": "PremiereDate" },
-        ]
-        options.filter = [
-            { "Title": tr("All"), "Name": "All" },
-            { "Title": tr("Favorites"), "Name": "Favorites" }
-        ]
-    end if
 
     if getCollectionType() = "movies"
         setMoviesOptions(options)
