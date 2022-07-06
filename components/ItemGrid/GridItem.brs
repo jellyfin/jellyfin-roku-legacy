@@ -53,7 +53,7 @@ sub itemContentChanged()
         m.itemText.text = itemData.Title
     else if itemData.type = "Folder"
         m.itemPoster.uri = itemData.PosterUrl
-        m.itemIcon.uri = itemData.iconUrl
+        'm.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
         m.itemPoster.loadDisplayMode = m.topParent.imageDisplayMode
     else if itemData.type = "Video"

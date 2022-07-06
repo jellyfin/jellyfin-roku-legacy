@@ -171,6 +171,7 @@ sub loadInitialItems()
     'end if
     if m.top.parentItem.type <> "Folder" and (m.options.view = "Networks" or m.view = "Networks" or m.options.view = "Studios" or m.view = "Studios")
         m.loadItemsTask.view = "Networks"
+        m.top.imageDisplayMode = "scaleToFit"
     else if m.top.parentItem.type <> "Folder" and (m.options.view = "Genres" or m.view = "Genres")
         m.loadItemsTask.StudioIds = m.top.parentItem.Id
         m.loadItemsTask.view = "Genres"
