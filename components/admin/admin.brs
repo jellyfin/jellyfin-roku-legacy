@@ -74,7 +74,7 @@ sub onRunningTaskResponse()
                 m.GetRunningTasks.control = "RUN"
             else
                 m.runningtaskcomplete = false
-                m.scanpercent.text = task.CurrentProgressPercentage.toStr() + "%" 
+                m.scanpercent.text = task.CurrentProgressPercentage.toStr() + "%"
                 m.GetRunningTasks.control = "STOP"
                 m.GetRunningTasks.control = "RUN"
             end if
