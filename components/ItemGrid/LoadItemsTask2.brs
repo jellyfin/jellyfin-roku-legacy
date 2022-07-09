@@ -55,7 +55,7 @@ sub loadItems()
         m.livetvsearch = m.top.searchTerm
     else
         m.livetvsearch = m.top.nameStartsWith
-    end if        
+    end if
 
     if m.top.ItemType = "LiveTV"
         params.append({ IncludeItemTypes: "LiveTvChannel" })
@@ -69,9 +69,9 @@ sub loadItems()
         url = "Genres"
         params.append({ UserId: get_setting("active_user") })
     else
-      url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+        url = Substitute("Users/{0}/Items/", get_setting("active_user"))
     end if
-    
+
     resp = APIRequest(url, params)
     data = getJson(resp)
     if data <> invalid
