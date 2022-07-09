@@ -36,7 +36,7 @@ sub optionsSet()
     if m.top.options.views <> invalid
         viewContent = CreateObject("roSGNode", "ContentNode")
         index = 0
-        selectedViewIndex = 0
+        selectedViewIndex = m.selectedViewIndex
 
         for each view in m.top.options.views
             entry = viewContent.CreateChild("ContentNode")

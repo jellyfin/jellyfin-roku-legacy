@@ -17,8 +17,13 @@ end sub
 sub setPoster()
     if m.top.image <> invalid
         m.top.posterURL = m.top.image.url
+    else if m.top.json.Type = "Studio"
+        imgParams = { "maxHeight": 440, "maxWidth": 295, "Tag": m.top.json.ParentThumbImageTag }
+        m.top.posterURL = ImageURL(m.top.json.id, "Thumb", imgParams)
     else if m.top.json.ImageTags.Primary <> invalid
         imgParams = { "maxHeight": 440, "maxWidth": 295 }
         m.top.posterURL = ImageURL(m.top.json.id, "Primary", imgParams)
     end if
 end sub
+
+'TODO Set network Poster image
