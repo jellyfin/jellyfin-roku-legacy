@@ -656,5 +656,15 @@
         <translation>Use generated splashscreen image as Jellyfin home background. Jellyfin will need to be closed and reopened for change to take effect.</translation>
         <extracomment>Description for option in Setting Screen</extracomment>
     </message>
+    <message>
+        <source>Cinema mode</source>
+        <translation>Cinema mode</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
+    <message>
+        <source>Cinema mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.</source>
+        <translation>Cinema mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
 </context>
 </TS>
