@@ -1,9 +1,12 @@
-function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1)
-
+function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, showIntro = true)
     ' Get video controls and UI
     video = CreateObject("roSGNode", "JFVideo")
     video.id = id
-    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx)
+    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, showIntro)
+
+    if video.errorMsg = "introaborted"
+        return video
+    end if
 
     if video.content = invalid
         return invalid
@@ -16,7 +19,7 @@ function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle
     return video
 end function
 
-sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1)
+sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, showIntro = true)
 
     video.content = createObject("RoSGNode", "ContentNode")
     meta = ItemMetaData(video.id)
@@ -140,6 +143,16 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
         end if
     end if
 
+    ' Don't attempt to play an intro for an intro video
+    if showIntro
+        ' Do not play intros when resuming playback
+        if playbackPosition = 0
+            if not PlayIntroVideo(video.id, audio_stream_idx)
+                video.errorMsg = "introaborted"
+                return
+            end if
+        end if
+    end if
 
     video.content.PlayStart = int(playbackPosition / 10000000)
 
@@ -169,6 +182,10 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     end if
 
     video.container = getContainerType(meta)
+
+    if playbackInfo.MediaSources[0] = invalid
+        playbackInfo = meta.json
+    end if
 
     subtitles = sortSubtitles(meta.id, playbackInfo.MediaSources[0].MediaStreams)
     video.Subtitles = subtitles["all"]
@@ -243,6 +260,43 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     end if
 
 end sub
+
+function PlayIntroVideo(video_id, audio_stream_idx) as boolean
+    ' Intro videos only play if user has cinema mode setting enabled
+    if get_user_setting("playback.cinemamode") = "true"
+
+        ' Check if server has intro videos setup and available
+        introVideos = GetIntroVideos(video_id)
+
+        if introVideos = invalid then return true
+
+        if introVideos.TotalRecordCount > 0
+            ' Bypass joke pre-roll
+            if lcase(introVideos.items[0].name) = "rick roll'd" then return true
+
+            introVideo = VideoPlayer(introVideos.items[0].id, introVideos.items[0].id, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), false)
+
+            port = CreateObject("roMessagePort")
+            introVideo.observeField("state", port)
+            m.global.sceneManager.callFunc("pushScene", introVideo)
+            introPlaying = true
+
+            while introPlaying
+                msg = wait(0, port)
+                if type(msg) = "roSGNodeEvent"
+                    if msg.GetData() = "finished"
+                        m.global.sceneManager.callFunc("clearPreviousScene")
+                        introPlaying = false
+                    else if msg.GetData() = "stopped"
+                        introPlaying = false
+                        return false
+                    end if
+                end if
+            end while
+        end if
+    end if
+    return true
+end function
 
 '
 ' Extract array of Transcode Reasons from the content URL
@@ -345,7 +399,7 @@ sub autoPlayNextEpisode(videoID as string, showID as string)
             ' remove finished video node
             m.global.sceneManager.callFunc("popScene")
             ' setup new video node
-            nextVideo = CreateVideoPlayerGroup(data.Items[1].Id)
+            nextVideo = CreateVideoPlayerGroup(data.Items[1].Id, invalid, 1, false)
             if nextVideo <> invalid
                 m.global.sceneManager.callFunc("pushScene", nextVideo)
             else

@@ -4267,5 +4267,22 @@ elemeket</translation>
         <source>Save Credentials?</source>
         <translation>Hitelesítő adatok mentése?</translation>
     </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Mentettek Törlése</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Hitelesítő adatok mentése?</translation>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Hiba a tartalom lekérésekor</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Most</translation>
+    </message>
 </context>
 </TS>
