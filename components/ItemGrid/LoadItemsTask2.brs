@@ -58,6 +58,7 @@ sub loadItems()
     end if
 
     if m.top.ItemType = "LiveTV"
+        url = "LiveTv/Channels"
         params.append({ IncludeItemTypes: "LiveTvChannel" })
         params.append({ parentid: "" })
         params.append({ NameStartsWith: "" })
