@@ -111,9 +111,9 @@ sub ShowKeyboard()
     dialog.title = tr("Enter the server name or ip address")
     dialog.buttons = [tr("OK"), tr("Cancel")]
     dialog.text = m.serverUrlTextbox.text
-    m.greenPalette = createObject("roSGNode", "RSGPalette")
-    m.greenPalette.colors = { DialogBackgroundColor: "#2A2B2A" }
-    dialog.palette = m.greenPalette
+    greenPalette = createObject("roSGNode", "RSGPalette")
+    greenPalette.colors = { DialogBackgroundColor: "#2A2B2A" }
+    dialog.palette = greenPalette
 
     m.top.getscene().dialog = dialog
     m.dialog = dialog
