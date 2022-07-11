@@ -4,7 +4,7 @@ sub init()
     m.top.vertAlignment = "top"
     m.top.visible = false
     m.searchText = m.top.findNode("search_Key")
-    m.searchText.textEditBox.hintText = tr("Enter Search Query")
+    m.searchText.textEditBox.hintText = tr("Search")
     m.searchText.keyGrid.keyDefinitionUri = "pkg:/components/data/CustomAddressKDF.json"
     m.searchText.textEditBox.voiceEnabled = true
     m.searchText.textEditBox.active = true
