@@ -23,6 +23,7 @@ sub searchMedias()
     end if
     m.searchTask.observeField("results", "loadResults")
     m.searchTask.query = query
+    m.top.overhangTitle = query
     m.searchTask.control = "RUN"
 
 end sub
