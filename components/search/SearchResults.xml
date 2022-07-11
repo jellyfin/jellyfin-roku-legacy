@@ -18,7 +18,6 @@
     <field id="quickPlayNode" type="node" alwaysNotify="true" />
     <field id="imageDisplayMode" type="string" value="scaleToZoom" />
     <field id="searchAlpha" type="string" alias="SearchBox.search_values" alwaysNotify="true" onChange="searchMedias" />
-
   </interface>
   <script type="text/brightscript" uri="SearchResults.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
