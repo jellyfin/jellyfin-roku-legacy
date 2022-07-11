@@ -33,7 +33,6 @@
         <FloatFieldInterpolator id = "fadeoutLoaded" key="[0.0, 1.0]" keyValue="[ 0.25, 0.00 ]" fieldToInterp="backdrop.opacity" />
     </Animation>
     <Alpha id="AlphaMenu" />
-    
   </children>
   <interface>
     <field id="HomeLibraryItem" type="string"/>
