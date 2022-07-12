@@ -37,30 +37,40 @@ sub itemContentChanged()
 
     if itemData.type = "Movie"
         m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "Series"
         m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "Boxset" or itemData.type = "Playlist"
         m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "TvChannel"
         m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "Folder"
         m.itemPoster.uri = itemData.PosterUrl
-        m.itemIcon.uri = itemData.iconUrl
+        'm.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
+        m.itemPoster.loadDisplayMode = m.topParent.imageDisplayMode
     else if itemData.type = "Video"
         m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "Photo"
         m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "Episode"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "MusicArtist" or itemData.type = "Audio" or itemData.type = "Song" or itemData.type = "AudioBook"
+        m.itemIcon.uri = itemData.iconUrl
+        m.itemText.text = itemData.json.SeriesName + " - " + itemData.Title
+    else if itemData.type = "MusicArtist"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title
 
