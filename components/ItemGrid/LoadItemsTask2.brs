@@ -34,9 +34,11 @@ sub loadItems()
         end if
     end if
 
-    'Append voice search when there is text
+    'Append voice search when there is text or if alpha picker
     if m.top.searchTerm <> ""
         params.searchTerm = m.top.searchTerm
+    else
+        m.livetvsearch = m.top.nameStartsWith
     end if
 
     filter = m.top.filter
@@ -49,12 +51,6 @@ sub loadItems()
 
     if m.top.ItemType <> ""
         params.append({ IncludeItemTypes: m.top.ItemType })
-    end if
-
-    if m.top.searchTerm <> ""
-        m.livetvsearch = m.top.searchTerm
-    else
-        m.livetvsearch = m.top.nameStartsWith
     end if
 
     if m.top.ItemType = "LiveTV"
