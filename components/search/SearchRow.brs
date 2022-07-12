@@ -27,7 +27,6 @@ sub updateSize()
     itemHeight = itemWidth + (textHeight / 2.3)
 
     m.top.itemSize = [1350, itemHeight] ' this is used for setting the row size
-    ' m.top.itemSize = [dimensions["width"] - border, itemHeight]
     m.top.itemSpacing = [0, 105]
 
     m.top.rowItemSize = [itemWidth, itemHeight]
