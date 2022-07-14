@@ -684,6 +684,10 @@
         <translation>Hides all clocks in Jellyfin. Jellyfin will need to be closed and reopened for change to take effect.</translation>
         <extracomment>Settings Menu - Description for option</extracomment>
     </message>
+    <message>
+        <source>Skip Intro</source>
+        <translation>Skip Intro</translation>
+    </message>
 </context>
 <context>
     <name></name>

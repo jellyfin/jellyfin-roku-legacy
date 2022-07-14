@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/jellyfin/jellyfin-roku#readme",
   "dependencies": {
+    "api": "npm:jellyfin-api-bs-client@^1.0.5",
     "brighterscript-formatter": "^1.6.8"
   }
 }

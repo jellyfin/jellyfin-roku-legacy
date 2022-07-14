@@ -22,12 +22,30 @@
     <field id="mediaSourceId" type="string" />
     <field id="audioIndex" type="integer" />
 
+    <field id="skipIntroParams" type="assocarray" />
   </interface>
   <script type="text/brightscript" uri="JFVideo.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
   <children>
+    <JFButton id="skipIntro" opacity="0" textColor="#f0f0f0" focusedTextColor="#202020" focusFootprintBitmapUri="pkg:/images/option-menu-bg.9.png" focusBitmapUri="pkg:/images/white.9.png" translation="[1575, 900]" />
     <timer id="playbackTimer" repeat="true" duration="30" />
     <timer id="bufferCheckTimer" repeat="true" />
+
+    <Animation id="moveUpskipIntroButton" duration=".1" repeat="false" easeFunction="linear">
+      <Vector2DFieldInterpolator key="[0.0,1.0]" keyValue="[[1575, 900], [1575, 825]]" fieldToInterp="skipIntro.translation"/>
+      <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[.9, .1]" fieldToInterp="skipIntro.opacity" />
+    </Animation>
+    <Animation id="moveDownskipIntroButton" duration=".1" repeat="false" easeFunction="linear">
+      <Vector2DFieldInterpolator key="[0.0,1.0]" keyValue="[[1575, 825], [1575, 900]]" fieldToInterp="skipIntro.translation"/>
+      <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[.1, .9]" fieldToInterp="skipIntro.opacity" />
+    </Animation>
+
+    <Animation id="showskipIntroButton" duration="1.0" repeat="false" easeFunction="inQuad">
+      <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0.0, .9]" fieldToInterp="skipIntro.opacity" />
+    </Animation>
+    <Animation id="hideskipIntroButton" duration=".2" repeat="false" easeFunction="inQuad">
+      <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[.9, 0]" fieldToInterp="skipIntro.opacity" />
+    </Animation>
   </children>
 </component>
