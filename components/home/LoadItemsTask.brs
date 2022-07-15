@@ -37,7 +37,7 @@ sub loadItems()
             tmp = CreateObject("roSGNode", "HomeData")
             item.ImageURL = ImageURL(item.Id, "Primary", params)
             if item.type = "Episode"
-                item.ImageURL = ImageURL(item.Id)
+                item.ImageURL = ImageURL(item.SeriesId)
             end if
             tmp.json = item
             results.push(tmp)
@@ -111,28 +111,6 @@ sub loadItems()
         params["MediaTypes"] = "Audio"
         params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
         params["ImageTypeLimit"] = 1
-
-        resp = APIRequest(url, params)
-        data = getJson(resp)
-        for each item in data.Items
-            tmp = CreateObject("roSGNode", "HomeData")
-            item.ImageURL = ImageURL(item.Id, "Backdrop")
-            tmp.json = item
-            results.push(tmp)
-        end for
-
-    else if m.top.itemsToLoad = "continueBook"
-
-        url = Substitute("Users/{0}/Items/Resume", get_setting("active_user"))
-
-        params = {}
-        params["Limit"] = 30
-        params["recursive"] = true
-        params["SortBy"] = "DatePlayed"
-        params["SortOrder"] = "Descending"
-        params["Filters"] = "IsResumable"
-        params["MediaTypes"] = "Book"
-        params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
 
         resp = APIRequest(url, params)
         data = getJson(resp)

@@ -166,7 +166,7 @@ sub Main (args as dynamic) as void
                 group = CreateAudioPlayerGroup([selectedItem.json])
             else
                 ' TODO - switch on more node types
-                message_dialog(Substitute(tr("{0} support is coming soon!"), selectedItem.type))
+                message_dialog(Substitute(tr("{0} not supported at this time"), selectedItem.type))
             end if
         else if isNodeEvent(msg, "movieSelected")
             ' If you select a movie from ANYWHERE, follow this flow

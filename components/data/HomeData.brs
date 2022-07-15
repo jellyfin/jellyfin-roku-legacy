@@ -106,7 +106,7 @@ sub setData()
         else if datum.BackdropImageTags[0] <> invalid
             m.top.thumbnailUrl = ImageURL(datum.id, "Backdrop", imgParams)
         end if
-    else if datum.type = "MusicAlbum" or datum.type = "Audio" or datum.type = "Book"
+    else if datum.type = "MusicAlbum" or datum.type = "Audio"
         params = { "maxHeight": 261, "maxWidth": 261 }
         m.top.thumbnailURL = ImageURL(datum.id, "Primary", params)
         m.top.widePosterUrl = m.top.thumbnailURL
