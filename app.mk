@@ -80,43 +80,43 @@ prep_staging:
 	@echo "  >> removing old application zip $(ZIPREL)/$(APPNAME).zip"
 	@if [ -e "$(ZIPREL)/$(APPNAME).zip" ]; \
 	then \
-		rm  $(ZIPREL)/$(APPNAME).zip; \
+		rm  "$(ZIPREL)/$(APPNAME).zip"; \
 	fi
 
 	@echo "  >> creating destination directory $(ZIPREL)"
-	@if [ ! -d $(ZIPREL) ]; \
+	@if [ ! -d "$(ZIPREL)" ]; \
 	then \
-		mkdir -p $(ZIPREL); \
+		mkdir -p "$(ZIPREL)"; \
 	fi
 
 	@echo "  >> setting directory permissions for $(ZIPREL)"
-	@if [ ! -w $(ZIPREL) ]; \
+	@if [ ! -w "$(ZIPREL)" ]; \
 	then \
-		chmod 755 $(ZIPREL); \
+		chmod 755 "$(ZIPREL)"; \
 	fi
 
 	@echo "  >> creating destination directory $(STAGINGREL)"
-	@if [ -d $(STAGINGREL) ]; \
+	@if [ -d "$(STAGINGREL)" ]; \
 	then \
-		find $(STAGINGREL) -delete; \
+		find "$(STAGINGREL)" -delete; \
 	fi; \
-	mkdir -p $(STAGINGREL); \
-	chmod -R 755 $(STAGINGREL); \
+	mkdir -p "$(STAGINGREL)"; \
+	chmod -R 755 "$(STAGINGREL)"; \
 
 	echo "  >> moving application to $(STAGINGREL)"
-	cp $(SOURCEREL)/manifest $(STAGINGREL)/manifest
-	cp -r $(SOURCEREL)/source $(STAGINGREL)
-	cp -r $(SOURCEREL)/components $(STAGINGREL)
-	cp -r $(SOURCEREL)/images $(STAGINGREL)
-	cp -r $(SOURCEREL)/settings $(STAGINGREL)
+	cp "$(SOURCEREL)/manifest" "$(STAGINGREL)/manifest"
+	cp -r "$(SOURCEREL)/source" "$(STAGINGREL)"
+	cp -r "$(SOURCEREL)/components" "$(STAGINGREL)"
+	cp -r "$(SOURCEREL)/images" "$(STAGINGREL)"
+	cp -r "$(SOURCEREL)/settings" "$(STAGINGREL)"
 	
 	# Copy only supported languages over to staging
-	mkdir $(STAGINGREL)/locale
-	cp -r $(foreach f,$(SUPPORTED_LOCALES),$(SOURCEREL)/locale/$f) $(STAGINGREL)/locale
+	mkdir "$(STAGINGREL)/locale"
+	cp -r $(foreach f,$(SUPPORTED_LOCALES),"$(SOURCEREL)/locale/$f") "$(STAGINGREL)/locale"
 	
 ifneq ($(BUILD), dev)
 	echo "COPYING $(BUILD)"
-	cp $(SOURCEREL)/resources/branding/$(BUILD)/* $(STAGINGREL)/images
+	cp "$(SOURCEREL)/resources/branding/$(BUILD)/*" "$(STAGINGREL)/images"
 endif
 
 package: prep_staging 
@@ -129,28 +129,28 @@ package: prep_staging
 	fi \
 
 	@echo "  >> generating build info file"
-	mkdir -p $(STAGINGREL)/$(APPSOURCEDIR)
+	mkdir -p "$(STAGINGREL)/$(APPSOURCEDIR)"
 	@if [ -e "$(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs" ]; \
 	then \
-		rm  $(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs; \
+		rm  "$(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs"; \
 	fi
 	echo "  >> generating build info file";\
-	echo "Function BuildDate()" >> $(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs
-	echo "  return \"${BUILDDATE}\"" >> $(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs
-	echo "End Function" >> $(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs
-	echo "Function BuildCommit()" >> $(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs
-	echo "  return \"${GITCOMMIT}\"" >> $(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs
-	echo "End Function" >> $(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs
+	echo "Function BuildDate()" >> "$(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs"
+	echo "  return \"${BUILDDATE}\"" >> "$(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs"
+	echo "End Function" >> "$(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs"
+	echo "Function BuildCommit()" >> "$(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs"
+	echo "  return \"${GITCOMMIT}\"" >> "$(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs"
+	echo "End Function" >> "$(STAGINGREL)/$(APPSOURCEDIR)/buildinfo.brs"
 
 	# zip .png files without compression
 	# do not zip up any files ending with '~'
 	@echo "  >> creating application zip $(STAGINGREL)/../apps/$(APPNAME)-$(BUILD).zip"
-	@if [ -d $(STAGINGREL) ]; \
+	@if [ -d "$(STAGINGREL)" ]; \
 	then \
-		cd $(STAGINGREL); \
+		cd "$(STAGINGREL)"; \
 		(zip -0 -r "../apps/$(APPNAME)-$(BUILD).zip" . -i \*.png $(ZIP_EXCLUDE)); \
 		(zip -9 -r "../apps/$(APPNAME)-$(BUILD).zip" . -x \*~ -x \*.png $(ZIP_EXCLUDE)); \
-		cd $(SOURCEREL);\
+		cd "$(SOURCEREL)";\
 	else \
 		echo "Source for $(APPNAME) not found at $(STAGINGREL)"; \
 	fi
@@ -158,7 +158,7 @@ package: prep_staging
 	@if [ "$(IMPORTCLEANUP)" ]; \
 	then \
 		echo "  >> deleting imports";\
-		rm -r -f $(APPSOURCEDIR)/common; \
+		rm -r -f "$(APPSOURCEDIR)/common"; \
 	fi \
 
 	@echo "*** packaging $(APPNAME)-$(BUILD) complete ***"
