@@ -80,9 +80,12 @@ sub loadHomeSections()
     m.latestMediaInt = getHomeSectionInt("latestmedia")
     m.sectionCount = getHomeSectionCount()
 
+    homesections = get_user_setting("display.homesections")
+
     for i = 0 to 6
         content = m.top.content
-        homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
+        sections_array = homesections.Split(",")
+        homesection = sections_array[i]
 
         if homesection = "smalllibrarytiles"
             m.LoadMyMediaTask.observeField("content", "updateMyMedia")
@@ -145,7 +148,7 @@ sub setLatestMediaCount()
             for i = 0 to orderedViews.count() - 1
                 for j = 0 to filteredLatest.count() - 1
                     if filteredLatest[j].id = orderedViews[i]
-                        if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders"
+                        if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders" and filteredLatest[j].collectionType <> "books"
                             filteredOrderedViews.push(orderedViews[i])
                             exit for
                         end if
@@ -158,7 +161,7 @@ sub setLatestMediaCount()
         for i = 0 to filteredOrderedViews.count() - 1
             for each lib in filteredLatest
                 if filteredOrderedViews[i] = lib.id
-                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders"
+                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
                         latest_count = latest_count + 1
                     end if
                 end if
@@ -167,7 +170,7 @@ sub setLatestMediaCount()
     else
         latest_count = 0
         for each lib in filteredLatest
-            if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders"
+            if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
                 latest_count = latest_count + 1
             end if
         end for
@@ -222,6 +225,11 @@ sub onUpdateLatestMediaComplete(event)
     ignores = m.sectionIgnores
     if data = "stop"
         itemData = m.LoadLatestMediaTask.content
+        for each item in itemData
+            if item.collectionType = "books"
+                ignores.push("latestbooks")
+            end if
+        end for
         if itemData.count() = 0
             ignores.push("latestmedia")
             m.sectionIgnores = ignores
@@ -351,8 +359,10 @@ sub rebuildItemArray()
     m.top.rowItemSize = []
     newSizeArray = []
     homesections = []
+    homesections_setting = get_user_setting("display.homesections")
     for i = 0 to section_count
-        homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
+        sections_array = homesections_setting.Split(",")
+        homesection = sections_array[i]
         if homesection <> invalid
             homesections.push(homesection)
         end if
@@ -404,8 +414,10 @@ end sub
 
 function getHomeSectionInt(section as string)
     home_section_count = getHomeSectionCount()
+    homesections_setting = get_user_setting("display.homesections")
     for i = 0 to home_section_count
-        homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
+        sections_array = homesections_setting.Split(",")
+        homesection = sections_array[i]
         if homesection <> invalid
             if homesection = section
                 if section = "latestmedia"
@@ -428,9 +440,11 @@ end function
 function getHomeSectionCount()
     latest_media_count = m.latestMediaCount
     section_count = 0
+    homesections_setting = get_user_setting("display.homesections")
     for i = 0 to 6
-        homesection = get_user_setting(Substitute("display.homesection{0}", i.toStr()))
-        if homesection <> "latestmedia" and homesection <> "none"
+        sections_array = homesections_setting.Split(",")
+        homesection = sections_array[i]
+        if homesection <> "latestmedia" and homesection <> "none" and homesection <> "resumebook"
             section_count += 1
         end if
     end for
@@ -461,9 +475,11 @@ sub updateMyMedia()
         row.title = tr("My Media")
         row.id = section
         for each item in itemData
-            item.usePoster = true
-            item.imageWidth = 464
-            row.appendChild(item)
+            if item.CollectionType <> "books"
+                item.usePoster = true
+                item.imageWidth = 464
+                row.appendChild(item)
+            end if
         end for
         updateSizeArray(itemSize, section + latestMediaCount, "replace")
         row.update(row, false)
@@ -516,7 +532,7 @@ sub updateLatestMedia()
             for i = 0 to orderedViews.count() - 1
                 for j = 0 to filteredLatest.count() - 1
                     if filteredLatest[j].id = orderedViews[i]
-                        if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders"
+                        if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders" and filteredLatest[j].collectionType <> "books"
                             filteredOrderedViews.push(orderedViews[i])
                             exit for
                         end if
@@ -529,7 +545,7 @@ sub updateLatestMedia()
         for i = 0 to filteredOrderedViews.count() - 1
             for each lib in filteredLatest
                 if filteredOrderedViews[i] = lib.id
-                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders"
+                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
                         latest_count = latest_count + 1
                         loadLatest = createObject("roSGNode", "LoadItemsTask")
                         loadLatest.itemsToLoad = "latest"
@@ -549,7 +565,7 @@ sub updateLatestMedia()
     else
         latest_count = 0
         for each lib in filteredLatest
-            if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders"
+            if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
                 loadLatest = createObject("roSGNode", "LoadItemsTask")
                 loadLatest.itemsToLoad = "latest"
                 loadLatest.itemId = lib.id

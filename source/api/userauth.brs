@@ -140,32 +140,31 @@ sub LoadUserPreferences()
     url = Substitute("DisplayPreferences/usersettings?userId={0}&client=emby", id)
     resp = APIRequest(url)
     jsonResponse = getJson(resp)
+    sections = ""
 
     if jsonResponse <> invalid and jsonResponse.CustomPrefs <> invalid
         if jsonResponse.CustomPrefs["landing-livetv"] <> invalid
             set_user_setting("display.livetv.landing", jsonResponse.CustomPrefs["landing-livetv"])
         end if
         ' Take into account nones, if nones are in the middle then resort them to the end to be removed later in HomeRows
-        nones = 0
+        ' nones = 0
         for i = 0 to 6
+            section = ""
             if jsonResponse.CustomPrefs["homesection" + i.ToStr()] <> invalid
                 ' Need to ignore resumebook for now
-                if jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "resumebook"
-                    jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "none"
-                end if
-                if jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "none"
-                    nones += 1
+                if jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "resumebook" or jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "none"
+                    section = "none"
                 else
-                    if nones > 0
-                        j = i - nones
-                        set_user_setting("display.homesection" + i.ToStr(), "none")
-                        set_user_setting("display.homesection" + j.ToStr(), jsonResponse.CustomPrefs["homesection" + i.ToStr()])
-                    else
-                        set_user_setting("display.homesection" + i.ToStr(), jsonResponse.CustomPrefs["homesection" + i.ToStr()])
-                    end if
+                    section = jsonResponse.CustomPrefs["homesection" + i.ToStr()]
+                end if
+                if sections = ""
+                    sections = section
+                else
+                    sections = sections + "," + section
                 end if
             end if
         end for
+        set_user_setting("display.homesections", sections)
         if jsonResponse.CustomPrefs["homesection0"] = invalid
             setHomeScreenDefaults()
         end if
@@ -184,13 +183,7 @@ sub LoadUserPreferences()
 end sub
 
 sub setHomeScreenDefaults()
-    set_user_setting("display.homesection0", "smalllibrarytiles")
-    set_user_setting("display.homesection1", "resume")
-    set_user_setting("display.homesection2", "resumeaudio")
-    set_user_setting("display.homesection3", "livetv")
-    set_user_setting("display.homesection4", "nextup")
-    set_user_setting("display.homesection5", "latestmedia")
-    set_user_setting("display.homesection6", "none")
+    set_user_setting("display.homesections", "smalllibrarytiles,resume,resumeaudio,livetv,nextup,latestmedia,none")
 end sub
 
 sub LoadUserAbilities(user)
