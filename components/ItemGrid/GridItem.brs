@@ -26,7 +26,7 @@ sub init()
 end sub
 
 sub itemContentChanged()
-    
+
     ' Set Random background colors from pallet
     posterBackgrounds = m.global.constants.poster_bg_pallet
     m.backdrop.blendColor = posterBackgrounds[rnd(posterBackgrounds.count()) - 1]

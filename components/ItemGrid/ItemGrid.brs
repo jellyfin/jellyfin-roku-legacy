@@ -155,7 +155,7 @@ sub loadInitialItems()
     else if m.top.parentItem.collectionType = "playlists"
         m.loadItemsTask.recursive = true
         m.loadItemsTask.itemId = m.top.parentItem.id
-    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel" 
+    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
         ' Non-recursive, to not show subfolder contents
         m.loadItemsTask.recursive = true
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
@@ -171,7 +171,7 @@ sub loadInitialItems()
     else
         print "[ItemGrid] Unknown Type: " m.top.parentItem
     end if
-    
+
     if m.top.parentItem.type <> "Folder" and (m.options.view = "Networks" or m.view = "Networks" or m.options.view = "Studios" or m.view = "Studios")
         m.loadItemsTask.view = "Networks"
         m.top.imageDisplayMode = "scaleToFit"
