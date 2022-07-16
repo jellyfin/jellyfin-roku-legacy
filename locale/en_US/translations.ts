@@ -573,16 +573,29 @@
         <source>There was an error authenticating via Quick Connect.</source>
         <translation>There was an error authenticating via Quick Connect.</translation>
     </message>
-<message>
-    <source>Items to Load</source>
-    <translation>Items to Load</translation>
-    <extracomment>UI -> Media Grid -> Item Title in user setting screen.</extracomment>
-</message>
-<message>
-    <source>Default Items that are loaded is 60. If you have network issues try reducing this number to help load items faster</source>
-    <translation>Default Items that are loaded is 60. If you have network issues try reducing this number to help load items faster</translation>
-    <extracomment>Description for option in Setting Screen</extracomment>
-</message>
+    <message>
+        <source>Items to Load</source>
+        <translation>Items to Load</translation>
+        <extracomment>UI -> Media Grid -> Item Title in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Default Items that are loaded is 60. If you have network issues try reducing this number to help load items faster</source>
+        <translation>Default Items that are loaded is 60. If you have network issues try reducing this number to help load items faster</translation>
+        <extracomment>Description for option in Setting Screen</extracomment>
+    </message>
+    <message>
+        <source>Networks</source>
+        <translation>Networks</translation>
+    </message>
+    <message>
+        <source>Studios</source>
+        <translation>Studios</translation>
+    </message>
+    <message>
+        <source>Shows</source>
+        <translation>Shows</translation>
+    </message>
+
         <source>Return to Top</source>
         <translation>Return to Top</translation>
         <extracomment>UI -> Media Grid -> Item Title in user setting screen.</extracomment>
@@ -664,6 +677,16 @@
         <source>Use generated splashscreen image as Jellyfin home background. Jellyfin will need to be closed and reopened for change to take effect.</source>
         <translation>Use generated splashscreen image as Jellyfin home background. Jellyfin will need to be closed and reopened for change to take effect.</translation>
         <extracomment>Description for option in Setting Screen</extracomment>
+    </message>
+    <message>
+        <source>Cinema mode</source>
+        <translation>Cinema mode</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
+    <message>
+        <source>Cinema mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.</source>
+        <translation>Cinema mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
     </message>
 </context>
 </TS>
