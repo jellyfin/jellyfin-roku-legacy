@@ -59,9 +59,6 @@ sub loadInitialItems()
     if m.top.parentItem.backdropUrl = ""
         SetBackground(m.top.parentItem.posterUrl)
     else if m.top.parentItem.backdropUrl <> invalid
-        if m.top.parentItem.json.Type = "CollectionFolder" 'or m.top.parentItem.json.Type = "Folder"
-          m.top.HomeLibraryItem = m.top.parentItem.Id
-        end if
         SetBackground(m.top.parentItem.backdropUrl)
     end if
 
@@ -152,13 +149,15 @@ sub loadInitialItems()
         if get_user_setting("display.livetv.landing") = "guide" and m.options.view <> "livetv"
             showTvGuide()
         end if
-
-
-
-    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel" or m.top.parentItem.collectionType = "playlists"
-
-        ' Non-recursive, to not show subfolder contents
+    else if m.top.parentItem.collectionType = "books"
         m.loadItemsTask.recursive = false
+        m.loadItemsTask.itemId = m.top.parentItem.id
+    else if m.top.parentItem.collectionType = "playlists"
+        m.loadItemsTask.recursive = true
+        m.loadItemsTask.itemId = m.top.parentItem.id
+    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel" 
+        ' Non-recursive, to not show subfolder contents
+        m.loadItemsTask.recursive = true
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
     else if m.top.parentItem.Type = "Channel"
         m.top.imageDisplayMode = "scaleToFit"
@@ -172,7 +171,7 @@ sub loadInitialItems()
     else
         print "[ItemGrid] Unknown Type: " m.top.parentItem
     end if
-    'end if
+    
     if m.top.parentItem.type <> "Folder" and (m.options.view = "Networks" or m.view = "Networks" or m.options.view = "Studios" or m.view = "Studios")
         m.loadItemsTask.view = "Networks"
         m.top.imageDisplayMode = "scaleToFit"
