@@ -75,7 +75,7 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "CollectionData")
             else if item.Type = "TvChannel"
                 tmp = CreateObject("roSGNode", "ChannelData")
-            else if item.Type = "Folder" or item.Type = "ChannelFolderItem" or item.Type = "CollectionFolder" or item.Type = "Playlist"
+            else if item.Type = "Folder" or item.Type = "ChannelFolderItem" or item.Type = "CollectionFolder" or item.Type = "Playlist" or item.Type = "ManualPlaylistsFolder"
                 tmp = CreateObject("roSGNode", "FolderData")
             else if item.Type = "Video"
                 tmp = CreateObject("roSGNode", "VideoData")
@@ -93,7 +93,7 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "MusicArtistData")
             else if item.Type = "Audio" or item.Type = "AudioBook"
                 tmp = CreateObject("roSGNode", "MusicSongData")
-            else if item.Type = "Episode"
+            else if item.Type = "Season"
                 tmp = CreateObject("roSGNode", "TVEpisodeData")
             else
                 print "[LoadItems] Unknown Type: " item.Type

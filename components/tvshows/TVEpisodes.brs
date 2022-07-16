@@ -16,8 +16,6 @@ sub setSeasonLoading()
 end sub
 
 sub updateSeason()
-    'imgParams = { "maxHeight": 450, "maxWidth": 300 }
-    'm.poster.uri = ImageURL(m.top.seasonData.Id, "Primary", imgParams)
     if m.top.seasonData.ImageTags.Primary <> invalid
         imgParams = { "maxHeight": 450, "maxWidth": 300 }
         m.poster.uri = ImageURL(m.top.seasonData.id, "Primary", imgParams)
