@@ -1,4 +1,4 @@
-name: build
+name: build-pr
 on:
   pull_request:
     types:
@@ -9,23 +9,9 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-20.04
     steps:
-      - name: Get the tag name
-        run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-      - name: Get the branch name
+      - name: Save the branch name
         run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
       - uses: actions/checkout@v2
-        if: "${{ env.TAG != '' }}"
-      - uses: vimtor/action-zip@v1
-        with:
-          recursive: false
-          files: components/ images/ locale/ settings/ source/ manifest
-          dest: jellyfin_${{ env.TAG }}.zip
-      - uses: actions/upload-artifact@v2
-        with:
-          name: jellyfin_${{ env.TAG }}.zip
-          path: jellyfin_${{ env.TAG }}.zip
-          if-no-files-found: error
-        if: "${{ env.TAG == '' }}"
       - uses: vimtor/action-zip@v1
         with:
           recursive: false

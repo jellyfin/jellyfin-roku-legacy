@@ -1,0 +1,22 @@
+name: build-pr
+on:
+  release:
+    types: [published]
+
+jobs:
+  run:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Save the tag name
+        run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+      - uses: actions/checkout@v2
+      - uses: vimtor/action-zip@v1
+        with:
+          recursive: false
+          files: components/ images/ locale/ settings/ source/ manifest
+          dest: jellyfin_${{ env.TAG }}.zip
+      - uses: actions/upload-artifact@v2
+        with:
+          name: jellyfin_${{ env.TAG }}.zip
+          path: jellyfin_${{ env.TAG }}.zip
+          if-no-files-found: error
