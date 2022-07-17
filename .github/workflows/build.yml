@@ -8,10 +8,11 @@ jobs:
   run:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-20.04
-    env:
-      TAG: ${GITHUB_REF/refs\/tags\//}
-      BRANCH: ${GITHUB_REF##*/}
     steps:
+      - name: Get the tag name
+        run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+      - name: Get the branch name
+        run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
       - uses: actions/checkout@v2
         if: "${{ env.TAG != '' }}"
       - uses: vimtor/action-zip@v1
