@@ -1,4 +1,4 @@
-name: build-pr
+name: build-release
 on:
   release:
     types: [published]
