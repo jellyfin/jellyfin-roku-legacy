@@ -17,18 +17,22 @@ jobs:
         if: "${{ env.TAG != '' }}"
       - uses: vimtor/action-zip@v1
         with:
+          recursive: false
           files: components/ images/ locale/ settings/ source/ manifest.json
           dest: jellyfin_${{ env.TAG }}.zip
       - uses: actions/upload-artifact@v2
         with:
+          name: jellyfin_${{ env.TAG }}.zip
           path: jellyfin_${{ env.TAG }}.zip
           if-no-files-found: error
         if: "${{ env.TAG == '' }}"
       - uses: vimtor/action-zip@v1
         with:
+          recursive: false
           files: components/ images/ locale/ settings/ source/ manifest.json
           dest: jellyfin_${{ env.BRANCH }}.zip
       - uses: actions/upload-artifact@v2
         with:
+          name: jellyfin_${{ env.BRANCH }}.zip
           path: jellyfin_${{ env.BRANCH }}.zip
           if-no-files-found: error
