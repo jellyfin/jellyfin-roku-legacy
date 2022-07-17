@@ -13,12 +13,12 @@ jobs:
       BRANCH: ${GITHUB_REF##*/}
     steps:
       - uses: actions/checkout@v2
-      if: "${{ env.TAG != '' }}"
+        if: "${{ env.TAG != '' }}"
       - uses: vimtor/action-zip@v1
         with:
           files: components/ images/ locale/ settings/ source/ manifest.json
           dest: jellyfin_${{ env.TAG }}.zip
-      if: "${{ env.TAG == '' }}"
+        if: "${{ env.TAG == '' }}"
       - uses: vimtor/action-zip@v1
         with:
           files: components/ images/ locale/ settings/ source/ manifest.json
