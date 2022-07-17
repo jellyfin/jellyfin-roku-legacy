@@ -19,8 +19,16 @@ jobs:
         with:
           files: components/ images/ locale/ settings/ source/ manifest.json
           dest: jellyfin_${{ env.TAG }}.zip
+      - uses: actions/upload-artifact@v2
+        with:
+          path: jellyfin_${{ env.TAG }}.zip
+          if-no-files-found: error
         if: "${{ env.TAG == '' }}"
       - uses: vimtor/action-zip@v1
         with:
           files: components/ images/ locale/ settings/ source/ manifest.json
           dest: jellyfin_${{ env.BRANCH }}.zip
+      - uses: actions/upload-artifact@v2
+        with:
+          path: jellyfin_${{ env.TAG }}.zip
+          if-no-files-found: error
