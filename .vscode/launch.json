@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "brightscript",
+            "request": "launch",
+            "name": "Jellyfin Debug: Launch",
+            "stopOnEntry": false,
+            //WARNING: don't edit this value. Instead, set "brightscript.debug.host": "YOUR_HOST_HERE" in your vscode user settings
+            //"host": "${promptForHost}",
+            //WARNING: don't edit this value. Instead, set "brightscript.debug.password": "YOUR_PASSWORD_HERE" in your vscode user settings
+            //"password": "${promptForPassword}",
+            "files": [
+                "components/**/*",
+                "images/**/*",
+                "locale/**/*",
+                "settings/**/*",
+                "source/**/*",
+                "manifest"
+            ]
+        }
+    ]
+}

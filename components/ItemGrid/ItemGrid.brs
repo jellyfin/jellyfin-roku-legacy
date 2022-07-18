@@ -42,17 +42,22 @@ sub init()
 
     'set inital counts for overhang before content is loaded.
     m.loadItemsTask.totalRecordCount = 0
+
     m.spinner = m.top.findNode("spinner")
     m.spinner.visible = true
-
     m.Alpha = m.top.findNode("AlphaMenu")
     m.AlphaSelected = m.top.findNode("AlphaSelected")
+
+    'Get reset folder setting
+    m.resetGrid = get_user_setting("itemgrid.reset") = "true"
 end sub
 
 '
 'Load initial set of Data
 sub loadInitialItems()
-
+    if m.top.parentItem.json.Type = "CollectionFolder" 'or m.top.parentItem.json.Type = "Folder"
+        m.top.HomeLibraryItem = m.top.parentItem.Id
+    end if
     if m.top.parentItem.backdropUrl <> invalid
         SetBackground(m.top.parentItem.backdropUrl)
     end if
@@ -69,11 +74,16 @@ sub loadInitialItems()
         m.sortField = get_user_setting("display.livetv.sortField")
         sortAscendingStr = get_user_setting("display.livetv.sortAscending")
         m.filter = get_user_setting("display.livetv.filter")
-    else
-        m.view = invalid
+    else if m.top.parentItem.collectionType = "music"
+        m.view = get_user_setting("display.music.view")
         m.sortField = get_user_setting("display." + m.top.parentItem.Id + ".sortField")
         sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
         m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
+    else
+        m.sortField = get_user_setting("display." + m.top.parentItem.Id + ".sortField")
+        sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
+        m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
+        m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
     end if
 
     if m.sortField = invalid then m.sortField = "SortName"
@@ -84,22 +94,52 @@ sub loadInitialItems()
     else
         m.sortAscending = false
     end if
+    'Set Stuido Id
+    if m.top.parentItem.json.type = "Studio"
+        m.loadItemsTask.studioIds = m.top.parentItem.Id
+        m.loadItemsTask.itemId = m.top.parentItem.parentFolder
+        m.loadItemsTask.genreIds = ""
+        'set Genre Id
+    else if m.top.parentItem.json.type = "Genre"
+        m.loadItemsTask.genreIds = m.top.parentItem.Id
+        m.loadItemsTask.itemId = m.top.parentItem.parentFolder
+        m.loadItemsTask.studioIds = ""
+    else if (m.view = "Shows" or m.options.view = "Shows") or (m.view = "Movies" or m.options.view = "Movies")
+        m.loadItemsTask.studioIds = ""
+        m.loadItemsTask.genreIds = ""
+    end if
+    updateTitle()
 
     m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
     m.emptyText.visible = false
-
-    updateTitle()
-
-    m.loadItemsTask.itemId = m.top.parentItem.Id
     m.loadItemsTask.sortField = m.sortField
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
     m.loadItemsTask.startIndex = 0
-
+    'Load Item Types
     if m.top.parentItem.collectionType = "movies"
         m.loadItemsTask.itemType = "Movie"
+        m.loadItemsTask.itemId = m.top.parentItem.Id
     else if m.top.parentItem.collectionType = "tvshows"
         m.loadItemsTask.itemType = "Series"
+        m.loadItemsTask.itemId = m.top.parentItem.Id
+    else if m.top.parentItem.collectionType = "music"
+        ' Default Settings
+        m.loadItemsTask.recursive = false
+        m.itemGrid.itemSize = "[290, 290]"
+        m.itemGrid.itemSpacing = "[ 0, 20]"
+        m.loadItemsTask.itemType = "MusicArtist,MusicAlbum"
+        m.loadItemsTask.itemId = m.top.parentItem.Id
+
+        m.view = get_user_setting("display.music.view")
+
+        if m.view = "music-artist"
+            m.loadItemsTask.recursive = true
+            m.loadItemsTask.itemType = "MusicArtist"
+        else if m.view = "music-album"
+            m.loadItemsTask.itemType = "MusicAlbum"
+            m.loadItemsTask.recursive = true
+        end if
     else if m.top.parentItem.collectionType = "livetv"
         m.loadItemsTask.itemType = "LiveTV"
 
@@ -110,114 +150,205 @@ sub loadInitialItems()
             showTvGuide()
         end if
 
-    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
+
+    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
+
         ' Non-recursive, to not show subfolder contents
         m.loadItemsTask.recursive = false
-    else if m.top.parentItem.collectionType = "Channel"
+        m.loadItemsTask.itemId = m.top.parentItem.parentFolder
+    else if m.top.parentItem.Type = "Channel"
         m.top.imageDisplayMode = "scaleToFit"
+    else if m.top.parentItem.json.type = "Studio"
+        m.loadItemsTask.itemId = m.top.parentItem.parentFolder
+        m.loadItemsTask.itemType = "Series,Movie"
+        m.top.imageDisplayMode = "scaleToFit"
+    else if m.top.parentItem.json.type = "Genre"
+        m.loadItemsTask.itemType = "Series,Movie"
+        m.loadItemsTask.itemId = m.top.parentItem.parentFolder
     else
         print "[ItemGrid] Unknown Type: " m.top.parentItem
     end if
+    'end if
+    if m.top.parentItem.type <> "Folder" and (m.options.view = "Networks" or m.view = "Networks" or m.options.view = "Studios" or m.view = "Studios")
+        m.loadItemsTask.view = "Networks"
+        m.top.imageDisplayMode = "scaleToFit"
+    else if m.top.parentItem.type <> "Folder" and (m.options.view = "Genres" or m.view = "Genres")
+        m.loadItemsTask.StudioIds = m.top.parentItem.Id
+        m.loadItemsTask.view = "Genres"
+    else if m.top.parentItem.type <> "Folder" and (m.options.view = "Shows" or m.view = "Shows")
+        m.loadItemsTask.studioIds = ""
+        m.loadItemsTask.view = "Shows"
+    else if m.top.parentItem.type <> "Folder" and (m.options.view = "Movies" or m.view = "Movies")
+        m.loadItemsTask.studioIds = ""
+        m.loadItemsTask.view = "Movies"
+    end if
 
     m.loadItemsTask.observeField("content", "ItemDataLoaded")
+    m.spinner.visible = true
     m.loadItemsTask.control = "RUN"
-
     SetUpOptions()
-
 end sub
+
+' Set Movies view, sort, and filter options
+sub setMoviesOptions(options)
+    options.views = [
+        { "Title": tr("Movies"), "Name": "Movies" },
+        { "Title": tr("Studios"), "Name": "Studios" },
+        { "Title": tr("Genres"), "Name": "Genres" }
+    ]
+    options.sort = [
+        { "Title": tr("TITLE"), "Name": "SortName" },
+        { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
+        { "Title": tr("CRITIC_RATING"), "Name": "CriticRating" },
+        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
+        { "Title": tr("PLAY_COUNT"), "Name": "PlayCount" },
+        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+        { "Title": tr("RUNTIME"), "Name": "Runtime" }
+    ]
+    options.filter = [
+        { "Title": tr("All"), "Name": "All" },
+        { "Title": tr("Favorites"), "Name": "Favorites" }
+    ]
+end sub
+
+' Set Boxset view, sort, and filter options
+sub setBoxsetsOptions(options)
+    options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
+    options.sort = [
+        { "Title": tr("TITLE"), "Name": "SortName" },
+        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+    ]
+    options.filter = [
+        { "Title": tr("All"), "Name": "All" },
+        { "Title": tr("Favorites"), "Name": "Favorites" }
+    ]
+end sub
+
+' Set TV Show view, sort, and filter options
+sub setTvShowsOptions(options)
+    options.views = [
+        { "Title": tr("Shows"), "Name": "Shows" },
+        { "Title": tr("Networks"), "Name": "Networks" },
+        { "Title": tr("Genres"), "Name": "Genres" }
+
+    ]
+    options.sort = [
+        { "Title": tr("TITLE"), "Name": "SortName" },
+        { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
+        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
+        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+    ]
+    options.filter = [
+        { "Title": tr("All"), "Name": "All" },
+        { "Title": tr("Favorites"), "Name": "Favorites" }
+    ]
+end sub
+
+' Set Live TV view, sort, and filter options
+sub setLiveTvOptions(options)
+    options.views = [
+        { "Title": tr("Channels"), "Name": "livetv" },
+        { "Title": tr("TV Guide"), "Name": "tvGuide" }
+    ]
+    options.sort = [
+        { "Title": tr("TITLE"), "Name": "SortName" }
+    ]
+    options.filter = [
+        { "Title": tr("All"), "Name": "All" },
+        { "Title": tr("Favorites"), "Name": "Favorites" }
+    ]
+    options.favorite = [
+        { "Title": tr("Favorite"), "Name": "Favorite" }
+    ]
+end sub
+
+' Set Music view, sort, and filter options
+sub setMusicOptions(options)
+    options.views = [
+        { "Title": tr("Default"), "Name": "music-default" },
+        { "Title": tr("Artists"), "Name": "music-artist" },
+        { "Title": tr("Albums"), "Name": "music-album" },
+    ]
+    options.sort = [
+        { "Title": tr("TITLE"), "Name": "SortName" },
+        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+    ]
+    options.filter = [
+        { "Title": tr("All"), "Name": "All" },
+        { "Title": tr("Favorites"), "Name": "Favorites" }
+    ]
+end sub
+
+' Set Photo Album view, sort, and filter options
+sub setPhotoAlbumOptions(options)
+    ' TODO/FIXME: Show shuffle options once implemented
+    ' options.views = [
+    '     { "Title": tr("Don't Shuffle"), "Name": "singlephoto"}
+    '     { "Title": tr("Shuffle"), "Name": "shufflephoto"}
+    ' ]
+    options.views = []
+    options.sort = []
+end sub
+
+' Set Default view, sort, and filter options
+sub setDefaultOptions(options)
+    options.views = [
+        { "Title": tr("Default"), "Name": "default" }
+    ]
+    options.sort = [
+        { "Title": tr("TITLE"), "Name": "SortName" }
+    ]
+end sub
+
+' Return parent collection type
+function getCollectionType() as string
+    if m.top.parentItem.collectionType = invalid
+        return m.top.parentItem.Type
+    else
+        return m.top.parentItem.CollectionType
+    end if
+end function
+
+' Search string array for search value. Return if it's found
+function inStringArray(array, searchValue) as boolean
+    for each item in array
+        if lcase(item) = lcase(searchValue) then return true
+    end for
+    return false
+end function
 
 ' Data to display when options button selected
 sub SetUpOptions()
-
     options = {}
     options.filter = []
     options.favorite = []
 
-    'Movies
-    if m.top.parentItem.collectionType = "movies"
-        options.views = [
-            { "Title": tr("Movies"), "Name": "movies" },
-        ]
-        options.sort = [
-            { "Title": tr("TITLE"), "Name": "SortName" },
-            { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
-            { "Title": tr("CRITIC_RATING"), "Name": "CriticRating" },
-            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
-            { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
-            { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
-            { "Title": tr("PLAY_COUNT"), "Name": "PlayCount" },
-            { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
-            { "Title": tr("RUNTIME"), "Name": "Runtime" }
-        ]
-        options.filter = [
-            { "Title": tr("All"), "Name": "All" },
-            { "Title": tr("Favorites"), "Name": "Favorites" }
-        ]
-        'Boxsets
-    else if m.top.parentItem.collectionType = "boxsets"
-        options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
-        options.sort = [
-            { "Title": tr("TITLE"), "Name": "SortName" },
-            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
-            { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
-            { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
-        ]
-        options.filter = [
-            { "Title": tr("All"), "Name": "All" },
-            { "Title": tr("Favorites"), "Name": "Favorites" }
-        ]
-        'TV Shows
-    else if m.top.parentItem.collectionType = "tvshows"
-        options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
-        options.sort = [
-            { "Title": tr("TITLE"), "Name": "SortName" },
-            { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
-            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
-            { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
-            { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
-            { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
-        ]
-        options.filter = [
-            { "Title": tr("All"), "Name": "All" },
-            { "Title": tr("Favorites"), "Name": "Favorites" }
-        ]
-        'Live TV
-    else if m.top.parentItem.collectionType = "livetv"
-        options.views = [
-            { "Title": tr("Channels"), "Name": "livetv" },
-            { "Title": tr("TV Guide"), "Name": "tvGuide" }
-        ]
-        options.sort = [
-            { "Title": tr("TITLE"), "Name": "SortName" }
-        ]
-        options.filter = [
-            { "Title": tr("All"), "Name": "All" },
-            { "Title": tr("Favorites"), "Name": "Favorites" }
-        ]
-        options.favorite = [
-            { "Title": tr("Favorite"), "Name": "Favorite" }
-        ]
-    else if m.top.parentItem.collectionType = "photoalbum" or m.top.parentItem.collectionType = "photo" or m.top.parentItem.collectionType = "homevideos"
-        ' For some reason, my photo library shows up as "homevideos", maybe because it has some mp4 mixed in with the jpgs?
+    if getCollectionType() = "movies"
+        setMoviesOptions(options)
+    else if inStringArray(["boxsets", "Boxset"], getCollectionType())
+        setBoxsetsOptions(options)
+    else if getCollectionType() = "tvshows"
+        setTvShowsOptions(options)
+    else if getCollectionType() = "livetv"
+        setLiveTvOptions(options)
+    else if inStringArray(["photoalbum", "photo", "homevideos"], getCollectionType())
+        setPhotoAlbumOptions(options)
+    else if getCollectionType() = "music"
+        setMusicOptions(options)
 
-        ' TODO/FIXME: Show shuffle options once implemented
-        ' options.views = [
-        '     { "Title": tr("Don't Shuffle"), "Name": "singlephoto"}
-        '     { "Title": tr("Shuffle"), "Name": "shufflephoto"}
-        ' ]
-        options.views = []
-        options.sort = []
-        options.filter = []
     else
-        options.views = [
-            { "Title": tr("Default"), "Name": "default" }
-        ]
-        options.sort = [
-            { "Title": tr("TITLE"), "Name": "SortName" }
-        ]
-        options.filter = []
+        setDefaultOptions(options)
     end if
 
+    ' Set selected view option
     for each o in options.views
         if o.Name = m.view
             o.Selected = true
@@ -226,6 +357,7 @@ sub SetUpOptions()
         end if
     end for
 
+    ' Set selected sort option
     for each o in options.sort
         if o.Name = m.sortField
             o.Selected = true
@@ -234,6 +366,7 @@ sub SetUpOptions()
         end if
     end for
 
+    ' Set selected filter option
     for each o in options.filter
         if o.Name = m.filter
             o.Selected = true
@@ -241,21 +374,14 @@ sub SetUpOptions()
         end if
     end for
 
-    ' for each o in options.favorite
-    '     if o.Name = m.favorite
-    '         m.options.favorite = o.Name
-    '     end if
-    ' end for
-
     m.options.options = options
-
 end sub
 
 
 '
 'Handle loaded data, and add to Grid
 sub ItemDataLoaded(msg)
-
+    m.top.alphaActive = false
     itemData = msg.GetData()
     m.loadItemsTask.unobserveField("content")
     m.loadItemsTask.content = []
@@ -273,7 +399,6 @@ sub ItemDataLoaded(msg)
     m.loadedItems = m.itemGrid.content.getChildCount()
     m.loadedRows = m.loadedItems / m.itemGrid.numColumns
     m.Loading = false
-
     'If there are no items to display, show message
     if m.loadedItems = 0
         m.emptyText.text = tr("NO_ITEMS").Replace("%1", m.top.parentItem.Type)
@@ -317,7 +442,7 @@ sub onItemFocused()
     ' Set Background to item backdrop
     SetBackground(m.itemGrid.content.getChild(m.itemGrid.itemFocused).backdropUrl)
 
-    ' Load more data if focus is within last 3 rows, and there are more items to load
+    ' Load more data if focus is within last 5 rows, and there are more items to load
     if focusedRow >= m.loadedRows - 5 and m.loadeditems < m.loadItemsTask.totalRecordCount
         loadMoreData()
     end if
@@ -354,9 +479,8 @@ end sub
 '
 'Load next set of items
 sub loadMoreData()
-
+    m.spinner.visible = true
     if m.Loading = true then return
-
     m.Loading = true
     m.loadItemsTask.startIndex = m.loadedItems
     m.loadItemsTask.observeField("content", "ItemDataLoaded")
@@ -374,6 +498,7 @@ sub onItemAlphaSelected()
     m.loadedItems = 0
     m.data = CreateObject("roSGNode", "ContentNode")
     m.itemGrid.content = m.data
+    m.spinner.visible = true
     loadInitialItems()
 end sub
 
@@ -381,7 +506,6 @@ end sub
 '
 'Check if options updated and any reloading required
 sub optionsClosed()
-
     if m.top.parentItem.collectionType = "livetv" and m.options.view <> m.view
         if m.options.view = "tvGuide"
             m.view = "tvGuide"
@@ -397,7 +521,6 @@ sub optionsClosed()
                 m.top.removeChild(m.tvGuide)
             end if
         end if
-
     end if
 
     if m.top.parentItem.Type = "CollectionFolder" or m.top.parentItem.CollectionType = "CollectionFolder"
@@ -412,6 +535,29 @@ sub optionsClosed()
     end if
 
     reload = false
+
+    if m.top.parentItem.collectionType = "music"
+        if m.options.view <> m.view
+            if m.options.view = "music-artist"
+                m.view = "music-artist"
+            else if m.options.view = "music-album"
+                m.view = "music-album"
+            else
+                m.view = "music-default"
+            end if
+            set_user_setting("display.music.view", m.view)
+            reload = true
+        end if
+    else
+        m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
+        if m.options.view <> m.view
+            'reload and store new view setting
+            m.view = m.options.view
+            set_user_setting("display." + m.top.parentItem.Id + ".landing", m.view)
+            reload = true
+        end if
+    end if
+
     if m.options.sortField <> m.sortField or m.options.sortAscending <> m.sortAscending
         m.sortField = m.options.sortField
         m.sortAscending = m.options.sortAscending
@@ -526,17 +672,26 @@ function onKeyEvent(key as string, press as boolean) as boolean
             photoPlayer.control = "RUN"
             return true
         end if
-    else if key = "right" and topGrp.isinFocusChain()
+    else if key = "left" and topGrp.isinFocusChain()
+        m.top.alphaActive = true
         topGrp.setFocus(false)
         alpha = m.Alpha.getChild(0).findNode("Alphamenu")
         alpha.setFocus(true)
         return true
-    else if key = "left" and m.Alpha.isinFocusChain()
+    else if key = "right" and m.Alpha.isinFocusChain()
+        m.top.alphaActive = false
         m.Alpha.setFocus(false)
         m.Alpha.visible = true
         topGrp.setFocus(true)
         return true
+    else if key = "replay" and topGrp.isinFocusChain()
+        if m.resetGrid = true
+            m.itemGrid.animateToItem = 0
+        else
+            m.itemGrid.jumpToItem = 0
+        end if
     end if
+
     return false
 end function
 
@@ -551,6 +706,15 @@ sub updateTitle()
         m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Filtered)")
     end if
 
+    if m.options.view = "Networks" or m.view = "Networks"
+        m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Networks"))
+    end if
+    if m.options.view = "Studios" or m.view = "Studios"
+        m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Studios"))
+    end if
+    if m.options.view = "Genres" or m.view = "Genres"
+        m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Genres"))
+    end if
     actInt = m.itemGrid.itemFocused + 1
     if m.showItemCount and m.loadItemsTask.totalRecordCount > 0
         m.top.overhangTitle += " (" + tr("%1 of %2").Replace("%1", actInt.toStr()).Replace("%2", m.loadItemsTask.totalRecordCount.toStr()) + ")"

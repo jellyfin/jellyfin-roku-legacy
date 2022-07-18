@@ -50,33 +50,33 @@ function CreateServerGroup()
                 dialog.title = tr("Connecting to Server")
                 m.scene.dialog = dialog
 
-                serverInfoResult = ServerInfo()
+                m.serverInfoResult = ServerInfo()
 
                 dialog.close = true
 
-                if serverInfoResult = invalid
+                if m.serverInfoResult = invalid
                     ' Maybe don't unset setting, but offer as a prompt
                     ' Server not found, is it online? New values / Retry
                     print "Server not found, is it online? New values / Retry"
                     screen.errorMessage = tr("Server not found, is it online?")
                     SignOut(false)
-                else if serverInfoResult.Error <> invalid and serverInfoResult.Error
+                else if m.serverInfoResult.Error <> invalid and m.serverInfoResult.Error
                     ' If server redirected received, update the URL
-                    if serverInfoResult.UpdatedUrl <> invalid
-                        serverUrl = serverInfoResult.UpdatedUrl
+                    if m.serverInfoResult.UpdatedUrl <> invalid
+                        serverUrl = m.serverInfoResult.UpdatedUrl
                         set_setting("server", serverUrl)
                     end if
                     ' Display Error Message to user
                     message = tr("Error: ")
-                    if serverInfoResult.ErrorCode <> invalid
-                        message = message + "[" + serverInfoResult.ErrorCode.toStr() + "] "
+                    if m.serverInfoResult.ErrorCode <> invalid
+                        message = message + "[" + m.serverInfoResult.ErrorCode.toStr() + "] "
                     end if
-                    screen.errorMessage = message + tr(serverInfoResult.ErrorMessage)
+                    screen.errorMessage = message + tr(m.serverInfoResult.ErrorMessage)
                     SignOut(false)
                 else
                     screen.visible = false
-                    if serverInfoResult.serverName <> invalid
-                        return serverInfoResult.ServerName + " (Saved)"
+                    if m.serverInfoResult.serverName <> invalid
+                        return m.serverInfoResult.ServerName + " (Saved)"
                     else
                         return "Saved"
                     end if
@@ -135,7 +135,7 @@ end function
 
 function CreateSigninGroup(user = "")
     ' Get and Save Jellyfin user login credentials
-    group = CreateObject("roSGNode", "ConfigScene")
+    group = CreateObject("roSGNode", "LoginScene")
     m.global.sceneManager.callFunc("pushScene", group)
     port = CreateObject("roMessagePort")
 
@@ -185,6 +185,18 @@ function CreateSigninGroup(user = "")
     items.appendChild(saveCheckBox)
     checkbox.content = items
     checkbox.checkedState = [true]
+    quickConnect = group.findNode("quickConnect")
+    if m.serverInfoResult = invalid
+        m.serverInfoResult = ServerInfo()
+    end if
+    ' Quick Connect only supported for server version 10.8+ right now...
+    if versionChecker(m.serverInfoResult.Version, "10.8.0")
+        ' Add option for Quick Connect
+        quickConnect.text = tr("Quick Connect")
+        quickConnect.observeField("buttonSelected", port)
+    else
+        quickConnect.visible = false
+    end if
 
     items = [username_field, password_field]
     config.configItems = items
@@ -224,6 +236,41 @@ function CreateSigninGroup(user = "")
                 end if
                 print "Login attempt failed..."
                 group.findNode("alert").text = tr("Login attempt failed.")
+            else if node = "quickConnect"
+                json = initQuickConnect()
+                if json = invalid
+                    group.findNode("alert").text = tr("Quick Connect not available.")
+                else
+                    ' Server user is talking to is at least 10.8 and has quick connect enabled...
+                    m.quickConnectDialog = createObject("roSGNode", "QuickConnectDialog")
+                    m.quickConnectDialog.quickConnectJson = json
+                    m.quickConnectDialog.title = tr("Quick Connect")
+                    m.quickConnectDialog.message = [tr("Here is your Quick Connect code: ") + json.Code, tr("(Dialog will close automatically)")]
+                    m.quickConnectDialog.buttons = [tr("Cancel")]
+                    m.quickConnectDialog.observeField("authenticated", port)
+                    m.scene.dialog = m.quickConnectDialog
+                end if
+            else if msg.getField() = "authenticated"
+                authenticated = msg.getData()
+                if authenticated = true
+                    ' Quick connect authentication was successful...
+                    return "true"
+                else
+                    dialog = createObject("roSGNode", "Dialog")
+                    dialog.id = "QuickConnectError"
+                    dialog.title = tr("Quick Connect")
+                    dialog.buttons = [tr("OK")]
+                    dialog.message = tr("There was an error authenticating via Quick Connect.")
+                    m.scene.dialog = dialog
+                    m.scene.dialog.observeField("buttonSelected", port)
+                end if
+            else
+                ' If there are no other button matches, check if this is a simple "OK" Dialog & Close if so
+                dialog = msg.getRoSGNode()
+                if dialog.id = "QuickConnectError"
+                    dialog.unobserveField("buttonSelected")
+                    dialog.close = true
+                end if
             end if
         end if
     end while
@@ -321,6 +368,52 @@ function CreateSeriesDetailsGroup(series)
     return group
 end function
 
+' Shows details on selected artist. Bio, image, and list of available albums
+function CreateMusicArtistDetailsGroup(musicartist)
+    musicData = MusicAlbumList(musicartist.id)
+
+    ' User only has songs under artists
+    if musicData = invalid or musicData.Items.Count() = 0
+        ' Just songs under artists...
+        group = CreateObject("roSGNode", "MusicAlbumDetails")
+        group.pageContent = ItemMetaData(musicartist.id)
+        group.albumData = MusicSongList(musicartist.id)
+        group.observeField("playSong", m.port)
+        group.observeField("playAllSelected", m.port)
+        group.observeField("instantMixSelected", m.port)
+    else
+        ' User has albums under artists
+        group = CreateObject("roSGNode", "MusicArtistDetails")
+        group.pageContent = ItemMetaData(musicartist.id)
+        group.musicArtistAlbumData = musicData
+        group.observeField("musicAlbumSelected", m.port)
+    end if
+
+    m.global.sceneManager.callFunc("pushScene", group)
+
+    return group
+end function
+
+' Shows details on selected album. Description text, image, and list of available songs
+function CreateMusicAlbumDetailsGroup(album)
+    group = CreateObject("roSGNode", "MusicAlbumDetails")
+    m.global.sceneManager.callFunc("pushScene", group)
+
+    group.pageContent = ItemMetaData(album.id)
+    group.albumData = MusicSongList(album.id)
+
+    ' Watch for user clicking on a song
+    group.observeField("playSong", m.port)
+
+    ' Watch for user click on Play button on album
+    group.observeField("playAllSelected", m.port)
+
+    ' Watch for user click on Instant Mix button on album
+    group.observeField("instantMixSelected", m.port)
+
+    return group
+end function
+
 function CreateSeasonDetailsGroup(series, season)
     group = CreateObject("roSGNode", "TVEpisodes")
     group.optionsAvailable = false
@@ -362,14 +455,60 @@ sub CreateSidePanel(buttons, options)
     group.options = options
 end sub
 
-function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_idx = 1)
+function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_idx = 1, showIntro = true)
+
     ' Video is Playing
-    video = VideoPlayer(video_id, mediaSourceId, audio_stream_idx)
+    video = VideoPlayer(video_id, mediaSourceId, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), showIntro)
     if video = invalid then return invalid
+    if video.errorMsg = "introaborted" then return video
     video.observeField("selectSubtitlePressed", m.port)
     video.observeField("state", m.port)
 
     return video
+end function
+
+' Play Audio
+function CreateAudioPlayerGroup(audiodata)
+
+    group = CreateObject("roSGNode", "NowPlaying")
+    group.observeField("state", m.port)
+    songIDArray = CreateObject("roArray", 0, true)
+
+    ' All we need is an array of Song IDs the user selected to play.
+    for each song in audiodata
+        songIDArray.push(song.id)
+    end for
+
+    group.pageContent = songIDArray
+    group.musicArtistAlbumData = audiodata
+
+    m.global.sceneManager.callFunc("pushScene", group)
+
+    return group
+end function
+
+' Play Instant Mix
+function CreateInstantMixGroup(audiodata)
+
+    songList = CreateInstantMix(audiodata[0].id)
+
+    group = CreateObject("roSGNode", "NowPlaying")
+    group.observeField("state", m.port)
+    songIDArray = CreateObject("roArray", 0, true)
+
+    ' All we need is an array of Song IDs the user selected to play.
+    for each song in songList.items
+        songIDArray.push(song.id)
+    end for
+
+    songIDArray.shift()
+
+    group.pageContent = songIDArray
+    group.musicArtistAlbumData = songList.items
+
+    m.global.sceneManager.callFunc("pushScene", group)
+
+    return group
 end function
 
 function CreatePersonView(personData as object) as object

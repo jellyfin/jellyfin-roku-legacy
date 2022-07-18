@@ -22,9 +22,10 @@ sub loadItems()
         SortBy: sort_field,
         SortOrder: sort_order,
         recursive: m.top.recursive,
-        Fields: "Overview"
+        Fields: "Overview",
+        StudioIds: m.top.studioIds,
+        genreIds: m.top.genreIds
     }
-
     ' Handle special case when getting names starting with numeral
     if m.top.NameStartsWith <> ""
         if m.top.NameStartsWith = "#"
@@ -49,6 +50,12 @@ sub loadItems()
     if m.top.ItemType = "LiveTV"
         url = "LiveTv/Channels"
         params.append({ UserId: get_setting("active_user") })
+    else if m.top.view = "Networks"
+        url = "Studios"
+        params.append({ UserId: get_setting("active_user") })
+    else if m.top.view = "Genres"
+        url = "Genres"
+        params.append({ UserId: get_setting("active_user") })
     else
         url = Substitute("Users/{0}/Items/", get_setting("active_user"))
     end if
@@ -72,11 +79,25 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "FolderData")
             else if item.Type = "Video"
                 tmp = CreateObject("roSGNode", "VideoData")
+            else if item.Type = "Photo"
+                tmp = CreateObject("roSGNode", "PhotoData")
+            else if item.type = "PhotoAlbum"
+                tmp = CreateObject("roSGNode", "FolderData")
+            else if item.type = "Episode"
+                tmp = CreateObject("roSGNode", "TVEpisode")
+            else if item.Type = "Genre"
+                tmp = CreateObject("roSGNode", "FolderData")
+            else if item.Type = "Studio"
+                tmp = CreateObject("roSGNode", "FolderData")
+            else if item.Type = "MusicArtist" or item.Type = "MusicAlbum"
+                tmp = CreateObject("roSGNode", "MusicArtistData")
+            else if item.Type = "Audio"
+                tmp = CreateObject("roSGNode", "MusicSongData")
             else
                 print "[LoadItems] Unknown Type: " item.Type
             end if
-
             if tmp <> invalid
+                tmp.parentFolder = m.top.itemId
                 tmp.json = item
                 if item.UserData <> invalid and item.UserData.isFavorite <> invalid
                     tmp.favorite = item.UserData.isFavorite
@@ -85,7 +106,5 @@ sub loadItems()
             end if
         end for
     end if
-
     m.top.content = results
-
 end sub

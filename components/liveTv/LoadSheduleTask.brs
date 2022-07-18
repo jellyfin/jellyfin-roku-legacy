@@ -9,10 +9,10 @@ sub loadSchedule()
     params = {
         UserId: get_setting("active_user"),
         SortBy: "startDate",
-        EnableImages: false
+        EnableImages: false,
         EnableTotalRecordCount: false,
-        EnableUserData: false
-        channelIds: m.top.channelIds
+        EnableUserData: false,
+        channelIds: m.top.channelIds,
         MaxStartDate: m.top.endTime,
         MinEndDate: m.top.startTime
     }

@@ -59,7 +59,7 @@ sub Main (args as dynamic) as void
     if (args.mediaType <> invalid) and (args.contentId <> invalid)
         video = CreateVideoPlayerGroup(args.contentId)
 
-        if video <> invalid
+        if video <> invalid and video.errorMsg <> "introaborted"
             sceneManager.callFunc("pushScene", video)
         else
             dialog = createObject("roSGNode", "Dialog")
@@ -100,7 +100,7 @@ sub Main (args as dynamic) as void
                 else
                     video = CreateVideoPlayerGroup(itemNode.id)
                 end if
-                if video <> invalid
+                if video <> invalid and video.errorMsg <> "introaborted"
                     sceneManager.callFunc("pushScene", video)
                 end if
             end if
@@ -119,7 +119,7 @@ sub Main (args as dynamic) as void
                 else
                     video = CreateVideoPlayerGroup(video_id)
                 end if
-                if video <> invalid
+                if video <> invalid and video.errorMsg <> "introaborted"
                     sceneManager.callFunc("pushScene", video)
                 end if
             else if selectedItem.type = "Series"
@@ -141,7 +141,7 @@ sub Main (args as dynamic) as void
                 video = CreateVideoPlayerGroup(video_id)
                 dialog.close = true
 
-                if video <> invalid
+                if video <> invalid and video.errorMsg <> "introaborted"
                     sceneManager.callFunc("pushScene", video)
                 else
                     dialog = createObject("roSGNode", "Dialog")
@@ -156,7 +156,7 @@ sub Main (args as dynamic) as void
                 ' Nothing to do here, handled in ItemGrid
             else
                 ' TODO - switch on more node types
-                message_dialog("This type is not yet supported: " + selectedItem.type + ".")
+                message_dialog(Substitute(tr("{0} support is coming soon!"), selectedItem.type))
             end if
         else if isNodeEvent(msg, "movieSelected")
             ' If you select a movie from ANYWHERE, follow this flow
@@ -182,7 +182,7 @@ sub Main (args as dynamic) as void
             else
                 video = CreateVideoPlayerGroup(video_id)
             end if
-            if video <> invalid
+            if video <> invalid and video.errorMsg <> "introaborted"
                 sceneManager.callFunc("pushScene", video)
             end if
         else if isNodeEvent(msg, "search_value")
@@ -228,7 +228,7 @@ sub Main (args as dynamic) as void
                 video_id = group.id
 
                 video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx)
-                if video <> invalid
+                if video <> invalid and video.errorMsg <> "introaborted"
                     sceneManager.callFunc("pushScene", video)
                 end if
 
@@ -306,7 +306,11 @@ sub Main (args as dynamic) as void
             end if
         else if isNodeEvent(msg, "state")
             node = msg.getRoSGNode()
-            if node.state = "finished"
+            if selectedItem.Type = "TvChannel" and node.state = "finished"
+                sceneManager.callFunc("popScene")
+                video = CreateVideoPlayerGroup(node.id)
+                sceneManager.callFunc("pushScene", video)
+            else if node.state = "finished"
                 node.control = "stop"
                 if node.showID = invalid
                     sceneManager.callFunc("popScene")
@@ -340,7 +344,7 @@ sub Main (args as dynamic) as void
                 info = msg.GetInfo()
                 if info.DoesExist("mediatype") and info.DoesExist("contentid")
                     video = CreateVideoPlayerGroup(info.contentId)
-                    if video <> invalid
+                    if video <> invalid and video.errorMsg <> "introaborted"
                         sceneManager.callFunc("pushScene", video)
                     else
                         dialog = createObject("roSGNode", "Dialog")

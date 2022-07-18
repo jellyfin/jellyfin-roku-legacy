@@ -3,13 +3,13 @@
   <children>
   
     <poster id="backdrop" 
-      loadDisplayMode="scaleToFill"
+      loadDisplayMode="scaleToFit"
       width="1920"
       height="1080" 
       opacity="0.25"
       />
     <poster id="backdropTransition" 
-      loadDisplayMode="scaleToFill"
+      loadDisplayMode="scaleToFit"
       width="1920"
       height="1080" 
       opacity="0.25"
@@ -34,14 +34,18 @@
     <Alpha id="AlphaMenu" />
   </children>
   <interface>
+    <field id="HomeLibraryItem" type="string"/>
     <field id="parentItem" type="node" onChange="loadInitialItems" />
     <field id="selectedItem" type="node" alwaysNotify="true" />
     <field id="quickPlayNode" type="node" alwaysNotify="true" />
     <field id="imageDisplayMode" type="string" value="scaleToZoom" />
     <field id="AlphaSelected" type="string" alias="AlphaMenu.itemAlphaSelected" alwaysNotify="true" onChange="onItemAlphaSelected" />
+    <field id="alphaActive" type="boolean" value="false" />
+    <field id="jumpToItem" type="integer" value="" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
   <script type="text/brightscript" uri="ItemGrid.brs" />
 </component>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="ConfigScene" extends="JFGroup">
+<component name="LoginScene" extends="JFGroup">
   <children>
     <label text="Enter Configuration"
       id="prompt"
@@ -14,14 +14,21 @@
     <Button
       id="submit"
       text="Submit"
-      showFocusFootprint="false"
       translation="[150, 550]" />
+    <Button
+      id="quickConnect"
+      translation="[550, 550]"
+    />
     <label text=""
       id="alert"
       wrap="true"
       width="1620"
       font="font:MediumSystemFont"
       translation="[150, 680]" />
+    <Timer
+      id="quickConnectTimer"
+      duration="3"
+      repeat="true" />
   </children>
-  <script type="text/brightscript" uri="ConfigScene.brs"/>
+  <script type="text/brightscript" uri="LoginScene.brs"/>
 </component>
