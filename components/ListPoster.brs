@@ -51,8 +51,12 @@ sub itemContentChanged() as void
     m.poster = m.top.findNode("poster")
     itemData = m.top.itemContent
     m.title.text = itemData.title
+
     if itemData.json.lookup("Type") = "Episode" and itemData.json.IndexNumber <> invalid
         m.title.text = StrI(itemData.json.IndexNumber) + ". " + m.title.text
+    else if itemData.json.lookup("Type") = "MusicAlbum"
+        m.title.font = "font:SmallestSystemFont"
+        m.staticTitle.font = "font:SmallestSystemFont"
     end if
     m.staticTitle.text = m.title.text
 

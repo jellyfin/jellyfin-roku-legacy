@@ -2,6 +2,11 @@ sub init()
     m.top.optionsAvailable = false
     setupMainNode()
 
+    ' Load background image
+    m.LoadBackdropImageTask = CreateObject("roSGNode", "LoadItemsTask")
+    m.LoadBackdropImageTask.itemsToLoad = "backdropImage"
+
+    m.backDrop = m.top.findNode("backdrop")
     m.artistImage = m.top.findNode("artistImage")
     m.dscr = m.top.findNode("overview")
     m.dscr.observeField("isTextEllipsized", "onEllipsisChanged")
@@ -16,6 +21,11 @@ end sub
 ' Event fired when page data is loaded
 sub pageContentChanged()
     item = m.top.pageContent
+
+    ' Use metadata to load backdrop image
+    m.LoadBackdropImageTask.itemId = item.json.id
+    m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
+    m.LoadBackdropImageTask.control = "RUN"
 
     ' Populate scene data
     setScreenTitle(item.json)
@@ -32,6 +42,23 @@ end sub
 sub setPosterImage(posterURL)
     if isValid(posterURL)
         m.artistImage.uri = posterURL
+    end if
+end sub
+
+sub onBackdropImageLoaded()
+    data = m.LoadBackdropImageTask.content[0]
+    m.LoadBackdropImageTask.unobserveField("content")
+    if isValid(data) and data <> ""
+        setBackdropImage(data)
+    end if
+end sub
+
+' Add backdrop image to screen
+sub setBackdropImage(data)
+    if isValid(data)
+        if m.backDrop.uri <> data
+            m.backDrop.uri = data
+        end if
     end if
 end sub
 

@@ -220,6 +220,16 @@ function CreateInstantMix(id as string)
     return getJson(resp)
 end function
 
+' Get Intro Videos for an item
+function GetIntroVideos(id as string)
+    url = Substitute("Users/{0}/Items/{1}/Intros", get_setting("active_user"), id)
+    resp = APIRequest(url, {
+        "UserId": get_setting("active_user")
+    })
+
+    return getJson(resp)
+end function
+
 function AudioStream(id as string)
     songData = AudioItem(id)
 
