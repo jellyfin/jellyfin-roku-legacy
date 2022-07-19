@@ -1,4 +1,4 @@
-name: auto-unstable-release
+name: unstable-release
 on:
   push:
     branches:
