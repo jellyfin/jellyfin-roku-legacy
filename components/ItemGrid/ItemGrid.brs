@@ -123,7 +123,7 @@ sub loadInitialItems()
     else if m.top.parentItem.collectionType = "tvshows"
         m.loadItemsTask.itemType = "Series"
         m.loadItemsTask.itemId = m.top.parentItem.Id
-    else if m.top.parentItem.collectionType = "music"
+    else if m.top.parentItem.collectionType = "music" 
         ' Default Settings
         m.loadItemsTask.recursive = false
         m.itemGrid.itemSize = "[290, 290]"
@@ -155,6 +155,8 @@ sub loadInitialItems()
     else if m.top.parentItem.collectionType = "playlists"
         m.loadItemsTask.recursive = true
         m.loadItemsTask.itemId = m.top.parentItem.id
+        m.itemGrid.itemSize = "[290, 290]"
+        m.itemGrid.itemSpacing = "[ 0, 20]"
     else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
         ' Non-recursive, to not show subfolder contents
         m.loadItemsTask.recursive = true

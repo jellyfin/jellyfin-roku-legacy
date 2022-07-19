@@ -26,13 +26,11 @@ sub init()
 end sub
 
 sub itemContentChanged()
-
     ' Set Random background colors from pallet
     posterBackgrounds = m.global.constants.poster_bg_pallet
     m.backdrop.blendColor = posterBackgrounds[rnd(posterBackgrounds.count()) - 1]
 
     itemData = m.top.itemContent
-
     if itemData = invalid then return
 
     if itemData.type = "Movie"
@@ -43,10 +41,21 @@ sub itemContentChanged()
         m.itemPoster.uri = itemData.PosterUrl
         m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
-    else if itemData.type = "Boxset" or itemData.type = "Playlist"
+    else if itemData.type = "Boxset" or itemData.json.Type = "Playlist"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
+        m.itemPoster.height = 250
+        m.itemPoster.width = 290
+        m.itemPoster.loadDisplayMode = "scaleToFit"
+
+        m.itemText.translation = [0, m.itemPoster.height + 7]
+
+        m.backdrop.height = 290
+        m.backdrop.width = 290
+
+        m.posterText.height = 240
+        m.posterText.width = 280
     else if itemData.type = "TvChannel"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemIcon.uri = itemData.iconUrl
