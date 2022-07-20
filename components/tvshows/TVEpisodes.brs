@@ -4,6 +4,7 @@ sub init()
     m.rows = m.top.findNode("picker")
     m.poster = m.top.findNode("seasonPoster")
     m.Random = m.top.findNode("Random")
+    m.playAll = m.top.findNode("playAll")
     m.tvEpisodeRow = m.top.findNode("TVEpisodeRow")
 
 
@@ -27,6 +28,7 @@ sub updateSeason()
         m.poster.uri = ImageURL(m.top.seasonData.ParentThumbItemId, "Thumb", imgParams)
     end if
     m.Random.visible = true
+    m.playAll.visible = true
     
     if m.top.seasonData.Type = "Playlist"
         m.top.overhangTitle = m.top.seasonData.Name
@@ -41,6 +43,15 @@ function onKeyEvent(key as string, press as boolean) as boolean
     handled = false
 
     if key = "left" and not m.Random.hasFocus()
+        m.Random.setFocus(true)
+        return true
+    end if
+
+    if key = "down" and m.Random.hasFocus()
+        m.playAll.setFocus(true)
+        return true
+    end if
+    if key = "up" and m.playAll.hasFocus()
         m.Random.setFocus(true)
         return true
     end if
