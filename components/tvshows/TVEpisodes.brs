@@ -4,7 +4,7 @@ sub init()
     m.rows = m.top.findNode("picker")
     m.poster = m.top.findNode("seasonPoster")
     m.Random = m.top.findNode("Random")
-    m.tvEpisodeRow = m.top.findNode("tvEpisodeRow")
+    m.tvEpisodeRow = m.top.findNode("TVEpisodeRow")
 
 
     m.rows.observeField("doneLoading", "updateSeason")
@@ -27,11 +27,14 @@ sub updateSeason()
         m.poster.uri = ImageURL(m.top.seasonData.ParentThumbItemId, "Thumb", imgParams)
     end if
     m.Random.visible = true
+    
     if m.top.seasonData.Type = "Playlist"
         m.top.overhangTitle = m.top.seasonData.Name
+        m.poster.width = 450
     else
         m.top.overhangTitle = m.top.seasonData.SeriesName + " - " + m.top.seasonData.name
     end if
+    
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean

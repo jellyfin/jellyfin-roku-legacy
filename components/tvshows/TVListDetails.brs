@@ -10,7 +10,10 @@ end sub
 sub itemContentChanged()
     item = m.top.itemContent
     itemData = item.json
-    if itemData.indexNumber <> invalid
+    if itemData.PlaylistItemId <> invalid
+        m.playlist = true
+    end if
+    if itemData.indexNumber <> invalid and m.playlist <> true
         indexNumber = itemData.indexNumber.toStr() + ". "
     else
         indexNumber = ""
@@ -25,6 +28,17 @@ sub itemContentChanged()
             if not itemData.userdata.played
                 imageUrl = imageUrl + "&blur=15"
             end if
+        end if
+    end if
+
+    'set poster size for playlist items 
+    if m.playlist = true
+        m.poster.width = 150
+        m.poster.height = 150
+        m.overview.height = 50
+        'set movie poster scale if playlist item
+        if itemData.lookup("Type") = "Movie"
+        m.poster.loadDisplayMode = "scaleToFit"
         end if
     end if
 
@@ -47,10 +61,10 @@ sub itemContentChanged()
 
     if itemData.MediaStreams <> invalid
         for i = 0 to itemData.MediaStreams.Count() - 1
-            if itemData.MediaStreams[i].Type = "Video" and videoIdx = invalid
+            if itemData.MediaStreams[i].Type = "Video" and videoIdx = invalid and m.playlist <> true
                 videoIdx = i
                 m.top.findNode("video_codec").text = tr("Video") + ": " + itemData.mediaStreams[videoIdx].DisplayTitle
-            else if itemData.MediaStreams[i].Type = "Audio" and audioIdx = invalid
+            else if itemData.MediaStreams[i].Type = "Audio" and audioIdx = invalid and m.playlist <> true
                 if item.selectedAudioStreamIndex > 1
                     audioIdx = item.selectedAudioStreamIndex
                 else
@@ -63,7 +77,7 @@ sub itemContentChanged()
     end if
 
     m.top.findNode("video_codec").visible = videoIdx <> invalid
-    if audioIdx <> invalid
+    if audioIdx <> invalid and m.playlist <> true
         m.top.findNode("audio_codec").visible = true
         DisplayAudioAvailable(itemData.mediaStreams)
     else

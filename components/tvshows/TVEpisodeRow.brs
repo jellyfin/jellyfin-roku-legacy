@@ -6,16 +6,21 @@ sub init()
 
     m.top.showRowLabel = [false]
 
-    updateSize()
 
     m.top.setFocus(true)
+    m.playlist = false
 end sub
 
 sub updateSize()
-    m.top.translation = [450, 180]
-
-    itemWidth = 1360
-    itemHeight = 300
+    if m.playlist = true
+        m.top.translation = [600, 180]
+        itemWidth = 1260
+        itemHeight = 150
+    else    
+        m.top.translation = [450, 180]
+        itemWidth = 1360
+        itemHeight = 300
+    end if
 
     m.top.visible = true
 
@@ -32,10 +37,13 @@ sub updateSize()
 end sub
 
 sub setupRows()
-    updateSize()
     objects = m.top.objects
     m.top.numRows = objects.items.count()
     m.top.content = setData()
+    if objects.items[0].json.PlaylistItemId <> invalid
+        m.playlist = true
+    end if 
+    updateSize()
 end sub
 
 function setData()
