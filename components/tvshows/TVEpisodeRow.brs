@@ -16,7 +16,7 @@ sub updateSize()
         m.top.translation = [600, 180]
         itemWidth = 1260
         itemHeight = 150
-    else    
+    else
         m.top.translation = [450, 180]
         itemWidth = 1360
         itemHeight = 300
@@ -42,7 +42,7 @@ sub setupRows()
     m.top.content = setData()
     if objects.items[0].json.PlaylistItemId <> invalid
         m.playlist = true
-    end if 
+    end if
     updateSize()
 end sub
 

@@ -31,14 +31,14 @@ sub itemContentChanged()
         end if
     end if
 
-    'set poster size for playlist items 
+    'set poster size for playlist items
     if m.playlist = true
         m.poster.width = 150
         m.poster.height = 150
         m.overview.height = 50
         'set movie poster scale if playlist item
         if itemData.lookup("Type") = "Movie"
-        m.poster.loadDisplayMode = "scaleToFit"
+            m.poster.loadDisplayMode = "scaleToFit"
         end if
     end if
 

@@ -29,14 +29,14 @@ sub updateSeason()
     end if
     m.Random.visible = true
     m.playAll.visible = true
-    
+
     if m.top.seasonData.Type = "Playlist"
         m.top.overhangTitle = m.top.seasonData.Name
         m.poster.width = 450
     else
         m.top.overhangTitle = m.top.seasonData.SeriesName + " - " + m.top.seasonData.name
     end if
-    
+
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean

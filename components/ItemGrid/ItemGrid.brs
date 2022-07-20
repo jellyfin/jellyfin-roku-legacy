@@ -123,7 +123,7 @@ sub loadInitialItems()
     else if m.top.parentItem.collectionType = "tvshows"
         m.loadItemsTask.itemType = "Series"
         m.loadItemsTask.itemId = m.top.parentItem.Id
-    else if m.top.parentItem.collectionType = "music" 
+    else if m.top.parentItem.collectionType = "music"
         ' Default Settings
         m.loadItemsTask.recursive = false
         m.itemGrid.itemSize = "[290, 290]"
