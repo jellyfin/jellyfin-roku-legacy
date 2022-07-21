@@ -118,7 +118,7 @@ sub loadInitialItems()
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
     m.loadItemsTask.startIndex = 0
-    
+
     'Load Item Types
     if m.top.parentItem.collectionType = "movies"
         m.loadItemsTask.itemType = "Movie"
@@ -157,7 +157,7 @@ sub loadInitialItems()
         m.loadItemsTask.recursive = false
     else if m.top.parentItem.Type = "Channel"
         m.top.imageDisplayMode = "scaleToFit"
-    else if m.top.parentItem.json.type = "Studio" 
+    else if m.top.parentItem.json.type = "Studio"
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
         m.loadItemsTask.itemType = "Series,Movie"
         m.top.imageDisplayMode = "scaleToFit"
