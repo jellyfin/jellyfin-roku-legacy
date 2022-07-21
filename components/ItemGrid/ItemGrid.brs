@@ -96,17 +96,19 @@ sub loadInitialItems()
     end if
     'Set Stuido Id
     if m.top.parentItem.json.type = "Studio"
-        m.loadItemsTask.studioIds = m.top.parentItem.Id
+        m.loadItemsTask.studioIds = m.top.parentItem.id
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
         m.loadItemsTask.genreIds = ""
         'set Genre Id
     else if m.top.parentItem.json.type = "Genre"
-        m.loadItemsTask.genreIds = m.top.parentItem.Id
+        m.loadItemsTask.genreIds = m.top.parentItem.id
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
         m.loadItemsTask.studioIds = ""
     else if (m.view = "Shows" or m.options.view = "Shows") or (m.view = "Movies" or m.options.view = "Movies")
         m.loadItemsTask.studioIds = ""
         m.loadItemsTask.genreIds = ""
+    else
+        m.loadItemsTask.itemId = m.top.parentItem.Id
     end if
     updateTitle()
 
@@ -116,7 +118,7 @@ sub loadInitialItems()
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
     m.loadItemsTask.startIndex = 0
-    m.loadItemsTask.itemId = m.top.parentItem.Id
+    
     'Load Item Types
     if m.top.parentItem.collectionType = "movies"
         m.loadItemsTask.itemType = "Movie"
@@ -155,7 +157,7 @@ sub loadInitialItems()
         m.loadItemsTask.recursive = false
     else if m.top.parentItem.Type = "Channel"
         m.top.imageDisplayMode = "scaleToFit"
-    else if m.top.parentItem.json.type = "Studio"
+    else if m.top.parentItem.json.type = "Studio" 
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
         m.loadItemsTask.itemType = "Series,Movie"
         m.top.imageDisplayMode = "scaleToFit"
