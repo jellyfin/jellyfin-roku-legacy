@@ -294,10 +294,6 @@
         <translation>Movies</translation>
     </message>
     <message>
-        <source>TV Shows</source>
-        <translation>TV Shows</translation>
-    </message>
-    <message>
         <source>today</source>
         <translation>today</translation>
         <extracomment>Current day</extracomment>
@@ -574,17 +570,6 @@
         <translation>There was an error authenticating via Quick Connect.</translation>
     </message>
     <message>
-        <source>Networks</source>
-        <translation>Networks</translation>
-    </message>
-    <message>
-        <source>Studios</source>
-        <translation>Studios</translation>
-    </message>
-    <message>
-        <source>Shows</source>
-        <translation>Shows</translation>
-    </message>
         <source>Return to Top</source>
         <translation>Return to Top</translation>
         <extracomment>UI -> Media Grid -> Item Title in user setting screen.</extracomment>
@@ -677,5 +662,17 @@
         <translation>Cinema mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.</translation>
         <extracomment>Settings Menu - Description for option</extracomment>
     </message>
+    <message>
+    <source>Networks</source>
+    <translation>Networks</translation>
+</message>
+<message>
+    <source>Studios</source>
+    <translation>Studios</translation>
+</message>
+<message>
+    <source>Shows</source>
+    <translation>Shows</translation>
+</message>
 </context>
 </TS>
