@@ -13,6 +13,8 @@
     <field id="showID" type="string" />
 
     <field id="transcodeParams" type="assocarray" />
+    <field id="transcodeAvailable" type="boolean" value="false" />
+    <field id="retryWithTranscoding" type="boolean" value="false" />
     <field id="isTranscoded" type="boolean" />
     <field id="transcodeReasons" type="array" />
     
