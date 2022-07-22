@@ -59,34 +59,34 @@ sub onChannelsLoaded()
     channelIdList = ""
 
     'if search returns channels
-if m.LoadChannelsTask.channels.count() > 0
-    for each item in m.LoadChannelsTask.channels
-        gridData.appendChild(item)
-        m.channelIndex[item.Id] = counter
-        counter = counter + 1
-        channelIdList = channelIdList + item.Id + ","
-    end for
-    m.scheduleGrid.content = gridData
-    
-    m.LoadScheduleTask = createObject("roSGNode", "LoadScheduleTask")
-    m.LoadScheduleTask.observeField("schedule", "onScheduleLoaded")
+    if m.LoadChannelsTask.channels.count() > 0
+        for each item in m.LoadChannelsTask.channels
+            gridData.appendChild(item)
+            m.channelIndex[item.Id] = counter
+            counter = counter + 1
+            channelIdList = channelIdList + item.Id + ","
+        end for
+        m.scheduleGrid.content = gridData
 
-    m.LoadScheduleTask.startTime = m.gridStartDate.ToISOString()
-    m.LoadScheduleTask.endTime = m.gridEndDate.ToISOString()
-    m.LoadScheduleTask.channelIds = channelIdList
-    m.LoadScheduleTask.control = "RUN"
+        m.LoadScheduleTask = createObject("roSGNode", "LoadScheduleTask")
+        m.LoadScheduleTask.observeField("schedule", "onScheduleLoaded")
 
-    m.LoadProgramDetailsTask = createObject("roSGNode", "LoadProgramDetailsTask")
-    m.LoadProgramDetailsTask.observeField("programDetails", "onProgramDetailsLoaded")
+        m.LoadScheduleTask.startTime = m.gridStartDate.ToISOString()
+        m.LoadScheduleTask.endTime = m.gridEndDate.ToISOString()
+        m.LoadScheduleTask.channelIds = channelIdList
+        m.LoadScheduleTask.control = "RUN"
 
-    m.scheduleGrid.setFocus(true)
-    if m.EPGLaunchCompleteSignaled = false
-        m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
-        m.EPGLaunchCompleteSignaled = true
+        m.LoadProgramDetailsTask = createObject("roSGNode", "LoadProgramDetailsTask")
+        m.LoadProgramDetailsTask.observeField("programDetails", "onProgramDetailsLoaded")
+
+        m.scheduleGrid.setFocus(true)
+        if m.EPGLaunchCompleteSignaled = false
+            m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
+            m.EPGLaunchCompleteSignaled = true
+        end if
+        m.LoadChannelsTask.channels = []
+
     end if
-    m.LoadChannelsTask.channels = []
-    
-end if
 
 end sub
 
