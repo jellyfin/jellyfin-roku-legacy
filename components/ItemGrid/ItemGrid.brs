@@ -62,6 +62,13 @@ sub init()
     'Get reset folder setting
     m.resetGrid = get_user_setting("itemgrid.reset") = "true"
 
+    'Check if device has voice remote
+    devinfo = CreateObject("roDeviceInfo")
+    m.deviFeature = devinfo.HasFeature("voice_remote")
+    'Hide voice search if device does not have voice remote
+    if m.deviFeature = false
+        m.voiceBox.visible = false
+    end if
 end sub
 
 '

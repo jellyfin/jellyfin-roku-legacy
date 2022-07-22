@@ -54,7 +54,7 @@ sub loadItems()
     end if
 
     if m.top.ItemType = "LiveTV"
-        url = "LiveTv/Channels"
+        url = Substitute("Users/{0}/Items/", get_setting("active_user"))
         params.append({ IncludeItemTypes: "LiveTvChannel" })
         params.append({ parentid: "" })
         params.append({ NameStartsWith: "" })
