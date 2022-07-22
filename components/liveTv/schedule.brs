@@ -58,15 +58,16 @@ sub onChannelsLoaded()
     counter = 0
     channelIdList = ""
 
+    'if search returns channels
+if m.LoadChannelsTask.channels.count() > 0
     for each item in m.LoadChannelsTask.channels
         gridData.appendChild(item)
         m.channelIndex[item.Id] = counter
         counter = counter + 1
         channelIdList = channelIdList + item.Id + ","
     end for
-
     m.scheduleGrid.content = gridData
-
+    
     m.LoadScheduleTask = createObject("roSGNode", "LoadScheduleTask")
     m.LoadScheduleTask.observeField("schedule", "onScheduleLoaded")
 
@@ -84,6 +85,9 @@ sub onChannelsLoaded()
         m.EPGLaunchCompleteSignaled = true
     end if
     m.LoadChannelsTask.channels = []
+    
+end if
+
 end sub
 
 ' When LoadScheduleTask completes (initial or more data) and we have a schedule to display
@@ -115,7 +119,7 @@ sub onProgramFocused()
     m.top.focusedChannel = channel
 
     ' Exit if Channels not yet loaded
-    if channel.getChildCount() = 0
+    if channel.getChildCount() = 0 or channel = invalid
         m.detailsPane.programDetails = invalid
         return
     end if
