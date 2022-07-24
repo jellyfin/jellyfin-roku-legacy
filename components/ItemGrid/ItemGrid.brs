@@ -65,9 +65,11 @@ sub init()
     'Check if device has voice remote
     devinfo = CreateObject("roDeviceInfo")
     m.deviFeature = devinfo.HasFeature("voice_remote")
+    m.micButton = m.top.findNode("micButton")
+    m.micButtonText = m.top.findNode("micButtonText")
     'Hide voice search if device does not have voice remote
     if m.deviFeature = false
-        m.voiceBox.visible = false
+        m.micButton.visible = false
     end if
 end sub
 
@@ -93,7 +95,10 @@ sub loadInitialItems()
         if viewSetting = "guide"
             m.view = "tvGuide"
             'Move mic to be visiable on TV Guide screen
-            m.voiceBox.translation = "[1845, 90]"
+            m.micButton.translation = "[1500, 90]"
+            m.micButtonText.visible = true
+            m.micButtonText.translation = "[1560,132]"
+            m.micButtonText.font.size = 20
         else
             m.view = "livetv"
         end if
