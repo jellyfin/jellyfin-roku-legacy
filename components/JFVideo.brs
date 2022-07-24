@@ -21,13 +21,17 @@ sub onState(msg)
         m.bufferCheckTimer.control = "start"
         m.bufferCheckTimer.ObserveField("fire", "bufferCheck")
     else if m.top.state = "error"
-        ' If an error was encountered, Display dialog
-        dialog = createObject("roSGNode", "Dialog")
-        dialog.title = tr("Error During Playback")
-        dialog.buttons = [tr("OK")]
-        dialog.message = tr("An error was encountered while playing this item.")
-        dialog.observeField("buttonSelected", "dialogClosed")
-        m.top.getScene().dialog = dialog
+        if not m.playReported and m.top.transcodeAvailable
+            m.top.retryWithTranscoding = true ' If playback was not reported, retry with transcoding
+        else
+            ' If an error was encountered, Display dialog
+            dialog = createObject("roSGNode", "Dialog")
+            dialog.title = tr("Error During Playback")
+            dialog.buttons = [tr("OK")]
+            dialog.message = tr("An error was encountered while playing this item.")
+            dialog.observeField("buttonSelected", "dialogClosed")
+            m.top.getScene().dialog = dialog
+        end if
 
         ' Stop playback and exit player
         m.top.control = "stop"

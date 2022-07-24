@@ -123,13 +123,31 @@ function getDeviceProfile() as object
                     {
                         "Condition": "EqualsAny",
                         "Property": "VideoProfile",
-                        "Value": "high|main|baseline|constrained baseline",
+                        "Value": "high|main",
                         "IsRequired": false
                     },
                     {
                         "Condition": "LessThanEqual",
                         "Property": "VideoLevel",
-                        "Value": "51",
+                        "Value": "41",
+                        "IsRequired": false
+                    }
+                ]
+            },
+            {
+                "Type": "Video",
+                "Codec": "hevc",
+                "Conditions": [
+                    {
+                        "Condition": "EqualsAny",
+                        "Property": "VideoProfile",
+                        "Value": "main",
+                        "IsRequired": false
+                    },
+                    {
+                        "Condition": "LessThanEqual",
+                        "Property": "VideoLevel",
+                        "Value": StrI(120 * 5.1),
                         "IsRequired": false
                     }
                 ]

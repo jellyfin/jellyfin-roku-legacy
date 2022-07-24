@@ -42,9 +42,9 @@ sub init()
 
     'set inital counts for overhang before content is loaded.
     m.loadItemsTask.totalRecordCount = 0
+
     m.spinner = m.top.findNode("spinner")
     m.spinner.visible = true
-
     m.Alpha = m.top.findNode("AlphaMenu")
     m.AlphaSelected = m.top.findNode("AlphaSelected")
 
@@ -55,7 +55,9 @@ end sub
 '
 'Load initial set of Data
 sub loadInitialItems()
-
+    if m.top.parentItem.json.Type = "CollectionFolder" 'or m.top.parentItem.json.Type = "Folder"
+        m.top.HomeLibraryItem = m.top.parentItem.Id
+    end if
     if m.top.parentItem.backdropUrl <> invalid
         SetBackground(m.top.parentItem.backdropUrl)
     end if
@@ -78,10 +80,10 @@ sub loadInitialItems()
         sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
         m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
     else
-        m.view = invalid
         m.sortField = get_user_setting("display." + m.top.parentItem.Id + ".sortField")
         sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
         m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
+        m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
     end if
 
     if m.sortField = invalid then m.sortField = "SortName"
@@ -92,28 +94,44 @@ sub loadInitialItems()
     else
         m.sortAscending = false
     end if
+    ' Set Studio Id
+    if m.top.parentItem.json.type = "Studio"
+        m.loadItemsTask.studioIds = m.top.parentItem.id
+        m.loadItemsTask.itemId = m.top.parentItem.parentFolder
+        m.loadItemsTask.genreIds = ""
+        ' Set Genre Id
+    else if m.top.parentItem.json.type = "Genre"
+        m.loadItemsTask.genreIds = m.top.parentItem.id
+        m.loadItemsTask.itemId = m.top.parentItem.parentFolder
+        m.loadItemsTask.studioIds = ""
+    else if (m.view = "Shows" or m.options.view = "Shows") or (m.view = "Movies" or m.options.view = "Movies")
+        m.loadItemsTask.studioIds = ""
+        m.loadItemsTask.genreIds = ""
+    else
+        m.loadItemsTask.itemId = m.top.parentItem.Id
+    end if
+    updateTitle()
 
     m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
     m.emptyText.visible = false
-
-    updateTitle()
-
-    m.loadItemsTask.itemId = m.top.parentItem.Id
     m.loadItemsTask.sortField = m.sortField
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
     m.loadItemsTask.startIndex = 0
-
+    ' Load Item Types
     if m.top.parentItem.collectionType = "movies"
         m.loadItemsTask.itemType = "Movie"
+        m.loadItemsTask.itemId = m.top.parentItem.Id
     else if m.top.parentItem.collectionType = "tvshows"
         m.loadItemsTask.itemType = "Series"
+        m.loadItemsTask.itemId = m.top.parentItem.Id
     else if m.top.parentItem.collectionType = "music"
         ' Default Settings
         m.loadItemsTask.recursive = false
         m.itemGrid.itemSize = "[290, 290]"
         m.itemGrid.itemSpacing = "[ 0, 20]"
         m.loadItemsTask.itemType = "MusicArtist,MusicAlbum"
+        m.loadItemsTask.itemId = m.top.parentItem.Id
 
         m.view = get_user_setting("display.music.view")
 
@@ -127,33 +145,54 @@ sub loadInitialItems()
     else if m.top.parentItem.collectionType = "livetv"
         m.loadItemsTask.itemType = "LiveTV"
 
-        'For LiveTV, we want to "Fit" the item images, not zoom
+        ' For LiveTV, we want to "Fit" the item images, not zoom
         m.top.imageDisplayMode = "scaleToFit"
 
         if get_user_setting("display.livetv.landing") = "guide" and m.options.view <> "livetv"
             showTvGuide()
         end if
-
     else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
         ' Non-recursive, to not show subfolder contents
         m.loadItemsTask.recursive = false
-    else if m.top.parentItem.collectionType = "Channel"
+    else if m.top.parentItem.Type = "Channel"
         m.top.imageDisplayMode = "scaleToFit"
+    else if m.top.parentItem.json.type = "Studio"
+        m.loadItemsTask.itemId = m.top.parentItem.parentFolder
+        m.loadItemsTask.itemType = "Series,Movie"
+        m.top.imageDisplayMode = "scaleToFit"
+    else if m.top.parentItem.json.type = "Genre"
+        m.loadItemsTask.itemType = "Series,Movie"
+        m.loadItemsTask.itemId = m.top.parentItem.parentFolder
     else
         print "[ItemGrid] Unknown Type: " m.top.parentItem
     end if
 
+    if m.top.parentItem.type <> "Folder" and (m.options.view = "Networks" or m.view = "Networks" or m.options.view = "Studios" or m.view = "Studios")
+        m.loadItemsTask.view = "Networks"
+        m.top.imageDisplayMode = "scaleToFit"
+    else if m.top.parentItem.type <> "Folder" and (m.options.view = "Genres" or m.view = "Genres")
+        m.loadItemsTask.StudioIds = m.top.parentItem.Id
+        m.loadItemsTask.view = "Genres"
+    else if m.top.parentItem.type <> "Folder" and (m.options.view = "Shows" or m.view = "Shows")
+        m.loadItemsTask.studioIds = ""
+        m.loadItemsTask.view = "Shows"
+    else if m.top.parentItem.type <> "Folder" and (m.options.view = "Movies" or m.view = "Movies")
+        m.loadItemsTask.studioIds = ""
+        m.loadItemsTask.view = "Movies"
+    end if
+
     m.loadItemsTask.observeField("content", "ItemDataLoaded")
+    m.spinner.visible = true
     m.loadItemsTask.control = "RUN"
-
     SetUpOptions()
-
 end sub
 
 ' Set Movies view, sort, and filter options
 sub setMoviesOptions(options)
     options.views = [
-        { "Title": tr("Movies"), "Name": "movies" },
+        { "Title": tr("Movies"), "Name": "Movies" },
+        { "Title": tr("Studios"), "Name": "Studios" },
+        { "Title": tr("Genres"), "Name": "Genres" }
     ]
     options.sort = [
         { "Title": tr("TITLE"), "Name": "SortName" },
@@ -189,7 +228,12 @@ end sub
 
 ' Set TV Show view, sort, and filter options
 sub setTvShowsOptions(options)
-    options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
+    options.views = [
+        { "Title": tr("Shows"), "Name": "Shows" },
+        { "Title": tr("Networks"), "Name": "Networks" },
+        { "Title": tr("Genres"), "Name": "Genres" }
+
+    ]
     options.sort = [
         { "Title": tr("TITLE"), "Name": "SortName" },
         { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
@@ -281,10 +325,10 @@ end function
 
 ' Data to display when options button selected
 sub SetUpOptions()
-
     options = {}
     options.filter = []
     options.favorite = []
+
     if getCollectionType() = "movies"
         setMoviesOptions(options)
     else if inStringArray(["boxsets", "Boxset"], getCollectionType())
@@ -297,6 +341,7 @@ sub SetUpOptions()
         setPhotoAlbumOptions(options)
     else if getCollectionType() = "music"
         setMusicOptions(options)
+
     else
         setDefaultOptions(options)
     end if
@@ -352,7 +397,6 @@ sub ItemDataLoaded(msg)
     m.loadedItems = m.itemGrid.content.getChildCount()
     m.loadedRows = m.loadedItems / m.itemGrid.numColumns
     m.Loading = false
-
     'If there are no items to display, show message
     if m.loadedItems = 0
         m.emptyText.text = tr("NO_ITEMS").Replace("%1", m.top.parentItem.Type)
@@ -396,7 +440,7 @@ sub onItemFocused()
     ' Set Background to item backdrop
     SetBackground(m.itemGrid.content.getChild(m.itemGrid.itemFocused).backdropUrl)
 
-    ' Load more data if focus is within last 3 rows, and there are more items to load
+    ' Load more data if focus is within last 5 rows, and there are more items to load
     if focusedRow >= m.loadedRows - 5 and m.loadeditems < m.loadItemsTask.totalRecordCount
         loadMoreData()
     end if
@@ -433,9 +477,8 @@ end sub
 '
 'Load next set of items
 sub loadMoreData()
-
+    m.spinner.visible = true
     if m.Loading = true then return
-
     m.Loading = true
     m.loadItemsTask.startIndex = m.loadedItems
     m.loadItemsTask.observeField("content", "ItemDataLoaded")
@@ -453,6 +496,7 @@ sub onItemAlphaSelected()
     m.loadedItems = 0
     m.data = CreateObject("roSGNode", "ContentNode")
     m.itemGrid.content = m.data
+    m.spinner.visible = true
     loadInitialItems()
 end sub
 
@@ -460,7 +504,6 @@ end sub
 '
 'Check if options updated and any reloading required
 sub optionsClosed()
-
     if m.top.parentItem.collectionType = "livetv" and m.options.view <> m.view
         if m.options.view = "tvGuide"
             m.view = "tvGuide"
@@ -501,6 +544,14 @@ sub optionsClosed()
                 m.view = "music-default"
             end if
             set_user_setting("display.music.view", m.view)
+            reload = true
+        end if
+    else
+        m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
+        if m.options.view <> m.view
+            'reload and store new view setting
+            m.view = m.options.view
+            set_user_setting("display." + m.top.parentItem.Id + ".landing", m.view)
             reload = true
         end if
     end if
@@ -653,6 +704,15 @@ sub updateTitle()
         m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Filtered)")
     end if
 
+    if m.options.view = "Networks" or m.view = "Networks"
+        m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Networks"))
+    end if
+    if m.options.view = "Studios" or m.view = "Studios"
+        m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Studios"))
+    end if
+    if m.options.view = "Genres" or m.view = "Genres"
+        m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Genres"))
+    end if
     actInt = m.itemGrid.itemFocused + 1
     if m.showItemCount and m.loadItemsTask.totalRecordCount > 0
         m.top.overhangTitle += " (" + tr("%1 of %2").Replace("%1", actInt.toStr()).Replace("%2", m.loadItemsTask.totalRecordCount.toStr()) + ")"

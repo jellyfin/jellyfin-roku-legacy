@@ -2389,5 +2389,36 @@ não contém itens</translation>
         <source>Change Server</source>
         <translation>Alterar Servidor</translation>
     </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Houve um erro ao coletar dados do servidor para este item</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Erro na reprodução</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Erro ao buscar conteúdo</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Deletar Salvo(a)</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Salvar Credenciais?</translation>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Sair</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Alterar Servidor</translation>
+    </message>
 </context>
 </TS>

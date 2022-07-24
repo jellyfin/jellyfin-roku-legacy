@@ -9,6 +9,7 @@ end sub
 ' Push a new group onto the stack, replacing the existing group on the screen
 sub pushScene(newGroup)
     currentGroup = m.groups.peek()
+
     if currentGroup <> invalid
         'Search through group and store off last focused item
         if currentGroup.focusedChild <> invalid
@@ -16,10 +17,10 @@ sub pushScene(newGroup)
             while focused.hasFocus() = false
                 focused = focused.focusedChild
             end while
+
             currentGroup.lastFocus = focused
             currentGroup.setFocus(false)
         else
-            currentGroup.lastFocus = invalid
             currentGroup.setFocus(false)
         end if
 
@@ -104,12 +105,15 @@ sub popScene()
         if group.isSubType("JFScreen")
             group.callFunc("OnScreenShown")
         else
-
             ' Restore focus
             if group.lastFocus <> invalid
                 group.lastFocus.setFocus(true)
             else
-                group.setFocus(true)
+                if group.focusedChild <> invalid
+                    group.focusedChild.setFocus(true)
+                else
+                    group.setFocus(true)
+                end if
             end if
         end if
     else
@@ -132,6 +136,12 @@ end function
 sub clearScenes()
     if m.content <> invalid then m.content.removeChildrenIndex(m.content.getChildCount(), 0)
     m.groups = []
+end sub
+
+'
+' Clear previous scene from group stack
+sub clearPreviousScene()
+    m.groups.pop()
 end sub
 
 '

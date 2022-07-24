@@ -7,8 +7,8 @@
     "test": "tests"
   },
   "devDependencies": {
-    "@rokucommunity/bslint": "0.7.1",
-    "brighterscript": "0.51.4",
+    "@rokucommunity/bslint": "0.7.2",
+    "brighterscript": "0.54.1",
     "rooibos-cli": "1.4.0"
   },
   "scripts": {

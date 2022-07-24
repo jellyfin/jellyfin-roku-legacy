@@ -1,9 +1,12 @@
-function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1)
-
+function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, forceTranscoding = false, showIntro = true)
     ' Get video controls and UI
     video = CreateObject("roSGNode", "JFVideo")
     video.id = id
-    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx)
+    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, forceTranscoding, showIntro)
+
+    if video.errorMsg = "introaborted"
+        return video
+    end if
 
     if video.content = invalid
         return invalid
@@ -16,8 +19,7 @@ function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle
     return video
 end function
 
-sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1)
-
+sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false, showIntro = true)
     video.content = createObject("RoSGNode", "ContentNode")
     meta = ItemMetaData(video.id)
     m.videotype = meta.type
@@ -140,6 +142,16 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
         end if
     end if
 
+    ' Don't attempt to play an intro for an intro video
+    if showIntro
+        ' Do not play intros when resuming playback
+        if playbackPosition = 0
+            if not PlayIntroVideo(video.id, audio_stream_idx)
+                video.errorMsg = "introaborted"
+                return
+            end if
+        end if
+    end if
 
     video.content.PlayStart = int(playbackPosition / 10000000)
 
@@ -170,6 +182,10 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
 
     video.container = getContainerType(meta)
 
+    if playbackInfo.MediaSources[0] = invalid
+        playbackInfo = meta.json
+    end if
+
     subtitles = sortSubtitles(meta.id, playbackInfo.MediaSources[0].MediaStreams)
     video.Subtitles = subtitles["all"]
 
@@ -187,6 +203,21 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
 
     video.directPlaySupported = playbackInfo.MediaSources[0].SupportsDirectPlay
     fully_external = false
+
+
+    ' For h264 video, Roku spec states that it supports and Encoding level 4.1 and 4.2.
+    ' The device can decode content with a Higher Encoding level but may play it back with certain
+    ' artifacts. If the user preference is set, and the only reason the server says we need to
+    ' transcode is that the Envoding Level is not supported, then try to direct play but silently
+    ' fall back to the transcode if that fails.
+    if get_user_setting("playback.tryDirect.h264ProfileLevel") = "true" and playbackInfo.MediaSources[0].TranscodingUrl <> invalid and forceTranscoding = false and playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
+        transcodingReasons = getTranscodeReasons(playbackInfo.MediaSources[0].TranscodingUrl)
+        if transcodingReasons.Count() = 1 and transcodingReasons[0] = "VideoLevelNotSupported"
+            video.directPlaySupported = true
+            video.transcodeAvailable = true
+        end if
+    end if
+
     if video.directPlaySupported
         protocol = LCase(playbackInfo.MediaSources[0].Protocol)
         if protocol <> "file"
@@ -243,6 +274,43 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     end if
 
 end sub
+
+function PlayIntroVideo(video_id, audio_stream_idx) as boolean
+    ' Intro videos only play if user has cinema mode setting enabled
+    if get_user_setting("playback.cinemamode") = "true"
+
+        ' Check if server has intro videos setup and available
+        introVideos = GetIntroVideos(video_id)
+
+        if introVideos = invalid then return true
+
+        if introVideos.TotalRecordCount > 0
+            ' Bypass joke pre-roll
+            if lcase(introVideos.items[0].name) = "rick roll'd" then return true
+
+            introVideo = VideoPlayer(introVideos.items[0].id, introVideos.items[0].id, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), false, false)
+
+            port = CreateObject("roMessagePort")
+            introVideo.observeField("state", port)
+            m.global.sceneManager.callFunc("pushScene", introVideo)
+            introPlaying = true
+
+            while introPlaying
+                msg = wait(0, port)
+                if type(msg) = "roSGNodeEvent"
+                    if msg.GetData() = "finished"
+                        m.global.sceneManager.callFunc("clearPreviousScene")
+                        introPlaying = false
+                    else if msg.GetData() = "stopped"
+                        introPlaying = false
+                        return false
+                    end if
+                end if
+            end while
+        end if
+    end if
+    return true
+end function
 
 '
 ' Extract array of Transcode Reasons from the content URL
@@ -345,7 +413,7 @@ sub autoPlayNextEpisode(videoID as string, showID as string)
             ' remove finished video node
             m.global.sceneManager.callFunc("popScene")
             ' setup new video node
-            nextVideo = CreateVideoPlayerGroup(data.Items[1].Id)
+            nextVideo = CreateVideoPlayerGroup(data.Items[1].Id, invalid, 1, false, false)
             if nextVideo <> invalid
                 m.global.sceneManager.callFunc("pushScene", nextVideo)
             else
