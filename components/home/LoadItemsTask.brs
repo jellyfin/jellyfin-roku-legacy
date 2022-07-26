@@ -81,9 +81,6 @@ sub loadItems()
                 tmp.json = item
                 results.push(tmp)
             end if
-            item.stretch = true
-            tmp.json = item
-            results.push(tmp)
         end for
 
     else if m.top.itemsToLoad = "continueAudio"
