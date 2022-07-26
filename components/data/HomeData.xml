@@ -12,8 +12,6 @@
     <field id="collectionType" type="string" />
     <field id="imageWidth" type="integer" value="464" />
     <field id="usePoster" type="bool" value="false" />
-    <field id="stretch" type="bool" value="false" />
-    <field id="isSmall" type="bool" value="false" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
