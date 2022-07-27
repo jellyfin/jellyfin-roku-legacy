@@ -33,6 +33,7 @@ sub init()
     m.LoadMyMediaSmallTask = createObject("roSGNode", "LoadItemsTask")
     m.LoadMyMediaSmallTask.itemsToLoad = "libraries"
     m.LoadLatestMediaTask = createObject("roSGNode", "LoadItemsTask")
+    m.LoadLatestMediaTask.itemsToLoad = "latest"
     m.LoadContinueVideoTask = createObject("roSGNode", "LoadItemsTask")
     m.LoadContinueVideoTask.itemsToLoad = "continueVideo"
     m.LoadContinueAudioTask = createObject("roSGNode", "LoadItemsTask")
@@ -611,7 +612,7 @@ sub updateContinueVideoItems()
             row.title = tr("Continue Watching")
             for i = 0 to item_count
                 if itemData[i] <> invalid
-                    itemData[i].usePoster = true
+                    itemData[i].usePoster = false
                     itemData[i].imageWidth = 464
                     row.appendChild(itemData[i])
                 end if

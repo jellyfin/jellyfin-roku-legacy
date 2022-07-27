@@ -19,7 +19,6 @@ sub itemContentChanged()
     if itemData = invalid then return
     itemData.Title = itemData.name ' Temporarily required while we move from "HomeItem" to "JFContentItem"
 
-
     m.itemPoster.width = itemData.imageWidth
     m.itemText.maxWidth = itemData.imageWidth
     m.itemTextExtra.width = itemData.imageWidth
@@ -75,9 +74,9 @@ sub itemContentChanged()
         m.itemText.text = itemData.json.SeriesName
 
         if itemData.usePoster = true
-            m.itemPoster.uri = itemData.widePosterURL
+            m.itemPoster.uri = itemData.posterURL
         else
-            m.itemPoster.uri = itemData.thumbnailURL
+            m.itemPoster.uri = itemData.widePosterURL
         end if
 
         ' Set Series and Episode Number for Extra Text
@@ -98,12 +97,11 @@ sub itemContentChanged()
 
     if itemData.type = "Movie"
         m.itemText.text = itemData.name
-
         ' Use best image, but fallback to secondary if it's empty
-        if (itemData.imageWidth = 180 and itemData.posterURL <> "") or itemData.thumbnailURL = ""
+        if itemData.usePoster = true
             m.itemPoster.uri = itemData.posterURL
         else
-            m.itemPoster.uri = itemData.thumbnailURL
+            m.itemPoster.uri = itemData.widePosterURL
         end if
 
         ' Set Release Year and Age Rating for Extra Text
@@ -136,15 +134,10 @@ sub itemContentChanged()
     if itemData.type = "Series"
 
         m.itemText.text = itemData.name
-
         if itemData.usePoster = true
-            if itemData.imageWidth = 180
-                m.itemPoster.uri = itemData.posterURL
-            else
-                m.itemPoster.uri = itemData.widePosterURL
-            end if
+            m.itemPoster.uri = itemData.posterURL
         else
-            m.itemPoster.uri = itemData.thumbnailURL
+            m.itemPoster.uri = itemData.widePosterURL
         end if
 
         textExtra = ""

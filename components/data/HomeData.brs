@@ -40,23 +40,19 @@ sub setData()
         m.top.thumbnailURL = ImageURL(datum.id, "Primary", imgParams)
 
         ' Add Wide Poster  (Series Backdrop)
-        if datum.ParentThumbImageTag <> invalid
-            m.top.widePosterUrl = ImageURL(datum.ParentThumbItemId, "Thumb", imgParams)
-        else if datum.ParentBackdropImageTags <> invalid
+        if datum.ParentBackdropImageTags <> invalid
+            m.top.posterUrl = ImageURL(datum.ParentBackdropItemId, "Primary", imgParams)
             m.top.widePosterUrl = ImageURL(datum.ParentBackdropItemId, "Backdrop", imgParams)
-        else if datum.ImageTags.Primary <> invalid
-            m.top.widePosterUrl = ImageURL(datum.id, "Primary", imgParams)
         end if
 
     else if datum.type = "Series"
-        imgParams = { "maxHeight": 261 }
-        imgParams.Append({ "maxWidth": 464 })
+        imgParams = { "fillHeight": 624, "fillWidth": 416, "quality": 96 }
 
         if datum.UserData.UnplayedItemCount > 0
             imgParams["UnplayedCount"] = datum.UserData.UnplayedItemCount
         end if
 
-        m.top.posterURL = ImageURL(datum.id, "Primary", imgParams)
+        m.top.posterURL = ImageURL(datum.Id, "Primary", imgParams)
 
         ' Add Wide Poster  (Series Backdrop)
         if datum.ImageTags <> invalid and datum.imageTags.Thumb <> invalid
@@ -66,7 +62,7 @@ sub setData()
         end if
 
     else if datum.type = "Movie"
-        imgParams = { AddPlayedIndicator: datum.UserData.Played }
+        imgParams = { "fillHeight": 624, "fillWidth": 416, "quality": 96 }
 
         if datum.UserData.PlayedPercentage <> invalid
             imgParams.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })

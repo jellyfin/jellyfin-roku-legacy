@@ -28,7 +28,7 @@ sub loadItems()
         params = {}
         params["Limit"] = 16
         params["ParentId"] = m.top.itemId
-        params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
+        ' params["EnableImageTypes"] = "Primary"
         params["ImageTypeLimit"] = 1
 
         resp = APIRequest(url, params)
@@ -37,7 +37,7 @@ sub loadItems()
             tmp = CreateObject("roSGNode", "HomeData")
             item.ImageURL = ImageURL(item.Id, "Primary", params)
             if item.type = "Episode"
-                item.ImageURL = ImageURL(item.SeriesId)
+                item.ImageURL = ImageURL(item.SeriesId, "Primary", params)
             end if
             tmp.json = item
             results.push(tmp)
@@ -79,6 +79,11 @@ sub loadItems()
             ' Skip Books for now as we don't support it (issue #558)
             if item.Type <> "Book"
                 tmp = CreateObject("roSGNode", "HomeData")
+                ' print "ITEM: " item
+                item.ImageURL = ImageURL(item.Id, "Primary", params)
+                if item.type = "Episode"
+                    item.ImageURL = ImageURL(item.SeriesId, "Primary", params)
+                end if
                 tmp.json = item
                 results.push(tmp)
             end if
