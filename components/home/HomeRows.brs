@@ -80,7 +80,7 @@ sub loadHomeSections()
     m.latestMediaInt = getHomeSectionInt("latestmedia")
     m.sectionCount = getHomeSectionCount()
 
-    homesections = get_user_setting("display.homesections")
+    homesections = m.top.userConfig.preferences.homesections
 
     for i = 0 to 6
         content = m.top.content
@@ -140,8 +140,7 @@ sub setLatestMediaCount()
     latest_count = 0
 
     ' Have to filter the orderedViews because Brightscript is awesome
-    userConfig = ParseJson(get_user_setting("display.userConfig"))
-    orderedViews = userConfig.Configuration.OrderedViews
+    orderedViews = m.top.userConfig.OrderedViews
     filteredOrderedViews = []
     if userConfig <> invalid
         if orderedViews <> invalid
@@ -359,7 +358,7 @@ sub rebuildItemArray()
     m.top.rowItemSize = []
     newSizeArray = []
     homesections = []
-    homesections_setting = get_user_setting("display.homesections")
+    homesections_setting = m.top.userConfig.preferences.homesections
     for i = 0 to section_count
         sections_array = homesections_setting.Split(",")
         homesection = sections_array[i]
@@ -414,7 +413,7 @@ end sub
 
 function getHomeSectionInt(section as string)
     home_section_count = getHomeSectionCount()
-    homesections_setting = get_user_setting("display.homesections")
+    homesections_setting = m.top.userConfig.preferences.homesections
     for i = 0 to home_section_count
         sections_array = homesections_setting.Split(",")
         homesection = sections_array[i]
@@ -440,7 +439,7 @@ end function
 function getHomeSectionCount()
     latest_media_count = m.latestMediaCount
     section_count = 0
-    homesections_setting = get_user_setting("display.homesections")
+    homesections_setting = m.top.userConfig.preferences.homesections
     for i = 0 to 6
         sections_array = homesections_setting.Split(",")
         homesection = sections_array[i]
@@ -524,8 +523,7 @@ sub updateLatestMedia()
     latest_count = 0
 
     ' Have to filter the orderedViews because Brightscript is awesome
-    userConfig = ParseJson(get_user_setting("display.userConfig"))
-    orderedViews = userConfig.Configuration.OrderedViews
+    orderedViews = m.top.userConfig.OrderedViews
     filteredOrderedViews = []
     if userConfig <> invalid
         if orderedViews <> invalid
@@ -546,7 +544,6 @@ sub updateLatestMedia()
             for each lib in filteredLatest
                 if filteredOrderedViews[i] = lib.id
                     if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
-                        latest_count = latest_count + 1
                         loadLatest = createObject("roSGNode", "LoadItemsTask")
                         loadLatest.itemsToLoad = "latest"
                         loadLatest.itemId = lib.id
@@ -713,14 +710,12 @@ end sub
 
 sub updateLatestItems(msg)
     itemData = msg.GetData()
-
     node = msg.getRoSGNode()
     node.unobserveField("content")
 
     homeRows = m.top.content
     section = getHomeSectionInt("latestmedia")
     node_index = node.nodeNumber
-
     index_section = section + 1
     index_section_latest = index_section + node_index
     row_index = getRowIndex(Substitute("Loading Section {0}...", index_section_latest.toStr()))

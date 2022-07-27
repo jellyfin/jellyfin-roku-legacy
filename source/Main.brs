@@ -112,7 +112,7 @@ sub Main (args as dynamic) as void
             ' If you select a library from ANYWHERE, follow this flow
             selectedItem = msg.getData()
             if selectedItem.type = "CollectionFolder" or selectedItem.type = "UserView" or selectedItem.type = "Folder" or selectedItem.type = "Channel" or selectedItem.type = "Boxset"
-                group = CreateItemGrid(selectedItem)
+                group = CreateItemGrid(selectedItem, m.user.configuration)
                 sceneManager.callFunc("pushScene", group)
             else if selectedItem.type = "Episode"
                 ' play episode
@@ -457,7 +457,7 @@ function LoginFlow(startOver = false as boolean)
                 get_token(userSelected, "")
                 if get_setting("active_user") <> invalid
                     m.user = AboutMe()
-                    LoadUserPreferences()
+                    m.user.configuration.preferences = LoadUserPreferences()
                     LoadUserAbilities(m.user)
                     SendPerformanceBeacon("AppDialogComplete") ' Roku Performance monitoring - Dialog Closed
                     return true
@@ -481,7 +481,7 @@ function LoginFlow(startOver = false as boolean)
         goto start_login
     end if
 
-    LoadUserPreferences()
+    m.user.configuration.preferences = LoadUserPreferences()
     LoadUserAbilities(m.user)
     m.global.sceneManager.callFunc("clearScenes")
 

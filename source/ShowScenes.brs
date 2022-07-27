@@ -428,8 +428,9 @@ function CreateSeasonDetailsGroup(series, season)
     return group
 end function
 
-function CreateItemGrid(libraryItem)
+function CreateItemGrid(libraryItem, config)
     group = CreateObject("roSGNode", "ItemGrid")
+    group.userConfig = config
     group.parentItem = libraryItem
     group.optionsAvailable = true
     group.observeField("selectedItem", m.port)

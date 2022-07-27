@@ -50,6 +50,7 @@ sub init()
 
     'Get reset folder setting
     m.resetGrid = get_user_setting("itemgrid.reset") = "true"
+
 end sub
 
 '
@@ -61,11 +62,10 @@ sub loadInitialItems()
     if m.top.parentItem.backdropUrl <> invalid
         SetBackground(m.top.parentItem.backdropUrl)
     end if
-
+    viewSetting = m.top.userConfig.preferences.liveTvLanding
     ' Read view/sort/filter settings
     if m.top.parentItem.collectionType = "livetv"
         ' Translate between app and server nomenclature
-        viewSetting = get_user_setting("display.livetv.landing")
         if viewSetting = "guide"
             m.view = "tvGuide"
         else
@@ -148,7 +148,7 @@ sub loadInitialItems()
         ' For LiveTV, we want to "Fit" the item images, not zoom
         m.top.imageDisplayMode = "scaleToFit"
 
-        if get_user_setting("display.livetv.landing") = "guide" and m.options.view <> "livetv"
+        if viewSetting = "guide" and m.options.view <> "livetv"
             showTvGuide()
         end if
     else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
@@ -507,12 +507,12 @@ sub optionsClosed()
     if m.top.parentItem.collectionType = "livetv" and m.options.view <> m.view
         if m.options.view = "tvGuide"
             m.view = "tvGuide"
-            set_user_setting("display.livetv.landing", "guide")
+            m.top.userConfig.preferences.liveTvLanding = "guide"
             showTVGuide()
             return
         else
             m.view = "livetv"
-            set_user_setting("display.livetv.landing", "channels")
+            m.top.userConfig.preferences.liveTvLanding = "channels"
 
             if m.tvGuide <> invalid
                 ' Try to hide the TV Guide

@@ -133,8 +133,9 @@ function GetPublicUsers()
 end function
 
 ' Load and parse Display Settings from server
-sub LoadUserPreferences()
+function LoadUserPreferences()
     id = get_setting("active_user")
+    userPrefs = { liveTvLanding: "", homeSections: "" }
     ' Currently using client "emby", which is what website uses so we get same Display prefs as web.
     ' May want to change to specific Roku display settings
     url = Substitute("DisplayPreferences/usersettings?userId={0}&client=emby", id)
@@ -144,7 +145,7 @@ sub LoadUserPreferences()
 
     if jsonResponse <> invalid and jsonResponse.CustomPrefs <> invalid
         if jsonResponse.CustomPrefs["landing-livetv"] <> invalid
-            set_user_setting("display.livetv.landing", jsonResponse.CustomPrefs["landing-livetv"])
+            userPrefs.liveTvLanding = jsonResponse.CustomPrefs["landing-livetv"]
         end if
         ' Take into account nones, if nones are in the middle then resort them to the end to be removed later in HomeRows
         ' nones = 0
@@ -164,19 +165,14 @@ sub LoadUserPreferences()
                 end if
             end if
         end for
-        set_user_setting("display.homesections", sections)
-        if jsonResponse.CustomPrefs["homesection0"] = invalid
-            setHomeScreenDefaults()
+        if jsonResponse.CustomPrefs["homesection0"] <> invalid
+            userPrefs.homeSections = sections
+        else
+            userPrefs.homeSections = "smalllibrarytiles,resume,resumeaudio,livetv,nextup,latestmedia,none"
         end if
-    else
-        unset_user_setting("display.livetv.landing")
     end if
-
-end sub
-
-sub setHomeScreenDefaults()
-    set_user_setting("display.homesections", "smalllibrarytiles,resume,resumeaudio,livetv,nextup,latestmedia,none")
-end sub
+    return userPrefs
+end function
 
 sub LoadUserAbilities(user)
     ' Only have one thing we're checking now, but in the future it could be more...
