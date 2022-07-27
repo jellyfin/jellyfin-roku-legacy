@@ -63,7 +63,7 @@ sub loadItems()
         end for
 
         ' Load Continue Watching
-    else if m.top.itemsToLoad = "continue"
+    else if m.top.itemsToLoad = "continueVideo"
 
         url = Substitute("Users/{0}/Items/Resume", get_setting("active_user"))
 

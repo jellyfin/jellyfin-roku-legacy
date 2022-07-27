@@ -613,7 +613,6 @@ sub updateContinueVideoItems()
                 if itemData[i] <> invalid
                     itemData[i].usePoster = true
                     itemData[i].imageWidth = 464
-                    itemData[i].stretch = true
                     row.appendChild(itemData[i])
                 end if
             end for
