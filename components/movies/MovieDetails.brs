@@ -18,14 +18,13 @@ sub init()
     m.buttonGrp = m.top.findNode("buttons")
     m.buttonGrp.setFocus(true)
     m.top.lastFocus = m.buttonGrp
-    m.defaultFocus = true
 
     m.top.observeField("itemContent", "itemContentChanged")
 end sub
 
 sub OnScreenShown()
     ' set focus to button group
-    if m.defaultFocus = false
+    if m.extrasGrp.opacity = 1
         m.top.lastFocus.setFocus(true)
     else
         m.buttonGrp.setFocus(true)
@@ -301,7 +300,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     if key = "down" and m.buttonGrp.isInFocusChain()
         m.top.lastFocus = m.extrasGrid
-        m.defaultFocus = false
         m.extrasGrid.setFocus(true)
         m.top.findNode("VertSlider").reverse = false
         m.top.findNode("extrasFader").reverse = false
@@ -312,7 +310,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if key = "up" and m.top.findNode("extrasGrid").isInFocusChain()
         if m.extrasGrid.itemFocused = 0
             m.top.lastFocus = m.buttonGrp
-            m.defaultFocus = true
             m.top.findNode("VertSlider").reverse = true
             m.top.findNode("extrasFader").reverse = true
             m.top.findNode("pplAnime").control = "start"
