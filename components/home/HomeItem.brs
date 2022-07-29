@@ -18,11 +18,19 @@ sub itemContentChanged()
     itemData = m.top.itemContent
     if itemData = invalid then return
     itemData.Title = itemData.name ' Temporarily required while we move from "HomeItem" to "JFContentItem"
-
     m.itemPoster.width = itemData.imageWidth
+    if itemData.imageHeight <> 0
+        m.itemPoster.height = itemData.imageHeight
+    end if
     m.itemText.maxWidth = itemData.imageWidth
     m.itemTextExtra.width = itemData.imageWidth
     m.itemTextExtra.visible = true
+    if itemData.translation <> ""
+        m.itemText.translation = itemData.translation
+    end if
+    if itemData.translation_extra <> ""
+        m.itemTextExtra.translation = itemData.translation_extra
+    end if
 
 
     m.backdrop.width = itemData.imageWidth
@@ -124,7 +132,7 @@ sub itemContentChanged()
     if itemData.type = "Video"
         m.itemText.text = itemData.name
 
-        if itemData.imageWidth = 180
+        if itemData.usePoster = true
             m.itemPoster.uri = itemData.posterURL
         else
             m.itemPoster.uri = itemData.thumbnailURL

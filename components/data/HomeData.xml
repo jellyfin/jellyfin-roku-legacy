@@ -11,6 +11,9 @@
     <field id="json" type="assocarray" onChange="setData" />
     <field id="collectionType" type="string" />
     <field id="imageWidth" type="integer" value="464" />
+    <field id="imageHeight" type="integer" value="" />
+    <field id="translation" type="string" value="" />
+    <field id="translation_extra" type="string" value="" />
     <field id="usePoster" type="bool" value="false" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />

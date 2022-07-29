@@ -127,7 +127,7 @@ sub loadItems()
         data = getJson(resp)
         for each item in data.Items
             tmp = CreateObject("roSGNode", "HomeData")
-            item.ImageURL = ImageURL(item.Id)
+            item.ImageURL = ImageURL(item.Id, "Primary")
             tmp.json = item
             results.push(tmp)
         end for

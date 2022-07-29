@@ -379,13 +379,16 @@ sub rebuildItemArray()
         end if
     end for
     for each homesection in homesections
-        if homesection <> invalid
+        if homesection <> invalid and homesection <> "none"
             if homesection = "latestmedia"
                 userConfig = m.top.userConfig
                 filteredLatest = filterNodeArray(m.libraryData, "id", userConfig.LatestItemsExcludes)
                 for each lib in filteredLatest
-                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv"
-                        itemSize = [200, 270]
+                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder"
+                        itemSize = [208, 312]
+                        if lib.collectionType = "music"
+                            itemSize = [261, 261]
+                        end if
                         newSizeArray.push(itemSize)
                     end if
                 end for
@@ -394,13 +397,12 @@ sub rebuildItemArray()
                 itemSize = [464, 261]
                 if homesection = "librarybuttons"
                     itemSize = [464, 100]
-                else if homesection = "livetv"
-                    itemSize = [200, 270]
                 end if
                 newSizeArray.push(itemSize)
             end if
         end if
     end for
+    ' print "------------------"
     for each size in newSizeArray
         ' print "SIZE: " size
     end for
@@ -732,7 +734,14 @@ sub updateLatestItems(msg)
             if itemData[i] <> invalid
                 row.title = tr("Latest in") + " " + node.metadata.title + " >"
                 itemData[i].usePoster = true
-                itemData[i].imageWidth = 200
+                if node.metadata.contentType = "music"
+                    itemData[i].imageWidth = 261
+                else
+                    itemData[i].imageWidth = 208
+                    itemData[i].imageHeight = 312
+                    itemData[i].translation = "[8,328]"
+                    itemData[i].translation_extra = "[8,355]"
+                end if
                 row.appendChild(itemData[i])
             end if
         end for
@@ -744,7 +753,7 @@ sub updateOnNowItems()
     itemData = m.LoadOnNowTask.content
     m.LoadOnNowTask.unobserveField("content")
 
-    itemSize = [200, 270]
+    itemSize = [464, 331]
 
     homeRows = m.top.content
     section = getHomeSectionInt("livetv")
@@ -765,8 +774,6 @@ sub updateOnNowItems()
             row.title = tr("On Now")
             for i = 0 to item_count
                 if itemData[i] <> invalid
-                    itemData[i].usePoster = true
-                    itemData[i].imageWidth = 200
                     row.appendChild(itemData[i])
                 end if
             end for

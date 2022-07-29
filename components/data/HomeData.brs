@@ -47,6 +47,7 @@ sub setData()
 
     else if datum.type = "Series"
         imgParams = { "fillHeight": 624, "fillWidth": 416, "quality": 96 }
+        imgParams_wide = { "fillHeight": 374, "fillWidth": 664, "quality": 96 }
 
         if datum.UserData.UnplayedItemCount > 0
             imgParams["UnplayedCount"] = datum.UserData.UnplayedItemCount
@@ -56,13 +57,14 @@ sub setData()
 
         ' Add Wide Poster  (Series Backdrop)
         if datum.ImageTags <> invalid and datum.imageTags.Thumb <> invalid
-            m.top.widePosterUrl = ImageURL(datum.Id, "Thumb", imgParams)
+            m.top.widePosterUrl = ImageURL(datum.Id, "Thumb", imgParams_wide)
         else if datum.BackdropImageTags <> invalid
-            m.top.widePosterUrl = ImageURL(datum.Id, "Backdrop", imgParams)
+            m.top.widePosterUrl = ImageURL(datum.Id, "Backdrop", imgParams_wide)
         end if
 
     else if datum.type = "Movie"
         imgParams = { "fillHeight": 624, "fillWidth": 416, "quality": 96 }
+        imgParams_wide = { "fillHeight": 374, "fillWidth": 664, "quality": 96 }
 
         if datum.UserData.PlayedPercentage <> invalid
             imgParams.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
@@ -72,46 +74,33 @@ sub setData()
         imgParams.Append({ "maxWidth": 175 })
 
         m.top.posterURL = ImageURL(datum.id, "Primary", imgParams)
-
-        ' For wide image, use backdrop
-        imgParams["maxWidth"] = 464
-
-        if datum.ImageTags <> invalid and datum.imageTags.Thumb <> invalid
-            m.top.thumbnailUrl = ImageURL(datum.Id, "Thumb", imgParams)
-        else if datum.BackdropImageTags[0] <> invalid
-            m.top.thumbnailUrl = ImageURL(datum.id, "Backdrop", imgParams)
-        end if
+        m.top.widePosterURL = ImageURL(datum.id, "Backdrop", imgParams_wide)
 
     else if datum.type = "Video"
-        imgParams = { AddPlayedIndicator: datum.UserData.Played }
+        imgParams = { "fillHeight": 624, "fillWidth": 416, "quality": 96, AddPlayedIndicator: datum.UserData.Played }
+        imgParams_wide = { "fillHeight": 374, "fillWidth": 664, "quality": 96, AddPlayedIndicator: datum.UserData.Played }
 
         if datum.UserData.PlayedPercentage <> invalid
             imgParams.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
+            imgParams_wide.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
         end if
 
-        imgParams.Append({ "maxHeight": 261 })
-        imgParams.Append({ "maxWidth": 175 })
-
         m.top.posterURL = ImageURL(datum.id, "Primary", imgParams)
-
-        ' For wide image, use backdrop
-        imgParams["maxWidth"] = 464
 
         if datum.ImageTags <> invalid and datum.imageTags.Thumb <> invalid
             m.top.thumbnailUrl = ImageURL(datum.Id, "Thumb", imgParams)
         else if datum.BackdropImageTags[0] <> invalid
-            m.top.thumbnailUrl = ImageURL(datum.id, "Backdrop", imgParams)
+            m.top.thumbnailUrl = ImageURL(datum.id, "Backdrop", imgParams_wide)
         end if
     else if datum.type = "MusicAlbum" or datum.type = "Audio"
-        params = { "maxHeight": 261, "maxWidth": 261 }
-        m.top.thumbnailURL = ImageURL(datum.id, "Primary", params)
-        m.top.widePosterUrl = m.top.thumbnailURL
-        m.top.posterUrl = m.top.thumbnailURL
+        imgParams = { "fillHeight": 624, "fillWidth": 416, "quality": 96, AddPlayedIndicator: datum.UserData.Played }
+        m.top.thumbnailURL = ImageURL(datum.id, "Primary", imgParams)
+        m.top.widePosterUrl = ImageURL(datum.id, "Backdrop", imgParams)
+        m.top.posterUrl = ImageURL(datum.id, "Primary", imgParams)
 
     else if datum.type = "TvChannel" or datum.type = "Channel"
         params = { "maxHeight": 261, "maxWidth": 464 }
-        m.top.thumbnailURL = ImageURL(datum.id, "Primary", params)
-        m.top.widePosterUrl = m.top.thumbnailURL
+        m.top.posterUrl = ImageURL(datum.id, "Primary", params)
         m.top.iconUrl = "pkg:/images/media_type_icons/live_tv_white.png"
     end if
 
