@@ -15,7 +15,7 @@
         <LayoutGroup id="infoGroup" layoutDirection="vert" itemSpacings="[15]">
           <Label id="overview" wrap="true" height="310" width="1250" ellipsisText=" ...  (Press * to read more)" />
           <Rectangle id='songListRect' translation="[-30, 0]" width="1260" height="510" color="0x202020ff">
-            <MusicAlbumSongList id="songList" translation="[45, 25]" itemSize="[1170,60]" numRows="7" />
+            <MusicAlbumSongList itemComponentName="SongItem" id="songList" translation="[45, 25]" itemSize="[1170,60]" numRows="7" />
           </Rectangle>
         </LayoutGroup>
       </LayoutGroup>

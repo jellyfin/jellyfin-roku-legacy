@@ -11,6 +11,13 @@
                 "default": "false"
             },
             {
+                "title": "Attempt Direct Play (Profile Lvl)",
+                "description": "Attempt Direct Play for h264 media with unsupported profile levels (> 4.2) before falling back to trancoding if it fails.",
+                "settingName": "playback.tryDirect.h264ProfileLevel",
+                "type": "bool",
+                "default": "true"
+            },
+            {
                 "title": "Cinema mode",
                 "description": "Cinema mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.",
                 "settingName": "playback.cinemamode",

@@ -585,6 +585,7 @@
         <source>Shows</source>
         <translation>Shows</translation>
     </message>
+    <message>
         <source>Return to Top</source>
         <translation>Return to Top</translation>
         <extracomment>UI -> Media Grid -> Item Title in user setting screen.</extracomment>

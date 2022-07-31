@@ -156,7 +156,7 @@ sub Main (args as dynamic) as void
                 ' Nothing to do here, handled in ItemGrid
             else
                 ' TODO - switch on more node types
-                message_dialog(Substitute(tr("{0} support is coming soon!"), selectedItem.type))
+                message_dialog("This type is not yet supported: " + selectedItem.type + ".")
             end if
         else if isNodeEvent(msg, "movieSelected")
             ' If you select a movie from ANYWHERE, follow this flow
@@ -312,7 +312,15 @@ sub Main (args as dynamic) as void
                 sceneManager.callFunc("pushScene", video)
             else if node.state = "finished"
                 node.control = "stop"
-                if node.showID = invalid
+
+                ' If node allows retrying using Transcode Url, give that shot
+                if isValid(node.retryWithTranscoding) and node.retryWithTranscoding
+                    retryVideo = CreateVideoPlayerGroup(node.Id, invalid, node.audioIndex, true, false)
+                    m.global.sceneManager.callFunc("popScene")
+                    if retryVideo <> invalid
+                        m.global.sceneManager.callFunc("pushScene", retryVideo)
+                    end if
+                else if node.showID = invalid
                     sceneManager.callFunc("popScene")
                 else
                     autoPlayNextEpisode(node.id, node.showID)
