@@ -44,7 +44,6 @@ sub init()
     m.loadItemsTask.totalRecordCount = 0
 
     m.spinner = m.top.findNode("spinner")
-    m.spinner.visible = true
     m.Alpha = m.top.findNode("AlphaMenu")
     m.AlphaSelected = m.top.findNode("AlphaSelected")
 
@@ -424,6 +423,7 @@ end sub
 'Handle new item being focused
 sub onItemFocused()
 
+    focusedRow = m.itemGrid.currFocusRow
     itemInt = m.itemGrid.itemFocused
 
     updateTitle()
@@ -439,10 +439,9 @@ sub onItemFocused()
     SetBackground(m.itemGrid.content.getChild(m.itemGrid.itemFocused).backdropUrl)
 
 
-    ' if user moves down grid and there are more items to load
-    if m.loadeditems < m.loadItemsTask.totalRecordCount
-        m.Loading = false
-        loadMoreData()
+   ' Load more data if focus is within last 3 rows, and there are more items to load
+    if focusedRow >= m.loadedRows - 3 and m.loadeditems < m.loadItemsTask.totalRecordCount
+    loadMoreData()
     end if
 end sub
 
@@ -477,12 +476,12 @@ end sub
 '
 'Load next set of items
 sub loadMoreData()
-    m.spinner.visible = true
     if m.Loading = true then return
     m.Loading = true
     m.loadItemsTask.startIndex = m.loadedItems
     m.loadItemsTask.observeField("content", "ItemDataLoaded")
     m.loadItemsTask.control = "RUN"
+    m.spinner.visible = true
 end sub
 
 '
