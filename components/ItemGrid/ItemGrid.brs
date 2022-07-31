@@ -94,19 +94,21 @@ sub loadInitialItems()
     else
         m.sortAscending = false
     end if
-    'Set Stuido Id
+    ' Set Studio Id
     if m.top.parentItem.json.type = "Studio"
-        m.loadItemsTask.studioIds = m.top.parentItem.Id
+        m.loadItemsTask.studioIds = m.top.parentItem.id
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
         m.loadItemsTask.genreIds = ""
-        'set Genre Id
+        ' Set Genre Id
     else if m.top.parentItem.json.type = "Genre"
-        m.loadItemsTask.genreIds = m.top.parentItem.Id
+        m.loadItemsTask.genreIds = m.top.parentItem.id
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
         m.loadItemsTask.studioIds = ""
     else if (m.view = "Shows" or m.options.view = "Shows") or (m.view = "Movies" or m.options.view = "Movies")
         m.loadItemsTask.studioIds = ""
         m.loadItemsTask.genreIds = ""
+    else
+        m.loadItemsTask.itemId = m.top.parentItem.Id
     end if
     updateTitle()
 
@@ -116,7 +118,7 @@ sub loadInitialItems()
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
     m.loadItemsTask.startIndex = 0
-    'Load Item Types
+    ' Load Item Types
     if m.top.parentItem.collectionType = "movies"
         m.loadItemsTask.itemType = "Movie"
         m.loadItemsTask.itemId = m.top.parentItem.Id
@@ -143,19 +145,15 @@ sub loadInitialItems()
     else if m.top.parentItem.collectionType = "livetv"
         m.loadItemsTask.itemType = "LiveTV"
 
-        'For LiveTV, we want to "Fit" the item images, not zoom
+        ' For LiveTV, we want to "Fit" the item images, not zoom
         m.top.imageDisplayMode = "scaleToFit"
 
         if get_user_setting("display.livetv.landing") = "guide" and m.options.view <> "livetv"
             showTvGuide()
         end if
-
-
     else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
-
         ' Non-recursive, to not show subfolder contents
         m.loadItemsTask.recursive = false
-        m.loadItemsTask.itemId = m.top.parentItem.parentFolder
     else if m.top.parentItem.Type = "Channel"
         m.top.imageDisplayMode = "scaleToFit"
     else if m.top.parentItem.json.type = "Studio"
@@ -168,7 +166,7 @@ sub loadInitialItems()
     else
         print "[ItemGrid] Unknown Type: " m.top.parentItem
     end if
-    'end if
+
     if m.top.parentItem.type <> "Folder" and (m.options.view = "Networks" or m.view = "Networks" or m.options.view = "Studios" or m.view = "Studios")
         m.loadItemsTask.view = "Networks"
         m.top.imageDisplayMode = "scaleToFit"

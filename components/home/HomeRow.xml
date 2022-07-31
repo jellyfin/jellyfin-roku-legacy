@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="HomeRow" extends="ContentNode">
   <interface>
-    <field id="imageWidth" type="integer" value="200" />
-    <field id="stretch" type="bool" value="false" />
+    <field id="imageWidth" type="integer" value="464" />
     <field id="usePoster" type="bool" value="false" />
   </interface>
 </component>
