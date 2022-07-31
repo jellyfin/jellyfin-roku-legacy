@@ -1,0 +1,41 @@
+name: unstable-release
+on:
+  push:
+    branches:
+      - unstable
+
+jobs:
+  test-build-release:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: "14.12.0"
+      - run: npm ci
+      - run: npm run validate
+      - run: npm run check-formatting
+      - name: "Find and save major_version from manifest"
+        run: awk 'BEGIN { FS="=" } /^major_version/ { print "MAJOR="$2; }' manifest >> $GITHUB_ENV
+      - name: "Find and save minor_version from manifest"
+        run: awk 'BEGIN { FS="=" } /^minor_version/ { print "MINOR="$2; }' manifest >> $GITHUB_ENV
+      - name: "Find and save build_version from manifest"
+        run: awk 'BEGIN { FS="=" } /^build_version/ { print "BUILD="$2; }' manifest >> $GITHUB_ENV
+      - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
+      - uses: vimtor/action-zip@5f1c4aa587ea41db1110df6a99981dbe19cee310 # tag=v1
+        with:
+          recursive: false
+          files: components/ images/ locale/ settings/ source/ manifest
+          dest: jellyfin_v${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.BUILD }}.zip
+      - uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: v${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.BUILD }}
+          prerelease: true
+          title: v${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.BUILD }}
+          files: ${{ github.workspace }}/jellyfin_v${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.BUILD }}.zip
+      - uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # tag=v3
+        with:
+          name: jellyfin_v${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.BUILD }}.zip
+          path: ${{ github.workspace }}/jellyfin_v${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.BUILD }}.zip
+          if-no-files-found: error
