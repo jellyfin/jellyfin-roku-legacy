@@ -8,6 +8,7 @@
         <field id="SubTitle" type="string" value="" />
         <field id="iconUrl" type="string" value="" />
         <field id="Type" type="string" value="" />
+        <field id="parentFolder" type="string" value="" />
         <field id="json" type="assocarray" onChange="setFields" />
     </interface>
 </component>

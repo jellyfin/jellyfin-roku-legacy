@@ -1,8 +1,8 @@
 ##   Channel Details
 title=Jellyfin
 major_version=1
-minor_version=4
-build_version=12
+minor_version=5
+build_version=0
 
 ###  Main Menu Icons / Channel Poster Artwork
 mm_icon_focus_fhd=pkg:/images/channel-poster_fhd.png

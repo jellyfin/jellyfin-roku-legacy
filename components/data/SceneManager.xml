@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="SceneManager" extends="ContentNode">
+<component name="SceneManager" extends="Group">
   <interface>
     <function name="pushScene" />
     <function name="popScene" />
     <function name="settings" />
     <function name="getActiveScene" />
     <function name="clearScenes" />
+    <function name="clearPreviousScene" />
     <function name="resetTime" />
     <function name="userMessage" />
     <field id="currentUser" type="string" onChange="updateUser" />

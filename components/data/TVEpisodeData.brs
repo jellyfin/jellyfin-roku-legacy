@@ -6,6 +6,7 @@ sub setFields()
     m.top.showID = datum.SeriesID
     m.top.seasonID = datum.SeasonID
     m.top.overview = datum.overview
+    m.top.favorite = datum.UserData.isFavorite
 end sub
 
 sub setPoster()

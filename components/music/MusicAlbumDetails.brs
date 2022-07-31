@@ -9,6 +9,7 @@ sub init()
     m.infoGroup = m.top.FindNode("infoGroup")
     m.songListRect = m.top.FindNode("songListRect")
 
+    m.songList.observeField("doneLoading", "onDoneLoading")
     m.spinner = m.top.findNode("spinner")
     m.spinner.visible = true
 
@@ -24,7 +25,6 @@ end sub
 ' Set values for displayed values on screen
 sub pageContentChanged()
     item = m.top.pageContent
-    m.spinner.visible = false
 
     setPosterImage(item.posterURL)
     setScreenTitle(item.json)
@@ -163,6 +163,11 @@ sub createDialogPallete()
         DialogKeyboardColor: "0x80FF804D",
         DialogFootprintColor: "0x80FF804D"
     }
+end sub
+
+sub onDoneLoading()
+    m.songList.unobservefield("doneLoading")
+    m.spinner.visible = false
 end sub
 
 sub OnScreenHidden()
