@@ -52,6 +52,7 @@ function API()
 
     ' 3rd Party Plugin Support
     instance["introskipper"] = introskipperActions()
+    instance["jellyscrub"] = jellyscrubActions()
 
     return instance
 end function
@@ -812,6 +813,17 @@ function introskipperActions()
     instance.get = function(id as string)
         req = _APIRequest(Substitute("/episode/{0}/introtimestamps/v1", id))
         return _getJson(req)
+    end function
+
+    return instance
+end function
+
+function jellyscrubActions()
+    instance = {}
+
+    ' Get jelly scrub plugin data
+    instance.get = function(id as string)
+        return _buildURL(Substitute("/Trickplay/{0}/320/GetBIF?apikey={1}", id, get_user_setting("token")))
     end function
 
     return instance
