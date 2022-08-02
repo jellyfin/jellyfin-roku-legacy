@@ -442,6 +442,7 @@ end function
 function getHomeSectionCount()
     latest_media_count = m.latestMediaCount
     section_count = 0
+    has_latest_media = false
     homesections_setting = m.top.userConfig.preferences.homesections
     for i = 0 to 6
         sections_array = homesections_setting.Split(",")
@@ -449,8 +450,15 @@ function getHomeSectionCount()
         if homesection <> "latestmedia" and homesection <> "none" and homesection <> "resumebook"
             section_count += 1
         end if
+        if homesection = "latestmedia"
+            has_latest_media = true
+        end if
     end for
-    return section_count + latest_media_count
+    if has_latest_media = true
+        ' This should be false if all sections are set to none
+        return section_count + latest_media_count
+    end if
+    return section_count
 end function
 
 sub updateMyMedia()
@@ -739,8 +747,8 @@ sub updateLatestItems(msg)
                 else
                     itemData[i].imageWidth = 208
                     itemData[i].imageHeight = 312
-                    itemData[i].translation = "[8,328]"
-                    itemData[i].translation_extra = "[8,355]"
+                    itemData[i].translation = "[8,318]"
+                    itemData[i].translation_extra = "[8,345]"
                 end if
                 row.appendChild(itemData[i])
             end if

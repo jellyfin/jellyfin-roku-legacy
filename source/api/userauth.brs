@@ -147,8 +147,6 @@ function LoadUserPreferences()
         if jsonResponse.CustomPrefs["landing-livetv"] <> invalid
             userPrefs.liveTvLanding = jsonResponse.CustomPrefs["landing-livetv"]
         end if
-        ' Take into account nones, if nones are in the middle then resort them to the end to be removed later in HomeRows
-        ' nones = 0
         for i = 0 to 6
             section = ""
             if jsonResponse.CustomPrefs["homesection" + i.ToStr()] <> invalid
@@ -165,6 +163,26 @@ function LoadUserPreferences()
                 end if
             end if
         end for
+
+        ' Take into account nones, if nones are in the middle then resort them to the end to be removed later in HomeRows
+        ' Have to do it this way because Deleting inside of a for loop does not work right
+        sections_arr = sections.Split(",")
+        new_sections_arr = []
+        nones = 0
+        for i = 0 to sections_arr.Count() - 1
+            if sections_arr[i] = "none"
+                nones += 1
+            end if
+        end for
+        for i = 0 to sections_arr.Count() - 1
+            if sections_arr[i] <> "none"
+                new_sections_arr.Push(sections_arr[i])
+            end if
+        end for
+        for i = 0 to nones
+            new_sections_arr.Push("none")
+        end for
+        sections = new_sections_arr.Join(",")
         if jsonResponse.CustomPrefs["homesection0"] <> invalid
             userPrefs.homeSections = sections
         else
