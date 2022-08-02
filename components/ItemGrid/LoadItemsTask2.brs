@@ -1,5 +1,10 @@
 sub init()
     m.top.functionName = "loadItems"
+    if get_user_setting("itemgrid.Limit") = "0"
+        m.top.limit = 60
+    else
+        m.top.limit = get_user_setting("itemgrid.Limit")
+    end if
 end sub
 
 sub loadItems()
@@ -25,20 +30,28 @@ sub loadItems()
         StudioIds: m.top.studioIds,
         genreIds: m.top.genreIds
     }
+    print m.top.ItemType
     ' Handle special case when getting names starting with numeral
     if m.top.NameStartsWith <> ""
         if m.top.NameStartsWith = "#"
-            params.NameLessThan = "A"
+            if m.top.ItemType = "LiveTV" or m.top.ItemType = "TvChannel"
+                params.searchterm = "A"
+                params.append({ parentid: " " })
+            else
+                params.NameLessThan = "A"
+            end if
         else
-            params.NameStartsWith = m.top.nameStartsWith
+            if m.top.ItemType = "LiveTV" or m.top.ItemType = "TvChannel"
+                params.searchterm = m.top.nameStartsWith
+                params.append({ parentid: " " })
+            else
+                params.NameStartsWith = m.top.nameStartsWith
+            end if
         end if
     end if
 
-    'Append voice search when there is text or if alpha picker
     if m.top.searchTerm <> ""
         params.searchTerm = m.top.searchTerm
-    else
-        m.livetvsearch = m.top.nameStartsWith
     end if
 
     filter = m.top.filter
@@ -54,11 +67,8 @@ sub loadItems()
     end if
 
     if m.top.ItemType = "LiveTV"
-        url = Substitute("Users/{0}/Items/", get_setting("active_user"))
-        params.append({ IncludeItemTypes: "LiveTvChannel" })
-        params.append({ parentid: "" })
-        params.append({ NameStartsWith: "" })
-        params.append({ searchTerm: m.livetvsearch })
+        url = "LiveTv/Channels"
+        params.append({ UserId: get_setting("active_user") })
     else if m.top.view = "Networks"
         url = "Studios"
         params.append({ UserId: get_setting("active_user") })
@@ -68,7 +78,6 @@ sub loadItems()
     else
         url = Substitute("Users/{0}/Items/", get_setting("active_user"))
     end if
-
     resp = APIRequest(url, params)
     data = getJson(resp)
     if data <> invalid
@@ -117,4 +126,5 @@ sub loadItems()
         end for
     end if
     m.top.content = results
+    print params
 end sub

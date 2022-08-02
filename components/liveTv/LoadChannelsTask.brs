@@ -25,9 +25,9 @@ sub loadChannels()
     ' Handle special case when getting names starting with numeral
     if m.top.NameStartsWith <> ""
         if m.top.NameStartsWith = "#"
-            params.NameLessThan = "A"
+            params.searchterm = "A"
         else
-            params.NameStartsWith = m.top.nameStartsWith
+            params.searchterm = m.top.nameStartsWith
         end if
     end if
 

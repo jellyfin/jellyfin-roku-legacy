@@ -155,9 +155,11 @@ sub loadInitialItems()
     if m.top.parentItem.collectionType = "movies"
         m.loadItemsTask.itemType = "Movie"
         m.loadItemsTask.itemId = m.top.parentItem.Id
+        print "Parent item is movies"
     else if m.top.parentItem.collectionType = "tvshows"
         m.loadItemsTask.itemType = "Series"
         m.loadItemsTask.itemId = m.top.parentItem.Id
+        print "Parent item is Tvshow"
     else if m.top.parentItem.collectionType = "music"
         ' Default Settings
 
@@ -182,8 +184,9 @@ sub loadInitialItems()
             m.loadItemsTask.recursive = true
         end if
     else if m.top.parentItem.collectionType = "livetv"
-        m.loadItemsTask.itemType = "LiveTV"
-
+        m.loadItemsTask.itemType = "TvChannel"
+        m.loadItemsTask.itemId = " "
+        print "this is from the parenttype"
         ' For LiveTV, we want to "Fit" the item images, not zoom
         m.top.imageDisplayMode = "scaleToFit"
 
@@ -537,26 +540,32 @@ sub onItemSelected()
 end sub
 
 sub onItemalphaSelected()
-    m.loadedRows = 0
-    m.loadedItems = 0
-    m.data = CreateObject("roSGNode", "ContentNode")
-    m.itemGrid.content = m.data
-    m.loadItemsTask.nameStartsWith = m.alpha.itemAlphaSelected
-    m.top.alphaSelected = m.alpha.itemAlphaSelected
-    m.loadItemsTask.searchTerm = ""
-    m.voiceBox.text = ""
-    loadInitialItems()
+    if m.top.alphaSelected <> ""
+        m.loadedRows = 0
+        m.loadedItems = 0
+        m.data = CreateObject("roSGNode", "ContentNode")
+        m.itemGrid.content = m.data
+        m.loadItemsTask.searchTerm = ""
+        m.VoiceBox.text = ""
+        m.loadItemsTask.nameStartsWith = m.alpha.itemAlphaSelected
+        print "Alpha selected"
+        loadInitialItems()
+    end if
 end sub
 
 sub onvoiceFilter()
-    m.loadedRows = 0
-    m.loadedItems = 0
-    m.data = CreateObject("roSGNode", "ContentNode")
-    m.itemGrid.content = m.data
-    m.top.alphaSelected = ""
-    m.loadItemsTask.searchTerm = m.voiceBox.text
-    m.loadItemsTask.recursive = true
-    loadInitialItems()
+    if m.VoiceBox.text <> ""
+        m.loadedRows = 0
+        m.loadedItems = 0
+        m.data = CreateObject("roSGNode", "ContentNode")
+        m.itemGrid.content = m.data
+        m.top.alphaSelected = ""
+        m.loadItemsTask.NameStartsWith = " "
+        m.loadItemsTask.searchTerm = m.voiceBox.text
+        'm.loadItemsTask.recursive = true
+        print "Voice Search"
+        loadInitialItems()
+    end if
 end sub
 
 
