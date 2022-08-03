@@ -70,9 +70,6 @@ sub setData()
             imgParams.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
         end if
 
-        imgParams.Append({ "maxHeight": 261 })
-        imgParams.Append({ "maxWidth": 175 })
-
         m.top.posterURL = ImageURL(datum.id, "Primary", imgParams)
         m.top.widePosterURL = ImageURL(datum.id, "Backdrop", imgParams_wide)
 
@@ -86,12 +83,7 @@ sub setData()
         end if
 
         m.top.posterURL = ImageURL(datum.id, "Primary", imgParams)
-
-        if datum.ImageTags <> invalid and datum.imageTags.Thumb <> invalid
-            m.top.thumbnailUrl = ImageURL(datum.Id, "Thumb", imgParams)
-        else if datum.BackdropImageTags[0] <> invalid
-            m.top.thumbnailUrl = ImageURL(datum.id, "Backdrop", imgParams_wide)
-        end if
+        m.top.widePosterURL = ImageURL(datum.id, "Backdrop", imgParams_wide)
     else if datum.type = "MusicAlbum" or datum.type = "Audio"
         imgParams = { "fillHeight": 624, "fillWidth": 416, "quality": 96, AddPlayedIndicator: datum.UserData.Played }
         m.top.thumbnailURL = ImageURL(datum.id, "Primary", imgParams)

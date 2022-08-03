@@ -44,6 +44,7 @@ sub itemContentChanged()
         m.itemText.text = itemData.name
         if itemData.isSmall = true
             m.backdrop.height = "100"
+            m.backdrop.width = "447"
             m.itemText.translation = [0, 20]
             itemData.usePoster = false
         end if

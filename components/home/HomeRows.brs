@@ -447,7 +447,7 @@ function getHomeSectionCount()
     for i = 0 to 6
         sections_array = homesections_setting.Split(",")
         homesection = sections_array[i]
-        if homesection <> "latestmedia" and homesection <> "none" and homesection <> "resumebook"
+        if homesection <> "latestmedia" and homesection <> "none" and homesection <> "resumebook" and homesection <> "activerecordings"
             section_count += 1
         end if
         if homesection = "latestmedia"
@@ -487,7 +487,8 @@ sub updateMyMedia()
         for each item in itemData
             if item.CollectionType <> "books"
                 item.usePoster = true
-                item.imageWidth = 464
+                item.imageWidth = 445
+                item.imageHeight = 250
                 row.appendChild(item)
             end if
         end for
@@ -597,7 +598,7 @@ sub updateContinueVideoItems()
     itemData = m.LoadContinueVideoTask.content
     m.LoadContinueVideoTask.unobserveField("content")
 
-    itemSize = [464, 331]
+    itemSize = [416, 331]
 
     latest_media_int = m.latestMediaInt
     latestMediaCount = m.latestMediaCount - 1
@@ -623,7 +624,8 @@ sub updateContinueVideoItems()
             for i = 0 to item_count
                 if itemData[i] <> invalid
                     itemData[i].usePoster = false
-                    itemData[i].imageWidth = 464
+                    itemData[i].imageWidth = 445
+                    itemData[i].imageHeight = 250
                     row.appendChild(itemData[i])
                 end if
             end for
@@ -665,8 +667,9 @@ sub updateContinueAudioItems()
             row.title = tr("Continue Listening")
             for i = 0 to item_count
                 if itemData[i] <> invalid
-                    itemData[i].usePoster = true
-                    itemData[i].imageWidth = 464
+                    itemData[i].usePoster = false
+                    itemData[i].imageWidth = 445
+                    itemData[i].imageHeight = 250
                     row.appendChild(itemData[i])
                 end if
             end for
@@ -708,7 +711,8 @@ sub updateNextUpItems()
         for i = 0 to item_count
             if itemData[i] <> invalid
                 itemData[i].usePoster = false
-                itemData[i].imageWidth = 464
+                itemData[i].imageWidth = 445
+                itemData[i].imageHeight = 250
                 row.appendChild(itemData[i])
             end if
         end for
@@ -743,10 +747,10 @@ sub updateLatestItems(msg)
                 row.title = tr("Latest in") + " " + node.metadata.title + " >"
                 itemData[i].usePoster = true
                 if node.metadata.contentType = "music"
-                    itemData[i].imageWidth = 261
+                    itemData[i].imageWidth = 245
                 else
-                    itemData[i].imageWidth = 208
-                    itemData[i].imageHeight = 312
+                    itemData[i].imageWidth = 192
+                    itemData[i].imageHeight = 300
                     itemData[i].translation = "[8,318]"
                     itemData[i].translation_extra = "[8,345]"
                 end if
@@ -782,6 +786,8 @@ sub updateOnNowItems()
             row.title = tr("On Now")
             for i = 0 to item_count
                 if itemData[i] <> invalid
+                    itemData[i].imageWidth = 445
+                    itemData[i].imageHeight = 250
                     row.appendChild(itemData[i])
                 end if
             end for
