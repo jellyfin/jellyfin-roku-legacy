@@ -94,11 +94,6 @@ sub loadInitialItems()
         viewSetting = get_user_setting("display.livetv.landing")
         if viewSetting = "guide"
             m.view = "tvGuide"
-            'Move mic to be visiable on TV Guide screen
-            m.micButton.translation = "[1500, 90]"
-            m.micButtonText.visible = true
-            m.micButtonText.translation = "[1560,132]"
-            m.micButtonText.font.size = 20
         else
             m.view = "livetv"
         end if
@@ -152,15 +147,13 @@ sub loadInitialItems()
     m.loadItemsTask.startIndex = 0
 
     ' Load Item Types
-    if m.top.parentItem.collectionType = "movies"
+    if getCollectionType() = "movies"
         m.loadItemsTask.itemType = "Movie"
         m.loadItemsTask.itemId = m.top.parentItem.Id
-        print "Parent item is movies"
-    else if m.top.parentItem.collectionType = "tvshows"
+    else if getCollectionType() = "tvshows"
         m.loadItemsTask.itemType = "Series"
         m.loadItemsTask.itemId = m.top.parentItem.Id
-        print "Parent item is Tvshow"
-    else if m.top.parentItem.collectionType = "music"
+    else if getCollectionType() = "music"
         ' Default Settings
 
         if m.voiceBox.text <> ""
@@ -186,7 +179,6 @@ sub loadInitialItems()
     else if m.top.parentItem.collectionType = "livetv"
         m.loadItemsTask.itemType = "TvChannel"
         m.loadItemsTask.itemId = " "
-        print "this is from the parenttype"
         ' For LiveTV, we want to "Fit" the item images, not zoom
         m.top.imageDisplayMode = "scaleToFit"
 
@@ -548,7 +540,6 @@ sub onItemalphaSelected()
         m.loadItemsTask.searchTerm = ""
         m.VoiceBox.text = ""
         m.loadItemsTask.nameStartsWith = m.alpha.itemAlphaSelected
-        print "Alpha selected"
         loadInitialItems()
     end if
 end sub
@@ -562,8 +553,7 @@ sub onvoiceFilter()
         m.top.alphaSelected = ""
         m.loadItemsTask.NameStartsWith = " "
         m.loadItemsTask.searchTerm = m.voiceBox.text
-        'm.loadItemsTask.recursive = true
-        print "Voice Search"
+        m.loadItemsTask.recursive = true
         loadInitialItems()
     end if
 end sub
@@ -778,8 +768,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.top.alphaSelected = ""
         m.loadItemsTask.filter = "All"
         m.filter = "All"
-        m.loadItemsTask.observeField("content", "ItemDataLoaded")
-        m.loadItemsTask.control = "RUN"
+        m.data = CreateObject("roSGNode", "ContentNode")
+        m.itemGrid.content = m.data
+        loadInitialItems()
         return true
     end if
 

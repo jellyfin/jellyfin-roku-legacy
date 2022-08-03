@@ -30,7 +30,7 @@ sub loadItems()
         StudioIds: m.top.studioIds,
         genreIds: m.top.genreIds
     }
-    print m.top.ItemType
+
     ' Handle special case when getting names starting with numeral
     if m.top.NameStartsWith <> ""
         if m.top.NameStartsWith = "#"
@@ -126,5 +126,4 @@ sub loadItems()
         end for
     end if
     m.top.content = results
-    print params
 end sub
