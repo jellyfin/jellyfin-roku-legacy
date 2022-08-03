@@ -94,6 +94,11 @@ sub loadInitialItems()
         viewSetting = get_user_setting("display.livetv.landing")
         if viewSetting = "guide"
             m.view = "tvGuide"
+            'Move mic to be visiable on TV Guide screen
+            m.micButton.translation = "[1500, 90]"
+            m.micButtonText.visible = true
+            m.micButtonText.translation = "[1560,132]"
+            m.micButtonText.font.size = 20
         else
             m.view = "livetv"
         end if
