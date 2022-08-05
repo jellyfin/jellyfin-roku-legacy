@@ -139,41 +139,59 @@ sub setLatestMediaCount()
     userConfig = m.top.userConfig
     filteredLatest = filterNodeArray(m.libraryData, "id", userConfig.LatestItemsExcludes)
     latest_count = 0
+    has_latest = false
+
+    ' Check to see if latest is even in the homesections
+    homesections = m.top.userConfig.preferences.homesections
+    sections_array = homesections.Split(",")
+    for i = 0 to 6
+        homesection = sections_array[i]
+        if homesection = "latestmedia"
+            has_latest = true
+        end if
+    end for
+    if has_latest = false
+        m.latestMediaCount = latest_count
+        return
+    end if
+
 
     ' Have to filter the orderedViews because Brightscript is awesome
-    orderedViews = m.top.userConfig.OrderedViews
-    filteredOrderedViews = []
-    if userConfig <> invalid
-        if orderedViews <> invalid
-            for i = 0 to orderedViews.count() - 1
-                for j = 0 to filteredLatest.count() - 1
-                    if filteredLatest[j].id = orderedViews[i]
-                        if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders" and filteredLatest[j].collectionType <> "books"
-                            filteredOrderedViews.push(orderedViews[i])
-                            exit for
+    if has_latest = true
+        orderedViews = m.top.userConfig.OrderedViews
+        filteredOrderedViews = []
+        if userConfig <> invalid
+            if orderedViews <> invalid
+                for i = 0 to orderedViews.count() - 1
+                    for j = 0 to filteredLatest.count() - 1
+                        if filteredLatest[j].id = orderedViews[i]
+                            if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders" and filteredLatest[j].collectionType <> "books"
+                                filteredOrderedViews.push(orderedViews[i])
+                                exit for
+                            end if
+                        end if
+                    end for
+                end for
+            end if
+        end if
+        if filteredOrderedViews.count() <> 0
+            for i = 0 to filteredOrderedViews.count() - 1
+                for each lib in filteredLatest
+                    if filteredOrderedViews[i] = lib.id
+                        if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
+                            latest_count = latest_count + 1
                         end if
                     end if
                 end for
             end for
-        end if
-    end if
-    if filteredOrderedViews.count() <> 0
-        for i = 0 to filteredOrderedViews.count() - 1
+        else
+            latest_count = 0
             for each lib in filteredLatest
-                if filteredOrderedViews[i] = lib.id
-                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
-                        latest_count = latest_count + 1
-                    end if
+                if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
+                    latest_count = latest_count + 1
                 end if
             end for
-        end for
-    else
-        latest_count = 0
-        for each lib in filteredLatest
-            if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
-                latest_count = latest_count + 1
-            end if
-        end for
+        end if
     end if
     m.latestMediaCount = latest_count
 end sub
