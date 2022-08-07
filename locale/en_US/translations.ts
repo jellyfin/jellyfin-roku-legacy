@@ -688,5 +688,25 @@
         <translation>Hides all clocks in Jellyfin. Jellyfin will need to be closed and reopened for change to take effect.</translation>
         <extracomment>Settings Menu - Description for option</extracomment>
     </message>
+    <message>
+        <source>Sports Channels</source>
+        <translation>Sports Channels</translation>
+        <extracomment>TV Guide - Filter Option</extracomment>
+    </message>
+        <message>
+        <source>Kids Channels</source>
+        <translation>Kids Channels</translation>
+        <extracomment>TV Guide - Filter Option</extracomment>
+    </message>
+        <message>
+        <source>News Channels</source>
+        <translation>News Channels</translation>
+        <extracomment>TV Guide - Filter Option</extracomment>
+    </message>
+        <message>
+        <source>Movie Channels</source>
+        <translation>Movie Channels</translation>
+        <extracomment>TV Guide - Filter Option</extracomment>
+    </message>
 </context>
 </TS>

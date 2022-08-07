@@ -259,7 +259,11 @@ sub setLiveTvOptions(options)
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
-        { "Title": tr("Favorites"), "Name": "Favorites" }
+        { "Title": tr("Favorites"), "Name": "Favorites" },
+        { "Title": tr("Movie Channels"), "Name": "Movie Channels" },
+        { "Title": tr("News Channels"), "Name": "News Channels" },
+        { "Title": tr("Kids Channels"), "Name": "Kids Channels" },
+        { "Title": tr("Sports Channels"), "Name": "Sports Channels" }
     ]
     options.favorite = [
         { "Title": tr("Favorite"), "Name": "Favorite" }
