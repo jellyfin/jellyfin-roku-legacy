@@ -70,6 +70,7 @@ sub init()
     'Hide voice search if device does not have voice remote
     if m.deviFeature = false
         m.micButton.visible = false
+        m.micButtonText.visible = false
     end if
 end sub
 
@@ -166,7 +167,6 @@ sub loadInitialItems()
         else
             m.loadItemsTask.recursive = false
             m.itemGrid.itemSize = "[290, 290]"
-            m.itemGrid.itemSpacing = "[ 0, 20]"
         end if
 
         m.loadItemsTask.itemType = "MusicArtist,MusicAlbum"
@@ -545,6 +545,7 @@ sub onItemalphaSelected()
         m.loadItemsTask.searchTerm = ""
         m.VoiceBox.text = ""
         m.loadItemsTask.nameStartsWith = m.alpha.itemAlphaSelected
+        m.spinner.visible = true
         loadInitialItems()
     end if
 end sub
@@ -559,6 +560,7 @@ sub onvoiceFilter()
         m.loadItemsTask.NameStartsWith = " "
         m.loadItemsTask.searchTerm = m.voiceBox.text
         m.loadItemsTask.recursive = true
+        m.spinner.visible = true
         loadInitialItems()
     end if
 end sub
@@ -731,7 +733,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             return true
         end if
     else if key = "play" or key = "OK"
-        markupGrid = m.top.getChild(2)
+        markupGrid = m.top.findNode("itemGrid")
         itemToPlay = markupGrid.content.getChild(markupGrid.itemFocused)
 
         if itemToPlay <> invalid and (itemToPlay.type = "Movie" or itemToPlay.type = "Episode")
