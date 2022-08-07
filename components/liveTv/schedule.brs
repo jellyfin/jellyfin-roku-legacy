@@ -48,9 +48,10 @@ sub channelsearchTermSet()
         if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
 
         m.LoadChannelsTask.searchTerm = m.top.searchTerm
+        m.spinner.visible = true
         m.LoadChannelsTask.control = "RUN"
     end if
-    m.spinner.visible = true
+    
 end sub
 
 ' Initial list of channels loaded
