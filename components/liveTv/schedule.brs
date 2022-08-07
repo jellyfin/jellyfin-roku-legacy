@@ -51,7 +51,7 @@ sub channelsearchTermSet()
         m.spinner.visible = true
         m.LoadChannelsTask.control = "RUN"
     end if
-    
+
 end sub
 
 ' Initial list of channels loaded
