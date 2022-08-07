@@ -6,8 +6,16 @@ sub init()
     m.albumHeader = m.top.findNode("albumHeader")
     m.albumHeader.text = tr("Albums")
 
+    m.sectionNavigation = m.top.findNode("sectionNavigation")
+    m.sectionButtonIndex = 0
+
     m.albums = m.top.findNode("albums")
     m.albums.observeField("infocus", "onAlbumFocusChange")
+
+    m.sections = [m.main, m.albums]
+    m.previouslySelectedSectionIndex = -1
+    m.top.observeField("selectedSectionIndex", "onSectionSelectedChange")
+    m.top.selectedSectionIndex = 0
 
     m.pageLoadAnimation = m.top.findNode("pageLoad")
     m.pageLoadAnimation.control = "start"
@@ -49,6 +57,21 @@ sub onButtonSelectedChange()
     ' Change selected button image to selected image
     selectedButton = m.buttonGrp.getChild(m.top.selectedButtonIndex)
     selectedButton.setFocus(true)
+end sub
+
+' Event handler when user selected a different playback button
+sub onSectionSelectedChange()
+    ' Change previously selected button back to default image
+    if m.previouslySelectedSectionIndex > -1
+        selectedButton = m.sectionNavigation.getChild(m.previouslySelectedSectionIndex)
+        selectedButton.highlighted = false
+    end if
+
+    m.previouslySelectedSectionIndex = m.top.selectedSectionIndex
+
+    ' Change selected button image to selected image
+    selectedButton = m.sectionNavigation.getChild(m.top.selectedSectionIndex)
+    selectedButton.highlighted = true
 end sub
 
 sub setupMainNode()
@@ -119,6 +142,7 @@ sub onAlbumFocusChange()
     if m.albums.infocus
         m.albums.setFocus(true)
         m.showAlbumsAnimation.control = "start"
+        m.top.selectedSectionIndex = 1
         return
     end if
 
@@ -128,6 +152,7 @@ sub onAlbumFocusChange()
 
     m.albums.setFocus(false)
     m.hideAlbumsAnimation.control = "start"
+    m.top.selectedSectionIndex = 0
 end sub
 
 sub dscrShowFocus()
@@ -171,6 +196,50 @@ sub createDialogPallete()
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
+
+    if m.sectionNavigation.isInFocusChain()
+        if key = "right"
+            m.sectionNavigation.setFocus(false)
+            m.buttonGrp.setFocus(true)
+
+            if m.albums.infocus
+                m.albums.setFocus(true)
+            else
+                m.previouslySelectedButtonIndex = -1
+                m.top.selectedButtonIndex = 0
+                onButtonSelectedChange()
+            end if
+
+            return true
+        else if key = "down"
+            if m.sectionButtonIndex >= m.sectionNavigation.getChildCount() - 1
+                return false
+            end if
+
+            m.sectionButtonIndex++
+            m.sectionNavigation.getChild(m.sectionButtonIndex).setFocus(true)
+            return true
+        else if key = "up"
+            if m.sectionButtonIndex <= 0
+                return false
+            end if
+            
+            m.sectionButtonIndex--
+            m.sectionNavigation.getChild(m.sectionButtonIndex).setFocus(true)
+            return true
+        else if key = "OK"
+            if isValid(m.sections[m.previouslySelectedSectionIndex]?.infocus)
+                m.sections[m.previouslySelectedSectionIndex].infocus = false
+            end if
+
+            if isValid(m.sections[m.sectionButtonIndex].infocus)
+                m.sections[m.sectionButtonIndex].infocus = true
+            end if
+            ' TODO: set infocus false to other sections
+            return true
+        end if
+    end if
+
     if m.buttonGrp.isInFocusChain()
         if key = "down"
             m.albums.infocus = true
@@ -178,11 +247,19 @@ function onKeyEvent(key as string, press as boolean) as boolean
         else if key = "left"
             if m.top.pageContent.count() = 1 then return false
 
+            if press
+                if m.top.selectedButtonIndex = 0
+                    m.buttonGrp.setFocus(false)
+                    m.sectionNavigation.getChild(m.sectionButtonIndex).setFocus(true)
+                    return true
+                end if
+            end if
+
             if m.top.selectedButtonIndex > 0
                 m.previouslySelectedButtonIndex = m.top.selectedButtonIndex
                 m.top.selectedButtonIndex = m.top.selectedButtonIndex - 1
+                return true
             end if
-            return true
         else if key = "right"
             if m.top.pageContent.count() = 1 then return false
 
@@ -194,6 +271,16 @@ function onKeyEvent(key as string, press as boolean) as boolean
     end if
 
     if not press then return false
+
+    if key = "left"
+        if m.albums.infocus
+            if m.albums.itemFocused MOD 5 = 0
+                m.albums.setFocus(false)
+                m.sectionNavigation.getChild(m.sectionButtonIndex).setFocus(true)
+                return true
+            end if
+        end if
+    end if
 
     if key = "options"
         if m.dscr.isTextEllipsized

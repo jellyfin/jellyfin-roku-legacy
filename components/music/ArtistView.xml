@@ -18,10 +18,16 @@
     <Label id="albumHeader" translation="[100, 1100]" font="font:LargeSystemFont" />
     <AlbumGrid id="albums" translation="[100, 1200]" vertFocusAnimationStyle="fixedFocus" basePosterSize="[300, 300]" numColumns="5" numRows="99" caption1NumLines="1" itemSpacing="[50, 50]" />
 
-    <Animation id="pageLoad" duration=".5" repeat="false">
-      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[0, 1050], [0, 750]]" fieldToInterp="albumRect.translation" />
-      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[100, 1100], [100, 800]]" fieldToInterp="albumHeader.translation" />
-      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[100, 1200], [100, 900]]" fieldToInterp="albums.translation" />
+    <ButtonGroupVert id="sectionNavigation" translation="[-100, 175]" itemSpacings="[10]">
+      <SlideOutButton background="#070707" focusBackground="#00a4dc" highlightBackground="#555555" padding="20" icon="pkg:/images/icons/details.png" text="Details" height="50" width="60" />
+      <SlideOutButton background="#070707" focusBackground="#00a4dc" highlightBackground="#555555" padding="20" icon="pkg:/images/icons/cd.png" text="Albums" height="50" width="60" />
+    </ButtonGroupVert>
+
+    <Animation id="pageLoad" duration="1" repeat="false">
+      <Vector2DFieldInterpolator key="[0.0, .5]" keyValue="[[0, 1050], [0, 750]]" fieldToInterp="albumRect.translation" />
+      <Vector2DFieldInterpolator key="[0.0, .5]" keyValue="[[100, 1100], [100, 800]]" fieldToInterp="albumHeader.translation" />
+      <Vector2DFieldInterpolator key="[0.5, 1.0]" keyValue="[[-100, 175], [-10, 175]]" fieldToInterp="sectionNavigation.translation" />
+      <Vector2DFieldInterpolator key="[0.0, .5]" keyValue="[[100, 1200], [100, 900]]" fieldToInterp="albums.translation" />
     </Animation>
 
     <Animation id="showAlbums" duration="0.5" repeat="false">
@@ -46,6 +52,7 @@
     <field id="playArtistSelected" alias="play.selected" />
     <field id="instantMixSelected" alias="instantMix.selected" />
     <field id="selectedButtonIndex" type="integer" value="-1" />
+    <field id="selectedSectionIndex" type="integer" value="-1" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="ArtistView.brs" />

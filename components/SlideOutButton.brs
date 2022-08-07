@@ -3,6 +3,10 @@ sub init()
     m.buttonIcon = m.top.findNode("buttonIcon")
     m.buttonText = m.top.findNode("buttonText")
 
+    m.buttonText.visible = false
+
+    m.originalWidth = 0
+
     m.top.observeField("background", "onBackgroundChanged")
     m.top.observeField("icon", "onIconChanged")
     m.top.observeField("text", "onTextChanged")
@@ -10,22 +14,28 @@ sub init()
     m.top.observeField("width", "onWidthChanged")
     m.top.observeField("padding", "onPaddingChanged")
     m.top.observeField("focusedChild", "onFocusChanged")
+    
+    m.top.observeField("highlighted", "onHighlightChanged")
 end sub
 
 sub onFocusChanged()
     if m.top.hasFocus()
+        m.buttonText.visible = true
         m.buttonBackground.blendColor = m.top.focusBackground
+        m.top.width = 200
     else
-        m.buttonBackground.blendColor = m.top.background
+        m.buttonText.visible = false
+        m.top.width = m.originalWidth
+        onHighlightChanged()
     end if
 end sub
 
-sub highlight()
-    m.buttonBackground.blendColor = m.top.highlightBackground
-end sub
-
-sub unHighlight()
-    m.buttonBackground.blendColor = m.top.background
+sub onHighlightChanged()
+    if m.top.highlighted
+        m.buttonBackground.blendColor = m.top.highlightBackground
+    else
+        m.buttonBackground.blendColor = m.top.background
+    end if
 end sub
 
 sub onBackgroundChanged()
@@ -54,9 +64,8 @@ sub setIconSize()
 
         m.buttonIcon.width = m.buttonIcon.height
 
-        m.buttonIcon.translation = [((width - m.buttonIcon.width) / 2), ((height - m.buttonIcon.height) / 2)]
-        m.buttonText.translation = [0, height + 10]
-        m.buttonText.width = width
+        m.buttonIcon.translation = [m.top.padding, ((height - m.buttonIcon.height) / 2)]
+        m.buttonText.translation = [m.top.padding + m.buttonIcon.width + 10, 12]
     end if
 end sub
 
@@ -66,6 +75,10 @@ sub onHeightChanged()
 end sub
 
 sub onWidthChanged()
+    if m.originalWidth = 0
+        m.originalWidth = m.top.width
+    end if
+    
     m.buttonBackground.width = m.top.width
     setIconSize()
 end sub
