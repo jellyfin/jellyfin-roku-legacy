@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="MusicAlbumSongList" extends="MarkupList">
+<component name="AlbumTrackList" extends="MarkupList">
   <interface>
     <field id="MusicArtistAlbumData" type="assocarray" onChange="getData" />
     <field id="doneLoading" type="boolean" value="false"/>
   </interface>
-  <script type="text/brightscript" uri="MusicAlbumSongList.brs" />
+  <script type="text/brightscript" uri="AlbumTrackList.brs" />
 </component>

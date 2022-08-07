@@ -32,7 +32,9 @@ sub itemContentChanged()
 
     if type(itemData.RunTimeTicks) = "LongInteger"
         m.top.findNode("runtime").text = stri(getRuntime()).trim() + " mins"
-        m.top.findNode("endtime").text = tr("Ends at %1").Replace("%1", getEndTime())
+        if get_user_setting("ui.design.hideclock") <> "true"
+            m.top.findNode("endtime").text = tr("Ends at %1").Replace("%1", getEndTime())
+        end if
     end if
 
     if itemData.communityRating <> invalid

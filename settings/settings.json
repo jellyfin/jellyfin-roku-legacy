@@ -74,6 +74,13 @@
                 "description": "Options that alter the design of Jellyfin.",
                 "children": [
                     {
+                        "title": "Hide Clock",
+                        "description": "Hides all clocks in Jellyfin. Jellyfin will need to be closed and reopened for change to take effect.",
+                        "settingName": "ui.design.hideclock",
+                        "type": "bool",
+                        "default": "false"
+                    },
+                    {
                         "title": "Use Splashscreen as Home Background",
                         "description": "Use generated splashscreen image as Jellyfin home background. Jellyfin will need to be closed and reopened for change to take effect.",
                         "settingName": "ui.home.splashBackground",

@@ -1,6 +1,19 @@
 sub init()
     m.top.optionsAvailable = false
     setupMainNode()
+    setupButtons()
+
+    m.albumHeader = m.top.findNode("albumHeader")
+    m.albumHeader.text = tr("Albums")
+
+    m.albums = m.top.findNode("albums")
+    m.albums.observeField("infocus", "onAlbumFocusChange")
+
+    m.pageLoadAnimation = m.top.findNode("pageLoad")
+    m.pageLoadAnimation.control = "start"
+
+    m.showAlbumsAnimation = m.top.findNode("showAlbums")
+    m.hideAlbumsAnimation = m.top.findNode("hideAlbums")
 
     ' Load background image
     m.LoadBackdropImageTask = CreateObject("roSGNode", "LoadItemsTask")
@@ -13,9 +26,34 @@ sub init()
     createDialogPallete()
 end sub
 
+' Setup playback buttons, default to Play button selected
+sub setupButtons()
+    m.buttonGrp = m.top.findNode("buttons")
+    m.buttonCount = m.buttonGrp.getChildCount()
+
+    m.playButton = m.top.findNode("play")
+    m.previouslySelectedButtonIndex = -1
+
+    m.top.observeField("selectedButtonIndex", "onButtonSelectedChange")
+    m.top.selectedButtonIndex = 0
+end sub
+
+' Event handler when user selected a different playback button
+sub onButtonSelectedChange()
+    ' Change previously selected button back to default image
+    if m.previouslySelectedButtonIndex > -1
+        selectedButton = m.buttonGrp.getChild(m.previouslySelectedButtonIndex)
+        selectedButton.setFocus(false)
+    end if
+
+    ' Change selected button image to selected image
+    selectedButton = m.buttonGrp.getChild(m.top.selectedButtonIndex)
+    selectedButton.setFocus(true)
+end sub
+
 sub setupMainNode()
-    main = m.top.findNode("toplevel")
-    main.translation = [96, 175]
+    m.main = m.top.findNode("toplevel")
+    m.main.translation = [96, 175]
 end sub
 
 ' Event fired when page data is loaded
@@ -40,9 +78,11 @@ sub setScreenTitle(json)
 end sub
 
 sub setPosterImage(posterURL)
-    if isValid(posterURL)
-        m.artistImage.uri = posterURL
+    if not isValid(posterURL) or posterURL = ""
+        posterURL = "pkg:/images/missingArtist.png"
     end if
+
+    m.artistImage.uri = posterURL
 end sub
 
 sub onBackdropImageLoaded()
@@ -73,6 +113,21 @@ sub onEllipsisChanged()
     if m.dscr.isTextEllipsized
         dscrShowFocus()
     end if
+end sub
+
+sub onAlbumFocusChange()
+    if m.albums.infocus
+        m.albums.setFocus(true)
+        m.showAlbumsAnimation.control = "start"
+        return
+    end if
+
+    ' Change selected button image to selected image
+    selectedButton = m.buttonGrp.getChild(m.top.selectedButtonIndex)
+    selectedButton.setFocus(true)
+
+    m.albums.setFocus(false)
+    m.hideAlbumsAnimation.control = "start"
 end sub
 
 sub dscrShowFocus()
@@ -116,6 +171,28 @@ sub createDialogPallete()
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
+    if m.buttonGrp.isInFocusChain()
+        if key = "down"
+            m.albums.infocus = true
+            return true
+        else if key = "left"
+            if m.top.pageContent.count() = 1 then return false
+
+            if m.top.selectedButtonIndex > 0
+                m.previouslySelectedButtonIndex = m.top.selectedButtonIndex
+                m.top.selectedButtonIndex = m.top.selectedButtonIndex - 1
+            end if
+            return true
+        else if key = "right"
+            if m.top.pageContent.count() = 1 then return false
+
+            m.previouslySelectedButtonIndex = m.top.selectedButtonIndex
+            if m.top.selectedButtonIndex < m.buttonCount - 1 then m.top.selectedButtonIndex = m.top.selectedButtonIndex + 1
+
+            return true
+        end if
+    end if
+
     if not press then return false
 
     if key = "options"

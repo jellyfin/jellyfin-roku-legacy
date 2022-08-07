@@ -173,7 +173,7 @@ function MusicAlbumList(id as string)
     results = []
     for each item in data.Items
         tmp = CreateObject("roSGNode", "MusicAlbumData")
-        tmp.image = PosterImage(item.id)
+        tmp.image = PosterImage(item.id, { "maxHeight": "500", "maxWidth": "500" })
         tmp.json = item
         results.push(tmp)
     end for
@@ -221,6 +221,22 @@ function CreateInstantMix(id as string)
     resp = APIRequest(url, {
         "UserId": get_setting("active_user"),
         "Limit": 201
+    })
+
+    return getJson(resp)
+end function
+
+' Get Instant Mix based on item
+function CreateArtistMix(id as string)
+    url = Substitute("Users/{0}/Items", get_setting("active_user"), id)
+    resp = APIRequest(url, {
+        "UserId": get_setting("active_user"),
+        "parentId": id,
+        "Filters": "IsNotFolder",
+        "Recursive": true,
+        "SortBy": "SortName",
+        "MediaTypes": "Audio",
+        "Limit": 300
     })
 
     return getJson(resp)

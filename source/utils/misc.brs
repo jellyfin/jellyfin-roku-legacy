@@ -238,3 +238,22 @@ function versionChecker(versionToCheck as string, minVersionAccepted as string)
 
     return leftHand >= rightHand
 end function
+
+function findNodeBySubtype(node, subtype)
+    foundNodes = []
+
+    for each child in node.getChildren(-1, 0)
+        if lcase(child.subtype()) = "group"
+            return findNodeBySubtype(child, subtype)
+        end if
+
+        if lcase(child.subtype()) = lcase(subtype)
+            foundNodes.push({
+                node: child,
+                parent: node
+            })
+        end if
+    end for
+
+    return foundNodes
+end function

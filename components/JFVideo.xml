@@ -24,6 +24,8 @@
 
   </interface>
   <script type="text/brightscript" uri="JFVideo.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
   <children>
     <timer id="playbackTimer" repeat="true" duration="30" />
     <timer id="bufferCheckTimer" repeat="true" />

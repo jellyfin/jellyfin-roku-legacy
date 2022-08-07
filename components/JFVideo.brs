@@ -8,6 +8,10 @@ sub init()
     m.top.transcodeReasons = []
     m.bufferCheckTimer.duration = 10
 
+    if get_user_setting("ui.design.hideclock") = "true"
+        clockNode = findNodeBySubtype(m.top, "clock")
+        clockNode[0].parent.removeChild(clockNode[0].node)
+    end if
 end sub
 
 '

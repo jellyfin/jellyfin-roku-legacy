@@ -3,8 +3,10 @@ sub init()
     ' hide seperators till they're needed
     leftSeperator = m.top.findNode("overlayLeftSeperator")
     leftSeperator.visible = "false"
-    rightSeperator = m.top.findNode("overlayRightSeperator")
-    rightSeperator.visible = "false"
+    m.rightSeperator = m.top.findNode("overlayRightSeperator")
+
+    m.hideClock = get_user_setting("ui.design.hideclock") = "true"
+
     ' set font sizes
     optionText = m.top.findNode("overlayOptionsText")
     optionText.font.size = 20
@@ -12,20 +14,30 @@ sub init()
     optionStar.font.size = 58
     overlayMeridian = m.top.findNode("overlayMeridian")
     overlayMeridian.font.size = 20
-    ' get system preference clock format (12/24hr)
-    di = CreateObject("roDeviceInfo")
-    m.clockFormat = di.GetClockFormat()
-    ' grab current time
-    currentTime = CreateObject("roDateTime")
-    currentTime.ToLocalTime()
-    m.currentHours = currentTime.GetHours()
-    m.currentMinutes = currentTime.GetMinutes()
-    ' start timer
-    m.currentTimeTimer = m.top.findNode("currentTimeTimer")
-    m.currentTimeTimer.control = "start"
-    m.currentTimeTimer.ObserveField("fire", "updateTime")
 
-    updateTimeDisplay()
+    m.overlayRightGroup = m.top.findNode("overlayRightGroup")
+    m.overlayTimeGroup = m.top.findNode("overlayTimeGroup")
+
+    if not m.hideClock
+        ' get system preference clock format (12/24hr)
+        di = CreateObject("roDeviceInfo")
+        m.clockFormat = di.GetClockFormat()
+
+        ' grab current time
+        currentTime = CreateObject("roDateTime")
+        currentTime.ToLocalTime()
+        m.currentHours = currentTime.GetHours()
+        m.currentMinutes = currentTime.GetMinutes()
+
+        ' start timer
+        m.currentTimeTimer = m.top.findNode("currentTimeTimer")
+        m.currentTimeTimer.control = "start"
+        m.currentTimeTimer.ObserveField("fire", "updateTime")
+
+        updateTimeDisplay()
+    end if
+
+    setClockVisibility()
 end sub
 
 sub updateTitle()
@@ -37,16 +49,33 @@ sub updateTitle()
     end if
     title = m.top.findNode("overlayTitle")
     title.text = m.top.title
-    resetTime()
+
+    if not m.hideClock
+        resetTime()
+    end if
+end sub
+
+sub setClockVisibility()
+    if m.hideClock
+        m.overlayRightGroup.removeChild(m.overlayTimeGroup)
+    end if
+end sub
+
+sub setRightSeperatorVisibility()
+    if m.hideClock
+        m.top.removeChild(m.rightSeperator)
+        return
+    end if
+
+    if m.top.currentUser <> ""
+        m.rightSeperator.visible = "true"
+    else
+        m.rightSeperator.visible = "false"
+    end if
 end sub
 
 sub updateUser()
-    rightSeperator = m.top.findNode("overlayRightSeperator")
-    if m.top.currentUser <> ""
-        rightSeperator.visible = "true"
-    else
-        rightSeperator.visible = "false"
-    end if
+    setRightSeperatorVisibility()
     user = m.top.findNode("overlayCurrentUser")
     user.text = m.top.currentUser
 end sub

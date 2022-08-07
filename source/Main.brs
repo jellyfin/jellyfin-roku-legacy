@@ -159,9 +159,9 @@ sub Main (args as dynamic) as void
             else if selectedItem.type = "Photo"
                 ' Nothing to do here, handled in ItemGrid
             else if selectedItem.type = "MusicArtist"
-                group = CreateMusicArtistDetailsGroup(selectedItem.json)
+                group = CreateArtistView(selectedItem.json)
             else if selectedItem.type = "MusicAlbum"
-                group = CreateMusicAlbumDetailsGroup(selectedItem.json)
+                group = CreateAlbumView(selectedItem.json)
             else if selectedItem.type = "Audio"
                 group = CreateAudioPlayerGroup([selectedItem.json])
             else
@@ -186,10 +186,9 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "musicAlbumSelected")
             ' If you select a Music Album from ANYWHERE, follow this flow
             ptr = msg.getData()
-            ' ptr is for [row, col] of selected item... but we only have 1 row
             albums = msg.getRoSGNode()
-            node = albums.musicArtistAlbumData.items[ptr[1]]
-            group = CreateMusicAlbumDetailsGroup(node)
+            node = albums.musicArtistAlbumData.items[ptr]
+            group = CreateAlbumView(node)
         else if isNodeEvent(msg, "playSong")
             ' User has selected audio they want us to play
             selectedIndex = msg.getData()
@@ -201,13 +200,24 @@ sub Main (args as dynamic) as void
             m.spinner = screenContent.findNode("spinner")
             m.spinner.visible = true
             group = CreateAudioPlayerGroup(screenContent.albumData.items)
+        else if isNodeEvent(msg, "playArtistSelected")
+            ' User has selected playlist of of audio they want us to play
+            screenContent = msg.getRoSGNode()
+            group = CreateArtistMixGroup(screenContent.pageContent.id)
         else if isNodeEvent(msg, "instantMixSelected")
             ' User has selected instant mix
             ' User has selected playlist of of audio they want us to play
             screenContent = msg.getRoSGNode()
             m.spinner = screenContent.findNode("spinner")
-            m.spinner.visible = true
-            group = CreateInstantMixGroup(screenContent.albumData.items)
+            if isValid(m.spinner)
+                m.spinner.visible = true
+            end if
+            if isValid(screenContent.albumData)
+                group = CreateInstantMixGroup(screenContent.albumData.items)
+            else if isValid(screenContent.pageContent)
+                print screenContent.musicArtistAlbumData.items[0].json
+                group = CreateInstantMixGroup([{ id: screenContent.musicArtistAlbumData.items[0].json.id }])
+            end if
         else if isNodeEvent(msg, "episodeSelected")
             ' If you select a TV Episode from ANYWHERE, follow this flow
             node = getMsgPicker(msg, "picker")

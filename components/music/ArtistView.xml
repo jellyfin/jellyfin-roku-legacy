@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="ArtistView" extends="JFGroup">
+  <children>
+    <Poster id="backdrop" opacity=".4" loadDisplayMode="scaleToZoom" width="1920" height="1200" blendColor="#3f3f3f" />
+    <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[75]" >
+      <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[125]" >
+        <LayoutGroup layoutDirection="vert" itemSpacings="[75]" >
+          <Label id="overview" wrap="true" lineSpacing="25" maxLines="6" width="1100" ellipsisText=" ...  (Press * to read more)" />
+          <ButtonGroupHoriz id="buttons" itemSpacings="[20]">
+            <IconButton id="play" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/play.png" text="Play" height="85" width="150" />
+            <IconButton id="instantMix" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/instantMix.png" text="Instant Mix" height="85" width="150" />
+          </ButtonGroupHoriz>
+        </LayoutGroup>
+        <Poster id="artistImage" width="500" height="500" />
+      </LayoutGroup>
+    </LayoutGroup>
+    <Rectangle id='albumRect' translation="[0, 1050]" width="1920" height="1080" color="#000000" opacity=".75" />
+    <Label id="albumHeader" translation="[100, 1100]" font="font:LargeSystemFont" />
+    <AlbumGrid id="albums" translation="[100, 1200]" vertFocusAnimationStyle="fixedFocus" basePosterSize="[300, 300]" numColumns="5" numRows="99" caption1NumLines="1" itemSpacing="[50, 50]" />
+
+    <Animation id="pageLoad" duration=".5" repeat="false">
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[0, 1050], [0, 750]]" fieldToInterp="albumRect.translation" />
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[100, 1100], [100, 800]]" fieldToInterp="albumHeader.translation" />
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[100, 1200], [100, 900]]" fieldToInterp="albums.translation" />
+    </Animation>
+
+    <Animation id="showAlbums" duration="0.5" repeat="false">
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[0, 750], [0, 0]]" fieldToInterp="albumRect.translation" />
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[100, 800], [100, 175]]" fieldToInterp="albumHeader.translation" />
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[100, 900], [100, 275]]" fieldToInterp="albums.translation" />
+      <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0.75, 0.95]" fieldToInterp="albumRect.opacity" />
+    </Animation>
+
+    <Animation id="hideAlbums" duration="0.5" repeat="false">
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[0, 0], [0, 750]]" fieldToInterp="albumRect.translation" />
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[100, 175], [100, 800]]" fieldToInterp="albumHeader.translation" />
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[100, 275], [100, 900]]" fieldToInterp="albums.translation" />
+      <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0.95, 0.75]" fieldToInterp="albumRect.opacity" />
+    </Animation>
+
+  </children>
+  <interface>
+    <field id="pageContent" type="node" onChange="pageContentChanged" />
+    <field id="musicArtistAlbumData" type="assocarray" alias="albums.MusicArtistAlbumData" />
+    <field id="musicAlbumSelected" alias="albums.itemSelected" />
+    <field id="playArtistSelected" alias="play.selected" />
+    <field id="instantMixSelected" alias="instantMix.selected" />
+    <field id="selectedButtonIndex" type="integer" value="-1" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+  <script type="text/brightscript" uri="ArtistView.brs" />
+</component>

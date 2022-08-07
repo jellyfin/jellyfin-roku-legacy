@@ -19,7 +19,8 @@
         id="overlayRightSeperator"
         color="#666666"
         width="2"
-        height="64"/>
+        height="64"
+        visible="false"/>
       <LayoutGroup id="overlayTimeGroup" layoutDirection="horiz" horizAlignment="right" itemSpacings="0" >
         <Label id="overlayHours" font="font:MediumSystemFont" vertAlign="center" height="64" />
         <Label font="font:MediumSystemFont" text=":" vertAlign="center" height="64" />
@@ -45,4 +46,5 @@
     <function name="resetTime" />
   </interface>
   <script type="text/brightscript" uri="JFOverhang.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

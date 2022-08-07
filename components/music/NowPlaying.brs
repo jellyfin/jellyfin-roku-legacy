@@ -382,9 +382,11 @@ sub onMetaDataLoaded()
     if data <> invalid and data.count() > 0
 
         ' Use metadata to load backdrop image
-        m.LoadBackdropImageTask.itemId = data.json.ArtistItems[0].id
-        m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
-        m.LoadBackdropImageTask.control = "RUN"
+        if isvalid(data?.json?.ArtistItems?[0].id)
+            m.LoadBackdropImageTask.itemId = data.json.ArtistItems[0].id
+            m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
+            m.LoadBackdropImageTask.control = "RUN"
+        end if
 
         setPosterImage(data.posterURL)
         setScreenTitle(data.json)

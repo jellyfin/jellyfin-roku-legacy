@@ -69,7 +69,9 @@ sub itemContentChanged()
 
     if type(itemData.RunTimeTicks) = "LongInteger"
         setFieldText("runtime", stri(getRuntime()) + " mins")
-        setFieldText("ends-at", tr("Ends at %1").Replace("%1", getEndTime()))
+        if get_user_setting("ui.design.hideclock") <> "true"
+            setFieldText("ends-at", tr("Ends at %1").Replace("%1", getEndTime()))
+        end if
     end if
 
     if itemData.genres.count() > 0
