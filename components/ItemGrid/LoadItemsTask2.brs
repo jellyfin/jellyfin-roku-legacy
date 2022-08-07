@@ -1,9 +1,11 @@
 sub init()
     m.top.functionName = "loadItems"
-    if get_user_setting("itemgrid.Limit") = "0"
-        m.top.limit = 60
-    else
-        m.top.limit = get_user_setting("itemgrid.Limit")
+
+    m.top.limit = 60
+    usersettingLimit = get_user_setting("itemgrid.Limit")
+
+    if usersettingLimit <> invalid
+        m.top.limit = usersettingLimit
     end if
 end sub
 
