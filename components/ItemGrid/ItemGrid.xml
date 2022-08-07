@@ -2,7 +2,7 @@
 <component name="ItemGrid" extends="JFGroup">
   <children>
     <VoiceTextEditBox id="VoiceBox" visible="true" width = "40" translation = "[52, 120]" />
-    <Rectangle id="VoiceBoxCover" height="200" width="100" color="0x262626ff" translation = "[25, 75]" />
+    <Rectangle id="VoiceBoxCover" height="240" width="100" color="0x262626ff" translation = "[25, 75]" />
     <poster id="backdrop" 
       loadDisplayMode="scaleToFill"
       width="1920"

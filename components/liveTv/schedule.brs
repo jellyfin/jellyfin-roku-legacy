@@ -26,6 +26,8 @@ sub init()
     m.top.lastFocus = m.scheduleGrid
 
     m.channelIndex = {}
+
+    m.spinner = m.top.findNode("spinner")
 end sub
 
 sub channelFilterSet()
@@ -48,7 +50,7 @@ sub channelsearchTermSet()
         m.LoadChannelsTask.searchTerm = m.top.searchTerm
         m.LoadChannelsTask.control = "RUN"
     end if
-
+    m.spinner.visible = true
 end sub
 
 ' Initial list of channels loaded
@@ -110,6 +112,7 @@ sub onScheduleLoaded()
     m.scheduleGrid.showLoadingDataFeedback = false
     m.scheduleGrid.setFocus(true)
     m.LoadScheduleTask.schedule = []
+    m.spinner.visible = false
 end sub
 
 sub onProgramFocused()
