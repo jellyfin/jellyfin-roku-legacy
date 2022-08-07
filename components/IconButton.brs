@@ -20,14 +20,6 @@ sub onFocusChanged()
     end if
 end sub
 
-sub highlight()
-    m.buttonBackground.blendColor = m.top.highlightBackground
-end sub
-
-sub unHighlight()
-    m.buttonBackground.blendColor = m.top.background
-end sub
-
 sub onBackgroundChanged()
     m.buttonBackground.blendColor = m.top.background
     m.top.unobserveField("background")
