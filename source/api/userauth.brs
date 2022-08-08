@@ -153,6 +153,15 @@ function LoadUserPreferences()
                 ' Need to ignore resumebook for now
                 if jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "resumebook" or jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "none"
                     section = "none"
+                else if Instr(1, sections, jsonResponse.CustomPrefs["homesection" + i.ToStr()]) > 0
+                    ' Check if home setting is already in there
+                    section = "none"
+                else if jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "librarybuttons" and Instr(1, sections, "smalllibrarytiles") > 0
+                    ' Ignore if My Media is already in there
+                    section = "none"
+                else if jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "smalllibrarytiles" and Instr(1, sections, "librarybuttons") > 0
+                    ' Ignore if My Media Small is already in there
+                    section = "none"
                 else
                     section = jsonResponse.CustomPrefs["homesection" + i.ToStr()]
                 end if

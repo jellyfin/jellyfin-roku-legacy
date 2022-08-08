@@ -43,7 +43,7 @@ sub itemContentChanged()
     if itemData.type = "CollectionFolder" or itemData.type = "UserView" or itemData.type = "Channel"
         m.itemText.text = itemData.name
         if itemData.isSmall = true
-            m.backdrop.height = "100"
+            m.backdrop.height = "90"
             m.backdrop.width = "447"
             m.itemText.translation = [0, 20]
             itemData.usePoster = false
