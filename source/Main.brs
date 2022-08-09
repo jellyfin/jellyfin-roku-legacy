@@ -132,7 +132,7 @@ sub Main (args as dynamic) as void
                 ' open movie detail page
                 group = CreateMovieDetailsGroup(selectedItem)
             else if selectedItem.type = "Person"
-                group = CreatePersonView(selectedItem)
+                CreatePersonView(selectedItem)
             else if selectedItem.type = "TvChannel" or selectedItem.type = "Video" or selectedItem.type = "Program"
                 ' play channel feed
                 video_id = selectedItem.id
@@ -232,74 +232,27 @@ sub Main (args as dynamic) as void
             end if
         else if isNodeEvent(msg, "search_value")
             query = msg.getRoSGNode().search_value
-            group.findNode("SearchBox").visible = true
-            options = group.findNode("searchSelect")
+            group.findNode("SearchBox").visible = false
+            options = group.findNode("SearchSelect")
             options.visible = true
-            searchSpinner = group.findNode("searchSpinner")
-            searchSpinner.visible = true
-            results = searchMedia(query)
-            searchSpinner.visible = false
+            options.setFocus(true)
+
+            dialog = createObject("roSGNode", "ProgressDialog")
+            dialog.title = tr("Loading Search Data")
+            m.scene.dialog = dialog
+            results = SearchMedia(query)
+            dialog.close = true
             options.itemData = results
             options.query = query
         else if isNodeEvent(msg, "itemSelected")
             ' Search item selected
             node = getMsgPicker(msg)
-            if node.type = "CollectionFolder" or node.type = "UserView" or node.type = "Folder" or node.type = "Channel" or node.type = "Boxset" or node.type = "Playlist"
-                group = CreateItemGrid(node)
-                sceneManager.callFunc("pushScene", group)
-            else if node.type = "Episode"
-                ' play episode
-                ' todo: create an episode page to link here
-                video_id = node.id
-                if node.selectedAudioStreamIndex <> invalid and node.selectedAudioStreamIndex > 1
-                    video = CreateVideoPlayerGroup(video_id, invalid, node.selectedAudioStreamIndex)
-                else
-                    video = CreateVideoPlayerGroup(video_id)
-                end if
-                if video <> invalid
-                    sceneManager.callFunc("pushScene", video)
-                end if
-            else if node.type = "Series"
-                group = CreateSeriesDetailsGroup(node.json)
-            else if node.type = "Movie"
-                ' open movie detail page
-                group = CreateMovieDetailsGroup(node)
-            else if node.type = "Person"
-                group = CreatePersonView(node)
-            else if node.type = "TvChannel" or node.type = "Video" or node.type = "Program"
-                ' play channel feed
-                video_id = node.id
-
-                ' Show Channel Loading spinner
-                dialog = createObject("roSGNode", "ProgressDialog")
-                dialog.title = tr("Loading Channel Data")
-                m.scene.dialog = dialog
-
-                video = CreateVideoPlayerGroup(video_id)
-                dialog.close = true
-
-                if video <> invalid
-                    sceneManager.callFunc("pushScene", video)
-                else
-                    dialog = createObject("roSGNode", "Dialog")
-                    dialog.id = "OKDialog"
-                    dialog.title = tr("Error loading Channel Data")
-                    dialog.message = tr("Unable to load Channel Data from the server")
-                    dialog.buttons = [tr("OK")]
-                    m.scene.dialog = dialog
-                    m.scene.dialog.observeField("buttonSelected", m.port)
-                end if
-            else if node.type = "Photo"
-                ' Nothing to do here, handled in ItemGrid
-            else if node.type = "MusicArtist"
-                group = CreateMusicArtistDetailsGroup(node.json)
-            else if node.type = "MusicAlbum"
-                group = CreateMusicAlbumDetailsGroup(node.json)
-            else if node.type = "Audio"
-                group = CreateAudioPlayerGroup([node.json])
+            ' TODO - swap this based on target.mediatype
+            ' types: [ Series (Show), Episode, Movie, Audio, Person, Studio, MusicArtist ]
+            if node.type = "Series"
+                group = CreateSeriesDetailsGroup(node)
             else
-                ' TODO - switch on more node types
-                message_dialog(Substitute(tr("{0} support is coming soon!"), node.type))
+                group = CreateMovieDetailsGroup(node)
             end if
         else if isNodeEvent(msg, "buttonSelected")
             ' If a button is selected, we have some determining to do
@@ -365,9 +318,8 @@ sub Main (args as dynamic) as void
                 end if
                 group = CreateSearchPage()
                 sceneManager.callFunc("pushScene", group)
-                searchKey = group.findNode("SearchBox").findNode("search_Key")
-                searchKey.setFocus(true)
-                searchKey.active = true
+                group.findNode("SearchBox").findNode("search-input").setFocus(true)
+                group.findNode("SearchBox").findNode("search-input").active = true
             else if button.id = "change_server"
                 unset_setting("server")
                 unset_setting("port")
