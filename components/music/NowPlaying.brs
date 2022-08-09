@@ -383,27 +383,27 @@ sub onMetaDataLoaded()
 
         ' Use metadata to load backdrop image
         if isvalid(data?.json?.ArtistItems?[0].id)
-        m.LoadBackdropImageTask.itemId = data.json.ArtistItems[0].id
-        m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
-        m.LoadBackdropImageTask.control = "RUN"
-    end if
-
-    setPosterImage(data.posterURL)
-    setScreenTitle(data.json)
-    setOnScreenTextValues(data.json)
-
-    m.songDuration = data.json.RunTimeTicks / 10000000.0
-
-    ' If we have more and 1 song to play, fade in the next and previous controls
-    if m.buttonsNeedToBeLoaded
-        if m.top.pageContent.count() > 1
-            m.shuffleIndicator.opacity = ".4"
-            m.loopIndicator.opacity = ".4"
-            m.displayButtonsAnimation.control = "start"
+            m.LoadBackdropImageTask.itemId = data.json.ArtistItems[0].id
+            m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
+            m.LoadBackdropImageTask.control = "RUN"
         end if
-        m.buttonsNeedToBeLoaded = false
+
+        setPosterImage(data.posterURL)
+        setScreenTitle(data.json)
+        setOnScreenTextValues(data.json)
+
+        m.songDuration = data.json.RunTimeTicks / 10000000.0
+
+        ' If we have more and 1 song to play, fade in the next and previous controls
+        if m.buttonsNeedToBeLoaded
+            if m.top.pageContent.count() > 1
+                m.shuffleIndicator.opacity = ".4"
+                m.loopIndicator.opacity = ".4"
+                m.displayButtonsAnimation.control = "start"
+            end if
+            m.buttonsNeedToBeLoaded = false
+        end if
     end if
-end if
 end sub
 
 ' Set poster image on screen
