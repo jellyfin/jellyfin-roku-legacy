@@ -151,7 +151,7 @@ function LoadUserPreferences()
             section = ""
             if jsonResponse.CustomPrefs["homesection" + i.ToStr()] <> invalid
                 ' Need to ignore resumebook for now
-                if jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "resumebook" or jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "none"
+                if jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "resumebook" or jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "activerecordings" or jsonResponse.CustomPrefs["homesection" + i.ToStr()] = "none"
                     section = "none"
                 else if Instr(1, sections, jsonResponse.CustomPrefs["homesection" + i.ToStr()]) > 0
                     ' Check if home setting is already in there
@@ -192,6 +192,7 @@ function LoadUserPreferences()
             new_sections_arr.Push("none")
         end for
         sections = new_sections_arr.Join(",")
+        print "SECTIONS: " sections
         if jsonResponse.CustomPrefs["homesection0"] <> invalid
             userPrefs.homeSections = sections
         else
