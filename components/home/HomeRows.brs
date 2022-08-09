@@ -535,6 +535,9 @@ sub updateMyMediaSmall()
     row_index = getRowIndex(Substitute("Loading Section {0}...", index_section.toStr()))
     if row_index <> invalid
         row = homeRows.getChild(row_index)
+        m.top.numRows = 3
+        parent = homeRows.getParent()
+        parent.rowHeights = [150]
         row.title = tr("My Media")
         for each item in itemData
             item.usePoster = false

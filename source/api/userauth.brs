@@ -192,7 +192,6 @@ function LoadUserPreferences()
             new_sections_arr.Push("none")
         end for
         sections = new_sections_arr.Join(",")
-        print "SECTIONS: " sections
         if jsonResponse.CustomPrefs["homesection0"] <> invalid
             userPrefs.homeSections = sections
         else
