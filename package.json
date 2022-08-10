@@ -10,6 +10,7 @@
     "@rokucommunity/bslint": "0.7.3",
     "brighterscript": "0.55.2",
     "rooibos-cli": "1.4.0"
+    "ropm": "^0.10.6"
   },
   "scripts": {
     "validate": "npx bsc --copy-to-staging=false --create-package=false",
