@@ -702,6 +702,14 @@ sub updateTitle()
         m.top.overhangTitle = m.top.parentItem.title
     else if m.filter = "Favorites"
         m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Favorites)")
+    else if m.filter = "Kids Channels" or m.options.filter = "Kids Channels"
+        m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Kids Channels)")
+    else if m.filter = "Movie Channels" or m.options.filter = "Movie Channels"
+        m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Movie Channels)")
+    else if m.filter = "Sports Channels" or m.options.filter = "Sports Channels"
+        m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Sports Channels)")
+    else if m.filter = "News Channels" or m.options.filter = "News Channels"
+        m.top.overhangTitle = m.top.parentItem.title + " " + tr("(News Channels)")
     end if
 
     if m.top.AlphaSelected <> ""

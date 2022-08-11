@@ -12,6 +12,14 @@ sub loadChannels()
 
     if m.top.filter = "Favorites"
         params.append({ isFavorite: true })
+    else if m.top.filter = "Movie Channels"
+        params.append({ isMovie: true })
+    else if m.top.filter = "Kids Channels"
+        params.append({ isKids: true })
+    else if m.top.filter = "News Channels"
+        params.append({ isNews: true })
+    else if m.top.filter = "Sports Channels"
+        params.append({ isSports: true })
     end if
 
     url = "LiveTv/Channels"
@@ -41,5 +49,4 @@ sub loadChannels()
     end for
 
     m.top.channels = results
-
 end sub
