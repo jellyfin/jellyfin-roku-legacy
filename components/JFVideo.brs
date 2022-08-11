@@ -10,7 +10,7 @@ sub init()
 
     if get_user_setting("ui.design.hideclock") = "true"
         clockNode = findNodeBySubtype(m.top, "clock")
-        clockNode[0].parent.removeChild(clockNode[0].node)
+        if clockNode[0] <> invalid then clockNode[0].parent.removeChild(clockNode[0].node)
     end if
 end sub
 
