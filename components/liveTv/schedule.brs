@@ -78,7 +78,7 @@ end sub
 
 ' When LoadScheduleTask completes (initial or more data) and we have a schedule to display
 sub onScheduleLoaded()
-    
+
     for each item in m.LoadScheduleTask.schedule
 
         channel = m.scheduleGrid.content.GetChild(m.channelIndex[item.ChannelId])
