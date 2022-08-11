@@ -78,7 +78,7 @@ end sub
 
 ' When LoadScheduleTask completes (initial or more data) and we have a schedule to display
 sub onScheduleLoaded()
-
+    
     for each item in m.LoadScheduleTask.schedule
 
         channel = m.scheduleGrid.content.GetChild(m.channelIndex[item.ChannelId])
@@ -105,10 +105,10 @@ sub onProgramFocused()
     m.top.focusedChannel = channel
 
     ' Exit if Channels not yet loaded
-    ' if channel.getChildCount() = 0
-    '    m.detailsPane.programDetails = invalid
-    '   return
-    'end if
+    if channel.getChildCount() = 0
+        m.detailsPane.programDetails = invalid
+        return
+    end if
 
     prog = channel.GetChild(m.scheduleGrid.programFocusedDetails.focusIndex)
 
