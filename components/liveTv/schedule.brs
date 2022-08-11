@@ -31,7 +31,6 @@ sub init()
 end sub
 
 sub channelFilterSet()
-    print "Channel Filter set"
     m.scheduleGrid.jumpToChannel = 0
     if m.top.filter <> invalid and m.LoadChannelsTask.filter <> m.top.filter
         if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
@@ -106,10 +105,10 @@ sub onProgramFocused()
     m.top.focusedChannel = channel
 
     ' Exit if Channels not yet loaded
-    if channel.getChildCount() = 0
-        m.detailsPane.programDetails = invalid
-        return
-    end if
+    ' if channel.getChildCount() = 0
+    '    m.detailsPane.programDetails = invalid
+    '   return
+    'end if
 
     prog = channel.GetChild(m.scheduleGrid.programFocusedDetails.focusIndex)
 

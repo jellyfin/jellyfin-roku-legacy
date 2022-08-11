@@ -41,6 +41,14 @@ sub loadItems()
     else if filter = "Favorites"
         params.append({ Filters: "IsFavorite" })
         params.append({ isFavorite: true })
+    else if m.top.filter = "Movie Channels"
+        params.append({ isMovie: true })
+    else if m.top.filter = "Kids Channels"
+        params.append({ isKids: true })
+    else if m.top.filter = "News Channels"
+        params.append({ isNews: true })
+    else if m.top.filter = "Sports Channels"
+        params.append({ isSports: true })
     end if
 
     if m.top.ItemType <> ""
@@ -107,4 +115,5 @@ sub loadItems()
         end for
     end if
     m.top.content = results
+    print "Loaded Items params" params
 end sub
