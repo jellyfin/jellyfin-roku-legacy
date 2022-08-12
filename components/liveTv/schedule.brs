@@ -54,31 +54,35 @@ sub onChannelsLoaded()
         counter = counter + 1
         channelIdList = channelIdList + item.Id + ","
     end for
+    if counter = 0
+        'no Channels found
+    else
+        'Loading Filtered Channels
 
-    m.scheduleGrid.content = gridData
+        m.scheduleGrid.content = gridData
 
-    m.LoadScheduleTask = createObject("roSGNode", "LoadScheduleTask")
-    m.LoadScheduleTask.observeField("schedule", "onScheduleLoaded")
+        m.LoadScheduleTask = createObject("roSGNode", "LoadScheduleTask")
+        m.LoadScheduleTask.observeField("schedule", "onScheduleLoaded")
 
-    m.LoadScheduleTask.startTime = m.gridStartDate.ToISOString()
-    m.LoadScheduleTask.endTime = m.gridEndDate.ToISOString()
-    m.LoadScheduleTask.channelIds = channelIdList
-    m.LoadScheduleTask.control = "RUN"
+        m.LoadScheduleTask.startTime = m.gridStartDate.ToISOString()
+        m.LoadScheduleTask.endTime = m.gridEndDate.ToISOString()
+        m.LoadScheduleTask.channelIds = channelIdList
+        m.LoadScheduleTask.control = "RUN"
 
-    m.LoadProgramDetailsTask = createObject("roSGNode", "LoadProgramDetailsTask")
-    m.LoadProgramDetailsTask.observeField("programDetails", "onProgramDetailsLoaded")
+        m.LoadProgramDetailsTask = createObject("roSGNode", "LoadProgramDetailsTask")
+        m.LoadProgramDetailsTask.observeField("programDetails", "onProgramDetailsLoaded")
 
-    m.scheduleGrid.setFocus(true)
-    if m.EPGLaunchCompleteSignaled = false
-        m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
-        m.EPGLaunchCompleteSignaled = true
+        m.scheduleGrid.setFocus(true)
+        if m.EPGLaunchCompleteSignaled = false
+            m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
+            m.EPGLaunchCompleteSignaled = true
+        end if
+        m.LoadChannelsTask.channels = []
     end if
-    m.LoadChannelsTask.channels = []
 end sub
 
 ' When LoadScheduleTask completes (initial or more data) and we have a schedule to display
 sub onScheduleLoaded()
-
     for each item in m.LoadScheduleTask.schedule
 
         channel = m.scheduleGrid.content.GetChild(m.channelIndex[item.ChannelId])
@@ -120,6 +124,7 @@ sub onProgramFocused()
     end if
 
     m.detailsPane.programDetails = prog
+
 end sub
 
 ' Update the Program Details with full information
