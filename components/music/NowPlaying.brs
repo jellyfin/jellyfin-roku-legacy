@@ -514,4 +514,4 @@ sub OnScreenHidden()
     ' Write screen tracker for screensaver
     WriteAsciiFile("tmp:/scene.temp", "")
     MoveFile("tmp:/scene.temp", "tmp:/scene")
-end sub
+end 
