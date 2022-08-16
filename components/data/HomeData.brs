@@ -29,20 +29,22 @@ sub setData()
 
     else if datum.type = "Episode"
         imgParams = { "AddPlayedIndicator": datum.UserData.Played }
+        imgParams_wide = { "AddPlayedIndicator": datum.UserData.Played }
 
         if datum.UserData.PlayedPercentage <> invalid
             imgParams.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
+            imgParams_wide.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
         end if
 
-        imgParams.Append({ "maxHeight": 261 })
-        imgParams.Append({ "maxWidth": 464 })
+        imgParams.Append({ "maxHeight": 261, "maxWidth": 464 })
+        imgParams_wide.Append({ "maxHeight": 261, "maxWidth": 464 })
 
         m.top.thumbnailURL = ImageURL(datum.id, "Primary", imgParams)
 
         ' Add Wide Poster  (Series Backdrop)
         if datum.ParentBackdropImageTags <> invalid
             m.top.posterUrl = ImageURL(datum.ParentBackdropItemId, "Primary", imgParams)
-            m.top.widePosterUrl = ImageURL(datum.ParentBackdropItemId, "Backdrop", imgParams)
+            m.top.widePosterUrl = ImageURL(datum.ParentBackdropItemId, "Backdrop", imgParams_wide)
         end if
 
     else if datum.type = "Series"
@@ -51,6 +53,11 @@ sub setData()
 
         if datum.UserData.UnplayedItemCount > 0
             imgParams["UnplayedCount"] = datum.UserData.UnplayedItemCount
+        end if
+
+        if datum.UserData.PlayedPercentage <> invalid
+            imgParams.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
+            imgParams_wide.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
         end if
 
         m.top.posterURL = ImageURL(datum.Id, "Primary", imgParams)
@@ -68,7 +75,11 @@ sub setData()
 
         if datum.UserData.PlayedPercentage <> invalid
             imgParams.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
+            imgParams_wide.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
         end if
+
+        imgParams.Append({ "maxHeight": 261, "maxWidth": 464 })
+        imgParams_wide.Append({ "maxHeight": 261, "maxWidth": 464 })
 
         m.top.posterURL = ImageURL(datum.id, "Primary", imgParams)
         m.top.widePosterURL = ImageURL(datum.id, "Backdrop", imgParams_wide)
@@ -81,6 +92,9 @@ sub setData()
             imgParams.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
             imgParams_wide.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
         end if
+
+        imgParams.Append({ "maxHeight": 261, "maxWidth": 464 })
+        imgParams_wide.Append({ "maxHeight": 261, "maxWidth": 464 })
 
         m.top.posterURL = ImageURL(datum.id, "Primary", imgParams)
         m.top.widePosterURL = ImageURL(datum.id, "Backdrop", imgParams_wide)
