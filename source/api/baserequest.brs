@@ -1,14 +1,14 @@
 ' Functions for making requests to the API
 function buildParams(params = {} as object) as string
     ' Take an object of parameters and construct the URL query
-    req = createObject("roUrlTransfer") ' Just so we can use it for escape
+    ' remove req create object as this cannot be called within a render thread and occasionally produces a crash - use EncodeURI Component instead
+    ' req = createObject("roUrlTransfer") ' Just so we can use it for escape
 
     param_array = []
     for each field in params.items()
         item = ""
         if type(field.value) = "String" or type(field.value) = "roString"
-            item = field.key + "=" + req.escape(field.value.trim())
-            'item = field.key + "=" + field.value.trim()
+            item = field.key + "=" + field.value.trim().EncodeUriComponent()
         else if type(field.value) = "roInteger" or type(field.value) = "roInt"
             item = field.key + "=" + stri(field.value).trim()
             'item = field.key + "=" + str(field.value).trim()
@@ -28,7 +28,7 @@ function buildParams(params = {} as object) as string
             item = field.key + "=null"
         else if field <> invalid
             print "Unhandled param type: " + type(field.value)
-            item = field.key + "=" + req.escape(field.value)
+            item = field.key + "=" + field.value.EncodeUriComponent()
             'item = field.key + "=" + field.value
         end if
 
