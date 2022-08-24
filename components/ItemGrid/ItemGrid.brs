@@ -240,15 +240,15 @@ sub setMoviesOptions(options)
         { "Title": tr("Genres"), "Name": "Genres" }
     ]
     options.sort = [
-        { "Title": tr("Title"), "Name": "SortName" },
-        { "Title": tr("IMDB_Rating"), "Name": "CommunityRating" },
-        { "Title": tr("Critic_Rating"), "Name": "CriticRating" },
-        { "Title": tr("Date_Added"), "Name": "DateCreated" },
-        { "Title": tr("Date_Played"), "Name": "DatePlayed" },
-        { "Title": tr("Official_Rating"), "Name": "OfficialRating" },
-        { "Title": tr("Play_Count"), "Name": "PlayCount" },
-        { "Title": tr("Release_Date"), "Name": "PremiereDate" },
-        { "Title": tr("Runtime"), "Name": "Runtime" }
+        { "Title": tr("TITLE"), "Name": "SortName" },
+        { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
+        { "Title": tr("CRITIC_RATING"), "Name": "CriticRating" },
+        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
+        { "Title": tr("PLAY_COUNT"), "Name": "PlayCount" },
+        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+        { "Title": tr("RUNTIME"), "Name": "Runtime" }
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
@@ -260,10 +260,10 @@ end sub
 sub setBoxsetsOptions(options)
     options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
     options.sort = [
-        { "Title": tr("Title"), "Name": "SortName" },
-        { "Title": tr("Date_Added"), "Name": "DateCreated" },
-        { "Title": tr("Date_Played"), "Name": "DatePlayed" },
-        { "Title": tr("Release_Date"), "Name": "PremiereDate" },
+        { "Title": tr("TITLE"), "Name": "SortName" },
+        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
@@ -280,12 +280,12 @@ sub setTvShowsOptions(options)
 
     ]
     options.sort = [
-        { "Title": tr("Title"), "Name": "SortName" },
-        { "Title": tr("IMDB_Rating"), "Name": "CommunityRating" },
-        { "Title": tr("Date_Added"), "Name": "DateCreated" },
-        { "Title": tr("Date_Played"), "Name": "DatePlayed" },
-        { "Title": tr("Official_Rating"), "Name": "OfficialRating" },
-        { "Title": tr("Release_Date"), "Name": "PremiereDate" },
+        { "Title": tr("TITLE"), "Name": "SortName" },
+        { "Title": tr("IMDB_RATING"), "Name": "CommunityRating" },
+        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
+        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
@@ -300,7 +300,7 @@ sub setLiveTvOptions(options)
         { "Title": tr("TV Guide"), "Name": "tvGuide" }
     ]
     options.sort = [
-        { "Title": tr("Title"), "Name": "SortName" }
+        { "Title": tr("TITLE"), "Name": "SortName" }
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
@@ -319,10 +319,10 @@ sub setMusicOptions(options)
         { "Title": tr("Albums"), "Name": "music-album" },
     ]
     options.sort = [
-        { "Title": tr("Title"), "Name": "SortName" },
-        { "Title": tr("Date_Added"), "Name": "DateCreated" },
-        { "Title": tr("Date_Played"), "Name": "DatePlayed" },
-        { "Title": tr("Release_Date"), "Name": "PremiereDate" },
+        { "Title": tr("TITLE"), "Name": "SortName" },
+        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
@@ -347,7 +347,7 @@ sub setDefaultOptions(options)
         { "Title": tr("Default"), "Name": "default" }
     ]
     options.sort = [
-        { "Title": tr("Ttile"), "Name": "SortName" }
+        { "Title": tr("TITLE"), "Name": "SortName" }
     ]
 end sub
 
