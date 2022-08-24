@@ -211,54 +211,54 @@
     </message>
     <message>
         <comment>Name or Title field of media item</comment>
-        <source>Title</source>
+        <source>TITLE</source>
         <translation>Name</translation>
     </message>
     <message>
-        <source>IMDB_Rating</source>
+        <source>IMDB_RATING</source>
         <translation>IMDb Rating</translation>
     </message>
     <message>
-        <source>Critic Rating</source>
+        <source>CRITIC_RATING</source>
         <translation>Critics Rating</translation>
     </message>
     <message>
-        <source>Date Added</source>
+        <source>DATE_ADDED</source>
         <translation>Date Added</translation>
     </message>
     <message>
-        <source>Date Played</source>
+        <source>DATE_PLAYED</source>
         <translation>Date Played</translation>
     </message>
     <message>
-        <source>Official Rating</source>
+        <source>OFFICIAL_RATING</source>
         <translation>Parental Rating</translation>
     </message>
     <message>
-        <source>Play Count</source>
+        <source>PLAY_COUNT</source>
         <translation>Play Count</translation>
     </message>
     <message>
-        <source>Release Date</source>
+        <source>RELEASE_DATE</source>
         <translation>Release Date</translation>
     </message>
     <message>
-        <source>Runtime</source>
+        <source>RUNTIME</source>
         <translation>Run Time</translation>
     </message>
     <message>
         <comment>Title of Tab for switching &quot;views&quot; when looking at a library</comment>
-        <source>View</source>
+        <source>TAB_VIEW</source>
         <translation>View</translation>
     </message>
     <message>
         <comment>Title of Tab for options to sort library content</comment>
-        <source>Sort</source>
+        <source>TAB_SORT</source>
         <translation>Sort</translation>
     </message>
     <message>
         <comment>Title of Tab for options to filter library content</comment>
-        <source>Filter</source>
+        <source>TAB_FILTER</source>
         <translation>Filter</translation>
     </message>
     <message>
