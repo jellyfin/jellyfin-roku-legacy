@@ -241,13 +241,13 @@ sub setMoviesOptions(options)
     ]
     options.sort = [
         { "Title": tr("Title"), "Name": "SortName" },
-        { "Title": tr("IMDB Rating"), "Name": "CommunityRating" },
-        { "Title": tr("Critic Rating"), "Name": "CriticRating" },
-        { "Title": tr("Date Added"), "Name": "DateCreated" },
-        { "Title": tr("Date Played"), "Name": "DatePlayed" },
-        { "Title": tr("Official Rating"), "Name": "OfficialRating" },
-        { "Title": tr("Play Count"), "Name": "PlayCount" },
-        { "Title": tr("Release Date"), "Name": "PremiereDate" },
+        { "Title": tr("IMDB_Rating"), "Name": "CommunityRating" },
+        { "Title": tr("Critic_Rating"), "Name": "CriticRating" },
+        { "Title": tr("Date_Added"), "Name": "DateCreated" },
+        { "Title": tr("Date_Played"), "Name": "DatePlayed" },
+        { "Title": tr("Official_Rating"), "Name": "OfficialRating" },
+        { "Title": tr("Play_Count"), "Name": "PlayCount" },
+        { "Title": tr("Release_Date"), "Name": "PremiereDate" },
         { "Title": tr("Runtime"), "Name": "Runtime" }
     ]
     options.filter = [
@@ -261,9 +261,9 @@ sub setBoxsetsOptions(options)
     options.views = [{ "Title": tr("Shows"), "Name": "shows" }]
     options.sort = [
         { "Title": tr("Title"), "Name": "SortName" },
-        { "Title": tr("Date Added"), "Name": "DateCreated" },
-        { "Title": tr("Date Played"), "Name": "DatePlayed" },
-        { "Title": tr("Release Date"), "Name": "PremiereDate" },
+        { "Title": tr("Date_Added"), "Name": "DateCreated" },
+        { "Title": tr("Date_Played"), "Name": "DatePlayed" },
+        { "Title": tr("Release_Date"), "Name": "PremiereDate" },
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
@@ -281,11 +281,11 @@ sub setTvShowsOptions(options)
     ]
     options.sort = [
         { "Title": tr("Title"), "Name": "SortName" },
-        { "Title": tr("IMDB Rating"), "Name": "CommunityRating" },
-        { "Title": tr("Date Added"), "Name": "DateCreated" },
-        { "Title": tr("Date Played"), "Name": "DatePlayed" },
-        { "Title": tr("Official Rating"), "Name": "OfficialRating" },
-        { "Title": tr("Release Date"), "Name": "PremiereDate" },
+        { "Title": tr("IMDB_Rating"), "Name": "CommunityRating" },
+        { "Title": tr("Date_Added"), "Name": "DateCreated" },
+        { "Title": tr("Date_Played"), "Name": "DatePlayed" },
+        { "Title": tr("Official_Rating"), "Name": "OfficialRating" },
+        { "Title": tr("Release_Date"), "Name": "PremiereDate" },
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
@@ -320,9 +320,9 @@ sub setMusicOptions(options)
     ]
     options.sort = [
         { "Title": tr("Title"), "Name": "SortName" },
-        { "Title": tr("Date Added"), "Name": "DateCreated" },
-        { "Title": tr("Date Played"), "Name": "DatePlayed" },
-        { "Title": tr("Release Date"), "Name": "PremiereDate" },
+        { "Title": tr("Date_Added"), "Name": "DateCreated" },
+        { "Title": tr("Date_Played"), "Name": "DatePlayed" },
+        { "Title": tr("Release_Date"), "Name": "PremiereDate" },
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
