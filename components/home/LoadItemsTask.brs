@@ -79,7 +79,6 @@ sub loadItems()
             ' Skip Books for now as we don't support it (issue #558)
             if item.Type <> "Book"
                 tmp = CreateObject("roSGNode", "HomeData")
-                ' print "ITEM: " item
                 item.ImageURL = ImageURL(item.Id, "Primary", params)
                 if item.type = "Episode"
                     item.ImageURL = ImageURL(item.SeriesId, "Primary", params)

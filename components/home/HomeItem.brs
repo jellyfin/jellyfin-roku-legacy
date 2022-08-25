@@ -175,10 +175,24 @@ sub itemContentChanged()
         return
     end if
 
-    if itemData.type = "MusicAlbum" or itemData.type = "Audio" or itemData.type = "AudioBook"
+    if itemData.type = "MusicAlbum" or itemData.type = "Audio" or itemData.type = "AudioBook" or itemData.type = "MusicVideo"
         m.itemText.text = itemData.name
         m.itemTextExtra.text = itemData.json.AlbumArtist
-        m.itemPoster.uri = itemData.posterURL
+        if itemData.usePoster = true
+            m.itemPoster.uri = itemData.posterURL
+        else
+            m.itemPoster.uri = itemData.widePosterURL
+        end if
+
+        return
+    end if
+
+    if itemData.type = "Photo" or itemData.type = "PhotoAlbum"
+        if itemData.usePoster = true
+            if itemData.json.ImageURL <> invalid
+                m.itemPoster.uri = itemData.json.ImageURL
+            end if
+        end if
         return
     end if
 

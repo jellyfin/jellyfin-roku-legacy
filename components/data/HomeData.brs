@@ -98,10 +98,10 @@ sub setData()
 
         m.top.posterURL = ImageURL(datum.id, "Primary", imgParams)
         m.top.widePosterURL = ImageURL(datum.id, "Backdrop", imgParams_wide)
-    else if datum.type = "MusicAlbum" or datum.type = "Audio"
-        imgParams = { "fillHeight": 624, "fillWidth": 416, "quality": 96, AddPlayedIndicator: datum.UserData.Played }
-        m.top.thumbnailURL = ImageURL(datum.id, "Primary", imgParams)
-        m.top.widePosterUrl = ImageURL(datum.id, "Backdrop", imgParams)
+    else if datum.type = "MusicAlbum" or datum.type = "Audio" or datum.type = "MusicVideo"
+        imgParams = { "fillHeight": 374, "fillWidth": 664, "quality": 96, "maxHeight": 374, "maxWidth": 664, AddPlayedIndicator: datum.UserData.Played }
+
+        m.top.widePosterUrl = ImageURL(datum.id, "Primary", imgParams)
         m.top.posterUrl = ImageURL(datum.id, "Primary", imgParams)
 
     else if datum.type = "TvChannel" or datum.type = "Channel"

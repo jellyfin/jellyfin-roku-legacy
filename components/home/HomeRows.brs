@@ -158,22 +158,12 @@ sub setLatestMediaCount()
 
     ' Have to filter the orderedViews because Brightscript is awesome
     if has_latest = true
-        orderedViews = m.top.userConfig.OrderedViews
         filteredOrderedViews = []
-        if userConfig <> invalid
-            if orderedViews <> invalid
-                for i = 0 to orderedViews.count() - 1
-                    for j = 0 to filteredLatest.count() - 1
-                        if filteredLatest[j].id = orderedViews[i]
-                            if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders" and filteredLatest[j].collectionType <> "books"
-                                filteredOrderedViews.push(orderedViews[i])
-                                exit for
-                            end if
-                        end if
-                    end for
-                end for
+        for j = 0 to filteredLatest.count() - 1
+            if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders" and filteredLatest[j].collectionType <> "books"
+                filteredOrderedViews.push(filteredLatest[j].id)
             end if
-        end if
+        end for
         if filteredOrderedViews.count() <> 0
             for i = 0 to filteredOrderedViews.count() - 1
                 for each lib in filteredLatest
@@ -402,10 +392,12 @@ sub rebuildItemArray()
                 userConfig = m.top.userConfig
                 filteredLatest = filterNodeArray(m.libraryData, "id", userConfig.LatestItemsExcludes)
                 for each lib in filteredLatest
-                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder"
+                    if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.collectionType <> "CollectionFolder" and lib.collectionType <> "folders" and lib.collectionType <> "books"
                         itemSize = [208, 312]
                         if lib.collectionType = "music"
                             itemSize = [261, 261]
+                        else if lib.collectionType = "musicvideos"
+                            itemSize = [430, 244]
                         end if
                         newSizeArray.push(itemSize)
                     end if
@@ -556,22 +548,12 @@ sub updateLatestMedia()
     latest_count = 0
 
     ' Have to filter the orderedViews because Brightscript is awesome
-    orderedViews = m.top.userConfig.OrderedViews
     filteredOrderedViews = []
-    if userConfig <> invalid
-        if orderedViews <> invalid
-            for i = 0 to orderedViews.count() - 1
-                for j = 0 to filteredLatest.count() - 1
-                    if filteredLatest[j].id = orderedViews[i]
-                        if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders" and filteredLatest[j].collectionType <> "books"
-                            filteredOrderedViews.push(orderedViews[i])
-                            exit for
-                        end if
-                    end if
-                end for
-            end for
+    for j = 0 to filteredLatest.count() - 1
+        if filteredLatest[j].collectionType <> "boxsets" and filteredLatest[j].collectionType <> "livetv" and filteredLatest[j].collectionType <> "CollectionFolder" and filteredLatest[j].collectionType <> "folders" and filteredLatest[j].collectionType <> "books"
+            filteredOrderedViews.push(filteredLatest[j].id)
         end if
-    end if
+    end for
     if filteredOrderedViews.count() <> 0
         for i = 0 to filteredOrderedViews.count() - 1
             for each lib in filteredLatest
@@ -748,12 +730,15 @@ sub updateLatestItems(msg)
     node = msg.getRoSGNode()
     node.unobserveField("content")
 
+    latestMediaCount = m.latestMediaCount - 1
+
     homeRows = m.top.content
     section = getHomeSectionInt("latestmedia")
     node_index = node.nodeNumber
     index_section = section + 1
     index_section_latest = index_section + node_index
     row_index = getRowIndex(Substitute("Loading Section {0}...", index_section_latest.toStr()))
+    itemSize = [208, 312]
     if row_index <> invalid
         row = homeRows.getChild(row_index)
         item_count = itemData.count()
@@ -768,7 +753,23 @@ sub updateLatestItems(msg)
                 row.title = tr("Latest in") + " " + node.metadata.title + " >"
                 itemData[i].usePoster = true
                 if node.metadata.contentType = "music"
-                    itemData[i].imageWidth = 245
+                    if itemData[i] <> invalid
+                        itemData[i].usePoster = false
+                        itemData[i].imageWidth = 261
+                        itemData[i].imageHeight = 261
+                        itemSize = [261, 261]
+                        row.appendChild(itemData[i])
+                    end if
+                else if node.metadata.contentType = "musicvideos"
+                    if itemData[i] <> invalid
+                        itemData[i].usePoster = false
+                        itemData[i].imageWidth = 416
+                        itemData[i].imageHeight = 234
+                        itemData[i].translation = "[8,258]"
+                        ' itemData[i].translation_extra = "[8,255]"
+                        itemSize = [430, 244]
+                        row.appendChild(itemData[i])
+                    end if
                 else
                     itemData[i].imageWidth = 192
                     itemData[i].imageHeight = 300
@@ -778,6 +779,8 @@ sub updateLatestItems(msg)
                 row.appendChild(itemData[i])
             end if
         end for
+
+        updateSizeArray(itemSize, section + latestMediaCount, "replace")
         row.update(row, false)
     end if
 end sub
