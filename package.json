@@ -35,6 +35,8 @@
   "homepage": "https://github.com/jellyfin/jellyfin-roku#readme",
   "dependencies": {
     "api": "npm:jellyfin-api-bs-client@^1.0.5",
-    "brighterscript-formatter": "^1.6.8"
+    "bgv": "npm:button-group-vert@^1.0.1",
+    "brighterscript-formatter": "^1.6.8",
+    "sob": "npm:slide-out-button@^1.0.1"
   }
 }

@@ -215,7 +215,6 @@ sub Main (args as dynamic) as void
             if isValid(screenContent.albumData)
                 group = CreateInstantMixGroup(screenContent.albumData.items)
             else if isValid(screenContent.pageContent)
-                print screenContent.musicArtistAlbumData.items[0].json
                 group = CreateInstantMixGroup([{ id: screenContent.musicArtistAlbumData.items[0].json.id }])
             end if
         else if isNodeEvent(msg, "episodeSelected")
