@@ -109,6 +109,10 @@ function ItemMetaData(id as string)
         tmp.image = PosterImage(data.id)
         tmp.json = data
         return tmp
+    else if data.type = "Trailer"
+        tmp = CreateObject("roSGNode", "VideoData")
+        tmp.json = data
+        return tmp
     else if data.type = "TvChannel" or data.type = "Program"
         tmp = CreateObject("roSGNode", "ChannelData")
         tmp.image = PosterImage(data.id)

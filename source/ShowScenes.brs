@@ -338,6 +338,12 @@ function CreateMovieDetailsGroup(movie)
 
     movie = ItemMetaData(movie.id)
     group.itemContent = movie
+    group.trailerAvailable = false
+
+    trailerData = api_API().users.getlocaltrailers(get_setting("active_user"), movie.id)
+    if isValid(trailerData)
+        group.trailerAvailable = trailerData.Count() > 0
+    end if
 
     buttons = group.findNode("buttons")
     for each b in buttons.getChildren(-1, 0)
