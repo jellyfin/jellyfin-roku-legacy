@@ -1,11 +1,11 @@
 [
     {
         "title": "Playback",
-        "description": "Settings relating to playback and supported codec and media types",
+        "description": "Settings relating to playback and supported codec and media types.",
         "children": [
             {
-                "title": "MPEG 2 Support",
-                "description": "Support Direct Play of MPEG 2 content (e.g., Live TV). This will prevent transcoding of MPEG 2 content, but uses significantly more bandwidth.",
+                "title": "MPEG-2 Support",
+                "description": "Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.",
                 "settingName": "playback.mpeg2",
                 "type": "bool",
                 "default": "false"
@@ -28,7 +28,7 @@
     },
     {
         "title": "User Interface",
-        "description": "Settings relating to how the application looks",
+        "description": "Settings relating to how the application looks.",
         "children": [
             {
                 "title": "Details Page",
@@ -49,7 +49,7 @@
                 "children": [
                     {
                         "title": "Blur Unwatched Episodes",
-                        "description": "If enabled, images for unwatched episodes will be blurred.",
+                        "description": "If enabled, images of unwatched episodes will be blurred.",
                         "settingName": "ui.tvshows.blurunwatched",
                         "type": "bool",
                         "default": "false"
@@ -91,7 +91,7 @@
             },
             {
                 "title": "Media Grid",
-                "description": "Media Grid Options",
+                "description": "Media Grid Options.",
                 "children": [
                     {
                         "title": "Item Count",
@@ -102,14 +102,14 @@
                     },
                     {
                         "title": "Item Titles",
-                        "description": "Always show the titles below the poster images. (If disabled, the title will be shown under the highlighted item only)",
+                        "description": "Always show the titles below the poster images. (If disabled, the title will be shown under the highlighted item only).",
                         "settingName": "itemgrid.alwaysShowTitles",
                         "type": "bool",
                         "default": "false"
                     },
                     {
                         "title": "Return to Top",
-                        "description": "Use the replay button to slowly animate to the first item in the folder. (If disabled, the folder will reset to the first item immediately)",
+                        "description": "Use the replay button to slowly animate to the first item in the folder. (If disabled, the folder will reset to the first item immediately).",
                         "settingName": "itemgrid.reset",
                         "type": "bool",
                         "default": "true"
