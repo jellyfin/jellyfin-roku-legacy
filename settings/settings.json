@@ -62,7 +62,7 @@
                 "children": [
                     {
                         "title": "Use Splashscreen as Screensaver Background",
-                        "description": "Use generated splashscreen image as Jellyfin's screensaver background.",
+                        "description": "Use generated splashscreen image as Jellyfin's screensaver background. Jellyfin will need to be closed and reopened for change to take effect.",
                         "settingName": "ui.screensaver.splashBackground",
                         "type": "bool",
                         "default": "false"
