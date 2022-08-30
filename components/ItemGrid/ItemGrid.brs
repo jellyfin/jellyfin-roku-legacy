@@ -97,11 +97,11 @@ sub loadInitialItems()
             m.view = "tvGuide"
             'Move mic to be visiable on TV Guide screen
             if m.deviFeature = true
-            m.micButton.translation = "[1500, 90]"
-            m.micButtonText.visible = true
-            m.micButtonText.translation = "[1560,130]"
-            m.micButtonText.font.size = 22
-            m.micButtonText.text = tr("Search")
+                m.micButton.translation = "[1500, 90]"
+                m.micButtonText.visible = true
+                m.micButtonText.translation = "[1560,130]"
+                m.micButtonText.font.size = 22
+                m.micButtonText.text = tr("Search")
             end if
         else
             m.view = "livetv"
