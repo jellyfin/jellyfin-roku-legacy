@@ -370,5 +370,9 @@
         <source>TITLE</source>
         <translation>Nosaukums</translation>
     </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Saglabāt akreditācijas datus?</translation>
+    </message>
 </context>
 </TS>

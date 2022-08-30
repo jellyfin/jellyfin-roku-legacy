@@ -1580,5 +1580,14 @@
         <source>Change Server</source>
         <translation>Cambia server</translation>
     </message>
+    <message>
+        <source>Playback</source>
+        <translation>Riproduzione</translation>
+        <extracomment>Title for Playback section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Salvare le Credenziali?</translation>
+    </message>
 </context>
 </TS>

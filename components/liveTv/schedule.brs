@@ -96,6 +96,11 @@ end sub
 ' When LoadScheduleTask completes (initial or more data) and we have a schedule to display
 sub onScheduleLoaded()
 
+    ' make sure we actually have a schedule (i.e. filter by favorites, but no channels have been favorited)
+    if m.scheduleGrid.content.GetChildCount() <= 0
+        return
+    end if
+
     for each item in m.LoadScheduleTask.schedule
 
         channel = m.scheduleGrid.content.GetChild(m.channelIndex[item.ChannelId])
@@ -118,12 +123,21 @@ end sub
 
 sub onProgramFocused()
     m.top.watchChannel = invalid
-    channel = m.scheduleGrid.content.GetChild(m.scheduleGrid.programFocusedDetails.focusChannelIndex)
+
+    ' Make sure we have channels (i.e. filter set to favorite yet there are none)
+    if m.scheduleGrid.content.getChildCount() <= 0
+        channel = invalid
+    else
+        channel = m.scheduleGrid.content.GetChild(m.scheduleGrid.programFocusedDetails.focusChannelIndex)
+    end if
+
     m.detailsPane.channel = channel
     m.top.focusedChannel = channel
 
     ' Exit if Channels not yet loaded
-    if channel.getChildCount() = 0 or channel = invalid
+
+    if channel = invalid or channel.getChildCount() = 0
+
         m.detailsPane.programDetails = invalid
         return
     end if

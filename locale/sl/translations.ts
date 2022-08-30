@@ -858,5 +858,9 @@
         <translation>Napaka pri pridobivanju vsebine</translation>
         <extracomment>Dialog title when unable to load Content from Server</extracomment>
     </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Shranite poverilnice?</translation>
+    </message>
 </context>
 </TS>

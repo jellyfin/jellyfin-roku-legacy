@@ -173,4 +173,11 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name></name>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Gcina imininingwane?</translation>
+    </message>
+</context>
 </TS>

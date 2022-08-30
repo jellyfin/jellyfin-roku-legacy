@@ -284,10 +284,10 @@
     <message>
         <source>Special Features</source>
         <translation>Special Features</translation>
-     <message>
-        <source>Press 'OK' to Close</source>
-        <translation>Press 'OK' to Close</translation>
-    </message>
+        <message>
+            <source>Press &apos;OK&apos; to Close</source>
+            <translation>Press &apos;OK&apos; to Close</translation>
+        </message>
     </message>
     <message>
         <source>Movies</source>
@@ -501,7 +501,7 @@
     <message>
         <source>Media Grid</source>
         <translation>Media Grid</translation>
-        <extracomment>UI -> Media Grid section in user setting screen.</extracomment>
+        <extracomment>UI -&gt; Media Grid section in user setting screen.</extracomment>
     </message>
     <message>
         <source>Media Grid Options</source>
@@ -510,7 +510,7 @@
     <message>
         <source>Item Titles</source>
         <translation>Item Titles</translation>
-        <extracomment>UI -> Media Grid -> Item Title in user setting screen.</extracomment>
+        <extracomment>UI -&gt; Media Grid -&gt; Item Title in user setting screen.</extracomment>
     </message>
     <message>
         <source>Always show the titles below the poster images. (If disabled, title will be shown under hilighted item only)</source>
@@ -520,7 +520,7 @@
     <message>
         <source>Item Count</source>
         <translation>Item Count</translation>
-        <extracomment>UI -> Media Grid -> Item Count in user setting screen.</extracomment>
+        <extracomment>UI -&gt; Media Grid -&gt; Item Count in user setting screen.</extracomment>
     </message>
     <message>
         <source>Show item count in the library, and index of selected item.</source>
@@ -602,7 +602,7 @@
     <message>
         <source>Return to Top</source>
         <translation>Return to Top</translation>
-        <extracomment>UI -> Media Grid -> Item Title in user setting screen.</extracomment>
+        <extracomment>UI -&gt; Media Grid -&gt; Item Title in user setting screen.</extracomment>
     </message>
     <message>
         <source>Use the replay button to slowly animate to the first item in the folder. (If disabled, The folder will reset to the first item immediately)</source>
@@ -628,10 +628,6 @@
         <translation>Hides tagline text on details pages.</translation>
     </message>
     <message>
-        <source>TV Shows</source>
-        <translation>TV Shows</translation>
-    </message>
-    <message>
         <source>Options for TV Shows.</source>
         <translation>Options for TV Shows.</translation>
         <extracomment>Description for TV Shows user settings.</extracomment>
@@ -650,8 +646,8 @@
         <translation>Screensaver</translation>
     </message>
     <message>
-        <source>Options for Jellyfin's screensaver.</source>
-        <translation>Options for Jellyfin's screensaver.</translation>
+        <source>Options for Jellyfin&apos;s screensaver.</source>
+        <translation>Options for Jellyfin&apos;s screensaver.</translation>
         <extracomment>Description for Screensaver user settings.</extracomment>
     </message>
     <message>
@@ -660,8 +656,8 @@
         <extracomment>Option Title in user setting screen</extracomment>
     </message>
     <message>
-        <source>Use generated splashscreen image as Jellyfin's screensaver background.</source>
-        <translation>Use generated splashscreen image as Jellyfin's screensaver background.</translation>
+        <source>Use generated splashscreen image as Jellyfin&apos;s screensaver background.</source>
+        <translation>Use generated splashscreen image as Jellyfin&apos;s screensaver background.</translation>
     </message>
     <message>
         <source>Design Elements</source>
@@ -702,5 +698,12 @@
         <translation>Hides all clocks in Jellyfin. Jellyfin will need to be closed and reopened for change to take effect.</translation>
         <extracomment>Settings Menu - Description for option</extracomment>
     </message>
+    <message>
+        <source>Skip Intro</source>
+        <translation>Skip Intro</translation>
+    </message>
+</context>
+<context>
+    <name></name>
 </context>
 </TS>

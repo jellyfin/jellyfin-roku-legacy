@@ -21,8 +21,7 @@ sub itemContentChanged()
     setFieldText("officialRating", itemData.officialRating)
     if itemData.communityRating <> invalid
         m.top.findNode("star").visible = true
-        setFieldText("communityRating", itemData.communityRating)
-        ' m.top.findNode("communityRating").text = str(int(itemData.communityRating*10)/10)
+        setFieldText("communityRating", int(itemData.communityRating * 10) / 10)
     else
         m.top.findNode("star").visible = false
     end if

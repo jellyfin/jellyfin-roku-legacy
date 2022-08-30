@@ -835,5 +835,14 @@
         <source>Save Credentials?</source>
         <translation>Save Credentials?</translation>
     </message>
+    <message>
+        <source>Playback</source>
+        <translation>Playback</translation>
+        <extracomment>Title for Playback section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Save Credentials?</translation>
+    </message>
 </context>
 </TS>

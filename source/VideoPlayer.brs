@@ -36,6 +36,11 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
         video.id = meta.json.ChannelId
     end if
 
+    if m.videotype = "Episode" or m.videotype = "Series"
+        video.skipIntroParams = api_API().introskipper.get(video.id)
+        video.content.contenttype = "episode"
+    end if
+
     video.content.title = meta.title
     video.showID = meta.showID
 
@@ -268,6 +273,10 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     ' Perform relevant setup work for selected subtitle, and return the index of the subtitle
     ' is enabled/will be enabled, indexed on the provided list of subtitles
     video.SelectedSubtitle = setupSubtitle(video, video.Subtitles, subtitle_idx)
+
+    video.content.SDBifUrl = api_API().jellyscrub.get(video.id)
+    video.content.HDBifUrl = api_API().jellyscrub.get(video.id)
+    video.content.FHDBifUrl = api_API().jellyscrub.get(video.id)
 
     if not fully_external
         video.content = authorize_request(video.content)

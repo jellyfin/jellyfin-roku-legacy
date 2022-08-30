@@ -7,9 +7,10 @@
     "test": "tests"
   },
   "devDependencies": {
-    "@rokucommunity/bslint": "0.7.2",
-    "brighterscript": "0.54.1",
-    "rooibos-cli": "1.4.0"
+    "@rokucommunity/bslint": "0.7.3",
+    "brighterscript": "0.55.2",
+    "rooibos-cli": "1.4.0",
+    "ropm": "^0.10.6"
   },
   "scripts": {
     "validate": "npx bsc --copy-to-staging=false --create-package=false",
@@ -33,6 +34,7 @@
   },
   "homepage": "https://github.com/jellyfin/jellyfin-roku#readme",
   "dependencies": {
+    "api": "npm:jellyfin-api-bs-client@^1.0.5",
     "brighterscript-formatter": "^1.6.8"
   }
 }

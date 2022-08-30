@@ -1602,5 +1602,9 @@
         <source>Save Credentials?</source>
         <translation>¿Guardar credenciales?</translation>
     </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Guardar credenciales?</translation>
+    </message>
 </context>
 </TS>

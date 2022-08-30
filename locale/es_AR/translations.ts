@@ -1316,5 +1316,9 @@
         <translation>Error recuperando contenido</translation>
         <extracomment>Dialog title when unable to load Content from Server</extracomment>
     </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Guardar credenciales?</translation>
+    </message>
 </context>
 </TS>

@@ -659,5 +659,9 @@
         <source>More Like This</source>
         <translation>Navrhované</translation>
     </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Uložiť poverenia?</translation>
+    </message>
 </context>
 </TS>
