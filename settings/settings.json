@@ -12,7 +12,7 @@
             },
             {
                 "title": "Attempt Direct Play (Profile Lvl)",
-                "description": "Attempt Direct Play for h264 media with unsupported profile levels (> 4.2) before falling back to transcoding if it fails.",
+                "description": "Attempt Direct Play for H.264 media with unsupported profile levels (> 4.2) before falling back to transcoding if it fails.",
                 "settingName": "playback.tryDirect.h264ProfileLevel",
                 "type": "bool",
                 "default": "true"
