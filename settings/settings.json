@@ -102,7 +102,7 @@
                     },
                     {
                         "title": "Item Titles",
-                        "description": "Always show the titles below the poster images. (If disabled, the title will be shown under highlighted item only)",
+                        "description": "Always show the titles below the poster images. (If disabled, the title will be shown under the highlighted item only)",
                         "settingName": "itemgrid.alwaysShowTitles",
                         "type": "bool",
                         "default": "false"
