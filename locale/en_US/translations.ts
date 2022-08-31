@@ -692,5 +692,24 @@
             <source>Play Trailer</source>
             <translation>Play Trailer</translation>
         </message>
+        <message>
+            <source>Home Page</source>
+            <translation>Home Page</translation>
+        </message>
+        <message>
+            <source>Options for Home Page.</source>
+            <translation>Options for Home Page.</translation>
+            <extracomment>Description for Home Page user settings.</extracomment>
+        </message>
+        <message>
+            <source>Max Days Next Up</source>
+            <translation>Max Days Next Up</translation>
+            <extracomment>Option Title in user setting screen</extracomment>
+        </message>
+        <message>
+            <source>Set the maximum amount of days a show should stay in the 'Next Up' list without watching it.</source>
+            <translation>Set the maximum amount of days a show should stay in the 'Next Up' list without watching it.</translation>
+            <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
     </context>
 </TS>

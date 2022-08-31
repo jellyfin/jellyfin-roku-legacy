@@ -31,6 +31,19 @@
         "description": "Settings relating to how the application looks.",
         "children": [
             {
+                "title": "Home Page",
+                "description": "Options for Home page.",
+                "children": [
+                    {
+                        "title": "Max Days Next Up",
+                        "description": "Set the maximum amount of days a show should stay in the 'Next Up' list without watching it.",
+                        "settingName": "ui.details.maxdaysnextup",
+                        "type": "integer",
+                        "default": "365"
+                    }
+                ]
+            },
+            {
                 "title": "Details Page",
                 "description": "Options for Details pages.",
                 "children": [
@@ -42,8 +55,8 @@
                         "default": "false"
                     }
                 ]
-            },     
-            {    
+            },
+            {
                 "title": "TV Shows",
                 "description": "Options for TV Shows.",
                 "children": [
@@ -55,8 +68,8 @@
                         "default": "false"
                     }
                 ]
-            },     
-            {              
+            },
+            {
                 "title": "Screensaver",
                 "description": "Options for Jellyfin's screensaver.",
                 "children": [
@@ -68,7 +81,7 @@
                         "default": "false"
                     }
                 ]
-            },     
+            },
             {
                 "title": "Design Elements",
                 "description": "Options that alter the design of Jellyfin.",
