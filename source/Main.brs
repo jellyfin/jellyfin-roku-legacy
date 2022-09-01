@@ -341,9 +341,8 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "state")
             node = msg.getRoSGNode()
             if selectedItem.Type = "TvChannel" and node.state = "finished"
-                sceneManager.callFunc("popScene")
                 video = CreateVideoPlayerGroup(node.id)
-                sceneManager.callFunc("pushScene", video)
+                m.global.sceneManager.callFunc("popScene")
             else if node.state = "finished"
                 node.control = "stop"
 
