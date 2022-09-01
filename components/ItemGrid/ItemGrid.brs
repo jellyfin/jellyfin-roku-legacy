@@ -77,7 +77,6 @@ end sub
 '
 'Load initial set of Data
 sub loadInitialItems()
-
     m.loadItemsTask.control = "stop"
     m.spinner.visible = true
 
@@ -93,16 +92,16 @@ sub loadInitialItems()
     if m.top.parentItem.collectionType = "livetv"
         ' Translate between app and server nomenclature
         viewSetting = get_user_setting("display.livetv.landing")
+        'Move mic to be visiable on TV Guide screen
+        if m.deviFeature = true
+            m.micButton.translation = "[1540, 92]"
+            m.micButtonText.visible = true
+            m.micButtonText.translation = "[1600,130]"
+            m.micButtonText.font.size = 22
+            m.micButtonText.text = tr("Search")
+        end if
         if viewSetting = "guide"
             m.view = "tvGuide"
-            'Move mic to be visiable on TV Guide screen
-            if m.deviFeature = true
-                m.micButton.translation = "[1500, 90]"
-                m.micButtonText.visible = true
-                m.micButtonText.translation = "[1560,130]"
-                m.micButtonText.font.size = 22
-                m.micButtonText.text = tr("Search")
-            end if
         else
             m.view = "livetv"
         end if
@@ -666,6 +665,7 @@ sub optionsClosed()
     if m.tvGuide <> invalid
         m.tvGuide.lastFocus.setFocus(true)
     end if
+
 end sub
 
 sub showTVGuide()

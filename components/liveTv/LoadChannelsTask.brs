@@ -66,5 +66,4 @@ sub loadChannels()
         end if
     end for
     m.top.channels = results
-
 end sub
