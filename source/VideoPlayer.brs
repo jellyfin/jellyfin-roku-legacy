@@ -176,7 +176,6 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     if meta.live then mediaSourceId = "" ' Don't send mediaSourceId for Live media
 
     playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
-    print "Debug playbackinfo: " playbackInfo
     video.videoId = video.id
     video.mediaSourceId = mediaSourceId
     video.audioIndex = audio_stream_idx
