@@ -264,6 +264,9 @@ function AudioStream(id as string)
     content.title = songData.title
     content.streamformat = songData.mediaSources[0].container
 
+    playbackInfo = ItemPostPlaybackInfo(songData.id, params.MediaSourceId)
+    content.id = playbackInfo.PlaySessionId
+
     return content
 end function
 
