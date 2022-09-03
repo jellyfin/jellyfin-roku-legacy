@@ -19,6 +19,9 @@ sub init()
     m.buttonGrp.setFocus(true)
     m.top.lastFocus = m.buttonGrp
 
+    m.trailerButton = m.top.findNode("trailer-button")
+    m.trailerButton.text = tr("Play Trailer")
+
     m.top.observeField("itemContent", "itemContentChanged")
 end sub
 
@@ -31,6 +34,9 @@ sub OnScreenShown()
     end if
 end sub
 
+sub trailerAvailableChanged()
+    m.trailerButton.visible = m.top.trailerAvailable
+end sub
 
 sub itemContentChanged()
     ' Updates video metadata

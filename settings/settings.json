@@ -1,18 +1,18 @@
 [
     {
         "title": "Playback",
-        "description": "Settings related to playback and supported codec and media types",
+        "description": "Settings relating to playback and supported codec and media types.",
         "children": [
             {
-                "title": "MPEG 2 Support",
-                "description": "Support direct play of MPEG 2 content (e.g. Live TV). This will prevent transcoding of MPEG 2 content, but uses significantly more bandwidth",
+                "title": "MPEG-2 Support",
+                "description": "Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.",
                 "settingName": "playback.mpeg2",
                 "type": "bool",
                 "default": "false"
             },
             {
                 "title": "Attempt Direct Play (Profile Lvl)",
-                "description": "Attempt Direct Play for h264 media with unsupported profile levels (> 4.2) before falling back to trancoding if it fails.",
+                "description": "Attempt Direct Play for H.264 media with unsupported profile levels (> 4.2) before falling back to transcoding if it fails.",
                 "settingName": "playback.tryDirect.h264ProfileLevel",
                 "type": "bool",
                 "default": "true"
@@ -28,10 +28,10 @@
     },
     {
         "title": "User Interface",
-        "description": "Settings relating to how the how the application looks",
+        "description": "Settings relating to how the application looks.",
         "children": [
             {
-                "title": "Detail Page",
+                "title": "Details Page",
                 "description": "Options for details pages.",
                 "children": [
                     {
@@ -49,7 +49,7 @@
                 "children": [
                     {
                         "title": "Blur Unwatched Episodes",
-                        "description": "If enabled, images for unwatched episodes will be blurred.",
+                        "description": "If enabled, images of unwatched episodes will be blurred.",
                         "settingName": "ui.tvshows.blurunwatched",
                         "type": "bool",
                         "default": "false"
@@ -62,7 +62,7 @@
                 "children": [
                     {
                         "title": "Use Splashscreen as Screensaver Background",
-                        "description": "Use generated splashscreen image as Jellyfin's screensaver background.",
+                        "description": "Use generated splashscreen image as Jellyfin's screensaver background. Jellyfin will need to be closed and reopened for change to take effect.",
                         "settingName": "ui.screensaver.splashBackground",
                         "type": "bool",
                         "default": "false"
@@ -82,7 +82,7 @@
                     },
                     {
                         "title": "Use Splashscreen as Home Background",
-                        "description": "Use generated splashscreen image as Jellyfin home background. Jellyfin will need to be closed and reopened for change to take effect.",
+                        "description": "Use generated splashscreen image as Jellyfin's home background. Jellyfin will need to be closed and reopened for change to take effect.",
                         "settingName": "ui.home.splashBackground",
                         "type": "bool",
                         "default": "false"
@@ -91,25 +91,25 @@
             },
             {
                 "title": "Media Grid",
-                "description": "Media Grid Options",
+                "description": "Media Grid Options.",
                 "children": [
                     {
                         "title": "Item Count",
-                        "description": "Show item count in the library, and index of selected item.",
+                        "description": "Show item count in the library and index of selected item.",
                         "settingName": "itemgrid.showItemCount",
                         "type": "bool",
                         "default": "false"
                     },
                     {
                         "title": "Item Titles",
-                        "description": "Always show the titles below the poster images. (If disabled, title will be shown under hilighted item only)",
+                        "description": "Always show the titles below the poster images. (If disabled, the title will be shown under the highlighted item only).",
                         "settingName": "itemgrid.alwaysShowTitles",
                         "type": "bool",
                         "default": "false"
                     },
                     {
                         "title": "Return to Top",
-                        "description": "Use the replay button to slowly animate to the first item in the folder. (If disabled, The folder will reset to the first item immediately)",
+                        "description": "Use the replay button to slowly animate to the first item in the folder. (If disabled, the folder will reset to the first item immediately).",
                         "settingName": "itemgrid.reset",
                         "type": "bool",
                         "default": "true"

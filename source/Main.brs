@@ -215,7 +215,6 @@ sub Main (args as dynamic) as void
             if isValid(screenContent.albumData)
                 group = CreateInstantMixGroup(screenContent.albumData.items)
             else if isValid(screenContent.pageContent)
-                print screenContent.musicArtistAlbumData.items[0].json
                 group = CreateInstantMixGroup([{ id: screenContent.musicArtistAlbumData.items[0].json.id }])
             end if
         else if isNodeEvent(msg, "episodeSelected")
@@ -292,6 +291,23 @@ sub Main (args as dynamic) as void
                     mediaSourceId = group.selectedVideoStreamId
                 end if
                 video_id = group.id
+
+                video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx)
+                if video <> invalid and video.errorMsg <> "introaborted"
+                    sceneManager.callFunc("pushScene", video)
+                end if
+
+                if group.lastFocus <> invalid
+                    group.lastFocus.setFocus(true)
+                end if
+            else if btn <> invalid and btn.id = "trailer-button"
+                audio_stream_idx = 1
+                mediaSourceId = invalid
+                video_id = group.id
+
+                trailerData = api_API().users.getlocaltrailers(get_setting("active_user"), group.id)
+
+                video_id = trailerData[0].id
 
                 video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx)
                 if video <> invalid and video.errorMsg <> "introaborted"

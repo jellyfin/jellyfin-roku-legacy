@@ -28,12 +28,21 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
         return
     end if
 
-    ' Special handling for "Programs" launched from "On Now"
-    if meta.json.type = "Program"
-        meta.title = meta.json.EpisodeTitle
+    ' Special handling for "Programs" or "Vidoes" launched from "On Now" or elsewhere on the home screen...
+    ' basically anything that is a Live Channel.
+    if meta.json.ChannelId <> invalid
+        if meta.json.EpisodeTitle <> invalid
+            meta.title = meta.json.EpisodeTitle
+        else if meta.json.Name <> invalid
+            meta.title = meta.json.Name
+        end if
         meta.showID = meta.json.id
         meta.live = true
-        video.id = meta.json.ChannelId
+        if meta.json.type = "Program"
+            video.id = meta.json.ChannelId
+        else
+            video.id = meta.json.id
+        end if
     end if
 
     if m.videotype = "Episode" or m.videotype = "Series"
@@ -167,7 +176,6 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     if meta.live then mediaSourceId = "" ' Don't send mediaSourceId for Live media
 
     playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
-
     video.videoId = video.id
     video.mediaSourceId = mediaSourceId
     video.audioIndex = audio_stream_idx
@@ -215,7 +223,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     ' artifacts. If the user preference is set, and the only reason the server says we need to
     ' transcode is that the Envoding Level is not supported, then try to direct play but silently
     ' fall back to the transcode if that fails.
-    if get_user_setting("playback.tryDirect.h264ProfileLevel") = "true" and playbackInfo.MediaSources[0].TranscodingUrl <> invalid and forceTranscoding = false and playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
+    if meta.live = false and get_user_setting("playback.tryDirect.h264ProfileLevel") = "true" and playbackInfo.MediaSources[0].TranscodingUrl <> invalid and forceTranscoding = false and playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
         transcodingReasons = getTranscodeReasons(playbackInfo.MediaSources[0].TranscodingUrl)
         if transcodingReasons.Count() = 1 and transcodingReasons[0] = "VideoLevelNotSupported"
             video.directPlaySupported = true
