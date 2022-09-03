@@ -249,10 +249,32 @@ sub Main (args as dynamic) as void
             node = getMsgPicker(msg)
             ' TODO - swap this based on target.mediatype
             ' types: [ Series (Show), Episode, Movie, Audio, Person, Studio, MusicArtist ]
+            print "Node.type= " node.type
             if node.type = "Series"
                 group = CreateSeriesDetailsGroup(node)
-            else
+            else if node.type = "Movie"
                 group = CreateMovieDetailsGroup(node)
+            else if node.type = "MusicArtist"
+                group = CreateArtistView(node.json)
+            else if node.type = "MusicAlbum"
+                group = CreateAlbumView(node.json)
+            else if node.type = "Audio"
+                group = CreateAudioPlayerGroup([node.json])
+            else if node.type = "Person"
+                group = CreatePersonView(node)
+            else if node.type = "TvChannel"
+                group = CreateVideoPlayerGroup(Node.id)
+                sceneManager.callFunc("pushScene", group)
+            else if node.type = "Episode"
+                group = CreateVideoPlayerGroup(Node.id)
+                sceneManager.callFunc("pushScene", group)
+            else if node.type = "Song"
+                selectedIndex = msg.getData()
+                screenContent = msg.getRoSGNode()
+                group = CreateAudioPlayerGroup([screenContent.albumData.items[selectedIndex]])
+            else
+                ' TODO - switch on more node types
+                message_dialog("This type is not yet supported: " + node.type + ".")
             end if
         else if isNodeEvent(msg, "buttonSelected")
             ' If a button is selected, we have some determining to do
