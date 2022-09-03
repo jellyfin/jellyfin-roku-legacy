@@ -261,15 +261,15 @@ sub Main (args as dynamic) as void
             else if node.type = "Person"
                 group = CreatePersonView(node)
             else if node.type = "TvChannel"
-                group = CreateVideoPlayerGroup(Node.id)
+                group = CreateVideoPlayerGroup(node.id)
                 sceneManager.callFunc("pushScene", group)
             else if node.type = "Episode"
-                group = CreateVideoPlayerGroup(Node.id)
+                group = CreateVideoPlayerGroup(node.id)
                 sceneManager.callFunc("pushScene", group)
             else if node.type = "Audio"
                 selectedIndex = msg.getData()
                 screenContent = msg.getRoSGNode()
-                group = CreateAudioPlayerGroup([screenContent.albumData.items[Node.id]])
+                group = CreateAudioPlayerGroup([screenContent.albumData.items[node.id]])
             else
                 ' TODO - switch on more node types
                 message_dialog("This type is not yet supported: " + node.type + ".")
