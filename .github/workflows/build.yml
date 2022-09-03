@@ -1,7 +1,9 @@
 name: build
-on: [push, pull_request]
-  paths-ignore:
-    - 'locale/**'
+on:
+  pull_request:
+  push:
+    paths-ignore:
+      - 'locale/**'
 jobs:
   run:
     runs-on: ubuntu-20.04
