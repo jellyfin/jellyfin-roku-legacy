@@ -18,8 +18,8 @@
                 "default": "true"
             },
             {
-                "title": "Cinema mode",
-                "description": "Cinema mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.",
+                "title": "Cinema Mode",
+                "description": "Cinema Mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.",
                 "settingName": "playback.cinemamode",
                 "type": "bool",
                 "default": "false"
@@ -32,7 +32,7 @@
         "children": [
             {
                 "title": "Details Page",
-                "description": "Options for details pages.",
+                "description": "Options for Details pages.",
                 "children": [
                     {
                         "title": "Hide Taglines",
@@ -91,7 +91,7 @@
             },
             {
                 "title": "Media Grid",
-                "description": "Media Grid Options.",
+                "description": "Media Grid options.",
                 "children": [
                     {
                         "title": "Item Count",
