@@ -36,6 +36,10 @@ function getDeviceProfile() as object
         tsVideoCodecs = tsVideoCodecs + ",h265,hevc"
     end if
 
+    if di.CanDecodeVideo({ Codec: "av1" }).result
+        tsVideoCodecs = tsVideoCodecs + ",av1"
+    end if
+
     if di.CanDecodeAudio({ Codec: "ac3" }).result
         tsAudioCodecs = "aac,ac3"
     else
