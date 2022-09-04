@@ -54,6 +54,22 @@ sub loadItems()
         params["ImageTypeLimit"] = 1
         params["UserId"] = get_setting("active_user")
 
+        maxDaysInNextUp = get_user_setting("ui.details.maxdaysnextup", "365")
+        if isValid(maxDaysInNextUp)
+            maxDaysInNextUp = Val(maxDaysInNextUp)
+            if maxDaysInNextUp > 0
+                dateToday = CreateObject("roDateTime")
+                dateCutoff = CreateObject("roDateTime")
+
+                dateCutoff.FromSeconds(dateToday.AsSeconds() - (maxDaysInNextUp * 86400))
+
+                params["NextUpDateCutoff"] = dateCutoff.ToISOString()
+                params["EnableRewatching"] = false
+                params["DisableFirstEpisode"] = false
+                params["limit"] = 24
+            end if
+        end if
+
         resp = APIRequest(url, params)
         data = getJson(resp)
         for each item in data.Items
