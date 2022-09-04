@@ -192,15 +192,21 @@ sub loadInitialItems()
         if get_user_setting("display.livetv.landing") = "guide" and m.options.view <> "livetv"
             showTvGuide()
         end if
-    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
+    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxsets" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
         ' Non-recursive, to not show subfolder contents
-
         if m.voiceBox.text <> ""
             m.loadItemsTask.recursive = true
         else
             m.loadItemsTask.recursive = false
         end if
-        m.loadItemsTask.itemId = m.top.parentItem.parentFolder
+        'recursive for boxsets
+        if m.top.parentItem.collectionType = "boxsets"
+            m.loadItemsTask.itemType = "BoxSet"
+            m.loadItemsTask.recursive = true
+            m.loadItemsTask.itemId = m.top.parentItem.id
+        else
+            m.loadItemsTask.itemId = m.top.parentItem.parentFolder
+        end if
     else if m.top.parentItem.Type = "Channel"
         m.top.imageDisplayMode = "scaleToFit"
     else if m.top.parentItem.json.type = "Studio"

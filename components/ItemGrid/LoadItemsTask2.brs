@@ -92,7 +92,7 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "MovieData")
             else if item.Type = "Series"
                 tmp = CreateObject("roSGNode", "SeriesData")
-            else if item.Type = "BoxSet"
+            else if item.Type = "BoxSet" or item.Type = "ManualPlaylistsFolder"
                 tmp = CreateObject("roSGNode", "CollectionData")
             else if item.Type = "TvChannel"
                 tmp = CreateObject("roSGNode", "ChannelData")
