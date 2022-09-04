@@ -201,6 +201,11 @@ function GetDirectPlayProfiles() as object
         mkvVideo = mkvVideo + ",vp9"
     end if
 
+    if di.CanDecodeVideo({ Codec: "av1" }).Result = true
+        mp4Video = mp4Video + ",av1"
+        mkvVideo = mkvVideo + ",av1"
+    end if
+
     if playMpeg2 and di.CanDecodeVideo({ Codec: "mpeg2" }).Result = true
         mp4Video = mp4Video + ",mpeg2video"
         mkvVideo = mkvVideo + ",mpeg2video"
