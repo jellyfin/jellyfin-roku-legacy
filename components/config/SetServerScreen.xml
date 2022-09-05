@@ -11,7 +11,7 @@
     <LayoutGroup translation="[150,150]" itemSpacings="40">
       <LayoutGroup>
         <label text="Connect to Server" id="prompt" font="font:LargeBoldSystemFont" />
-        <label text="Pick a Jellyfin server from the local network" />
+        <label text="Select an available Jellyfin server from your network:" />
       </LayoutGroup>
       <!--background for server picker-->
       <Rectangle color="0x00000020" width="1620" height="400">
@@ -19,7 +19,7 @@
         <MarkupList id="serverPicker" translation="[50, 20]" itemComponentName="JFServer" itemSpacing="[0, 10]" itemSize="[1520, 100]" numRows="3" vertFocusAnimationStyle="floatingFocus" />
       </Rectangle>
 
-      <label text="...or enter server URL manually:" translation="[0, 690]" />
+      <label text="If no server is listed above, you may also enter the server URL manually:" translation="[0, 690]" />
 
       <Rectangle id="serverUrlContainer" color="0x00000000">
         <TextEditBox id="serverUrlTextbox" hintText="e.g. 192.168.1.100:8096 or https://example.com/jellyfin"></TextEditBox>
