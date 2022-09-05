@@ -427,10 +427,10 @@ sub autoPlayNextEpisode(videoID as string, showID as string)
         data = getJson(resp)
 
         if data <> invalid and data.Items.Count() = 2
-            ' remove finished video node
-            m.global.sceneManager.callFunc("popScene")
             ' setup new video node
             nextVideo = CreateVideoPlayerGroup(data.Items[1].Id, invalid, 1, false, false)
+            ' remove last video scene
+            m.global.sceneManager.callFunc("clearPreviousScene")
             if nextVideo <> invalid
                 m.global.sceneManager.callFunc("pushScene", nextVideo)
             else
