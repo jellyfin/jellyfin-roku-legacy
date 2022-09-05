@@ -11,6 +11,7 @@
     <field id="type" type="string" value="Episode" />
     <field id="json" type="assocarray" onChange="setFields" />
     <field id="selectedAudioStreamIndex" type="integer" />
+    <field id="favorite" type="boolean" />
   </interface>
   <script type="text/brightscript" uri="TVEpisodeData.brs" />
 </component>

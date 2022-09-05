@@ -561,6 +561,21 @@
             <extracomment>Continue Watching Popup Menu - Navigate to the Episode Detail Page</extracomment>
         </message>
         <message>
+            <source>Use voice remote to search</source>
+            <translation>Use voice remote to search</translation>
+            <extracomment>Help text in search voice text box</extracomment>
+        </message>
+        <message>
+            <source>Search now</source>
+            <translation>Search now</translation>
+            <extracomment>Help text in search Box</extracomment>
+        </message>
+        <message>
+            <source>You can search for Titles, People, Live TV Channels and more</source>
+            <translation>You can search for Titles, People, Live TV Channels and more</translation>
+            <extracomment>Help text in search results</extracomment>
+        </message>
+        <message>
             <source>%1 of %2</source>
             <translation>%1 of %2</translation>
             <extracomment>Item position and count.  %1 = current item.  %2 = total number of items</extracomment>

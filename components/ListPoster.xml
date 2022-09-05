@@ -2,6 +2,12 @@
 <component name="ListPoster" extends="Group">
   <children>
     <Rectangle id="backdrop" />
+    <ScrollingLabel id="Series"
+      horizAlign="center"
+      font="font:SmallSystemFont"
+      repeatCount="0"
+      visible="false"
+      />
     <Poster id="poster" translation="[2,0]" loadDisplayMode="scaleToFit" />
     <ScrollingLabel id="title"
       horizAlign="center"

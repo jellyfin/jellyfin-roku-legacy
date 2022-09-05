@@ -5,7 +5,11 @@
     <field id="limit" type="integer" value="" />
     <field id="startIndex" type="integer" value="0" />
     <field id="filter" type="string" value="All" />
-    
+    <field id="searchTerm" type="string" value="" />
+    <field id="sortField" type="string" value="SortName" />
+    <field id="sortAscending" type="boolean" value="true" />
+    <field id="nameStartsWith" type="string" value="" />
+    <field id="recursive" type="boolean" value="true" />
     <!-- Total records available from server-->
     <field id="channels" type="array" />
   </interface>

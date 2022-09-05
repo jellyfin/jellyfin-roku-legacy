@@ -3310,7 +3310,7 @@
         <translation>Speciální funkce</translation>
         <message>
             <source>Press &apos;OK&apos; to Close</source>
-            <translation>Press &apos;OK&apos; to Close</translation>
+            <translation>Pro zavření stiskni &apos;OK&apos;</translation>
         </message>
     </message>
     <message>
@@ -3401,6 +3401,75 @@
     <message>
         <source>Save Credentials?</source>
         <translation>Uložit přihlašovací údaje?</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Smazat uložené</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Uložit přihlašovací údaje?</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to filter library content</comment>
+        <source>TAB_FILTER</source>
+        <translation>Filtr</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to sort library content</comment>
+        <source>TAB_SORT</source>
+        <translation>Třídit</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for switching &quot;views&quot; when looking at a library</comment>
+        <source>TAB_VIEW</source>
+        <translation>Pohled</translation>
+    </message>
+    <message>
+        <source>RUNTIME</source>
+        <translation>Délka</translation>
+    </message>
+    <message>
+        <source>RELEASE_DATE</source>
+        <translation>Datum vydání</translation>
+    </message>
+    <message>
+        <source>PLAY_COUNT</source>
+        <translation>Počet přehrání</translation>
+    </message>
+    <message>
+        <source>OFFICIAL_RATING</source>
+        <translation>Rodičovské hodnocení</translation>
+    </message>
+    <message>
+        <source>DATE_PLAYED</source>
+        <translation>Datum přehrání</translation>
+    </message>
+    <message>
+        <source>DATE_ADDED</source>
+        <translation>Datum přidání</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Honocení kritiků</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>Hodnocení IMDb</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Název</translation>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>Tato %1 neobsahuje žádné položky</translation>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Nyní</translation>
     </message>
     <message>
         <source>Delete Saved</source>
