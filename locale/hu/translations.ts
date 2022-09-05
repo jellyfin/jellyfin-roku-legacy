@@ -113,6 +113,14 @@
         <translation>Kezdőlap</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Adjon meg egy felhasználónevet</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Írja be a jelszót</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
         <translation>Adj meg egy értéket…</translation>
     </message>

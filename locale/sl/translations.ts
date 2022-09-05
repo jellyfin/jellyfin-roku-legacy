@@ -113,6 +113,14 @@
         <translation>Domov</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Vnesite svoje uporabniško ime</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Vnesite geslo</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
         <translation>Vnesite vrednost…</translation>
     </message>

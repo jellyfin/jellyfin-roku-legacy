@@ -113,9 +113,17 @@
         <translation>Home</translation>
     </message>
     <message>
-        <source>Enter a value...</source>
-        <translation>Wert eingeben…</translation>
+        <source>Enter a username</source>
+        <translation>Benutzernamen eingeben</translation>
     </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Passwort eingeben</translation>
+    </message>
+    <message>
+            <source>Enter a value...</source>
+            <translation>Wert eingeben…</translation>
+        </message>
     <message>
         <source>Sort Field</source>
         <translation>Sortiert nach</translation>

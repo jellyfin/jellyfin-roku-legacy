@@ -113,8 +113,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Faka igama lomsebenzisi</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Faka iphasiwedi</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
-        <translation type="unfinished"></translation>
+        <translation>Faka inani...</translation>
     </message>
     <message>
         <source>Sort Field</source>

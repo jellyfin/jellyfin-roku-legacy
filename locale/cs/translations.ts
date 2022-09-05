@@ -113,8 +113,16 @@
         <translation>Domů</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Zadejte jméno</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Zadejte heslo</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
-        <translation>Zadejte hodnotu…</translation>
+        <translation>Zadejte hodnotu...</translation>
     </message>
     <message>
         <source>Sort Field</source>

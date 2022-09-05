@@ -113,6 +113,14 @@
         <translation>Accueil</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Entrez votre nom d'utilisateur</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Entrer le mot de passe</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
         <translation>Entrez une valeur…</translation>
     </message>

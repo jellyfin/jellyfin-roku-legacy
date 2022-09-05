@@ -113,8 +113,12 @@
         <translation>Inicio</translation>
     </message>
     <message>
-        <source>Enter a value...</source>
-        <translation>Enter a value...</translation>
+        <source>Enter a username</source>
+        <translation>Ingres nombre de usuario</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Ingres la contraseña</translation>
     </message>
     <message>
         <source>Sort Field</source>
@@ -169,8 +173,16 @@
         <translation>Audio</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Ingresar nombre de usuario</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Ingresar la contraseña</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
-        <translation>Introduce un valor…</translation>
+        <translation>Ingresar un valor...</translation>
     </message>
     <message>
         <source>Sort Field</source>

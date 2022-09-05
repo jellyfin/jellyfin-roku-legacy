@@ -113,6 +113,14 @@
         <translation>Mājas</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Ievadiet lietotājvārdu</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Ievadiet paroli</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
         <translation>Ievadi vērtību…</translation>
     </message>

@@ -113,6 +113,14 @@
         <translation>Acasă</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Introduceți un nume de utilizator</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Introduceți o parolă</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
         <translation>Introduceți o valoare…</translation>
     </message>

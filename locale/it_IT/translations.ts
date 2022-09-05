@@ -113,6 +113,14 @@
         <translation>Home</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Inserisci il tuo cognome</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Inserisci la password</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
         <translation>Inserire un valore…</translation>
     </message>

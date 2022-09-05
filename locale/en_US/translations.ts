@@ -125,8 +125,16 @@
             <translation>Home</translation>
         </message>
         <message>
+            <source>Enter a username</source>
+            <translation>Enter a username</translation>
+        </message>
+        <message>
+            <source>Enter a password</source>
+            <translation>Enter a password</translation>
+        </message>
+        <message>
             <source>Enter a value...</source>
-            <translation>Enter a value…</translation>
+            <translation>Enter a value...</translation>
         </message>
         <message>
             <source>Name</source>
