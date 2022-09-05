@@ -1,5 +1,4 @@
 sub init()
-
     m.EPGLaunchCompleteSignaled = false
     m.scheduleGrid = m.top.findNode("scheduleGrid")
     m.detailsPane = m.top.findNode("detailsPane")
@@ -7,7 +6,6 @@ sub init()
     m.detailsPane.observeField("watchSelectedChannel", "onWatchChannelSelected")
     m.detailsPane.observeField("recordSelectedChannel", "onRecordChannelSelected")
     m.detailsPane.observeField("recordSeriesSelectedChannel", "onRecordSeriesChannelSelected")
-
     m.gridStartDate = CreateObject("roDateTime")
     m.scheduleGrid.contentStartTime = m.gridStartDate.AsSeconds() - 1800
     m.gridEndDate = createObject("roDateTime")
@@ -28,15 +26,29 @@ sub init()
     m.top.lastFocus = m.scheduleGrid
 
     m.channelIndex = {}
+
+    m.spinner = m.top.findNode("spinner")
 end sub
 
 sub channelFilterSet()
-    print "Channel Filter set"
     m.scheduleGrid.jumpToChannel = 0
     if m.top.filter <> invalid and m.LoadChannelsTask.filter <> m.top.filter
         if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
 
         m.LoadChannelsTask.filter = m.top.filter
+        m.LoadChannelsTask.control = "RUN"
+    end if
+
+end sub
+
+'Voice Search set
+sub channelsearchTermSet()
+    m.scheduleGrid.jumpToChannel = 0
+    if m.top.searchTerm <> invalid and m.LoadChannelsTask.searchTerm <> m.top.searchTerm
+        if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
+
+        m.LoadChannelsTask.searchTerm = m.top.searchTerm
+        m.spinner.visible = true
         m.LoadChannelsTask.control = "RUN"
     end if
 
@@ -49,32 +61,36 @@ sub onChannelsLoaded()
     counter = 0
     channelIdList = ""
 
-    for each item in m.LoadChannelsTask.channels
-        gridData.appendChild(item)
-        m.channelIndex[item.Id] = counter
-        counter = counter + 1
-        channelIdList = channelIdList + item.Id + ","
-    end for
+    'if search returns channels
+    if m.LoadChannelsTask.channels.count() > 0
+        for each item in m.LoadChannelsTask.channels
+            gridData.appendChild(item)
+            m.channelIndex[item.Id] = counter
+            counter = counter + 1
+            channelIdList = channelIdList + item.Id + ","
+        end for
+        m.scheduleGrid.content = gridData
 
-    m.scheduleGrid.content = gridData
+        m.LoadScheduleTask = createObject("roSGNode", "LoadScheduleTask")
+        m.LoadScheduleTask.observeField("schedule", "onScheduleLoaded")
 
-    m.LoadScheduleTask = createObject("roSGNode", "LoadScheduleTask")
-    m.LoadScheduleTask.observeField("schedule", "onScheduleLoaded")
+        m.LoadScheduleTask.startTime = m.gridStartDate.ToISOString()
+        m.LoadScheduleTask.endTime = m.gridEndDate.ToISOString()
+        m.LoadScheduleTask.channelIds = channelIdList
+        m.LoadScheduleTask.control = "RUN"
 
-    m.LoadScheduleTask.startTime = m.gridStartDate.ToISOString()
-    m.LoadScheduleTask.endTime = m.gridEndDate.ToISOString()
-    m.LoadScheduleTask.channelIds = channelIdList
-    m.LoadScheduleTask.control = "RUN"
+        m.LoadProgramDetailsTask = createObject("roSGNode", "LoadProgramDetailsTask")
+        m.LoadProgramDetailsTask.observeField("programDetails", "onProgramDetailsLoaded")
 
-    m.LoadProgramDetailsTask = createObject("roSGNode", "LoadProgramDetailsTask")
-    m.LoadProgramDetailsTask.observeField("programDetails", "onProgramDetailsLoaded")
+        m.scheduleGrid.setFocus(true)
+        if m.EPGLaunchCompleteSignaled = false
+            m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
+            m.EPGLaunchCompleteSignaled = true
+        end if
+        m.LoadChannelsTask.channels = []
 
-    m.scheduleGrid.setFocus(true)
-    if m.EPGLaunchCompleteSignaled = false
-        m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
-        m.EPGLaunchCompleteSignaled = true
     end if
-    m.LoadChannelsTask.channels = []
+
 end sub
 
 ' When LoadScheduleTask completes (initial or more data) and we have a schedule to display
@@ -102,6 +118,7 @@ sub onScheduleLoaded()
     m.scheduleGrid.showLoadingDataFeedback = false
     m.scheduleGrid.setFocus(true)
     m.LoadScheduleTask.schedule = []
+    m.spinner.visible = false
 end sub
 
 sub onProgramFocused()
@@ -118,7 +135,9 @@ sub onProgramFocused()
     m.top.focusedChannel = channel
 
     ' Exit if Channels not yet loaded
+
     if channel = invalid or channel.getChildCount() = 0
+
         m.detailsPane.programDetails = invalid
         return
     end if
@@ -195,6 +214,22 @@ sub onWatchChannelSelected()
     m.top.watchChannel = m.detailsPane.channel
 end sub
 
+' As user scrolls grid, check if more data requries to be loaded
+sub onGridScrolled()
+
+    ' If we're within 12 hours of end of grid, load next 24hrs of data
+    if m.scheduleGrid.leftEdgeTargetTime + (12 * 60 * 60) > m.gridEndDate.AsSeconds()
+
+        ' Ensure the task is not already (still) running,
+        if m.LoadScheduleTask.state <> "run"
+            m.LoadScheduleTask.startTime = m.gridEndDate.ToISOString()
+            m.gridEndDate.FromSeconds(m.gridEndDate.AsSeconds() + (24 * 60 * 60))
+            m.LoadScheduleTask.endTime = m.gridEndDate.ToISOString()
+            m.LoadScheduleTask.control = "RUN"
+        end if
+    end if
+end sub
+
 ' Handle user selecting "Record Channel" from Program Details
 sub onRecordChannelSelected()
     if m.detailsPane.recordSelectedChannel = false then return
@@ -242,27 +277,18 @@ sub onRecordOperationDone()
     end if
 end sub
 
-' As user scrolls grid, check if more data requries to be loaded
-sub onGridScrolled()
-
-    ' If we're within 12 hours of end of grid, load next 24hrs of data
-    if m.scheduleGrid.leftEdgeTargetTime + (12 * 60 * 60) > m.gridEndDate.AsSeconds()
-
-        ' Ensure the task is not already (still) running,
-        if m.LoadScheduleTask.state <> "run"
-            m.LoadScheduleTask.startTime = m.gridEndDate.ToISOString()
-            m.gridEndDate.FromSeconds(m.gridEndDate.AsSeconds() + (24 * 60 * 60))
-            m.LoadScheduleTask.endTime = m.gridEndDate.ToISOString()
-            m.LoadScheduleTask.control = "RUN"
-        end if
-    end if
-end sub
-
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
+    detailsGrp = m.top.findNode("detailsPane")
+    gridGrp = m.top.findNode("scheduleGrid")
 
-    if key = "back" and m.detailsPane.isInFocusChain()
+    if key = "back" and detailsGrp.isInFocusChain()
         focusProgramDetails(false)
+        detailsGrp.setFocus(false)
+        gridGrp.setFocus(true)
+        return true
+    else if key = "back"
+        m.global.sceneManager.callFunc("popScene")
         return true
     end if
 

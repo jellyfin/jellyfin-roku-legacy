@@ -3,48 +3,25 @@ sub init()
     m.top.horizAlignment = "center"
     m.top.vertAlignment = "top"
     m.top.visible = false
+    m.searchText = m.top.findNode("search_Key")
+    m.searchText.textEditBox.hintText = tr("Search")
+    m.searchText.keyGrid.keyDefinitionUri = "pkg:/components/data/CustomAddressKDF.json"
+    m.searchText.textEditBox.voiceEnabled = true
+    m.searchText.textEditBox.active = true
+    m.searchText.ObserveField("text", "searchMedias")
+    m.searchSelect = m.top.findNode("searchSelect")
 
-    show_dialog()
+    'set lable text
+    m.label = m.top.findNode("text")
+    m.label.text = tr("Search now")
+
 end sub
 
-function onKeyEvent(key as string, press as boolean) as boolean
-    if not press then return false
-
-    if key = "OK"
-        ' Make a Keyboard Dialog here
-        show_dialog()
-        return true
+sub searchMedias()
+    m.top.search_values = m.searchText.text
+    if m.top.search_values.len() > 1
+        m.searchText.textEditBox.leadingEllipsis = true
+    else
+        m.searchText.textEditBox.leadingEllipsis = false
     end if
-
-    return false
-end function
-
-function onDialogButton()
-    d = m.top.getScene().dialog
-    button_text = d.buttons[d.buttonSelected]
-
-    if button_text = tr("Search")
-        m.top.search_value = d.text
-        dismiss_dialog()
-        return true
-    else if button_text = tr("Cancel")
-        dismiss_dialog()
-        return true
-    end if
-
-    return false
-end function
-
-sub show_dialog()
-    dialog = CreateObject("roSGNode", "KeyboardDialog")
-    dialog.title = tr("Search")
-    dialog.buttons = [tr("Search"), tr("Cancel")]
-
-    m.top.getScene().dialog = dialog
-
-    dialog.observeField("buttonselected", "onDialogButton")
-end sub
-
-sub dismiss_dialog()
-    m.top.getScene().dialog.close = true
 end sub

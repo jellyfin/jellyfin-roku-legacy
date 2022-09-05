@@ -250,8 +250,29 @@ sub Main (args as dynamic) as void
             ' types: [ Series (Show), Episode, Movie, Audio, Person, Studio, MusicArtist ]
             if node.type = "Series"
                 group = CreateSeriesDetailsGroup(node)
-            else
+            else if node.type = "Movie"
                 group = CreateMovieDetailsGroup(node)
+            else if node.type = "MusicArtist"
+                group = CreateArtistView(node.json)
+            else if node.type = "MusicAlbum"
+                group = CreateAlbumView(node.json)
+            else if node.type = "Audio"
+                group = CreateAudioPlayerGroup([node.json])
+            else if node.type = "Person"
+                group = CreatePersonView(node)
+            else if node.type = "TvChannel"
+                group = CreateVideoPlayerGroup(node.id)
+                sceneManager.callFunc("pushScene", group)
+            else if node.type = "Episode"
+                group = CreateVideoPlayerGroup(node.id)
+                sceneManager.callFunc("pushScene", group)
+            else if node.type = "Audio"
+                selectedIndex = msg.getData()
+                screenContent = msg.getRoSGNode()
+                group = CreateAudioPlayerGroup([screenContent.albumData.items[node.id]])
+            else
+                ' TODO - switch on more node types
+                message_dialog("This type is not yet supported: " + node.type + ".")
             end if
         else if isNodeEvent(msg, "buttonSelected")
             ' If a button is selected, we have some determining to do
@@ -334,8 +355,8 @@ sub Main (args as dynamic) as void
                 end if
                 group = CreateSearchPage()
                 sceneManager.callFunc("pushScene", group)
-                group.findNode("SearchBox").findNode("search-input").setFocus(true)
-                group.findNode("SearchBox").findNode("search-input").active = true
+                group.findNode("SearchBox").findNode("search_Key").setFocus(true)
+                group.findNode("SearchBox").findNode("search_Key").active = true
             else if button.id = "change_server"
                 unset_setting("server")
                 unset_setting("port")

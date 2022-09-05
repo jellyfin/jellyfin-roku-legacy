@@ -11,27 +11,28 @@ sub init()
     ' TODO - Define a failed to load image background
     ' m.top.failedBitmapURI
 
-    m.top.setFocus(true)
 end sub
 
 sub updateSize()
     ' In search results, rowSize only dictates how many are on screen at once
-    m.top.rowSize = 5
+    m.top.rowSize = 3
 
     dimensions = m.top.getScene().currentDesignResolution
 
-    border = 75
+    border = 50
     m.top.translation = [border, border + 115]
 
     textHeight = 80
-    itemWidth = (dimensions["width"] - border * 2) / m.top.rowSize
-    itemHeight = itemWidth * 1.5 + textHeight
+    itemWidth = (dimensions["width"] - border) / 6
+    itemHeight = itemWidth + (textHeight / 2.3)
 
-    m.top.itemSize = [dimensions["width"] - border * 2, itemHeight]
-    m.top.itemSpacing = [0, 50]
+    m.top.itemSize = [1350, itemHeight] ' this is used for setting the row size
+    m.top.itemSpacing = [0, 105]
 
     m.top.rowItemSize = [itemWidth, itemHeight]
     m.top.rowItemSpacing = [0, 0]
+    m.top.numRows = 2
+    m.top.translation = "[12,18]"
 end sub
 
 function getData()
@@ -45,16 +46,17 @@ function getData()
     ' todo - Or get the old data? I can't remember...
     data = CreateObject("roSGNode", "ContentNode")
     ' Do this to keep the ordering, AssociateArrays have no order
-    type_array = ["Movie", "Series", "TvChannel", "Episode", "AlbumArtist", "Album", "Audio", "Person"]
+    type_array = ["Movie", "Series", "TvChannel", "Episode", "MusicArtist", "MusicAlbum", "Audio", "Person", "PlaylistsFolder"]
     content_types = {
         "TvChannel": { "label": "Channels", "count": 0 },
         "Movie": { "label": "Movies", "count": 0 },
         "Series": { "label": "Shows", "count": 0 },
         "Episode": { "label": "Episodes", "count": 0 },
-        "AlbumArtist": { "label": "Artists", "count": 0 },
-        "Album": { "label": "Albums", "count": 0 },
+        "MusicArtist": { "label": "Artists", "count": 0 },
+        "MusicAlbum": { "label": "Albums", "count": 0 },
         "Audio": { "label": "Songs", "count": 0 },
-        "Person": { "label": "People", "count": 0 }
+        "Person": { "label": "People", "count": 0 },
+        "PlaylistsFolder": { "label": "Playlist", "count": 0 }
     }
 
     for each item in itemData.searchHints
@@ -84,3 +86,4 @@ sub addRow(data, title, type_filter)
         end if
     end for
 end sub
+

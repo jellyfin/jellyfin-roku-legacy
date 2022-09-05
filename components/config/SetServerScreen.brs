@@ -107,10 +107,13 @@ sub ScanForServersComplete(event)
 end sub
 
 sub ShowKeyboard()
-    dialog = createObject("roSGNode", "KeyboardDialog")
+    dialog = createObject("roSGNode", "StandardKeyboardDialog")
     dialog.title = tr("Enter the server name or ip address")
     dialog.buttons = [tr("OK"), tr("Cancel")]
     dialog.text = m.serverUrlTextbox.text
+    greenPalette = createObject("roSGNode", "RSGPalette")
+    greenPalette.colors = { DialogBackgroundColor: "#2A2B2A" }
+    dialog.palette = greenPalette
 
     m.top.getscene().dialog = dialog
     m.dialog = dialog

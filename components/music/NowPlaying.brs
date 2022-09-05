@@ -408,7 +408,7 @@ sub onMetaDataLoaded()
     if data <> invalid and data.count() > 0
 
         ' Use metadata to load backdrop image
-        if isvalid(data?.json?.ArtistItems?[0].id)
+        if isvalid(data?.json?.ArtistItems?[0]?.id)
             m.LoadBackdropImageTask.itemId = data.json.ArtistItems[0].id
             m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
             m.LoadBackdropImageTask.control = "RUN"

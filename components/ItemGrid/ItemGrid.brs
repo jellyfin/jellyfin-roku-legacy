@@ -25,7 +25,17 @@ sub init()
 
     m.itemGrid.observeField("itemFocused", "onItemFocused")
     m.itemGrid.observeField("itemSelected", "onItemSelected")
-    m.itemGrid.observeField("AlphaSelected", "onItemAlphaSelected")
+    m.itemGrid.observeField("alphaSelected", "onItemalphaSelected")
+
+    'Voice filter setup
+    m.voiceBox = m.top.findNode("voiceBox")
+    m.voiceBox.voiceEnabled = true
+    m.voiceBox.active = true
+    m.voiceBox.observeField("text", "onvoiceFilter")
+    'set voice help text
+    m.voiceBox.hintText = tr("Use voice remote to search")
+
+    'backdrop
     m.newBackdrop.observeField("loadStatus", "newBGLoaded")
 
     'Background Image Queued for loading
@@ -45,19 +55,35 @@ sub init()
 
     m.spinner = m.top.findNode("spinner")
     m.spinner.visible = true
+
     m.Alpha = m.top.findNode("AlphaMenu")
     m.AlphaSelected = m.top.findNode("AlphaSelected")
 
     'Get reset folder setting
     m.resetGrid = get_user_setting("itemgrid.reset") = "true"
+
+    'Check if device has voice remote
+    devinfo = CreateObject("roDeviceInfo")
+    m.deviFeature = devinfo.HasFeature("voice_remote")
+    m.micButton = m.top.findNode("micButton")
+    m.micButtonText = m.top.findNode("micButtonText")
+    'Hide voice search if device does not have voice remote
+    if m.deviFeature = false
+        m.micButton.visible = false
+        m.micButtonText.visible = false
+    end if
 end sub
 
 '
 'Load initial set of Data
 sub loadInitialItems()
+    m.loadItemsTask.control = "stop"
+    m.spinner.visible = true
+
     if m.top.parentItem.json.Type = "CollectionFolder" 'or m.top.parentItem.json.Type = "Folder"
         m.top.HomeLibraryItem = m.top.parentItem.Id
     end if
+
     if m.top.parentItem.backdropUrl <> invalid
         SetBackground(m.top.parentItem.backdropUrl)
     end if
@@ -66,6 +92,14 @@ sub loadInitialItems()
     if m.top.parentItem.collectionType = "livetv"
         ' Translate between app and server nomenclature
         viewSetting = get_user_setting("display.livetv.landing")
+        'Move mic to be visiable on TV Guide screen
+        if m.deviFeature = true
+            m.micButton.translation = "[1540, 92]"
+            m.micButtonText.visible = true
+            m.micButtonText.translation = "[1600,130]"
+            m.micButtonText.font.size = 22
+            m.micButtonText.text = tr("Search")
+        end if
         if viewSetting = "guide"
             m.view = "tvGuide"
         else
@@ -112,24 +146,31 @@ sub loadInitialItems()
     end if
     updateTitle()
 
-    m.loadItemsTask.nameStartsWith = m.top.AlphaSelected
+    m.loadItemsTask.nameStartsWith = m.top.alphaSelected
+    m.loadItemsTask.searchTerm = m.voiceBox.text
     m.emptyText.visible = false
     m.loadItemsTask.sortField = m.sortField
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
     m.loadItemsTask.startIndex = 0
+
     ' Load Item Types
-    if m.top.parentItem.collectionType = "movies"
+    if getCollectionType() = "movies"
         m.loadItemsTask.itemType = "Movie"
         m.loadItemsTask.itemId = m.top.parentItem.Id
-    else if m.top.parentItem.collectionType = "tvshows"
+    else if getCollectionType() = "tvshows"
         m.loadItemsTask.itemType = "Series"
         m.loadItemsTask.itemId = m.top.parentItem.Id
-    else if m.top.parentItem.collectionType = "music"
+    else if getCollectionType() = "music"
         ' Default Settings
-        m.loadItemsTask.recursive = false
-        m.itemGrid.itemSize = "[290, 290]"
-        m.itemGrid.itemSpacing = "[ 0, 20]"
+
+        if m.voiceBox.text <> ""
+            m.loadItemsTask.recursive = true
+        else
+            m.loadItemsTask.recursive = false
+            m.itemGrid.itemSize = "[290, 290]"
+        end if
+
         m.loadItemsTask.itemType = "MusicArtist,MusicAlbum"
         m.loadItemsTask.itemId = m.top.parentItem.Id
 
@@ -143,19 +184,21 @@ sub loadInitialItems()
             m.loadItemsTask.recursive = true
         end if
     else if m.top.parentItem.collectionType = "livetv"
-        m.loadItemsTask.itemType = "LiveTV"
-
+        m.loadItemsTask.itemType = "TvChannel"
+        m.loadItemsTask.itemId = " "
         ' For LiveTV, we want to "Fit" the item images, not zoom
         m.top.imageDisplayMode = "scaleToFit"
 
         if get_user_setting("display.livetv.landing") = "guide" and m.options.view <> "livetv"
             showTvGuide()
         end if
-    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
-        ' Non-recursive, to not show subfolder contents
-        m.loadItemsTask.recursive = false
-    else if m.top.parentItem.Type = "Channel"
-        m.top.imageDisplayMode = "scaleToFit"
+    else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Boxsets" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
+        if m.voiceBox.text <> ""
+            m.loadItemsTask.recursive = true
+        else
+            ' non recursive for collections (folders, boxsets, photo albums, etc)
+            m.loadItemsTask.recursive = false
+        end if
     else if m.top.parentItem.json.type = "Studio"
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
         m.loadItemsTask.itemType = "Series,Movie"
@@ -491,13 +534,33 @@ sub onItemSelected()
     m.top.selectedItem = m.itemGrid.content.getChild(m.itemGrid.itemSelected)
 end sub
 
-sub onItemAlphaSelected()
-    m.loadedRows = 0
-    m.loadedItems = 0
-    m.data = CreateObject("roSGNode", "ContentNode")
-    m.itemGrid.content = m.data
-    m.spinner.visible = true
-    loadInitialItems()
+sub onItemalphaSelected()
+    if m.top.alphaSelected <> ""
+        m.loadedRows = 0
+        m.loadedItems = 0
+        m.data = CreateObject("roSGNode", "ContentNode")
+        m.itemGrid.content = m.data
+        m.loadItemsTask.searchTerm = ""
+        m.VoiceBox.text = ""
+        m.loadItemsTask.nameStartsWith = m.alpha.itemAlphaSelected
+        m.spinner.visible = true
+        loadInitialItems()
+    end if
+end sub
+
+sub onvoiceFilter()
+    if m.VoiceBox.text <> ""
+        m.loadedRows = 0
+        m.loadedItems = 0
+        m.data = CreateObject("roSGNode", "ContentNode")
+        m.itemGrid.content = m.data
+        m.top.alphaSelected = ""
+        m.loadItemsTask.NameStartsWith = " "
+        m.loadItemsTask.searchTerm = m.voiceBox.text
+        m.loadItemsTask.recursive = true
+        m.spinner.visible = true
+        loadInitialItems()
+    end if
 end sub
 
 
@@ -598,6 +661,7 @@ sub optionsClosed()
     if m.tvGuide <> invalid
         m.tvGuide.lastFocus.setFocus(true)
     end if
+
 end sub
 
 sub showTVGuide()
@@ -608,6 +672,7 @@ sub showTVGuide()
         m.tvGuide.observeField("focusedChannel", "onChannelFocused")
     end if
     m.tvGuide.filter = m.filter
+    m.tvGuide.searchTerm = m.voiceBox.text
     m.top.appendChild(m.tvGuide)
     m.tvGuide.lastFocus.setFocus(true)
 end sub
@@ -629,6 +694,12 @@ end sub
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
     topGrp = m.top.findNode("itemGrid")
+    searchGrp = m.top.findNode("voiceBox")
+
+    if key = "left" and searchGrp.isinFocusChain()
+        topGrp.setFocus(true)
+        searchGrp.setFocus(false)
+    end if
     if key = "options"
         if m.options.visible = true
             m.options.visible = false
@@ -655,9 +726,13 @@ function onKeyEvent(key as string, press as boolean) as boolean
             m.options.visible = false
             optionsClosed()
             return true
+        else
+            m.global.sceneManager.callfunc("popScene")
+            m.loadItemsTask.control = "stop"
+            return true
         end if
     else if key = "play" or key = "OK"
-        markupGrid = m.top.getChild(2)
+        markupGrid = m.top.findNode("itemGrid")
         itemToPlay = markupGrid.content.getChild(markupGrid.itemFocused)
 
         if itemToPlay <> invalid and (itemToPlay.type = "Movie" or itemToPlay.type = "Episode")
@@ -673,9 +748,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
     else if key = "left" and topGrp.isinFocusChain()
         m.top.alphaActive = true
         topGrp.setFocus(false)
-        alpha = m.Alpha.getChild(0).findNode("Alphamenu")
+        alpha = m.alpha.getChild(0).findNode("Alphamenu")
         alpha.setFocus(true)
         return true
+
     else if key = "right" and m.Alpha.isinFocusChain()
         m.top.alphaActive = false
         m.Alpha.setFocus(false)
@@ -690,6 +766,20 @@ function onKeyEvent(key as string, press as boolean) as boolean
         end if
     end if
 
+    if key = "replay"
+        m.spinner.visible = true
+        m.loadItemsTask.searchTerm = ""
+        m.loadItemsTask.nameStartsWith = ""
+        m.voiceBox.text = ""
+        m.top.alphaSelected = ""
+        m.loadItemsTask.filter = "All"
+        m.filter = "All"
+        m.data = CreateObject("roSGNode", "ContentNode")
+        m.itemGrid.content = m.data
+        loadInitialItems()
+        return true
+    end if
+
     return false
 end function
 
@@ -699,9 +789,11 @@ sub updateTitle()
     else if m.filter = "Favorites"
         m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Favorites)")
     end if
-
-    if m.top.AlphaSelected <> ""
-        m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Filtered)")
+    if m.voiceBox.text <> ""
+        m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered by ") + m.loadItemsTask.searchTerm + ")"
+    end if
+    if m.top.alphaSelected <> ""
+        m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered by ") + m.loadItemsTask.nameStartsWith + ")"
     end if
 
     if m.options.view = "Networks" or m.view = "Networks"

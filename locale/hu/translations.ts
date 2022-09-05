@@ -6333,5 +6333,13 @@ elemeket</translation>
         <source>Save Credentials?</source>
         <translation>Mented a hitelesítő adatokat?</translation>
     </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Mentettek Törlése</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Mented a hitelesítő adatokat?</translation>
+    </message>
 </context>
 </TS>
