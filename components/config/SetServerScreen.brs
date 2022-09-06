@@ -41,7 +41,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         ScanForServers()
     else if key = "back" and m.serverPicker.hasFocus() and m.servers.Count() > 0
         ScanForServers()
-        ' On back with available servers or not, will rescan for servers
+        ' On "back" with or without available local servers, will rescan for servers
     else if key = "up" and m.submit.hasFocus()
         m.serverUrlContainer.setFocus(true)
         'focus the submit button from serverUrl
@@ -70,6 +70,7 @@ sub ScanForServers()
     'run the task
     m.ssdpScanner.observeField("content", "ScanForServersComplete")
     m.ssdpScanner.control = "RUN"
+    m.spinner.visible = true
 end sub
 
 sub ScanForServersComplete(event)
