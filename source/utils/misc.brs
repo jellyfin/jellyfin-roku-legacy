@@ -43,7 +43,7 @@ end function
 
 ' Format time as 12 or 24 hour format based on system clock setting
 function formatTime(time) as string
-    hours = time.getHours()
+    hours = time.getHours() mod 24 ' Specifically for reported bug where hours occasionally shown as '24' #609
     minHourDigits = 1
     di = CreateObject("roDeviceInfo")
     if di.GetClockFormat() = "12h"
