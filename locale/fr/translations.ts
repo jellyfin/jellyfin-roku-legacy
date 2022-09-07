@@ -2708,5 +2708,22 @@
         <source>Save Credentials?</source>
         <translation>Enregistrer les identifiants&#xa0;?</translation>
     </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Erreur lors de la récupération du contenu</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Maintenant</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Supprimer les informations enregistrées</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Enregistrer les identifiants&#xa0;?</translation>
+    </message>
 </context>
 </TS>
