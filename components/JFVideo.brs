@@ -41,9 +41,9 @@ sub onState(msg)
             ReportPlayback("start")
             m.playReported = true
         else
-            m.playbackTimer.control = "start"
             ReportPlayback()
         end if
+        m.playbackTimer.control = "start"
     else if m.top.state = "paused"
         m.playbackTimer.control = "stop"
         ReportPlayback()
