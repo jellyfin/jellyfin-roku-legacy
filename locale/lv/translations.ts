@@ -113,6 +113,14 @@
         <translation>Mājas</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Ievadiet lietotājvārdu</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Ievadiet paroli</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
         <translation>Ievadi vērtību…</translation>
     </message>
@@ -369,6 +377,10 @@
         <comment>Name or Title field of media item</comment>
         <source>TITLE</source>
         <translation>Nosaukums</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Saglabāt akreditācijas datus?</translation>
     </message>
 </context>
 </TS>

@@ -12,6 +12,7 @@
     <field id="nameStartsWith" type="string" value="" />
     <field id="recursive" type="boolean" value="true" />
     <field id="filter" type="string" value="All" />
+    <field id="searchTerm" type="string" value="" />
     <field id="studioIds" type="string" value="" />
     <field id="genreIds" type="string" value="" />
     <field id="view" type="string" value="" />

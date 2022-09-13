@@ -113,6 +113,14 @@
         <translation>Domov</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Zadajte používateľské meno</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Zadajte heslo</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
         <translation>Zadajte hodnotu…</translation>
     </message>
@@ -658,6 +666,10 @@
     <message>
         <source>More Like This</source>
         <translation>Navrhované</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Uložiť poverenia?</translation>
     </message>
 </context>
 </TS>

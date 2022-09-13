@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="SceneManager" extends="ContentNode">
+<component name="SceneManager" extends="Group">
   <interface>
     <function name="pushScene" />
     <function name="popScene" />

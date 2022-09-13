@@ -113,8 +113,16 @@
         <translation>Inicio</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Ingresar nombre de usuario</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Ingresar la contraseña</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
-        <translation>Ingresar un valor…</translation>
+        <translation>Ingresar un valor...</translation>
     </message>
     <message>
         <source>Sort Field</source>
@@ -1601,6 +1609,10 @@
     <message>
         <source>Save Credentials?</source>
         <translation>¿Guardar credenciales?</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Guardar credenciales?</translation>
     </message>
 </context>
 </TS>

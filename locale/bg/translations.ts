@@ -113,8 +113,16 @@
         <translation>Основен</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Въведете потребителско име</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Въведете паролата</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
-        <translation>Въведете стойност…</translation>
+        <translation>Въведете стойност...</translation>
     </message>
     <message>
         <source>Sort Field</source>
@@ -723,6 +731,15 @@
     <message>
         <source>Save Credentials?</source>
         <translation>Да запазя ли данни за удостоверение?</translation>
+    </message>
+    <message>
+        <source>Playback</source>
+        <translation>Възпроизвеждане</translation>
+        <extracomment>Title for Playback section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>запишете идентификационни данни?</translation>
     </message>
 </context>
 </TS>

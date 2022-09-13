@@ -4,7 +4,12 @@
     <field id="rowSize" type="int" />
     <field id="itemData" type="assocarray" onChange="getData" />
     <field id="query" type="string" />
-    <field id="itemSelected" type="int" />
+    <field id="itemSelected" type="node" alwaysNotify="true" />
   </interface>
   <script type="text/brightscript" uri="SearchRow.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
 </component>

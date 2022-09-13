@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<component name="MusicAlbumSongList" extends="LabelList">
-  <interface>
-    <field id="MusicArtistAlbumData" type="assocarray" onChange="getData" />
-  </interface>
-  <script type="text/brightscript" uri="MusicAlbumSongList.brs" />
-</component>

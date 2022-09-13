@@ -1,8 +1,8 @@
-function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, showIntro = true)
+function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, forceTranscoding = false, showIntro = true)
     ' Get video controls and UI
     video = CreateObject("roSGNode", "JFVideo")
     video.id = id
-    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, showIntro)
+    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, forceTranscoding, showIntro)
 
     if video.errorMsg = "introaborted"
         return video
@@ -19,8 +19,7 @@ function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle
     return video
 end function
 
-sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, showIntro = true)
-
+sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false, showIntro = true)
     video.content = createObject("RoSGNode", "ContentNode")
     meta = ItemMetaData(video.id)
     m.videotype = meta.type
@@ -29,12 +28,26 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
         return
     end if
 
-    ' Special handling for "Programs" launched from "On Now"
-    if meta.json.type = "Program"
-        meta.title = meta.json.EpisodeTitle
+    ' Special handling for "Programs" or "Vidoes" launched from "On Now" or elsewhere on the home screen...
+    ' basically anything that is a Live Channel.
+    if meta.json.ChannelId <> invalid
+        if meta.json.EpisodeTitle <> invalid
+            meta.title = meta.json.EpisodeTitle
+        else if meta.json.Name <> invalid
+            meta.title = meta.json.Name
+        end if
         meta.showID = meta.json.id
         meta.live = true
-        video.id = meta.json.ChannelId
+        if meta.json.type = "Program"
+            video.id = meta.json.ChannelId
+        else
+            video.id = meta.json.id
+        end if
+    end if
+
+    if m.videotype = "Episode" or m.videotype = "Series"
+        video.skipIntroParams = api_API().introskipper.get(video.id)
+        video.content.contenttype = "episode"
     end if
 
     video.content.title = meta.title
@@ -163,7 +176,6 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     if meta.live then mediaSourceId = "" ' Don't send mediaSourceId for Live media
 
     playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
-
     video.videoId = video.id
     video.mediaSourceId = mediaSourceId
     video.audioIndex = audio_stream_idx
@@ -204,6 +216,21 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
 
     video.directPlaySupported = playbackInfo.MediaSources[0].SupportsDirectPlay
     fully_external = false
+
+
+    ' For h264 video, Roku spec states that it supports and Encoding level 4.1 and 4.2.
+    ' The device can decode content with a Higher Encoding level but may play it back with certain
+    ' artifacts. If the user preference is set, and the only reason the server says we need to
+    ' transcode is that the Envoding Level is not supported, then try to direct play but silently
+    ' fall back to the transcode if that fails.
+    if meta.live = false and get_user_setting("playback.tryDirect.h264ProfileLevel") = "true" and playbackInfo.MediaSources[0].TranscodingUrl <> invalid and forceTranscoding = false and playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
+        transcodingReasons = getTranscodeReasons(playbackInfo.MediaSources[0].TranscodingUrl)
+        if transcodingReasons.Count() = 1 and transcodingReasons[0] = "VideoLevelNotSupported"
+            video.directPlaySupported = true
+            video.transcodeAvailable = true
+        end if
+    end if
+
     if video.directPlaySupported
         protocol = LCase(playbackInfo.MediaSources[0].Protocol)
         if protocol <> "file"
@@ -255,6 +282,10 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     ' is enabled/will be enabled, indexed on the provided list of subtitles
     video.SelectedSubtitle = setupSubtitle(video, video.Subtitles, subtitle_idx)
 
+    video.content.SDBifUrl = api_API().jellyscrub.get(video.id)
+    video.content.HDBifUrl = api_API().jellyscrub.get(video.id)
+    video.content.FHDBifUrl = api_API().jellyscrub.get(video.id)
+
     if not fully_external
         video.content = authorize_request(video.content)
     end if
@@ -274,7 +305,7 @@ function PlayIntroVideo(video_id, audio_stream_idx) as boolean
             ' Bypass joke pre-roll
             if lcase(introVideos.items[0].name) = "rick roll'd" then return true
 
-            introVideo = VideoPlayer(introVideos.items[0].id, introVideos.items[0].id, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), false)
+            introVideo = VideoPlayer(introVideos.items[0].id, introVideos.items[0].id, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), false, false)
 
             port = CreateObject("roMessagePort")
             introVideo.observeField("state", port)
@@ -313,9 +344,9 @@ function getTranscodeReasons(url as string) as object
     return []
 end function
 
-'Opens dialog asking user if they want to resume video or start playback over
+'Opens dialog asking user if they want to resume video or start playback over only on the home screen
 function startPlayBackOver(time as longinteger) as integer
-    if m.videotype = "Episode" or m.videotype = "Series"
+    if m.scene.focusedChild.focusedChild.overhangTitle = tr("Home") and (m.videotype = "Episode" or m.videotype = "Series")
         return option_dialog([tr("Resume playing at ") + ticksToHuman(time) + ".", tr("Start over from the beginning."), tr("Watched"), tr("Go to series"), tr("Go to season"), tr("Go to episode")])
     else
         return option_dialog(["Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning."])
@@ -396,10 +427,10 @@ sub autoPlayNextEpisode(videoID as string, showID as string)
         data = getJson(resp)
 
         if data <> invalid and data.Items.Count() = 2
-            ' remove finished video node
-            m.global.sceneManager.callFunc("popScene")
             ' setup new video node
-            nextVideo = CreateVideoPlayerGroup(data.Items[1].Id, invalid, 1, false)
+            nextVideo = CreateVideoPlayerGroup(data.Items[1].Id, invalid, 1, false, false)
+            ' remove last video scene
+            m.global.sceneManager.callFunc("clearPreviousScene")
             if nextVideo <> invalid
                 m.global.sceneManager.callFunc("pushScene", nextVideo)
             else

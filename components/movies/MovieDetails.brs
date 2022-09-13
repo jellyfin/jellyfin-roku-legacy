@@ -19,14 +19,24 @@ sub init()
     m.buttonGrp.setFocus(true)
     m.top.lastFocus = m.buttonGrp
 
+    m.trailerButton = m.top.findNode("trailer-button")
+    m.trailerButton.text = tr("Play Trailer")
+
     m.top.observeField("itemContent", "itemContentChanged")
 end sub
 
 sub OnScreenShown()
     ' set focus to button group
-    m.buttonGrp.setFocus(true)
+    if m.extrasGrp.opacity = 1
+        m.top.lastFocus.setFocus(true)
+    else
+        m.buttonGrp.setFocus(true)
+    end if
 end sub
 
+sub trailerAvailableChanged()
+    m.trailerButton.visible = m.top.trailerAvailable
+end sub
 
 sub itemContentChanged()
     ' Updates video metadata
@@ -36,8 +46,9 @@ sub itemContentChanged()
     m.top.findNode("moviePoster").uri = m.top.itemContent.posterURL
 
     ' Set default video source
-    m.top.selectedVideoStreamId = itemData.MediaSources[0].id
-
+    if itemData.MediaSources <> invalid
+        m.top.selectedVideoStreamId = itemData.MediaSources[0].id
+    end if
     ' Find first Audio Stream and set that as default
     SetDefaultAudioTrack(itemData)
 
@@ -48,7 +59,7 @@ sub itemContentChanged()
     setFieldText("overview", itemData.overview)
 
     if itemData.communityRating <> invalid
-        setFieldText("communityRating", itemData.communityRating)
+        setFieldText("communityRating", int(itemData.communityRating * 10) / 10)
     else
         ' hide the star icon
         m.top.findNode("communityRatingGroup").visible = false
@@ -68,7 +79,9 @@ sub itemContentChanged()
 
     if type(itemData.RunTimeTicks) = "LongInteger"
         setFieldText("runtime", stri(getRuntime()) + " mins")
-        setFieldText("ends-at", tr("Ends at %1").Replace("%1", getEndTime()))
+        if get_user_setting("ui.design.hideclock") <> "true"
+            setFieldText("ends-at", tr("Ends at %1").Replace("%1", getEndTime()))
+        end if
     end if
 
     if itemData.genres.count() > 0
@@ -295,6 +308,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     end if
 
     if key = "down" and m.buttonGrp.isInFocusChain()
+        m.top.lastFocus = m.extrasGrid
         m.extrasGrid.setFocus(true)
         m.top.findNode("VertSlider").reverse = false
         m.top.findNode("extrasFader").reverse = false
@@ -304,6 +318,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     if key = "up" and m.top.findNode("extrasGrid").isInFocusChain()
         if m.extrasGrid.itemFocused = 0
+            m.top.lastFocus = m.buttonGrp
             m.top.findNode("VertSlider").reverse = true
             m.top.findNode("extrasFader").reverse = true
             m.top.findNode("pplAnime").control = "start"

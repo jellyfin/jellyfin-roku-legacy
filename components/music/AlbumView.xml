@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="MusicAlbumDetails" extends="JFScreen">
+<component name="AlbumView" extends="JFScreen">
   <children>
     <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[-10]" >
       <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[15]" >
@@ -15,7 +15,7 @@
         <LayoutGroup id="infoGroup" layoutDirection="vert" itemSpacings="[15]">
           <Label id="overview" wrap="true" height="310" width="1250" ellipsisText=" ...  (Press * to read more)" />
           <Rectangle id='songListRect' translation="[-30, 0]" width="1260" height="510" color="0x202020ff">
-            <MusicAlbumSongList id="songList" translation="[45, 25]" itemSize="[1170,60]" numRows="7" />
+            <AlbumTrackList itemComponentName="SongItem" id="songList" translation="[45, 25]" itemSize="[1170,60]" numRows="7" />
           </Rectangle>
         </LayoutGroup>
       </LayoutGroup>
@@ -30,5 +30,5 @@
     <field id="instantMixSelected" alias="instantMix.buttonSelected" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
-  <script type="text/brightscript" uri="MusicAlbumDetails.brs" />
+  <script type="text/brightscript" uri="AlbumView.brs" />
 </component>

@@ -154,7 +154,7 @@ sub createDialogPallete()
         DialogSecondaryTextColor: "0xf8f8f8ff",
         DialogSecondaryItemColor: "0xcc7ecc4D",
         DialogInputFieldColor: "0x80FF8080",
-        DialogKeyboardColor: "0x80FF804D",
+        KeyboardDialogColor: "0x80FF804D",
         DialogFootprintColor: "0x80FF804D"
     }
 end sub

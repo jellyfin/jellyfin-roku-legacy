@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.ts": "xml"
+    },
+    "editor.formatOnSave": true
+}

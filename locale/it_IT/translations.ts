@@ -113,6 +113,14 @@
         <translation>Home</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Inserisci il tuo cognome</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Inserisci la password</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
         <translation>Inserire un valore…</translation>
     </message>
@@ -1579,6 +1587,15 @@
     <message>
         <source>Change Server</source>
         <translation>Cambia server</translation>
+    </message>
+    <message>
+        <source>Playback</source>
+        <translation>Riproduzione</translation>
+        <extracomment>Title for Playback section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Salvare le Credenziali?</translation>
     </message>
 </context>
 </TS>

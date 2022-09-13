@@ -19,6 +19,13 @@ Open up the new folder:
 cd jellyfin-roku
 ```
 
+Install Dependencies:
+
+```bash
+npm install
+```
+
+
 
 ## Method 1: Visual Studio Code
 We recommend using Visual Studio Code when working on this project. The [BrightScript Language extension](https://marketplace.visualstudio.com/items?itemName=RokuCommunity.brightscript) provides a rich debugging experience, including in-editor syntax checking, debugging/breakpoint support, variable inspection at runtime, auto-formatting, an integrated remote control mode, and [much more](https://rokucommunity.github.io/vscode-brightscript-language/features.html).

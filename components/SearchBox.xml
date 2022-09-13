@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="SearchBox" extends="LayoutGroup">
   <children>
-    <Label text="Search" />
-    <TextEditBox id="search-input" width="800" maxTextLength="75" />
+       <Label id = "text" text="" visible="false"	/>
+        <DynamicMiniKeyboard id="search_Key" />
   </children>
   <interface>
-    <field id="search_value" type="string" alwaysNotify="true" />
+    <field id="search_values" type="string" alwaysNotify="true" />
   </interface>
   <script type="text/brightscript" uri="SearchBox.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
 </component>

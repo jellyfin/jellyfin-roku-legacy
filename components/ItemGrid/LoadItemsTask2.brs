@@ -1,9 +1,15 @@
 sub init()
     m.top.functionName = "loadItems"
+
+    m.top.limit = 60
+    usersettingLimit = get_user_setting("itemgrid.Limit")
+
+    if usersettingLimit <> invalid
+        m.top.limit = usersettingLimit
+    end if
 end sub
 
 sub loadItems()
-
     results = []
 
     sort_field = m.top.sortField
@@ -26,13 +32,28 @@ sub loadItems()
         StudioIds: m.top.studioIds,
         genreIds: m.top.genreIds
     }
+
     ' Handle special case when getting names starting with numeral
     if m.top.NameStartsWith <> ""
         if m.top.NameStartsWith = "#"
-            params.NameLessThan = "A"
+            if m.top.ItemType = "LiveTV" or m.top.ItemType = "TvChannel"
+                params.searchterm = "A"
+                params.append({ parentid: " " })
+            else
+                params.NameLessThan = "A"
+            end if
         else
-            params.NameStartsWith = m.top.nameStartsWith
+            if m.top.ItemType = "LiveTV" or m.top.ItemType = "TvChannel"
+                params.searchterm = m.top.nameStartsWith
+                params.append({ parentid: " " })
+            else
+                params.NameStartsWith = m.top.nameStartsWith
+            end if
         end if
+    end if
+
+    if m.top.searchTerm <> ""
+        params.searchTerm = m.top.searchTerm
     end if
 
     filter = m.top.filter
@@ -71,7 +92,7 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "MovieData")
             else if item.Type = "Series"
                 tmp = CreateObject("roSGNode", "SeriesData")
-            else if item.Type = "BoxSet"
+            else if item.Type = "BoxSet" or item.Type = "ManualPlaylistsFolder"
                 tmp = CreateObject("roSGNode", "CollectionData")
             else if item.Type = "TvChannel"
                 tmp = CreateObject("roSGNode", "ChannelData")

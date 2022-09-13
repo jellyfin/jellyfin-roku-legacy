@@ -12,6 +12,9 @@ sub init()
     m.path = m.top.findNode("path")
 
     m.boolSetting = m.top.findNode("boolSetting")
+    m.integerSetting = m.top.findNode("integerSetting")
+    m.integerSetting.observeField("submit", "onKeyGridSubmit")
+    m.integerSetting.observeField("escape", "onKeyGridEscape")
 
     m.settingsMenu.setFocus(true)
     m.settingsMenu.observeField("itemFocused", "settingFocused")
@@ -24,6 +27,17 @@ sub init()
     LoadMenu({ children: m.configTree })
 end sub
 
+sub onKeyGridSubmit()
+    selectedSetting = m.userLocation.peek().children[m.settingsMenu.itemFocused]
+    set_user_setting(selectedSetting.settingName, m.integerSetting.text)
+    m.settingsMenu.setFocus(true)
+end sub
+
+sub onKeyGridEscape()
+    if m.integerSetting.escape = "left" or m.integerSetting.escape = "back"
+        m.settingsMenu.setFocus(true)
+    end if
+end sub
 
 sub LoadMenu(configSection)
 
@@ -58,8 +72,6 @@ sub LoadMenu(configSection)
     end for
 end sub
 
-
-
 sub settingFocused()
 
     selectedSetting = m.userLocation.peek().children[m.settingsMenu.itemFocused]
@@ -68,6 +80,7 @@ sub settingFocused()
 
     ' Hide Settings
     m.boolSetting.visible = false
+    m.integerSetting.visible = false
 
     if selectedSetting.type = invalid
         return
@@ -80,6 +93,12 @@ sub settingFocused()
         else
             m.boolSetting.checkedItem = 0
         end if
+    else if selectedSetting.type = "integer"
+        integerValue = get_user_setting(selectedSetting.settingName, selectedSetting.default)
+        if isValid(integerValue)
+            m.integerSetting.text = integerValue
+        end if
+        m.integerSetting.visible = true
     else
         print "Unknown setting type " + selectedSetting.type
     end if
@@ -91,10 +110,12 @@ sub settingSelected()
 
     selectedItem = m.userLocation.peek().children[m.settingsMenu.itemFocused]
 
-
     if selectedItem.type <> invalid ' Show setting
         if selectedItem.type = "bool"
             m.boolSetting.setFocus(true)
+        end if
+        if selectedItem.type = "integer"
+            m.integerSetting.setFocus(true)
         end if
     else if selectedItem.children <> invalid and selectedItem.children.Count() > 0 ' Show sub menu
         LoadMenu(selectedItem)
