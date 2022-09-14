@@ -307,8 +307,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.options.setFocus(true)
     end if
 
-    if key = "down" and m.buttonGrp.isInFocusChain()
-        m.top.lastFocus = m.extrasGrid
+    if key = "down" and m.top.findNode("trailer-button").hasFocus()
         m.extrasGrid.setFocus(true)
         m.top.findNode("VertSlider").reverse = false
         m.top.findNode("extrasFader").reverse = false
@@ -322,7 +321,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             m.top.findNode("VertSlider").reverse = true
             m.top.findNode("extrasFader").reverse = true
             m.top.findNode("pplAnime").control = "start"
-            m.buttonGrp.setFocus(true)
+            m.top.findNode("favorite-button").setFocus(true)
             return true
         end if
     end if
