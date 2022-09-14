@@ -8,7 +8,7 @@ sub init()
     m.bufferPercentage = 0 ' Track whether content is being loaded
     m.playReported = false
     m.top.transcodeReasons = []
-    m.bufferCheckTimer.duration = 10
+    m.bufferCheckTimer.duration = 30
 
     if get_user_setting("ui.design.hideclock") = "true"
         clockNode = findNodeBySubtype(m.top, "clock")
@@ -125,7 +125,6 @@ end sub
 '
 ' When Video Player state changes
 sub onState(msg)
-
     ' When buffering, start timer to monitor buffering process
     if m.top.state = "buffering" and m.bufferCheckTimer <> invalid
 

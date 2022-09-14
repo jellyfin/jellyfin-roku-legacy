@@ -9,7 +9,6 @@ sub Main (args as dynamic) as void
 
     ' Set global constants
     setConstants()
-
     ' Write screen tracker for screensaver
     WriteAsciiFile("tmp:/scene.temp", "")
     MoveFile("tmp:/scene.temp", "tmp:/scene")
@@ -388,7 +387,11 @@ sub Main (args as dynamic) as void
             end if
         else if isNodeEvent(msg, "state")
             node = msg.getRoSGNode()
-            if node.state = "finished"
+            if selectedItem.Type = "TvChannel" and node.state = "finished"
+                video = CreateVideoPlayerGroup(node.id)
+                m.global.sceneManager.callFunc("pushScene", video)
+                m.global.sceneManager.callFunc("clearPreviousScene")
+            else if node.state = "finished"
                 node.control = "stop"
 
                 ' If node allows retrying using Transcode Url, give that shot
