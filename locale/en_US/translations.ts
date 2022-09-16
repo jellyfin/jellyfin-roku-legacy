@@ -133,8 +133,8 @@
             <translation>Enter a password</translation>
         </message>
         <message>
-            <source>Enter a value...</source>
-            <translation>Enter a value...</translation>
+            <source>Enter a value…</source>
+            <translation>Enter a value…</translation>
         </message>
         <message>
             <source>Name</source>
