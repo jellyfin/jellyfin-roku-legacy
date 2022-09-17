@@ -37,7 +37,7 @@ sub optionsSet()
 
         for each view in m.top.options.videos
             entry = viewContent.CreateChild("VideoTrackListData")
-            entry.title = view.video_codec
+            entry.title = view.Title
             entry.description = view.Description
             entry.streamId = view.streamId
             entry.video_codec = view.video_codec
@@ -87,8 +87,8 @@ end sub
 ' Switch menu shown when button focus changes
 sub buttonFocusChanged()
     if m.buttons.focusedIndex = m.selectedItem then return
-    m.fadeOutAnimOpacity.fieldToInterp = m.menus[m.selectedItem].id + ".opacity" + "&blur=15"
-    m.fadeInAnimOpacity.fieldToInterp = m.menus[m.buttons.focusedIndex].id + ".opacity" + "&blur=15"
+    m.fadeOutAnimOpacity.fieldToInterp = m.menus[m.selectedItem].id + ".opacity"
+    m.fadeInAnimOpacity.fieldToInterp = m.menus[m.buttons.focusedIndex].id + ".opacity"
     m.fadeAnim.control = "start"
     m.selectedItem = m.buttons.focusedIndex
 end sub
