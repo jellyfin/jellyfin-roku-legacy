@@ -1879,5 +1879,10 @@
         <source>Change Server</source>
         <translation>Cambiar de Servidor</translation>
     </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Nombre</translation>
+    </message>
 </context>
 </TS>
