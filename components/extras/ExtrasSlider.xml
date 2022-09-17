@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="ExtrasSlider" extends="JFGroup">
   <children>
-    <Rectangle id="extrasGrp" color="#0A0010" opacity="0.3" width="1860" height="900" translation="[30, 1014]" >
-      <ExtrasRowList id="extrasGrid"
+    <Rectangle id="extrasGrp" color="#0A0010" opacity="0.3" width="1860" height="950" translation="[30, 1014]" >
+      <ExtrasRowList id="extrasGrid" 
         itemSpacing="[ 60, 132]"
         rowLabelOffset="[ [9, 24] ]"
         numRows="2"
         showRowLabel="true"
         showRowCounter="true"
         visible="true"
-        translation="[12,18]"
+        translation="[90,36]"
         itemComponentName="ExtrasItem" />
       <Animation id="pplAnime" duration=".4" repeat="false" >
         <Vector2DFieldInterpolator
