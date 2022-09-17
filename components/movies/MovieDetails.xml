@@ -4,12 +4,12 @@
     <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[30]">
       <LayoutGroup layoutDirection="vert">
         <Poster id="moviePoster" translation="[250,150]" width="300" height="450" />
-        <ButtonGroup id="buttons" itemSpacings="[0]">
-          <Button text="Play" id="play-button" iconUri="" focusedIconUri="" maxWidth="175" minWidth="175" />
-          <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="250" minWidth="250" />
-          <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="300" />
-          <Button text="Favorite" id="favorite-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
-          <Button id="trailer-button" visible="false" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
+        <ButtonGroup id="buttons" itemSpacings="[0]" >
+          <Button text="Play" id="play-button" iconUri="pkg:/images/play_button_jf_white_18dp.png" focusedIconUri="pkg:/images/play_button_jf_white_18dp.png" blendColor="#a4dcFF" maxWidth="300" minWidth="300" height="100"/>
+          <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="350" height="75" />
+          <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="350" height="75" />
+          <Button text="Favorite" id="favorite-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="350" height="75" />
+          <Button id="trailer-button" visible="false" iconUri="" focusedIconUri="" maxWidth="350" minWidth="350" />
         </ButtonGroup>
       </LayoutGroup>
       <LayoutGroup layoutDirection="vert" translation="[455, 150]" itemSpacings="[25]" id="details">
