@@ -5,7 +5,7 @@
       <LayoutGroup layoutDirection="vert">
         <Poster id="moviePoster" translation="[250,150]" width="300" height="450" />
         <ButtonGroup id="buttons" itemSpacings="[0]" >
-          <Button text="Play" id="play-button" iconUri="pkg:/images/play_button_jf_white_18dp.png" focusedIconUri="pkg:/images/play_button_jf_white_18dp.png" blendColor="#a4dcFF" maxWidth="300" minWidth="300" height="100"/>
+          <Button text="Play" id="play-button" iconUri="pkg:/images/play_button_jf_white_18dp.png" focusedIconUri="pkg:/images/play_button_jf_white_18dp.png" maxWidth="300" minWidth="300" height="100"/>
           <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="350" height="75" />
           <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="350" height="75" />
           <Button text="Favorite" id="favorite-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="350" height="75" />
