@@ -83,7 +83,7 @@ function ItemMetaData(id as string)
             imgParams.Append(param)
         end if
     end if
-    if data.type = "Movie"
+    if data.type = "Movie" or data.type = "MusicVideo"
         tmp = CreateObject("roSGNode", "MovieData")
         tmp.image = PosterImage(data.id, imgParams)
         tmp.json = data
