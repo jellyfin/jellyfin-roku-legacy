@@ -3,7 +3,7 @@
   <children>
     <Rectangle width="1920" height="1080" color="#000000" opacity="0.5" />
     <Group translation="[420,150]">
-      <Poster width="1400" height="880" uri="pkg:/images/dialog.9.png" />
+      <Poster width="1400" height="880" uri="pkg:/images/dialog2.9.png" />
       <LayoutGroup layoutDirection="vert" translation="[380,50]" itemSpacings="[50]">
         <JFButtons id="buttons" />
         <Group>
