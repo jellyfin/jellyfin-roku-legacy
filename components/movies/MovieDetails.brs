@@ -307,7 +307,12 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.options.setFocus(true)
     end if
 
-    if key = "down" and m.top.findNode("trailer-button").hasFocus()
+    if key = "down" and m.top.findNode("cast-crew-button").hasFocus() and m.trailerAvailable = true and m.trailerButton.visible = true
+        m.top.findNode("trailer-button").setFocus(true)
+        return true
+    end if
+
+    if key = "OK" and m.top.findNode("cast-crew-button").hasFocus()
         m.extrasGrid.setFocus(true)
         m.top.findNode("VertSlider").reverse = false
         m.top.findNode("extrasFader").reverse = false
@@ -315,13 +320,16 @@ function onKeyEvent(key as string, press as boolean) as boolean
         return true
     end if
 
-    if key = "up" and m.top.findNode("extrasGrid").isInFocusChain()
+    if key = "back" and m.top.findNode("extrasGrid").isInFocusChain()
         if m.extrasGrid.itemFocused = 0
             m.top.lastFocus = m.buttonGrp
             m.top.findNode("VertSlider").reverse = true
             m.top.findNode("extrasFader").reverse = true
             m.top.findNode("pplAnime").control = "start"
-            m.top.findNode("favorite-button").setFocus(true)
+            if m.trailerButton.visible
+                m.top.findNode("trailer-button").setFocus(true)
+            else m.top.findNode("cast-crew-button").setFocus(true)
+            end if
             return true
         end if
     end if

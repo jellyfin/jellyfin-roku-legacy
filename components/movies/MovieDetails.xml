@@ -3,13 +3,14 @@
   <children>
     <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[30]">
       <LayoutGroup layoutDirection="vert">
-        <Poster id="moviePoster" translation="[250,150]" width="300" height="450" />
+        <Poster id="moviePoster" translation="[250,150]" width="305" height="457.5" />
         <ButtonGroup id="buttons" itemSpacings="[0]" >
-          <Button text="Play" id="play-button" iconUri="pkg:/images/play_button_jf_white_18dp.png" focusedIconUri="pkg:/images/play_button_jf_white_18dp.png" maxWidth="300" minWidth="300" height="100"/>
-          <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="350" height="75" />
-          <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="350" height="75" />
-          <Button text="Favorite" id="favorite-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="350" height="75" />
-          <Button id="trailer-button" visible="false" iconUri="" focusedIconUri="" maxWidth="350" minWidth="350" />
+          <Button text="Play" id="play-button" iconUri="pkg:/images/play_button_jf_white_18dp.png" focusedIconUri="pkg:/images/play_button_jf_white_18dp.png" maxWidth="325" minWidth="325" height="85"/>
+          <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="325" minWidth="325" height="70" />
+          <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="325" minWidth="325" height="70" />
+          <Button text="Favorite" id="favorite-button" iconUri="" focusedIconUri="" maxWidth="325" minWidth="325" height="70" />
+          <Button text="View Cast" id="cast-crew-button" iconUri="" focusedIconUri="" maxWidth="325" minWidth="325" height="70" />
+          <Button id="trailer-button" visible="false" iconUri="" focusedIconUri="" maxWidth="325" minWidth="325" height="70" />
         </ButtonGroup>
       </LayoutGroup>
       <LayoutGroup layoutDirection="vert" translation="[455, 150]" itemSpacings="[25]" id="details">
@@ -28,7 +29,7 @@
           <Label id="ends-at" />
         </LayoutGroup>
         <Label id="genres" />
-        <!--  <Label id="tagline" /> -->
+        <Label id="tagline" />
         <Label id="overview" wrap="true" maxLines="8" font="font:mediumBoldSystemFont" />
         <Label id="director" />
         <LayoutGroup layoutDirection="vert">

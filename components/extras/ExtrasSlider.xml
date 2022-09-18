@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="ExtrasSlider" extends="JFGroup">
   <children>
-    <Rectangle id="extrasGrp" color="#0A0010" opacity="0.3" width="1860" height="950" translation="[30, 1014]" >
+    <Rectangle id="extrasGrp" color="#0A0010" opacity="0.3" width="1860" height="950" translation="[30, 1100]" >
       <ExtrasRowList id="extrasGrid" 
         itemSpacing="[ 60, 132]"
         rowLabelOffset="[ [9, 24] ]"
@@ -15,7 +15,7 @@
         <Vector2DFieldInterpolator
             id="VertSlider"
             key="[0.0, 0.25, 0.50, 75.0, 1.0]"
-            keyValue="[[30, 1014], [30, 804], [30, 588], [30,375 ], [30, 162]]"
+            keyValue="[[30, 1100], [30, 804], [30, 588], [30,375 ], [30, 162]]"
             fieldToInterp="extrasGrp.translation" />
         <FloatFieldInterpolator
             id="extrasFader"
