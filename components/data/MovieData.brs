@@ -48,10 +48,10 @@ sub setPoster()
             m.top.posterURL = ImageURL(m.top.json.ParentThumbItemId, "Thumb", imgParams)
         end if
 
-        ' Add Backdrop Image
+        ' Add Backdrop Image + very small image size to emulate a blur of background image, invalid image will not longer cause visual confusion if the selection does not match
         if m.top.json.BackdropImageTags[0] <> invalid
-            imgParams = { "maxHeight": 720, "maxWidth": 1280 }
-            m.top.backdropURL = ImageURL(m.top.json.id, "Backdrop", imgParams)
+            imgParams = { "maxHeight": 5.4, "maxWidth": 9.6 }
+            m.top.backdropURL = ImageURL(m.top.json.id, "Primary", imgParams)
         end if
 
     end if

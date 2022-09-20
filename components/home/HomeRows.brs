@@ -3,7 +3,7 @@ sub init()
     ' how many rows are visible on the screen
     m.top.numRows = 2
 
-    m.top.rowFocusAnimationStyle = "fixedFocusWrap"
+    m.top.rowFocusAnimationStyle = "floatingFocus"
     m.top.vertFocusAnimationStyle = "fixedFocus"
 
     m.top.showRowLabel = [true]

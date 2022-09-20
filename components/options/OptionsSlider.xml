@@ -7,7 +7,7 @@
         color="#101010DD"
         width="575"
         height="1080" />
-      <LabelList id="panelList">
+      <LabelList id="panelList" vertFocusAnimationStyle="floatingFocus">
         <ContentNode id="fieldList" role="content" />
       </LabelList>
     </ListPanel>

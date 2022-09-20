@@ -1,7 +1,7 @@
 sub init()
     m.top.visible = true
     updateSize()
-    m.top.rowFocusAnimationStyle = "fixedFocusWrap"
+    m.top.rowFocusAnimationStyle = "floatingFocus"
     m.top.observeField("rowItemSelected", "onRowItemSelected")
 
     ' Set up all Tasks
