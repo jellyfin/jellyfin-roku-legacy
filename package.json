@@ -10,7 +10,7 @@
     "@rokucommunity/bslint": "0.7.5",
     "brighterscript": "0.57.2",
     "rooibos-cli": "1.4.0",
-    "ropm": "0.10.9"
+    "ropm": "0.10.10"
   },
   "scripts": {
     "postinstall": "npx ropm copy",

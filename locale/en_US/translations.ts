@@ -708,10 +708,6 @@
             <extracomment>Settings Menu - Description for option</extracomment>
         </message>
         <message>
-            <source>Skip Intro</source>
-            <translation>Skip Intro</translation>
-        </message>
-        <message>
             <source>Play Trailer</source>
             <translation>Play Trailer</translation>
         </message>
