@@ -88,7 +88,7 @@ sub loadItems()
 
         for each item in data.Items
             tmp = invalid
-            if item.Type = "Movie"
+            if item.Type = "Movie" or item.Type = "MusicVideo"
                 tmp = CreateObject("roSGNode", "MovieData")
             else if item.Type = "Series"
                 tmp = CreateObject("roSGNode", "SeriesData")
