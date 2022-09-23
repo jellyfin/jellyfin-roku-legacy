@@ -417,36 +417,33 @@ sub onMetaDataLoaded()
         'm.LoadBackdropImageTask.control = "RUN"
 
         if isvalid(data?.json?.ArtistItems?[0]?.id)
-            m.LoadBackdropImageTask.itemId = data.json.ArtistItems[0].id
-            m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
-            m.LoadBackdropImageTask.control = "RUN"
-        end if
-
-
-
-
-        if data.type = "AudioBook"
-            m.songDuration = data.RunTimeTicks / 10000000.0
-            setPosterImage(data.posterURL)
-            setScreenTitle(data)
-            setOnScreenTextValues(data)
-        else
-            m.songDuration = data.json.RunTimeTicks / 10000000.0
-            setPosterImage(data.posterURL)
-            setScreenTitle(data.json)
-            setOnScreenTextValues(data.json)
-        end if
-
-        ' If we have more and 1 song to play, fade in the next and previous controls
-        if m.buttonsNeedToBeLoaded
-            if m.top.pageContent.count() > 1
-                m.shuffleIndicator.opacity = ".4"
-                m.loopIndicator.opacity = ".4"
-                m.displayButtonsAnimation.control = "start"
-            end if
-            m.buttonsNeedToBeLoaded = false
-        end if
+        m.LoadBackdropImageTask.itemId = data.json.ArtistItems[0].id
+        m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
+        m.LoadBackdropImageTask.control = "RUN"
     end if
+
+    if data.type = "AudioBook"
+        m.songDuration = data.RunTimeTicks / 10000000.0
+        setScreenTitle(data)
+        setOnScreenTextValues(data)
+    else
+        m.songDuration = data.json.RunTimeTicks / 10000000.0
+        setScreenTitle(data.json)
+        setOnScreenTextValues(data.json)
+    end if
+
+    setPosterImage(data.posterURL)
+
+    ' If we have more and 1 song to play, fade in the next and previous controls
+    if m.buttonsNeedToBeLoaded
+        if m.top.pageContent.count() > 1
+            m.shuffleIndicator.opacity = ".4"
+            m.loopIndicator.opacity = ".4"
+            m.displayButtonsAnimation.control = "start"
+        end if
+        m.buttonsNeedToBeLoaded = false
+    end if
+end if
 end sub
 
 ' Set poster image on screen

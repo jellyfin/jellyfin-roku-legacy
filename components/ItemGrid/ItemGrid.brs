@@ -81,10 +81,10 @@ sub loadInitialItems()
     if m.top.parentItem.backdropUrl = ""
         SetBackground(m.top.parentItem.posterUrl)
     else if m.top.parentItem.backdropUrl <> invalid
-    m.loadItemsTask.control = "stop"
-    m.spinner.visible = true
+        m.loadItemsTask.control = "stop"
+        m.spinner.visible = true
 
-    if m.top.parentItem.json.Type = "CollectionFolder" 'or m.top.parentItem.json.Type = "Folder"
+    else if m.top.parentItem.json.Type = "CollectionFolder" 'or m.top.parentItem.json.Type = "Folder"
         m.top.HomeLibraryItem = m.top.parentItem.Id
 
     end if
@@ -193,7 +193,7 @@ sub loadInitialItems()
         if get_user_setting("display.livetv.landing") = "guide" and m.options.view <> "livetv"
             showTvGuide()
         end if
-        
+
     else if m.top.parentItem.collectionType = "books"
         m.loadItemsTask.recursive = false
         m.loadItemsTask.itemId = m.top.parentItem.id

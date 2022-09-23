@@ -165,7 +165,7 @@ sub Main (args as dynamic) as void
             else if selectedItem.type = "MusicArtist"
                 group = CreateArtistView(selectedItem.json)
             else if selectedItem.type = "MusicAlbum"
-                group = CreateMusicAlbumDetailsGroup(selectedItem.json)
+                group = CreateAlbumView(selectedItem.json)
             else if selectedItem.type = "Audio" or selectedItem.type = "Song" or selectedItem.type = "AudioBook"
                 group = CreateAudioPlayerGroup([selectedItem.json])
             else
