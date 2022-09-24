@@ -2,9 +2,7 @@
 <component name="MovieDetails" extends="JFScreen">
   <children>
     <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[30]">
-      <Poster id="moviePoster"
-        translation="[250,150]"
-        width="300" height="450" />
+      <Poster id="moviePoster" translation="[250,150]" width="300" height="450" />
       <LayoutGroup layoutDirection="vert" translation="[455, 150]" itemSpacings="[25]" id="details">
         <LayoutGroup layoutDirection="horiz" itemSpacings="[100]" id="infoGroup">
           <Label id="releaseYear" />
@@ -22,19 +20,20 @@
         </LayoutGroup>
         <Label id="genres" />
         <Label id="director" />
-        <LayoutGroup layoutDirection="horiz" >
+        <LayoutGroup layoutDirection="horiz">
           <Label id="video_codec" vertAlign="bottom" height="39" />
           <label id="video_codec_count" font="font:smallestSystemFont" vertAlign="top" color="#ceffff" />
         </LayoutGroup>
-        <LayoutGroup layoutDirection="horiz" >
+        <LayoutGroup layoutDirection="horiz">
           <Label id="audio_codec" vertAlign="bottom" height="39" />
           <label id="audio_codec_count" font="font:smallestSystemFont" vertAlign="top" color="#ceffff" />
         </LayoutGroup>
         <ButtonGroupHoriz id="buttons" itemSpacings="[10]">
-          <Button text="Play" id="play-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
-          <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
+          <Button text="Play" id="play-button" iconUri="" focusedIconUri="" maxWidth="175" minWidth="175" />
+          <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="250" minWidth="250" />
           <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="300" />
           <Button text="Favorite" id="favorite-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
+          <Button id="trailer-button" visible="false" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
         </ButtonGroupHoriz>
         <Label id="tagline" />
         <Label id="overview" wrap="true" maxLines="8" />
@@ -46,6 +45,7 @@
   </children>
   <interface>
     <field id="itemContent" type="node" />
+    <field id="trailerAvailable" type="bool" onChange="trailerAvailableChanged" value="false" />
     <field id="selectedAudioStreamIndex" type="integer" />
     <field id="selectedVideoStreamId" type="string" />
   </interface>

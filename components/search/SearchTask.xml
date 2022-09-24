@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="SearchBox" extends="LayoutGroup">
-  <children>
-       <Label id = "text" text="" visible="false"	/>
-        <DynamicMiniKeyboard id="search_Key" />
-  </children>
+
+<component name="SearchTask" extends="Task">
   <interface>
-    <field id="search_values" type="string" alwaysNotify="true" />
+    <field id="query" type="string" />
+    <field id="results" type="assocarray" />
   </interface>
-  <script type="text/brightscript" uri="SearchBox.brs" />
+  <script type="text/brightscript" uri="SearchTask.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />

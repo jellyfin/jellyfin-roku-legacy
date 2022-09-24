@@ -3,6 +3,7 @@
   <interface>
     <field id="backPressed" type="boolean" alwaysNotify="true" />
     <field id="selectSubtitlePressed" type="boolean" alwaysNotify="true" />
+    <field id="selectPlaybackInfoPressed" type="boolean" alwaysNotify="true" />
     <field id="PlaySessionId" type="string" />
     <field id="Subtitles" type="array" />
     <field id="SelectedSubtitle" type="integer" />
@@ -17,11 +18,10 @@
     <field id="retryWithTranscoding" type="boolean" value="false" />
     <field id="isTranscoded" type="boolean" />
     <field id="transcodeReasons" type="array" />
-    
+
     <field id="videoId" type="string" />
     <field id="mediaSourceId" type="string" />
     <field id="audioIndex" type="integer" />
-
   </interface>
   <script type="text/brightscript" uri="JFVideo.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />

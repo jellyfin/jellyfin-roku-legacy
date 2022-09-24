@@ -338,6 +338,12 @@ function CreateMovieDetailsGroup(movie)
 
     movie = ItemMetaData(movie.id)
     group.itemContent = movie
+    group.trailerAvailable = false
+
+    trailerData = api_API().users.getlocaltrailers(get_setting("active_user"), movie.id)
+    if isValid(trailerData)
+        group.trailerAvailable = trailerData.Count() > 0
+    end if
 
     buttons = group.findNode("buttons")
     for each b in buttons.getChildren(-1, 0)
@@ -440,12 +446,8 @@ end function
 
 function CreateSearchPage()
     ' Search + Results Page
-    group = CreateObject("roSGNode", "SearchResults")
-
-    search = group.findNode("SearchBox")
-    search.observeField("search_value", m.port)
-
-    options = group.findNode("SearchSelect")
+    group = CreateObject("roSGNode", "searchResults")
+    options = group.findNode("searchSelect")
     options.observeField("itemSelected", m.port)
 
     return group
@@ -465,6 +467,7 @@ function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_
     if video = invalid then return invalid
     if video.errorMsg = "introaborted" then return video
     video.observeField("selectSubtitlePressed", m.port)
+    video.observeField("selectPlaybackInfoPressed", m.port)
     video.observeField("state", m.port)
 
     return video

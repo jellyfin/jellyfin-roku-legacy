@@ -14,6 +14,7 @@ sub init()
     m.loopMode = ""
     m.shuffleEvent = ""
     m.buttonCount = m.buttons.getChildCount()
+    m.playReported = false
 
     m.screenSaverTimeout = 300
 
@@ -198,6 +199,24 @@ sub endScreenSaver()
 end sub
 
 sub audioStateChanged()
+
+    if m.top.audio.state = "playing"
+        if m.playReported
+            ReportPlayback()
+        else
+            ReportPlayback("start")
+            m.playReported = true
+        end if
+    else if m.top.audio.state = "paused"
+        ReportPlayback()
+    else if m.top.audio.state = "stopped"
+        ReportPlayback("stop")
+        m.playReported = false
+    else if m.top.audio.state = "finished"
+        ReportPlayback("stop")
+        m.playReported = false
+    end if
+
     ' Song Finished, attempt to move to next song
     if m.top.audio.state = "finished"
         if m.loopMode = "one"
@@ -240,6 +259,10 @@ function playAction() as boolean
 end function
 
 function previousClicked() as boolean
+    if m.top.audio.state = "playing"
+        m.top.audio.control = "stop"
+    end if
+
     if m.currentSongIndex > 0
         m.currentSongIndex--
         pageContentChanged()
@@ -331,6 +354,10 @@ function shuffleClicked() as boolean
 end function
 
 sub LoadNextSong()
+    if m.top.audio.state = "playing"
+        m.top.audio.control = "stop"
+    end if
+
     ' Reset playPosition bar without animation
     m.playPosition.width = 0
     m.currentSongIndex++
@@ -362,7 +389,6 @@ sub onAudioStreamLoaded()
     m.LoadAudioStreamTask.unobserveField("content")
     if data <> invalid and data.count() > 0
         m.top.audio.content = data
-        m.top.audio.control = "stop"
         m.top.audio.control = "none"
         m.top.audio.control = "play"
     end if
@@ -382,7 +408,7 @@ sub onMetaDataLoaded()
     if data <> invalid and data.count() > 0
 
         ' Use metadata to load backdrop image
-        if isvalid(data?.json?.ArtistItems?[0].id)
+        if isvalid(data?.json?.ArtistItems?[0]?.id)
             m.LoadBackdropImageTask.itemId = data.json.ArtistItems[0].id
             m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
             m.LoadBackdropImageTask.control = "RUN"
@@ -514,4 +540,22 @@ sub OnScreenHidden()
     ' Write screen tracker for screensaver
     WriteAsciiFile("tmp:/scene.temp", "")
     MoveFile("tmp:/scene.temp", "tmp:/scene")
+end sub
+
+' Report playback to server
+sub ReportPlayback(state = "update" as string)
+
+    if m.top.audio.position = invalid then return
+
+    params = {
+        "ItemId": m.top.pageContent[m.currentSongIndex],
+        "PlaySessionId": m.top.audio.content.id,
+        "PositionTicks": int(m.top.audio.position) * 10000000&, 'Ensure a LongInteger is used
+        "IsPaused": (m.top.audio.state = "paused")
+    }
+
+    ' Report playstate via worker task
+    playstateTask = m.global.playstateTask
+    playstateTask.setFields({ status: state, params: params })
+    playstateTask.control = "RUN"
 end sub

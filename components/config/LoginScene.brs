@@ -23,11 +23,17 @@ function onKeyEvent(key as string, press as boolean) as boolean
     else if key = "down" and submit.focusedChild = invalid
         submit.setFocus(true)
         return true
-    else if key = "up" and submit.focusedChild <> invalid or quickConnect.focusedChild <> invalid
+    else if key = "up" and submit.focusedChild <> invalid
+        checkbox.setFocus(true)
+        return true
+    else if key = "up" and quickConnect.focusedChild <> invalid
         checkbox.setFocus(true)
         return true
     else if key = "up" and checkbox.focusedChild <> invalid
         list.setFocus(true)
+        return true
+    else if key = "right" and checkbox.focusedChild <> invalid
+        quickConnect.setFocus(true)
         return true
     else if key = "right" and submit.focusedChild <> invalid
         quickConnect.setFocus(true)

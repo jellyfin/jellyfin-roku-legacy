@@ -113,6 +113,14 @@
         <translation>Domov</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Vnesite svoje uporabniško ime</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Vnesite geslo</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
         <translation>Vnesite vrednost…</translation>
     </message>
@@ -857,6 +865,10 @@
         <source>Error Retrieving Content</source>
         <translation>Napaka pri pridobivanju vsebine</translation>
         <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Shranite poverilnice?</translation>
     </message>
 </context>
 </TS>

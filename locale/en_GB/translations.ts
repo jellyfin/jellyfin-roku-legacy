@@ -113,8 +113,12 @@
         <translation>Home</translation>
     </message>
     <message>
-        <source>Enter a value...</source>
-        <translation>Enter a value…</translation>
+        <source>Enter a username</source>
+        <translation>Enter a username</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Enter a password</translation>
     </message>
     <message>
         <source>Name</source>
@@ -374,7 +378,7 @@
     </message>
     <message>
         <source>Pick a Jellyfin server from the local network</source>
-        <translation>Pick a Jellyfin server from the local network</translation>
+        <translation>Select an available Jellyfin server from your local network:</translation>
         <extracomment>Instructions on initial app launch when the user is asked to pick a server from a list</extracomment>
     </message>
     <message>
@@ -384,7 +388,7 @@
     </message>
     <message>
         <source>...or enter server URL manually:</source>
-        <translation>…or enter server URL manually:</translation>
+        <translation>If no server is listed above, you may also enter the server URL manually:</translation>
         <extracomment>Instructions on initial app launch when the user is asked to manually enter a server URL</extracomment>
     </message>
     <message>
@@ -830,6 +834,15 @@
     <message>
         <source>Delete Saved</source>
         <translation>Delete Saved</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Save Credentials?</translation>
+    </message>
+    <message>
+        <source>Playback</source>
+        <translation>Playback</translation>
+        <extracomment>Title for Playback section in user setting screen.</extracomment>
     </message>
     <message>
         <source>Save Credentials?</source>

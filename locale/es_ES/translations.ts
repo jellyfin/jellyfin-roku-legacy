@@ -113,8 +113,12 @@
         <translation>Inicio</translation>
     </message>
     <message>
-        <source>Enter a value...</source>
-        <translation>Enter a value...</translation>
+        <source>Enter a username</source>
+        <translation>Ingres nombre de usuario</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Ingres la contraseña</translation>
     </message>
     <message>
         <source>Sort Field</source>
@@ -169,8 +173,16 @@
         <translation>Audio</translation>
     </message>
     <message>
+        <source>Enter a username</source>
+        <translation>Ingresar nombre de usuario</translation>
+    </message>
+    <message>
+        <source>Enter a password</source>
+        <translation>Ingresar la contraseña</translation>
+    </message>
+    <message>
         <source>Enter a value...</source>
-        <translation>Introduce un valor…</translation>
+        <translation>Ingresar un valor...</translation>
     </message>
     <message>
         <source>Sort Field</source>
@@ -1625,7 +1637,7 @@
         <translation>Contenido Adicional</translation>
         <message>
             <source>Press &apos;OK&apos; to Close</source>
-            <translation>Press &apos;OK&apos; to Close</translation>
+            <translation>Presiona &apos;OK&apos; para cerrar</translation>
         </message>
     </message>
     <message>
@@ -1752,6 +1764,125 @@
     <message>
         <source>Change Server</source>
         <translation>Cambiar Servidor</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Guardar credenciales?</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Eliminar Guardado</translation>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Desconectar</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Cambiar Servidor</translation>
+    </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Error al cargar los Datos del Canal</translation>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Cargando Datos del Canal</translation>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>Se encontró un error al reproducir este elemento.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Hubo un error extrayendo los datos de este elemento desde el servidor.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Error durante la Reproducción</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Error al Recuperar Contenido</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>En directo ahora</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>¿Guardar Credenciales?</translation>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Desconectarse</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Cambiar Servidor</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Nombre</translation>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>%1 no contiene ítems</translation>
+    </message>
+    <message>
+        <source>Unable to load Channel Data from the server</source>
+        <translation>No se pudo cargar la Información de Canal del servidor</translation>
+    </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Error al cargar Información de Canal</translation>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Cargando Información de Canal</translation>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>Se a producido un error mientras se reproducía este ítem.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Ha habido un error al intentar obtener este ítem del servidor.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Error Durante la Reproducción</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Error Obteniendo Contenido</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Eliminar Guardados</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>¿Guardar credenciales?</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Cambiar de Servidor</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Nombre</translation>
     </message>
 </context>
 </TS>

@@ -15,6 +15,10 @@ sub init()
     m.showAlbumsAnimation = m.top.findNode("showAlbums")
     m.hideAlbumsAnimation = m.top.findNode("hideAlbums")
 
+    m.sectionNavigation = m.top.findNode("sectionNavigation")
+    m.sectionNavigation.observeField("escape", "onSectionNavigationEscape")
+    m.sectionNavigation.observeField("selected", "onSectionNavigationSelected")
+
     ' Load background image
     m.LoadBackdropImageTask = CreateObject("roSGNode", "LoadItemsTask")
     m.LoadBackdropImageTask.itemsToLoad = "backdropImage"
@@ -53,7 +57,7 @@ end sub
 
 sub setupMainNode()
     m.main = m.top.findNode("toplevel")
-    m.main.translation = [96, 175]
+    m.main.translation = [120, 175]
 end sub
 
 ' Event fired when page data is loaded
@@ -130,6 +134,23 @@ sub onAlbumFocusChange()
     m.hideAlbumsAnimation.control = "start"
 end sub
 
+sub onSectionNavigationEscape()
+    if m.sectionNavigation.escape = "right"
+
+        if m.albums.infocus
+            m.albums.setFocus(true)
+            return
+        end if
+
+        selectedButton = m.buttonGrp.getChild(0)
+        selectedButton.setFocus(true)
+    end if
+end sub
+
+sub onSectionNavigationSelected()
+    m.albums.infocus = (m.sectionNavigation.selected = 1)
+end sub
+
 sub dscrShowFocus()
     if m.dscr.isTextEllipsized
         m.dscr.setFocus(true)
@@ -171,21 +192,42 @@ sub createDialogPallete()
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
+    if key = "left"
+        if m.buttonGrp.isInFocusChain()
+            if m.top.selectedButtonIndex > 0
+                m.previouslySelectedButtonIndex = m.top.selectedButtonIndex
+                m.top.selectedButtonIndex = m.top.selectedButtonIndex - 1
+                return true
+            end if
+
+            if press
+                m.buttonGrp.setFocus(false)
+                m.sectionNavigation.setFocus(true)
+                return true
+            end if
+
+            return false
+        end if
+
+        if m.albums.isInFocusChain()
+            if m.albums.itemFocused mod 5 = 0
+                m.sectionNavigation.setFocus(true)
+                return true
+            end if
+        end if
+    end if
+
     if m.buttonGrp.isInFocusChain()
         if key = "down"
             m.albums.infocus = true
             return true
-        else if key = "left"
-            if m.top.pageContent.count() = 1 then return false
-
-            if m.top.selectedButtonIndex > 0
-                m.previouslySelectedButtonIndex = m.top.selectedButtonIndex
-                m.top.selectedButtonIndex = m.top.selectedButtonIndex - 1
-            end if
-            return true
         else if key = "right"
-            if m.top.pageContent.count() = 1 then return false
+            if m.sectionNavigation.escape = "right"
+                m.sectionNavigation.escape = ""
+                return true
+            end if
 
+            if m.top.pageContent.count() = 1 then return false
             m.previouslySelectedButtonIndex = m.top.selectedButtonIndex
             if m.top.selectedButtonIndex < m.buttonCount - 1 then m.top.selectedButtonIndex = m.top.selectedButtonIndex + 1
 

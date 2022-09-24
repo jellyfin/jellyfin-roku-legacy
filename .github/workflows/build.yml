@@ -1,0 +1,22 @@
+name: build
+on:
+  pull_request:
+  push:
+    paths-ignore:
+      - 'locale/**'
+jobs:
+  run:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
+      - uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3
+        with:
+          node-version: "14.12.0"
+      - run: npm ci
+      - run: npx ropm install
+      - run: make dev
+      - uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # tag=v3
+        with:
+          name: Jellyfin-Roku-dev-${{ github.sha }}
+          path: ${{ github.workspace }}/out/staging
+          if-no-files-found: error

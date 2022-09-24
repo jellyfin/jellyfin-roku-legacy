@@ -6,18 +6,17 @@ sub init()
     m.bufferPercentage = 0 ' Track whether content is being loaded
     m.playReported = false
     m.top.transcodeReasons = []
-    m.bufferCheckTimer.duration = 10
+    m.bufferCheckTimer.duration = 30
 
     if get_user_setting("ui.design.hideclock") = "true"
         clockNode = findNodeBySubtype(m.top, "clock")
-        clockNode[0].parent.removeChild(clockNode[0].node)
+        if clockNode[0] <> invalid then clockNode[0].parent.removeChild(clockNode[0].node)
     end if
 end sub
 
 '
 ' When Video Player state changes
 sub onState(msg)
-
     ' When buffering, start timer to monitor buffering process
     if m.top.state = "buffering" and m.bufferCheckTimer <> invalid
 
@@ -134,6 +133,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     if m.top.Subtitles.count() and key = "down"
         m.top.selectSubtitlePressed = true
+        return true
+    else if key = "up"
+        m.top.selectPlaybackInfoPressed = true
         return true
     end if
 
