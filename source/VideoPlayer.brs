@@ -444,3 +444,59 @@ sub autoPlayNextEpisode(videoID as string, showID as string)
         m.global.sceneManager.callFunc("popScene")
     end if
 end sub
+
+
+sub autoPlayNextPlaylistItem(playlistID as string, videoID)
+    ' use web client setting
+    print "Video Info= " videoID
+    if m.user.Configuration.EnableNextEpisodeAutoPlay
+        ' query API for next episode ID
+        url = Substitute("Playlists/{0}/Items", playlistID)
+        urlParams = { "UserId": get_setting("active_user") }
+        ' urlParams.Append({ "startIndex": videoID.Index })
+        'urlParams.Append({ "Limit": 2 })
+        resp = APIRequest(url, urlParams)
+        data = getJson(resp)
+
+        if data <> invalid
+            ' setup new video node
+            list = []
+            for each item in data.Items
+                list.push(item.Id)
+            end for
+            listCount = list.count() - 1
+            index = getArrayIndex(list, videoID)
+            print "List Size = " listCount
+            print "Current Index " index
+            if index < listCount
+                NextVideoIndex = index + 1
+            else if index = listCount
+                NextVideoIndex = 0
+            end if
+
+
+
+            if data.Items[NextVideoIndex].Type = "Audio"
+                ' print "Playing Audio = "data.Items[1]
+                nextVideo = CreateAudioPlayerGroup([data.Items[NextVideoIndex]])
+            else
+                print "Playing Video"
+                nextVideo = CreateVideoPlayerGroup(data.Items[NextVideoIndex].Id, invalid, 1, false, false)
+            end if
+            ' remove last video scene
+            m.global.sceneManager.callFunc("clearPreviousScene")
+            if nextVideo <> invalid
+                m.global.sceneManager.callFunc("pushScene", nextVideo)
+            else
+                m.global.sceneManager.callFunc("popScene")
+            end if
+        else
+            ' can't play next episode
+            m.global.sceneManager.callFunc("popScene")
+        end if
+    else
+        m.global.sceneManager.callFunc("popScene")
+    end if
+    print url
+    print "parms = " urlParams
+end sub

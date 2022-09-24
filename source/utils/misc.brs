@@ -257,3 +257,18 @@ function findNodeBySubtype(node, subtype)
 
     return foundNodes
 end function
+
+
+function getArrayIndex(haystack, needle) as integer
+    if not isValid(GetInterface(haystack, "ifArray"))
+        return -1
+    end if
+
+    for i = 0 to haystack.Count() - 1
+        if needle = haystack[i]
+            return i
+        end if
+    next
+
+    return -1
+end function

@@ -398,62 +398,73 @@ sub Main (args as dynamic) as void
                 m.global.sceneManager.callFunc("clearPreviousScene")
             else if node.state = "finished"
                 node.control = "stop"
+                '
+                'Do Playlist autoPlayNextItem
+                if selectedItem.json.Type = "Playlist"
 
-                ' If node allows retrying using Transcode Url, give that shot
-                if isValid(node.retryWithTranscoding) and node.retryWithTranscoding
-                    retryVideo = CreateVideoPlayerGroup(node.Id, invalid, node.audioIndex, true, false)
-                    m.global.sceneManager.callFunc("popScene")
-                    if retryVideo <> invalid
-                        m.global.sceneManager.callFunc("pushScene", retryVideo)
-                    end if
-                else if node.showID = invalid
-                    sceneManager.callFunc("popScene")
-                else
-                    autoPlayNextEpisode(node.id, node.showID)
-                end if
-            end if
-            'else if isNodeEvent(msg, "selectedExtra")
-            'rl = msg.getData()
-            'sel = rl.rowItemSelected
-            '? "msg.getfield():" + msg.getField()
-            'stop
-            'CreatePersonView(msg.getData())
-        else if type(msg) = "roDeviceInfoEvent"
-            event = msg.GetInfo()
-            group = sceneManager.callFunc("getActiveScene")
-            if event.exitedScreensaver = true
-                sceneManager.callFunc("resetTime")
-                if group.subtype() = "Home"
-                    currentTime = CreateObject("roDateTime").AsSeconds()
-                    group.timeLastRefresh = currentTime
-                    group.callFunc("refresh")
-                end if
-                ' todo: add other screens to be refreshed - movie detail, tv series, episode list etc.
-            else
-                print "Unhandled roDeviceInfoEvent:"
-                print msg.GetInfo()
-            end if
-        else if type(msg) = "roInputEvent"
-            if msg.IsInput()
-                info = msg.GetInfo()
-                if info.DoesExist("mediatype") and info.DoesExist("contentid")
-                    video = CreateVideoPlayerGroup(info.contentId)
-                    if video <> invalid and video.errorMsg <> "introaborted"
-                        sceneManager.callFunc("pushScene", video)
+                    autoPlayNextPlaylistItem(selectedItem.ID, itemnode.id)
+                    print "Trying to play next playlist item"
+                    print "Playlist ID = "selectedItem.ID
+                    print "Item playing ID = " itemnode.json
+                    ' If node allows retrying using Transcode Url, give that shot
+                else if isValid(node.retryWithTranscoding) and node.retryWithTranscoding
+
+                    ' If node allows retrying using Transcode Url, give that shot
+                    if isValid(node.retryWithTranscoding) and node.retryWithTranscoding
+                        retryVideo = CreateVideoPlayerGroup(node.Id, invalid, node.audioIndex, true, false)
+                        m.global.sceneManager.callFunc("popScene")
+                        if retryVideo <> invalid
+                            m.global.sceneManager.callFunc("pushScene", retryVideo)
+                        end if
+                    else if node.showID = invalid
+                        sceneManager.callFunc("popScene")
                     else
-                        dialog = createObject("roSGNode", "Dialog")
-                        dialog.id = "OKDialog"
-                        dialog.title = tr("Not found")
-                        dialog.message = tr("The requested content does not exist on the server")
-                        dialog.buttons = [tr("OK")]
-                        m.scene.dialog = dialog
-                        m.scene.dialog.observeField("buttonSelected", m.port)
+                        autoPlayNextEpisode(node.id, node.showID)
                     end if
                 end if
+                'else if isNodeEvent(msg, "selectedExtra")
+                'rl = msg.getData()
+                'sel = rl.rowItemSelected
+                '? "msg.getfield():" + msg.getField()
+                'stop
+                'CreatePersonView(msg.getData())
+            else if type(msg) = "roDeviceInfoEvent"
+                event = msg.GetInfo()
+                group = sceneManager.callFunc("getActiveScene")
+                if event.exitedScreensaver = true
+                    sceneManager.callFunc("resetTime")
+                    if group.subtype() = "Home"
+                        currentTime = CreateObject("roDateTime").AsSeconds()
+                        group.timeLastRefresh = currentTime
+                        group.callFunc("refresh")
+                    end if
+                    ' todo: add other screens to be refreshed - movie detail, tv series, episode list etc.
+                else
+                    print "Unhandled roDeviceInfoEvent:"
+                    print msg.GetInfo()
+                end if
+            else if type(msg) = "roInputEvent"
+                if msg.IsInput()
+                    info = msg.GetInfo()
+                    if info.DoesExist("mediatype") and info.DoesExist("contentid")
+                        video = CreateVideoPlayerGroup(info.contentId)
+                        if video <> invalid and video.errorMsg <> "introaborted"
+                            sceneManager.callFunc("pushScene", video)
+                        else
+                            dialog = createObject("roSGNode", "Dialog")
+                            dialog.id = "OKDialog"
+                            dialog.title = tr("Not found")
+                            dialog.message = tr("The requested content does not exist on the server")
+                            dialog.buttons = [tr("OK")]
+                            m.scene.dialog = dialog
+                            m.scene.dialog.observeField("buttonSelected", m.port)
+                        end if
+                    end if
+                end if
+            else
+                print "Unhandled " type(msg)
+                print msg
             end if
-        else
-            print "Unhandled " type(msg)
-            print msg
         end if
     end while
 
