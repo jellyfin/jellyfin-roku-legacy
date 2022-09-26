@@ -9,11 +9,11 @@ sub init()
     m.top.observeField("height", "onHeightChanged")
     m.top.observeField("width", "onWidthChanged")
     m.top.observeField("padding", "onPaddingChanged")
-    m.top.observeField("focusedChild", "onFocusChanged")
+    m.top.observeField("focus", "onFocusChanged")
 end sub
 
 sub onFocusChanged()
-    if m.top.hasFocus()
+    if m.top.focus
         m.buttonBackground.blendColor = m.top.focusBackground
     else
         m.buttonBackground.blendColor = m.top.background
@@ -73,6 +73,14 @@ function onKeyEvent(key as string, press as boolean) as boolean
         ' Simply toggle the selected field to trigger the next event
         m.top.selected = not m.top.selected
         return true
+    end if
+
+    if key = "right" and m.top.hasFocus()
+        m.top.escape = "right"
+    end if
+
+    if key = "left" and m.top.hasFocus()
+        m.top.escape = "left"
     end if
 
     return false

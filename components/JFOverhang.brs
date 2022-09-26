@@ -18,6 +18,9 @@ sub init()
     m.overlayRightGroup = m.top.findNode("overlayRightGroup")
     m.overlayTimeGroup = m.top.findNode("overlayTimeGroup")
 
+    m.slideDownAnimation = m.top.findNode("slideDown")
+    m.slideUpAnimation = m.top.findNode("slideUp")
+
     if not m.hideClock
         ' get system preference clock format (12/24hr)
         di = CreateObject("roDeviceInfo")
@@ -38,6 +41,19 @@ sub init()
     end if
 
     setClockVisibility()
+end sub
+
+sub onVisibleChange()
+    if m.top.disableMoveAnimation
+        m.top.translation = [0, 0]
+        return
+    end if
+    if m.top.isVisible
+        m.slideDownAnimation.control = "start"
+        return
+    end if
+
+    m.slideUpAnimation.control = "start"
 end sub
 
 sub updateTitle()

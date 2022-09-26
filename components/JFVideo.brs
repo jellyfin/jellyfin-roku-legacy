@@ -134,6 +134,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if m.top.Subtitles.count() and key = "down"
         m.top.selectSubtitlePressed = true
         return true
+    else if key = "up"
+        m.top.selectPlaybackInfoPressed = true
+        return true
     end if
 
     return false

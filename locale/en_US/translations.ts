@@ -133,10 +133,6 @@
             <translation>Enter a password</translation>
         </message>
         <message>
-            <source>Enter a value...</source>
-            <translation>Enter a value...</translation>
-        </message>
-        <message>
             <source>Name</source>
             <translation>Name</translation>
         </message>
@@ -738,5 +734,83 @@
             <translation>Set the maximum amount of days a show should stay in the 'Next Up' list without watching it.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
         </message>
+        <message>
+            <source>Playback Information</source>
+            <translation>Playback Information</translation>
+        </message>
+        <message>
+            <source>Transcoding Information</source>
+            <translation>Transcoding Information</translation>
+        </message>
+        <message>
+            <source>Reason</source>
+            <translation>Reason</translation>
+        </message>
+        <message>
+            <source>Video Codec</source>
+            <translation>Video Codec</translation>
+        </message>
+        <message>
+            <source>Audio Codec</source>
+            <translation>Audio Codec</translation>
+        </message>
+        <message>
+            <source>direct</source>
+            <translation>direct</translation>
+        </message>                                 
+        <message>
+            <source>Total Bitrate</source>
+            <translation>Total Bitrate</translation>
+        </message>
+        <message>
+            <source>Audio Channels</source>
+            <translation>Audio Channels</translation>
+        </message>                               
+        <message>
+            <source>Stream Information</source>
+            <translation>Stream Information</translation>
+        </message>
+        <message>
+            <source>Codec</source>
+            <translation>Codec</translation>
+        </message>
+        <message>
+            <source>Codec Tag</source>
+            <translation>Codec Tag</translation>
+        </message>
+        <message>
+            <source>Level</source>
+            <translation>Level</translation>
+            <extracomment>Video profile level</extracomment>            
+        </message>                                
+        <message>
+            <source>Bit Rate</source>
+            <translation>Bit Rate</translation>
+            <extracomment>Video streaming bit rate</extracomment>            
+        </message>                                
+        <message>
+            <source>Container</source>
+            <translation>Container</translation>
+            <extracomment>Video streaming container</extracomment>            
+        </message>  
+        <message>
+            <source>Size</source>
+            <translation>Size</translation>
+            <extracomment>Video size</extracomment>            
+        </message>  
+        <message>
+            <source>Video range type</source>
+            <translation>Video range type</translation>
+        </message>  
+        <message>
+            <source>Pixel format</source>
+            <translation>Pixel format</translation>
+            <extracomment>Video pixel format</extracomment>            
+        </message>  
+        <message>
+            <source>WxH</source>
+            <translation>WxH</translation>
+            <extracomment>Video width x height</extracomment>            
+        </message>                                          
     </context>
 </TS>

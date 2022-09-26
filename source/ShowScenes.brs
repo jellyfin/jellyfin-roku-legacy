@@ -467,6 +467,7 @@ function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_
     if video = invalid then return invalid
     if video.errorMsg = "introaborted" then return video
     video.observeField("selectSubtitlePressed", m.port)
+    video.observeField("selectPlaybackInfoPressed", m.port)
     video.observeField("state", m.port)
 
     return video

@@ -1,6 +1,5 @@
 sub init()
     getData()
-    m.top.infocus = false
 end sub
 
 function getData()
@@ -35,7 +34,17 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     if key = "up"
         if m.top.itemFocused <= 4
-            m.top.infocus = false
+            m.top.escape = key
+            return true
+        end if
+    else if key = "left"
+        if m.top.itemFocused mod 5 = 0
+            m.top.escape = key
+            return true
+        end if
+    else if key = "right"
+        if m.top.itemFocused + 1 mod 5 = 0
+            m.top.escape = key
             return true
         end if
     end if
