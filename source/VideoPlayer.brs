@@ -226,11 +226,11 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
         end if
     end if
 
+	subtitute_localhost = false
     if video.directPlaySupported
         protocol = LCase(playbackInfo.MediaSources[0].Protocol)
         ' This branch allows serving videos from a server local to jf, without jf standing between said server and the rp
         if protocol <> "file"
-            subtitute_localhost = false
             uriRegex = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
             uri = uriRegex.Match(playbackInfo.MediaSources[0].Path)
             ' proto $1, host $2, port $3, the-rest $4
@@ -241,7 +241,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 video.content.url = buildURL(uri[4]) ' direct all requests to jellyfin server's host:port
             end if
         end if
-        if (protocol = "file" or substitute_localhost = false)
+        if protocol = "file" or substitute_localhost = false
             params.append({
                 "Static": "true",
                 "Container": video.container,
