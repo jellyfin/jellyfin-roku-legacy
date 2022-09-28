@@ -227,23 +227,21 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     end if
 
     if video.directPlaySupported
-        protocol = LCase(m.playbackInfo.MediaSources[0].Protocol)
+        protocol = LCase(playbackInfo.MediaSources[0].Protocol)
+        ' This branch allows serving videos from a server local to jf, without jf standing between said server and the rp
         if protocol <> "file"
+            subtitute_localhost = false
             uriRegex = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
-            uri = uriRegex.Match(m.playbackInfo.MediaSources[0].Path)
+            uri = uriRegex.Match(playbackInfo.MediaSources[0].Path)
             ' proto $1, host $2, port $3, the-rest $4
             localhost = CreateObject("roRegex", "^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*\:)*?:?0*1$", "i")
             ' https://stackoverflow.com/questions/8426171/what-regex-will-match-all-loopback-addresses
             if localhost.isMatch(uri[2])
-                ' if the domain of the URI is local to the server,
-                ' create a new URI by appending the received path to the server URL
-                ' later we will substitute the users provided URL for this case
-                video.content.url = buildURL(uri[4])
-            else
-                fully_external = true
-                video.content.url = m.playbackInfo.MediaSources[0].Path
+                substitute_localhost = true ' don't request our own loopback
+                video.content.url = buildURL(uri[4]) ' direct all requests to jellyfin server's host:port
             end if
-        else:
+        end if
+        if (protocol = "file" or substitute_localhost = false)
             params.append({
                 "Static": "true",
                 "Container": video.container,
@@ -254,19 +252,18 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                 params.MediaSourceId = mediaSourceId
             end if
             video.content.url = buildURL(Substitute("Videos/{0}/stream", video.id), params)
-
+            video.isTranscoded = false
         end if
-        video.isTranscoded = false
     else
-        if m.playbackInfo.MediaSources[0].TranscodingUrl = invalid
+        if playbackInfo.MediaSources[0].TranscodingUrl = invalid
             ' If server does not provide a transcode URL, display a message to the user
             m.global.sceneManager.callFunc("userMessage", tr("Error Getting Playback Information"), tr("An error was encountered while playing this item.  Server did not provide required transcoding data."))
             video.content = invalid
             return
         end if
         ' Get transcoding reason
-        video.transcodeReasons = getTranscodeReasons(m.playbackInfo.MediaSources[0].TranscodingUrl)
-        video.content.url = buildURL(m.playbackInfo.MediaSources[0].TranscodingUrl)
+        video.transcodeReasons = getTranscodeReasons(playbackInfo.MediaSources[0].TranscodingUrl)
+        video.content.url = buildURL(playbackInfo.MediaSources[0].TranscodingUrl)
         video.isTranscoded = true
     end if
 
