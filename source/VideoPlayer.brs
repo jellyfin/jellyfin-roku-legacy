@@ -226,8 +226,9 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
         end if
     end if
 
-	subtitute_localhost = false
+	
     if video.directPlaySupported
+		subtitute_localhost = false
         protocol = LCase(playbackInfo.MediaSources[0].Protocol)
         ' This branch allows serving videos from a server local to jf, without jf standing between said server and the rp
         if protocol <> "file"
@@ -237,6 +238,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
             localhost = CreateObject("roRegex", "^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*\:)*?:?0*1$", "i")
             ' https://stackoverflow.com/questions/8426171/what-regex-will-match-all-loopback-addresses
             if localhost.isMatch(uri[2])
+                substitute_localhost = true
                 video.content.url = buildURL(uri[4]) ' direct all requests to jellyfin server's host:port
             end if
         end if
