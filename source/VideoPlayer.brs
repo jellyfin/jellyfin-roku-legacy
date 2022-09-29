@@ -210,8 +210,6 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     ' 'TODO: allow user selection of subtitle track before playback initiated, for now set to no subtitles
 
     video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
-    fully_external = false
-
 
     ' For h264 video, Roku spec states that it supports and Encoding level 4.1 and 4.2.
     ' The device can decode content with a Higher Encoding level but may play it back with certain
@@ -274,9 +272,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     ' is enabled/will be enabled, indexed on the provided list of subtitles
     video.SelectedSubtitle = setupSubtitle(video, video.Subtitles, subtitle_idx)
 
-    if not fully_external
-        video.content = authorize_request(video.content)
-    end if
+    video.content = authorize_request(video.content)
 
 end sub
 
