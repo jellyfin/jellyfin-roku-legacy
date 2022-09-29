@@ -228,12 +228,12 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
 
 	
     if video.directPlaySupported
-		subtitute_localhost = false
-        protocol = LCase(playbackInfo.MediaSources[0].Protocol)
+	substitute_localhost = false
+        protocol = LCase(m.playbackInfo.MediaSources[0].Protocol)
         ' This branch allows serving videos from a server local to jf, without jf standing between said server and the rp
         if protocol <> "file"
             uriRegex = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
-            uri = uriRegex.Match(playbackInfo.MediaSources[0].Path)
+            uri = uriRegex.Match(m.playbackInfo.MediaSources[0].Path)
             ' proto $1, host $2, port $3, the-rest $4
             localhost = CreateObject("roRegex", "^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*\:)*?:?0*1$", "i")
             ' https://stackoverflow.com/questions/8426171/what-regex-will-match-all-loopback-addresses
@@ -256,15 +256,15 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
             video.isTranscoded = false
         end if
     else
-        if playbackInfo.MediaSources[0].TranscodingUrl = invalid
+        if m.playbackInfo.MediaSources[0].TranscodingUrl = invalid
             ' If server does not provide a transcode URL, display a message to the user
             m.global.sceneManager.callFunc("userMessage", tr("Error Getting Playback Information"), tr("An error was encountered while playing this item.  Server did not provide required transcoding data."))
             video.content = invalid
             return
         end if
         ' Get transcoding reason
-        video.transcodeReasons = getTranscodeReasons(playbackInfo.MediaSources[0].TranscodingUrl)
-        video.content.url = buildURL(playbackInfo.MediaSources[0].TranscodingUrl)
+        video.transcodeReasons = getTranscodeReasons(m.playbackInfo.MediaSources[0].TranscodingUrl)
+        video.content.url = buildURL(m.playbackInfo.MediaSources[0].TranscodingUrl)
         video.isTranscoded = true
     end if
 
