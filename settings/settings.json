@@ -130,5 +130,18 @@
                 ]
             }
         ]
+    },
+	{
+        "title": "Advanced",
+        "description": "Settings you probably do not need, and should probably not touch.",
+        "children": [
+            {
+                "title": "Substitute loopback in shortcuts",
+                "description": "If a shortcut contains a loopback host, replace the host expression with the server url. Stream directly from a server that is local to jellyfin by configuring locations in your reverse proxy.",
+                "settingName": "advanced.subLoopbacks",
+                "type": "bool",
+                "default": "false"
+            }
+        ]
     }
 ]
