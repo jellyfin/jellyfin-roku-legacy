@@ -112,9 +112,9 @@
         <source>Home</source>
         <translation>Accueil</translation>
     </message>
-        <message>
+    <message>
         <source>Enter a username</source>
-        <translation>Entrez votre nom d'utilisateur</translation>
+        <translation>Entrez votre nom d&apos;utilisateur</translation>
     </message>
     <message>
         <source>Enter a password</source>
@@ -2724,6 +2724,48 @@
     <message>
         <source>Save Credentials?</source>
         <translation>Enregistrer les identifiants&#xa0;?</translation>
+    </message>
+    <message>
+        <source>More Like This</source>
+        <translation>Similaires</translation>
+    </message>
+    <message>
+        <source>Age</source>
+        <translation>Âge</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to filter library content</comment>
+        <source>TAB_FILTER</source>
+        <translation>Filtrer</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to sort library content</comment>
+        <source>TAB_SORT</source>
+        <translation>Trier</translation>
+    </message>
+    <message>
+        <source>RUNTIME</source>
+        <translation>Durée</translation>
+    </message>
+    <message>
+        <source>RELEASE_DATE</source>
+        <translation>Date de sortie</translation>
+    </message>
+    <message>
+        <source>PLAY_COUNT</source>
+        <translation>Nombre de lecture</translation>
+    </message>
+    <message>
+        <source>OFFICIAL_RATING</source>
+        <translation>Classification parentale</translation>
+    </message>
+    <message>
+        <source>DATE_PLAYED</source>
+        <translation>Date de lecture</translation>
+    </message>
+    <message>
+        <source>DATE_ADDED</source>
+        <translation>Date d&apos;ajout</translation>
     </message>
 </context>
 </TS>
