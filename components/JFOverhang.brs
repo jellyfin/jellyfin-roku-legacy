@@ -25,19 +25,14 @@ sub init()
         ' get system preference clock format (12/24hr)
         di = CreateObject("roDeviceInfo")
         m.clockFormat = di.GetClockFormat()
-
-        ' grab current time
-        currentTime = CreateObject("roDateTime")
-        currentTime.ToLocalTime()
-        m.currentHours = currentTime.GetHours()
-        m.currentMinutes = currentTime.GetMinutes()
+        m.overlayHours = m.top.findNode("overlayHours")
+        m.overlayMinutes = m.top.findNode("overlayMinutes")
+        m.overlayMeridian = m.top.findNode("overlayMeridian")
 
         ' start timer
         m.currentTimeTimer = m.top.findNode("currentTimeTimer")
         m.currentTimeTimer.control = "start"
         m.currentTimeTimer.ObserveField("fire", "updateTime")
-
-        updateTimeDisplay()
     end if
 
     setClockVisibility()
@@ -97,64 +92,50 @@ sub updateUser()
 end sub
 
 sub updateTime()
-    if (m.currentMinutes + 1) > 59
-        m.currentHours = m.currentHours + 1
-        m.currentMinutes = 0
-    else
-        m.currentMinutes = m.currentMinutes + 1
-    end if
-
+    m.currentTime = CreateObject("roDateTime")
+    m.currentTime.ToLocalTime()
+    m.currentTimeTimer.duration = 60 - m.currentTime.GetSeconds()
+    m.currentHours = m.currentTime.GetHours()
+    m.currentMinutes = m.currentTime.GetMinutes()
     updateTimeDisplay()
 end sub
 
 sub resetTime()
     m.currentTimeTimer.control = "stop"
-
-    currentTime = CreateObject("roDateTime")
     m.currentTimeTimer.control = "start"
-
-    currentTime.ToLocalTime()
-
-    m.currentHours = currentTime.GetHours()
-    m.currentMinutes = currentTime.GetMinutes()
-
-    updateTimeDisplay()
+    updateTime()
 end sub
 
 sub updateTimeDisplay()
-    overlayHours = m.top.findNode("overlayHours")
-    overlayMinutes = m.top.findNode("overlayMinutes")
-    overlayMeridian = m.top.findNode("overlayMeridian")
-
     if m.clockFormat = "24h"
-        overlayMeridian.text = ""
+        m.overlayMeridian.text = ""
         if m.currentHours < 10
-            overlayHours.text = "0" + StrI(m.currentHours).trim()
+            m.overlayHours.text = "0" + StrI(m.currentHours).trim()
         else
-            overlayHours.text = m.currentHours
+            m.overlayHours.text = m.currentHours
         end if
     else
         if m.currentHours < 12
-            overlayMeridian.text = "AM"
+            m.overlayMeridian.text = "AM"
             if m.currentHours = 0
-                overlayHours.text = "12"
+                m.overlayHours.text = "12"
             else
-                overlayHours.text = m.currentHours
+                m.overlayHours.text = m.currentHours
             end if
         else
-            overlayMeridian.text = "PM"
+            m.overlayMeridian.text = "PM"
             if m.currentHours = 12
-                overlayHours.text = "12"
+                m.overlayHours.text = "12"
             else
-                overlayHours.text = m.currentHours - 12
+                m.overlayHours.text = m.currentHours - 12
             end if
         end if
     end if
 
     if m.currentMinutes < 10
-        overlayMinutes.text = "0" + StrI(m.currentMinutes).trim()
+        m.overlayMinutes.text = "0" + StrI(m.currentMinutes).trim()
     else
-        overlayMinutes.text = m.currentMinutes
+        m.overlayMinutes.text = m.currentMinutes
     end if
 end sub
 
