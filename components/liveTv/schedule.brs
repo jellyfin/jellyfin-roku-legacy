@@ -31,6 +31,9 @@ sub init()
 
     'Set initial channels loaded int - TODO create user settings to control the limi
     m.top.channelsLoaded = m.LoadChannelsTask.limit
+
+    m.gridData = createObject("roSGNode", "ContentNode")
+
 end sub
 
 sub channelFilterSet()
@@ -59,7 +62,6 @@ end sub
 
 ' Initial list of channels loaded
 sub onChannelsLoaded()
-    gridData = createObject("roSGNode", "ContentNode")
 
     counter = 0
     m.channelIdList = m.top.channelIdList
@@ -67,12 +69,12 @@ sub onChannelsLoaded()
     'if search returns channels
     if m.LoadChannelsTask.channels.count() > 0
         for each item in m.LoadChannelsTask.channels
-            gridData.appendChild(item)
+            m.gridData.appendChild(item)
             m.channelIndex[item.Id] = counter
             counter = counter + 1
             m.channelIdList = m.channelIdList + item.Id + ","
         end for
-        m.scheduleGrid.content = gridData
+        m.scheduleGrid.content = m.gridData
 
         m.LoadScheduleTask = createObject("roSGNode", "LoadScheduleTask")
         m.LoadScheduleTask.observeField("schedule", "onScheduleLoaded")
@@ -90,9 +92,9 @@ sub onChannelsLoaded()
             m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
             m.EPGLaunchCompleteSignaled = true
         end if
-        m.LoadChannelsTask.channels = []
+        m.LoadChannelsTask.channels = m.LoadChannelsTask.channels
         m.top.channelIdList = m.channelIdList
-        print "Channel ID's " m.top.channelIdList
+        print "Channel ", m.LoadChannelsTask.channels
     end if
 
 end sub
@@ -121,7 +123,7 @@ sub onScheduleLoaded()
 
     m.scheduleGrid.showLoadingDataFeedback = false
     m.scheduleGrid.setFocus(true)
-    m.LoadScheduleTask.schedule = []
+    'm.LoadScheduleTask.schedule = []
     m.spinner.visible = false
 end sub
 
@@ -175,7 +177,7 @@ sub onProgramFocused()
         ' if task is running stop and load more
         if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
         m.LoadChannelsTask.control = "RUN"
-        m.LoadProgramDetailsTask.control = "RUN"
+
         end
     end if
 

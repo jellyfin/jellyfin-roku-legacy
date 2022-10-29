@@ -5,7 +5,7 @@ end sub
 sub loadChannels()
 
     results = []
-
+    print "FOr results", results
     sort_field = m.top.sortField
 
     if m.top.sortAscending = true
@@ -69,5 +69,5 @@ sub loadChannels()
     end for
     m.top.channels = results
     m.top.count = data.TotalRecordCount
-    print "channel = "results
+    print "Last results = ", results
 end sub
