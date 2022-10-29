@@ -19,6 +19,8 @@ sub init()
     m.gridMoveAnimation = m.top.findNode("gridMoveAnimation")
     m.gridMoveAnimationPosition = m.top.findNode("gridMoveAnimationPosition")
 
+    m.gridData = createObject("roSGNode", "ContentNode")
+
     m.LoadChannelsTask = createObject("roSGNode", "LoadChannelsTask")
     m.LoadChannelsTask.observeField("channels", "onChannelsLoaded")
     m.LoadChannelsTask.control = "RUN"
@@ -32,7 +34,6 @@ sub init()
     'Set initial channels loaded int - TODO create user settings to control the limi
     m.top.channelsLoaded = m.LoadChannelsTask.limit
 
-    m.gridData = createObject("roSGNode", "ContentNode")
 
 end sub
 
@@ -123,7 +124,7 @@ sub onScheduleLoaded()
 
     m.scheduleGrid.showLoadingDataFeedback = false
     m.scheduleGrid.setFocus(true)
-    'm.LoadScheduleTask.schedule = []
+    m.LoadScheduleTask.schedule = []
     m.spinner.visible = false
 end sub
 
@@ -139,8 +140,6 @@ sub onProgramFocused()
 
     m.detailsPane.channel = channel
     m.top.focusedChannel = channel
-    print "Focus channel index = ", m.scheduleGrid.programFocusedDetails.focusChannelIndex
-
     ' Exit if Channels not yet loaded
 
     if channel = invalid or channel.getChildCount() = 0
@@ -164,7 +163,9 @@ sub onProgramFocused()
     startIdex = m.LoadChannelsTask.startIndex
     'Load more Channels
     'if focus comes within 5 rows of the end load more channels
-    if m.scheduleGrid.programFocusedDetails.focusChannelIndex >= (m.top.channelsLoaded - 5)
+    print "Focus channel index = ", m.scheduleGrid.programFocusedDetails.focusChannelIndex
+    print "m.top.channelsLoaded = ", m.top.channelsLoaded
+    if m.scheduleGrid.programFocusedDetails.focusChannelIndex > (m.top.channelsLoaded - 5)
         'add loaded channels count to advance guide
         m.top.channelsLoaded = m.top.channelsLoaded + m.LoadChannelsTask.limit
         print "channels Loaded after refresh = ", m.top.channelsLoaded
@@ -175,13 +176,12 @@ sub onProgramFocused()
         print "channels loaded = ", m.top.channelsLoaded
         print "startIdex ", startIdex
         ' if task is running stop and load more
-        if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
         m.LoadChannelsTask.control = "RUN"
-
-        end
+        m.LoadScheduleTask.control = "RUN"
+        m.LoadProgramDetailsTask.control = "RUN"
     end if
 
-    print "Channels Loaded", m.top.channelsLoaded
+    print "***** END of Script ***********"
 
 end sub
 
