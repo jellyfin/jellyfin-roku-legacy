@@ -22,6 +22,8 @@
         <field id="focusedChannel" type="node" alwaysNotify="false" />
         <field id="filter" type="string" value="All" onChange="channelFilterSet" />
         <field id="searchTerm" type="string" value="" onChange="channelsearchTermSet" />
+        <field id="channelIdList" type="string" />
+        <field id="channelsLoaded" type="int" value="0" />
   </interface>
   <script type="text/brightscript" uri="schedule.brs" />
 </component>

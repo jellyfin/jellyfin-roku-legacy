@@ -43,5 +43,5 @@ sub loadSchedule()
 
 
     m.top.schedule = results
-
+    print "Loadschedule Channel ID's = ", m.top.channelIds
 end sub

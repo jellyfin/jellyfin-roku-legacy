@@ -19,6 +19,8 @@ sub loadChannels()
         SortBy: sort_field,
         SortOrder: sort_order,
         recursive: m.top.recursive,
+        limit: m.top.limit,
+        startIndex: m.top.startIndex,
         UserId: get_setting("active_user")
     }
 
@@ -66,4 +68,6 @@ sub loadChannels()
         end if
     end for
     m.top.channels = results
+    m.top.count = data.TotalRecordCount
+    print "channel = "results
 end sub

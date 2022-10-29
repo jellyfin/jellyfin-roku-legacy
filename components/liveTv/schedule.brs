@@ -28,6 +28,9 @@ sub init()
     m.channelIndex = {}
 
     m.spinner = m.top.findNode("spinner")
+
+    'Set initial channels loaded int - TODO create user settings to control the limi
+    m.top.channelsLoaded = m.LoadChannelsTask.limit
 end sub
 
 sub channelFilterSet()
@@ -66,7 +69,7 @@ sub onChannelsLoaded()
     gridData = createObject("roSGNode", "ContentNode")
 
     counter = 0
-    channelIdList = ""
+    m.channelIdList = m.top.channelIdList
 
     'if search returns channels
     if m.LoadChannelsTask.channels.count() > 0
@@ -74,7 +77,7 @@ sub onChannelsLoaded()
             gridData.appendChild(item)
             m.channelIndex[item.Id] = counter
             counter = counter + 1
-            channelIdList = channelIdList + item.Id + ","
+            m.channelIdList = m.channelIdList + item.Id + ","
         end for
         m.scheduleGrid.content = gridData
 
@@ -83,7 +86,7 @@ sub onChannelsLoaded()
 
         m.LoadScheduleTask.startTime = m.gridStartDate.ToISOString()
         m.LoadScheduleTask.endTime = m.gridEndDate.ToISOString()
-        m.LoadScheduleTask.channelIds = channelIdList
+        m.LoadScheduleTask.channelIds = m.channelIdList
         m.LoadScheduleTask.control = "RUN"
 
         m.LoadProgramDetailsTask = createObject("roSGNode", "LoadProgramDetailsTask")
@@ -95,7 +98,8 @@ sub onChannelsLoaded()
             m.EPGLaunchCompleteSignaled = true
         end if
         m.LoadChannelsTask.channels = []
-
+        m.top.channelIdList = m.channelIdList
+        print "Channel ID's " m.top.channelIdList
     end if
 
 end sub
@@ -140,6 +144,7 @@ sub onProgramFocused()
 
     m.detailsPane.channel = channel
     m.top.focusedChannel = channel
+    print "Focus channel index = ", m.scheduleGrid.programFocusedDetails.focusChannelIndex
 
     ' Exit if Channels not yet loaded
 
@@ -159,6 +164,30 @@ sub onProgramFocused()
     end if
 
     m.detailsPane.programDetails = prog
+
+
+    startIdex = m.LoadChannelsTask.startIndex
+    'Load more Channels
+    'if focus comes within 5 rows of the end load more channels
+    if m.scheduleGrid.programFocusedDetails.focusChannelIndex >= (m.top.channelsLoaded - 5)
+        'add loaded channels count to advance guide
+        m.top.channelsLoaded = m.top.channelsLoaded + m.LoadChannelsTask.limit
+        print "channels Loaded after refresh = ", m.top.channelsLoaded
+        'advance start index to get new channels
+        startIdex = startIdex + m.top.channelsLoaded
+        'update satrt index in loaded channels task
+        m.LoadChannelsTask.startIndex = startIdex
+        print "channels loaded = ", m.top.channelsLoaded
+        print "startIdex ", startIdex
+        ' if task is running stop and load more
+        if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
+        m.LoadChannelsTask.control = "RUN"
+        m.LoadProgramDetailsTask.control = "RUN"
+        end
+    end if
+
+    print "Channels Loaded", m.top.channelsLoaded
+
 end sub
 
 ' Update the Program Details with full information
