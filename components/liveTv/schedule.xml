@@ -24,6 +24,7 @@
         <field id="searchTerm" type="string" value="" onChange="channelsearchTermSet" />
         <field id="channelIdList" type="string" />
         <field id="channelsLoaded" type="int" value="0" />
+        <field id="counter" type="int" value="-1" />
   </interface>
   <script type="text/brightscript" uri="schedule.brs" />
 </component>
