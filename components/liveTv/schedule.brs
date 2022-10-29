@@ -102,7 +102,7 @@ end sub
 
 ' When LoadScheduleTask completes (initial or more data) and we have a schedule to display
 sub onScheduleLoaded()
-
+    print "schedule Task Channel IDS", m.LoadScheduleTask.channelIds
     ' make sure we actually have a schedule (i.e. filter by favorites, but no channels have been favorited)
     if m.scheduleGrid.content.GetChildCount() <= 0
         return
@@ -161,11 +161,11 @@ sub onProgramFocused()
 
 
     startIdex = m.LoadChannelsTask.startIndex
-    'Load more Channels
+    'Load more Channels when grid is scrolled
     'if focus comes within 5 rows of the end load more channels
-    print "Focus channel index = ", m.scheduleGrid.programFocusedDetails.focusChannelIndex
+    print "Focus channel index = ", m.scheduleGrid.focusChannelIndex
     print "m.top.channelsLoaded = ", m.top.channelsLoaded
-    if m.scheduleGrid.programFocusedDetails.focusChannelIndex > (m.top.channelsLoaded - 5)
+    if m.scheduleGrid.channelFocused > (m.top.channelsLoaded - 5)
         'add loaded channels count to advance guide
         m.top.channelsLoaded = m.top.channelsLoaded + m.LoadChannelsTask.limit
         print "channels Loaded after refresh = ", m.top.channelsLoaded
@@ -178,7 +178,7 @@ sub onProgramFocused()
         ' if task is running stop and load more
         m.LoadChannelsTask.control = "RUN"
         m.LoadScheduleTask.control = "RUN"
-        m.LoadProgramDetailsTask.control = "RUN"
+
     end if
 
     print "***** END of Script ***********"
@@ -247,6 +247,7 @@ end sub
 
 ' As user scrolls grid, check if more data requries to be loaded
 sub onGridScrolled()
+    print "Grid Scrolled"
 
     ' If we're within 12 hours of end of grid, load next 24hrs of data
     if m.scheduleGrid.leftEdgeTargetTime + (12 * 60 * 60) > m.gridEndDate.AsSeconds()
@@ -259,6 +260,7 @@ sub onGridScrolled()
             m.LoadScheduleTask.control = "RUN"
         end if
     end if
+
 end sub
 
 ' Handle user selecting "Record Channel" from Program Details
