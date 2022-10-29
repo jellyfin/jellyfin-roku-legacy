@@ -1,5 +1,6 @@
 sub init()
     m.top.functionName = "loadSchedule"
+    print "Loadschedule Channel ID's = ", m.top.channelIds
 end sub
 
 sub loadSchedule()
@@ -43,5 +44,4 @@ sub loadSchedule()
 
 
     m.top.schedule = results
-    print "Loadschedule Channel ID's = ", m.top.channelIds
 end sub

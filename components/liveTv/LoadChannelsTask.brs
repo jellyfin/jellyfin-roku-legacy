@@ -69,5 +69,4 @@ sub loadChannels()
     end for
     m.top.channels = results
     m.top.count = data.TotalRecordCount
-    print "Running Task!!!!!!"
 end sub
