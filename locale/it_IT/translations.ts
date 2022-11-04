@@ -1718,5 +1718,10 @@
         <source>TAB_FILTER</source>
         <translation>Filtro</translation>
     </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>È stato riscontrato un errore durante la riproduzione di questo oggetto.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
 </context>
 </TS>

@@ -1884,5 +1884,320 @@
         <source>TITLE</source>
         <translation>Nombre</translation>
     </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Error de Reproducción de Contenido de Canal</translation>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Terminar Sesión</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Borrar Credenciales</translation>
+    </message>
+    <message>
+        <source>Age</source>
+        <translation>Edad</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Criticas Raiting</translation>
+    </message>
+    <message>
+        <source>Born</source>
+        <translation>Nacido/a</translation>
+    </message>
+    <message>
+        <source>today</source>
+        <translation>hoy</translation>
+        <extracomment>Current day</extracomment>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Reproduciendo Contenido de  Canal</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation>Canales</translation>
+        <extracomment>Menu option for showing Live TV Channel List</extracomment>
+    </message>
+    <message>
+        <source>Died</source>
+        <translation>Muerto/a</translation>
+    </message>
+    <message>
+        <source>View Channel</source>
+        <translation>Ver Canales</translation>
+    </message>
+    <message>
+        <source>...or enter server URL manually:</source>
+        <translation>si no hay servidores disponibles, puedes agregar manualmente la URL</translation>
+        <extracomment>Instructions on initial app launch when the user is asked to manually enter a server URL</extracomment>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Ha ocurrido un error tratando de recuperar  la información desde el servidor.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>Este  %1 no contiene elementos</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>IMDb Raiting</translation>
+    </message>
+    <message>
+        <source>DATE_ADDED</source>
+        <translation>Fecha Agregada</translation>
+    </message>
+    <message>
+        <source>DATE_PLAYED</source>
+        <translation>Fecha Reproducida</translation>
+    </message>
+    <message>
+        <source>Movies</source>
+        <translation>Películas</translation>
+    </message>
+    <message>
+        <source>yesterday</source>
+        <translation>ayer</translation>
+        <extracomment>Previous day</extracomment>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation>mañana</translation>
+        <extracomment>Next day</extracomment>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Martes</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Jueves</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>Viernes</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <comment>Title of Tab for options to filter library content</comment>
+        <source>TAB_FILTER</source>
+        <translation>Filtro</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Domingo</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation>Lunes</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Miercoles</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Sabado</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Started at</source>
+        <translation>Comienza a</translation>
+        <extracomment>(Past Tense) For defining time when a program started today (e.g. Started at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Live</source>
+        <translation>En Vivo</translation>
+        <extracomment>If TV Show is being broadcast live (not pre-recorded)</extracomment>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation>Repetir</translation>
+        <extracomment>If TV Shows has previously been broadcasted</extracomment>
+    </message>
+    <message>
+        <source>TV Guide</source>
+        <translation>Guia de Television</translation>
+        <extracomment>Menu option for showing Live TV Guide / Schedule</extracomment>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation>Grabar</translation>
+    </message>
+    <message>
+        <source>Record Series</source>
+        <translation>Grabar Series</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Cerrar</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>desconocido</translation>
+        <extracomment>Title for a cast member for which we have no information for</extracomment>
+    </message>
+    <message>
+        <source>Connecting to Server</source>
+        <translation>Conectando con el Servidor</translation>
+        <extracomment>Message to display to user while client is attempting to connect to the server</extracomment>
+    </message>
+    <message>
+        <source>Not found</source>
+        <translation>No se ha encontrado</translation>
+        <extracomment>Title of message box when the requested content is not found on the server</extracomment>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Guardar Credenciales?</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Nombre</translation>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>Ha ocurrido un error al reproducir este contenido.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Error Recuperando Contenido</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>OFFICIAL_RATING</source>
+        <translation>Padres Raiting</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Cambiar de Servidor</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to sort library content</comment>
+        <source>TAB_SORT</source>
+        <translation>Clasificar</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for switching &quot;views&quot; when looking at a library</comment>
+        <source>TAB_VIEW</source>
+        <translation>Vista</translation>
+    </message>
+    <message>
+        <source>RUNTIME</source>
+        <translation>Tiempo de Ejecución</translation>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Error Durante la Reproducción</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Unable to load Channel Data from the server</source>
+        <translation>No se ha podido reproducir el Contenido del Canal de este servidor</translation>
+    </message>
+    <message>
+        <source>RELEASE_DATE</source>
+        <translation>Fecha de Premiere</translation>
+    </message>
+    <message>
+        <source>PLAY_COUNT</source>
+        <translation>Cuenta de Reproducción</translation>
+    </message>
+    <message>
+        <source>More Like This</source>
+        <translation>Mas de este Estilo</translation>
+    </message>
+    <message>
+        <source>Special Features</source>
+        <translation>Funciones Especiales</translation>
+        <message>
+            <source>Press &apos;OK&apos; to Close</source>
+            <translation>Press &apos;OK&apos; to Close</translation>
+        </message>
+    </message>
+    <message>
+        <source>TV Shows</source>
+        <translation>Programas de Televisión</translation>
+    </message>
+    <message>
+        <source>Ends at</source>
+        <translation>Termina a</translation>
+        <extracomment>(Past Tense) For defining a day and time when a program ended (e.g. Ended Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Cancel Recording</source>
+        <translation>Cancelar la grabación</translation>
+    </message>
+    <message>
+        <source>Cancel Series Recording</source>
+        <translation>Cancelar la grabación de Series</translation>
+    </message>
+    <message>
+        <source>Pick a Jellyfin server from the local network</source>
+        <translation>Elige un servidor Jellyfin disponible de la red local</translation>
+        <extracomment>Instructions on initial app launch when the user is asked to pick a server from a list</extracomment>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation>Comenzó</translation>
+        <extracomment>(Past Tense) For defining a day and time when a program started (e.g. Started Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Starts at</source>
+        <translation>Comenzó a</translation>
+        <extracomment>(Future Tense) For defining time when a program will start today (e.g. Starts at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Starts</source>
+        <translation>Comienza</translation>
+        <extracomment>(Future Tense) For defining a day and time when a program will start (e.g. Starts Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Ended at</source>
+        <translation>Terminó</translation>
+        <extracomment>(Past Tense) For defining time when a program will ended (e.g. Ended at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Enter the server name or IP address</source>
+        <translation>Agregar el nombre del servidor o direccion de IP</translation>
+        <extracomment>Title of KeyboardDialog when manually entering a server URL</extracomment>
+    </message>
+    <message>
+        <source>Pick a Jellyfin server from the local network</source>
+        <translation>Elige un servidor Jellyfin disponible de la red local:</translation>
+        <extracomment>Instructions on initial app launch when the user is asked to pick a server from a list</extracomment>
+    </message>
+    <message>
+        <source>...or enter server URL manually:</source>
+        <translation>si no hay servidores disponibles, puedes agregar manualmente la URL:</translation>
+        <extracomment>Instructions on initial app launch when the user is asked to manually enter a server URL</extracomment>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Ha ocurrido un error tratando de recuperar la información desde el servidor.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Reproduciendo Contenido de Canal</translation>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>Este %1 no contiene elementos</translation>
+    </message>
 </context>
 </TS>

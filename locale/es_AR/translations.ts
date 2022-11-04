@@ -1328,5 +1328,22 @@
         <source>Save Credentials?</source>
         <translation>Guardar credenciales?</translation>
     </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>¿Guardar credenciales?</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Eliminar guardado</translation>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Ahora</translation>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Error al recuperar contenido</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
 </context>
 </TS>

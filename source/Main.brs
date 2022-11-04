@@ -13,13 +13,6 @@ sub Main (args as dynamic) as void
     WriteAsciiFile("tmp:/scene.temp", "")
     MoveFile("tmp:/scene.temp", "tmp:/scene")
 
-    ' Temporary code to migrate MPEG2 setting from device setting to user setting
-    ' Added for 1.4.13 release and should probably be removed for 1.4.15
-    if get_setting("playback.mpeg2") <> invalid and registry_read("playback.mpeg2", get_setting("active_user")) = invalid
-        set_user_setting("playback.mpeg2", get_setting("playback.mpeg2"))
-    end if
-    ' End Temporary code
-
     m.port = CreateObject("roMessagePort")
     m.screen.setMessagePort(m.port)
     m.scene = m.screen.CreateScene("JFScene")
@@ -428,7 +421,7 @@ sub Main (args as dynamic) as void
             if m.selectedItemType = "TvChannel" and node.state = "finished"
                 video = CreateVideoPlayerGroup(node.id)
                 m.global.sceneManager.callFunc("pushScene", video)
-                m.global.sceneManager.callFunc("clearPreviousScene")
+                m.global.sceneManager.callFunc("deleteSceneAtIndex", 2)
             else if node.state = "finished"
                 node.control = "stop"
 

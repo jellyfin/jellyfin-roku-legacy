@@ -146,7 +146,13 @@ end sub
 '
 ' Clear previous scene from group stack
 sub clearPreviousScene()
-    m.groups.Delete(2)
+    m.groups.pop()
+end sub
+
+'
+' Delete scene from group stack at passed index
+sub deleteSceneAtIndex(index = 1)
+    m.groups.Delete(index)
 end sub
 
 '

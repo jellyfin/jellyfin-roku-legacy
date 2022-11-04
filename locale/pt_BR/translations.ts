@@ -2553,5 +2553,35 @@ não contém itens</translation>
         <source>Change Server</source>
         <translation>Alterar servidor</translation>
     </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Mudar Servidor</translation>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Sair</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Salvar Credenciais?</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Deletar Salvos</translation>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Passando Agora</translation>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Erro ao Carregar Conteúdo</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Erro Durante Reprodução</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
 </context>
 </TS>
