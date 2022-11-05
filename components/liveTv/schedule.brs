@@ -34,11 +34,10 @@ sub init()
     'Set initial channels loaded int - TODO create user settings to control the limi
     m.top.channelsLoaded = m.LoadChannelsTask.limit
 
-
 end sub
 
 sub channelFilterSet()
-    m.scheduleGrid.jumpToChannel = 0
+    'm.scheduleGrid.jumpToChannel = 0
     if m.top.filter <> invalid and m.LoadChannelsTask.filter <> m.top.filter
         if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
 
@@ -70,16 +69,15 @@ end sub
 
 ' Initial list of channels loaded
 sub onChannelsLoaded()
-
-    counter = 0
+    counter = m.top.counter
     m.channelIdList = m.top.channelIdList
-
     'if search returns channels
     if m.LoadChannelsTask.channels.count() > 0
+        print "Channels = "m.LoadChannelsTask.channels
         for each item in m.LoadChannelsTask.channels
             m.gridData.appendChild(item)
-            m.channelIndex[item.Id] = counter
             counter = counter + 1
+            m.channelIndex[item.Id] = counter
             m.channelIdList = m.channelIdList + item.Id + ","
         end for
         m.scheduleGrid.content = m.gridData
@@ -100,16 +98,16 @@ sub onChannelsLoaded()
             m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
             m.EPGLaunchCompleteSignaled = true
         end if
-        m.LoadChannelsTask.channels = m.LoadChannelsTask.channels
-        m.top.channelIdList = m.channelIdList
-        print "Channel ", m.LoadChannelsTask.channels
+        'm.LoadChannelsTask.channels = m.LoadChannelsTask.channels
+        'm.top.channelIdList = m.channelIdList
     end if
-
+    m.LoadChannelsTask.channels = []
+    'keep focus on current channel while loading the next set of channels
+    m.schedulegrid.jumpToChannel = m.top.currentChannelFocused
 end sub
 
 ' When LoadScheduleTask completes (initial or more data) and we have a schedule to display
 sub onScheduleLoaded()
-    print "schedule Task Channel IDS", m.LoadScheduleTask.channelIds
     ' make sure we actually have a schedule (i.e. filter by favorites, but no channels have been favorited)
     if m.scheduleGrid.content.GetChildCount() <= 0
         return
@@ -118,7 +116,6 @@ sub onScheduleLoaded()
     for each item in m.LoadScheduleTask.schedule
 
         channel = m.scheduleGrid.content.GetChild(m.channelIndex[item.ChannelId])
-
         if channel.PosterUrl <> ""
             item.channelLogoUri = channel.PosterUrl
         end if
@@ -170,26 +167,20 @@ sub onProgramFocused()
     startIdex = m.LoadChannelsTask.startIndex
     'Load more Channels when grid is scrolled
     'if focus comes within 5 rows of the end load more channels
-    print "Focus channel index = ", m.scheduleGrid.focusChannelIndex
-    print "m.top.channelsLoaded = ", m.top.channelsLoaded
+    print "Focused = ", m.scheduleGrid.channelFocused
     if m.scheduleGrid.channelFocused > (m.top.channelsLoaded - 5)
         'add loaded channels count to advance guide
         m.top.channelsLoaded = m.top.channelsLoaded + m.LoadChannelsTask.limit
-        print "channels Loaded after refresh = ", m.top.channelsLoaded
         'advance start index to get new channels
         startIdex = startIdex + m.top.channelsLoaded
         'update satrt index in loaded channels task
         m.LoadChannelsTask.startIndex = startIdex
-        print "channels loaded = ", m.top.channelsLoaded
-        print "startIdex ", startIdex
         ' if task is running stop and load more
+        m.top.counter = m.top.channelsLoaded - 11
+        m.top.currentChannelFocused = m.scheduleGrid.channelFocused
         m.LoadChannelsTask.control = "RUN"
-        m.LoadScheduleTask.control = "RUN"
-
+        print "Loaded Channels = " m.top.channelsLoaded
     end if
-
-    print "***** END of Script ***********"
-
 end sub
 
 ' Update the Program Details with full information
@@ -254,7 +245,6 @@ end sub
 
 ' As user scrolls grid, check if more data requries to be loaded
 sub onGridScrolled()
-    print "Grid Scrolled"
 
     ' If we're within 12 hours of end of grid, load next 24hrs of data
     if m.scheduleGrid.leftEdgeTargetTime + (12 * 60 * 60) > m.gridEndDate.AsSeconds()
