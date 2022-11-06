@@ -83,6 +83,8 @@
         <field id="programDetails" type="node" onchange="programUpdated" />
         <field id="height" type="integer" />
         <field id="hasFocus" type="boolean" onChange="focusChanged" />
+        <field id="currentChannelFocused" type="int" value="-1"/>
+
     </interface>
     <script type="text/brightscript" uri="ProgramDetails.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />

@@ -5,7 +5,6 @@ end sub
 sub loadChannels()
 
     results = []
-    print "FOr results", results
     sort_field = m.top.sortField
 
     if m.top.sortAscending = true

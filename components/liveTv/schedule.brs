@@ -64,16 +64,15 @@ sub channelsearchTermSet()
         m.spinner.visible = true
         m.LoadChannelsTask.control = "RUN"
     end if
-
 end sub
 
 ' Initial list of channels loaded
 sub onChannelsLoaded()
+    m.spinner.visible = true
     counter = m.top.counter
     m.channelIdList = m.top.channelIdList
     'if search returns channels
     if m.LoadChannelsTask.channels.count() > 0
-        print "Channels = "m.LoadChannelsTask.channels
         for each item in m.LoadChannelsTask.channels
             m.gridData.appendChild(item)
             counter = counter + 1
@@ -103,7 +102,8 @@ sub onChannelsLoaded()
     end if
     m.LoadChannelsTask.channels = []
     'keep focus on current channel while loading the next set of channels
-    m.schedulegrid.jumpToChannel = m.top.currentChannelFocused
+    m.schedulegrid.jumpToChannel = m.detailsPane.currentChannelFocused
+    m.spinner.visible = false
 end sub
 
 ' When LoadScheduleTask completes (initial or more data) and we have a schedule to display
@@ -143,6 +143,7 @@ sub onProgramFocused()
     end if
 
     m.detailsPane.channel = channel
+    m.detailsPane.currentChannelFocused = m.scheduleGrid.channelFocused
     m.top.focusedChannel = channel
     ' Exit if Channels not yet loaded
 
@@ -152,35 +153,18 @@ sub onProgramFocused()
         return
     end if
 
-    prog = channel.GetChild(m.scheduleGrid.programFocusedDetails.focusIndex)
+    m.prog = channel.GetChild(m.scheduleGrid.programFocusedDetails.focusIndex)
 
-    if prog <> invalid and prog.fullyLoaded = false
-        m.LoadProgramDetailsTask.programId = prog.Id
+
+    if m.prog <> invalid and m.prog.fullyLoaded = false
+        m.LoadProgramDetailsTask.programId = m.prog.Id
         m.LoadProgramDetailsTask.channelIndex = m.scheduleGrid.programFocusedDetails.focusChannelIndex
         m.LoadProgramDetailsTask.programIndex = m.scheduleGrid.programFocusedDetails.focusIndex
         m.LoadProgramDetailsTask.control = "RUN"
     end if
 
-    m.detailsPane.programDetails = prog
+    m.detailsPane.programDetails = m.prog
 
-
-    startIdex = m.LoadChannelsTask.startIndex
-    'Load more Channels when grid is scrolled
-    'if focus comes within 5 rows of the end load more channels
-    print "Focused = ", m.scheduleGrid.channelFocused
-    if m.scheduleGrid.channelFocused > (m.top.channelsLoaded - 5)
-        'add loaded channels count to advance guide
-        m.top.channelsLoaded = m.top.channelsLoaded + m.LoadChannelsTask.limit
-        'advance start index to get new channels
-        startIdex = startIdex + m.top.channelsLoaded
-        'update satrt index in loaded channels task
-        m.LoadChannelsTask.startIndex = startIdex
-        ' if task is running stop and load more
-        m.top.counter = m.top.channelsLoaded - 11
-        m.top.currentChannelFocused = m.scheduleGrid.channelFocused
-        m.LoadChannelsTask.control = "RUN"
-        print "Loaded Channels = " m.top.channelsLoaded
-    end if
 end sub
 
 ' Update the Program Details with full information
@@ -198,6 +182,25 @@ sub onProgramDetailsLoaded()
     m.scheduleGrid.showLoadingDataFeedback = false
 end sub
 
+sub advanceGuide()
+    startIdex = m.LoadChannelsTask.startIndex
+    'Load more Channels when grid is scrolled
+    'if focus comes within 5 rows of the end load more channels
+    print "Focused = ", m.top.channelChanged
+    if m.top.channelChanged > (m.top.channelsLoaded - 6)
+        'add loaded channels count to advance guide
+        m.top.channelsLoaded = m.top.channelsLoaded + m.LoadChannelsTask.limit
+        'advance start index to get new channels
+        startIdex = startIdex + m.top.channelsLoaded
+        'update satrt index in loaded channels task
+        m.LoadChannelsTask.startIndex = startIdex
+        ' if task is running stop and load more
+        m.top.counter = m.top.channelsLoaded - 11
+        'm.top.currentChannelFocused = m.scheduleGrid.channelFocused
+        m.LoadChannelsTask.control = "RUN"
+        print "********   Loaded Channels = " m.top.channelsLoaded
+    end if
+end sub
 
 sub onProgramSelected()
     ' If there is no program data - view the channel
@@ -321,6 +324,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
     else if key = "back"
         m.LoadChannelsTask.control = "stop"
         m.global.sceneManager.callFunc("popScene")
+        return true
+    end if
+    if key = "down"
+        print "Key down"
         return true
     end if
 
