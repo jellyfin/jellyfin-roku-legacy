@@ -10,7 +10,7 @@
               automaticLoadingDataFeedback="false" showLoadingDataFeedback="true"
               focusBitmapUri="pkg:/images/white.9.png" focusBitmapBlendColor="#006fab" 
               programTitleFocusedColor="#ffffff" iconFocusedColor="#ff0000"
-              showPastTimeScreen="true" pastTimeScreenBlendColor="#555555" fillProgramGaps="No Data Availible!"
+              showPastTimeScreen="true" pastTimeScreenBlendColor="#555555"
               />
     <Spinner id="spinner" translation="[900, 450]" />
     <Animation id="gridMoveAnimation" duration="1" repeat="false" easeFunction="outQuad" >
@@ -25,8 +25,7 @@
         <field id="channelIdList" type="string" />
         <field id="channelsLoaded" type="int" value="0" />
         <field id="counter" type="int" value="-1" />
-        <field id="currentChannelFocused" type="int" value="-1"/>
-
+        <field id="channelChanged" type="int" alias="detailsPane.currentChannelFocused" alwaysNotify="true" onChange="advanceGuide" />
   </interface>
   <script type="text/brightscript" uri="schedule.brs" />
 </component>

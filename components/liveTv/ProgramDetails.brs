@@ -118,6 +118,9 @@ sub channelUpdated()
     if m.top.channel = invalid
         m.top.findNode("noInfoChannelName").text = ""
         m.channelName.text = ""
+        ' advance channel index when no program
+        m.top.currentChannelFocused = m.top.currentChannelFocused + 1
+        print "Updated no program channel index ", m.top.currentChannelFocused
     else
         m.top.findNode("noInfoChannelName").text = m.top.channel.Title
         m.channelName.text = m.top.channel.Title
@@ -125,6 +128,9 @@ sub channelUpdated()
             m.image.uri = m.top.channel.posterURL
         end if
         m.favorite.visible = m.top.channel.favorite
+        'advance channel index when valid program
+        m.top.currentChannelFocused = m.top.currentChannelFocused + 1
+        print "Updated channel index to ", m.top.currentChannelFocused
     end if
 end sub
 
@@ -142,6 +148,7 @@ sub programUpdated()
         m.detailsView.visible = "false"
         m.noInfoView.visible = "true"
         return
+
     end if
 
     m.programName.text = prog.Title
@@ -243,8 +250,8 @@ function getRelativeDayName(date) as string
     end if
 
     ' Check for Yesterday
-    todayMidnight = now.AsSeconds() - (now.AsSeconds() MOD 86400)
-    dateMidnight = date.AsSeconds() - (date.AsSeconds() MOD 86400)
+    todayMidnight = now.AsSeconds() - (now.AsSeconds() mod 86400)
+    dateMidnight = date.AsSeconds() - (date.AsSeconds() mod 86400)
 
     if todayMidnight - dateMidnight = 86400
         return "yesterday"
@@ -266,8 +273,8 @@ function getDurationStringFromSeconds(seconds) as string
     minutes = seconds / 60.0
 
     if minutes > 60
-        hours = (minutes - (minutes MOD 60)) / 60
-        minutes = minutes MOD 60
+        hours = (minutes - (minutes mod 60)) / 60
+        minutes = minutes mod 60
     end if
 
     if hours > 0

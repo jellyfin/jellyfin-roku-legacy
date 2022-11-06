@@ -1,6 +1,5 @@
 sub init()
     m.top.functionName = "loadSchedule"
-    print "Loadschedule Channel ID's = ", m.top.channelIds
 end sub
 
 sub loadSchedule()
