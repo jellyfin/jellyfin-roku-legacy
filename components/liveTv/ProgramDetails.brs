@@ -120,7 +120,6 @@ sub channelUpdated()
         m.channelName.text = ""
         ' advance channel index when no program
         m.top.currentChannelFocused = m.top.currentChannelFocused + 1
-        print "Updated no program channel index ", m.top.currentChannelFocused
     else
         m.top.findNode("noInfoChannelName").text = m.top.channel.Title
         m.channelName.text = m.top.channel.Title
@@ -130,7 +129,6 @@ sub channelUpdated()
         m.favorite.visible = m.top.channel.favorite
         'advance channel index when valid program
         m.top.currentChannelFocused = m.top.currentChannelFocused + 1
-        print "Updated channel index to ", m.top.currentChannelFocused
     end if
 end sub
 
