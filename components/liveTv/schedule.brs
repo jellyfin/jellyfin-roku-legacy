@@ -32,17 +32,27 @@ sub init()
     m.spinner = m.top.findNode("spinner")
 
     'Set initial channels loaded int - TODO create user settings to control the limi
-    m.top.channelsLoaded = m.LoadChannelsTask.limit
+    m.top.channelsLoaded = 0
 
 end sub
 
 sub channelFilterSet()
+    m.spinner.visible = true
     'm.scheduleGrid.jumpToChannel = 0
     if m.top.filter <> invalid and m.LoadChannelsTask.filter <> m.top.filter
         if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
 
+        m.gridData = createObject("roSGNode", "ContentNode")
         m.LoadChannelsTask.filter = m.top.filter
+        'reset guide to default values
+        m.LoadChannelsTask.searchTerm = ""
+        m.LoadChannelsTask.startIndex = 0
+        m.top.channelsLoaded = 0
+        m.top.counter = -1
+        'run task
         m.LoadChannelsTask.control = "RUN"
+        'set guide focus
+        m.scheduleGrid.setFocus(true)
     end if
 
 end sub
@@ -60,15 +70,22 @@ sub channelsearchTermSet()
     else if m.top.searchTerm <> invalid and LCase(m.LoadChannelsTask.searchTerm) <> LCase(m.top.searchTerm)
         if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
 
+        m.gridData = createObject("roSGNode", "ContentNode")
         m.LoadChannelsTask.searchTerm = m.top.searchTerm
         m.spinner.visible = true
+        'reset guide to default values
+        m.LoadChannelsTask.startIndex = 0
+        m.top.channelsLoaded = 0
+        m.top.counter = -1
+        'run task
         m.LoadChannelsTask.control = "RUN"
+        'set guide focus
+        m.scheduleGrid.setFocus(true)
     end if
 end sub
 
 ' Initial list of channels loaded
 sub onChannelsLoaded()
-    m.spinner.visible = true
     counter = m.top.counter
     m.channelIdList = m.top.channelIdList
     'if search returns channels
@@ -103,7 +120,6 @@ sub onChannelsLoaded()
     m.LoadChannelsTask.channels = []
     'keep focus on current channel while loading the next set of channels
     m.schedulegrid.jumpToChannel = m.detailsPane.currentChannelFocused
-    m.spinner.visible = false
 end sub
 
 ' When LoadScheduleTask completes (initial or more data) and we have a schedule to display
@@ -183,22 +199,21 @@ sub onProgramDetailsLoaded()
 end sub
 
 sub advanceGuide()
-    startIdex = m.LoadChannelsTask.startIndex
+    startIdex = -1
     'Load more Channels when grid is scrolled
-    'if focus comes within 5 rows of the end load more channels
-    print "Focused = ", m.top.channelChanged
+    'if focus comes within 6 rows of the end load more channels
     if m.top.channelChanged > (m.top.channelsLoaded - 6)
         'add loaded channels count to advance guide
         m.top.channelsLoaded = m.top.channelsLoaded + m.LoadChannelsTask.limit
         'advance start index to get new channels
-        startIdex = startIdex + m.top.channelsLoaded
+        startIdex = m.top.channelsLoaded - 9
         'update satrt index in loaded channels task
         m.LoadChannelsTask.startIndex = startIdex
         ' if task is running stop and load more
         m.top.counter = m.top.channelsLoaded - 11
         'm.top.currentChannelFocused = m.scheduleGrid.channelFocused
         m.LoadChannelsTask.control = "RUN"
-        print "********   Loaded Channels = " m.top.channelsLoaded
+        m.scheduleGrid.setFocus(true)
     end if
 end sub
 
@@ -324,10 +339,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
     else if key = "back"
         m.LoadChannelsTask.control = "stop"
         m.global.sceneManager.callFunc("popScene")
-        return true
-    end if
-    if key = "down"
-        print "Key down"
         return true
     end if
 
