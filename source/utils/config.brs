@@ -5,6 +5,10 @@ function GetConfigTree()
     return ParseJSON(ReadAsciiFile("pkg:/settings/settings.json"))
 end function
 
+' Read help tree from json help file and return
+function GetHelpTree()
+    return ParseJson(ReadAsciiFile("pkg:/TipsAndTricks/help.json"))
+end function
 
 ' Generic registry accessors
 function registry_read(key, section = invalid)

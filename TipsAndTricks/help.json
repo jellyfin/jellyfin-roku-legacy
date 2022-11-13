@@ -1,0 +1,29 @@
+[
+    {
+        "title": "Playback",
+        "description": "Things you can do while watching media",
+        "children": [
+            {
+                "title": "Subtitles",
+                "description": "Pressing the down arrow while watching media brings up any available subtitles you can select from:",
+                "image": "pkg:/TipsAndTricks/Subtitles.png"
+            },
+            {
+                "title": "Transcoding / Streaming",
+                "description": "Pressing the up arrow while watching media brings transcoding and streaming information:",
+                "image": "pkg:/TipsAndTricks/Transcoding.png"
+            }
+        ]
+    },
+    {
+        "title": "Logging In",
+        "description": "Tips and Tricks for logging in",
+        "children": [
+            {
+                "title": "Quick Connect",
+                "description": "With server version 10.8 and above, you can log in to the web client and select Quick Connect. Here you enter the quick connect code given on the Roku client.",
+                "image": "pkg:/TipsAndTricks/QuickConnect.png"
+            }
+        ]
+    }
+]

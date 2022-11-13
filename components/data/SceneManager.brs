@@ -163,6 +163,13 @@ sub settings()
 end sub
 
 '
+' Display help screen
+sub help()
+    helpScreen = createObject("roSGNode", "Help")
+    pushScene(helpScreen)
+end sub
+
+'
 ' Register observers for overhang data
 sub registerOverhangData(group)
     if group.isSubType("JFGroup")

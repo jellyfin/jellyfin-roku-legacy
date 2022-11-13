@@ -395,6 +395,16 @@ sub Main (args as dynamic) as void
                     group.setFocus(true)
                 end if
                 sceneManager.callFunc("settings")
+            else if button.id = "help"
+                ' Exit out of the side panel
+                pane = group.findNode("options")
+                pane.visible = false
+                if group.lastFocus <> invalid
+                    group.lastFocus.setFocus(true)
+                else
+                    group.setFocus(true)
+                end if
+                sceneManager.callFunc("help")
             end if
         else if isNodeEvent(msg, "selectSubtitlePressed")
             node = m.scene.focusedChild

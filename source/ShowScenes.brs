@@ -312,6 +312,13 @@ function CreateHomeGroup()
     o.observeField("optionSelected", m.port)
     new_options.push(o)
 
+    ' Add help option to menu
+    o = CreateObject("roSGNode", "OptionsButton")
+    o.title = "Help"
+    o.id = "help"
+    o.observeField("optionSelected", m.port)
+    new_options.push(o)
+
     ' And a profile button
     user_node = CreateObject("roSGNode", "OptionsData")
     user_node.id = "active_user"

@@ -15,6 +15,7 @@
                 "images/**/*",
                 "locale/**/*",
                 "settings/**/*",
+                "TipsAndTricks/**/*",
                 "source/**/*",
                 "manifest"
             ]

@@ -6,9 +6,12 @@
         "images/**/*.*",
         "resources/**/*.*",
         "locale/**/*.*",
-        "settings/*.*"
+        "settings/*.*",
+        "TipsAndTricks/*.*"
     ],
-    "plugins": [ "@rokucommunity/bslint" ],
+    "plugins": [
+        "@rokucommunity/bslint"
+    ],
     "diagnosticFilters": [
         "**/roku_modules/**/*"
     ]
