@@ -48,7 +48,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.searchAlphabox.textEditBox.translation = "[0, 0]"
     end if
 
-    if key = "left" and m.searchSelect.isinFocusChain() and (m.searchSelect.currFocusColumn = -1 or m.searchSelect.currFocusColumn = 0)
+    if key = "left" and m.searchSelect.isinFocusChain()
         m.searchAlphabox.setFocus(true)
         return true
     else if key = "right"
