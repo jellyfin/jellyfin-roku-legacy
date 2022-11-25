@@ -402,10 +402,10 @@ sub Main (args as dynamic) as void
                 'Do Playlist autoPlayNextItem
                 if selectedItem.json.Type = "Playlist"
 
-                    autoPlayNextPlaylistItem(selectedItem.ID, itemnode.id)
+                    autoPlayNextPlaylistItem(selectedItem.ID, itemNode.id)
                     print "Trying to play next playlist item"
                     print "Playlist ID = "selectedItem.ID
-                    print "Item playing ID = " itemnode.json
+                    print "Item playing ID = " itemNode.json
                     ' If node allows retrying using Transcode Url, give that shot
                 else if isValid(node.retryWithTranscoding) and node.retryWithTranscoding
 
