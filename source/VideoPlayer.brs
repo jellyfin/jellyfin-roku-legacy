@@ -448,7 +448,6 @@ end sub
 
 sub autoPlayNextPlaylistItem(playlistID as string, videoID)
     ' use web client setting
-    print "Video Info= " videoID
     if m.user.Configuration.EnableNextEpisodeAutoPlay
         ' query API for next episode ID
         url = Substitute("Playlists/{0}/Items", playlistID)
@@ -466,8 +465,6 @@ sub autoPlayNextPlaylistItem(playlistID as string, videoID)
             end for
             listCount = list.count() - 1
             index = getArrayIndex(list, videoID)
-            print "List Size = " listCount
-            print "Current Index " index
             if index < listCount
                 NextVideoIndex = index + 1
             else if index = listCount
@@ -480,7 +477,6 @@ sub autoPlayNextPlaylistItem(playlistID as string, videoID)
                 ' print "Playing Audio = "data.Items[1]
                 nextVideo = CreateAudioPlayerGroup([data.Items[NextVideoIndex]])
             else
-                print "Playing Video"
                 nextVideo = CreateVideoPlayerGroup(data.Items[NextVideoIndex].Id, invalid, 1, false, false)
             end if
             ' remove last video scene
@@ -497,6 +493,4 @@ sub autoPlayNextPlaylistItem(playlistID as string, videoID)
     else
         m.global.sceneManager.callFunc("popScene")
     end if
-    print url
-    print "parms = " urlParams
 end sub
