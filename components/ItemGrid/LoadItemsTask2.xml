@@ -22,6 +22,7 @@
   </interface>
   <script type="text/brightscript" uri="LoadItemsTask2.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
+  <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />

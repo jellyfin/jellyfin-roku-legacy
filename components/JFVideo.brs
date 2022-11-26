@@ -2,8 +2,8 @@ sub init()
     m.playbackTimer = m.top.findNode("playbackTimer")
     m.bufferCheckTimer = m.top.findNode("bufferCheckTimer")
     m.top.observeField("state", "onState")
-    m.top.observeField("position", "onPositionChanged")
-    m.top.trickPlayBar.observeField("visible", "onTrickPlayBarVisibilityChange")
+    m.top.observeField("content", "onContentChange")
+
     m.playbackTimer.observeField("fire", "ReportPlayback")
     m.bufferPercentage = 0 ' Track whether content is being loaded
     m.playReported = false
@@ -15,111 +15,87 @@ sub init()
         if clockNode[0] <> invalid then clockNode[0].parent.removeChild(clockNode[0].node)
     end if
 
-    ' Skip Intro Button
-    m.skipIntroButton = m.top.findNode("skipIntro")
-    m.skipIntroButton.text = tr("Skip Intro")
-    m.introCompleted = false
-    m.showskipIntroButtonAnimation = m.top.findNode("showskipIntroButton")
-    m.hideskipIntroButtonAnimation = m.top.findNode("hideskipIntroButton")
-    m.moveUpskipIntroButtonAnimation = m.top.findNode("moveUpskipIntroButton")
-    m.moveDownskipIntroButtonAnimation = m.top.findNode("moveDownskipIntroButton")
+    'Play Next Episode button
+    m.nextEpisodeButton = m.top.findNode("nextEpisode")
+    m.nextEpisodeButton.text = tr("Next Episode")
+    m.nextEpisodeButton.setFocus(false)
+
+    m.showNextEpisodeButtonAnimation = m.top.findNode("showNextEpisodeButton")
+    m.hideNextEpisodeButtonAnimation = m.top.findNode("hideNextEpisodeButton")
+
+    m.checkedForNextEpisode = false
+    m.getNextEpisodeTask = createObject("roSGNode", "GetNextEpisodeTask")
+    m.getNextEpisodeTask.observeField("nextEpisodeData", "onNextEpisodeDataLoaded")
+
 end sub
 
-'
-' Checks if we have valid skip intro param data
-function haveSkipIntroParams() as boolean
+' Event handler for when video content field changes
+sub onContentChange()
+    if not isValid(m.top.content) then return
 
-    ' Intro data is invalid, skip
-    if not isValid(m.top.skipIntroParams?.Valid)
-        return false
+    m.top.observeField("position", "onPositionChanged")
+
+    ' If video content type is not episode, remove position observer
+    if m.top.content.contenttype <> 4
+        m.top.unobserveField("position")
     end if
+end sub
 
-    ' Returned intro data is not valid, return
-    if not m.top.skipIntroParams.Valid
-        return false
-    end if
+sub onNextEpisodeDataLoaded()
+    m.checkedForNextEpisode = true
 
-    return true
-end function
+    m.top.observeField("position", "onPositionChanged")
 
-'
-' Handles showing / hiding the skip intro button
-sub handleSkipIntro()
-    ' We've already shown the intro, return
-    if m.introCompleted then return
-
-    ' We don't have valid data, return
-    if not haveSkipIntroParams() then return
-
-    ' Check if it's time to hide the skip prompt
-    if m.top.position >= m.top.skipIntroParams.HideSkipPromptAt
-        if skipIntroButtonVisible()
-            hideSkipIntro()
-        end if
-        return
-    end if
-
-    ' Check if it's time to show the skip prompt
-    if m.top.position >= m.top.skipIntroParams.ShowSkipPromptAt
-        if not skipIntroButtonVisible()
-            showSkipIntro()
-        end if
-        return
+    if m.getNextEpisodeTask.nextEpisodeData.Items.count() <> 2
+        m.top.unobserveField("position")
     end if
 end sub
 
 '
-' When Trick Playbar Visibility changes
-sub onTrickPlayBarVisibilityChange()
-    ' Skip Intro button isn't visible, return
-    if not skipIntroButtonVisible() then return
-
-    ' Trick Playbar is visible, move the skip intro button up and fade it out
-    if m.top.trickPlayBar.visible
-        m.moveUpskipIntroButtonAnimation.control = "start"
-
-        m.skipIntroButton.setFocus(false)
-        m.top.setFocus(true)
-
-        return
+' Runs Next Episode button animation and sets focus to button
+sub showNextEpisodeButton()
+    if not m.nextEpisodeButton.visible
+        m.showNextEpisodeButtonAnimation.control = "start"
+        m.nextEpisodeButton.setFocus(true)
+        m.nextEpisodeButton.visible = true
     end if
-
-    ' Trick Playbar is not visible, move the skip intro button down and fade it in
-    m.moveDownskipIntroButtonAnimation.control = "start"
-    m.skipIntroButton.setFocus(true)
-
 end sub
 
 '
+'Update count down text
+sub updateCount()
+    m.nextEpisodeButton.text = tr("Next Episode") + " " + Int(m.top.runTime - m.top.position).toStr()
+end sub
+
+'
+' Runs hide Next Episode button animation and sets focus back to video
+sub hideNextEpisodeButton()
+    m.hideNextEpisodeButtonAnimation.control = "start"
+    m.nextEpisodeButton.setFocus(false)
+    m.top.setFocus(true)
+end sub
+
+' Checks if we need to display the Next Episode button
+sub checkTimeToDisplayNextEpisode()
+    if int(m.top.position) >= (m.top.runTime - 30)
+        showNextEpisodeButton()
+        updateCount()
+        return
+    end if
+
+    if m.nextEpisodeButton.visible or m.nextEpisodeButton.hasFocus()
+        m.nextEpisodeButton.visible = false
+        m.nextEpisodeButton.setFocus(false)
+    end if
+end sub
+
 ' When Video Player state changes
 sub onPositionChanged()
-    ' Check if content is episode
-    if m.top.content.contenttype = 4
-        handleSkipIntro()
+    ' Check if dialog is open
+    m.dialog = m.top.getScene().findNode("dialogBackground")
+    if not isValid(m.dialog)
+        checkTimeToDisplayNextEpisode()
     end if
-end sub
-
-'
-' Returns if skip intro button is currently visible
-function skipIntroButtonVisible() as boolean
-    return m.skipIntroButton.opacity > 0
-end function
-
-'
-' Runs skip intro button animation and sets focus to button
-sub showSkipIntro()
-    m.showskipIntroButtonAnimation.control = "start"
-    m.skipIntroButton.setFocus(true)
-end sub
-
-'
-' Runs hide intro button animation and sets focus back to video
-sub hideSkipIntro()
-    m.top.trickPlayBar.unobserveField("visible")
-    m.hideskipIntroButtonAnimation.control = "start"
-    m.introCompleted = true
-    m.skipIntroButton.setFocus(false)
-    m.top.setFocus(true)
 end sub
 
 '
@@ -148,13 +124,23 @@ sub onState(msg)
         m.top.control = "stop"
         m.top.backPressed = true
     else if m.top.state = "playing"
+
+        ' Check if next episde is available
+        if isValid(m.top.showID)
+            if m.top.showID <> "" and not m.checkedForNextEpisode and m.top.content.contenttype = 4
+                m.getNextEpisodeTask.showID = m.top.showID
+                m.getNextEpisodeTask.videoID = m.top.id
+                m.getNextEpisodeTask.control = "RUN"
+            end if
+        end if
+
         if m.playReported = false
             ReportPlayback("start")
             m.playReported = true
         else
-            m.playbackTimer.control = "start"
             ReportPlayback()
         end if
+        m.playbackTimer.control = "start"
     else if m.top.state = "paused"
         m.playbackTimer.control = "stop"
         ReportPlayback()
@@ -234,23 +220,28 @@ sub dialogClosed(msg)
     sourceNode.close = true
 end sub
 
-
-
 function onKeyEvent(key as string, press as boolean) as boolean
-    if key = "OK"
-        if not m.top.trickPlayBar.visible
-            if m.skipIntroButton.hasFocus()
-                m.top.seek = m.top.skipIntroParams.IntroEnd
-                hideSkipIntro()
-                return true
-            end if
+
+    if key = "OK" and m.nextEpisodeButton.hasfocus() and m.top.trickPlayMode = "play"
+        m.top.state = "finished"
+        hideNextEpisodeButton()
+        return true
+    else
+        'Hide Next Episode Button
+        if m.nextEpisodeButton.visible or m.nextEpisodeButton.hasFocus()
+            m.nextEpisodeButton.visible = false
+            m.nextEpisodeButton.setFocus(false)
+            m.top.setFocus(true)
         end if
     end if
 
     if not press then return false
 
-    if m.top.Subtitles.count() and key = "down"
+    if key = "down"
         m.top.selectSubtitlePressed = true
+        return true
+    else if key = "up"
+        m.top.selectPlaybackInfoPressed = true
         return true
     end if
 

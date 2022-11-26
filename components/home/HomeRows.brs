@@ -19,13 +19,19 @@ sub init()
     ' Load the Libraries from API via task
     m.LoadLibrariesTask = createObject("roSGNode", "LoadItemsTask")
     m.LoadLibrariesTask.observeField("content", "onLibrariesLoaded")
+
     ' set up tesk nodes for other rows
     m.LoadContinueTask = createObject("roSGNode", "LoadItemsTask")
     m.LoadContinueTask.itemsToLoad = "continue"
+
     m.LoadNextUpTask = createObject("roSGNode", "LoadItemsTask")
     m.LoadNextUpTask.itemsToLoad = "nextUp"
+
     m.LoadOnNowTask = createObject("roSGNode", "LoadItemsTask")
     m.LoadOnNowTask.itemsToLoad = "onNow"
+
+    m.LoadFavoritesTask = createObject("roSGNode", "LoadItemsTask")
+    m.LoadFavoritesTask.itemsToLoad = "favorites"
 end sub
 
 sub loadLibraries()
@@ -61,20 +67,28 @@ sub onLibrariesLoaded()
     continueRow.title = tr("Continue Watching")
     nextUpRow = content.CreateChild("HomeRow")
     nextUpRow.title = tr("Next Up >")
+
+    favoritesRow = content.CreateChild("HomeRow")
+    favoritesRow.title = tr("Favorites")
+
     sizeArray = [
         [464, 311], ' My Media
         [464, 331], ' Continue Watching
-        [464, 331] ' Next Up
+        [464, 331], ' Next Up
+        [464, 331] ' Favorites
     ]
+
     haveLiveTV = false
     ' validate library data
     if m.libraryData <> invalid and m.libraryData.count() > 0
         userConfig = m.top.userConfig
+
         ' populate My Media row
         filteredMedia = filterNodeArray(m.libraryData, "id", userConfig.MyMediaExcludes)
         for each item in filteredMedia
             mediaRow.appendChild(item)
         end for
+
         ' create a "Latest In" row for each library
         filteredLatest = filterNodeArray(m.libraryData, "id", userConfig.LatestItemsExcludes)
         for each lib in filteredLatest
@@ -99,6 +113,10 @@ sub onLibrariesLoaded()
     m.LoadContinueTask.observeField("content", "updateContinueItems")
     m.LoadContinueTask.control = "RUN"
 
+    ' Load the Favorites Data
+    m.LoadFavoritesTask.observeField("content", "updateFavoritesItems")
+    m.LoadFavoritesTask.control = "RUN"
+
     ' If we have Live TV access, load "On Now" data
     if haveLiveTV
         m.LoadOnNowTask.observeField("content", "updateOnNowItems")
@@ -107,8 +125,58 @@ sub onLibrariesLoaded()
 end sub
 
 sub updateHomeRows()
+    if m.global.playstateTask.state = "run"
+        m.global.playstateTask.observeField("state", "updateHomeRows")
+    else
+        m.global.playstateTask.unobserveField("state")
+    end if
     m.LoadContinueTask.observeField("content", "updateContinueItems")
     m.LoadContinueTask.control = "RUN"
+end sub
+
+sub updateFavoritesItems()
+    itemData = m.LoadFavoritesTask.content
+    m.LoadFavoritesTask.unobserveField("content")
+    m.LoadFavoritesTask.content = []
+
+    if itemData = invalid then return
+
+    homeRows = m.top.content
+    rowIndex = getRowIndex("Favorites")
+
+    if itemData.count() < 1
+        if rowIndex <> invalid
+            ' remove the row
+            deleteFromSizeArray(rowIndex)
+            homeRows.removeChildIndex(rowIndex)
+        end if
+    else
+        ' remake row using the new data
+        row = CreateObject("roSGNode", "HomeRow")
+        row.title = tr("Favorites")
+        itemSize = [464, 331]
+
+        for each item in itemData
+            usePoster = true
+
+            if lcase(item.type) = "episode" or lcase(item.type) = "audio" or lcase(item.type) = "musicartist"
+                usePoster = false
+            end if
+
+            item.usePoster = usePoster
+            item.imageWidth = row.imageWidth
+            row.appendChild(item)
+        end for
+
+        if rowIndex = invalid
+            ' insert new row under "My Media"
+            updateSizeArray(itemSize, 1)
+            homeRows.insertChild(row, 1)
+        else
+            ' replace the old row
+            homeRows.replaceChild(row, rowIndex)
+        end if
+    end if
 end sub
 
 sub updateContinueItems()

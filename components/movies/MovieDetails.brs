@@ -103,10 +103,6 @@ sub itemContentChanged()
         setFieldText("director", tr("Director") + ": " + directors.join(", "))
     end if
 
-    if itemData.mediaStreams[0] <> invalid
-        setFieldText("video_codec", tr("Video") + ": " + itemData.mediaStreams[0].displayTitle)
-    end if
-
     if get_user_setting("ui.details.hidetagline") = "false"
         if itemData.taglines.count() > 0
             setFieldText("tagline", itemData.taglines[0])
@@ -125,11 +121,28 @@ end sub
 sub SetUpVideoOptions(streams)
 
     videos = []
+    codecDetailsSet = false
 
     for i = 0 to streams.Count() - 1
         if streams[i].VideoType = "VideoFile"
             codec = ""
-            if streams[i].mediaStreams <> invalid and streams[i].mediaStreams.Count() > 0 then codec = streams[i].mediaStreams[0].displayTitle
+            if streams[i].mediaStreams <> invalid and streams[i].mediaStreams.Count() > 0
+
+                ' find the first (default) video track to get the codec for the details screen
+                if codecDetailsSet = false
+                    for index = 0 to streams[i].mediaStreams.Count() - 1
+                        if streams[i].mediaStreams[index].Type = "Video"
+                            setFieldText("video_codec", tr("Video") + ": " + streams[i].mediaStreams[index].displayTitle)
+                            codecDetailsSet = true
+                            exit for
+                        end if
+                    end for
+                end if
+
+                codec = streams[i].mediaStreams[0].displayTitle
+            end if
+
+            ' Create options for user to switch between video tracks
             videos.push({
                 "Title": streams[i].Name,
                 "Description": tr("Video"),

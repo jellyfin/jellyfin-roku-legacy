@@ -64,7 +64,8 @@ sub itemContentChanged() as void
     else if itemData.json.lookup("Type") = "MusicAlbum"
         m.title.font = "font:SmallestSystemFont"
         m.staticTitle.font = "font:SmallestSystemFont"
-
+    else
+        m.series.visible = false
     end if
     m.staticTitle.text = m.title.text
 

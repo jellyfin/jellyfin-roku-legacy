@@ -78,12 +78,12 @@ function ItemMetaData(id as string)
     if data = invalid then return invalid
     imgParams = {}
     if data.type <> "Audio"
-        if data.UserData.PlayedPercentage <> invalid
+        if data?.UserData?.PlayedPercentage <> invalid
             param = { "PercentPlayed": data.UserData.PlayedPercentage }
             imgParams.Append(param)
         end if
     end if
-    if data.type = "Movie"
+    if data.type = "Movie" or data.type = "MusicVideo"
         tmp = CreateObject("roSGNode", "MovieData")
         tmp.image = PosterImage(data.id, imgParams)
         tmp.json = data
@@ -168,21 +168,82 @@ function ItemMetaData(id as string)
     end if
 end function
 
+' Music Artist Data
+function ArtistOverview(name as string)
+    req = createObject("roUrlTransfer")
+    url = Substitute("Artists/{0}", req.escape(name))
+    resp = APIRequest(url)
+    data = getJson(resp)
+    if data = invalid then return invalid
+    return data.overview
+end function
+
 ' Get list of albums belonging to an artist
 function MusicAlbumList(id as string)
-    url = Substitute("Users/{0}/Items", get_setting("active_user"), id)
+    url = Substitute("Users/{0}/Items", get_setting("active_user"))
     resp = APIRequest(url, {
-        "UserId": get_setting("active_user"),
-        "parentId": id,
+        "AlbumArtistIds": id,
         "includeitemtypes": "MusicAlbum",
-        "sortBy": "SortName"
+        "sortBy": "SortName",
+        "Recursive": true
     })
 
     data = getJson(resp)
     results = []
     for each item in data.Items
         tmp = CreateObject("roSGNode", "MusicAlbumData")
-        tmp.image = PosterImage(item.id, { "maxHeight": "500", "maxWidth": "500" })
+        tmp.image = PosterImage(item.id)
+        tmp.json = item
+        results.push(tmp)
+    end for
+    data.Items = results
+    return data
+end function
+
+' Get list of albums an artist appears on
+function AppearsOnList(id as string)
+    url = Substitute("Users/{0}/Items", get_setting("active_user"))
+    resp = APIRequest(url, {
+        "ContributingArtistIds": id,
+        "ExcludeItemIds": id,
+        "includeitemtypes": "MusicAlbum",
+        "sortBy": "PremiereDate,ProductionYear,SortName",
+        "SortOrder": "Descending",
+        "Recursive": true
+    })
+
+    data = getJson(resp)
+    results = []
+    for each item in data.Items
+        tmp = CreateObject("roSGNode", "MusicAlbumData")
+        tmp.image = PosterImage(item.id)
+        tmp.json = item
+        results.push(tmp)
+    end for
+    data.Items = results
+    return data
+end function
+
+' Get list of songs belonging to an artist
+function GetSongsByArtist(id as string)
+    url = Substitute("Users/{0}/Items", get_setting("active_user"))
+    resp = APIRequest(url, {
+        "AlbumArtistIds": id,
+        "includeitemtypes": "Audio",
+        "sortBy": "SortName",
+        "Recursive": true
+    })
+
+    data = getJson(resp)
+    results = []
+
+    if data = invalid then return invalid
+    if data.Items = invalid then return invalid
+    if data.Items.Count() = 0 then return invalid
+
+    for each item in data.Items
+        tmp = CreateObject("roSGNode", "MusicAlbumData")
+        tmp.image = PosterImage(item.id)
         tmp.json = item
         results.push(tmp)
     end for
@@ -200,8 +261,13 @@ function MusicSongList(id as string)
         "sortBy": "SortName"
     })
 
-    data = getJson(resp)
     results = []
+    data = getJson(resp)
+
+    if data = invalid then return invalid
+    if data.Items = invalid then return invalid
+    if data.Items.Count() = 0 then return invalid
+
     for each item in data.Items
         tmp = CreateObject("roSGNode", "MusicSongData")
         tmp.image = PosterImage(item.id)
@@ -237,15 +303,18 @@ end function
 
 ' Get Instant Mix based on item
 function CreateArtistMix(id as string)
-    url = Substitute("Users/{0}/Items", get_setting("active_user"), id)
+    url = Substitute("Users/{0}/Items", get_setting("active_user"))
     resp = APIRequest(url, {
-        "UserId": get_setting("active_user"),
-        "parentId": id,
-        "Filters": "IsNotFolder",
-        "Recursive": true,
-        "SortBy": "SortName",
+        "ArtistIds": id,
+        "Recursive": "true",
         "MediaTypes": "Audio",
-        "Limit": 300
+        "Filters": "IsNotFolder",
+        "SortBy": "SortName",
+        "Limit": 300,
+        "Fields": "Chapters",
+        "ExcludeLocationTypes": "Virtual",
+        "EnableTotalRecordCount": false,
+        "CollapseBoxSetItems": false
     })
 
     return getJson(resp)
@@ -265,24 +334,30 @@ function AudioStream(id as string)
     songData = AudioItem(id)
 
     content = createObject("RoSGNode", "ContentNode")
-
-    params = {}
-
-    params.append({
-        "Static": "true",
-        "Container": songData.mediaSources[0].container
-    })
-
-    params.MediaSourceId = songData.mediaSources[0].id
-
-    content.url = buildURL(Substitute("Audio/{0}/stream", songData.id), params)
     content.title = songData.title
-    content.streamformat = songData.mediaSources[0].container
 
-    playbackInfo = ItemPostPlaybackInfo(songData.id, params.MediaSourceId)
+    playbackInfo = ItemPostPlaybackInfo(songData.id, songData.mediaSources[0].id)
     content.id = playbackInfo.PlaySessionId
 
+    if useTranscodeAudioStream(playbackInfo)
+        ' Transcode the audio
+        content.url = buildURL(playbackInfo.mediaSources[0].TranscodingURL)
+    else
+        ' Direct Stream the audio
+        params = {
+            "Static": "true",
+            "Container": songData.mediaSources[0].container,
+            "MediaSourceId": songData.mediaSources[0].id
+        }
+        content.streamformat = songData.mediaSources[0].container
+        content.url = buildURL(Substitute("Audio/{0}/stream", songData.id), params)
+    end if
+
     return content
+end function
+
+function useTranscodeAudioStream(playbackInfo)
+    return playbackInfo.mediaSources[0] <> invalid and playbackInfo.mediaSources[0].TranscodingURL <> invalid
 end function
 
 function BackdropImage(id as string)

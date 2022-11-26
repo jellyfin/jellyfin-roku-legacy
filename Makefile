@@ -12,7 +12,7 @@
 ##########################################################################
 
 APPNAME = Jellyfin_Roku
-VERSION = 1.4.12
+VERSION = 1.6.2
 ROKU_TEST_ID = 1
 ROKU_TEST_WAIT_DURATION = 5
 

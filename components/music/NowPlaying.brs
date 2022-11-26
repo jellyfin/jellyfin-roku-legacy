@@ -408,6 +408,7 @@ sub onMetaDataLoaded()
     if data <> invalid and data.count() > 0
 
         ' Use metadata to load backdrop image
+
         ' if data.type = "AudioBook"
         '    m.LoadBackdropImageTask.itemId = data.ArtistItems[0].id
         'else
@@ -421,7 +422,8 @@ sub onMetaDataLoaded()
         m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
         m.LoadBackdropImageTask.control = "RUN"
     end if
-
+    
+    
     if data.type = "AudioBook"
         m.songDuration = data.RunTimeTicks / 10000000.0
         setScreenTitle(data)

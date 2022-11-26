@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="MusicSongData" extends="ContentNode">
+<component name="MusicSongData" extends="JFContentItem">
   <interface>
     <field id="id" type="string" />
     <field id="title" type="string" />
     <field id="trackNumber" type="integer" />
     <field id="image" type="node" onChange="setPoster" />
-    <field id="posterURL" type="string" />
     <field id="overview" type="string" />
     <field id="type" type="string" value="Song" />
     <field id="json" type="assocarray" onChange="setFields" />
     <field id="favorite" type="boolean" />
     <field id="parentFolder" type="string" value="" />
+
   </interface>
   <script type="text/brightscript" uri="MusicSongData.brs" />
 </component>

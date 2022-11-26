@@ -133,6 +133,7 @@ sub itemContentChanged()
         end if
         return
     end if
+
     if itemData.type = "Series"
 
         m.itemText.text = itemData.name
@@ -167,6 +168,34 @@ sub itemContentChanged()
         m.itemText.text = itemData.name
         m.itemTextExtra.text = itemData.json.AlbumArtist
         m.itemPoster.uri = itemData.posterURL
+        return
+    end if
+
+    if itemData.type = "MusicArtist"
+        m.itemText.text = itemData.name
+        m.itemTextExtra.text = itemData.json.AlbumArtist
+        m.itemPoster.uri = ImageURL(itemData.id)
+        return
+    end if
+
+    if itemData.type = "Audio"
+        m.itemText.text = itemData.name
+        m.itemTextExtra.text = itemData.json.AlbumArtist
+        m.itemPoster.uri = ImageURL(itemData.id)
+        return
+    end if
+
+    if itemData.type = "TvChannel"
+        m.itemText.text = itemData.name
+        m.itemTextExtra.text = itemData.json.AlbumArtist
+        m.itemPoster.uri = ImageURL(itemData.id)
+        return
+    end if
+
+    if itemData.type = "Season"
+        m.itemText.text = itemData.json.SeriesName
+        m.itemTextExtra.text = itemData.name
+        m.itemPoster.uri = ImageURL(itemData.id)
         return
     end if
 

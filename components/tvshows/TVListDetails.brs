@@ -44,8 +44,14 @@ sub itemContentChanged()
 
     m.poster.uri = imageUrl
 
-    if type(itemData.RunTimeTicks) = "LongInteger"
-        m.top.findNode("runtime").text = stri(getRuntime()).trim() + " mins"
+    if type(itemData.RunTimeTicks) = "roInt" or type(itemData.RunTimeTicks) = "LongInteger"
+        runTime = getRuntime()
+        if runTime < 2
+            m.top.findNode("runtime").text = "1 min"
+        else
+            m.top.findNode("runtime").text = stri(runTime).trim() + " mins"
+        end if
+
         if get_user_setting("ui.design.hideclock") <> "true"
             m.top.findNode("endtime").text = tr("Ends at %1").Replace("%1", getEndTime())
         end if

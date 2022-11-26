@@ -22,7 +22,7 @@ jobs:
         run: awk 'BEGIN { FS="=" } /^minor_version/ { print "MINOR="$2; }' manifest >> $GITHUB_ENV
       - name: "Find and save build_version from manifest"
         run: awk 'BEGIN { FS="=" } /^build_version/ { print "BUILD="$2; }' manifest >> $GITHUB_ENV
-      - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
+      - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3
       - uses: vimtor/action-zip@5f1c4aa587ea41db1110df6a99981dbe19cee310 # tag=v1
         with:
           recursive: false
@@ -35,7 +35,7 @@ jobs:
           prerelease: true
           title: v${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.BUILD }}
           files: ${{ github.workspace }}/jellyfin_v${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.BUILD }}.zip
-      - uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # tag=v3
+      - uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # tag=v3
         with:
           name: jellyfin_v${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.BUILD }}.zip
           path: ${{ github.workspace }}/jellyfin_v${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.BUILD }}.zip

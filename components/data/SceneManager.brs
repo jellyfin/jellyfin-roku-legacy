@@ -8,60 +8,65 @@ end sub
 '
 ' Push a new group onto the stack, replacing the existing group on the screen
 sub pushScene(newGroup)
+
     currentGroup = m.groups.peek()
+    if newGroup <> invalid
+        if currentGroup <> invalid
+            'Search through group and store off last focused item
+            if currentGroup.focusedChild <> invalid
+                focused = currentGroup.focusedChild
+                while focused.hasFocus() = false
+                    focused = focused.focusedChild
+                end while
 
-    if currentGroup <> invalid
-        'Search through group and store off last focused item
-        if currentGroup.focusedChild <> invalid
-            focused = currentGroup.focusedChild
-            while focused.hasFocus() = false
-                focused = focused.focusedChild
-            end while
+                currentGroup.lastFocus = focused
+                currentGroup.setFocus(false)
+            else
+                currentGroup.setFocus(false)
+            end if
 
-            currentGroup.lastFocus = focused
-            currentGroup.setFocus(false)
+            if currentGroup.isSubType("JFGroup")
+                unregisterOverhangData(currentGroup)
+            end if
+
+            currentGroup.visible = false
+
+            if currentGroup.isSubType("JFScreen")
+                currentGroup.callFunc("OnScreenHidden")
+            end if
+
+        end if
+
+        m.groups.push(newGroup)
+
+        if currentGroup <> invalid
+            m.content.replaceChild(newGroup, 0)
         else
-            currentGroup.setFocus(false)
+            m.content.appendChild(newGroup)
         end if
 
-        if currentGroup.isSubType("JFGroup")
-            unregisterOverhangData(currentGroup)
+        if newGroup.isSubType("JFScreen")
+            newGroup.callFunc("OnScreenShown")
         end if
 
-        currentGroup.visible = false
+        'observe info about new group, set overhang title, etc.
+        if newGroup.isSubType("JFGroup")
+            registerOverhangData(newGroup)
 
-        if currentGroup.isSubType("JFScreen")
-            currentGroup.callFunc("OnScreenHidden")
-        end if
-
-    end if
-
-    m.groups.push(newGroup)
-
-    if currentGroup <> invalid
-        m.content.replaceChild(newGroup, 0)
-    else
-        m.content.appendChild(newGroup)
-    end if
-
-    if newGroup.isSubType("JFScreen")
-        newGroup.callFunc("OnScreenShown")
-    end if
-
-    'observe info about new group, set overhang title, etc.
-    if newGroup.isSubType("JFGroup")
-        registerOverhangData(newGroup)
-
-        ' Some groups set focus to a specific component within init(), so we don't want to
-        ' change if that is the case.
-        if newGroup.isInFocusChain() = false
+            ' Some groups set focus to a specific component within init(), so we don't want to
+            ' change if that is the case.
+            if newGroup.isInFocusChain() = false
+                newGroup.setFocus(true)
+            end if
+        else if newGroup.isSubType("JFVideo")
             newGroup.setFocus(true)
+            newGroup.control = "play"
+            m.overhang.visible = false
         end if
-    else if newGroup.isSubType("JFVideo")
-        newGroup.setFocus(true)
-        newGroup.control = "play"
-        m.overhang.visible = false
+    else
+        currentGroup.focusedChild.setFocus(true)
     end if
+
 end sub
 
 '
@@ -142,6 +147,12 @@ end sub
 ' Clear previous scene from group stack
 sub clearPreviousScene()
     m.groups.pop()
+end sub
+
+'
+' Delete scene from group stack at passed index
+sub deleteSceneAtIndex(index = 1)
+    m.groups.Delete(index)
 end sub
 
 '

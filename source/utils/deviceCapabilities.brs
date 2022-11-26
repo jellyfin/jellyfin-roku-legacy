@@ -177,7 +177,7 @@ end function
 
 function GetDirectPlayProfiles() as object
 
-    mp4Video = "h264"
+    mp4Video = "h264,mpeg4"
     mp4Audio = "mp3,pcm,lpcm,wav"
     mkvVideo = "h264,vp8"
     mkvAudio = "mp3,pcm,lpcm,wav"

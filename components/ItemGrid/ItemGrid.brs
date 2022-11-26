@@ -164,25 +164,16 @@ sub loadInitialItems()
         m.loadItemsTask.itemId = m.top.parentItem.Id
     else if getCollectionType() = "music"
         ' Default Settings
+        m.loadItemsTask.recursive = true
+        m.itemGrid.itemSize = "[290, 290]"
 
-        if m.voiceBox.text <> ""
-            m.loadItemsTask.recursive = true
-        else
-            m.loadItemsTask.recursive = false
-            m.itemGrid.itemSize = "[290, 290]"
-        end if
-
-        m.loadItemsTask.itemType = "MusicArtist,MusicAlbum"
+        m.loadItemsTask.itemType = "MusicArtist"
         m.loadItemsTask.itemId = m.top.parentItem.Id
 
         m.view = get_user_setting("display.music.view")
 
-        if m.view = "music-artist"
-            m.loadItemsTask.recursive = true
-            m.loadItemsTask.itemType = "MusicArtist"
-        else if m.view = "music-album"
+        if m.view = "music-album"
             m.loadItemsTask.itemType = "MusicAlbum"
-            m.loadItemsTask.recursive = true
         end if
     else if m.top.parentItem.collectionType = "livetv"
         m.loadItemsTask.itemType = "TvChannel"
@@ -321,7 +312,6 @@ end sub
 ' Set Music view, sort, and filter options
 sub setMusicOptions(options)
     options.views = [
-        { "Title": tr("Default"), "Name": "music-default" },
         { "Title": tr("Artists"), "Name": "music-artist" },
         { "Title": tr("Albums"), "Name": "music-album" },
     ]
@@ -610,13 +600,7 @@ sub optionsClosed()
 
     if m.top.parentItem.collectionType = "music"
         if m.options.view <> m.view
-            if m.options.view = "music-artist"
-                m.view = "music-artist"
-            else if m.options.view = "music-album"
-                m.view = "music-album"
-            else
-                m.view = "music-default"
-            end if
+            m.view = m.options.view
             set_user_setting("display.music.view", m.view)
             reload = true
         end if
@@ -805,6 +789,12 @@ sub updateTitle()
     end if
     if m.top.alphaSelected <> ""
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered by ") + m.loadItemsTask.nameStartsWith + ")"
+    end if
+
+    if m.view = "music-artist"
+        m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Artists"))
+    else if m.view = "music-album"
+        m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Albums"))
     end if
 
     if m.options.view = "Networks" or m.view = "Networks"

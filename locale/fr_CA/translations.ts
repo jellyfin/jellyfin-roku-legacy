@@ -114,7 +114,7 @@
     </message>
     <message>
         <source>Enter a username</source>
-        <translation>Entrez votre nom d'utilisateur</translation>
+        <translation>Entrez votre nom d&apos;utilisateur</translation>
     </message>
     <message>
         <source>Enter a password</source>
@@ -1083,6 +1083,46 @@
         <source>...or enter server URL manually:</source>
         <translation>...ou entrer l&apos;adresse URL du serveur manuellement:</translation>
         <extracomment>Instructions on initial app launch when the user is asked to manually enter a server URL</extracomment>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>Une erreur s&apos;est produite lors de la lecture de cet élément.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Il y a eu une erreur pendant la recherche de donnnées pour cet item provenant du serveur.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Erreur durant la lecture</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Erreur lors de la récupération du contenu</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation type="unfinished">Jouant maintenant</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Effacer sauvegardés</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Enregistrer les identifiants ?</translation>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Se déconnecter</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Changer de serveur</translation>
     </message>
 </context>
 </TS>

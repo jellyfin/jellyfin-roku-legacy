@@ -13,13 +13,6 @@ sub Main (args as dynamic) as void
     WriteAsciiFile("tmp:/scene.temp", "")
     MoveFile("tmp:/scene.temp", "tmp:/scene")
 
-    ' Temporary code to migrate MPEG2 setting from device setting to user setting
-    ' Added for 1.4.13 release and should probably be removed for 1.4.15
-    if get_setting("playback.mpeg2") <> invalid and registry_read("playback.mpeg2", get_setting("active_user")) = invalid
-        set_user_setting("playback.mpeg2", get_setting("playback.mpeg2"))
-    end if
-    ' End Temporary code
-
     m.port = CreateObject("roMessagePort")
     m.screen.setMessagePort(m.port)
     m.scene = m.screen.CreateScene("JFScene")
@@ -112,10 +105,24 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "selectedItem")
             ' If you select a library from ANYWHERE, follow this flow
             selectedItem = msg.getData()
+
             if selectedItem.json.Type = "Playlist"
                 group = CreatePlaylistGroup(selectedItem.json)
                 'sceneManager.callFunc("pushScene", group)
             else if selectedItem.type = "CollectionFolder" or selectedItem.type = "UserView" or selectedItem.type = "Folder" or selectedItem.type = "Channel" or selectedItem.type = "Boxset"
+            m.selectedItemType = selectedItem.type
+            '
+            if selectedItem.type = "CollectionFolder"
+                if selectedItem.collectionType = "movies"
+                    group = CreateMovieLibraryView(selectedItem)
+                else
+                    group = CreateItemGrid(selectedItem)
+                end if
+                sceneManager.callFunc("pushScene", group)
+            else if selectedItem.type = "Folder" and selectedItem.json.type = "Genre"
+                group = CreateMovieLibraryView(selectedItem)
+                sceneManager.callFunc("pushScene", group)
+            else if selectedItem.type = "UserView" or selectedItem.type = "Folder" or selectedItem.type = "Channel" or selectedItem.type = "Boxset"
                 group = CreateItemGrid(selectedItem)
                 sceneManager.callFunc("pushScene", group)
             else if selectedItem.type = "Episode"
@@ -132,6 +139,8 @@ sub Main (args as dynamic) as void
                 end if
             else if selectedItem.type = "Series"
                 group = CreateSeriesDetailsGroup(selectedItem.json)
+            else if selectedItem.type = "Season"
+                group = CreateSeasonDetailsGroupByID(selectedItem.json.SeriesId, selectedItem.id)
             else if selectedItem.type = "Movie"
                 ' open movie detail page
                 group = CreateMovieDetailsGroup(selectedItem)
@@ -164,6 +173,9 @@ sub Main (args as dynamic) as void
                 ' Nothing to do here, handled in ItemGrid
             else if selectedItem.type = "MusicArtist"
                 group = CreateArtistView(selectedItem.json)
+                if not isValid(group)
+                    message_dialog(tr("Unable to find any albums or songs belonging to this artist"))
+                end if
             else if selectedItem.type = "MusicAlbum"
                 group = CreateAlbumView(selectedItem.json)
             else if selectedItem.type = "Audio" or selectedItem.type = "Song" or selectedItem.type = "AudioBook"
@@ -193,6 +205,12 @@ sub Main (args as dynamic) as void
             albums = msg.getRoSGNode()
             node = albums.musicArtistAlbumData.items[ptr]
             group = CreateAlbumView(node)
+        else if isNodeEvent(msg, "appearsOnSelected")
+            ' If you select a Music Album from ANYWHERE, follow this flow
+            ptr = msg.getData()
+            albums = msg.getRoSGNode()
+            node = albums.musicArtistAppearsOnData.items[ptr]
+            group = CreateAlbumView(node)
         else if isNodeEvent(msg, "playSong")
             ' User has selected audio they want us to play
             selectedIndex = msg.getData()
@@ -216,13 +234,26 @@ sub Main (args as dynamic) as void
             if isValid(m.spinner)
                 m.spinner.visible = true
             end if
+
+            group = invalid
+
+            ' Create instant mix based on selected album
             if isValid(screenContent.albumData)
-                group = CreateInstantMixGroup(screenContent.albumData.items)
-            else if isValid(screenContent.pageContent)
-                group = CreateInstantMixGroup([{ id: screenContent.musicArtistAlbumData.items[0].json.id }])
+                if isValid(screenContent.albumData.items)
+                    if screenContent.albumData.items.count() > 0
+                        group = CreateInstantMixGroup(screenContent.albumData.items)
+                    end if
+                end if
             end if
+
+            ' Create instant mix based on selected artist
+            if not isValid(group)
+                group = CreateInstantMixGroup([{ id: screenContent.pageContent.id }])
+            end if
+
         else if isNodeEvent(msg, "episodeSelected")
             ' If you select a TV Episode from ANYWHERE, follow this flow
+            m.selectedItemType = "Episode"
             node = getMsgPicker(msg, "picker")
             video_id = node.id
             if node.selectedAudioStreamIndex <> invalid and node.selectedAudioStreamIndex > 1
@@ -252,6 +283,7 @@ sub Main (args as dynamic) as void
             node = getMsgPicker(msg)
             ' TODO - swap this based on target.mediatype
             ' types: [ Series (Show), Episode, Movie, Audio, Person, Studio, MusicArtist ]
+            m.selectedItemType = node.type
             if node.type = "Series"
                 group = CreateSeriesDetailsGroup(node)
             else if node.type = "Movie"
@@ -313,7 +345,7 @@ sub Main (args as dynamic) as void
 
                 video_id = trailerData[0].id
 
-                video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx)
+                video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx, false, false)
                 if video <> invalid and video.errorMsg <> "introaborted"
                     sceneManager.callFunc("pushScene", video)
                 end if
@@ -390,12 +422,18 @@ sub Main (args as dynamic) as void
                     changeSubtitleDuringPlayback(trackSelected)
                 end if
             end if
+        else if isNodeEvent(msg, "selectPlaybackInfoPressed")
+            node = m.scene.focusedChild
+            if node.focusedChild <> invalid and node.focusedChild.isSubType("JFVideo")
+                info = GetPlaybackInfo()
+                show_dialog(tr("Playback Information"), info)
+            end if
         else if isNodeEvent(msg, "state")
             node = msg.getRoSGNode()
-            if selectedItem.Type = "TvChannel" and node.state = "finished"
+            if m.selectedItemType = "TvChannel" and node.state = "finished"
                 video = CreateVideoPlayerGroup(node.id)
                 m.global.sceneManager.callFunc("pushScene", video)
-                m.global.sceneManager.callFunc("clearPreviousScene")
+                m.global.sceneManager.callFunc("deleteSceneAtIndex", 2)
             else if node.state = "finished"
                 node.control = "stop"
                 '
@@ -422,12 +460,7 @@ sub Main (args as dynamic) as void
                         autoPlayNextEpisode(node.id, node.showID)
                     end if
                 end if
-                'else if isNodeEvent(msg, "selectedExtra")
-                'rl = msg.getData()
-                'sel = rl.rowItemSelected
-                '? "msg.getfield():" + msg.getField()
-                'stop
-                'CreatePersonView(msg.getData())
+
             else if type(msg) = "roDeviceInfoEvent"
                 event = msg.GetInfo()
                 group = sceneManager.callFunc("getActiveScene")
@@ -442,6 +475,16 @@ sub Main (args as dynamic) as void
                 else
                     print "Unhandled roDeviceInfoEvent:"
                     print msg.GetInfo()
+            end if
+        else if type(msg) = "roDeviceInfoEvent"
+            event = msg.GetInfo()
+            group = sceneManager.callFunc("getActiveScene")
+            if event.exitedScreensaver = true
+                sceneManager.callFunc("resetTime")
+                if group.subtype() = "Home"
+                    currentTime = CreateObject("roDateTime").AsSeconds()
+                    group.timeLastRefresh = currentTime
+                    group.callFunc("refresh")
                 end if
             else if type(msg) = "roInputEvent"
                 if msg.IsInput()

@@ -3479,5 +3479,178 @@
         <source>Save Credentials?</source>
         <translation>Uložit přihlašovací údaje?</translation>
     </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>Tato %1 neobsahuje žádné položky</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Honocení kritiků</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>Hodnocení IMDb</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Název</translation>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Nyní</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Smazat uložené</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Uložit přihlašovací údaje?</translation>
+    </message>
+    <message>
+        <source>direct</source>
+        <translation>přímý</translation>
+    </message>
+    <message>
+        <source>Audio Codec</source>
+        <translation>Audio kodek</translation>
+    </message>
+    <message>
+        <source>Video Codec</source>
+        <translation>Video kodek</translation>
+    </message>
+    <message>
+        <source>Reason</source>
+        <translation>Důvod</translation>
+    </message>
+    <message>
+        <source>Transcoding Information</source>
+        <translation>Informace o překódování</translation>
+    </message>
+    <message>
+        <source>Playback Information</source>
+        <translation>Informace o přehrávání</translation>
+    </message>
+    <message>
+        <source>Set the maximum amount of days a show should stay in the &apos;Next Up&apos; list without watching it.</source>
+        <translation>Nastavení maximálního počtu dní, pro setrvání pořadu v seznamu &quot;Další díly&quot;, aniž by byl zhlédnut.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>Max Days Next Up</source>
+        <translation>Maximum dní pro další díly</translation>
+        <extracomment>Option Title in user setting screen</extracomment>
+    </message>
+    <message>
+        <source>Options for Home Page.</source>
+        <translation>Možností domovské stránky.</translation>
+        <extracomment>Description for Home Page user settings.</extracomment>
+    </message>
+    <message>
+        <source>Home Page</source>
+        <translation>Domovská stránka</translation>
+    </message>
+    <message>
+        <source>Settings relating to how the application looks.</source>
+        <translation>Nastavení související se vzhledem aplikace.</translation>
+    </message>
+    <message>
+        <source>Settings relating to playback and supported codec and media types.</source>
+        <translation>Nastavení, která se týkají přehrávání, podporovanému kodeku a typům médií.</translation>
+    </message>
+    <message>
+        <source>Play Trailer</source>
+        <translation>Přehrát trailer</translation>
+    </message>
+    <message>
+        <source>Cinema Mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.</source>
+        <translation>Režim Cinema přináší zážitek z kina přímo do vašeho obývacího pokoje díky možnosti přehrávání vlastních úvodů před hlavním titulem.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>Cinema Mode</source>
+        <translation>Režim Cinema</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
+    <message>
+        <source>Use generated splashscreen image as Jellyfin&apos;s home background. Jellyfin will need to be closed and reopened for change to take effect.</source>
+        <translation>Použijte vygenerovaný obrázek úvodní obrazovky jako pozadí domovské stránky Jellyfin. Aby se změna projevila, bude třeba Jellyfin zavřít a znovu otevřít.</translation>
+        <extracomment>Description for option in Setting Screen</extracomment>
+    </message>
+    <message>
+        <source>Use generated splashscreen image as Jellyfin&apos;s screensaver background. Jellyfin will need to be closed and reopened for change to take effect.</source>
+        <translation>Použijte vygenerovaný obrázek úvodní obrazovky jako pozadí spořiče obrazovky Jellyfin. Aby se změna projevila, bude třeba Jellyfin zavřít a znovu otevřít.</translation>
+    </message>
+    <message>
+        <source>If enabled, images of unwatched episodes will be blurred.</source>
+        <translation>Pokud je povoleno, obrázky nezobrazených epizod budou zobrazeny rozmazaně.</translation>
+    </message>
+    <message>
+        <source>Hide Taglines</source>
+        <translation>Skrýt slogany</translation>
+        <extracomment>Option Title in user setting screen</extracomment>
+    </message>
+    <message>
+        <source>Options for Details pages.</source>
+        <translation>Možnosti pro stránky s podrobnostmi.</translation>
+        <extracomment>Description for Details page user settings.</extracomment>
+    </message>
+    <message>
+        <source>Details Page</source>
+        <translation>Stránka s podrobnostmi</translation>
+    </message>
+    <message>
+        <source>Use the replay button to slowly animate to the first item in the folder. (If disabled, the folder will reset to the first item immediately).</source>
+        <translation>Pomocí tlačítka pro přehrávání se můžete pomalu pohybovat k první položce ve složce. (Pokud je vypnuto, složka se znovu hned nastaví na první položku).</translation>
+        <extracomment>Description for option in Setting Screen</extracomment>
+    </message>
+    <message>
+        <source>(Dialog will close automatically)</source>
+        <translation>(Dialog se automaticky zavře)</translation>
+    </message>
+    <message>
+        <source>Here is your Quick Connect code:</source>
+        <translation>Zde je Váš kód pro rychlé připojení:</translation>
+    </message>
+    <message>
+        <source>Quick Connect</source>
+        <translation>Rychle připojit</translation>
+    </message>
+    <message>
+        <source>%1 of %2</source>
+        <translation>%1 z %2</translation>
+        <extracomment>Item position and count.  %1 = current item.  %2 = total number of items</extracomment>
+    </message>
+    <message>
+        <source>You can search for Titles, People, Live TV Channels and more</source>
+        <translation>Můžete hledat názvy, osoby, kanály živého vysílání a mnohem více</translation>
+        <extracomment>Help text in search results</extracomment>
+    </message>
+    <message>
+        <source>Search now</source>
+        <translation>Hledat teď</translation>
+        <extracomment>Help text in search Box</extracomment>
+    </message>
+    <message>
+        <source>Use voice remote to search</source>
+        <translation>K hledání použít hlasové ovládání</translation>
+        <extracomment>Help text in search voice text box</extracomment>
+    </message>
+    <message>
+        <source>Go to episode</source>
+        <translation>Přejít k epizodě</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Episode Detail Page</extracomment>
+    </message>
+    <message>
+        <source>Level</source>
+        <translation>Úroveň</translation>
+        <extracomment>Video profile level</extracomment>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Uložit přihlašovací údaje?</translation>
+    </message>
 </context>
 </TS>

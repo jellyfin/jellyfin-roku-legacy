@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="Section" extends="JFGroup">
+    <children>
+        <Animation id="showFromBottomAnimation" duration="0.5" repeat="false">
+            <Vector2DFieldInterpolator id="showFromBottomPosition" key="[0.0, 1.0]" keyValue="[[0, 750], [0, 0]]" fieldToInterp="" />
+            <FloatFieldInterpolator id="showFromBottomOpacity" key="[0.0, 1.0]" keyValue="[0.55, 0.95]" fieldToInterp="" />
+        </Animation>
+        <Animation id="showFromTopAnimation" duration="0.5" repeat="false">
+            <Vector2DFieldInterpolator id="showFromTopPosition" key="[0.0, 1.0]" keyValue="[[0, -1080], [0, 0]]" fieldToInterp="" />
+            <FloatFieldInterpolator id="showFromTopOpacity" key="[0.0, 1.0]" keyValue="[0.55, 0.95]" fieldToInterp="" />
+        </Animation>
+        <Animation id="scrollOffBottomAnimation" duration="0.5" repeat="false">
+            <Vector2DFieldInterpolator id="scrollOffBottomPosition" key="[0.0, 1.0]" keyValue="[]" fieldToInterp="" />
+            <FloatFieldInterpolator id="scrollOffBottomOpacity" key="[0.0, 1.0]" keyValue="[0.95, 0.55]" fieldToInterp="" />
+        </Animation>
+        <Animation id="scrollOffTopAnimation" duration="0.5" repeat="false">
+            <Vector2DFieldInterpolator id="scrollOffTopPosition" key="[0.0, 1.0]" keyValue="[[0, 0], [0, -1080]]" fieldToInterp="" />
+            <FloatFieldInterpolator id="scrollOffTopOpacity" key="[0.0, 1.0]" keyValue="[0.95, 0.55]" fieldToInterp="" />
+        </Animation>
+        <Animation id="scrollUpToOnDeckAnimation" duration="0.5" repeat="false">
+            <Vector2DFieldInterpolator id="scrollUpToOnDeckPosition" key="[0.0, 1.0]" keyValue="[[0, 1100], [0, 950]]" fieldToInterp="" />
+        </Animation>
+        <Animation id="scrollDownToOnDeckAnimation" duration="0.5" repeat="false">
+            <Vector2DFieldInterpolator id="scrollDownToOnDeckPosition" key="[0.0, 1.0]" keyValue="[[0, 0], [0, 950]]" fieldToInterp="" />
+        </Animation>
+        <Animation id="scrollOffOnDeckAnimation" duration="0.5" repeat="false">
+            <Vector2DFieldInterpolator id="scrollOffOnDeckPosition" key="[0.0, 1.0]" keyValue="[[0, 950], [0, 1080]]" fieldToInterp="" />
+        </Animation>
+    </children>
+    <interface>
+        <field id="defaultFocusID" type="string" />
+        <function name="showFromTop" />
+        <function name="showFromBottom" />
+        <function name="scrollOffTop" />
+        <function name="scrollOffBottom" />
+        <function name="scrollUpToOnDeck" />
+        <function name="scrollDownToOnDeck" />
+        <function name="scrollOffOnDeck" />
+    </interface>
+    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+    <script type="text/brightscript" uri="section.brs" />
+</component>

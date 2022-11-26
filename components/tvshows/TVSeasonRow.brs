@@ -20,7 +20,7 @@ sub updateSize()
     m.top.visible = true
 
     ' size of the whole row
-    m.top.itemSize = [1800, (itemHeight + 40)]
+    m.top.itemSize = [1680, (itemHeight + 40)]
     ' spacing between rows
     m.top.itemSpacing = [0, 0]
 

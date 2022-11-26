@@ -1614,5 +1614,104 @@
         <source>Save Credentials?</source>
         <translation>Guardar credenciales?</translation>
     </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Guardar Credenciales?</translation>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Error al recuperar contenido</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>Se ha encontrado un error mientras se reproducía este ítem.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Error al cargar datos del canal</translation>
+    </message>
+    <message>
+        <source>Movies</source>
+        <translation>Peliculas</translation>
+    </message>
+    <message>
+        <source>TV Shows</source>
+        <translation>Programa de TV</translation>
+    </message>
+    <message>
+        <source>today</source>
+        <translation>Hoy</translation>
+        <extracomment>Current day</extracomment>
+    </message>
+    <message>
+        <source>yesterday</source>
+        <translation>Ayer</translation>
+        <extracomment>Previous day</extracomment>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Error durante la reproducción</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Nombre</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Calificación de los Críticos</translation>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation>Lunes</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Cargando información del canal</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Borrado confirmado</translation>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Ocurrió un error al recuperar los datos para este ítem desde el servidor.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Unable to load Channel Data from the server</source>
+        <translation>No se pudo cargar los datos del canal desde el servidor</translation>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>Este %1 no contiene ítems</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>Calificación IMDb</translation>
+    </message>
+    <message>
+        <source>Special Features</source>
+        <translation>Funciones especiales</translation>
+        <message>
+            <source>Press &apos;OK&apos; to Close</source>
+            <translation>Press &apos;OK&apos; to Close</translation>
+        </message>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation>Mañana</translation>
+        <extracomment>Next day</extracomment>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Domingo</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
 </context>
 </TS>

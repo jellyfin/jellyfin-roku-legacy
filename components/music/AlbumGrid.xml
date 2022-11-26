@@ -2,7 +2,8 @@
 <component name="AlbumGrid" extends="PosterGrid">
   <interface>
     <field id="MusicArtistAlbumData" type="assocarray" onChange="getData" />
-    <field id="infocus" type="boolean" />
+    <field id="escape" type="string" alwaysNotify="true" />
   </interface>
   <script type="text/brightscript" uri="AlbumGrid.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>

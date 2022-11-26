@@ -12,4 +12,5 @@
   <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>

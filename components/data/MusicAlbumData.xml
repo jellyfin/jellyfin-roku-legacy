@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="MusicAlbumData" extends="ContentNode">
+<component name="MusicAlbumData" extends="JFContentItem">
   <interface>
     <field id="id" type="string" />
     <field id="title" type="string" />
     <field id="image" type="node" onChange="setPoster" />
-    <field id="posterURL" type="string" />
     <field id="overview" type="string" />
-    <field id="type" type="string" value="Episode" />
-    <field id="json" type="assocarray" onChange="setFields" />
   </interface>
   <script type="text/brightscript" uri="MusicAlbumData.brs" />
 </component>

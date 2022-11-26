@@ -1,6 +1,5 @@
 sub init()
     getData()
-    m.top.infocus = false
 end sub
 
 function getData()
@@ -16,10 +15,15 @@ function getData()
 
     for each album in albumData.items
         gridAlbum = CreateObject("roSGNode", "ContentNode")
+
+        if not isValid(album.posterURL) or album.posterURL = ""
+            album.posterURL = "pkg:/images/icons/album.png"
+        end if
+
         gridAlbum.shortdescriptionline1 = album.title
         gridAlbum.HDGRIDPOSTERURL = album.posterURL
         gridAlbum.hdposterurl = album.posterURL
-        gridAlbum.SDGRIDPOSTERURL = album.SDGRIDPOSTERURL
+        gridAlbum.SDGRIDPOSTERURL = album.posterURL
         gridAlbum.sdposterurl = album.posterURL
 
         data.appendChild(gridAlbum)
@@ -35,7 +39,26 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     if key = "up"
         if m.top.itemFocused <= 4
-            m.top.infocus = false
+            m.top.escape = key
+            return true
+        end if
+    else if key = "left"
+        if m.top.itemFocused mod 5 = 0
+            m.top.escape = key
+            return true
+        end if
+    else if key = "right"
+        if m.top.itemFocused + 1 mod 5 = 0
+            m.top.escape = key
+            return true
+        end if
+    else if key = "down"
+        totalCount = m.top.MusicArtistAlbumData.items.count()
+        totalRows = div_ceiling(totalCount, 5)
+        currentRow = div_ceiling(m.top.itemFocused + 1, 5)
+
+        if currentRow = totalRows
+            m.top.escape = key
             return true
         end if
     end if

@@ -288,6 +288,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         gridGrp.setFocus(true)
         return true
     else if key = "back"
+        m.LoadChannelsTask.control = "stop"
         m.global.sceneManager.callFunc("popScene")
         return true
     end if

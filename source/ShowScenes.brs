@@ -377,13 +377,26 @@ end function
 ' Shows details on selected artist. Bio, image, and list of available albums
 function CreateArtistView(musicartist)
     musicData = MusicAlbumList(musicartist.id)
+    appearsOnData = AppearsOnList(musicartist.id)
 
-    ' User only has songs under artists
-    if musicData = invalid or musicData.Items.Count() = 0
+    if (musicData = invalid or musicData.Items.Count() = 0) and (appearsOnData = invalid or appearsOnData.Items.Count() = 0)
         ' Just songs under artists...
         group = CreateObject("roSGNode", "AlbumView")
         group.pageContent = ItemMetaData(musicartist.id)
-        group.albumData = MusicSongList(musicartist.id)
+
+        ' Lookup songs based on artist id
+        songList = GetSongsByArtist(musicartist.id)
+
+        if not isValid(songList)
+            ' Lookup songs based on folder parent / child relationship
+            songList = MusicSongList(musicartist.id)
+        end if
+
+        if not isValid(songList)
+            return invalid
+        end if
+
+        group.albumData = songList
         group.observeField("playSong", m.port)
         group.observeField("playAllSelected", m.port)
         group.observeField("instantMixSelected", m.port)
@@ -392,9 +405,13 @@ function CreateArtistView(musicartist)
         group = CreateObject("roSGNode", "ArtistView")
         group.pageContent = ItemMetaData(musicartist.id)
         group.musicArtistAlbumData = musicData
+        group.musicArtistAppearsOnData = appearsOnData
+        group.artistOverview = ArtistOverview(musicartist.name)
+
         group.observeField("musicAlbumSelected", m.port)
         group.observeField("playArtistSelected", m.port)
         group.observeField("instantMixSelected", m.port)
+        group.observeField("appearsOnSelected", m.port)
     end if
 
     m.global.sceneManager.callFunc("pushScene", group)
@@ -449,8 +466,31 @@ function CreatePlaylistGroup(playlist_id)
     return group
 end function
 
+
+function CreateSeasonDetailsGroupByID(seriesID, seasonID)
+    group = CreateObject("roSGNode", "TVEpisodes")
+    group.optionsAvailable = false
+    m.global.sceneManager.callFunc("pushScene", group)
+
+    group.seasonData = ItemMetaData(seasonID).json
+    group.objects = TVEpisodes(seriesID, seasonID)
+
+    group.observeField("episodeSelected", m.port)
+    group.observeField("quickPlayNode", m.port)
+
+    return group
+end function
+
 function CreateItemGrid(libraryItem)
     group = CreateObject("roSGNode", "ItemGrid")
+    group.parentItem = libraryItem
+    group.optionsAvailable = true
+    group.observeField("selectedItem", m.port)
+    return group
+end function
+
+function CreateMovieLibraryView(libraryItem)
+    group = CreateObject("roSGNode", "MovieLibraryView")
     group.parentItem = libraryItem
     group.optionsAvailable = true
     group.observeField("selectedItem", m.port)
@@ -480,6 +520,7 @@ function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_
     if video = invalid then return invalid
     if video.errorMsg = "introaborted" then return video
     video.observeField("selectSubtitlePressed", m.port)
+    video.observeField("selectPlaybackInfoPressed", m.port)
     video.observeField("state", m.port)
 
     return video
@@ -542,8 +583,6 @@ function CreateArtistMixGroup(artistID)
     for each song in songList.items
         songIDArray.push(song.id)
     end for
-
-    songIDArray.shift()
 
     group.pageContent = songIDArray
     group.musicArtistAlbumData = songList.items
