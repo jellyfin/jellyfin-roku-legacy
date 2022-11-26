@@ -105,24 +105,25 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "selectedItem")
             ' If you select a library from ANYWHERE, follow this flow
             selectedItem = msg.getData()
-
+            print "selectedItem.type: " selectedItem.collectionType
+            print "selected item: " selectedItem
             if selectedItem.json.Type = "Playlist"
                 group = CreatePlaylistGroup(selectedItem.json)
                 'sceneManager.callFunc("pushScene", group)
             else if selectedItem.type = "CollectionFolder" or selectedItem.type = "UserView" or selectedItem.type = "Folder" or selectedItem.type = "Channel" or selectedItem.type = "Boxset"
-            m.selectedItemType = selectedItem.type
-            '
-            if selectedItem.type = "CollectionFolder"
+                m.selectedItemType = selectedItem.type
+                '
                 if selectedItem.collectionType = "movies"
                     group = CreateMovieLibraryView(selectedItem)
                 else
                     group = CreateItemGrid(selectedItem)
                 end if
                 sceneManager.callFunc("pushScene", group)
+
             else if selectedItem.type = "Folder" and selectedItem.json.type = "Genre"
                 group = CreateMovieLibraryView(selectedItem)
                 sceneManager.callFunc("pushScene", group)
-            else if selectedItem.type = "UserView" or selectedItem.type = "Folder" or selectedItem.type = "Channel" or selectedItem.type = "Boxset"
+            else if selectedItem.type = "UserView" or selectedItem.type = "Folder" or selectedItem.type = "Channel" or selectedItem.type = "Boxset" or selectedItem.collectionType = "musicvideos"
                 group = CreateItemGrid(selectedItem)
                 sceneManager.callFunc("pushScene", group)
             else if selectedItem.type = "Episode"
@@ -250,7 +251,6 @@ sub Main (args as dynamic) as void
             if not isValid(group)
                 group = CreateInstantMixGroup([{ id: screenContent.pageContent.id }])
             end if
-
         else if isNodeEvent(msg, "episodeSelected")
             ' If you select a TV Episode from ANYWHERE, follow this flow
             m.selectedItemType = "Episode"
@@ -284,6 +284,7 @@ sub Main (args as dynamic) as void
             ' TODO - swap this based on target.mediatype
             ' types: [ Series (Show), Episode, Movie, Audio, Person, Studio, MusicArtist ]
             m.selectedItemType = node.type
+            print "Selected Item: "node.type
             if node.type = "Series"
                 group = CreateSeriesDetailsGroup(node)
             else if node.type = "Movie"
@@ -460,7 +461,6 @@ sub Main (args as dynamic) as void
                         autoPlayNextEpisode(node.id, node.showID)
                     end if
                 end if
-
             else if type(msg) = "roDeviceInfoEvent"
                 event = msg.GetInfo()
                 group = sceneManager.callFunc("getActiveScene")
@@ -475,38 +475,39 @@ sub Main (args as dynamic) as void
                 else
                     print "Unhandled roDeviceInfoEvent:"
                     print msg.GetInfo()
-            end if
-        else if type(msg) = "roDeviceInfoEvent"
-            event = msg.GetInfo()
-            group = sceneManager.callFunc("getActiveScene")
-            if event.exitedScreensaver = true
-                sceneManager.callFunc("resetTime")
-                if group.subtype() = "Home"
-                    currentTime = CreateObject("roDateTime").AsSeconds()
-                    group.timeLastRefresh = currentTime
-                    group.callFunc("refresh")
                 end if
-            else if type(msg) = "roInputEvent"
-                if msg.IsInput()
-                    info = msg.GetInfo()
-                    if info.DoesExist("mediatype") and info.DoesExist("contentid")
-                        video = CreateVideoPlayerGroup(info.contentId)
-                        if video <> invalid and video.errorMsg <> "introaborted"
-                            sceneManager.callFunc("pushScene", video)
-                        else
-                            dialog = createObject("roSGNode", "Dialog")
-                            dialog.id = "OKDialog"
-                            dialog.title = tr("Not found")
-                            dialog.message = tr("The requested content does not exist on the server")
-                            dialog.buttons = [tr("OK")]
-                            m.scene.dialog = dialog
-                            m.scene.dialog.observeField("buttonSelected", m.port)
+            else if type(msg) = "roDeviceInfoEvent"
+                event = msg.GetInfo()
+                group = sceneManager.callFunc("getActiveScene")
+                if event.exitedScreensaver = true
+                    sceneManager.callFunc("resetTime")
+                    if group.subtype() = "Home"
+                        currentTime = CreateObject("roDateTime").AsSeconds()
+                        group.timeLastRefresh = currentTime
+                        group.callFunc("refresh")
+                    end if
+                else if type(msg) = "roInputEvent"
+                    if msg.IsInput()
+                        info = msg.GetInfo()
+                        if info.DoesExist("mediatype") and info.DoesExist("contentid")
+                            video = CreateVideoPlayerGroup(info.contentId)
+                            if video <> invalid and video.errorMsg <> "introaborted"
+                                sceneManager.callFunc("pushScene", video)
+                            else
+                                dialog = createObject("roSGNode", "Dialog")
+                                dialog.id = "OKDialog"
+                                dialog.title = tr("Not found")
+                                dialog.message = tr("The requested content does not exist on the server")
+                                dialog.buttons = [tr("OK")]
+                                m.scene.dialog = dialog
+                                m.scene.dialog.observeField("buttonSelected", m.port)
+                            end if
                         end if
                     end if
+                else
+                    print "Unhandled " type(msg)
+                    print msg
                 end if
-            else
-                print "Unhandled " type(msg)
-                print msg
             end if
         end if
     end while

@@ -73,7 +73,6 @@ sub loadItems()
         params.append({ Filters: "IsFavorite" })
         params.append({ isFavorite: true })
     end if
-
     if m.top.ItemType <> ""
         params.append({ IncludeItemTypes: m.top.ItemType })
     end if
@@ -108,7 +107,9 @@ sub loadItems()
 
         for each item in data.Items
             tmp = invalid
+
             if item.Type = "Movie" or item.Type = "MusicVideo"
+
                 tmp = CreateObject("roSGNode", "MovieData")
             else if item.Type = "Series"
                 tmp = CreateObject("roSGNode", "SeriesData")

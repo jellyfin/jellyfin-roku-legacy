@@ -452,7 +452,7 @@ sub autoPlayNextPlaylistItem(playlistID as string, videoID)
         'urlParams.Append({ "Limit": 2 })
         resp = APIRequest(url, urlParams)
         data = getJson(resp)
-
+        NextVideoIndex = 0
         if data <> invalid
             ' setup new video node
             list = []

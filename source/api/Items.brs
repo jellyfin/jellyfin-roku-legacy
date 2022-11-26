@@ -153,7 +153,6 @@ function ItemMetaData(id as string)
 
         ' Try using song's parent for poster image
         tmp.image = PosterImage(data.ParentId)
-
         ' Song's parent poster image is no good, try using the song's poster image
         if tmp.image = invalid
             tmp.image = PosterImage(data.id)

@@ -77,7 +77,6 @@ end sub
 '
 'Load initial set of Data
 sub loadInitialItems()
-
     if m.top.parentItem.backdropUrl = ""
         SetBackground(m.top.parentItem.posterUrl)
     else if m.top.parentItem.backdropUrl <> invalid
@@ -193,6 +192,9 @@ sub loadInitialItems()
         m.loadItemsTask.itemId = m.top.parentItem.id
         m.itemGrid.itemSize = "[290, 290]"
         m.itemGrid.itemSpacing = "[ 0, 20]"
+    else if m.top.parentItem.collectionType = "musicvideos"
+        m.loadItemsTask.recursive = false
+        m.loadItemsTask.itemId = m.top.parentItem.id
     else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
         ' Non-recursive, to not show subfolder contents
         m.loadItemsTask.recursive = true

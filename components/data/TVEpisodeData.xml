@@ -7,6 +7,7 @@
     <field id="posterURL" type="string" />
     <field id="showID" type="string" />
     <field id="seasonID" type="string" />
+    <field id="parentfolder" type="string" />
     <field id="overview" type="string" />
     <field id="type" type="string" value="Episode" />
     <field id="json" type="assocarray" onChange="setFields" />

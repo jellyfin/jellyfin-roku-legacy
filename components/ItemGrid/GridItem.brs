@@ -33,7 +33,7 @@ sub itemContentChanged()
     itemData = m.top.itemContent
     if itemData = invalid then return
 
-    if itemData.type = "Movie"
+    if itemData.type = "Movie" or itemData.type = "MusicVideo"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
