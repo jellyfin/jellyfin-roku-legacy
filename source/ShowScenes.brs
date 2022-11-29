@@ -26,7 +26,6 @@ function CreateServerGroup()
 
     while true
         msg = wait(0, port)
-        print type(msg), msg
         if type(msg) = "roSGScreenEvent" and msg.isScreenClosed()
             return "false"
         else if isNodeEvent(msg, "backPressed")

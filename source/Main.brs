@@ -105,8 +105,6 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "selectedItem")
             ' If you select a library from ANYWHERE, follow this flow
             selectedItem = msg.getData()
-            print "selectedItem.type: " selectedItem.collectionType
-            print "selected item: " selectedItem
             if selectedItem.json.Type = "Playlist"
                 group = CreatePlaylistGroup(selectedItem.json)
                 'sceneManager.callFunc("pushScene", group)
@@ -284,7 +282,6 @@ sub Main (args as dynamic) as void
             ' TODO - swap this based on target.mediatype
             ' types: [ Series (Show), Episode, Movie, Audio, Person, Studio, MusicArtist ]
             m.selectedItemType = node.type
-            print "Selected Item: "node.type
             if node.type = "Series"
                 group = CreateSeriesDetailsGroup(node)
             else if node.type = "Movie"
@@ -474,7 +471,6 @@ sub Main (args as dynamic) as void
                     ' todo: add other screens to be refreshed - movie detail, tv series, episode list etc.
                 else
                     print "Unhandled roDeviceInfoEvent:"
-                    print msg.GetInfo()
                 end if
             else if type(msg) = "roDeviceInfoEvent"
                 event = msg.GetInfo()
@@ -506,7 +502,6 @@ sub Main (args as dynamic) as void
                     end if
                 else
                     print "Unhandled " type(msg)
-                    print msg
                 end if
             end if
         end if
@@ -537,7 +532,6 @@ function LoginFlow(startOver = false as boolean)
         m.serverSelection = CreateServerGroup()
         SendPerformanceBeacon("AppDialogComplete") ' Roku Performance monitoring - Dialog Closed
         if m.serverSelection = "backPressed"
-            print "backPressed"
             m.global.sceneManager.callFunc("clearScenes")
             return false
         end if

@@ -67,6 +67,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
             randomEpisode = Rnd(m.rows.getChild(0).objects.items.count()) - 1
             m.top.quickPlayNode = m.rows.getChild(0).objects.items[randomEpisode]
             return true
+        else if m.playAll.hasFocus()
+            m.top.quickPlayNode = m.rows.getChild(0).objects.items[0]
+            return true
         end if
     end if
 

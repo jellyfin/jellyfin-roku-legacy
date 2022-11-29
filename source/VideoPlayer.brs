@@ -470,7 +470,6 @@ sub autoPlayNextPlaylistItem(playlistID as string, videoID)
 
 
             if data.Items[NextVideoIndex].Type = "Audio"
-                ' print "Playing Audio = "data.Items[1]
                 nextVideo = CreateAudioPlayerGroup([data.Items[NextVideoIndex]])
             else
                 nextVideo = CreateVideoPlayerGroup(data.Items[NextVideoIndex].Id, invalid, 1, false, false)

@@ -248,6 +248,5 @@ end sub
 '
 ' Close currently displayed dialog
 sub dismiss_dialog()
-    print "Button Pressed"
     m.scene.dialog.close = true
 end sub
