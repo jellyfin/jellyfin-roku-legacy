@@ -82,7 +82,7 @@ sub itemContentChanged()
 
         m.posterText.height = 200
         m.posterText.width = 280
-    else if itemData.json.type = "MusicAlbum"
+    else if itemData.type = "MusicAlbum"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title
 
@@ -96,7 +96,7 @@ sub itemContentChanged()
 
         m.posterText.height = 200
         m.posterText.width = 280
-    else
+    else if itemData.type <> invalid
         print "Unhandled Grid Item Type: " + itemData.type
     end if
 

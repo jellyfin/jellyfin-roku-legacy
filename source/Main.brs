@@ -177,7 +177,11 @@ sub Main (args as dynamic) as void
                 group = CreateAudioPlayerGroup([selectedItem.json])
             else
                 ' TODO - switch on more node types
-                message_dialog("This type is not yet supported: " + selectedItem.type + ".")
+                if selectedItem.type <> invalid
+                    message_dialog("This type is not yet supported: " + selectedItem.type + ".")
+                else
+                    message_dialog("Type is invalid or unknown type is not supported in Main.brs.")
+                end if
             end if
         else if isNodeEvent(msg, "movieSelected")
             ' If you select a movie from ANYWHERE, follow this flow
