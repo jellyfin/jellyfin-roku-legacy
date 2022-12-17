@@ -1,9 +1,5 @@
 sub Main (args as dynamic) as void
 
-    ' If the Rooibos files are included in deployment, run tests
-    'bs:disable-next-line
-    if type(Rooibos__Init) = "Function" then Rooibos__Init()
-
     ' The main function that runs when the application is launched.
     m.screen = CreateObject("roSGScreen")
 
@@ -149,7 +145,12 @@ sub Main (args as dynamic) as void
                 dialog.title = tr("Loading Channel Data")
                 m.scene.dialog = dialog
 
-                video = CreateVideoPlayerGroup(video_id)
+                if LCase(selectedItem.subtype()) = "extrasdata"
+                    video = CreateVideoPlayerGroup(video_id, invalid, 1, false, true, false)
+                else
+                    video = CreateVideoPlayerGroup(video_id)
+                end if
+
                 dialog.close = true
 
                 if video <> invalid and video.errorMsg <> "introaborted"
@@ -327,9 +328,17 @@ sub Main (args as dynamic) as void
                     sceneManager.callFunc("pushScene", video)
                 end if
 
+                if group.lastfocus.id = "main_group"
+                    buttons = group.findNode("buttons")
+                    if isValid(buttons)
+                        group.lastfocus = group.findNode("buttons")
+                    end if
+                end if
+
                 if group.lastFocus <> invalid
                     group.lastFocus.setFocus(true)
                 end if
+
             else if btn <> invalid and btn.id = "trailer-button"
                 audio_stream_idx = 1
                 mediaSourceId = invalid

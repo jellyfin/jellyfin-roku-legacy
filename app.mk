@@ -163,13 +163,6 @@ package: prep_staging
 
 	@echo "*** packaging $(APPNAME)-$(BUILD) complete ***"
 
-prep_tests:
-	@mkdir -p $(STAGINGREL)/components/tests/; \
-	mkdir -p $(STAGINGREL)/source/tests/; \
-	cp -r $(SOURCEREL)/tests/components/* $(STAGINGREL)/components/tests/;\
-	cp -r $(SOURCEREL)/tests/source/* $(STAGINGREL)/source/tests/;\
-	./node_modules/.bin/rooibos-cli i tests/.rooibosrc.json
-
 prep_commit:
 	npm run format
 	npm ci

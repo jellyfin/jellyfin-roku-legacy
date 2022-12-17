@@ -201,6 +201,10 @@ sub updateContinueItems()
         row.title = tr("Continue Watching")
         itemSize = [464, 331]
         for each item in itemData
+            if item.json?.UserData?.PlayedPercentage <> invalid
+                item.PlayedPercentage = item.json.UserData.PlayedPercentage
+            end if
+
             item.usePoster = row.usePoster
             item.imageWidth = row.imageWidth
             row.appendChild(item)

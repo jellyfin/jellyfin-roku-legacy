@@ -18,6 +18,12 @@ sub itemContentChanged()
     m.title.text = indexNumber + item.title
     m.overview.text = item.overview
 
+    if itemData.PremiereDate <> invalid
+        airDate = CreateObject("roDateTime")
+        airDate.FromISO8601String(itemData.PremiereDate)
+        m.top.findNode("aired").text = tr("Aired") + ": " + airDate.AsDateString("short-month-no-weekday")
+    end if
+
     imageUrl = item.posterURL
 
     if get_user_setting("ui.tvshows.blurunwatched") = "true"
@@ -47,7 +53,8 @@ sub itemContentChanged()
         m.top.findNode("star").visible = true
         m.top.findNode("communityRating").text = str(int(itemData.communityRating * 10) / 10)
     else
-        m.top.findNode("star").visible = false
+
+        m.top.findnode("infoBar").removeChild(m.top.findnode("rating"))
     end if
 
     videoIdx = invalid

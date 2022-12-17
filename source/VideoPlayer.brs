@@ -1,8 +1,8 @@
-function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, forceTranscoding = false, showIntro = true)
+function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
     ' Get video controls and UI
     video = CreateObject("roSGNode", "JFVideo")
     video.id = id
-    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, forceTranscoding, showIntro)
+    AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, forceTranscoding, showIntro, allowResumeDialog)
 
     if video.errorMsg = "introaborted"
         return video
@@ -19,7 +19,7 @@ function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle
     return video
 end function
 
-sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false, showIntro = true)
+sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
     video.content = createObject("RoSGNode", "ContentNode")
     meta = ItemMetaData(video.id)
     m.videotype = meta.type
@@ -55,103 +55,105 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
 
     if playbackPosition = -1
         playbackPosition = meta.json.UserData.PlaybackPositionTicks
-        if playbackPosition > 0
-            dialogResult = startPlayBackOver(playbackPosition)
-            'Dialog returns -1 when back pressed, 0 for resume, and 1 for start over
-            if dialogResult = -1
-                'User pressed back, return invalid and don't load video
-                video.content = invalid
-                return
-            else if dialogResult = 1
-                'Start Over selected, change position to 0
-                playbackPosition = 0
-            else if dialogResult = 2
-                'Mark this item as watched, refresh the page, and return invalid so we don't load the video
-                MarkItemWatched(video.id)
-                video.content.watched = not video.content.watched
-                group = m.scene.focusedChild
-                group.timeLastRefresh = CreateObject("roDateTime").AsSeconds()
-                group.callFunc("refresh")
-                video.content = invalid
-                return
-            else if dialogResult = 3
-                'get series ID based off episiode ID
-                params = {
-                    ids: video.Id
-                }
-                url = Substitute("Users/{0}/Items/", get_setting("active_user"))
-                resp = APIRequest(url, params)
-                data = getJson(resp)
-                for each item in data.Items
-                    m.series_id = item.SeriesId
-                end for
-                'Get series json data
-                params = {
-                    ids: m.series_id
-                }
-                url = Substitute("Users/{0}/Items/", get_setting("active_user"))
-                resp = APIRequest(url, params)
-                data = getJson(resp)
-                for each item in data.Items
-                    m.tmp = item
-                end for
-                'Create Series Scene
-                CreateSeriesDetailsGroup(m.tmp)
-                video.content = invalid
-                return
+        if allowResumeDialog
+            if playbackPosition > 0
+                dialogResult = startPlayBackOver(playbackPosition)
+                'Dialog returns -1 when back pressed, 0 for resume, and 1 for start over
+                if dialogResult = -1
+                    'User pressed back, return invalid and don't load video
+                    video.content = invalid
+                    return
+                else if dialogResult = 1
+                    'Start Over selected, change position to 0
+                    playbackPosition = 0
+                else if dialogResult = 2
+                    'Mark this item as watched, refresh the page, and return invalid so we don't load the video
+                    MarkItemWatched(video.id)
+                    video.content.watched = not video.content.watched
+                    group = m.scene.focusedChild
+                    group.timeLastRefresh = CreateObject("roDateTime").AsSeconds()
+                    group.callFunc("refresh")
+                    video.content = invalid
+                    return
+                else if dialogResult = 3
+                    'get series ID based off episiode ID
+                    params = {
+                        ids: video.Id
+                    }
+                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    resp = APIRequest(url, params)
+                    data = getJson(resp)
+                    for each item in data.Items
+                        m.series_id = item.SeriesId
+                    end for
+                    'Get series json data
+                    params = {
+                        ids: m.series_id
+                    }
+                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    resp = APIRequest(url, params)
+                    data = getJson(resp)
+                    for each item in data.Items
+                        m.tmp = item
+                    end for
+                    'Create Series Scene
+                    CreateSeriesDetailsGroup(m.tmp)
+                    video.content = invalid
+                    return
 
-            else if dialogResult = 4
-                'get Season/Series ID based off episiode ID
-                params = {
-                    ids: video.Id
-                }
-                url = Substitute("Users/{0}/Items/", get_setting("active_user"))
-                resp = APIRequest(url, params)
-                data = getJson(resp)
-                for each item in data.Items
-                    m.season_id = item.SeasonId
-                    m.series_id = item.SeriesId
-                end for
-                'Get Series json data
-                params = {
-                    ids: m.season_id
-                }
-                url = Substitute("Users/{0}/Items/", get_setting("active_user"))
-                resp = APIRequest(url, params)
-                data = getJson(resp)
-                for each item in data.Items
-                    m.Season_tmp = item
-                end for
-                'Get Season json data
-                params = {
-                    ids: m.series_id
-                }
-                url = Substitute("Users/{0}/Items/", get_setting("active_user"))
-                resp = APIRequest(url, params)
-                data = getJson(resp)
-                for each item in data.Items
-                    m.Series_tmp = item
-                end for
-                'Create Season Scene
-                CreateSeasonDetailsGroup(m.Series_tmp, m.Season_tmp)
-                video.content = invalid
-                return
+                else if dialogResult = 4
+                    'get Season/Series ID based off episiode ID
+                    params = {
+                        ids: video.Id
+                    }
+                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    resp = APIRequest(url, params)
+                    data = getJson(resp)
+                    for each item in data.Items
+                        m.season_id = item.SeasonId
+                        m.series_id = item.SeriesId
+                    end for
+                    'Get Series json data
+                    params = {
+                        ids: m.season_id
+                    }
+                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    resp = APIRequest(url, params)
+                    data = getJson(resp)
+                    for each item in data.Items
+                        m.Season_tmp = item
+                    end for
+                    'Get Season json data
+                    params = {
+                        ids: m.series_id
+                    }
+                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    resp = APIRequest(url, params)
+                    data = getJson(resp)
+                    for each item in data.Items
+                        m.Series_tmp = item
+                    end for
+                    'Create Season Scene
+                    CreateSeasonDetailsGroup(m.Series_tmp, m.Season_tmp)
+                    video.content = invalid
+                    return
 
-            else if dialogResult = 5
-                'get  episiode ID
-                params = {
-                    ids: video.Id
-                }
-                url = Substitute("Users/{0}/Items/", get_setting("active_user"))
-                resp = APIRequest(url, params)
-                data = getJson(resp)
-                for each item in data.Items
-                    m.episode_id = item
-                end for
-                'Create Episode Scene
-                CreateMovieDetailsGroup(m.episode_id)
-                video.content = invalid
-                return
+                else if dialogResult = 5
+                    'get  episiode ID
+                    params = {
+                        ids: video.Id
+                    }
+                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    resp = APIRequest(url, params)
+                    data = getJson(resp)
+                    for each item in data.Items
+                        m.episode_id = item
+                    end for
+                    'Create Episode Scene
+                    CreateMovieDetailsGroup(m.episode_id)
+                    video.content = invalid
+                    return
+                end if
             end if
         end if
     end if
@@ -218,16 +220,20 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     fully_external = false
 
 
-    ' For h264 video, Roku spec states that it supports and Encoding level 4.1 and 4.2.
+    ' For h264/hevc video, Roku spec states that it supports specfic encoding levels
     ' The device can decode content with a Higher Encoding level but may play it back with certain
     ' artifacts. If the user preference is set, and the only reason the server says we need to
-    ' transcode is that the Envoding Level is not supported, then try to direct play but silently
+    ' transcode is that the Encoding Level is not supported, then try to direct play but silently
     ' fall back to the transcode if that fails.
-    if meta.live = false and get_user_setting("playback.tryDirect.h264ProfileLevel") = "true" and m.playbackInfo.MediaSources[0].TranscodingUrl <> invalid and forceTranscoding = false and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
-        transcodingReasons = getTranscodeReasons(m.playbackInfo.MediaSources[0].TranscodingUrl)
-        if transcodingReasons.Count() = 1 and transcodingReasons[0] = "VideoLevelNotSupported"
-            video.directPlaySupported = true
-            video.transcodeAvailable = true
+    if m.playbackInfo.MediaSources[0].MediaStreams.Count() > 0 and meta.live = false
+        tryDirectPlay = get_user_setting("playback.tryDirect.h264ProfileLevel") = "true" and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
+        tryDirectPlay = tryDirectPlay or (get_user_setting("playback.tryDirect.hevcProfileLevel") = "true" and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "hevc")
+        if tryDirectPlay and m.playbackInfo.MediaSources[0].TranscodingUrl <> invalid and forceTranscoding = false
+            transcodingReasons = getTranscodeReasons(m.playbackInfo.MediaSources[0].TranscodingUrl)
+            if transcodingReasons.Count() = 1 and transcodingReasons[0] = "VideoLevelNotSupported"
+                video.directPlaySupported = true
+                video.transcodeAvailable = true
+            end if
         end if
     end if
 

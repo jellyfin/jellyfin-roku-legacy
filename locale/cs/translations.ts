@@ -3652,5 +3652,9 @@
         <source>Save Credentials?</source>
         <translation>Uložit přihlašovací údaje?</translation>
     </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Uložit přihlašovací údaje?</translation>
+    </message>
 </context>
 </TS>

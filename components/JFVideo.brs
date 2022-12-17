@@ -222,7 +222,7 @@ end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
 
-    if key = "OK" and m.nextEpisodeButton.hasfocus() and m.top.trickPlayMode = "play"
+    if key = "OK" and m.nextEpisodeButton.hasfocus() and not m.top.trickPlayBar.visible
         m.top.state = "finished"
         hideNextEpisodeButton()
         return true

@@ -352,7 +352,7 @@ function CreateMovieDetailsGroup(movie)
 
     extras = group.findNode("extrasGrid")
     extras.observeField("selectedItem", m.port)
-    extras.callFunc("loadPeople", movie.json)
+    extras.callFunc("loadParts", movie.json)
 
     return group
 end function
@@ -369,7 +369,7 @@ function CreateSeriesDetailsGroup(series)
 
     extras = group.findNode("extrasGrid")
     extras.observeField("selectedItem", m.port)
-    extras.callFunc("loadPeople", group.itemcontent.json)
+    extras.callFunc("loadParts", group.itemcontent.json)
 
     return group
 end function
@@ -498,10 +498,10 @@ sub CreateSidePanel(buttons, options)
     group.options = options
 end sub
 
-function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_idx = 1, forceTranscoding = false, showIntro = true)
+function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_idx = 1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
 
     ' Video is Playing
-    video = VideoPlayer(video_id, mediaSourceId, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), forceTranscoding, showIntro)
+    video = VideoPlayer(video_id, mediaSourceId, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), forceTranscoding, showIntro, allowResumeDialog)
 
     if video = invalid then return invalid
     if video.errorMsg = "introaborted" then return video
@@ -590,17 +590,6 @@ function CreatePersonView(personData as object) as object
     person.findNode("favorite-button").observeField("buttonSelected", m.port)
 
     return person
-end function
-
-function CreatePhotoPage(photo)
-    group = CreateObject("roSGNode", "PhotoDetails")
-    group.optionsAvailable = true
-    m.global.sceneManager.callFunc("pushScene", group)
-
-    group.itemContent = photo
-
-    return group
-
 end function
 
 sub UpdateSavedServerList()

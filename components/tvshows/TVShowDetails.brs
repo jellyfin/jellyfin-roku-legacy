@@ -17,14 +17,31 @@ sub itemContentChanged()
 
     ' Handle all "As Is" fields
     m.top.overhangTitle = itemData.name
-    setFieldText("releaseYear", itemData.productionYear)
-    setFieldText("officialRating", itemData.officialRating)
+
+    'Check production year, if invalid remove label
+    if itemData.productionYear <> invalid
+        setFieldText("releaseYear", itemData.productionYear)
+    else
+        m.top.findNode("main_group").removeChild(m.top.findNode("releaseYear"))
+    end if
+
+    'Check officialRating, if invalid remove label
+    if itemData.officialRating <> invalid
+        setFieldText("officialRating", itemData.officialRating)
+    else
+        m.top.findNode("main_group").removeChild(m.top.findNode("officialRating"))
+    end if
+
+    'Check communityRating, if invalid remove label
     if itemData.communityRating <> invalid
         m.top.findNode("star").visible = true
         setFieldText("communityRating", int(itemData.communityRating * 10) / 10)
     else
+        m.top.findNode("main_group").removeChild(m.top.findNode("communityRating"))
+        m.top.findNode("main_group").removeChild(m.top.findNode("star"))
         m.top.findNode("star").visible = false
     end if
+
     setFieldText("overview", itemData.overview)
 
 
@@ -32,11 +49,17 @@ sub itemContentChanged()
         setFieldText("runtime", stri(getRuntime()) + " mins")
     end if
 
+    'History feild is set via the function getHistory()
     setFieldText("history", getHistory())
 
+    'Check genres, if invalid remove label
     if itemData.genres.count() > 0
         setFieldText("genres", itemData.genres.join(", "))
+    else
+        m.top.findNode("main_group").removeChild(m.top.findNode("genres"))
     end if
+
+    'We don't display Directors in the show page. Might want to remove this.
     for each person in itemData.people
         if person.type = "Director"
             exit for
@@ -44,6 +67,8 @@ sub itemContentChanged()
     end for
     if itemData.taglines.count() > 0
         setFieldText("tagline", itemData.taglines[0])
+    else
+        m.top.findNode("main_group").removeChild(m.top.findNode("tagline"))
     end if
 end sub
 
@@ -105,6 +130,7 @@ function getHistory() as string
     end if
 
     if studio = invalid and airwords = invalid
+        m.top.findNode("main_group").removeChild(m.top.findNode("history"))
         return ""
     end if
 

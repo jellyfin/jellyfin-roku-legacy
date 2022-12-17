@@ -34,10 +34,6 @@ sub setData()
     else if datum.type = "Episode"
         imgParams = { "AddPlayedIndicator": datum.UserData.Played }
 
-        if datum.UserData.PlayedPercentage <> invalid
-            imgParams.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
-        end if
-
         imgParams.Append({ "maxHeight": 261 })
         imgParams.Append({ "maxWidth": 464 })
 
@@ -85,10 +81,6 @@ sub setData()
     else if datum.type = "Movie"
         imgParams = { AddPlayedIndicator: datum.UserData.Played }
 
-        if datum.UserData.PlayedPercentage <> invalid
-            imgParams.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
-        end if
-
         imgParams.Append({ "maxHeight": 261 })
         imgParams.Append({ "maxWidth": 175 })
 
@@ -111,10 +103,6 @@ sub setData()
 
     else if datum.type = "Video"
         imgParams = { AddPlayedIndicator: datum.UserData.Played }
-
-        if datum.UserData.PlayedPercentage <> invalid
-            imgParams.Append({ "PercentPlayed": datum.UserData.PlayedPercentage })
-        end if
 
         imgParams.Append({ "maxHeight": 261 })
         imgParams.Append({ "maxWidth": 175 })

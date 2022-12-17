@@ -2115,5 +2115,78 @@
         <translation>Unable to find any albums or songs belonging to this artist</translation>
         <extracomment>Popup message when we find no audio data for an artist</extracomment>
     </message>
+    <message>
+        <source>On Now</source>
+        <translation>On Now</translation>
+    </message>
+    <message>
+        <source>Press &apos;OK&apos; to Close</source>
+        <translation>Press &apos;OK&apos; to Close</translation>
+    </message>
+    <message>
+        <source>View Channel</source>
+        <translation>View Channel</translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation>Record</translation>
+    </message>
+    <message>
+        <source>Age</source>
+        <translation>Age</translation>
+    </message>
+    <message>
+        <source>Cast &amp; Crew</source>
+        <translation>Cast &amp; Crew</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Save Credentials?</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Delete Saved</translation>
+    </message>
+    <message>
+        <source>Died</source>
+        <translation>Died</translation>
+    </message>
+    <message>
+        <source>More Like This</source>
+        <translation>More Like This</translation>
+    </message>
+    <message>
+        <source>Special Features</source>
+        <translation>Special Features</translation>
+    </message>
+    <message>
+        <source>Born</source>
+        <translation>Born</translation>
+    </message>
+    <message>
+        <source>Additional Parts</source>
+        <translation>Additional Parts</translation>
+        <extracomment>Additional parts of a video</extracomment>
+    </message>
+    <message>
+        <source>Movies</source>
+        <translation>Films</translation>
+    </message>
+    <message>
+        <source>TV Shows</source>
+        <translation>TV Shows</translation>
+    </message>
+    <message>
+        <source>Record Series</source>
+        <translation>Record Series</translation>
+    </message>
+    <message>
+        <source>Cancel Recording</source>
+        <translation>Cancel Recording</translation>
+    </message>
+    <message>
+        <source>Cancel Series Recording</source>
+        <translation>Cancel Series Recording</translation>
+    </message>
 </context>
 </TS>

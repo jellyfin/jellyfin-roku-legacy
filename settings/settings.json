@@ -4,6 +4,13 @@
         "description": "Settings relating to playback and supported codec and media types.",
         "children": [
             {
+                "title": "AV1 Support",
+                "description": "** EXPERIMENTAL** Support Direct Play of AV1 content if this Roku device supports it.",
+                "settingName": "playback.av1",
+                "type": "bool",
+                "default": "false"
+            },
+            {
                 "title": "MPEG-2 Support",
                 "description": "Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.",
                 "settingName": "playback.mpeg2",
@@ -11,9 +18,23 @@
                 "default": "false"
             },
             {
-                "title": "Attempt Direct Play (Profile Lvl)",
-                "description": "Attempt Direct Play for H.264 media with unsupported profile levels (> 4.2) before falling back to transcoding if it fails.",
+                "title": "MPEG-4 Support",
+                "description": "Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.",
+                "settingName": "playback.mpeg4",
+                "type": "bool",
+                "default": "true"
+            },
+            {
+                "title": "Direct Play H.264 Unsupported Profile Levels",
+                "description": "Attempt Direct Play for H.264 media with unsupported profile levels before falling back to transcoding if it fails.",
                 "settingName": "playback.tryDirect.h264ProfileLevel",
+                "type": "bool",
+                "default": "true"
+            },
+            {
+                "title": "Direct Play HEVC Unsupported Profile Levels",
+                "description": "Attempt Direct Play for HEVC media with unsupported profile levels before falling back to trancoding if it fails.",
+                "settingName": "playback.tryDirect.hevcProfileLevel",
                 "type": "bool",
                 "default": "true"
             },

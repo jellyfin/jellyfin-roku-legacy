@@ -5,7 +5,7 @@
     <field id="type" type="string" />
     <field id="parentId" type="string" />
     <field id="selectedItem" type="node" alwaysNotify="true" />
-    <function name="loadPeople" />
+    <function name="loadParts" />
     <function name="loadPersonVideos" />
   </interface>
   <script type="text/brightscript" uri="ExtrasRowList.brs" />

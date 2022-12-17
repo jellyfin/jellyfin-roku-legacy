@@ -320,13 +320,14 @@ end sub
 
 ' Set Photo Album view, sort, and filter options
 sub setPhotoAlbumOptions(options)
-    ' TODO/FIXME: Show shuffle options once implemented
-    ' options.views = [
-    '     { "Title": tr("Don't Shuffle"), "Name": "singlephoto"}
-    '     { "Title": tr("Shuffle"), "Name": "shufflephoto"}
-    ' ]
-    options.views = []
+    options.views = [
+        { "Title": tr("Slideshow Off"), "Name": "singlephoto" }
+        { "Title": tr("Slideshow On"), "Name": "slideshowphoto" }
+        { "Title": tr("Random Off"), "Name": "singlephoto" }
+        { "Title": tr("Random On"), "Name": "randomphoto" }
+    ]
     options.sort = []
+    options.filter = []
 end sub
 
 ' Set Default view, sort, and filter options
@@ -574,14 +575,17 @@ sub optionsClosed()
         end if
     end if
 
-    if m.top.parentItem.Type = "CollectionFolder" or m.top.parentItem.CollectionType = "CollectionFolder"
-        ' Did the user just request "Shuffle" on a PhotoAlbum?
+    if m.top.parentItem.Type = "CollectionFolder" or m.top.parentItem.Type = "Folder" or m.top.parentItem.CollectionType = "CollectionFolder"
+        ' Did the user just request "Random" on a PhotoAlbum?
         if m.options.view = "singlephoto"
-            ' TODO/FIXME: Stop shuffling here
-            print "TODO/FIXME: Stop any shuffling here"
-        else if m.options.view = "shufflephoto"
-            ' TODO/FIXME: Start shuffling here
-            print "TODO/FIXME: Start shuffle here"
+            set_user_setting("photos.slideshow", "false")
+            set_user_setting("photos.random", "false")
+        else if m.options.view = "slideshowphoto"
+            set_user_setting("photos.slideshow", "true")
+            set_user_setting("photos.random", "false")
+        else if m.options.view = "randomphoto"
+            set_user_setting("photos.random", "true")
+            set_user_setting("photos.slideshow", "false")
         end if
     end if
 
@@ -724,9 +728,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
             return true
         else if itemToPlay <> invalid and itemToPlay.type = "Photo"
             ' Spawn photo player task
-            photoPlayer = CreateObject("roSgNode", "PhotoPlayerTask")
-            photoPlayer.itemContent = itemToPlay
-            photoPlayer.control = "RUN"
+            photoPlayer = CreateObject("roSgNode", "PhotoDetails")
+            photoPlayer.items = markupGrid
+            photoPlayer.itemIndex = markupGrid.itemFocused
+            m.global.sceneManager.callfunc("pushScene", photoPlayer)
             return true
         end if
     else if key = "left" and topGrp.isinFocusChain()

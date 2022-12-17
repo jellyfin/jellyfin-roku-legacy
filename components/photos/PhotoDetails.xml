@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="PhotoDetails" extends="JFGroup">
   <children>
-    <LayoutGroup id="toplevel">
-        <Poster id="photo" width="1920" height="1080" loadDisplayMode="scaleToFit"/>
-    </LayoutGroup>
+    <Poster id="photo" width="1920" height="1080" loadDisplayMode="scaleToFit"/>
+    <Rectangle id="background" color="0x101010EE" height="120" width="500" Translation="[700, -150]" opacity="0">
+      <Label id="status" font="font:MediumSystemFont" height="100" width="500" horizAlign="center" vertAlign="bottom"/>
+    </Rectangle>
+    <Timer id="slideshowTimer" duration="5" repeat="false" />
+    <Timer id="statusTimer" duration="2" repeat="false" />
+
+    <Animation id="showStatusAnimation" duration="1" repeat="false">
+      <FloatFieldInterpolator key="[0.0, 0.1]" keyValue="[0, 1]" fieldToInterp="background.opacity" />
+      <Vector2DFieldInterpolator key="[0.1, 1]" keyValue="[[700, -150], [700, -5]]" fieldToInterp="background.translation" />
+    </Animation>
+    <Animation id="hideStatusAnimation" duration="1" repeat="false">
+      <Vector2DFieldInterpolator key="[0.0, 0.9]" keyValue="[[700, -5], [700, -150]]" fieldToInterp="background.translation" />
+      <FloatFieldInterpolator key="[0.9, 1]" keyValue="[1, 0]" fieldToInterp="background.opacity" />
+    </Animation>
+
   </children>
   <interface>
-    <field id="itemContent" type="node" onChange="itemContentChanged" />
+    <field id="items" type="node" />
+    <field id="itemIndex" type="integer" value="-1" onChange="itemContentChanged" />
   </interface>
   <script type="text/brightscript" uri="PhotoDetails.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

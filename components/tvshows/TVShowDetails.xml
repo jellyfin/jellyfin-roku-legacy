@@ -9,7 +9,7 @@
             <Label id="releaseYear" />
             <Label id="officialRating" />
             <LayoutGroup layoutDirection="horiz" itemSpacings="[3]">
-              <Poster id="star" uri="pkg:/images/sharp_star_white_18dp.png" height="32" width="32" blendColor="#cb272a" />
+              <Poster id="star" uri="pkg:/images/sharp_star_white_18dp.png" height="32" width="32" blendColor="#cb272a" visible="false" />
               <Label id="communityRating" />
             </LayoutGroup>
           </LayoutGroup>

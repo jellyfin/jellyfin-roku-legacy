@@ -2,9 +2,14 @@ sub init()
 
     m.itemText = m.top.findNode("itemText")
     m.itemPoster = m.top.findNode("itemPoster")
+    m.itemProgress = m.top.findNode("progress")
+    m.itemProgressBackground = m.top.findNode("progressBackground")
     m.itemIcon = m.top.findNode("itemIcon")
     m.itemTextExtra = m.top.findNode("itemTextExtra")
     m.itemPoster.observeField("loadStatus", "onPosterLoadStatusChanged")
+
+    m.showProgressBarAnimation = m.top.findNode("showProgressBar")
+    m.showProgressBarField = m.top.findNode("showProgressBarField")
 
     ' Randomize the background colors
     m.backdrop = m.top.findNode("backdrop")
@@ -74,6 +79,10 @@ sub itemContentChanged()
     if itemData.type = "Episode"
         m.itemText.text = itemData.json.SeriesName
 
+        if itemData.PlayedPercentage > 0
+            drawProgressBar(itemData)
+        end if
+
         if itemData.usePoster = true
             m.itemPoster.uri = itemData.widePosterURL
         else
@@ -98,6 +107,10 @@ sub itemContentChanged()
 
     if itemData.type = "Movie"
         m.itemText.text = itemData.name
+
+        if itemData.PlayedPercentage > 0
+            drawProgressBar(itemData)
+        end if
 
         ' Use best image, but fallback to secondary if it's empty
         if (itemData.imageWidth = 180 and itemData.posterURL <> "") or itemData.thumbnailURL = ""
@@ -125,6 +138,10 @@ sub itemContentChanged()
 
     if itemData.type = "Video"
         m.itemText.text = itemData.name
+
+        if itemData.PlayedPercentage > 0
+            drawProgressBar(itemData)
+        end if
 
         if itemData.imageWidth = 180
             m.itemPoster.uri = itemData.posterURL
@@ -201,6 +218,15 @@ sub itemContentChanged()
 
     print "Unhandled Home Item Type: " + itemData.type
 
+end sub
+
+'
+' Draws and animates item progress bar
+sub drawProgressBar(itemData)
+    m.itemProgressBackground.width = itemData.imageWidth
+    m.itemProgressBackground.visible = true
+    m.showProgressBarField.keyValue = [0, m.itemPoster.width * (itemData.PlayedPercentage / 100)]
+    m.showProgressBarAnimation.control = "Start"
 end sub
 
 '

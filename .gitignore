@@ -12,11 +12,6 @@ roku_modules
 #NPM modules
 node_modules/
 
-#Rooibos generated
-rooibosFunctionMap.brs
-*/buildinfo.brs
-logs
-
 #Eclipse
 .buildpath
 .project

@@ -9,7 +9,7 @@
           <Label id="runtime" />
           <Label id="officialRating" />
           <LayoutGroup id="communityRatingGroup" layoutDirection="horiz" itemSpacings="[-5]">
-            <Poster id="star" uri="pkg:/images/sharp_star_white_18dp.png" height="32" width="32" blendColor="#cb272a" />
+            <Poster id="star" uri="pkg:/images/sharp_star_white_18dp.png" height="32" width="32" blendColor="#cb272a" visible="false"/>
             <Label id="communityRating" />
           </LayoutGroup>
           <LayoutGroup layoutDirection="horiz" itemSpacings="[-5]" id="criticRatingGroup">
@@ -17,6 +17,7 @@
             <Label id="criticRatingLabel" />
           </LayoutGroup>
           <Label id="ends-at" />
+          <Label id="aired" />
         </LayoutGroup>
         <Label id="genres" />
         <Label id="director" />

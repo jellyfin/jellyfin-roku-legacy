@@ -172,6 +172,20 @@ sub loadItems()
                 tmp.json = specfeat
             end for
         end if
+    else if m.top.itemsToLoad = "additionalparts"
+        additionalParts = api_API().videos.getAdditionalParts(m.top.itemId)
+        if isValid(additionalParts)
+            for each part in additionalParts.items
+                tmp = CreateObject("roSGNode", "ExtrasData")
+                params = {}
+                params["Tags"] = part.ImageTags.Primary
+                params["MaxWidth"] = 450
+                params["MaxHeight"] = 402
+                tmp.posterURL = ImageUrl(part.Id, "Primary", params)
+                tmp.json = part
+                results.push(tmp)
+            end for
+        end if
     else if m.top.itemsToLoad = "likethis"
         params = { "userId": get_setting("active_user"), "limit": 16 }
         url = Substitute("Items/{0}/Similar", m.top.itemId)
