@@ -21,7 +21,7 @@ sub setData()
         else
             params = { "maxHeight": 261, "maxWidth": 464 }
         end if
-        m.top.thumbnailURL = ImageURL(datum.id, "Primary", params)
+        m.top.thumbnailURL = api_API().items.getimageurl(datum.id, "Primary", 0, params)
         m.top.widePosterUrl = m.top.thumbnailURL
 
         ' Add Icon URLs for display if there is no Poster
@@ -41,18 +41,18 @@ sub setData()
             imgParams["Tag"] = datum.ImageTags.Primary
         end if
 
-        m.top.thumbnailURL = ImageURL(datum.id, "Primary", imgParams)
+        m.top.thumbnailURL = api_API().items.getimageurl(datum.id, "Primary", 0, imgParams)
 
         ' Add Wide Poster  (Series Backdrop)
         if datum.ParentThumbImageTag <> invalid
             imgParams["Tag"] = datum.ParentThumbImageTag
-            m.top.widePosterUrl = ImageURL(datum.ParentThumbItemId, "Thumb", imgParams)
+            m.top.widePosterUrl = api_API().items.getimageurl(datum.ParentThumbItemId, "Thumb", 0, imgParams)
         else if datum.ParentBackdropImageTags <> invalid
             imgParams["Tag"] = datum.ParentBackdropImageTags[0]
-            m.top.widePosterUrl = ImageURL(datum.ParentBackdropItemId, "Backdrop", imgParams)
+            m.top.widePosterUrl = api_API().items.getimageurl(datum.ParentBackdropItemId, "Backdrop", 0, imgParams)
         else if datum.ImageTags.Primary <> invalid
             imgParams["Tag"] = datum.SeriesPrimaryImageTag
-            m.top.widePosterUrl = ImageURL(datum.id, "Primary", imgParams)
+            m.top.widePosterUrl = api_API().items.getimageurl(datum.id, "Primary", 0, imgParams)
         end if
 
     else if datum.type = "Series"
@@ -67,15 +67,15 @@ sub setData()
             imgParams["Tag"] = datum.ImageTags.Primary
         end if
 
-        m.top.posterURL = ImageURL(datum.id, "Primary", imgParams)
+        m.top.posterURL = api_API().items.getimageurl(datum.id, "Primary", 0, imgParams)
 
         ' Add Wide Poster  (Series Backdrop)
         if datum.ImageTags <> invalid and datum.imageTags.Thumb <> invalid
             imgParams["Tag"] = datum.imageTags.Thumb
-            m.top.widePosterUrl = ImageURL(datum.Id, "Thumb", imgParams)
+            m.top.widePosterUrl = api_API().items.getimageurl(datum.id, "Thumb", 0, imgParams)
         else if datum.BackdropImageTags <> invalid
             imgParams["Tag"] = datum.BackdropImageTags[0]
-            m.top.widePosterUrl = ImageURL(datum.Id, "Backdrop", imgParams)
+            m.top.widePosterUrl = api_API().items.getimageurl(datum.id, "Backdrop", 0, imgParams)
         end if
 
     else if datum.type = "Movie"
@@ -88,17 +88,17 @@ sub setData()
             imgParams["Tag"] = datum.ImageTags.Primary
         end if
 
-        m.top.posterURL = ImageURL(datum.id, "Primary", imgParams)
+        m.top.posterURL = api_API().items.getimageurl(datum.id, "Primary", 0, imgParams)
 
         ' For wide image, use backdrop
         imgParams["maxWidth"] = 464
 
         if datum.ImageTags <> invalid and datum.imageTags.Thumb <> invalid
             imgParams["Tag"] = datum.imageTags.Thumb
-            m.top.thumbnailUrl = ImageURL(datum.Id, "Thumb", imgParams)
+            m.top.thumbnailUrl = api_API().items.getimageurl(datum.id, "Thumb", 0, imgParams)
         else if datum.BackdropImageTags[0] <> invalid
             imgParams["Tag"] = datum.BackdropImageTags[0]
-            m.top.thumbnailUrl = ImageURL(datum.id, "Backdrop", imgParams)
+            m.top.thumbnailUrl = api_API().items.getimageurl(datum.id, "Backdrop", 0, imgParams)
         end if
 
     else if datum.type = "Video"
@@ -111,27 +111,27 @@ sub setData()
             imgParams["Tag"] = datum.ImageTags.Primary
         end if
 
-        m.top.posterURL = ImageURL(datum.id, "Primary", imgParams)
+        m.top.posterURL = api_API().items.getimageurl(datum.id, "Primary", 0, imgParams)
 
         ' For wide image, use backdrop
         imgParams["maxWidth"] = 464
 
         if datum.ImageTags <> invalid and datum.imageTags.Thumb <> invalid
             imgParams["Tag"] = datum.imageTags.Thumb
-            m.top.thumbnailUrl = ImageURL(datum.Id, "Thumb", imgParams)
+            m.top.thumbnailUrl = api_API().items.getimageurl(datum.id, "Thumb", 0, imgParams)
         else if datum.BackdropImageTags[0] <> invalid
             imgParams["Tag"] = datum.BackdropImageTags[0]
-            m.top.thumbnailUrl = ImageURL(datum.id, "Backdrop", imgParams)
+            m.top.thumbnailUrl = api_API().items.getimageurl(datum.id, "Backdrop", 0, imgParams)
         end if
     else if datum.type = "MusicAlbum"
         params = { "maxHeight": 261, "maxWidth": 261, "Tag": datum.ImageTags.Primary }
-        m.top.thumbnailURL = ImageURL(datum.id, "Primary", params)
+        m.top.thumbnailURL = api_API().items.getimageurl(datum.id, "Primary", 0, params)
         m.top.widePosterUrl = m.top.thumbnailURL
         m.top.posterUrl = m.top.thumbnailURL
 
     else if datum.type = "TvChannel" or datum.type = "Channel"
         params = { "maxHeight": 261, "maxWidth": 464, "Tag": datum.ImageTags.Primary }
-        m.top.thumbnailURL = ImageURL(datum.id, "Primary", params)
+        m.top.thumbnailURL = api_API().items.getimageurl(datum.id, "Primary", 0, params)
         m.top.widePosterUrl = m.top.thumbnailURL
         m.top.iconUrl = "pkg:/images/media_type_icons/live_tv_white.png"
     end if

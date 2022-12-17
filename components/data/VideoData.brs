@@ -16,6 +16,6 @@ sub setPoster()
         m.top.posterURL = m.top.image.url
     else if m.top.json.ImageTags.Primary <> invalid
         imgParams = { "maxHeight": 440, "maxWidth": 295, "Tag": m.top.json.ImageTags.Primary }
-        m.top.posterURL = ImageURL(m.top.json.id, "Primary", imgParams)
+        m.top.posterURL = api_API().items.getimageurl(m.top.json.id, "Primary", 0, imgParams)
     end if
 end sub

@@ -178,10 +178,10 @@ sub loadItems()
             else if item.Type = "MusicAlbum"
                 tmp = CreateObject("roSGNode", "MusicAlbumData")
                 tmp.type = "MusicAlbum"
-                if api_API().items.headimageurlbyname(item.id, "primary")
-                    tmp.posterURL = ImageURL(item.id, "Primary")
+                if api_API().items.headimageurlbyname(item.id, "Primary")
+                    tmp.posterURL = api_API().items.getimageurl(item.id, "Primary", 0)
                 else
-                    tmp.posterURL = ImageURL(item.id, "backdrop")
+                    tmp.posterURL = api_API().items.getimageurl(item.id, "Backdrop", 0)
                 end if
             else if item.Type = "MusicArtist"
                 tmp = CreateObject("roSGNode", "MusicArtistData")

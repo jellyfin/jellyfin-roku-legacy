@@ -9,7 +9,7 @@
     <field id="mediaSources" type="array" />
   </interface>
   <script type="text/brightscript" uri="MovieData.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+  <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />

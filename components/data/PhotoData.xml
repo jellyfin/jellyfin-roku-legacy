@@ -5,7 +5,7 @@
     <field id="photoID" type="string" />
   </interface>
   <script type="text/brightscript" uri="PhotoData.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+  <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

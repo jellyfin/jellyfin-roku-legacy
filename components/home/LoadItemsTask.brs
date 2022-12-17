@@ -136,7 +136,7 @@ sub loadItems()
         data = getJson(resp)
         for each item in data.Items
             tmp = CreateObject("roSGNode", "HomeData")
-            item.ImageURL = ImageURL(item.Id)
+            item.ImageURL = api_API().items.getimageurl(item.id)
             tmp.json = item
             results.push(tmp)
         end for
@@ -151,7 +151,7 @@ sub loadItems()
             params["Tags"] = person.PrimaryImageTag
             params["MaxWidth"] = 234
             params["MaxHeight"] = 330
-            tmp.posterURL = ImageUrl(person.Id, "Primary", params)
+            tmp.posterURL = api_API().items.getimageurl(person.id, "Primary", 0, params)
             tmp.json = person
             results.push(tmp)
         end for
@@ -168,7 +168,7 @@ sub loadItems()
                 params["Tags"] = specfeat.ImageTags.Primary
                 params["MaxWidth"] = 450
                 params["MaxHeight"] = 402
-                tmp.posterURL = ImageUrl(specfeat.Id, "Primary", params)
+                tmp.posterURL = api_API().items.getimageurl(specfeat.id, "Primary", 0, params)
                 tmp.json = specfeat
             end for
         end if
@@ -181,7 +181,7 @@ sub loadItems()
                 params["Tags"] = part.ImageTags.Primary
                 params["MaxWidth"] = 450
                 params["MaxHeight"] = 402
-                tmp.posterURL = ImageUrl(part.Id, "Primary", params)
+                tmp.posterURL = api_API().items.getimageurl(part.Id, "Primary", 0, params)
                 tmp.json = part
                 results.push(tmp)
             end for
@@ -193,7 +193,7 @@ sub loadItems()
         data = getJson(resp)
         for each item in data.items
             tmp = CreateObject("roSGNode", "ExtrasData")
-            tmp.posterURL = ImageUrl(item.Id, "Primary", { "Tags": item.PrimaryImageTag })
+            tmp.posterURL = api_API().items.getimageurl(item.Id, "Primary", 0, { "Tags": item.PrimaryImageTag })
             tmp.json = item
             results.push(tmp)
         end for
@@ -223,9 +223,9 @@ sub getPersonVideos(videoType, dest, dimens)
     if data <> invalid and data.count() > 0
         for each item in data.items
             tmp = CreateObject("roSGNode", "ExtrasData")
-            imgParms = { "Tags": item.ImageTags.Primary }
-            imgParms.append(dimens)
-            tmp.posterURL = ImageUrl(item.Id, "Primary", imgParms)
+            imgParams = { "Tags": item.ImageTags.Primary }
+            imgParams.append(dimens)
+            tmp.posterURL = api_API().items.getimageurl(item.Id, "Primary", 0, imgParams)
             tmp.json = item
             dest.push(tmp)
         end for
