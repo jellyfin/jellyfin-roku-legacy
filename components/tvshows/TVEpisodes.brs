@@ -15,7 +15,7 @@ sub setSeasonLoading()
 end sub
 
 sub updateSeason()
-    imgParams = { "maxHeight": 450, "maxWidth": 300 }
+    imgParams = { "maxHeight": 450, "maxWidth": 300, "Tag": m.top.seasonData.ImageTags.Primary }
     m.poster.uri = ImageURL(m.top.seasonData.Id, "Primary", imgParams)
     m.Random.visible = true
     m.top.overhangTitle = m.top.seasonData.SeriesName + " - " + m.top.seasonData.name

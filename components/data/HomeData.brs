@@ -32,14 +32,12 @@ sub setData()
         end if
 
     else if datum.type = "Episode"
-        imgParams = { "AddPlayedIndicator": datum.UserData.Played }
-
-        imgParams.Append({ "maxHeight": 261 })
-        imgParams.Append({ "maxWidth": 464 })
-
-        if datum.ImageTags.Primary <> invalid
-            imgParams["Tag"] = datum.ImageTags.Primary
-        end if
+        imgParams = {
+            "AddPlayedIndicator": datum.UserData.Played,
+            "maxHeight": 261,
+            "maxWidth": 464,
+            "Tag": datum.ImageTags.Primary
+        }
 
         m.top.thumbnailURL = api_API().items.getimageurl(datum.id, "Primary", 0, imgParams)
 
