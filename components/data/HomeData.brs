@@ -31,9 +31,12 @@ sub setData()
         imgParams = {
             "AddPlayedIndicator": datum.UserData.Played,
             "maxHeight": 261,
-            "maxWidth": 464,
-            "Tag": datum.ImageTags.Primary
+            "maxWidth": 464
         }
+
+        if datum.ImageTags <> invalid and datum.imageTags.Primary <> invalid
+            imgParams["Tag"] = datum.ImageTags.Primary
+        end if
 
         m.top.thumbnailURL = api_API().items.getimageurl(datum.id, "Primary", 0, imgParams)
 
@@ -52,9 +55,12 @@ sub setData()
     else if datum.type = "Series"
         imgParams = {
             "maxHeight": 261,
-            "maxWidth": 464,
-            "Tag": datum.ImageTags.Primary
+            "maxWidth": 464
         }
+
+        if datum.ImageTags <> invalid and datum.imageTags.Primary <> invalid
+            imgParams["Tag"] = datum.ImageTags.Primary
+        end if
 
         if datum.UserData.UnplayedItemCount > 0
             imgParams["UnplayedCount"] = datum.UserData.UnplayedItemCount
@@ -65,7 +71,6 @@ sub setData()
         ' Add Wide Poster  (Series Backdrop)
         if datum.ImageTags <> invalid and datum.imageTags.Thumb <> invalid
             imgParams["Tag"] = datum.imageTags.Thumb
-
             m.top.widePosterUrl = api_API().items.getimageurl(datum.id, "Thumb", 0, imgParams)
         else if datum.BackdropImageTags <> invalid
             imgParams["Tag"] = datum.BackdropImageTags[0]
@@ -76,9 +81,12 @@ sub setData()
         imgParams = {
             "AddPlayedIndicator": datum.UserData.Played,
             "maxHeight": 261,
-            "maxWidth": 175,
-            "Tag": datum.ImageTags.Primary
+            "maxWidth": 175
         }
+
+        if datum.ImageTags <> invalid and datum.imageTags.Primary <> invalid
+            imgParams["Tag"] = datum.ImageTags.Primary
+        end if
 
         m.top.posterURL = api_API().items.getimageurl(datum.id, "Primary", 0, imgParams)
 
