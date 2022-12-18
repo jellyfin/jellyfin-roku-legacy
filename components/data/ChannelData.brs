@@ -12,7 +12,7 @@ sub setPoster()
         m.top.posterURL = m.top.image.url
     else if m.top.json.ImageTags <> invalid and m.top.json.ImageTags.Primary <> invalid
         imgParams = { "maxHeight": 60, "Tag": m.top.json.ImageTags.Primary }
-        m.top.hdsmalliconurl = api_API().items.getimageurl(m.top.itemId, "logo", 0, imgParams)
+        m.top.hdsmalliconurl = api_API().items.getimageurl(m.top.json.id, "Primary", 0, imgParams)
 
         imgParams = { "maxHeight": 440, "maxWidth": 295, "Tag": m.top.json.ImageTags.Primary }
         m.top.posterURL = api_API().items.getimageurl(m.top.json.id, "Primary", 0, imgParams)

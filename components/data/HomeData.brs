@@ -16,11 +16,7 @@ sub setData()
     ' Set appropriate Images for Wide and Tall based on type
 
     if datum.type = "CollectionFolder" or datum.type = "UserView"
-        if datum.ImageTags.Primary <> invalid
-            params = { "maxHeight": 261, "maxWidth": 464, "Tag": datum.ImageTags.Primary }
-        else
-            params = { "maxHeight": 261, "maxWidth": 464 }
-        end if
+        params = { "maxHeight": 261, "maxWidth": 464, "Tag": datum.ImageTags.Primary }
         m.top.thumbnailURL = api_API().items.getimageurl(datum.id, "Primary", 0, params)
         m.top.widePosterUrl = m.top.thumbnailURL
 
@@ -54,15 +50,14 @@ sub setData()
         end if
 
     else if datum.type = "Series"
-        imgParams = { "maxHeight": 261 }
-        imgParams.Append({ "maxWidth": 464 })
+        imgParams = {
+            "maxHeight": 261,
+            "maxWidth": 464,
+            "Tag": datum.ImageTags.Primary
+        }
 
         if datum.UserData.UnplayedItemCount > 0
             imgParams["UnplayedCount"] = datum.UserData.UnplayedItemCount
-        end if
-
-        if datum.ImageTags.Primary <> invalid
-            imgParams["Tag"] = datum.ImageTags.Primary
         end if
 
         m.top.posterURL = api_API().items.getimageurl(datum.id, "Primary", 0, imgParams)
@@ -70,6 +65,7 @@ sub setData()
         ' Add Wide Poster  (Series Backdrop)
         if datum.ImageTags <> invalid and datum.imageTags.Thumb <> invalid
             imgParams["Tag"] = datum.imageTags.Thumb
+
             m.top.widePosterUrl = api_API().items.getimageurl(datum.id, "Thumb", 0, imgParams)
         else if datum.BackdropImageTags <> invalid
             imgParams["Tag"] = datum.BackdropImageTags[0]
@@ -77,20 +73,17 @@ sub setData()
         end if
 
     else if datum.type = "Movie"
-        imgParams = { AddPlayedIndicator: datum.UserData.Played }
-
-        imgParams.Append({ "maxHeight": 261 })
-        imgParams.Append({ "maxWidth": 175 })
-
-        if datum.ImageTags.Primary <> invalid
-            imgParams["Tag"] = datum.ImageTags.Primary
-        end if
+        imgParams = {
+            "AddPlayedIndicator": datum.UserData.Played,
+            "maxHeight": 261,
+            "maxWidth": 175,
+            "Tag": datum.ImageTags.Primary
+        }
 
         m.top.posterURL = api_API().items.getimageurl(datum.id, "Primary", 0, imgParams)
 
         ' For wide image, use backdrop
         imgParams["maxWidth"] = 464
-
         if datum.ImageTags <> invalid and datum.imageTags.Thumb <> invalid
             imgParams["Tag"] = datum.imageTags.Thumb
             m.top.thumbnailUrl = api_API().items.getimageurl(datum.id, "Thumb", 0, imgParams)
@@ -100,14 +93,12 @@ sub setData()
         end if
 
     else if datum.type = "Video"
-        imgParams = { AddPlayedIndicator: datum.UserData.Played }
-
-        imgParams.Append({ "maxHeight": 261 })
-        imgParams.Append({ "maxWidth": 175 })
-
-        if datum.ImageTags.Primary <> invalid
-            imgParams["Tag"] = datum.ImageTags.Primary
-        end if
+        imgParams = {
+            "AddPlayedIndicator": datum.UserData.Played,
+            "maxHeight": 261,
+            "maxWidth": 175,
+            "Tag": datum.ImageTags.Primary
+        }
 
         m.top.posterURL = api_API().items.getimageurl(datum.id, "Primary", 0, imgParams)
 
