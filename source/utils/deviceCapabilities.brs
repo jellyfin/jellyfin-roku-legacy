@@ -83,6 +83,27 @@ function getDeviceProfile() as object
 
     DirectPlayProfile = GetDirectPlayProfiles()
 
+    ' Set a sane default width of 720 (standard HD)
+    supportedWidth = 720
+
+    ' **** Get Roku device supported "graphics" resolutions ****
+    ' This does not make sense to me. My devices support up to 1080p, but this
+    ' functiontion reports a max width of 720.
+    '
+    ' I suppose it's because this is the "graphics" resolution (not video), so
+    ' it only applies to menus and stuff. But if I mannually set the max width
+    ' to 1080, it doesn't work. Is the Jellyfin app calling the video in a way
+    ' that's limited by the max graphics" resolution?
+
+    ' https://developer.roku.com/en-gb/docs/references/brightscript/interfaces/ifdeviceinfo.md#getsupportedgraphicsresolutions-as-object
+    supportedResolutions = di.GetSupportedGraphicsResolutions()
+    ' Find the maximum supported width
+    For Each res In supportedResolutions
+        if res.width > supportedWidth
+            supportedWidth = res.width
+        end if
+    end for
+
     deviceProfile = {
         "MaxStreamingBitrate": 120000000,
         "MaxStaticBitrate": 100000000,
@@ -170,6 +191,18 @@ function getDeviceProfile() as object
                         "Property": "VideoLevel",
                         "Value": "41",
                         "IsRequired": false
+                    },
+                    {
+                        "Condition": "LessThanEqual",
+                        "Property": "Width",
+                        "Value": supportedWidth,
+                        "IsRequired": false
+                    },
+                    {
+                        "Condition": "LessThanEqual",
+                        "Property": "VideoBitrate",
+                        "Value": "12000000",
+                        IsRequired: true
                     }
                 ]
             }
@@ -203,6 +236,12 @@ function getDeviceProfile() as object
                     "Property": "VideoRangeType",
                     "Value": av1VideoRangeTypes,
                     "IsRequired": false
+                },
+                {
+                    "Condition": "LessThanEqual",
+                    "Property": "Width",
+                    "Value": supportedWidth,
+                    "IsRequired": false
                 }
             ]
         })
@@ -229,6 +268,12 @@ function getDeviceProfile() as object
                     "Property": "VideoLevel",
                     "Value": (120 * 5.1).ToStr(),
                     "IsRequired": false
+                },
+                {
+                    "Condition": "LessThanEqual",
+                    "Property": "Width",
+                    "Value": supportedWidth,
+                    "IsRequired": false
                 }
             ]
         })
@@ -242,6 +287,12 @@ function getDeviceProfile() as object
                     "Condition": "EqualsAny",
                     "Property": "VideoRangeType",
                     "Value": vp9VideoRangeTypes,
+                    "IsRequired": false
+                },
+                {
+                    "Condition": "LessThanEqual",
+                    "Property": "Width",
+                    "Value": supportedWidth,
                     "IsRequired": false
                 }
             ]
