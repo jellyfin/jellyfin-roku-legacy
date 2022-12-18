@@ -87,15 +87,9 @@ function getDeviceProfile() as object
     supportedWidth = 720
 
     ' **** Get Roku device supported "graphics" resolutions ****
-    ' This does not make sense to me. My devices support up to 1080p, but this
-    ' functiontion reports a max width of 720.
-    '
-    ' I suppose it's because this is the "graphics" resolution (not video), so
-    ' it only applies to menus and stuff. But if I mannually set the max width
-    ' to 1080, it doesn't work. Is the Jellyfin app calling the video in a way
-    ' that's limited by the max graphics" resolution?
-
     ' https://developer.roku.com/en-gb/docs/references/brightscript/interfaces/ifdeviceinfo.md#getsupportedgraphicsresolutions-as-object
+    ' Works similar to jellyfin-web. We only need the max width to ensure we
+    ' receive correctly sized video
     supportedResolutions = di.GetSupportedGraphicsResolutions()
     ' Find the maximum supported width
     For Each res In supportedResolutions
