@@ -16,6 +16,9 @@ end sub
 
 sub updateSeason()
     imgParams = { "maxHeight": 450, "maxWidth": 300 }
+    if m.top.seasonData.ImageTags <> invalid and m.top.seasonData.ImageTags.Primary <> invalid
+        imgParams["Tag"] = m.top.seasonData.ImageTags.Primary
+    end if
     m.poster.uri = ImageURL(m.top.seasonData.Id, "Primary", imgParams)
     m.Random.visible = true
     m.top.overhangTitle = m.top.seasonData.SeriesName + " - " + m.top.seasonData.name

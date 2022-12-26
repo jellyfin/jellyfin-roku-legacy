@@ -223,9 +223,9 @@ sub getPersonVideos(videoType, dest, dimens)
     if data <> invalid and data.count() > 0
         for each item in data.items
             tmp = CreateObject("roSGNode", "ExtrasData")
-            imgParms = { "Tags": item.ImageTags.Primary }
-            imgParms.append(dimens)
-            tmp.posterURL = ImageUrl(item.Id, "Primary", imgParms)
+            imgParams = { "Tags": item.ImageTags.Primary }
+            imgParams.append(dimens)
+            tmp.posterURL = ImageUrl(item.Id, "Primary", imgParams)
             tmp.json = item
             dest.push(tmp)
         end for
