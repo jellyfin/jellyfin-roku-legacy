@@ -77,6 +77,12 @@ sub loadItems()
         params.append({ isFavorite: true })
     end if
 
+    if isValid(m.top.filterOptions)
+        if m.top.filterOptions.count() > 0
+            params.append(m.top.filterOptions)
+        end if
+    end if
+
     if m.top.ItemType <> ""
         params.append({ IncludeItemTypes: m.top.ItemType })
     end if
@@ -103,6 +109,7 @@ sub loadItems()
     else
         url = Substitute("Users/{0}/Items/", get_setting("active_user"))
     end if
+
     resp = APIRequest(url, params)
     data = getJson(resp)
     if data <> invalid
