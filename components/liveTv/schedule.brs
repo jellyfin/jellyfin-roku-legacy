@@ -38,7 +38,6 @@ end sub
 
 sub channelFilterSet()
     m.spinner.visible = true
-    'm.scheduleGrid.jumpToChannel = 0
     if m.top.filter <> invalid and m.LoadChannelsTask.filter <> m.top.filter
         if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
 
@@ -59,7 +58,6 @@ end sub
 
 'Voice Search set
 sub channelsearchTermSet()
-    'm.scheduleGrid.jumpToChannel = 0
     if m.top.searchTerm <> invalid and m.LoadChannelsTask.searchTerm <> m.top.searchTerm
         if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
 
@@ -107,8 +105,6 @@ sub onChannelsLoaded()
             m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
             m.EPGLaunchCompleteSignaled = true
         end if
-        'm.LoadChannelsTask.channels = m.LoadChannelsTask.channels
-        'm.top.channelIdList = m.channelIdList
     end if
     m.LoadChannelsTask.channels = []
     'keep focus on current channel while loading the next set of channels
@@ -204,7 +200,6 @@ sub advanceGuide()
         m.LoadChannelsTask.startIndex = startIdex
         ' if task is running stop and load more
         m.top.counter = m.top.channelsLoaded - 11
-        'm.top.currentChannelFocused = m.scheduleGrid.channelFocused
         m.LoadChannelsTask.control = "RUN"
         m.scheduleGrid.setFocus(true)
     end if
