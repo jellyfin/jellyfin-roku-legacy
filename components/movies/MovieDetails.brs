@@ -19,7 +19,6 @@ sub init()
     m.buttonGrp.setFocus(true)
     m.top.lastFocus = m.buttonGrp
 
-    m.spinner = m.top.findNode("spinner")
 
     m.trailerButton = m.top.findNode("trailer-button")
     m.trailerButton.text = tr("Play Trailer")
