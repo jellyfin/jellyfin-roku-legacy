@@ -100,6 +100,27 @@ sub loadItems()
             end if
         end for
 
+    else if m.top.itemsToLoad = "favorites"
+
+        url = Substitute("Users/{0}/Items", get_setting("active_user"))
+
+        params = {}
+        params["Filters"] = "IsFavorite"
+        params["Limit"] = 20
+        params["recursive"] = true
+        params["sortby"] = "random"
+
+        resp = APIRequest(url, params)
+        data = getJson(resp)
+        for each item in data.Items
+            ' Skip Books for now as we don't support it (issue #558)
+            if item.Type <> "Book"
+                tmp = CreateObject("roSGNode", "HomeData")
+                tmp.json = item
+                results.push(tmp)
+            end if
+        end for
+
     else if m.top.itemsToLoad = "onNow"
         url = "LiveTv/Programs/Recommended"
         params = {}
@@ -149,6 +170,20 @@ sub loadItems()
                 params["MaxHeight"] = 402
                 tmp.posterURL = ImageUrl(specfeat.Id, "Primary", params)
                 tmp.json = specfeat
+            end for
+        end if
+    else if m.top.itemsToLoad = "additionalparts"
+        additionalParts = api_API().videos.getAdditionalParts(m.top.itemId)
+        if isValid(additionalParts)
+            for each part in additionalParts.items
+                tmp = CreateObject("roSGNode", "ExtrasData")
+                params = {}
+                params["Tags"] = part.ImageTags.Primary
+                params["MaxWidth"] = 450
+                params["MaxHeight"] = 402
+                tmp.posterURL = ImageUrl(part.Id, "Primary", params)
+                tmp.json = part
+                results.push(tmp)
             end for
         end if
     else if m.top.itemsToLoad = "likethis"

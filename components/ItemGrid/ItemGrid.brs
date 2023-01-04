@@ -12,6 +12,11 @@ sub init()
     m.newBackdrop = m.top.findNode("backdropTransition")
     m.emptyText = m.top.findNode("emptyText")
 
+    m.genreList = m.top.findNode("genrelist")
+    m.genreList.observeField("itemSelected", "onGenreItemSelected")
+    m.genreData = CreateObject("roSGNode", "ContentNode")
+    m.genreList.content = m.genreData
+
     m.swapAnimation = m.top.findNode("backroundSwapAnimation")
     m.swapAnimation.observeField("state", "swapDone")
 
@@ -72,6 +77,12 @@ sub init()
         m.micButton.visible = false
         m.micButtonText.visible = false
     end if
+end sub
+
+'
+'Genre Item Selected
+sub onGenreItemSelected()
+    m.top.selectedItem = m.genreList.content.getChild(m.genreList.rowItemSelected[0]).getChild(m.genreList.rowItemSelected[1])
 end sub
 
 '
@@ -241,7 +252,10 @@ sub setMoviesOptions(options)
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
-        { "Title": tr("Favorites"), "Name": "Favorites" }
+        { "Title": tr("Favorites"), "Name": "Favorites" },
+        { "Title": tr("Played"), "Name": "Played" },
+        { "Title": tr("Unplayed"), "Name": "Unplayed" },
+        { "Title": tr("Resumable"), "Name": "Resumable" }
     ]
 end sub
 
@@ -256,7 +270,9 @@ sub setBoxsetsOptions(options)
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
-        { "Title": tr("Favorites"), "Name": "Favorites" }
+        { "Title": tr("Favorites"), "Name": "Favorites" },
+        { "Title": tr("Played"), "Name": "Played" },
+        { "Title": tr("Unplayed"), "Name": "Unplayed" }
     ]
 end sub
 
@@ -278,8 +294,18 @@ sub setTvShowsOptions(options)
     ]
     options.filter = [
         { "Title": tr("All"), "Name": "All" },
-        { "Title": tr("Favorites"), "Name": "Favorites" }
+        { "Title": tr("Favorites"), "Name": "Favorites" },
+        { "Title": tr("Played"), "Name": "Played" },
+        { "Title": tr("Unplayed"), "Name": "Unplayed" }
     ]
+
+    if isValid(m.view)
+        if LCase(m.options.view) = "genres" or LCase(m.view) = "genres"
+            options.sort = [{ "Title": tr("TITLE"), "Name": "SortName" }]
+            options.filter = []
+        end if
+    end if
+
 end sub
 
 ' Set Live TV view, sort, and filter options
@@ -320,13 +346,14 @@ end sub
 
 ' Set Photo Album view, sort, and filter options
 sub setPhotoAlbumOptions(options)
-    ' TODO/FIXME: Show shuffle options once implemented
-    ' options.views = [
-    '     { "Title": tr("Don't Shuffle"), "Name": "singlephoto"}
-    '     { "Title": tr("Shuffle"), "Name": "shufflephoto"}
-    ' ]
-    options.views = []
+    options.views = [
+        { "Title": tr("Slideshow Off"), "Name": "singlephoto" }
+        { "Title": tr("Slideshow On"), "Name": "slideshowphoto" }
+        { "Title": tr("Random Off"), "Name": "singlephoto" }
+        { "Title": tr("Random On"), "Name": "randomphoto" }
+    ]
     options.sort = []
+    options.filter = []
 end sub
 
 ' Set Default view, sort, and filter options
@@ -422,9 +449,31 @@ sub ItemDataLoaded(msg)
         return
     end if
 
+    if m.loadItemsTask.view = "Genres"
+        ' Reset genre list data
+        m.genreData.removeChildren(m.genreData.getChildren(-1, 0))
+
+        for each item in itemData
+            m.genreData.appendChild(item)
+        end for
+
+        m.itemGrid.opacity = "0"
+        m.genreList.opacity = "1"
+
+        m.itemGrid.setFocus(false)
+        m.genreList.setFocus(true)
+
+        m.loading = false
+        m.spinner.visible = false
+        return
+    end if
+
     for each item in itemData
         m.data.appendChild(item)
     end for
+
+    m.itemGrid.opacity = "1"
+    m.genreList.opacity = "0"
 
     'Update the stored counts
     m.loadedItems = m.itemGrid.content.getChildCount()
@@ -437,6 +486,7 @@ sub ItemDataLoaded(msg)
     end if
 
     m.itemGrid.setFocus(true)
+    m.genreList.setFocus(false)
     m.spinner.visible = false
 end sub
 
@@ -574,14 +624,17 @@ sub optionsClosed()
         end if
     end if
 
-    if m.top.parentItem.Type = "CollectionFolder" or m.top.parentItem.CollectionType = "CollectionFolder"
-        ' Did the user just request "Shuffle" on a PhotoAlbum?
+    if m.top.parentItem.Type = "CollectionFolder" or m.top.parentItem.Type = "Folder" or m.top.parentItem.CollectionType = "CollectionFolder"
+        ' Did the user just request "Random" on a PhotoAlbum?
         if m.options.view = "singlephoto"
-            ' TODO/FIXME: Stop shuffling here
-            print "TODO/FIXME: Stop any shuffling here"
-        else if m.options.view = "shufflephoto"
-            ' TODO/FIXME: Start shuffling here
-            print "TODO/FIXME: Start shuffle here"
+            set_user_setting("photos.slideshow", "false")
+            set_user_setting("photos.random", "false")
+        else if m.options.view = "slideshowphoto"
+            set_user_setting("photos.slideshow", "true")
+            set_user_setting("photos.random", "false")
+        else if m.options.view = "randomphoto"
+            set_user_setting("photos.random", "true")
+            set_user_setting("photos.slideshow", "false")
         end if
     end if
 
@@ -641,7 +694,10 @@ sub optionsClosed()
         m.itemGrid.content = m.data
         loadInitialItems()
     end if
-    m.itemGrid.setFocus(true)
+
+    m.itemGrid.setFocus(m.itemGrid.opacity = 1)
+    m.genreList.setFocus(m.genreList.opacity = 1)
+
     if m.tvGuide <> invalid
         m.tvGuide.lastFocus.setFocus(true)
     end if
@@ -677,13 +733,19 @@ end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
-    topGrp = m.top.findNode("itemGrid")
+
+    if m.itemGrid.opacity = 1
+        topGrp = m.itemGrid
+    else
+        topGrp = m.genreList
+    end if
     searchGrp = m.top.findNode("voiceBox")
 
     if key = "left" and searchGrp.isinFocusChain()
         topGrp.setFocus(true)
         searchGrp.setFocus(false)
     end if
+
     if key = "options"
         if m.options.visible = true
             m.options.visible = false
@@ -724,9 +786,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
             return true
         else if itemToPlay <> invalid and itemToPlay.type = "Photo"
             ' Spawn photo player task
-            photoPlayer = CreateObject("roSgNode", "PhotoPlayerTask")
-            photoPlayer.itemContent = itemToPlay
-            photoPlayer.control = "RUN"
+            photoPlayer = CreateObject("roSgNode", "PhotoDetails")
+            photoPlayer.items = markupGrid
+            photoPlayer.itemIndex = markupGrid.itemFocused
+            m.global.sceneManager.callfunc("pushScene", photoPlayer)
             return true
         end if
     else if key = "left" and topGrp.isinFocusChain()
@@ -768,14 +831,16 @@ function onKeyEvent(key as string, press as boolean) as boolean
 end function
 
 sub updateTitle()
-    if m.filter = "All"
-        m.top.overhangTitle = m.top.parentItem.title
-    else if m.filter = "Favorites"
+    m.top.overhangTitle = m.top.parentItem.title
+
+    if m.filter = "Favorites"
         m.top.overhangTitle = m.top.parentItem.title + " " + tr("(Favorites)")
     end if
+
     if m.voiceBox.text <> ""
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered by ") + m.loadItemsTask.searchTerm + ")"
     end if
+
     if m.top.alphaSelected <> ""
         m.top.overhangTitle = m.top.parentItem.title + tr(" (Filtered by ") + m.loadItemsTask.nameStartsWith + ")"
     end if
@@ -789,14 +854,18 @@ sub updateTitle()
     if m.options.view = "Networks" or m.view = "Networks"
         m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Networks"))
     end if
+
     if m.options.view = "Studios" or m.view = "Studios"
         m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Studios"))
     end if
+
     if m.options.view = "Genres" or m.view = "Genres"
         m.top.overhangTitle = "%s (%s)".Format(m.top.parentItem.title, tr("Genres"))
     end if
+
     actInt = m.itemGrid.itemFocused + 1
-    if m.showItemCount and m.loadItemsTask.totalRecordCount > 0
+
+    if m.showItemCount and m.loadItemsTask.totalRecordCount > 0 and m.options.view <> "Genres" and m.view <> "Genres"
         m.top.overhangTitle += " (" + tr("%1 of %2").Replace("%1", actInt.toStr()).Replace("%2", m.loadItemsTask.totalRecordCount.toStr()) + ")"
     end if
 

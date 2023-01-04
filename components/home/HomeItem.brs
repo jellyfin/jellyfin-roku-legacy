@@ -2,9 +2,16 @@ sub init()
 
     m.itemText = m.top.findNode("itemText")
     m.itemPoster = m.top.findNode("itemPoster")
+    m.itemProgress = m.top.findNode("progress")
+    m.itemProgressBackground = m.top.findNode("progressBackground")
     m.itemIcon = m.top.findNode("itemIcon")
     m.itemTextExtra = m.top.findNode("itemTextExtra")
     m.itemPoster.observeField("loadStatus", "onPosterLoadStatusChanged")
+    m.unplayedCount = m.top.findNode("unplayedCount")
+    m.unplayedEpisodeCount = m.top.findNode("unplayedEpisodeCount")
+
+    m.showProgressBarAnimation = m.top.findNode("showProgressBar")
+    m.showProgressBarField = m.top.findNode("showProgressBarField")
 
     ' Randomize the background colors
     m.backdrop = m.top.findNode("backdrop")
@@ -19,17 +26,24 @@ sub itemContentChanged()
     if itemData = invalid then return
     itemData.Title = itemData.name ' Temporarily required while we move from "HomeItem" to "JFContentItem"
 
-
     m.itemPoster.width = itemData.imageWidth
     m.itemText.maxWidth = itemData.imageWidth
     m.itemTextExtra.width = itemData.imageWidth
     m.itemTextExtra.visible = true
 
-
     m.backdrop.width = itemData.imageWidth
 
     if itemData.iconUrl <> invalid
         m.itemIcon.uri = itemData.iconUrl
+    end if
+
+    if LCase(itemData.type) = "series"
+        if itemData?.json?.UserData?.UnplayedItemCount <> invalid
+            if itemData.json.UserData.UnplayedItemCount > 0
+                m.unplayedCount.visible = true
+                m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
+            end if
+        end if
     end if
 
     ' Format the Data based on the type of Home Data
@@ -74,6 +88,10 @@ sub itemContentChanged()
     if itemData.type = "Episode"
         m.itemText.text = itemData.json.SeriesName
 
+        if itemData.PlayedPercentage > 0
+            drawProgressBar(itemData)
+        end if
+
         if itemData.usePoster = true
             m.itemPoster.uri = itemData.widePosterURL
         else
@@ -98,6 +116,10 @@ sub itemContentChanged()
 
     if itemData.type = "Movie"
         m.itemText.text = itemData.name
+
+        if itemData.PlayedPercentage > 0
+            drawProgressBar(itemData)
+        end if
 
         ' Use best image, but fallback to secondary if it's empty
         if (itemData.imageWidth = 180 and itemData.posterURL <> "") or itemData.thumbnailURL = ""
@@ -126,6 +148,10 @@ sub itemContentChanged()
     if itemData.type = "Video"
         m.itemText.text = itemData.name
 
+        if itemData.PlayedPercentage > 0
+            drawProgressBar(itemData)
+        end if
+
         if itemData.imageWidth = 180
             m.itemPoster.uri = itemData.posterURL
         else
@@ -133,6 +159,7 @@ sub itemContentChanged()
         end if
         return
     end if
+
     if itemData.type = "Series"
 
         m.itemText.text = itemData.name
@@ -170,8 +197,45 @@ sub itemContentChanged()
         return
     end if
 
+    if itemData.type = "MusicArtist"
+        m.itemText.text = itemData.name
+        m.itemTextExtra.text = itemData.json.AlbumArtist
+        m.itemPoster.uri = ImageURL(itemData.id)
+        return
+    end if
+
+    if itemData.type = "Audio"
+        m.itemText.text = itemData.name
+        m.itemTextExtra.text = itemData.json.AlbumArtist
+        m.itemPoster.uri = ImageURL(itemData.id)
+        return
+    end if
+
+    if itemData.type = "TvChannel"
+        m.itemText.text = itemData.name
+        m.itemTextExtra.text = itemData.json.AlbumArtist
+        m.itemPoster.uri = ImageURL(itemData.id)
+        return
+    end if
+
+    if itemData.type = "Season"
+        m.itemText.text = itemData.json.SeriesName
+        m.itemTextExtra.text = itemData.name
+        m.itemPoster.uri = ImageURL(itemData.id)
+        return
+    end if
+
     print "Unhandled Home Item Type: " + itemData.type
 
+end sub
+
+'
+' Draws and animates item progress bar
+sub drawProgressBar(itemData)
+    m.itemProgressBackground.width = itemData.imageWidth
+    m.itemProgressBackground.visible = true
+    m.showProgressBarField.keyValue = [0, m.itemPoster.width * (itemData.PlayedPercentage / 100)]
+    m.showProgressBarAnimation.control = "Start"
 end sub
 
 '

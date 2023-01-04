@@ -5,6 +5,9 @@ sub init()
     m.overview = m.top.findNode("overview")
     m.poster = m.top.findNode("poster")
     m.deviceInfo = CreateObject("roDeviceInfo")
+
+    m.rating = m.top.findnode("rating")
+    m.infoBar = m.top.findnode("infoBar")
 end sub
 
 sub itemContentChanged()
@@ -18,6 +21,12 @@ sub itemContentChanged()
     m.title.text = indexNumber + item.title
     m.overview.text = item.overview
 
+    if itemData.PremiereDate <> invalid
+        airDate = CreateObject("roDateTime")
+        airDate.FromISO8601String(itemData.PremiereDate)
+        m.top.findNode("aired").text = tr("Aired") + ": " + airDate.AsDateString("short-month-no-weekday")
+    end if
+
     imageUrl = item.posterURL
 
     if get_user_setting("ui.tvshows.blurunwatched") = "true"
@@ -30,18 +39,29 @@ sub itemContentChanged()
 
     m.poster.uri = imageUrl
 
-    if type(itemData.RunTimeTicks) = "LongInteger"
-        m.top.findNode("runtime").text = stri(getRuntime()).trim() + " mins"
+    if type(itemData.RunTimeTicks) = "roInt" or type(itemData.RunTimeTicks) = "LongInteger"
+        runTime = getRuntime()
+        if runTime < 2
+            m.top.findNode("runtime").text = "1 min"
+        else
+            m.top.findNode("runtime").text = stri(runTime).trim() + " mins"
+        end if
+
         if get_user_setting("ui.design.hideclock") <> "true"
             m.top.findNode("endtime").text = tr("Ends at %1").Replace("%1", getEndTime())
         end if
     end if
 
-    if itemData.communityRating <> invalid
-        m.top.findNode("star").visible = true
-        m.top.findNode("communityRating").text = str(int(itemData.communityRating * 10) / 10)
+    if get_user_setting("ui.tvshows.disableCommunityRating") = "false"
+        if isValid(itemData.communityRating)
+            m.top.findNode("star").visible = true
+            m.top.findNode("communityRating").text = str(int(itemData.communityRating * 10) / 10)
+        else
+            m.top.findNode("star").visible = false
+        end if
     else
-        m.top.findNode("star").visible = false
+        m.rating.visible = false
+        m.infoBar.itemSpacings = [20, -25, 20, 20]
     end if
 
     videoIdx = invalid

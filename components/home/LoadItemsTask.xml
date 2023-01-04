@@ -15,4 +15,5 @@
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+  <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
 </component>

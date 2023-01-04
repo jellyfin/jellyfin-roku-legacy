@@ -8,11 +8,13 @@ sub setFields()
     m.top.watched = json.UserData.played
     m.top.Type = "Movie"
 
-    if json.MediaSourceCount <> invalid and json.MediaSourceCount > 1
-        m.top.mediaSources = []
-        for each source in json.MediaSources
-            m.top.mediaSources.push(source)
-        end for
+    if isValid(json.MediaSourceCount) and json.MediaSourceCount > 1
+        if isValid(json.MediaSources)
+            m.top.mediaSources = []
+            for each source in json.MediaSources
+                m.top.mediaSources.push(source)
+            end for
+        end if
     end if
 
     if json.ProductionYear <> invalid
@@ -49,9 +51,11 @@ sub setPoster()
         end if
 
         ' Add Backdrop Image
-        if m.top.json.BackdropImageTags[0] <> invalid
-            imgParams = { "maxHeight": 720, "maxWidth": 1280 }
-            m.top.backdropURL = ImageURL(m.top.json.id, "Backdrop", imgParams)
+        if m.top.json.BackdropImageTags <> invalid
+            if m.top.json.BackdropImageTags[0] <> invalid
+                imgParams = { "maxHeight": 720, "maxWidth": 1280 }
+                m.top.backdropURL = ImageURL(m.top.json.id, "Backdrop", imgParams)
+            end if
         end if
 
     end if

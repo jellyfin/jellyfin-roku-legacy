@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="QueueManager" extends="Group">
+  <interface>
+    <function name="clear" />
+    <function name="deleteAtIndex" />
+    <function name="getCount" />
+    <function name="getCurrentItem" />
+    <function name="getItemByIndex" />
+    <function name="getPosition" />
+    <function name="getQueue" />
+    <function name="moveBack" />
+    <function name="moveForward" />
+    <function name="peek" />
+    <function name="playQueue" />
+    <function name="pop" />
+    <function name="push" />
+    <function name="set" />
+    <function name="setPosition" />
+    <function name="top" />
+  </interface>
+  <script type="text/brightscript" uri="QueueManager.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+  <script type="text/brightscript" uri="ViewCreator.brs" />
+</component>

@@ -11,10 +11,11 @@
     <field id="json" type="assocarray" onChange="setData" />
     <field id="collectionType" type="string" />
     <field id="imageWidth" type="integer" value="464" />
+    <field id="PlayedPercentage" type="float" value="0" />
     <field id="usePoster" type="bool" value="false" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
-    <script type="text/brightscript" uri="HomeData.brs" />
+  <script type="text/brightscript" uri="HomeData.brs" />
 </component>

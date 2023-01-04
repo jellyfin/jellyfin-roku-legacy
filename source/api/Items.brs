@@ -329,24 +329,30 @@ function AudioStream(id as string)
     songData = AudioItem(id)
 
     content = createObject("RoSGNode", "ContentNode")
-
-    params = {}
-
-    params.append({
-        "Static": "true",
-        "Container": songData.mediaSources[0].container
-    })
-
-    params.MediaSourceId = songData.mediaSources[0].id
-
-    content.url = buildURL(Substitute("Audio/{0}/stream", songData.id), params)
     content.title = songData.title
-    content.streamformat = songData.mediaSources[0].container
 
-    playbackInfo = ItemPostPlaybackInfo(songData.id, params.MediaSourceId)
+    playbackInfo = ItemPostPlaybackInfo(songData.id, songData.mediaSources[0].id)
     content.id = playbackInfo.PlaySessionId
 
+    if useTranscodeAudioStream(playbackInfo)
+        ' Transcode the audio
+        content.url = buildURL(playbackInfo.mediaSources[0].TranscodingURL)
+    else
+        ' Direct Stream the audio
+        params = {
+            "Static": "true",
+            "Container": songData.mediaSources[0].container,
+            "MediaSourceId": songData.mediaSources[0].id
+        }
+        content.streamformat = songData.mediaSources[0].container
+        content.url = buildURL(Substitute("Audio/{0}/stream", songData.id), params)
+    end if
+
     return content
+end function
+
+function useTranscodeAudioStream(playbackInfo)
+    return playbackInfo.mediaSources[0] <> invalid and playbackInfo.mediaSources[0].TranscodingURL <> invalid
 end function
 
 function BackdropImage(id as string)
@@ -363,10 +369,6 @@ function TVSeasons(id as string)
     results = []
     for each item in data.Items
         imgParams = { "AddPlayedIndicator": item.UserData.Played }
-        if item.UserData.UnplayedItemCount > 0
-            param = { "UnplayedCount": item.UserData.UnplayedItemCount }
-            imgParams.Append(param)
-        end if
         tmp = CreateObject("roSGNode", "TVEpisodeData")
         tmp.image = PosterImage(item.id, imgParams)
         tmp.json = item

@@ -2,32 +2,20 @@
 <component name="ListPoster" extends="Group">
   <children>
     <Rectangle id="backdrop" />
-    <ScrollingLabel id="Series"
-      horizAlign="center"
-      font="font:SmallSystemFont"
-      repeatCount="0"
-      visible="false"
-      />
-    <Poster id="poster" translation="[2,0]" loadDisplayMode="scaleToFit" />
-    <ScrollingLabel id="title"
-      horizAlign="center"
-      font="font:SmallSystemFont"
-      repeatCount="0"
-      visible="false"
-      />
-    <Label id="staticTitle"
-      horizAlign="center"
-      font="font:SmallSystemFont"
-      wrap="false"
-      />
+    <ScrollingLabel id="Series" horizAlign="center" font="font:SmallSystemFont" repeatCount="0" visible="false" />
+    <Poster id="poster" translation="[2,0]" loadDisplayMode="scaleToFit">
+      <Rectangle id="unplayedCount" visible="false" width="90" height="60" color="#00a4dcFF" translation="[104, 0]">
+        <Label id="unplayedEpisodeCount" width="90" height="60" font="font:SmallestBoldSystemFont" horizAlign="center" vertAlign="center" />
+      </Rectangle>
+    </Poster>
+    <ScrollingLabel id="title" horizAlign="center" font="font:SmallSystemFont" repeatCount="0" visible="false" />
+    <Label id="staticTitle" horizAlign="center" font="font:SmallSystemFont" wrap="false" />
   </children>
   <interface>
     <field id="itemContent" type="node" onChange="itemContentChanged"/>
     <field id="itemWidth" type="integer" />
     <field id="itemHasFocus" type="boolean" onChange="focusChanged" />
-    <!-- mediatype -->
   </interface>
-
   <script type="text/brightscript" uri="ListPoster.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

@@ -286,16 +286,31 @@
             <translation>More Like This</translation>
         </message>
         <message>
+            <source>Press &apos;OK&apos; to Close</source>
+            <translation>Press &apos;OK&apos; to Close</translation>
+        </message>
+        <message>
             <source>Special Features</source>
             <translation>Special Features</translation>
-            <message>
-                <source>Press &apos;OK&apos; to Close</source>
-                <translation>Press &apos;OK&apos; to Close</translation>
-            </message>
+        </message>
+        <message>
+            <source>Additional Parts</source>
+            <translation>Additional Parts</translation>
+            <extracomment>Additional parts of a video</extracomment>
         </message>
         <message>
             <source>Movies</source>
             <translation>Movies</translation>
+        </message>
+        <message>
+            <source>Movies (Presentation)</source>
+            <translation>Movies (Presentation)</translation>
+            <extracomment>Movie library view option</extracomment>
+        </message>
+        <message>
+            <source>Movies (Grid)</source>
+            <translation>Movies (Grid)</translation>
+            <extracomment>Movie library view option</extracomment>
         </message>
         <message>
             <source>TV Shows</source>
@@ -479,15 +494,46 @@
             <translation>Playback</translation>
             <extracomment>Title for Playback section in user setting screen.</extracomment>
         </message>
+
         <message>
-            <source>MPEG-2 Support</source>
-            <translation>MPEG-2 Support</translation>
-            <extracomment>Settings Menu - Title for option</extracomment>
+            <source>Codec Support</source>
+            <translation>Codec Support</translation>
+            <extracomment>Settings Menu - Title for settings group related to codec support</extracomment>
+        </message>
+        <message>
+            <source>Enable or disable Direct Play for optional codecs</source>
+            <translation>Enable or disable Direct Play for optional codecs</translation>
+            <extracomment>Settings Menu - Title for settings group related to codec support</extracomment>
+        </message>
+        <message>
+            <source>MPEG-2</source>
+            <translation>MPEG-2</translation>
+            <extracomment>Name of codec used in settings menu</extracomment>
         </message>
         <message>
             <source>Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.</source>
             <translation>Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
+        <message>
+            <source>MPEG-4</source>
+            <translation>MPEG-4</translation>
+            <extracomment>Name of codec used in settings menu</extracomment>
+        </message>
+        <message>
+            <source>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</source>
+            <translation>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</translation>
+            <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
+        <message>
+            <source>AV1</source>
+            <translation>AV1</translation>
+            <extracomment>Name of a setting - should we try to direct play experimental av1 codec</extracomment>
+        </message>
+        <message>
+            <source>** EXPERIMENTAL** Support Direct Play of AV1 content if this Roku device supports it.</source>
+            <translation>** EXPERIMENTAL** Support Direct Play of AV1 content if this Roku device supports it.</translation>
+            <extracomment>Description of a setting - should we try to direct play experimental av1 codec</extracomment>
         </message>
         <message>
             <source>Enabled</source>
@@ -643,6 +689,16 @@
             <extracomment>Option Title in user setting screen</extracomment>
         </message>
         <message>
+            <source>Skip Details for Single Seasons</source>
+            <translation>Skip Details for Single Seasons</translation>
+            <extracomment>Settings Menu - Title for option</extracomment>
+        </message>
+        <message>
+            <source>If enabled, selecting a TV series with only one season will go straight to the episode list rather than the show details and season list.</source>
+            <translation>If enabled, selecting a TV series with only one season will go straight to the episode list rather than the show details and season list.</translation>
+            <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
+        <message>
             <source>If enabled, images of unwatched episodes will be blurred.</source>
             <translation>If enabled, images of unwatched episodes will be blurred.</translation>
         </message>
@@ -704,8 +760,32 @@
             <extracomment>Settings Menu - Description for option</extracomment>
         </message>
         <message>
+            <source>Next episode</source>
+            <translation>Next episode</translation>
+        </message>
+        <message>
             <source>Play Trailer</source>
             <translation>Play Trailer</translation>
+        </message>
+        <message>
+            <source>H.264</source>
+            <translation>H.264</translation>
+            <extracomment>Name of codec used in settings menu</extracomment>
+        </message>
+        <message>
+            <source>Attempt Direct Play for H.264 media with unsupported profile levels before falling back to transcoding if it fails.</source>
+            <translation>Attempt Direct Play for H.264 media with unsupported profile levels before falling back to transcoding if it fails.</translation>
+            <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
+        <message>
+            <source>HEVC</source>
+            <translation>HEVC</translation>
+            <extracomment>Name of codec used in settings menu</extracomment>
+        </message>
+        <message>
+            <source>Attempt Direct Play for HEVC media with unsupported profile levels before falling back to trancoding if it fails.</source>
+            <translation>Attempt Direct Play for HEVC media with unsupported profile levels before falling back to trancoding if it fails.</translation>
+            <extracomment>Settings Menu - Description for option</extracomment>
         </message>
         <message>
             <source>Settings relating to playback and supported codec and media types.</source>
@@ -816,6 +896,118 @@
             <source>Unable to find any albums or songs belonging to this artist</source>
             <translation>Unable to find any albums or songs belonging to this artist</translation>
             <extracomment>Popup message when we find no audio data for an artist</extracomment>
+        </message>
+        <message>
+            <source>Text Subtitles Only</source>
+            <translation>Text Subtitles Only</translation>
+            <extracomment>Name of a setting - should we hide subtitles that might transcode</extracomment>
+        </message>
+        <message>
+            <source>Only display text subtitles to minimize transcoding.</source>
+            <translation>Only display text subtitles to minimize transcoding.</translation>
+            <extracomment>Description of a setting - should we hide subtitles that might transcode</extracomment>
+        </message>
+        <message>
+            <source>all</source>
+            <translation>all</translation>
+            <extracomment>all will reset the searchTerm so all data will be availible</extracomment>
+        </message>
+        <message>
+            <source>Aired</source>
+            <translation>Aired</translation>
+            <extracomment>Aired date label</extracomment>
+        </message>
+        <message>
+            <source>Slideshow Off</source>
+            <translation>Slideshow Off</translation>
+        </message>
+        <message>
+            <source>Slideshow On</source>
+            <translation>Slideshow On</translation>
+        </message>
+        <message>
+            <source>Slideshow Paused</source>
+            <translation>Slideshow Paused</translation>
+        </message>
+        <message>
+            <source>Slideshow Resumed</source>
+            <translation>Slideshow Resumed</translation>
+        </message>
+        <message>
+            <source>Random Off</source>
+            <translation>Random Off</translation>
+        </message>
+        <message>
+            <source>Random On</source>
+            <translation>Random On</translation>
+        </message>
+        <message>
+            <source>MPEG-4 Support</source>
+            <translation>MPEG-4 Support</translation>
+            <extracomment>Settings Menu - Title for option</extracomment>
+        </message>
+        <message>
+            <source>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</source>
+            <translation>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</translation>
+            <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
+        <message>
+            <source>Show What's New Popup</source>
+            <translation>Show What's New Popup</translation>
+            <extracomment>Settings Menu - Title for option</extracomment>
+        </message>
+        <message>
+            <source>Show What's New popup when Jellyfin is updated to a new version.</source>
+            <translation>Show What's New popup when Jellyfin is updated to a new version.</translation>
+            <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
+        <message>
+            <source>Unplayed</source>
+            <translation>Unplayed</translation>
+        </message>
+        <message>
+            <source>Played</source>
+            <translation>Played</translation>
+        </message>
+        <message>
+            <source>Resumable</source>
+            <translation>Resumable</translation>
+        </message>
+        <message>
+            <source>Artists (Presentation)</source>
+            <translation>Artists (Presentation)</translation>
+        </message>
+        <message>
+            <source>Artists (Grid)</source>
+            <translation>Artists (Grid)</translation>
+        </message>
+        <message>
+            <source>Song</source>
+            <translation>Song</translation>
+        </message>
+        <message>
+            <source>Songs</source>
+            <translation>Songs</translation>
+        </message>
+        <message>
+            <source>Album</source>
+            <translation>Album</translation>
+        </message>
+        <message>
+            <source>Albums</source>
+            <translation>Albums</translation>
+        </message>
+        <message>
+            <source>View All</source>
+            <translation>View All</translation>
+        </message>
+        <message>
+            <source>Disable Community Rating for Episodes</source>
+            <translation>Disable Community Rating for Episodes</translation>
+        </message>
+        <message>
+            <source>If enabled, the star and community rating for episodes of a TV show will be removed. This is to prevent spoilers of an upcoming good/bad episode.</source>
+            <translation>If enabled, the star and community rating for episodes of a TV show will be removed. This is to prevent spoilers of an upcoming good/bad episode.</translation>
         </message>
     </context>
 </TS>

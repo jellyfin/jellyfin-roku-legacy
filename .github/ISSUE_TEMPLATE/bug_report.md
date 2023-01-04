@@ -7,15 +7,19 @@ assignees: ''
 
 ---
 
+**Software Versions**
+Jellyfin Server Version: 
+Roku Client Version: 
+
 **Describe the bug**
 <!-- A clear and concise description of what the bug is. -->
 
-**To Reproduce**
+**How To Reproduce**
 <!-- Steps to reproduce the behavior: -->
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
-4. See error
+4. Bug occurs
 
 **Expected behavior**
 <!-- A clear and concise description of what you expected to happen. -->
@@ -25,6 +29,11 @@ assignees: ''
 
 **Screenshots**
 <!-- If applicable, add screenshots to help explain your problem. -->
+
+**Connection Information**
+Is server local or remote? 
+
+Is server connection http or https? 
 
 **Additional context**
 <!-- Add any other context about the problem here. -->

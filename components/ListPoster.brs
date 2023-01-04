@@ -3,6 +3,8 @@ sub init()
     m.staticTitle = m.top.findNode("staticTitle")
     m.series = m.top.findNode("Series")
     m.poster = m.top.findNode("poster")
+    m.unplayedCount = m.top.findNode("unplayedCount")
+    m.unplayedEpisodeCount = m.top.findNode("unplayedEpisodeCount")
 
     m.backdrop = m.top.findNode("backdrop")
 
@@ -54,6 +56,13 @@ sub itemContentChanged() as void
     m.poster = m.top.findNode("poster")
     itemData = m.top.itemContent
     m.title.text = itemData.title
+
+    if itemData?.json?.UserData?.UnplayedItemCount <> invalid
+        if itemData.json.UserData.UnplayedItemCount > 0
+            m.unplayedCount.visible = true
+            m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
+        end if
+    end if
 
     if itemData.json.lookup("Type") = "Episode" and itemData.json.IndexNumber <> invalid
         m.title.text = StrI(itemData.json.IndexNumber) + ". " + m.title.text

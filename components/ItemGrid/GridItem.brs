@@ -8,6 +8,9 @@ sub init()
 
     m.itemPoster.observeField("loadStatus", "onPosterLoadStatusChanged")
 
+    m.unplayedCount = m.top.findNode("unplayedCount")
+    m.unplayedEpisodeCount = m.top.findNode("unplayedEpisodeCount")
+
     m.itemText.translation = [0, m.itemPoster.height + 7]
 
     m.alwaysShowTitles = get_user_setting("itemgrid.alwaysShowTitles") = "true"
@@ -40,6 +43,13 @@ sub itemContentChanged()
         m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "Series"
+        if itemData?.json?.UserData?.UnplayedItemCount <> invalid
+            if itemData.json.UserData.UnplayedItemCount > 0
+                m.unplayedCount.visible = true
+                m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
+            end if
+        end if
+
         m.itemPoster.uri = itemData.PosterUrl
         m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title

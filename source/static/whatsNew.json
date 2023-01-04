@@ -1,0 +1,90 @@
+[
+    {
+        "description": "Settings relating to playback and supported codec and media types.",
+        "author": "candry7731"
+    },
+    {
+        "description": "Create photo slideshow",
+        "author": "jimdogx"
+    },
+    {
+        "description": "Add 20 random favorites to home view",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Add Aired Date to episode details",
+        "author": "candry7731"
+    },
+    {
+        "description": "Transcode music if needed to play",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Update Movie Library View",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Add support for Additional Movie Parts",
+        "author": "jimdogx"
+    },
+    {
+        "description": "Convert MPEG4 direct play to user setting",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Support for HDR, VP9, AV1",
+        "author": "whiteowl3"
+    },
+    {
+        "description": "HEVC Direct Play override for Profile Version",
+        "author": "neilsb"
+    },
+    {
+        "description": "Update overhang clock time logic",
+        "author": "neilsb"
+    },
+    {
+        "description": "Remove temporary code to migrate MPEG2 setting",
+        "author": "neilsb"
+    },
+    {
+        "description": "Show short runtime for TV Episodes",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Don't play intro video before trailers",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Fix video details popup wrong information",
+        "author": "jimdogx"
+    },
+    {
+        "description": "Fix search results navigation when 1 item in row",
+        "author": "candry7731"
+    },
+    {
+        "description": "Remove rooibos test framework",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Exempt draft PR from stale workflow",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Fix Filter reload Issues with Live TV",
+        "author": "candry7731"
+    },
+    {
+        "description": "Fix lockup on Additional Parts resume",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Fix Next Episode button if trickplay never used",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Fix invalid en_US translations file",
+        "author": "1hitsong"
+    }
+]

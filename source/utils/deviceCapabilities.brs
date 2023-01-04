@@ -18,6 +18,7 @@ end function
 
 function getDeviceProfile() as object
     playMpeg2 = get_user_setting("playback.mpeg2") = "true"
+    playAv1 = get_user_setting("playback.av1") = "true"
 
     'Check if 5.1 Audio Output connected
     maxAudioChannels = 2
@@ -26,14 +27,19 @@ function getDeviceProfile() as object
         maxAudioChannels = 6
     end if
 
-    if playMpeg2 and di.CanDecodeVideo({ Codec: "mpeg2" }).Result = true
-        tsVideoCodecs = "h264,mpeg2video"
-    else
-        tsVideoCodecs = "h264"
+    addHevcProfile = false
+    MAIN10 = ""
+    tsVideoCodecs = "h264"
+    if di.CanDecodeVideo({ Codec: "hevc" }).Result = true
+        tsVideoCodecs = "h265,hevc," + tsVideoCodecs
+        addHevcProfile = true
+        if di.CanDecodeVideo({ Codec: "hevc", Profile: "main 10" }).Result
+            MAIN10 = "|main 10"
+        end if
     end if
 
-    if di.CanDecodeVideo({ Codec: "hevc" }).Result = true
-        tsVideoCodecs = tsVideoCodecs + ",h265,hevc"
+    if playMpeg2 and di.CanDecodeVideo({ Codec: "mpeg2" }).Result = true
+        tsVideoCodecs = tsVideoCodecs + ",mpeg2video"
     end if
 
     if di.CanDecodeAudio({ Codec: "ac3" }).result
@@ -42,9 +48,42 @@ function getDeviceProfile() as object
         tsAudioCodecs = "aac"
     end if
 
+    addAv1Profile = false
+    if playAv1 and di.CanDecodeVideo({ Codec: "av1" }).result
+        tsVideoCodecs = tsVideoCodecs + ",av1"
+        addAv1Profile = true
+    end if
+
+    addVp9Profile = false
+    if di.CanDecodeVideo({ Codec: "vp9" }).result
+        tsVideoCodecs = tsVideoCodecs + ",vp9"
+        addVp9Profile = true
+    end if
+
+    hevcVideoRangeTypes = "SDR"
+    vp9VideoRangeTypes = "SDR"
+    av1VideoRangeTypes = "SDR"
+
+    dp = di.GetDisplayProperties()
+    if dp.Hdr10 ' or dp.Hdr10Plus?
+        hevcVideoRangeTypes = hevcVideoRangeTypes + "|HDR10"
+        vp9VideoRangeTypes = vp9VideoRangeTypes + "|HDR10"
+        av1VideoRangeTypes = av1VideoRangeTypes + "|HDR10"
+    end if
+    if dp.HLG
+        hevcVideoRangeTypes = hevcVideoRangeTypes + "|HLG"
+        vp9VideoRangeTypes = vp9VideoRangeTypes + "|HLG"
+        av1VideoRangeTypes = av1VideoRangeTypes + "|HLG"
+    end if
+    if dp.DolbyVision
+        hevcVideoRangeTypes = hevcVideoRangeTypes + "|DOVI"
+        'vp9VideoRangeTypes = vp9VideoRangeTypes + ",DOVI" no evidence that vp9 can hold DOVI
+        av1VideoRangeTypes = av1VideoRangeTypes + "|DOVI"
+    end if
+
     DirectPlayProfile = GetDirectPlayProfiles()
 
-    return {
+    deviceProfile = {
         "MaxStreamingBitrate": 120000000,
         "MaxStaticBitrate": 100000000,
         "MusicStreamingTranscodingBitrate": 192000,
@@ -131,24 +170,13 @@ function getDeviceProfile() as object
                         "Property": "VideoLevel",
                         "Value": "41",
                         "IsRequired": false
-                    }
-                ]
-            },
-            {
-                "Type": "Video",
-                "Codec": "hevc",
-                "Conditions": [
-                    {
-                        "Condition": "EqualsAny",
-                        "Property": "VideoProfile",
-                        "Value": "main",
-                        "IsRequired": false
                     },
+                    ' Roku only supports h264 up to 10Mpbs
                     {
                         "Condition": "LessThanEqual",
-                        "Property": "VideoLevel",
-                        "Value": StrI(120 * 5.1),
-                        "IsRequired": false
+                        "Property": "VideoBitrate",
+                        "Value": "10000000",
+                        IsRequired: true
                     }
                 ]
             }
@@ -172,12 +200,89 @@ function getDeviceProfile() as object
             }
         ]
     }
+    if addAv1Profile
+        deviceProfile.CodecProfiles.push({
+            "Type": "Video",
+            "Codec": "av1",
+            "Conditions": [
+                {
+                    "Condition": "EqualsAny",
+                    "Property": "VideoRangeType",
+                    "Value": av1VideoRangeTypes,
+                    "IsRequired": false
+                },
+                ' Roku only supports AVI up to 40Mpbs
+                {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "40000000",
+                    IsRequired: true
+                }
+            ]
+        })
+    end if
+    if addHevcProfile
+        deviceProfile.CodecProfiles.push({
+            "Type": "Video",
+            "Codec": "hevc",
+            "Conditions": [
+                {
+                    "Condition": "EqualsAny",
+                    "Property": "VideoProfile",
+                    "Value": "main" + MAIN10,
+                    "IsRequired": false
+                },
+                {
+                    "Condition": "EqualsAny",
+                    "Property": "VideoRangeType",
+                    "Value": hevcVideoRangeTypes,
+                    "IsRequired": false
+                },
+                {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoLevel",
+                    "Value": (120 * 5.1).ToStr(),
+                    "IsRequired": false
+                },
+                ' Roku only supports h265 up to 40Mpbs
+                {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "40000000",
+                    IsRequired: true
+                }
+            ]
+        })
+    end if
+    if addVp9Profile
+        deviceProfile.CodecProfiles.push({
+            "Type": "Video",
+            "Codec": "vp9",
+            "Conditions": [
+                {
+                    "Condition": "EqualsAny",
+                    "Property": "VideoRangeType",
+                    "Value": vp9VideoRangeTypes,
+                    "IsRequired": false
+                },
+                ' Roku only supports VP9 up to 40Mpbs
+                {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "40000000",
+                    IsRequired: true
+                }
+            ]
+        })
+    end if
+
+    return deviceProfile
 end function
 
 
 function GetDirectPlayProfiles() as object
 
-    mp4Video = "h264,mpeg4"
+    mp4Video = "h264"
     mp4Audio = "mp3,pcm,lpcm,wav"
     mkvVideo = "h264,vp8"
     mkvAudio = "mp3,pcm,lpcm,wav"
@@ -200,6 +305,10 @@ function GetDirectPlayProfiles() as object
     if playMpeg2 and di.CanDecodeVideo({ Codec: "mpeg2" }).Result = true
         mp4Video = mp4Video + ",mpeg2video"
         mkvVideo = mkvVideo + ",mpeg2video"
+    end if
+
+    if get_user_setting("playback.mpeg4") = "true"
+        mp4Video = mp4Video + ",mpeg4"
     end if
 
     ' Check for supported Audio

@@ -2583,5 +2583,65 @@ não contém itens</translation>
         <translation>Erro Durante Reprodução</translation>
         <extracomment>Dialog title when error occurs during playback</extracomment>
     </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Houve um erro ao coletar dados do servidor para este item.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Carregando dados do canal</translation>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>Este %1 não possui itens</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Nome</translation>
+    </message>
+    <message>
+        <source>DATE_PLAYED</source>
+        <translation>Data de Reprodução</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>Avaliação IMDb</translation>
+    </message>
+    <message>
+        <source>RELEASE_DATE</source>
+        <translation>Data de Lançamento</translation>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>Um erro foi encontrado enquanto reproduzindo este item.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Erro ao carregar os dados do canal</translation>
+    </message>
+    <message>
+        <source>Unable to load Channel Data from the server</source>
+        <translation>Não foi possível carregar do servidor os dados do canal</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Avaliação de críticos</translation>
+    </message>
+    <message>
+        <source>DATE_ADDED</source>
+        <translation>Data de Adição</translation>
+    </message>
+    <message>
+        <source>PLAY_COUNT</source>
+        <translation>Número de Reproduções</translation>
+    </message>
+    <message>
+        <source>OFFICIAL_RATING</source>
+        <translation>Classificação Etária</translation>
+    </message>
 </context>
 </TS>

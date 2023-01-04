@@ -58,7 +58,15 @@ end sub
 
 'Voice Search set
 sub channelsearchTermSet()
-    if m.top.searchTerm <> invalid and m.LoadChannelsTask.searchTerm <> m.top.searchTerm
+    m.scheduleGrid.jumpToChannel = 0
+    'Reset filter if user says all
+    if LCase(m.top.searchTerm) = LCase(tr("all")) or m.LoadChannelsTask.searchTerm = LCase(tr("all"))
+        m.top.searchTerm = " "
+        m.LoadChannelsTask.searchTerm = " "
+        m.spinner.visible = true
+        m.LoadChannelsTask.control = "RUN"
+        'filter if the searterm is not invalid
+    else if m.top.searchTerm <> invalid and LCase(m.LoadChannelsTask.searchTerm) <> LCase(m.top.searchTerm)
         if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
 
         m.gridData = createObject("roSGNode", "ContentNode")
@@ -315,6 +323,7 @@ end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
+
     detailsGrp = m.top.findNode("detailsPane")
     gridGrp = m.top.findNode("scheduleGrid")
 

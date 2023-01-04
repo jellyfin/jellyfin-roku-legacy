@@ -9,7 +9,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: actions/stale@3de2653986ebd134983c79fe2be5d45cc3d9f4e1 # tag=v6
+      - uses: actions/stale@6f05e4244c9a0b2ed3401882b05d701dd0a7289b # v7
         with:
           days-before-issue-stale: -1
           days-before-issue-close: -1
@@ -17,4 +17,5 @@ jobs:
           close-pr-message: "This pull request has been closed because it has been inactive for 28 days. You may submit a new pull request if desired."
           days-before-pr-stale: 21
           days-before-pr-close: 7
+          exempt-draft-pr: true
           repo-token: ${{ secrets.GITHUB_TOKEN }}

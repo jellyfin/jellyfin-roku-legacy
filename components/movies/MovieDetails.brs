@@ -57,12 +57,21 @@ sub itemContentChanged()
     ' Handle all "As Is" fields
     m.top.overhangTitle = itemData.name
     setFieldText("releaseYear", itemData.productionYear)
-    setFieldText("officialRating", itemData.officialRating)
     setFieldText("overview", itemData.overview)
+
+    if itemData.officialRating <> invalid
+        setFieldText("officialRating", itemData.officialRating)
+    else
+        m.top.findNode("infoGroup").removeChild(m.top.findNode("officialRating"))
+    end if
 
     if itemData.communityRating <> invalid
         setFieldText("communityRating", int(itemData.communityRating * 10) / 10)
         m.top.findNode("communityRatingGroup").visible = true
+        m.top.findNode("star").visible = "true"
+    else
+        ' hide the star icon
+        m.top.findNode("infoGroup").removeChild(m.top.findNode("communityRatingGroup"))
     end if
 
     if itemData.CriticRating <> invalid
@@ -86,6 +95,8 @@ sub itemContentChanged()
 
     if itemData.genres.count() > 0
         setFieldText("genres", tr("Genres") + ": " + itemData.genres.join(", "))
+    else
+        m.top.findNode("details").removeChild(m.top.findNode("genres"))
     end if
 
     ' show tags if there are no genres to display
@@ -101,10 +112,8 @@ sub itemContentChanged()
     end for
     if directors.count() > 0
         setFieldText("director", tr("Director") + ": " + directors.join(", "))
-    end if
-
-    if itemData.mediaStreams[0] <> invalid
-        setFieldText("video_codec", tr("Video") + ": " + itemData.mediaStreams[0].displayTitle)
+    else
+        m.top.findNode("details").removeChild(m.top.findNode("director"))
     end if
 
     if get_user_setting("ui.details.hidetagline") = "false"
@@ -113,6 +122,15 @@ sub itemContentChanged()
         end if
     else
         m.details.removeChild(m.tagline)
+    end if
+
+    'set aired date if type is Episode
+    if itemData.PremiereDate <> invalid and itemData.Type = "Episode"
+        airDate = CreateObject("roDateTime")
+        airDate.FromISO8601String(itemData.PremiereDate)
+        m.top.findNode("aired").text = tr("Aired") + ": " + airDate.AsDateString("short-month-no-weekday")
+        'remove movie release year label
+        m.top.findNode("infoGroup").removeChild(m.top.findNode("releaseYear"))
     end if
 
     setFavoriteColor()
@@ -127,11 +145,28 @@ end sub
 sub SetUpVideoOptions(streams)
 
     videos = []
+    codecDetailsSet = false
 
     for i = 0 to streams.Count() - 1
         if streams[i].VideoType = "VideoFile"
             codec = ""
-            if streams[i].mediaStreams <> invalid and streams[i].mediaStreams.Count() > 0 then codec = streams[i].mediaStreams[0].displayTitle
+            if streams[i].mediaStreams <> invalid and streams[i].mediaStreams.Count() > 0
+
+                ' find the first (default) video track to get the codec for the details screen
+                if codecDetailsSet = false
+                    for index = 0 to streams[i].mediaStreams.Count() - 1
+                        if streams[i].mediaStreams[index].Type = "Video"
+                            setFieldText("video_codec", tr("Video") + ": " + streams[i].mediaStreams[index].displayTitle)
+                            codecDetailsSet = true
+                            exit for
+                        end if
+                    end for
+                end if
+
+                codec = streams[i].mediaStreams[0].displayTitle
+            end if
+
+            ' Create options for user to switch between video tracks
             videos.push({
                 "Title": streams[i].Name,
                 "Description": tr("Video"),

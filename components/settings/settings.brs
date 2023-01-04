@@ -13,6 +13,8 @@ sub init()
 
     m.boolSetting = m.top.findNode("boolSetting")
     m.integerSetting = m.top.findNode("integerSetting")
+    m.radioSetting = m.top.findNode("radioSetting")
+
     m.integerSetting.observeField("submit", "onKeyGridSubmit")
     m.integerSetting.observeField("escape", "onKeyGridEscape")
 
@@ -21,6 +23,7 @@ sub init()
     m.settingsMenu.observeField("itemSelected", "settingSelected")
 
     m.boolSetting.observeField("checkedItem", "boolSettingChanged")
+    m.radioSetting.observeField("checkedItem", "radioSettingChanged")
 
     ' Load Configuration Tree
     m.configTree = GetConfigTree()
@@ -40,7 +43,6 @@ sub onKeyGridEscape()
 end sub
 
 sub LoadMenu(configSection)
-
     if configSection.children = invalid
         ' Load parent menu
         m.userLocation.pop()
@@ -81,6 +83,7 @@ sub settingFocused()
     ' Hide Settings
     m.boolSetting.visible = false
     m.integerSetting.visible = false
+    m.radioSetting.visible = false
 
     if selectedSetting.type = invalid
         return
@@ -99,6 +102,26 @@ sub settingFocused()
             m.integerSetting.text = integerValue
         end if
         m.integerSetting.visible = true
+    else if LCase(selectedSetting.type) = "radio"
+
+        selectedValue = get_user_setting(selectedSetting.settingName, selectedSetting.default)
+
+        radioContent = CreateObject("roSGNode", "ContentNode")
+
+        itemIndex = 0
+        for each item in m.userLocation.peek().children[m.settingsMenu.itemFocused].options
+            listItem = radioContent.CreateChild("ContentNode")
+            listItem.title = tr(item.title)
+            listItem.id = item.id
+            if selectedValue = item.id
+                m.radioSetting.checkedItem = itemIndex
+            end if
+            itemIndex++
+        end for
+
+        m.radioSetting.content = radioContent
+
+        m.radioSetting.visible = true
     else
         print "Unknown setting type " + selectedSetting.type
     end if
@@ -116,6 +139,9 @@ sub settingSelected()
         end if
         if selectedItem.type = "integer"
             m.integerSetting.setFocus(true)
+        end if
+        if (selectedItem.type) = "radio"
+            m.radioSetting.setFocus(true)
         end if
     else if selectedItem.children <> invalid and selectedItem.children.Count() > 0 ' Show sub menu
         LoadMenu(selectedItem)
@@ -139,9 +165,13 @@ sub boolSettingChanged()
     else
         set_user_setting(selectedSetting.settingName, "false")
     end if
-
 end sub
 
+sub radioSettingChanged()
+    if m.radioSetting.focusedChild = invalid then return
+    selectedSetting = m.userLocation.peek().children[m.settingsMenu.itemFocused]
+    set_user_setting(selectedSetting.settingName, m.radioSetting.content.getChild(m.radioSetting.checkedItem).id)
+end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
@@ -150,6 +180,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
         LoadMenu({})
         return true
     else if (key = "back" or key = "left") and m.settingDetail.focusedChild <> invalid
+        m.settingsMenu.setFocus(true)
+        return true
+    else if (key = "back" or key = "left") and m.radioSetting.hasFocus()
         m.settingsMenu.setFocus(true)
         return true
     end if

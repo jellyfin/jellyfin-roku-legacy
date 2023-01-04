@@ -130,36 +130,11 @@ Modify code -> `make install` -> Use Roku remote to test changes -> `telnet ${RO
 
 Unfortunately there is no debuger. You will need to use telnet to see log statements, warnings, and error reports. You won't always need to telnet into your device but the workflow above is typical when you are new to Brightscript or are working on tricky code.
 
-### Testing
-
-Testing is done with the [Rooibos](https://github.com/georgejecook/rooibos/) library. This works by including tests in the deployment and then looking at telnet
-for the test results.
-
 Install necessary packages:
 
 ```bash
 sudo apt-get install nodejs npm
 ```
-
-Install [rooibos-cli](https://github.com/georgejecook/rooibos-cli):
-
-```bash
-npm install -g rooibos-cli
-```
-
-Deploy the application with tests:
-
-```bash
-make test
-```
-
-View test results:
-
-```bash
-telnet ${ROKU_DEV_TARGET} 8085
-```
-
-To exit telnet: `CTRL + ]` and then type `quit + ENTER`
 
 ### Committing
 

@@ -2,6 +2,8 @@ sub init()
     m.playbackTimer = m.top.findNode("playbackTimer")
     m.bufferCheckTimer = m.top.findNode("bufferCheckTimer")
     m.top.observeField("state", "onState")
+    m.top.observeField("content", "onContentChange")
+
     m.playbackTimer.observeField("fire", "ReportPlayback")
     m.bufferPercentage = 0 ' Track whether content is being loaded
     m.playReported = false
@@ -11,6 +13,88 @@ sub init()
     if get_user_setting("ui.design.hideclock") = "true"
         clockNode = findNodeBySubtype(m.top, "clock")
         if clockNode[0] <> invalid then clockNode[0].parent.removeChild(clockNode[0].node)
+    end if
+
+    'Play Next Episode button
+    m.nextEpisodeButton = m.top.findNode("nextEpisode")
+    m.nextEpisodeButton.text = tr("Next Episode")
+    m.nextEpisodeButton.setFocus(false)
+
+    m.showNextEpisodeButtonAnimation = m.top.findNode("showNextEpisodeButton")
+    m.hideNextEpisodeButtonAnimation = m.top.findNode("hideNextEpisodeButton")
+
+    m.checkedForNextEpisode = false
+    m.getNextEpisodeTask = createObject("roSGNode", "GetNextEpisodeTask")
+    m.getNextEpisodeTask.observeField("nextEpisodeData", "onNextEpisodeDataLoaded")
+
+end sub
+
+' Event handler for when video content field changes
+sub onContentChange()
+    if not isValid(m.top.content) then return
+
+    m.top.observeField("position", "onPositionChanged")
+
+    ' If video content type is not episode, remove position observer
+    if m.top.content.contenttype <> 4
+        m.top.unobserveField("position")
+    end if
+end sub
+
+sub onNextEpisodeDataLoaded()
+    m.checkedForNextEpisode = true
+
+    m.top.observeField("position", "onPositionChanged")
+
+    if m.getNextEpisodeTask.nextEpisodeData.Items.count() <> 2
+        m.top.unobserveField("position")
+    end if
+end sub
+
+'
+' Runs Next Episode button animation and sets focus to button
+sub showNextEpisodeButton()
+    if not m.nextEpisodeButton.visible
+        m.showNextEpisodeButtonAnimation.control = "start"
+        m.nextEpisodeButton.setFocus(true)
+        m.nextEpisodeButton.visible = true
+    end if
+end sub
+
+'
+'Update count down text
+sub updateCount()
+    m.nextEpisodeButton.text = tr("Next Episode") + " " + Int(m.top.runTime - m.top.position).toStr()
+end sub
+
+'
+' Runs hide Next Episode button animation and sets focus back to video
+sub hideNextEpisodeButton()
+    m.hideNextEpisodeButtonAnimation.control = "start"
+    m.nextEpisodeButton.setFocus(false)
+    m.top.setFocus(true)
+end sub
+
+' Checks if we need to display the Next Episode button
+sub checkTimeToDisplayNextEpisode()
+    if int(m.top.position) >= (m.top.runTime - 30)
+        showNextEpisodeButton()
+        updateCount()
+        return
+    end if
+
+    if m.nextEpisodeButton.visible or m.nextEpisodeButton.hasFocus()
+        m.nextEpisodeButton.visible = false
+        m.nextEpisodeButton.setFocus(false)
+    end if
+end sub
+
+' When Video Player state changes
+sub onPositionChanged()
+    ' Check if dialog is open
+    m.dialog = m.top.getScene().findNode("dialogBackground")
+    if not isValid(m.dialog)
+        checkTimeToDisplayNextEpisode()
     end if
 end sub
 
@@ -40,6 +124,16 @@ sub onState(msg)
         m.top.control = "stop"
         m.top.backPressed = true
     else if m.top.state = "playing"
+
+        ' Check if next episde is available
+        if isValid(m.top.showID)
+            if m.top.showID <> "" and not m.checkedForNextEpisode and m.top.content.contenttype = 4
+                m.getNextEpisodeTask.showID = m.top.showID
+                m.getNextEpisodeTask.videoID = m.top.id
+                m.getNextEpisodeTask.control = "RUN"
+            end if
+        end if
+
         if m.playReported = false
             ReportPlayback("start")
             m.playReported = true
@@ -126,17 +220,39 @@ sub dialogClosed(msg)
     sourceNode.close = true
 end sub
 
-
-
 function onKeyEvent(key as string, press as boolean) as boolean
+
+    if key = "OK" and m.nextEpisodeButton.hasfocus() and not m.top.trickPlayBar.visible
+        m.top.state = "finished"
+        hideNextEpisodeButton()
+        return true
+    else
+        'Hide Next Episode Button
+        if m.nextEpisodeButton.visible or m.nextEpisodeButton.hasFocus()
+            m.nextEpisodeButton.visible = false
+            m.nextEpisodeButton.setFocus(false)
+            m.top.setFocus(true)
+        end if
+    end if
+
     if not press then return false
 
-    if m.top.Subtitles.count() and key = "down"
+    if key = "down"
         m.top.selectSubtitlePressed = true
         return true
     else if key = "up"
         m.top.selectPlaybackInfoPressed = true
         return true
+    else if key = "OK"
+        ' OK will play/pause depending on current state
+        ' return false to allow selection during seeking
+        if m.top.state = "paused"
+            m.top.control = "resume"
+            return false
+        else if m.top.state = "playing"
+            m.top.control = "pause"
+            return false
+        end if
     end if
 
     return false
