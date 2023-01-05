@@ -227,7 +227,9 @@ sub audioStateChanged()
 
         if m.global.queueManager.callFunc("getPosition") < m.global.queueManager.callFunc("getCount") - 1
             ' We are not at the end of the song queue, advance to next song
-            LoadNextSong()
+            'LoadNextSong()
+            ' Return to previous screen
+            m.top.state = "finished"
         else
             ' We are at the end of the song queue
 

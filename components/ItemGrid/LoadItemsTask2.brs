@@ -135,6 +135,9 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "PhotoData")
             else if item.type = "PhotoAlbum"
                 tmp = CreateObject("roSGNode", "FolderData")
+            else if item.type = "Playlist"
+                tmp = CreateObject("roSGNode", "PlaylistData")
+                tmp.type = "Playlist"
             else if item.type = "Episode"
                 tmp = CreateObject("roSGNode", "TVEpisode")
             else if item.Type = "Genre"
@@ -207,6 +210,8 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "MusicArtistData")
             else if item.Type = "Audio"
                 tmp = CreateObject("roSGNode", "MusicSongData")
+                tmp.type = "Audio"
+                tmp.image = api_API().items.getimageurl(item.id, "primary", 0, { "maxHeight": 280, "maxWidth": 280, "quality": "90" })
             else if item.Type = "MusicGenre"
                 tmp = CreateObject("roSGNode", "FolderData")
                 tmp.title = item.name

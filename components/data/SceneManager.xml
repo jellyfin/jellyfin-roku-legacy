@@ -9,6 +9,7 @@
     <function name="clearPreviousScene" />
     <function name="resetTime" />
     <function name="userMessage" />
+    <function name="standardDialog" />
     <field id="currentUser" type="string" onChange="updateUser" />
   </interface>
   <script type="text/brightscript" uri="SceneManager.brs" />

@@ -77,7 +77,7 @@ end function
 '
 ' Play items in queue
 sub playQueue()
-    nextItem = top()
+    nextItem = getCurrentItem()
     nextItemMediaType = invalid
 
     if isValid(nextItem?.json?.mediatype) and nextItem.json.mediatype <> ""
@@ -90,6 +90,10 @@ sub playQueue()
 
     if nextItemMediaType = "audio"
         CreateAudioPlayerView()
+    else if nextItemMediaType = "video"
+        CreateVideoPlayerView()
+    else if nextItemMediaType = "episode"
+        CreateVideoPlayerView()
     end if
 end sub
 

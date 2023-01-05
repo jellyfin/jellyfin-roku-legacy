@@ -237,11 +237,33 @@ end sub
 '
 ' Display dialog to user with an OK button
 sub userMessage(title as string, message as string)
-    dialog = createObject("roSGNode", "Dialog")
+    dialog = createObject("roSGNode", "StandardMessageDialog")
     dialog.title = title
     dialog.message = message
     dialog.buttons = [tr("OK")]
     dialog.observeField("buttonSelected", "dismiss_dialog")
+    m.scene.dialog = dialog
+end sub
+
+'
+' Display dialog to user with an OK button
+sub standardDialog(title, message)
+    dialog = createObject("roSGNode", "StandardDialog")
+    dlgPalette = createObject("roSGNode", "RSGPalette")
+    dlgPalette.colors = {
+        DialogBackgroundColor: "0x262828FF",
+        DialogFocusColor: "0xcececeFF",
+        DialogFocusItemColor: "0x202020FF",
+        DialogSecondaryTextColor: "0xf8f8f8ff",
+        DialogSecondaryItemColor: "#00a4dcFF",
+        DialogTextColor: "0xeeeeeeFF"
+    }
+    dialog.palette = dlgPalette
+    dialog.observeField("buttonSelected", "dismiss_dialog")
+    dialog.title = title
+    dialog.contentData = message
+    dialog.buttons = [tr("OK")]
+
     m.scene.dialog = dialog
 end sub
 

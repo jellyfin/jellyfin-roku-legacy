@@ -21,6 +21,7 @@
           <Label id="tagline" />
           <Label id="overview" wrap="true" width="1400" maxLines="4" />
           <Label id="history" />
+          <JFButton id="Shuffle" minChars="15" text="Shuffle" translation="[90, 640]" visible="false"></JFButton>
         </LayoutGroup>
       </LayoutGroup>
       <TVSeasonRow id="seasons" />
