@@ -168,6 +168,44 @@
                 "description": "Media Grid options.",
                 "children": [
                     {
+                        "title": "Movie Library Default View",
+                        "description": "Default view for Movie Libraries.",
+                        "settingName": "itemgrid.movieDefaultView",
+                        "type": "radio",
+                        "default": "movies",
+                        "options": [
+                            {
+                                "title": "Movies (Presentation)",
+                                "id": "Movies"
+                            },
+                            {
+                                "title": "Movies (Grid)",
+                                "id": "MoviesGrid"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Movie Library Grid Titles",
+                        "description": "Select when to show titles.",
+                        "settingName": "itemgrid.movieGridTitles",
+                        "type": "radio",
+                        "default": "showonhover",
+                        "options": [
+                            {
+                                "title": "Show On Hover",
+                                "id": "showonhover"
+                            },
+                            {
+                                "title": "Always Show",
+                                "id": "showalways"
+                            },
+                            {
+                                "title": "Always Hide",
+                                "id": "hidealways"
+                            }
+                        ]
+                    },
+                    {
                         "title": "Item Count",
                         "description": "Show item count in the library and index of selected item.",
                         "settingName": "itemgrid.showItemCount",
@@ -187,23 +225,6 @@
                         "settingName": "itemgrid.reset",
                         "type": "bool",
                         "default": "true"
-                    },
-                    {
-                        "title": "Movie Library Default View",
-                        "description": "Default view for Movie Libraries.",
-                        "settingName": "itemgrid.movieDefaultView",
-                        "type": "radio",
-                        "default": "movies",
-                        "options": [
-                            {
-                                "title": "Movies (Presentation)",
-                                "id": "Movies"
-                            },
-                            {
-                                "title": "Movies (Grid)",
-                                "id": "MoviesGrid"
-                            }
-                        ]
                     }
                 ]
             }

@@ -129,7 +129,7 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "ChannelData")
             else if item.Type = "Folder" or item.Type = "ChannelFolderItem" or item.Type = "CollectionFolder"
                 tmp = CreateObject("roSGNode", "FolderData")
-            else if item.Type = "Video"
+            else if item.Type = "Video" or item.Type = "Recording"
                 tmp = CreateObject("roSGNode", "VideoData")
             else if item.Type = "Photo"
                 tmp = CreateObject("roSGNode", "PhotoData")

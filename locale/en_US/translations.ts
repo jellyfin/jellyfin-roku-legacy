@@ -974,6 +974,46 @@
             <translation>Resumable</translation>
         </message>
         <message>
+            <source>Movie Library Default View</source>
+            <translation>Movie Library Default View</translation>
+            <extracomment>Settings Menu - Title for option</extracomment>
+        </message>
+        <message>
+            <source>Default view for Movie Libraries.</source>
+            <translation>Default view for Movie Libraries.</translation>
+            <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
+        <message>
+            <source>Movies (Presentation)</source>
+            <translation>Movies (Presentation)</translation>
+        </message>
+        <message>
+            <source>Movies (Grid)</source>
+            <translation>Movies (Grid)</translation>
+        </message>
+        <message>
+            <source>Movie Library Grid Titles</source>
+            <translation>Movie Library Grid Titles</translation>
+            <extracomment>Settings Menu - Title for option</extracomment>
+        </message>
+        <message>
+            <source>Select when to show titles.</source>
+            <translation>Select when to show titles.</translation>
+            <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
+        <message>
+            <source>Show On Hover</source>
+            <translation>Show On Hover</translation>
+        </message>
+        <message>
+            <source>Always Show</source>
+            <translation>Always Show</translation>
+        </message>
+        <message>
+            <source>Always Hide</source>
+            <translation>Always Hide</translation>
+        </message>
+        <message>
             <source>Artists (Presentation)</source>
             <translation>Artists (Presentation)</translation>
         </message>

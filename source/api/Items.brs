@@ -157,6 +157,10 @@ function ItemMetaData(id as string)
 
         tmp.json = data
         return tmp
+    else if data.type = "Recording"
+        ' We know it's "Recording", but we don't do any special preprocessing
+        ' for this data type at the moment, so just return the json.
+        return data
     else
         print "Items.brs::ItemMetaData processed unhandled type: " data.type
         ' Return json if we don't know what it is

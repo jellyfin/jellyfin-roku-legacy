@@ -17,14 +17,17 @@ sub init()
     if m.topParent.imageDisplayMode <> invalid
         m.itemPoster.loadDisplayMode = m.topParent.imageDisplayMode
     end if
-
 end sub
 
 sub itemContentChanged()
     m.backdrop.blendColor = "#101010"
 
+    m.title.visible = false
+
     if isValid(m.topParent.showItemTitles)
-        m.title.visible = m.topParent.showItemTitles
+        if LCase(m.topParent.showItemTitles) = "showalways"
+            m.title.visible = true
+        end if
     end if
 
     itemData = m.top.itemContent
@@ -43,11 +46,16 @@ sub itemContentChanged()
 end sub
 
 sub focusChanged()
-
     if m.top.itemHasFocus = true
         m.title.repeatCount = -1
     else
         m.title.repeatCount = 0
+    end if
+
+    if isValid(m.topParent.showItemTitles)
+        if LCase(m.topParent.showItemTitles) = "showonhover"
+            m.title.visible = m.top.itemHasFocus
+        end if
     end if
 end sub
 

@@ -1,90 +1,98 @@
 [
     {
-        "description": "Settings relating to playback and supported codec and media types.",
-        "author": "candry7731"
-    },
-    {
-        "description": "Create photo slideshow",
+        "description": "Bug Fix: Don't crash when viewing in progress recording.",
         "author": "jimdogx"
     },
     {
-        "description": "Add 20 random favorites to home view",
+        "description": "New Setting: Disable Community Rating for Episodes of TV shows.",
+        "author": "dezchai"
+    },
+    {
+        "description": "New View: Music Grid View",
         "author": "1hitsong"
     },
     {
-        "description": "Add Aired Date to episode details",
-        "author": "candry7731"
-    },
-    {
-        "description": "Transcode music if needed to play",
+        "description": "New Setting: Movie Grid Title Display",
         "author": "1hitsong"
     },
     {
-        "description": "Update Movie Library View",
+        "description": "Updated View: TV Library Genre View",
         "author": "1hitsong"
     },
     {
-        "description": "Add support for Additional Movie Parts",
-        "author": "jimdogx"
+        "description": "Bug Fix: Fix Crash When Options Button Pressed, but Options Are Not Available",
+        "author": "ApexArray"
     },
     {
-        "description": "Convert MPEG4 direct play to user setting",
+        "description": "Bug Fix: Fix Crash When Invalid Deep Link Arguments Are Passed",
+        "author": "ApexArray"
+    },
+    {
+        "description": "New Setting: Go straight to episode listing (if only 1 season available)",
+        "author": "ApexArray"
+    },
+    {
+        "description": "Feature: Create What's New Popup that tells users what's changed the first time they run a new version.",
         "author": "1hitsong"
     },
     {
-        "description": "Support for HDR, VP9, AV1",
-        "author": "whiteowl3"
+        "description": "Feature: Toggle video playback when OK button is pressed",
+        "author": "ApexArray"
     },
     {
-        "description": "HEVC Direct Play override for Profile Version",
-        "author": "neilsb"
-    },
-    {
-        "description": "Update overhang clock time logic",
-        "author": "neilsb"
-    },
-    {
-        "description": "Remove temporary code to migrate MPEG2 setting",
-        "author": "neilsb"
-    },
-    {
-        "description": "Show short runtime for TV Episodes",
+        "description": "Bug Fix: Fix TV Season List Crash when showing 27+ Episodes",
         "author": "1hitsong"
     },
     {
-        "description": "Don't play intro video before trailers",
+        "description": "New View: Create Movie Grid View and new default setting",
         "author": "1hitsong"
     },
     {
-        "description": "Fix video details popup wrong information",
-        "author": "jimdogx"
+        "description": "Core: Set Maximum Bitrates values based on Roku Guidelines",
+        "author": "ApexArray"
     },
     {
-        "description": "Fix search results navigation when 1 item in row",
-        "author": "candry7731"
+        "description": "Core: Reorganize Roku Settings",
+        "author": "sevenrats"
     },
     {
-        "description": "Remove rooibos test framework",
+        "description": "Updated View: Add resumable filter to Movies",
         "author": "1hitsong"
     },
     {
-        "description": "Exempt draft PR from stale workflow",
+        "description": "Updated View: Filter Movies & Series by Played/Unplayed status",
         "author": "1hitsong"
     },
     {
-        "description": "Fix Filter reload Issues with Live TV",
-        "author": "candry7731"
+        "description": "New Setting: Hide subtitles that might transcode",
+        "author": "sevenrats"
     },
     {
-        "description": "Fix lockup on Additional Parts resume",
+        "description": "Bug Fix: Show Unwatched Episode Count",
         "author": "1hitsong"
     },
     {
-        "description": "Fix Next Episode button if trickplay never used",
+        "description": "New View: Add Artist Presentation View & Genre View to Music Library",
         "author": "1hitsong"
     },
     {
-        "description": "Fix invalid en_US translations file",
+        "description": "Core: Draw Homepage Continue Watching percent complete bar instead of using image API",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Bug Fix: Fix TV Episode focus issues",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Bug Fix: Fix Movie Detail View lost focus bug when going back from resume dialog",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Core: Add new questions to GitHub bug template",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Core: Create Queue Manager and use for Music",
         "author": "1hitsong"
     }
 ]
