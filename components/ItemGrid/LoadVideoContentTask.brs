@@ -226,19 +226,19 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
     end if
 
     ' tgpo
-    'subtitles = sortSubtitles(meta.id, m.playbackInfo.MediaSources[0].MediaStreams)
-    'if get_user_setting("playback.subs.onlytext") = "true"
-    '    safesubs = []
-    '    for each subtitle in subtitles["all"]
-    '        if subtitle["IsTextSubtitleStream"]
-    '            safesubs.push(subtitle)
-    '        end if
-    '    end for
-    '    video.Subtitles = safesubs
-    'else
-    '    video.Subtitles = subtitles["all"]
-    'end if
-    'video.content.SubtitleTracks = subtitles["text"]
+    subtitles = sortSubtitles(meta.id, m.playbackInfo.MediaSources[0].MediaStreams)
+    if get_user_setting("playback.subs.onlytext") = "true"
+        safesubs = []
+        for each subtitle in subtitles["all"]
+            if subtitle["IsTextSubtitleStream"]
+                safesubs.push(subtitle)
+            end if
+        end for
+        video.Subtitles = safesubs
+    else
+        video.Subtitles = subtitles["all"]
+    end if
+    video.content.SubtitleTracks = subtitles["text"]
 
     if meta.live
         video.transcodeParams = {
@@ -347,7 +347,9 @@ end function
 
 'Opens dialog asking user if they want to resume video or start playback over only on the home screen
 function startPlayBackOver(time as longinteger) as integer
+    ' tgpo
     return 1
+
     if m.scene.focusedChild.focusedChild.overhangTitle = tr("Home") and (m.videotype = "Episode" or m.videotype = "Series")
         return option_dialog([tr("Resume playing at ") + ticksToHuman(time) + ".", tr("Start over from the beginning."), tr("Watched"), tr("Go to series"), tr("Go to season"), tr("Go to episode")])
     else
@@ -770,6 +772,7 @@ end sub
 
 'Checks available subtitle tracks and puts subtitles in forced, default, and non-default/forced but preferred language at the top
 function sortSubtitles(id as string, MediaStreams)
+    m.user = AboutMe()
     tracks = { "forced": [], "default": [], "normal": [] }
     'Too many args for using substitute
     prefered_lang = m.user.Configuration.SubtitleLanguagePreference

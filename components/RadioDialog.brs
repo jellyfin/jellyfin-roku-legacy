@@ -21,14 +21,13 @@ sub onContentDataChanged()
     for each item in m.top.contentData.data
         cardItem = m.content.CreateChild("StdDlgActionCardItem")
         cardItem.iconType = "radiobutton"
-        cardItem.id = item.id
 
         if isValid(item.selected)
             m.content.selectedIndex = i
         end if
 
         textLine = cardItem.CreateChild("SimpleLabel")
-        textLine.text = item.text
+        textLine.text = item.description
         i++
     end for
 end sub

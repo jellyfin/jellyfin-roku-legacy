@@ -31,17 +31,16 @@ end sub
 
 ' User requested subtitle selection popup
 sub onSelectSubtitlePressed()
+
     subtitleData = {
-        data: [
-            { id: "none", text: "None" },
-            { id: "abc123", text: "Option 2" }
-        ]
+        data: [{ "description": "None" }]
     }
 
-    for each item in subtitleData.data
-        if item.id = m.selectedSubtitle.id
+    for each item in m.view.content.subtitletracks
+        if item.description = m.selectedSubtitle.description
             item.selected = true
         end if
+        subtitleData.data.push(item)
     end for
 
     m.global.sceneManager.callFunc("radioDialog", tr("Select Subtitles"), subtitleData)
@@ -51,6 +50,15 @@ end sub
 sub onSelectionMade()
     m.global.sceneManager.unobserveField("returnData")
     m.selectedSubtitle = m.global.sceneManager.returnData
+
+    if LCase(m.selectedSubtitle.description) = "none"
+        m.view.globalCaptionMode = "Off"
+        m.view.subtitleTrack = ""
+        return
+    end if
+
+    m.view.globalCaptionMode = "On"
+    m.view.subtitleTrack = m.selectedSubtitle.TrackName
 end sub
 
 ' User requested playback info
