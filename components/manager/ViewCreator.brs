@@ -11,6 +11,7 @@ end sub
 
 ' Play Video
 sub CreateVideoPlayerView()
+    m.playbackData = {}
     m.getPlaybackInfoTask = createObject("roSGNode", "GetPlaybackInfoTask")
     m.getPlaybackInfoTask.videoID = m.global.queueManager.callFunc("getCurrentItem").id
     m.getPlaybackInfoTask.observeField("data", "onPlaybackInfoLoaded")
@@ -28,14 +29,19 @@ end sub
 
 ' User requested playback info
 sub onSelectPlaybackInfoPressed()
+    if isValid(m.playbackData?.playbackinfo)
+        m.global.sceneManager.callFunc("standardDialog", tr("Playback Info"), m.playbackData.playbackinfo)
+        return
+    end if
+
     m.getPlaybackInfoTask.control = "RUN"
 end sub
 
 ' Playback info task has returned data
 sub onPlaybackInfoLoaded()
-    playbackInfo = m.getPlaybackInfoTask.data
-    if isValid(playbackInfo?.playbackinfo)
-        m.global.sceneManager.callFunc("standardDialog", tr("Playback Info"), playbackInfo.playbackinfo)
+    m.playbackData = m.getPlaybackInfoTask.data
+    if isValid(m.playbackData?.playbackinfo)
+        m.global.sceneManager.callFunc("standardDialog", tr("Playback Info"), m.playbackData.playbackinfo)
     end if
 end sub
 

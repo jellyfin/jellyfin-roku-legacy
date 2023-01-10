@@ -31,7 +31,7 @@ sub pageContentChanged()
 
     ' Only 1 song shown, so hide Play Album button
     if item.json.ChildCount = 1
-        m.playAlbum.visible = false
+        m.playAll.visible = false
     end if
 end sub
 
