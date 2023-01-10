@@ -12,6 +12,7 @@ end sub
 ' Play Video
 sub CreateVideoPlayerView()
     m.playbackData = {}
+    m.selectedSubtitle = {}
     m.getPlaybackInfoTask = createObject("roSGNode", "GetPlaybackInfoTask")
     m.getPlaybackInfoTask.videoID = m.global.queueManager.callFunc("getCurrentItem").id
     m.getPlaybackInfoTask.observeField("data", "onPlaybackInfoLoaded")
@@ -19,6 +20,7 @@ sub CreateVideoPlayerView()
     m.view = CreateObject("roSGNode", "VideoPlayerView")
     m.view.observeField("state", "onStateChange")
     m.view.observeField("selectPlaybackInfoPressed", "onSelectPlaybackInfoPressed")
+    m.view.observeField("selectSubtitlePressed", "onSelectSubtitlePressed")
     m.global.sceneManager.callFunc("pushScene", m.view)
 end sub
 
@@ -26,6 +28,30 @@ end sub
 '
 ' Event Handlers
 ' -----------------
+
+' User requested subtitle selection popup
+sub onSelectSubtitlePressed()
+    subtitleData = {
+        data: [
+            { id: "none", text: "None" },
+            { id: "abc123", text: "Option 2" }
+        ]
+    }
+
+    for each item in subtitleData.data
+        if item.id = m.selectedSubtitle.id
+            item.selected = true
+        end if
+    end for
+
+    m.global.sceneManager.callFunc("radioDialog", tr("Select Subtitles"), subtitleData)
+    m.global.sceneManager.observeField("returnData", "onSelectionMade")
+end sub
+
+sub onSelectionMade()
+    m.global.sceneManager.unobserveField("returnData")
+    m.selectedSubtitle = m.global.sceneManager.returnData
+end sub
 
 ' User requested playback info
 sub onSelectPlaybackInfoPressed()
