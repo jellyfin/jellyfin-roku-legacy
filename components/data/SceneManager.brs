@@ -290,8 +290,56 @@ sub radioDialog(title, message)
 end sub
 
 '
+' Display dialog to user with an OK button
+sub optionDialog(title, message, buttons)
+    m.top.returnData = invalid
+    m.userselection = false
+
+    dialog = createObject("roSGNode", "StandardMessageDialog")
+    dlgPalette = createObject("roSGNode", "RSGPalette")
+    dlgPalette.colors = {
+        DialogBackgroundColor: "0x262828FF",
+        DialogFocusColor: "0xcececeFF",
+        DialogFocusItemColor: "0x202020FF",
+        DialogSecondaryTextColor: "0xf8f8f8ff",
+        DialogSecondaryItemColor: "#00a4dcFF",
+        DialogTextColor: "0xeeeeeeFF"
+    }
+    dialog.palette = dlgPalette
+    dialog.observeField("buttonSelected", "optionSelected")
+    dialog.observeField("wasClosed", "optionClosed")
+    dialog.title = title
+    dialog.message = message
+    dialog.buttons = buttons
+
+    m.scene.dialog = dialog
+end sub
+
+'
+' Return button the user selected
+sub optionClosed()
+    if m.userselection then return
+
+    m.top.returnData = {
+        indexSelected: -1,
+        buttonSelected: ""
+    }
+end sub
+
+'
+' Return button the user selected
+sub optionSelected()
+    m.userselection = true
+    m.top.returnData = {
+        indexSelected: m.scene.dialog.buttonSelected,
+        buttonSelected: m.scene.dialog.buttons[m.scene.dialog.buttonSelected]
+    }
+
+    dismiss_dialog()
+end sub
+
+'
 ' Close currently displayed dialog
 sub dismiss_dialog()
-    print "Button Pressed"
     m.scene.dialog.close = true
 end sub

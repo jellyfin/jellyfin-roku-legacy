@@ -45,14 +45,31 @@ sub init()
     m.getNextEpisodeTask = createObject("roSGNode", "GetNextEpisodeTask")
     m.getNextEpisodeTask.observeField("nextEpisodeData", "onNextEpisodeDataLoaded")
 
+    m.top.retrievingBar.filledBarBlendColor = m.global.constants.colors.blue
+    m.top.bufferingBar.filledBarBlendColor = m.global.constants.colors.blue
+    m.top.trickPlayBar.filledBarBlendColor = m.global.constants.colors.blue
 end sub
 
 sub onVideoContentLoaded()
-    data = m.LoadMetaDataTask.content[0]
     m.LoadMetaDataTask.unobserveField("content")
-    if not isValid(data) or data.count() = 0 then return
 
-    m.top.content = data.content
+    ' If we have nothing to play, return to previous screen
+    if not isValid(m.LoadMetaDataTask.content)
+        m.global.sceneManager.callFunc("popScene")
+        return
+    end if
+
+    if not isValid(m.LoadMetaDataTask.content[0])
+        m.global.sceneManager.callFunc("popScene")
+        return
+    end if
+
+    if m.LoadMetaDataTask.content.count() = 0
+        m.global.sceneManager.callFunc("popScene")
+        return
+    end if
+
+    m.top.content = m.LoadMetaDataTask.content[0].content
 
     m.top.setFocus(true)
     m.top.control = "play"

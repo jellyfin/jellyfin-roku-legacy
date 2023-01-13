@@ -13,14 +13,16 @@ end sub
 sub CreateVideoPlayerView()
     m.playbackData = {}
     m.selectedSubtitle = {}
-    m.getPlaybackInfoTask = createObject("roSGNode", "GetPlaybackInfoTask")
-    m.getPlaybackInfoTask.videoID = m.global.queueManager.callFunc("getCurrentItem").id
-    m.getPlaybackInfoTask.observeField("data", "onPlaybackInfoLoaded")
 
     m.view = CreateObject("roSGNode", "VideoPlayerView")
     m.view.observeField("state", "onStateChange")
     m.view.observeField("selectPlaybackInfoPressed", "onSelectPlaybackInfoPressed")
     m.view.observeField("selectSubtitlePressed", "onSelectSubtitlePressed")
+
+    m.getPlaybackInfoTask = createObject("roSGNode", "GetPlaybackInfoTask")
+    m.getPlaybackInfoTask.videoID = m.global.queueManager.callFunc("getCurrentItem").id
+    m.getPlaybackInfoTask.observeField("data", "onPlaybackInfoLoaded")
+
     m.global.sceneManager.callFunc("pushScene", m.view)
 end sub
 
@@ -32,14 +34,18 @@ end sub
 ' User requested subtitle selection popup
 sub onSelectSubtitlePressed()
 
+    ' None is always first in the subtitle list
     subtitleData = {
-        data: [{ "description": "None" }]
+        data: [{ "description": "None", "type": "subtitleselection" }]
     }
 
     for each item in m.view.content.subtitletracks
+        item.type = "subtitleselection"
+
         if item.description = m.selectedSubtitle.description
             item.selected = true
         end if
+
         subtitleData.data.push(item)
     end for
 
@@ -47,8 +53,18 @@ sub onSelectSubtitlePressed()
     m.global.sceneManager.observeField("returnData", "onSelectionMade")
 end sub
 
+' User has selected something from the radioDialog popup
 sub onSelectionMade()
     m.global.sceneManager.unobserveField("returnData")
+
+    if not isValid(m.global.sceneManager.returnData?.type) then return
+
+    if LCase(m.global.sceneManager.returnData.type) = "subtitleselection"
+        processSubtitleSelection()
+    end if
+end sub
+
+sub processSubtitleSelection()
     m.selectedSubtitle = m.global.sceneManager.returnData
 
     if LCase(m.selectedSubtitle.description) = "none"
@@ -63,6 +79,8 @@ end sub
 
 ' User requested playback info
 sub onSelectPlaybackInfoPressed()
+
+    ' Check if we already have playback info and show it in a popup
     if isValid(m.playbackData?.playbackinfo)
         m.global.sceneManager.callFunc("standardDialog", tr("Playback Info"), m.playbackData.playbackinfo)
         return
@@ -71,13 +89,16 @@ sub onSelectPlaybackInfoPressed()
     m.getPlaybackInfoTask.control = "RUN"
 end sub
 
-' Playback info task has returned data
+' The playback info task has returned data
 sub onPlaybackInfoLoaded()
     m.playbackData = m.getPlaybackInfoTask.data
+
+    ' Check if we have playback info and show it in a popup
     if isValid(m.playbackData?.playbackinfo)
         m.global.sceneManager.callFunc("standardDialog", tr("Playback Info"), m.playbackData.playbackinfo)
     end if
 end sub
+
 
 ' Playback state change event handlers
 sub onStateChange()
@@ -87,9 +108,10 @@ sub onStateChange()
             m.global.sceneManager.callFunc("clearPreviousScene")
             m.global.queueManager.callFunc("moveForward")
             m.global.queueManager.callFunc("playQueue")
-        else
-            ' Playback completed, return user to previous screen
-            m.global.sceneManager.callFunc("popScene")
+            return
         end if
+
+        ' Playback completed, return user to previous screen
+        m.global.sceneManager.callFunc("popScene")
     end if
 end sub

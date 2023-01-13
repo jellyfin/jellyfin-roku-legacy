@@ -19,8 +19,6 @@ function LoadItems_VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1
 
     video.id = id
 
-    print "LoadItems_VideoPlayer() video.id" video.id
-
     LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, forceTranscoding, showIntro, allowResumeDialog)
 
     if video.errorMsg = "introaborted"
@@ -31,18 +29,11 @@ function LoadItems_VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1
         return invalid
     end if
 
-    ' tgpo
-    ' jellyfin_blue = "#00a4dcFF"
-    'video.retrievingBar.filledBarBlendColor = jellyfin_blue
-    'video.bufferingBar.filledBarBlendColor = jellyfin_blue
-    'video.trickPlayBar.filledBarBlendColor = jellyfin_blue
     return video
 end function
 
 sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
     video.content = createObject("RoSGNode", "ContentNode")
-
-    print "LoadItems_AddVideoContent() video.id", video.id
 
     meta = ItemMetaData(video.id)
     if meta = invalid
@@ -82,15 +73,16 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
         if allowResumeDialog
             if playbackPosition > 0
                 dialogResult = startPlayBackOver(playbackPosition)
+
                 'Dialog returns -1 when back pressed, 0 for resume, and 1 for start over
-                if dialogResult = -1
+                if dialogResult.indexselected = -1
                     'User pressed back, return invalid and don't load video
                     video.content = invalid
                     return
-                else if dialogResult = 1
+                else if dialogResult.indexselected = 1
                     'Start Over selected, change position to 0
                     playbackPosition = 0
-                else if dialogResult = 2
+                else if dialogResult.indexselected = 2
                     'Mark this item as watched, refresh the page, and return invalid so we don't load the video
                     MarkItemWatched(video.id)
                     video.content.watched = not video.content.watched
@@ -99,7 +91,7 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
                     group.callFunc("refresh")
                     video.content = invalid
                     return
-                else if dialogResult = 3
+                else if dialogResult.indexselected = 3
                     'get series ID based off episiode ID
                     params = {
                         ids: video.Id
@@ -125,7 +117,7 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
                     video.content = invalid
                     return
 
-                else if dialogResult = 4
+                else if dialogResult.indexselected = 4
                     'get Season/Series ID based off episiode ID
                     params = {
                         ids: video.Id
@@ -162,7 +154,7 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
                     video.content = invalid
                     return
 
-                else if dialogResult = 5
+                else if dialogResult.indexselected = 5
                     'get  episiode ID
                     params = {
                         ids: video.Id
@@ -225,7 +217,6 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
         m.playbackInfo = meta.json
     end if
 
-    ' tgpo
     subtitles = sortSubtitles(meta.id, m.playbackInfo.MediaSources[0].MediaStreams)
     if get_user_setting("playback.subs.onlytext") = "true"
         safesubs = []
@@ -346,10 +337,22 @@ function getTranscodeReasons(url as string) as object
 end function
 
 'Opens dialog asking user if they want to resume video or start playback over only on the home screen
-function startPlayBackOver(time as longinteger) as integer
-    ' tgpo
-    return 1
+function startPlayBackOver(time as longinteger)
 
+    resumeData = [
+        "Resume playing at " + ticksToHuman(time) + ".",
+        "Start over from the beginning."
+    ]
+
+    m.global.sceneManager.callFunc("optionDialog", tr("Playback Options"), ["Choose an option"], resumeData)
+
+    while not isValid(m.global.sceneManager.returnData)
+
+    end while
+
+    return m.global.sceneManager.returnData
+
+    ' tgpo
     if m.scene.focusedChild.focusedChild.overhangTitle = tr("Home") and (m.videotype = "Episode" or m.videotype = "Series")
         return option_dialog([tr("Resume playing at ") + ticksToHuman(time) + ".", tr("Start over from the beginning."), tr("Watched"), tr("Go to series"), tr("Go to season"), tr("Go to episode")])
     else
