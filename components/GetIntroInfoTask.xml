@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="GetIntroInfoTask" extends="Task">
+    <interface>
+        <field id="videoID" type="string" />
+        <field id="introData" type="assocarray" />
+    </interface>
+    <script type="text/brightscript" uri="GetIntroInfoTask.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
+</component>
