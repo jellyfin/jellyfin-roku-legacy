@@ -2881,5 +2881,90 @@
         <translation type="unfinished">H.264</translation>
         <extracomment>Name of codec used in settings menu</extracomment>
     </message>
+    <message>
+        <source>Attempt Direct Play for H.264 media with unsupported profile levels before falling back to transcoding if it fails.</source>
+        <translation>Attempt Direct Play for H.264 media with unsupported profile levels before falling back to transcoding if it fails.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>Attempt Direct Play for HEVC media with unsupported profile levels before falling back to trancoding if it fails.</source>
+        <translation>Attempt Direct Play for HEVC media with unsupported profile levels before falling back to transcoding if it fails.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>Only display text subtitles to minimize transcoding.</source>
+        <translation>Only display text subtitles to minimise transcoding.</translation>
+        <extracomment>Description of a setting - should we hide subtitles that might transcode</extracomment>
+    </message>
+    <message>
+        <source>Aired</source>
+        <translation>Aired</translation>
+        <extracomment>Aired date label</extracomment>
+    </message>
+    <message>
+        <source>Slideshow Off</source>
+        <translation>Slideshow Off</translation>
+    </message>
+    <message>
+        <source>Show What&apos;s New Popup</source>
+        <translation>Show What&apos;s New Popup</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
+    <message>
+        <source>Show What&apos;s New popup when Jellyfin is updated to a new version.</source>
+        <translation>Show What&apos;s New popup when Jellyfin is updated to a new version.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>Unplayed</source>
+        <translation>Unplayed</translation>
+    </message>
+    <message>
+        <source>Resumable</source>
+        <translation>Resumable</translation>
+    </message>
+    <message>
+        <source>Slideshow On</source>
+        <translation>Slideshow On</translation>
+    </message>
+    <message>
+        <source>Slideshow Resumed</source>
+        <translation>Slideshow Resumed</translation>
+    </message>
+    <message>
+        <source>Random On</source>
+        <translation>Random On</translation>
+    </message>
+    <message>
+        <source>Random Off</source>
+        <translation>Random Off</translation>
+    </message>
+    <message>
+        <source>all</source>
+        <translation>all</translation>
+        <extracomment>all will reset the searchTerm so all data will be availible</extracomment>
+    </message>
+    <message>
+        <source>Slideshow Paused</source>
+        <translation>Slideshow Paused</translation>
+    </message>
+    <message>
+        <source>MPEG-4 Support</source>
+        <translation>MPEG-4 Support</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
+    <message>
+        <source>Played</source>
+        <translation>Played</translation>
+    </message>
+    <message>
+        <source>If enabled, the star and community rating for episodes of a TV show will be removed. This is to prevent spoilers of an upcoming good/bad episode.</source>
+        <translation>If enabled, the star and community rating for episodes of a TV show will be removed. This is to prevent spoilers of an upcoming good/bad episode.</translation>
+    </message>
+    <message>
+        <source>H.264</source>
+        <translation>H.264</translation>
+        <extracomment>Name of codec used in settings menu</extracomment>
+    </message>
 </context>
 </TS>
