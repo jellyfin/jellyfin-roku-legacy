@@ -11,7 +11,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         return true
     else if key = "options"
         group = m.global.sceneManager.callFunc("getActiveScene")
-        if group <> invalid and group.optionsAvailable
+        if isValid(group) and isValid(group.optionsAvailable) and group.optionsAvailable
             group.lastFocus = group.focusedChild
             panel = group.findNode("options")
             panel.visible = true

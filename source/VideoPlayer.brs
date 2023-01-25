@@ -22,15 +22,15 @@ end function
 sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
     video.content = createObject("RoSGNode", "ContentNode")
     meta = ItemMetaData(video.id)
-    m.videotype = meta.type
     if meta = invalid
         video.content = invalid
         return
     end if
+    m.videotype = meta.type
 
     ' Special handling for "Programs" or "Vidoes" launched from "On Now" or elsewhere on the home screen...
     ' basically anything that is a Live Channel.
-    if meta.json.ChannelId <> invalid
+    if isValid(meta?.json?.ChannelId)
         if meta.json.EpisodeTitle <> invalid
             meta.title = meta.json.EpisodeTitle
         else if meta.json.Name <> invalid
@@ -53,7 +53,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     video.content.title = meta.title
     video.showID = meta.showID
 
-    if playbackPosition = -1
+    if playbackPosition = -1 and isValid(meta.json)
         playbackPosition = meta.json.UserData.PlaybackPositionTicks
         if allowResumeDialog
             if playbackPosition > 0
@@ -175,7 +175,17 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     if mediaSourceId = invalid
         mediaSourceId = video.id
     end if
-    if meta.live then mediaSourceId = "" ' Don't send mediaSourceId for Live media
+
+    ' Don't send mediaSourceId for Live Media
+    ' Note: Recordings in progress will have meta.live = invalid, but we still don't want to send mediaSourceId
+    if not isValid(meta.live)
+        meta.live = false
+        mediaSourceId = ""
+    else
+        if meta.live
+            mediaSourceId = ""
+        end if
+    end if
 
     m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
     video.videoId = video.id
@@ -197,7 +207,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
 
     video.container = getContainerType(meta)
 
-    if m.playbackInfo.MediaSources[0] = invalid
+    if not isValid(m.playbackInfo.MediaSources[0]) and isValid(meta.json)
         m.playbackInfo = meta.json
     end if
 
@@ -395,7 +405,7 @@ end function
 
 function getContainerType(meta as object) as string
     ' Determine the file type of the video file source
-    if meta.json.mediaSources = invalid then return ""
+    if not IsValid(meta.json) or not isValid(meta.json.mediaSources) then return ""
 
     container = meta.json.mediaSources[0].container
     if container = invalid

@@ -358,12 +358,18 @@ function CreateMovieDetailsGroup(movie)
 end function
 
 function CreateSeriesDetailsGroup(series)
+    ' Get season data early in the function so we can check number of seasons.
+    seasonData = TVSeasons(series.id)
+    ' Divert to season details if user setting goStraightToEpisodeListing is enabled and only one season exists.
+    if get_user_setting("ui.tvshows.goStraightToEpisodeListing") = "true" and seasonData.Items.Count() = 1
+        return CreateSeasonDetailsGroupByID(series.id, seasonData.Items[0].id)
+    end if
     group = CreateObject("roSGNode", "TVShowDetails")
     group.optionsAvailable = false
     m.global.sceneManager.callFunc("pushScene", group)
 
     group.itemContent = ItemMetaData(series.id)
-    group.seasonData = TVSeasons(series.id)
+    group.seasonData = seasonData ' Re-use variable from beginning of function
 
     group.observeField("seasonSelected", m.port)
 
@@ -483,6 +489,14 @@ function CreateMovieLibraryView(libraryItem)
     return group
 end function
 
+function CreateMusicLibraryView(libraryItem)
+    group = CreateObject("roSGNode", "MusicLibraryView")
+    group.parentItem = libraryItem
+    group.optionsAvailable = true
+    group.observeField("selectedItem", m.port)
+    return group
+end function
+
 function CreateSearchPage()
     ' Search + Results Page
     group = CreateObject("roSGNode", "searchResults")
@@ -510,72 +524,6 @@ function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_
     video.observeField("state", m.port)
 
     return video
-end function
-
-' Play Audio
-function CreateAudioPlayerGroup(audiodata)
-
-    group = CreateObject("roSGNode", "NowPlaying")
-    group.observeField("state", m.port)
-    songIDArray = CreateObject("roArray", 0, true)
-
-    ' All we need is an array of Song IDs the user selected to play.
-    for each song in audiodata
-        songIDArray.push(song.id)
-    end for
-
-    group.pageContent = songIDArray
-    group.musicArtistAlbumData = audiodata
-
-    m.global.sceneManager.callFunc("pushScene", group)
-
-    return group
-end function
-
-' Play Instant Mix
-function CreateInstantMixGroup(audiodata)
-
-    songList = CreateInstantMix(audiodata[0].id)
-
-    group = CreateObject("roSGNode", "NowPlaying")
-    group.observeField("state", m.port)
-    songIDArray = CreateObject("roArray", 0, true)
-
-    ' All we need is an array of Song IDs the user selected to play.
-    for each song in songList.items
-        songIDArray.push(song.id)
-    end for
-
-    songIDArray.shift()
-
-    group.pageContent = songIDArray
-    group.musicArtistAlbumData = songList.items
-
-    m.global.sceneManager.callFunc("pushScene", group)
-
-    return group
-end function
-
-' Play Artist
-function CreateArtistMixGroup(artistID)
-
-    songList = CreateArtistMix(artistID)
-
-    group = CreateObject("roSGNode", "NowPlaying")
-    group.observeField("state", m.port)
-    songIDArray = CreateObject("roArray", 0, true)
-
-    ' All we need is an array of Song IDs the user selected to play.
-    for each song in songList.items
-        songIDArray.push(song.id)
-    end for
-
-    group.pageContent = songIDArray
-    group.musicArtistAlbumData = songList.items
-
-    m.global.sceneManager.callFunc("pushScene", group)
-
-    return group
 end function
 
 function CreatePersonView(personData as object) as object

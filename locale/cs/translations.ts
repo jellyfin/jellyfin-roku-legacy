@@ -4370,5 +4370,23 @@
         <translation>zítra</translation>
         <extracomment>Next day</extracomment>
     </message>
+    <message>
+        <source>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</source>
+        <translation>Podpora přímého přehrávání obsahu MPEG-4. Toto může být nutné deaktivovat pro přehrávání videí kódovaných v DIVX.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>AV1</source>
+        <translation>AV1</translation>
+        <extracomment>Name of a setting - should we try to direct play experimental av1 codec</extracomment>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Smazat uložené</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Uložit přihlašovací údaje?</translation>
+    </message>
 </context>
 </TS>

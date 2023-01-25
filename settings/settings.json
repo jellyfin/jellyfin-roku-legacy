@@ -4,39 +4,51 @@
         "description": "Settings relating to playback and supported codec and media types.",
         "children": [
             {
-                "title": "AV1 Support",
-                "description": "** EXPERIMENTAL** Support Direct Play of AV1 content if this Roku device supports it.",
-                "settingName": "playback.av1",
-                "type": "bool",
-                "default": "false"
+                "title": "Codec Support",
+                "description": "Enable or disable Direct Play support for certain codecs",
+                "children": [
+                    {
+                        "title": "AV1",
+                        "description": "** EXPERIMENTAL** Support Direct Play of AV1 content if this Roku device supports it.",
+                        "settingName": "playback.av1",
+                        "type": "bool",
+                        "default": "false"
+                    },
+                    {
+                        "title": "MPEG-2",
+                        "description": "Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.",
+                        "settingName": "playback.mpeg2",
+                        "type": "bool",
+                        "default": "false"
+                    },
+                    {
+                        "title": "MPEG-4",
+                        "description": "Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.",
+                        "settingName": "playback.mpeg4",
+                        "type": "bool",
+                        "default": "true"
+                    }
+                ]
             },
             {
-                "title": "MPEG-2 Support",
-                "description": "Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.",
-                "settingName": "playback.mpeg2",
-                "type": "bool",
-                "default": "false"
-            },
-            {
-                "title": "MPEG-4 Support",
-                "description": "Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.",
-                "settingName": "playback.mpeg4",
-                "type": "bool",
-                "default": "true"
-            },
-            {
-                "title": "Direct Play H.264 Unsupported Profile Levels",
-                "description": "Attempt Direct Play for H.264 media with unsupported profile levels before falling back to transcoding if it fails.",
-                "settingName": "playback.tryDirect.h264ProfileLevel",
-                "type": "bool",
-                "default": "true"
-            },
-            {
-                "title": "Direct Play HEVC Unsupported Profile Levels",
-                "description": "Attempt Direct Play for HEVC media with unsupported profile levels before falling back to trancoding if it fails.",
-                "settingName": "playback.tryDirect.hevcProfileLevel",
-                "type": "bool",
-                "default": "true"
+                "title": "Profile Level Support",
+                "description": "Attempt Direct Play of potentially unsupported profile levels",
+                "children": [
+                    {
+                        "title": "H.264",
+                        "description": "Attempt Direct Play for H.264 media with unsupported profile levels before falling back to transcoding if it fails.",
+                        "settingName": "playback.tryDirect.h264ProfileLevel",
+                        "type": "bool",
+                        "default": "true"
+                    },
+                    {
+                        "title": "HEVC",
+                        "description": "Attempt Direct Play for HEVC media with unsupported profile levels before falling back to trancoding if it fails.",
+                        "settingName": "playback.tryDirect.hevcProfileLevel",
+                        "type": "bool",
+                        "default": "true"
+                    }
+                ]
             },
             {
                 "title": "Cinema Mode",
@@ -55,6 +67,13 @@
         ]
     },
     {
+        "title": "Show What's New Popup",
+        "description": "Show What's New popup when Jellyfin is updated to a new version.",
+        "settingName": "load.allowwhatsnew",
+        "type": "bool",
+        "default": "true"
+    },
+    {
         "title": "User Interface",
         "description": "Settings relating to how the application looks.",
         "children": [
@@ -68,6 +87,13 @@
                         "settingName": "ui.details.maxdaysnextup",
                         "type": "integer",
                         "default": "365"
+                    },
+                    {
+                        "title": "Use Splashscreen as Home Background",
+                        "description": "Use generated splashscreen image as Jellyfin's home background. Jellyfin will need to be closed and reopened for change to take effect.",
+                        "settingName": "ui.home.splashBackground",
+                        "type": "bool",
+                        "default": "false"
                     }
                 ]
             },
@@ -94,6 +120,20 @@
                         "settingName": "ui.tvshows.blurunwatched",
                         "type": "bool",
                         "default": "false"
+                    },
+                    {
+                        "title": "Skip Details for Single Seasons",
+                        "description": "If enabled, selecting a TV series with only one season will go straight to the episode list rather than the show details and season list.",
+                        "settingName": "ui.tvshows.goStraightToEpisodeListing",
+                        "type": "bool",
+                        "default": "false"
+                    },
+                    {
+                        "title":"Disable Community Rating for Episodes",
+                        "description": "If enabled, the star and community rating for episodes of a TV show will be removed. This is to prevent spoilers of an upcoming good/bad episode.",
+                        "settingName": "ui.tvshows.disableCommunityRating",
+                        "type":"bool",
+                        "default":"false"
                     }
                 ]
             },
@@ -120,13 +160,6 @@
                         "settingName": "ui.design.hideclock",
                         "type": "bool",
                         "default": "false"
-                    },
-                    {
-                        "title": "Use Splashscreen as Home Background",
-                        "description": "Use generated splashscreen image as Jellyfin's home background. Jellyfin will need to be closed and reopened for change to take effect.",
-                        "settingName": "ui.home.splashBackground",
-                        "type": "bool",
-                        "default": "false"
                     }
                 ]
             },
@@ -134,6 +167,44 @@
                 "title": "Media Grid",
                 "description": "Media Grid options.",
                 "children": [
+                    {
+                        "title": "Movie Library Default View",
+                        "description": "Default view for Movie Libraries.",
+                        "settingName": "itemgrid.movieDefaultView",
+                        "type": "radio",
+                        "default": "movies",
+                        "options": [
+                            {
+                                "title": "Movies (Presentation)",
+                                "id": "Movies"
+                            },
+                            {
+                                "title": "Movies (Grid)",
+                                "id": "MoviesGrid"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Movie Library Grid Titles",
+                        "description": "Select when to show titles.",
+                        "settingName": "itemgrid.movieGridTitles",
+                        "type": "radio",
+                        "default": "showonhover",
+                        "options": [
+                            {
+                                "title": "Show On Hover",
+                                "id": "showonhover"
+                            },
+                            {
+                                "title": "Always Show",
+                                "id": "showalways"
+                            },
+                            {
+                                "title": "Always Hide",
+                                "id": "hidealways"
+                            }
+                        ]
+                    },
                     {
                         "title": "Item Count",
                         "description": "Show item count in the library and index of selected item.",

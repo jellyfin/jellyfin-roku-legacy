@@ -170,6 +170,13 @@ function getDeviceProfile() as object
                         "Property": "VideoLevel",
                         "Value": "41",
                         "IsRequired": false
+                    },
+                    ' Roku only supports h264 up to 10Mpbs
+                    {
+                        "Condition": "LessThanEqual",
+                        "Property": "VideoBitrate",
+                        "Value": "10000000",
+                        IsRequired: true
                     }
                 ]
             }
@@ -203,6 +210,13 @@ function getDeviceProfile() as object
                     "Property": "VideoRangeType",
                     "Value": av1VideoRangeTypes,
                     "IsRequired": false
+                },
+                ' Roku only supports AVI up to 40Mpbs
+                {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "40000000",
+                    IsRequired: true
                 }
             ]
         })
@@ -229,6 +243,13 @@ function getDeviceProfile() as object
                     "Property": "VideoLevel",
                     "Value": (120 * 5.1).ToStr(),
                     "IsRequired": false
+                },
+                ' Roku only supports h265 up to 40Mpbs
+                {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "40000000",
+                    IsRequired: true
                 }
             ]
         })
@@ -243,6 +264,13 @@ function getDeviceProfile() as object
                     "Property": "VideoRangeType",
                     "Value": vp9VideoRangeTypes,
                     "IsRequired": false
+                },
+                ' Roku only supports VP9 up to 40Mpbs
+                {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "40000000",
+                    IsRequired: true
                 }
             ]
         })

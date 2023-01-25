@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="GridItem" extends="Group">
   <children>
-    <maskGroup id="posterMask" maskUri="pkg:/images/postermask.png" scaleRotateCenter="[145, 212.5]" scale="[0.85,0.85]"  >
+    <maskGroup id="posterMask" maskUri="pkg:/images/postermask.png" scaleRotateCenter="[145, 212.5]" scale="[0.85,0.85]">
       <Poster id="backdrop" width="290" height="425" loadDisplayMode="scaleToZoom" uri="pkg:/images/white.9.png" />
-      <Poster id="itemPoster" width="290" height="425" loadDisplayMode="scaleToZoom" />
+      <Poster id="itemPoster" width="290" height="425" loadDisplayMode="scaleToZoom">
+        <Rectangle id="unplayedCount" visible="false" width="90" height="60" color="#00a4dcFF" translation="[201, 0]">
+          <Label id="unplayedEpisodeCount" width="90" height="60" font="font:SmallestBoldSystemFont" horizAlign="center" vertAlign="center" />
+        </Rectangle>
+      </Poster>
       <Poster id="itemIcon" width="50" height="50" translation="[230,10]" />
       <Label id="posterText" width="280" height="415" translation="[5,5]" horizAlign="center" vertAlign="center" ellipsizeOnBoundary="true" wrap="true" />
     </maskGroup>

@@ -52,11 +52,16 @@ sub itemContentChanged()
         end if
     end if
 
-    if isValid(itemData.communityRating)
-        m.top.findNode("star").visible = true
-        m.top.findNode("communityRating").text = str(int(itemData.communityRating * 10) / 10)
+    if get_user_setting("ui.tvshows.disableCommunityRating") = "false"
+        if isValid(itemData.communityRating)
+            m.top.findNode("star").visible = true
+            m.top.findNode("communityRating").text = str(int(itemData.communityRating * 10) / 10)
+        else
+            m.top.findNode("star").visible = false
+        end if
     else
-        m.top.findNode("star").visible = false
+        m.rating.visible = false
+        m.infoBar.itemSpacings = [20, -25, 20, 20]
     end if
 
     videoIdx = invalid

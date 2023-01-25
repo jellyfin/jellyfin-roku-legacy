@@ -91,6 +91,12 @@ function get_dialog_result(dialog, port)
 end function
 
 function lastFocusedChild(obj as object) as object
+    if LCase(obj.focusedChild.focusedChild.subType()) = "tvepisodes"
+        if isValid(obj?.focusedChild?.focusedChild?.lastFocus)
+            return obj.focusedChild.focusedChild.lastFocus
+        end if
+    end if
+
     child = obj
     for i = 0 to obj.getChildCount()
         if obj.focusedChild <> invalid
@@ -187,6 +193,24 @@ end sub
 ' Returns whether or not passed value is valid
 function isValid(input) as boolean
     return input <> invalid
+end function
+
+' Returns whether or not passed value is valid and not empty
+' Accepts a string, or any countable type (arrays and lists)
+function isValidAndNotEmpty(input) as boolean
+    if not isValid(input) then return false
+    ' Use roAssociativeArray instead of list so we get access to the doesExist() method
+    countableTypes = { "array": 1, "list": 1, "roarray": 1, "roassociativearray": 1, "rolist": 1 }
+    inputType = LCase(type(input))
+    if inputType = "string" or inputType = "rostring"
+        trimmedInput = input.trim()
+        return trimmedInput <> ""
+    else if countableTypes.doesExist(inputType)
+        return input.count() > 0
+    else
+        print "Called isValidAndNotEmpty() with invalid type: ", inputType
+        return false
+    end if
 end function
 
 ' Rounds number to nearest integer

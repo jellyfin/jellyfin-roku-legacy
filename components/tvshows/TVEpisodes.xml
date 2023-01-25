@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="TVEpisodes" extends="JFGroup">
   <children>
-    <Poster id="seasonPoster" width="300" height="450" translation="[95,175]" />
+    <Poster id="seasonPoster" width="300" height="450" translation="[95,175]">
+      <Rectangle id="unplayedCount" visible="false" width="90" height="60" color="#00a4dcFF" translation="[210, 0]">
+        <Label id="unplayedEpisodeCount" width="90" height="60" font="font:SmallestBoldSystemFont" horizAlign="center" vertAlign="center" />
+      </Rectangle>
+    </Poster>
     <JFButton id="Random" text="Play Random" translation="[90, 640]" visible="false"></JFButton>
     <TVEpisodeRowWithOptions id="picker" visible="true" />
   </children>

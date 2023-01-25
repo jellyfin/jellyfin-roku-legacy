@@ -7,6 +7,8 @@ sub init()
     m.itemIcon = m.top.findNode("itemIcon")
     m.itemTextExtra = m.top.findNode("itemTextExtra")
     m.itemPoster.observeField("loadStatus", "onPosterLoadStatusChanged")
+    m.unplayedCount = m.top.findNode("unplayedCount")
+    m.unplayedEpisodeCount = m.top.findNode("unplayedEpisodeCount")
 
     m.showProgressBarAnimation = m.top.findNode("showProgressBar")
     m.showProgressBarField = m.top.findNode("showProgressBarField")
@@ -24,17 +26,24 @@ sub itemContentChanged()
     if itemData = invalid then return
     itemData.Title = itemData.name ' Temporarily required while we move from "HomeItem" to "JFContentItem"
 
-
     m.itemPoster.width = itemData.imageWidth
     m.itemText.maxWidth = itemData.imageWidth
     m.itemTextExtra.width = itemData.imageWidth
     m.itemTextExtra.visible = true
 
-
     m.backdrop.width = itemData.imageWidth
 
     if itemData.iconUrl <> invalid
         m.itemIcon.uri = itemData.iconUrl
+    end if
+
+    if LCase(itemData.type) = "series"
+        if itemData?.json?.UserData?.UnplayedItemCount <> invalid
+            if itemData.json.UserData.UnplayedItemCount > 0
+                m.unplayedCount.visible = true
+                m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
+            end if
+        end if
     end if
 
     ' Format the Data based on the type of Home Data

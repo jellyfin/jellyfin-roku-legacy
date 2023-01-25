@@ -2199,5 +2199,9 @@
         <source>NO_ITEMS</source>
         <translation>Este %1 no contiene elementos</translation>
     </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Cambiar Servidor</translation>
+    </message>
 </context>
 </TS>

@@ -21,7 +21,7 @@ end function
 ' returns the server-side track index for the appriate subtitle
 function defaultSubtitleTrackFromVid(video_id) as integer
     meta = ItemMetaData(video_id)
-    if meta.json.mediaSources <> invalid
+    if meta?.json?.mediaSources <> invalid
         subtitles = sortSubtitles(meta.id, meta.json.MediaSources[0].MediaStreams)
         default_text_subs = defaultSubtitleTrack(subtitles["all"], true) ' Find correct subtitle track (forced text)
         if default_text_subs <> -1

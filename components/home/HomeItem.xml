@@ -3,12 +3,14 @@
   <children>
     <Rectangle id="backdrop" width="464" height="261" translation="[8,5]" />
     <Poster id="itemIcon" width="100" height="100" translation="[190,85]" loadDisplayMode="scaleToFit" />
-    <Poster id="itemPoster" width="464" height="261" translation="[8,5]" loadDisplayMode="scaleToZoom" />
-
+    <Poster id="itemPoster" width="464" height="261" translation="[8,5]" loadDisplayMode="scaleToZoom">
+      <Rectangle id="unplayedCount" visible="false" width="90" height="60" color="#00a4dcFF" translation="[375, 0]">
+        <Label id="unplayedEpisodeCount" width="90" height="60" font="font:SmallestBoldSystemFont" horizAlign="center" vertAlign="center" />
+      </Rectangle>
+    </Poster>
     <Rectangle id="progressBackground" visible="false" color="0x00000098" width="464" height="8" translation="[8,260]">
       <Rectangle id="progress" color="#00a4dcFF" width="0" height="8" />
     </Rectangle>
-
     <ScrollingLabel id="itemText" horizAlign="center" vertAlign="center" font="font:SmallBoldSystemFont" height="64" maxWidth="456" translation="[8,267]" repeatCount="0" />
     <Label id="itemTextExtra" horizAlign="left" vertAlign="center" font="font:SmallBoldSystemFont" height="32" width="456" translation="[8,300]" visible="false" color="#777777FF" />
 
