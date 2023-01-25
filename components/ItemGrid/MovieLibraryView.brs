@@ -448,6 +448,10 @@ sub ItemDataLoaded(msg)
     m.itemGrid.setFocus(true)
     m.genreList.setFocus(false)
 
+    if m.data.getChildCount() = 0
+        m.itemGrid.jumpToItem = 0
+    end if
+
     for each item in itemData
         m.data.appendChild(item)
     end for
@@ -479,8 +483,6 @@ sub ItemDataLoaded(msg)
         m.emptyText.text = tr("NO_ITEMS").Replace("%1", m.top.parentItem.Type)
         m.emptyText.visible = true
     end if
-
-    m.itemGrid.jumpToItem = 0
 
     m.spinner.visible = false
 end sub
