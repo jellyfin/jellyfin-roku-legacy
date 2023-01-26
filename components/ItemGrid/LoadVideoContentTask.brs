@@ -351,13 +351,6 @@ function startPlayBackOver(time as longinteger)
     end while
 
     return m.global.sceneManager.returnData
-
-    ' tgpo
-    if m.scene.focusedChild.focusedChild.overhangTitle = tr("Home") and (m.videotype = "Episode" or m.videotype = "Series")
-        return option_dialog([tr("Resume playing at ") + ticksToHuman(time) + ".", tr("Start over from the beginning."), tr("Watched"), tr("Go to series"), tr("Go to season"), tr("Go to episode")])
-    else
-        return option_dialog(["Resume playing at " + ticksToHuman(time) + ".", "Start over from the beginning."])
-    end if
 end function
 
 function directPlaySupported(meta as object) as boolean
