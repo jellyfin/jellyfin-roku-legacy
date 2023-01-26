@@ -138,6 +138,7 @@ sub loadItems()
             else if item.type = "Playlist"
                 tmp = CreateObject("roSGNode", "PlaylistData")
                 tmp.type = "Playlist"
+                tmp.image = PosterImage(item.id, { "maxHeight": 425, "maxWidth": 290, "quality": "90" })
             else if item.type = "Episode"
                 tmp = CreateObject("roSGNode", "TVEpisode")
             else if item.Type = "Genre"

@@ -284,6 +284,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     'end if
 
     if key = "OK" and m.nextEpisodeButton.hasfocus() and not m.top.trickPlayBar.visible
+        m.top.control = "stop"
         m.top.state = "finished"
         hideNextEpisodeButton()
         return true

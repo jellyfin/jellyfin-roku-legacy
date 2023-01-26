@@ -8,6 +8,8 @@ sub init()
     setupDataTasks()
     setupScreenSaver()
 
+    m.playlistTypeCount = m.global.queueManager.callFunc("getQueueUniqueTypes").count()
+
     m.shuffleEnabled = false
     m.loopMode = ""
     m.buttonCount = m.buttons.getChildCount()
@@ -268,6 +270,8 @@ function playAction() as boolean
 end function
 
 function previousClicked() as boolean
+    if m.playlistTypeCount > 1 then return false
+
     if m.top.audio.state = "playing"
         m.top.audio.control = "stop"
     end if
@@ -298,6 +302,8 @@ function loopClicked() as boolean
 end function
 
 function nextClicked() as boolean
+    if m.playlistTypeCount > 1 then return false
+
     if m.global.queueManager.callFunc("getPosition") < m.global.queueManager.callFunc("getCount") - 1
         LoadNextSong()
     end if
@@ -417,6 +423,9 @@ end sub
 
 ' If we have more and 1 song to play, fade in the next and previous controls
 sub loadButtons()
+    ' Don't show audio buttons if we have a mixed playlist
+    if m.playlistTypeCount > 1 then return
+
     if m.global.queueManager.callFunc("getCount") > 1
         m.shuffleIndicator.opacity = ".4"
         m.loopIndicator.opacity = ".4"
@@ -506,7 +515,11 @@ sub setOnScreenTextValues(json)
         if m.shuffleEnabled
             currentSongIndex = findCurrentSongIndex(m.originalSongList)
         end if
-        setFieldTextValue("numberofsongs", "Track " + stri(currentSongIndex + 1) + "/" + stri(m.global.queueManager.callFunc("getCount")))
+
+        if m.playlistTypeCount = 1
+            setFieldTextValue("numberofsongs", "Track " + stri(currentSongIndex + 1) + "/" + stri(m.global.queueManager.callFunc("getCount")))
+        end if
+
         setFieldTextValue("artist", json.Artists[0])
         setFieldTextValue("song", json.name)
     end if
