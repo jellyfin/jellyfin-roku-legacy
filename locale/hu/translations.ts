@@ -9969,5 +9969,138 @@ elemeket</translation>
         <source>Playback Information</source>
         <translation>Lejátszási információk</translation>
     </message>
+    <message>
+        <source>Only display text subtitles to minimize transcoding.</source>
+        <translation>Csak a szöveges feliratokat jelenítse meg az átkódolás minimalizálása érdekében.</translation>
+        <extracomment>Description of a setting - should we hide subtitles that might transcode</extracomment>
+    </message>
+    <message>
+        <source>Pixel format</source>
+        <translation>Pixel formátum</translation>
+        <extracomment>Video pixel format</extracomment>
+    </message>
+    <message>
+        <source>Bit Rate</source>
+        <translation>Bitráta</translation>
+        <extracomment>Video streaming bit rate</extracomment>
+    </message>
+    <message>
+        <source>Codec Tag</source>
+        <translation>Kodek jelölés</translation>
+    </message>
+    <message>
+        <source>Text Subtitles Only</source>
+        <translation>Csak szöveges feliratok</translation>
+        <extracomment>Name of a setting - should we hide subtitles that might transcode</extracomment>
+    </message>
+    <message>
+        <source>Video Codec</source>
+        <translation>Videókodek</translation>
+    </message>
+    <message>
+        <source>Codec</source>
+        <translation>Kodek</translation>
+    </message>
+    <message>
+        <source>Container</source>
+        <translation>Konténer</translation>
+        <extracomment>Video streaming container</extracomment>
+    </message>
+    <message>
+        <source>Transcoding Information</source>
+        <translation>Transzkódolási információk</translation>
+    </message>
+    <message>
+        <source>Reason</source>
+        <translation>Oka</translation>
+    </message>
+    <message>
+        <source>Audio Codec</source>
+        <translation>Audiókodek</translation>
+    </message>
+    <message>
+        <source>direct</source>
+        <translation>direkt</translation>
+    </message>
+    <message>
+        <source>Total Bitrate</source>
+        <translation>Teljes Bitráta</translation>
+    </message>
+    <message>
+        <source>Audio Channels</source>
+        <translation>Audiocsatornák</translation>
+    </message>
+    <message>
+        <source>Stream Information</source>
+        <translation>Adatfolyam információ</translation>
+    </message>
+    <message>
+        <source>Level</source>
+        <translation>Szint</translation>
+        <extracomment>Video profile level</extracomment>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Méret</translation>
+        <extracomment>Video size</extracomment>
+    </message>
+    <message>
+        <source>Video range type</source>
+        <translation>Videó tartomány típusa</translation>
+    </message>
+    <message>
+        <source>WxH</source>
+        <translation>Szélesség x Magasság</translation>
+        <extracomment>Video width x height</extracomment>
+    </message>
+    <message>
+        <source>Unable to find any albums or songs belonging to this artist</source>
+        <translation>Nem találhatók ehhez az előadóhoz tartozó albumok vagy dalok</translation>
+        <extracomment>Popup message when we find no audio data for an artist</extracomment>
+    </message>
+    <message>
+        <source>Slideshow Paused</source>
+        <translation>Diavetítés szüneteltetve</translation>
+    </message>
+    <message>
+        <source>Show What&apos;s New Popup</source>
+        <translation>Az újdonságok előugró ablaka</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
+    <message>
+        <source>all</source>
+        <translation>összes</translation>
+        <extracomment>all will reset the searchTerm so all data will be availible</extracomment>
+    </message>
+    <message>
+        <source>Slideshow On</source>
+        <translation>Diavetítés bekapcsolva</translation>
+    </message>
+    <message>
+        <source>Slideshow Resumed</source>
+        <translation>Diavetítés folytatódik</translation>
+    </message>
+    <message>
+        <source>Random Off</source>
+        <translation>Véletlenszerű kikapcsolva</translation>
+    </message>
+    <message>
+        <source>Aired</source>
+        <translation>Sugározva</translation>
+        <extracomment>Aired date label</extracomment>
+    </message>
+    <message>
+        <source>Slideshow Off</source>
+        <translation>Diavetítés kikapcsolva</translation>
+    </message>
+    <message>
+        <source>Random On</source>
+        <translation>Véletlenszerű bekapcsolva</translation>
+    </message>
+    <message>
+        <source>MPEG-4 Support</source>
+        <translation>MPEG-4 Támogatás</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
 </context>
 </TS>

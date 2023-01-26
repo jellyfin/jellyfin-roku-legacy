@@ -21,7 +21,7 @@ sub setPoster()
         imgParams = { "maxHeight": 440, "maxWidth": 295, "Tag": m.top.json.ParentThumbImageTag }
         m.top.posterURL = ImageURL(m.top.json.id, "Thumb", imgParams)
     else if m.top.json.ImageTags.Primary <> invalid
-        imgParams = { "maxHeight": 440, "maxWidth": 295 }
+        imgParams = { "maxHeight": 440, "maxWidth": 295, "Tag": m.top.json.ImageTags.Primary }
         m.top.posterURL = ImageURL(m.top.json.id, "Primary", imgParams)
     end if
 end sub

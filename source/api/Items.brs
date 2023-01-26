@@ -148,11 +148,11 @@ function ItemMetaData(id as string)
         tmp = CreateObject("roSGNode", "MusicSongData")
 
         ' Try using song's parent for poster image
-        tmp.image = PosterImage(data.ParentId)
+        tmp.image = PosterImage(data.ParentId, { "MaxWidth": 500, "MaxHeight": 500 })
 
         ' Song's parent poster image is no good, try using the song's poster image
         if tmp.image = invalid
-            tmp.image = PosterImage(data.id)
+            tmp.image = PosterImage(data.id, { "MaxWidth": 500, "MaxHeight": 500 })
         end if
 
         tmp.json = data

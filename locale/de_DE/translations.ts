@@ -9335,5 +9335,192 @@
         <translation>Mittwoch</translation>
         <extracomment>Day of Week</extracomment>
     </message>
+    <message>
+        <source>Enable or disable Direct Play for optional codecs</source>
+        <translation>Aktiviere oder deaktiviere Direkte Wiedergabe für optionale Codecs</translation>
+        <extracomment>Settings Menu - Title for settings group related to codec support</extracomment>
+    </message>
+    <message>
+        <source>MPEG-2</source>
+        <translation>MPEG-2</translation>
+        <extracomment>Name of codec used in settings menu</extracomment>
+    </message>
+    <message>
+        <source>MPEG-4</source>
+        <translation>MPEG-4</translation>
+        <extracomment>Name of codec used in settings menu</extracomment>
+    </message>
+    <message>
+        <source>Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.</source>
+        <translation>Unterstütze Direkte Wiedergabe von MPEG-2-Inhalten (z. B. Live-TV). Dies verhindert die Transkodierung von MPEG-2-Inhalten, verbraucht aber deutlich mehr Bandbreite.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>Codec Support</source>
+        <translation>Codec Unterstützung</translation>
+        <extracomment>Settings Menu - Title for settings group related to codec support</extracomment>
+    </message>
+    <message>
+        <source>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</source>
+        <translation>Unterstützt direktes Abspielen von MPEG-4 Inhalten. Das muss ggf. deaktiviert werden um DIVX-Dateien abzuspielen.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>AV1</source>
+        <translation>AV1</translation>
+        <extracomment>Name of a setting - should we try to direct play experimental av1 codec</extracomment>
+    </message>
+    <message>
+        <source>Always show the titles below the poster images. (If disabled, the title will be shown under the highlighted item only).</source>
+        <translation>Titel werden immer unter den Posterbildern angezeigt. (Wenn deaktiviert, wird der Titel nur unter dem hervorgehobenen Element angezeigt).</translation>
+        <extracomment>Description for option in Setting Screen</extracomment>
+    </message>
+    <message>
+        <source>Show item count in the library and index of selected item.</source>
+        <translation>Anzahl der Elemente in der Bibliothek und im Index des gewählten Elements anzeigen.</translation>
+        <extracomment>Description for option in Setting Screen</extracomment>
+    </message>
+    <message>
+        <source>Go to series</source>
+        <translation>Springe zur Serie</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Series Detail Page</extracomment>
+    </message>
+    <message>
+        <source>You can search for Titles, People, Live TV Channels and more</source>
+        <translation>Sie können nach Titeln, Personen, Live-TV-Kanälen und noch mehr suchen</translation>
+        <extracomment>Help text in search results</extracomment>
+    </message>
+    <message>
+        <source>Return to Top</source>
+        <translation>Zurück nach oben</translation>
+        <extracomment>UI -&gt; Media Grid -&gt; Item Title in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Options for Details pages.</source>
+        <translation>Detail-Seiten Einstellungen.</translation>
+        <extracomment>Description for Details page user settings.</extracomment>
+    </message>
+    <message>
+        <source>Use Splashscreen as Screensaver Background</source>
+        <translation>Splashscreen als Bildschirmschoner verwenden</translation>
+        <extracomment>Option Title in user setting screen</extracomment>
+    </message>
+    <message>
+        <source>Quick Connect</source>
+        <translation>Schnellverbindung</translation>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation>Aktiviert</translation>
+    </message>
+    <message>
+        <source>Set Favorite</source>
+        <translation>Als Favorit festlegen</translation>
+        <extracomment>Button Text - When pressed, sets item as Favorite</extracomment>
+    </message>
+    <message>
+        <source>Go to season</source>
+        <translation>Springe zur Staffel</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Season Page</extracomment>
+    </message>
+    <message>
+        <source>Use voice remote to search</source>
+        <translation>Benutze Sprachfernbedienung zum Suchen</translation>
+        <extracomment>Help text in search voice text box</extracomment>
+    </message>
+    <message>
+        <source>Search now</source>
+        <translation>Jetzt suchen</translation>
+        <extracomment>Help text in search Box</extracomment>
+    </message>
+    <message>
+        <source>%1 of %2</source>
+        <translation>%1 von %2</translation>
+        <extracomment>Item position and count. %1 = current item. %2 = total number of items</extracomment>
+    </message>
+    <message>
+        <source>Networks</source>
+        <translation>Netzwerke</translation>
+    </message>
+    <message>
+        <source>Studios</source>
+        <translation>Studios</translation>
+    </message>
+    <message>
+        <source>There was an error authenticating via Quick Connect.</source>
+        <translation>Bei der Authentifizierung über Quick Connect ist ein Fehler aufgetreten.</translation>
+    </message>
+    <message>
+        <source>Shows</source>
+        <translation>Serien</translation>
+    </message>
+    <message>
+        <source>Details Page</source>
+        <translation>Detailseite</translation>
+    </message>
+    <message>
+        <source>Hide Taglines</source>
+        <translation>Markierungen verstecken</translation>
+        <extracomment>Option Title in user setting screen</extracomment>
+    </message>
+    <message>
+        <source>Hides tagline text on details pages.</source>
+        <translation>Markierungs-Text auf der Detailseite verstecken.</translation>
+    </message>
+    <message>
+        <source>Blur Unwatched Episodes</source>
+        <translation>Ungesehene Folgen verpixeln</translation>
+        <extracomment>Option Title in user setting screen</extracomment>
+    </message>
+    <message>
+        <source>Skip Details for Single Seasons</source>
+        <translation>Details für einzelne Staffeln überspringen</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
+    <message>
+        <source>If enabled, images of unwatched episodes will be blurred.</source>
+        <translation>Wenn diese Option aktiviert ist, werden Bilder von nicht angesehenen Folgen unscharf dargestellt.</translation>
+    </message>
+    <message>
+        <source>Screensaver</source>
+        <translation>Bildschirmschoner</translation>
+    </message>
+    <message>
+        <source>Options for Jellyfin&apos;s screensaver.</source>
+        <translation>Einstellungen für Jellyfins Bildschirmschoner.</translation>
+        <extracomment>Description for Screensaver user settings.</extracomment>
+    </message>
+    <message>
+        <source>** EXPERIMENTAL** Support Direct Play of AV1 content if this Roku device supports it.</source>
+        <translation>**EXPERIMENTELL** Unterstützt direktes Abspielen von AV1 Inhalten falls das Roku-Gerät das unterstützt.</translation>
+        <extracomment>Description of a setting - should we try to direct play experimental av1 codec</extracomment>
+    </message>
+    <message>
+        <source>User Interface</source>
+        <translation>Benutzerschnittstelle</translation>
+        <extracomment>Title for User Interface section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Set Watched</source>
+        <translation>Als gesehen markieren</translation>
+        <extracomment>Button Text - When pressed, marks item as Warched</extracomment>
+    </message>
+    <message>
+        <source>Go to episode</source>
+        <translation>Springe zur Folge</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Episode Detail Page</extracomment>
+    </message>
+    <message>
+        <source>Here is your Quick Connect code:</source>
+        <translation>Ihr Schnellverbindungscode lautet:</translation>
+    </message>
+    <message>
+        <source>(Dialog will close automatically)</source>
+        <translation>(Dialog schließt sich automatisch)</translation>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation>Deaktiviert</translation>
+    </message>
 </context>
 </TS>
