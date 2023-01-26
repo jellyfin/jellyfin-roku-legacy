@@ -339,6 +339,9 @@ end function
 'Opens dialog asking user if they want to resume video or start playback over only on the home screen
 function startPlayBackOver(time as longinteger)
 
+    ' If we're inside a play queue, start the episode from the beginning
+    if m.global.queueManager.callFunc("getCount") > 1 then return { indexselected: 1 }
+
     resumeData = [
         "Resume playing at " + ticksToHuman(time) + ".",
         "Start over from the beginning."
