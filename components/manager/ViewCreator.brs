@@ -57,7 +57,8 @@ end sub
 sub onSelectionMade()
     m.global.sceneManager.unobserveField("returnData")
 
-    if not isValid(m.global.sceneManager.returnData?.type) then return
+    if not isValid(m.global.sceneManager.returnData) then return
+    if not isValid(m.global.sceneManager.returnData.type) then return
 
     if LCase(m.global.sceneManager.returnData.type) = "subtitleselection"
         processSubtitleSelection()
