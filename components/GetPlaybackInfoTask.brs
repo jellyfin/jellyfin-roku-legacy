@@ -41,7 +41,6 @@ sub getPlaybackInfoTask()
 end sub
 
 function GetTranscodingStats(session)
-    print "GetPlaybackInfo", session
     sessionStats = { data: [] }
 
     if isValid(session.TranscodingInfo) and session.TranscodingInfo.Count() > 0

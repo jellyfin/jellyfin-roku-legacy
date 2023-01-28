@@ -70,6 +70,11 @@ sub onVideoContentLoaded()
     end if
 
     m.top.content = m.LoadMetaDataTask.content[0].content
+    m.top.PlaySessionId = m.LoadMetaDataTask.content[0].PlaySessionId
+    m.top.videoId = m.LoadMetaDataTask.content[0].id
+    m.top.container = m.LoadMetaDataTask.content[0].container
+    m.top.mediaSourceId = m.LoadMetaDataTask.content[0].mediaSourceId
+    m.top.audioIndex = m.LoadMetaDataTask.content[0].audio_stream_idx
 
     m.top.setFocus(true)
     m.top.control = "play"
