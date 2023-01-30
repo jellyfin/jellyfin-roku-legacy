@@ -252,11 +252,10 @@ function GetSongsByArtist(id as string)
 end function
 
 ' Get Items that are under the provided item
-function ChildItemList(id as string)
-    url = Substitute("Users/{0}/Items", get_setting("active_user"), id)
+function PlaylistItemList(id as string)
+    url = Substitute("Playlists/{0}/Items", id)
     resp = APIRequest(url, {
-        "UserId": get_setting("active_user"),
-        "parentId": id
+        "UserId": get_setting("active_user")
     })
 
     results = []

@@ -14,10 +14,10 @@ sub loadItems()
 end sub
 
 function LoadItems_VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
-    ' Get video controls and UI
-    video = {}
 
+    video = {}
     video.id = id
+    video.content = createObject("RoSGNode", "ContentNode")
 
     LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, forceTranscoding, showIntro, allowResumeDialog)
 
@@ -33,34 +33,17 @@ function LoadItems_VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1
 end function
 
 sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
-    video.content = createObject("RoSGNode", "ContentNode")
 
     meta = ItemMetaData(video.id)
-    if meta = invalid
+
+    if not isValid(meta)
         video.content = invalid
         return
     end if
 
-    m.videotype = meta.type
+    videotype = LCase(meta.type)
 
-    ' Special handling for "Programs" or "Vidoes" launched from "On Now" or elsewhere on the home screen...
-    ' basically anything that is a Live Channel.
-    if (meta?.json?.ChannelId) <> invalid
-        if meta.json.EpisodeTitle <> invalid
-            meta.title = meta.json.EpisodeTitle
-        else if meta.json.Name <> invalid
-            meta.title = meta.json.Name
-        end if
-        meta.showID = meta.json.id
-        meta.live = true
-        if meta.json.type = "Program"
-            video.id = meta.json.ChannelId
-        else
-            video.id = meta.json.id
-        end if
-    end if
-
-    if m.videotype = "Episode" or m.videotype = "Series"
+    if videotype = "episode" or videotype = "series"
         video.runTime = (meta.json.RunTimeTicks / 10000000.0)
         video.content.contenttype = "episode"
     end if
@@ -82,93 +65,6 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
                 else if dialogResult.indexselected = 1
                     'Start Over selected, change position to 0
                     playbackPosition = 0
-                else if dialogResult.indexselected = 2
-                    'Mark this item as watched, refresh the page, and return invalid so we don't load the video
-                    MarkItemWatched(video.id)
-                    video.content.watched = not video.content.watched
-                    group = m.scene.focusedChild
-                    group.timeLastRefresh = CreateObject("roDateTime").AsSeconds()
-                    group.callFunc("refresh")
-                    video.content = invalid
-                    return
-                else if dialogResult.indexselected = 3
-                    'get series ID based off episiode ID
-                    params = {
-                        ids: video.Id
-                    }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
-                    resp = APIRequest(url, params)
-                    data = getJson(resp)
-                    for each item in data.Items
-                        m.series_id = item.SeriesId
-                    end for
-                    'Get series json data
-                    params = {
-                        ids: m.series_id
-                    }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
-                    resp = APIRequest(url, params)
-                    data = getJson(resp)
-                    for each item in data.Items
-                        m.tmp = item
-                    end for
-                    'Create Series Scene
-                    CreateSeriesDetailsGroup(m.tmp)
-                    video.content = invalid
-                    return
-
-                else if dialogResult.indexselected = 4
-                    'get Season/Series ID based off episiode ID
-                    params = {
-                        ids: video.Id
-                    }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
-                    resp = APIRequest(url, params)
-                    data = getJson(resp)
-                    for each item in data.Items
-                        m.season_id = item.SeasonId
-                        m.series_id = item.SeriesId
-                    end for
-                    'Get Series json data
-                    params = {
-                        ids: m.season_id
-                    }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
-                    resp = APIRequest(url, params)
-                    data = getJson(resp)
-                    for each item in data.Items
-                        m.Season_tmp = item
-                    end for
-                    'Get Season json data
-                    params = {
-                        ids: m.series_id
-                    }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
-                    resp = APIRequest(url, params)
-                    data = getJson(resp)
-                    for each item in data.Items
-                        m.Series_tmp = item
-                    end for
-                    'Create Season Scene
-                    CreateSeasonDetailsGroup(m.Series_tmp, m.Season_tmp)
-                    video.content = invalid
-                    return
-
-                else if dialogResult.indexselected = 5
-                    'get  episiode ID
-                    params = {
-                        ids: video.Id
-                    }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
-                    resp = APIRequest(url, params)
-                    data = getJson(resp)
-                    for each item in data.Items
-                        m.episode_id = item
-                    end for
-                    'Create Episode Scene
-                    CreateMovieDetailsGroup(m.episode_id)
-                    video.content = invalid
-                    return
                 end if
             end if
         end if
@@ -187,23 +83,20 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
 
     video.content.PlayStart = int(playbackPosition / 10000000)
 
-    ' Call PlayInfo from server
-    if mediaSourceId = invalid
-        mediaSourceId = video.id
-    end if
-    if meta.live then mediaSourceId = "" ' Don't send mediaSourceId for Live media
+
+    if not isValid(mediaSourceId) then mediaSourceId = video.id
+    if meta.live then mediaSourceId = ""
 
     m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
     video.videoId = video.id
     video.mediaSourceId = mediaSourceId
     video.audioIndex = audio_stream_idx
 
-    if m.playbackInfo = invalid
+    if not isValid(m.playbackInfo)
         video.content = invalid
         return
     end if
 
-    params = {}
     video.PlaySessionId = m.playbackInfo.PlaySessionId
 
     if meta.live
@@ -213,23 +106,11 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
 
     video.container = getContainerType(meta)
 
-    if m.playbackInfo.MediaSources[0] = invalid
+    if not isValid(m.playbackInfo.MediaSources[0])
         m.playbackInfo = meta.json
     end if
 
-    subtitles = sortSubtitles(meta.id, m.playbackInfo.MediaSources[0].MediaStreams)
-    if get_user_setting("playback.subs.onlytext") = "true"
-        safesubs = []
-        for each subtitle in subtitles["all"]
-            if subtitle["IsTextSubtitleStream"]
-                safesubs.push(subtitle)
-            end if
-        end for
-        video.Subtitles = safesubs
-    else
-        video.Subtitles = subtitles["all"]
-    end if
-    video.content.SubtitleTracks = subtitles["text"]
+    addSubtitlesToVideo(video, meta)
 
     if meta.live
         video.transcodeParams = {
@@ -264,35 +145,7 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
     end if
 
     if video.directPlaySupported
-        protocol = LCase(m.playbackInfo.MediaSources[0].Protocol)
-        if protocol <> "file"
-            uriRegex = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
-            uri = uriRegex.Match(m.playbackInfo.MediaSources[0].Path)
-            ' proto $1, host $2, port $3, the-rest $4
-            localhost = CreateObject("roRegex", "^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*\:)*?:?0*1$", "i")
-            ' https://stackoverflow.com/questions/8426171/what-regex-will-match-all-loopback-addresses
-            if localhost.isMatch(uri[2])
-                ' if the domain of the URI is local to the server,
-                ' create a new URI by appending the received path to the server URL
-                ' later we will substitute the users provided URL for this case
-                video.content.url = buildURL(uri[4])
-            else
-                fully_external = true
-                video.content.url = m.playbackInfo.MediaSources[0].Path
-            end if
-        else:
-            params.append({
-                "Static": "true",
-                "Container": video.container,
-                "PlaySessionId": video.PlaySessionId,
-                "AudioStreamIndex": audio_stream_idx
-            })
-            if mediaSourceId <> ""
-                params.MediaSourceId = mediaSourceId
-            end if
-            video.content.url = buildURL(Substitute("Videos/{0}/stream", video.id), params)
-
-        end if
+        addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
         video.isTranscoded = false
     else
         if m.playbackInfo.MediaSources[0].TranscodingUrl = invalid
@@ -318,6 +171,57 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
         video.content = authorize_request(video.content)
     end if
 
+end sub
+
+sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
+    protocol = LCase(m.playbackInfo.MediaSources[0].Protocol)
+    if protocol <> "file"
+        uriRegex = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
+        uri = uriRegex.Match(m.playbackInfo.MediaSources[0].Path)
+        ' proto $1, host $2, port $3, the-rest $4
+        localhost = CreateObject("roRegex", "^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*\:)*?:?0*1$", "i")
+        ' https://stackoverflow.com/questions/8426171/what-regex-will-match-all-loopback-addresses
+        if localhost.isMatch(uri[2])
+            ' if the domain of the URI is local to the server,
+            ' create a new URI by appending the received path to the server URL
+            ' later we will substitute the users provided URL for this case
+            video.content.url = buildURL(uri[4])
+        else
+            fully_external = true
+            video.content.url = m.playbackInfo.MediaSources[0].Path
+        end if
+    else:
+        params = {}
+
+        params.append({
+            "Static": "true",
+            "Container": video.container,
+            "PlaySessionId": video.PlaySessionId,
+            "AudioStreamIndex": audio_stream_idx
+        })
+
+        if mediaSourceId <> ""
+            params.MediaSourceId = mediaSourceId
+        end if
+
+        video.content.url = buildURL(Substitute("Videos/{0}/stream", video.id), params)
+    end if
+end sub
+
+sub addSubtitlesToVideo(video, meta)
+    subtitles = sortSubtitles(meta.id, m.playbackInfo.MediaSources[0].MediaStreams)
+    if get_user_setting("playback.subs.onlytext") = "true"
+        safesubs = []
+        for each subtitle in subtitles["all"]
+            if subtitle["IsTextSubtitleStream"]
+                safesubs.push(subtitle)
+            end if
+        end for
+        video.Subtitles = safesubs
+    else
+        video.Subtitles = subtitles["all"]
+    end if
+    video.content.SubtitleTracks = subtitles["text"]
 end sub
 
 
@@ -693,81 +597,6 @@ function getSubtitleSelIdxFromSubIdx(subtitles, sub_idx) as integer
     end for
     return -1
 end function
-
-function selectSubtitleTrack(tracks, current = -1) as integer
-    video = m.scene.focusedChild.focusedChild
-    trackSelected = selectSubtitleTrackDialog(video.Subtitles, video.SelectedSubtitle)
-    if trackSelected = invalid or trackSelected = -1 ' back pressed in Dialog - no selection made
-        return -2
-    else
-        return trackSelected - 1
-    end if
-end function
-
-' Present Dialog to user to select subtitle track
-function selectSubtitleTrackDialog(tracks, currentTrack = -1)
-    iso6392 = getSubtitleLanguages()
-    options = ["None"]
-    for each item in tracks
-        forced = ""
-        default = ""
-        if item.IsForced then forced = " [Forced]"
-        if item.IsDefault then default = " - Default"
-        if item.Track.Language <> invalid
-            language = iso6392.lookup(item.Track.Language)
-            if language = invalid then language = item.Track.Language
-        else
-            language = "Undefined"
-        end if
-        options.push(language + forced + default)
-    end for
-    return option_dialog(options, "Select a subtitle track", currentTrack + 1)
-end function
-
-sub changeSubtitleDuringPlayback(newid)
-
-    ' If no subtitles set
-    if newid = invalid or newid = -1
-        turnoffSubtitles()
-        return
-    end if
-
-    video = m.scene.focusedChild.focusedChild
-
-    ' If no change of subtitle track, return
-    if newid = video.SelectedSubtitle then return
-
-    currentSubtitles = video.Subtitles[video.SelectedSubtitle]
-    newSubtitles = video.Subtitles[newid]
-
-    if newSubtitles.IsEncoded or (currentSubtitles <> invalid and currentSubtitles.IsEncoded)
-        ' With encoded subtitles we need to stop/start playback
-        video.control = "stop"
-        LoadItems_AddVideoContent(video, video.mediaSourceId, video.audioIndex, newSubtitles.Index, video.position * 10000000)
-        video.control = "play"
-    else
-        ' Switching from text to text (or none to text) does not require stopping playback
-        video.globalCaptionMode = "On"
-        video.subtitleTrack = video.availableSubtitleTracks[availSubtitleTrackIdx(video, newid)].TrackName
-    end if
-
-    video.SelectedSubtitle = newid
-
-end sub
-
-sub turnoffSubtitles()
-    video = m.scene.focusedChild.focusedChild
-    current = video.SelectedSubtitle
-    video.SelectedSubtitle = -1
-    video.globalCaptionMode = "Off"
-    m.device.EnableAppFocusEvent(false)
-    ' Check if Enoded subtitles are being displayed, and turn off
-    if current > -1 and video.Subtitles[current].IsEncoded
-        video.control = "stop"
-        LoadItems_AddVideoContent(video, video.mediaSourceId, video.audioIndex, -1, video.position * 10000000)
-        video.control = "play"
-    end if
-end sub
 
 'Checks available subtitle tracks and puts subtitles in forced, default, and non-default/forced but preferred language at the top
 function sortSubtitles(id as string, MediaStreams)

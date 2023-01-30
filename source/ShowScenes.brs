@@ -451,7 +451,7 @@ function CreatePlaylistView(album)
     m.global.sceneManager.callFunc("pushScene", group)
 
     group.pageContent = ItemMetaData(album.id)
-    group.albumData = ChildItemList(album.id)
+    group.albumData = PlaylistItemList(album.id)
 
     ' Watch for user clicking on an item
     group.observeField("playItem", m.port)
