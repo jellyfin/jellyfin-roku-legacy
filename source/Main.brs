@@ -136,7 +136,7 @@ sub Main (args as dynamic) as void
                 sceneManager.callFunc("pushScene", group)
             else if selectedItem.type = "Folder" and selectedItem.json.type = "Genre"
                 ' User clicked on a genre folder
-                if selectedItem.collectionType = "movies"
+                if selectedItem.json.MovieCount > 0
                     group = CreateMovieLibraryView(selectedItem)
                 else
                     group = CreateItemGrid(selectedItem)

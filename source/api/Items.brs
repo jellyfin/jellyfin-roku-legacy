@@ -147,15 +147,19 @@ function ItemMetaData(id as string)
         tmp = CreateObject("roSGNode", "MusicSongData")
 
         ' Try using song's parent for poster image
-        tmp.image = PosterImage(data.ParentId)
+        tmp.image = PosterImage(data.ParentId, { "MaxWidth": 500, "MaxHeight": 500 })
 
         ' Song's parent poster image is no good, try using the song's poster image
         if tmp.image = invalid
-            tmp.image = PosterImage(data.id)
+            tmp.image = PosterImage(data.id, { "MaxWidth": 500, "MaxHeight": 500 })
         end if
 
         tmp.json = data
         return tmp
+    else if data.type = "Recording"
+        ' We know it's "Recording", but we don't do any special preprocessing
+        ' for this data type at the moment, so just return the json.
+        return data
     else
         print "Items.brs::ItemMetaData processed unhandled type: " data.type
         ' Return json if we don't know what it is
@@ -385,11 +389,7 @@ function TVEpisodes(show_id as string, season_id as string)
     data = getJson(resp)
     results = []
     for each item in data.Items
-        imgParams = { "AddPlayedIndicator": item.UserData.Played, "maxWidth": 400, "maxheight": 250 }
-        if item.UserData.PlayedPercentage <> invalid
-            param = { "PercentPlayed": item.UserData.PlayedPercentage }
-            imgParams.Append(param)
-        end if
+        imgParams = { "maxWidth": 400, "maxheight": 250 }
         tmp = CreateObject("roSGNode", "TVEpisodeData")
         tmp.image = PosterImage(item.id, imgParams)
         if tmp.image <> invalid

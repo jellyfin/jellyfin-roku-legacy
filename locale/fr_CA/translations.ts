@@ -1124,5 +1124,53 @@
         <source>Change Server</source>
         <translation>Changer de serveur</translation>
     </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Chargement des données de la chaîne</translation>
+    </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Erreur lors du chargement des données de la chaîne</translation>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>En ce moment</translation>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Erreur lors de la récupération du contenu</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>Une erreur s&apos;est produite lors de la lecture de cet élément.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Changer de serveur</translation>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Se déconnecter</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Sauvegarder les informations d&apos;authentification ?</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Supprimer les valeurs enregistrées</translation>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Erreur lors de la lecture</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Une erreur s&apos;est produite lors de la récupération des données de cet élément depuis le serveur.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
 </context>
 </TS>

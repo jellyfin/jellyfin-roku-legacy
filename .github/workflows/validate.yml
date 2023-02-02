@@ -3,12 +3,12 @@ on: [push, pull_request]
 
 jobs:
   run:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
         with:
-          node-version: "14.12.0"
+          node-version: "18.13.0"
       - run: npm ci
       - run: npx ropm install
       - run: npm run validate

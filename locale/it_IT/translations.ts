@@ -1921,5 +1921,36 @@
         <translation>Errore durante la riproduzione</translation>
         <extracomment>Dialog title when error occurs during playback</extracomment>
     </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Errore durante la riproduzione</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Esci</translation>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>C&apos;è stato un errore nel recupero dei dati per questo elemento dal server.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>È stato riscontrato un errore durante la riproduzione di questo oggetto.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Caricamento dati del canale</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Salvare le credenziali?</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Cambia server</translation>
+    </message>
 </context>
 </TS>
