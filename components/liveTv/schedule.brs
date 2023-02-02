@@ -50,10 +50,9 @@ sub channelFilterSet()
         m.top.counter = -1
         'run task
         m.LoadChannelsTask.control = "RUN"
-        'set guide focus
-        m.scheduleGrid.setFocus(true)
     end if
-
+    'set guide focus
+    m.scheduleGrid.setFocus(true)
 end sub
 
 'Voice Search set
@@ -108,7 +107,6 @@ sub onChannelsLoaded()
         m.LoadProgramDetailsTask = createObject("roSGNode", "LoadProgramDetailsTask")
         m.LoadProgramDetailsTask.observeField("programDetails", "onProgramDetailsLoaded")
 
-        m.scheduleGrid.setFocus(true)
         if m.EPGLaunchCompleteSignaled = false
             m.top.signalBeacon("EPGLaunchComplete") ' Required Roku Performance monitoring
             m.EPGLaunchCompleteSignaled = true
@@ -117,6 +115,7 @@ sub onChannelsLoaded()
     m.LoadChannelsTask.channels = []
     'keep focus on current channel while loading the next set of channels
     m.schedulegrid.jumpToChannel = m.detailsPane.currentChannelFocused
+    m.scheduleGrid.setFocus(true)
 end sub
 
 ' When LoadScheduleTask completes (initial or more data) and we have a schedule to display
@@ -140,9 +139,9 @@ sub onScheduleLoaded()
     end for
 
     m.scheduleGrid.showLoadingDataFeedback = false
-    m.scheduleGrid.setFocus(true)
     m.LoadScheduleTask.schedule = []
     m.spinner.visible = false
+    m.scheduleGrid.setFocus(true)
 end sub
 
 sub onProgramFocused()
@@ -209,8 +208,8 @@ sub advanceGuide()
         ' if task is running stop and load more
         m.top.counter = m.top.channelsLoaded - 11
         m.LoadChannelsTask.control = "RUN"
-        m.scheduleGrid.setFocus(true)
     end if
+    m.scheduleGrid.setFocus(true)
 end sub
 
 sub onProgramSelected()
