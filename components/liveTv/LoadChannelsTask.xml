@@ -2,7 +2,7 @@
 
 <component name="LoadChannelsTask" extends="Task">
   <interface>
-    <field id="limit" type="integer" value="10" />
+    <field id="limit" type="integer" value="20" />
     <field id="startIndex" type="integer" value="0" />
     <field id="count" type="integer" value="" />
     <field id="filter" type="string" value="All" />

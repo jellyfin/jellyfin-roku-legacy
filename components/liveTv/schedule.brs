@@ -202,11 +202,11 @@ sub advanceGuide()
         'add loaded channels count to advance guide
         m.top.channelsLoaded = m.top.channelsLoaded + m.LoadChannelsTask.limit
         'advance start index to get new channels
-        startIdex = m.top.channelsLoaded - 9
+        startIdex = m.top.channelsLoaded - 19
         'update satrt index in loaded channels task
         m.LoadChannelsTask.startIndex = startIdex
         ' if task is running stop and load more
-        m.top.counter = m.top.channelsLoaded - 11
+        m.top.counter = m.top.channelsLoaded - 21
         m.LoadChannelsTask.control = "RUN"
     end if
     m.scheduleGrid.setFocus(true)
