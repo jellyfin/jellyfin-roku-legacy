@@ -117,6 +117,7 @@ sub onChannelsLoaded()
     m.LoadChannelsTask.channels = []
     'keep focus on current channel while loading the next set of channels
     m.scheduleGrid.setFocus(true)
+    m.spinner.visible = false
 end sub
 
 ' When LoadScheduleTask completes (initial or more data) and we have a schedule to display
