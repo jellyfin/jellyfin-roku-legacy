@@ -20,6 +20,7 @@ sub init()
     m.gridMoveAnimationPosition = m.top.findNode("gridMoveAnimationPosition")
 
     m.gridData = createObject("roSGNode", "ContentNode")
+    m.scheduleGrid.content = m.gridData
 
     m.LoadChannelsTask = createObject("roSGNode", "LoadChannelsTask")
     m.LoadChannelsTask.observeField("channels", "onChannelsLoaded")
@@ -42,6 +43,7 @@ sub channelFilterSet()
         if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
 
         m.gridData = createObject("roSGNode", "ContentNode")
+        m.scheduleGrid.content = m.gridData
         m.LoadChannelsTask.filter = m.top.filter
         'reset guide to default values
         m.LoadChannelsTask.searchTerm = ""
@@ -57,7 +59,6 @@ end sub
 
 'Voice Search set
 sub channelsearchTermSet()
-    m.scheduleGrid.jumpToChannel = 0
     'Reset filter if user says all
     if LCase(m.top.searchTerm) = LCase(tr("all")) or m.LoadChannelsTask.searchTerm = LCase(tr("all"))
         m.top.searchTerm = " "
@@ -69,6 +70,7 @@ sub channelsearchTermSet()
         if m.LoadChannelsTask.state = "run" then m.LoadChannelsTask.control = "stop"
 
         m.gridData = createObject("roSGNode", "ContentNode")
+        m.scheduleGrid.content = m.gridData
         m.LoadChannelsTask.searchTerm = m.top.searchTerm
         m.spinner.visible = true
         'reset guide to default values
@@ -94,7 +96,6 @@ sub onChannelsLoaded()
             m.channelIndex[item.Id] = counter
             m.channelIdList = m.channelIdList + item.Id + ","
         end for
-        m.scheduleGrid.content = m.gridData
 
         m.LoadScheduleTask = createObject("roSGNode", "LoadScheduleTask")
         m.LoadScheduleTask.observeField("schedule", "onScheduleLoaded")
@@ -112,9 +113,9 @@ sub onChannelsLoaded()
             m.EPGLaunchCompleteSignaled = true
         end if
     end if
+
     m.LoadChannelsTask.channels = []
     'keep focus on current channel while loading the next set of channels
-    m.schedulegrid.jumpToChannel = m.detailsPane.currentChannelFocused
     m.scheduleGrid.setFocus(true)
 end sub
 
