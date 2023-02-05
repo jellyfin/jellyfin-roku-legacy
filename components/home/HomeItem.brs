@@ -151,7 +151,7 @@ sub itemContentChanged()
         return
     end if
 
-    if itemData.type = "Video"
+    if itemData.type = "Video" or itemData.type = "MusicVideo"
         m.itemText.text = itemData.name
 
         if itemData.PlayedPercentage > 0

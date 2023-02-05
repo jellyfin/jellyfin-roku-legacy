@@ -315,10 +315,11 @@ sub updateLatestItems(msg)
         row.title = tr("Latest in") + " " + node.metadata.title + " >"
         row.usePoster = true
         ' Handle specific types with different item widths
+        print node.metadata.contentType
         if node.metadata.contentType = "movies"
             row.imageWidth = 180
             itemSize = [188, 331]
-        else if node.metadata.contentType = "music"
+        else if node.metadata.contentType = "music" or node.metadata.contentType = "musicvideos"
             row.imageWidth = 261
             itemSize = [261, 331]
         else
