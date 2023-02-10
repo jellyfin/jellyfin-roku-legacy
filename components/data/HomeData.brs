@@ -27,7 +27,7 @@ sub setData()
             m.top.iconUrl = "pkg:/images/media_type_icons/folder_white.png"
         end if
 
-    else if datum.type = "Episode"
+    else if datum.type = "Episode" or datum.type = "MusicVideo"
         imgParams = { "AddPlayedIndicator": datum.UserData.Played }
 
         imgParams.Append({ "maxHeight": 261 })

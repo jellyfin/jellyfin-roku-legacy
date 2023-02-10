@@ -357,6 +357,33 @@ function CreateMovieDetailsGroup(movie)
     return group
 end function
 
+function CreateMusicVideoDetailsGroup(musicVideo)
+    group = CreateObject("roSGNode", "MovieDetails")
+    group.overhangTitle = musicVideo.title
+    group.optionsAvailable = false
+    m.global.sceneManager.callFunc("pushScene", group)
+
+    musicVideo = ItemMetaData(musicVideo.id)
+    group.itemContent = musicVideo
+    group.trailerAvailable = false
+
+    trailerData = api_API().users.getlocaltrailers(get_setting("active_user"), musicVideo.id)
+    if isValid(trailerData)
+        group.trailerAvailable = trailerData.Count() > 0
+    end if
+
+    buttons = group.findNode("buttons")
+    for each b in buttons.getChildren(-1, 0)
+        b.observeField("buttonSelected", m.port)
+    end for
+
+    extras = group.findNode("extrasGrid")
+    extras.observeField("selectedItem", m.port)
+    extras.callFunc("loadParts", musicVideo.json)
+
+    return group
+end function
+
 function CreateSeriesDetailsGroup(series)
     ' Get season data early in the function so we can check number of seasons.
     seasonData = TVSeasons(series.id)

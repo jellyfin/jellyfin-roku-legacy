@@ -184,8 +184,8 @@ sub Main (args as dynamic) as void
                 ' open movie detail page
                 group = CreateMovieDetailsGroup(selectedItem)
             else if selectedItem.type = "MusicVideo"
-                'open artist detail page
-                group = CreateMovieDetailsGroup(selectedItem)
+                'open musicvideo detail page
+                group = CreateMusicVideoDetailsGroup(selectedItem)
             else if selectedItem.type = "Person"
                 CreatePersonView(selectedItem)
             else if selectedItem.type = "TvChannel" or selectedItem.type = "Video" or selectedItem.type = "Program"
