@@ -42,6 +42,7 @@ sub Main (args as dynamic) as void
 
     m.global.addFields({ app_loaded: false, playstateTask: playstateTask, sceneManager: sceneManager })
     m.global.addFields({ queueManager: CreateObject("roSGNode", "QueueManager") })
+    m.global.addFields({ audioPlayer: CreateObject("roSGNode", "AudioPlayer") })
 
     app_start:
     ' First thing to do is validate the ability to use the API
