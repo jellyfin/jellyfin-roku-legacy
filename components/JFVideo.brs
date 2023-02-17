@@ -466,6 +466,11 @@ function onKeyEvent(key as string, press as boolean) as boolean
             if m.extras.hasFocus()
                 closeExtrasSlider()
                 return true
+            else if m.buttonGrp.isInFocusChain()
+                m.buttonGrp.visible = false
+                m.buttonGrp.setFocus(false)
+                m.top.setFocus(true)
+                return true
             else if isValid(m.tvGuide) and m.tvGuide.isInFocusChain()
                 m.tvGuide.setFocus(false)
                 m.tvGuide.lastFocus = "videoPlayer"
@@ -476,7 +481,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
                 return true
             end if
         else
-            'm.top.setFocus(true) ' if JFVideo hears a back release, it should have focus
             if not m.buttonGrp.visible
                 m.top.control = "resume"
             end if
