@@ -106,7 +106,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     end if
 
     if key = "down"
-        if m.dscr.hasFocus()
+        if m.dscr.hasFocus() and not somethingIsPlaying()
             m.dscr.opacity = 0.6
             m.top.findNode("dscrBorder").color = "#data202020ff"
             m.vidsList.setFocus(true)
