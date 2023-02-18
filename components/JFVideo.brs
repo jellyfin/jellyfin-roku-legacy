@@ -299,19 +299,22 @@ end sub
 
 sub setinfo()
     'episode info
+    print "count: " m.getItemQueryTask.getItemQueryData.Items.Count()
     if not m.getNextEpisodeTask.nextEpisodeData = invalid
         m.info = m.getNextEpisodeTask.nextEpisodeData.Items[0].Overview
         m.content = m.getNextEpisodeTask.nextEpisodeData.Items[0]
     else if not m.getItemQueryTask.getItemQueryData = invalid and not m.top.content.live = true 'movie info
         m.info = m.getItemQueryTask.getItemQueryData.Items.[0].Overview
         m.content = m.getItemQueryTask.getItemQueryData.Items.[0]
-    else if not m.getItemQueryTask.getItemQueryData = invalid 'Live TV Content
+    else if m.getItemQueryTask.getItemQueryData.Items.Count() > 0 'Live TV Content
         if not m.getItemQueryTask.getItemQueryData.Items.[0].Overview = invalid
             m.info = m.getItemQueryTask.getItemQueryData.Items.[0].Overview
         else
             m.info = invalid
         end if
         m.content = m.getItemQueryTask.getItemQueryData.Items.[0]
+    else
+        m.info = invalid
     end if
 
     if m.info = invalid
