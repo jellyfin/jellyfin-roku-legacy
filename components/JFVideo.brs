@@ -408,6 +408,7 @@ sub showTVGuide()
     m.top.setFocus(false)
     m.buttonGrp.visible = false
     m.showGuideAnimation.control = "start"
+    m.top.enableTrickPlay = false
 end sub
 
 sub onChannelSelected(msg)
@@ -479,6 +480,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
                 m.tvGuide.visible = false
                 m.buttonGrp.setFocus(false)
                 m.buttonGrp.visible = false
+                m.top.enableTrickPlay = true
                 m.top.setFocus(true)
                 return true
             end if
