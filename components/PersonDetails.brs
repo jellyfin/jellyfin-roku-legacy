@@ -5,9 +5,7 @@ sub init()
     m.btnGrp.observeField("escape", "onButtonGroupEscaped")
     m.favBtn = m.top.findNode("favorite-button")
     m.extrasGrp = m.top.findNode("extrasGrp")
-    'm.top.findNode("VertSlider").keyValue = "[[30, 998], [30, 789], [30, 580], [30,371 ], [30, 162]]"
     m.extrasGrp.opacity = 0
-    'm.extrasGrp.translation = "[30, 998]"
     m.dscr.observeField("isTextEllipsized", "onEllipsisChanged")
     createDialogPallete()
     m.top.optionsAvailable = false
