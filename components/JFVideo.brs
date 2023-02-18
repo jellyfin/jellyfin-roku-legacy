@@ -299,7 +299,6 @@ end sub
 
 sub setinfo()
     'episode info
-    print "count: " m.getItemQueryTask.getItemQueryData.Items.Count()
     if not m.getNextEpisodeTask.nextEpisodeData = invalid
         m.info = m.getNextEpisodeTask.nextEpisodeData.Items[0].Overview
         m.content = m.getNextEpisodeTask.nextEpisodeData.Items[0]
