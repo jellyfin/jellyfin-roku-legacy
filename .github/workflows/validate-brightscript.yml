@@ -1,4 +1,4 @@
-name: validate
+name: validate-brightscript
 on: [push, pull_request]
 
 jobs:
