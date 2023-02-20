@@ -1,0 +1,17 @@
+name: validate-xml
+on: [push, pull_request]
+
+jobs:
+  run:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Clone github repo
+        uses: actions/checkout@master
+      - name: Install xmllint and xmlstarlet
+        run: sudo apt-get install -y libxml2-utils xmlstarlet
+      - name: Get list of translation files
+        run: echo "tsFiles=$(find ./locale/*/*.ts -type f | awk '$1=$1' ORS=' ')" >> $GITHUB_ENV
+      - name: Validate XML syntax
+        run: xmllint --noout --path ${{ env.tsFiles }}
+      - name: Check XML for duplicate entries
+        run: xmlstarlet sel -t -m '/TS/context/message/source' -o 'Duplicate entry found in:' -f -o ' ' -c '.' -nl ./locale/*/translations.ts | sort | uniq -d
