@@ -12,14 +12,19 @@ sub showContent()
         m.name.text = cont.labelText
         m.name.maxWidth = cont.imageWidth
         m.role.maxWidth = cont.imageWidth
-        m.posterImg.uri = cont.posterUrl
         m.posterImg.width = cont.imageWidth
-        m.role.Text = cont.subTitle
+        m.posterImg.uri = cont.posterUrl
+        if cont.subTitle = "as "
+            m.role.text = tr("as Unknown")
+        else
+            m.role.Text = cont.subTitle
+        end if
     else
-        m.role.text = tr("Unknown")
+        m.role.text = tr("as Unknown")
         m.posterImg.uri = "pkg:/images/baseline_person_white_48dp.png"
     end if
 end sub
+
 
 sub focusChanged()
     if m.top.itemHasFocus = true
