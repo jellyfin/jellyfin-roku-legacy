@@ -3214,5 +3214,21 @@
             <translation>Set how many seconds before the end of an episode the Next Episode button should appear. Set to 0 to disable.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
         </message>
+        <message>
+            <source>Age</source>
+            <translation>Age</translation>
+        </message>
+        <message>
+            <source>Cast &amp; Crew</source>
+            <translation>Cast &amp; Crew</translation>
+        </message>
+        <message>
+            <source>Died</source>
+            <translation>Died</translation>
+        </message>
+        <message>
+            <source>More Like This</source>
+            <translation>More Like This</translation>
+        </message>
     </context>
 </TS>
