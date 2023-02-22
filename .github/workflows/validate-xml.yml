@@ -3,12 +3,14 @@ on: [push, pull_request]
 
 jobs:
   run:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Clone github repo
         uses: actions/checkout@master
-      - name: Install xmllint and xmlstarlet
-        run: sudo apt-get install -y libxml2-utils xmlstarlet
+      - name: Install xmllint and xmlstarlet using apt (from cache)
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libxml2-utils xmlstarlet
       - name: Validate XML syntax
         run: xmllint --noout ./locale/*/*.ts
       - name: Check XML for duplicate entries
