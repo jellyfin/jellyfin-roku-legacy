@@ -46,11 +46,11 @@
     <timer id="bufferCheckTimer" repeat="true" />
     <JFButton id="nextEpisode" opacity="0" textColor="#f0f0f0" focusedTextColor="#202020" focusFootprintBitmapUri="pkg:/images/option-menu-bg.9.png" focusBitmapUri="pkg:/images/white.9.png" translation="[1500, 900]" />
     <ButtonGroupHoriz id="buttons" itemSpacings="[20]" translation = "[95,950]">
-      <IconButton id="guide" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/guide-default.png" text="Guide" height="85" width="150" />
-      <IconButton id="info" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/info-default.png" text="Info" height="85" width="150" />
-      <IconButton id="cc" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/cc-default.png" text="CC" height="85" width="150" />
-      <IconButton id="cast" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/cast-default.png" text="Cast" height="85" width="150" />
-      <IconButton id="playbackInfo" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/playbackInfo-default.png" text="Stream Info" height="85" width="150" />
+      <IconButton id="guide" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/guide-default.png" text="Guide" height="85" width="170" />
+      <IconButton id="info" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/info-default.png" text="Info" height="85" width="170" />
+      <IconButton id="cc" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/cc-default.png" text="CC" height="85" width="170" />
+      <IconButton id="cast" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/cast-default.png" text="Cast" height="85" width="170" />
+      <IconButton id="playbackInfo" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/playbackInfo-default.png" text="Stream Info" height="85" width="170" />
     </ButtonGroupHoriz>
 
     <!-- "Cast and Crew" row -->
