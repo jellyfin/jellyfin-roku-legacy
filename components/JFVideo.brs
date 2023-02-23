@@ -247,7 +247,6 @@ sub onState(msg)
             m.buttonGrp.removeChild(m.top.findNode("cast"))
             m.buttonGrp.removeChild(m.top.findNode("cc"))
             m.getItemQueryTask.live = "true"
-            print "m.top.id" m.top.id
             m.getItemQueryTask.videoID = m.top.id
             m.getItemQueryTask.control = "RUN"
             setupButtons()
