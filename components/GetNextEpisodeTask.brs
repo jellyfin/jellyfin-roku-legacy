@@ -11,6 +11,10 @@ sub getNextEpisodeTask()
         fields: "Overview,People"
 
     })
-
     m.top.nextEpisodeData = m.nextEpisodeData
+    getEpisodeImageTask()
+end sub
+sub getEpisodeImageTask()
+    m.image = api_API().items.getimages(m.nextEpisodeData.Items[1].Id)
+    m.top.imageArray = m.image
 end sub
