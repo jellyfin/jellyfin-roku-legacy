@@ -1,0 +1,29 @@
+name: lint
+on: [push, pull_request]
+
+jobs:
+  brightscript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: "lts/*"
+          cache: "npm"
+      - run: npm ci
+      - run: npx ropm install
+      - run: npm run validate
+      - run: npm run check-formatting
+  translation-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone github repo
+        uses: actions/checkout@master
+      - name: Install xmllint and xmlstarlet using apt (from cache)
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libxml2-utils xmlstarlet
+      - name: Validate XML syntax
+        run: xmllint --noout ./locale/*/*.ts
+      - name: Check XML for duplicate entries
+        run: xmlstarlet sel -t -m '/TS/context/message/source' -o 'Duplicate entry found in:' -f -o ' ' -c '.' -nl ./locale/*/*.ts | sort | uniq -d
