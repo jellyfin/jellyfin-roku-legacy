@@ -6,13 +6,15 @@
   "devDependencies": {
     "@rokucommunity/bslint": "0.8.1",
     "brighterscript": "0.61.3",
-    "ropm": "0.10.11"
+    "ropm": "0.10.11",
+    "jsonlint-cli": "1.0.1"
   },
   "scripts": {
     "postinstall": "npx ropm copy",
     "validate": "npx bsc --copy-to-staging=false --create-package=false",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "bslint",
+    "lint-json": "jsonlint-cli **/*.json",
     "check-formatting": "npx bsfmt --check",
     "format": "npx bsfmt --write"
   },
