@@ -36,4 +36,4 @@ Feature requests are always welcome too, but please have a read though the exist
 
 If you fancy some development, then read the [DEVGUIDE](DEVGUIDE.md) to find out the best ways to help.
 
-As Roku have severely limited their Beta channel programme, the best way to test pre-release versions is by following the [DEVGUIDE](DEVGUIDE.md) to install and test the latest changes.  Feedback is always welcome.
+As Roku have severely limited their Beta channel program, the best way to test pre-release versions is by following the [DEVGUIDE](DEVGUIDE.md) to install and test the latest changes.  Feedback is always welcome.

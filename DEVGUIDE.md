@@ -149,7 +149,7 @@ make install
 
 Modify code -> `make install` -> Use Roku remote to test changes -> `telnet ${ROKU_DEV_TARGET} 8085` -> `CTRL + ]` -> `quit + ENTER`
 
-Unfortunately there is no debuger. You will need to use telnet to see log statements, warnings, and error reports. You won't always need to telnet into your device but the workflow above is typical when you are new to Brightscript or are working on tricky code.
+Unfortunately there is no debugger. You will need to use telnet to see log statements, warnings, and error reports. You won't always need to telnet into your device but the workflow above is typical when you are new to Brightscript or are working on tricky code.
 
 Install necessary packages:
 
@@ -159,7 +159,7 @@ sudo apt-get install nodejs npm
 
 ## Committing
 
-Before commiting your code, please run:
+Before committing your code, please run:
 
 ```bash
 make prep_commit
