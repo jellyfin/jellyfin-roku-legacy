@@ -822,6 +822,10 @@
             <source>Stream Information</source>
             <translation>Stream Information</translation>
         </message>
+         <message>
+            <source>Program Information</source>
+            <translation>Stream Information</translation>
+        </message>
         <message>
             <source>Codec</source>
             <translation>Codec</translation>

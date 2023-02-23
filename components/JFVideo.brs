@@ -360,6 +360,7 @@ sub info()
     dialog = createObject("roSGNode", "PlaybackInfoDialog")
     if not m.info = invalid
         dialog.message = m.info
+        dialog.title = tr("Program Information")
     else
         dialog.message = "A description for this stream is not available."
     end if
@@ -391,6 +392,7 @@ sub PlaybackInfo()
     m.buttonGrp.visible = false
     m.top.control = "pause"
     dialog = createObject("rosgnode", "PlaybackInfoDialog")
+    dialog.title = tr("Stream Information")
     for i = 0 to m.top.playbackInfo.count() - 1
         dialog.message = dialog.message + m.top.playbackInfo[i] + chr(10)
     end for
@@ -554,6 +556,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
                     m.top.findNode("extrasFader").reverse = false
                     m.top.findNode("pplAnime").control = "start"
                     m.buttonGrp.visible = false
+                    m.top.enableTrickPlay = false
                     return true
                 end if
             end if
@@ -586,6 +589,7 @@ sub closeExtrasSlider()
     m.top.setFocus(true)
     m.top.control = "resume"
     m.extrasGrp.opacity = 0
+    m.top.enableTrickPlay = true
 end sub
 
 sub toggleButtonGrpVisible()
