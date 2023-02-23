@@ -28,7 +28,6 @@ The Jellyfin Roku App is a Jellyfin client for Roku Devices.  This is still very
 
 The channel is available on the [Roku Channel Store](https://my.roku.com/add/jellyfin).
 
-
 ## Getting Involved<a name="get_involved"></a>
 
 No matter what your interests or skill are, you can help to make this client better for everyone by simply using the client and letting us know if you find a problem with it.   Either give us a shout on [matrix](https://matrix.to/#/+jellyfin:matrix.org) or create a github issue.
@@ -36,6 +35,5 @@ No matter what your interests or skill are, you can help to make this client bet
 Feature requests are always welcome too, but please have a read though the existing issues to see if someone has already raised one for something similar.
 
 If you fancy some development, then read the [DEVGUIDE](DEVGUIDE.md) to find out the best ways to help.
-
 
 As Roku have severely limited their Beta channel program, the best way to test pre-release versions is by following the [DEVGUIDE](DEVGUIDE.md) to install and test the latest changes.  Feedback is always welcome.
