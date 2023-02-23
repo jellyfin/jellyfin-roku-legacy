@@ -200,18 +200,11 @@ sub Main (args as dynamic) as void
                 ' play channel feed
                 video_id = selectedItem.id
 
-                'Show Channel Loading spinner
-                dialog = createObject("roSGNode", "ProgressDialog")
-                dialog.title = tr("Loading Channel Data")
-                m.scene.dialog = dialog
-
                 if LCase(selectedItem.subtype()) = "extrasdata"
                     video = CreateVideoPlayerGroup(video_id, invalid, 1, false, true, false)
                 else
                     video = CreateVideoPlayerGroup(video_id)
                 end if
-
-                dialog.close = true
 
                 if video <> invalid and video.errorMsg <> "introaborted"
                     sceneManager.callFunc("pushScene", video)
