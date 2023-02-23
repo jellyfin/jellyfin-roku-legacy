@@ -6,12 +6,13 @@ on:
       - 'locale/**'
 jobs:
   run:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
       - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3
         with:
-          node-version: "18.13.0"
+          node-version: "lts/*"
+          cache: "npm"
       - run: npm ci
       - run: npx ropm install
       - run: make dev

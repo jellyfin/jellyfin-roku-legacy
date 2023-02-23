@@ -3233,5 +3233,242 @@
             <source>Movies</source>
             <translation>Películas</translation>
         </message>
+        <message>
+            <source>Additional Parts</source>
+            <translation>Partes adicionales</translation>
+            <extracomment>Additional parts of a video</extracomment>
+        </message>
+        <message>
+            <source>Error Getting Playback Information</source>
+            <translation>Error obteniendo la información de reproducción</translation>
+            <extracomment>Dialog Title: Received error from server when trying to get information about the selected item for playback</extracomment>
+        </message>
+        <message>
+            <source>Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.</source>
+            <translation>Soporte de reproducción directa para contenido MPEG-2 (ej., televisión en vivo). Esto previene la transcodificación de contenido MPEG-2, pero a mayor uso de ancho de banda.</translation>
+            <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
+        <message>
+            <source>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</source>
+            <translation>Soporte de reproducción directa para contenido MPEG-4. Esto podría requerir ser deshabilitado para poder reproducir los archivos de video con encodificación DIVX.</translation>
+            <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
+        <message>
+            <source>Enabled</source>
+            <translation>Habilitado</translation>
+        </message>
+        <message>
+            <source>Media Grid</source>
+            <translation>Cuadrícula de multimedia</translation>
+            <extracomment>UI -&gt; Media Grid section in user setting screen.</extracomment>
+        </message>
+        <message>
+            <source>RUNTIME</source>
+            <translation>Tiempo funcionando</translation>
+        </message>
+        <message>
+            <comment>Title of Tab for switching &quot;views&quot; when looking at a library</comment>
+            <source>TAB_VIEW</source>
+            <translation>Visualización</translation>
+        </message>
+        <message>
+            <source>Special Features</source>
+            <translation>Características especiales</translation>
+        </message>
+        <message>
+            <source>Died</source>
+            <translation>Falleció</translation>
+        </message>
+        <message>
+            <source>Started at</source>
+            <translation>Empezado a las</translation>
+            <extracomment>(Past Tense) For defining time when a program started today (e.g. Started at 08:00) </extracomment>
+        </message>
+        <message>
+            <source>Starts</source>
+            <translation>Empieza</translation>
+            <extracomment>(Future Tense) For defining a day and time when a program will start (e.g. Starts Wednesday, 08:00) </extracomment>
+        </message>
+        <message>
+            <source>Ended at</source>
+            <translation>Terminado a las</translation>
+            <extracomment>(Past Tense) For defining time when a program will ended (e.g. Ended at 08:00) </extracomment>
+        </message>
+        <message>
+            <source>Channels</source>
+            <translation>Canales</translation>
+            <extracomment>Menu option for showing Live TV Channel List</extracomment>
+        </message>
+        <message>
+            <source>TV Guide</source>
+            <translation>Guía de TV</translation>
+            <extracomment>Menu option for showing Live TV Guide / Schedule</extracomment>
+        </message>
+        <message>
+            <source>Cancel Recording</source>
+            <translation>Cancelar grabación</translation>
+        </message>
+        <message>
+            <source>Close</source>
+            <translation>Cerrar</translation>
+        </message>
+        <message>
+            <source>Connecting to Server</source>
+            <translation>Conectando al servidor</translation>
+            <extracomment>Message to display to user while client is attempting to connect to the server</extracomment>
+        </message>
+        <message>
+            <source>Not found</source>
+            <translation>No se ha encontrado</translation>
+            <extracomment>Title of message box when the requested content is not found on the server</extracomment>
+        </message>
+        <message>
+            <source>Unknown</source>
+            <translation>Desconocido</translation>
+            <extracomment>Title for a cast member for which we have no information for</extracomment>
+        </message>
+        <message>
+            <source>Pick a Jellyfin server from the local network</source>
+            <translation>Seleccione un servidor Jellyfin disponible en su red local:</translation>
+            <extracomment>Instructions on initial app launch when the user is asked to pick a server from a list</extracomment>
+        </message>
+        <message>
+            <source>DATE_ADDED</source>
+            <translation>Fecha añadido</translation>
+        </message>
+        <message>
+            <source>Cast &amp; Crew</source>
+            <translation>Elenco y equipo</translation>
+        </message>
+        <message>
+            <source>More Like This</source>
+            <translation>Más como este/a</translation>
+        </message>
+        <message>
+            <source>Repeat</source>
+            <translation>Repetir</translation>
+            <extracomment>If TV Shows has previously been broadcasted</extracomment>
+        </message>
+        <message>
+            <source>An error was encountered while playing this item. Server did not provide required transcoding data.</source>
+            <translation>Se ha encontrado un error al reproducir este elemento. El servidor no proveyó la información necesaria para la transcodificación.</translation>
+            <extracomment>Content of message box when trying to play an item which requires transcoding, and the server did not provide transcode url</extracomment>
+        </message>
+        <message>
+            <source>MPEG-2</source>
+            <translation>MPEG-2</translation>
+            <extracomment>Name of codec used in settings menu</extracomment>
+        </message>
+        <message>
+            <source>Movies (Presentation)</source>
+            <translation>Películas (presentación)</translation>
+        </message>
+        <message>
+            <source>Movies (Grid)</source>
+            <translation>Películas (cuadrícula)</translation>
+        </message>
+        <message>
+            <source>Starts at</source>
+            <translation>Empieza a las</translation>
+            <extracomment>(Future Tense) For defining time when a program will start today (e.g. Starts at 08:00) </extracomment>
+        </message>
+        <message>
+            <source>Live</source>
+            <translation>En vivo</translation>
+            <extracomment>If TV Show is being broadcast live (not pre-recorded)</extracomment>
+        </message>
+        <message>
+            <source>Record Series</source>
+            <translation>Grabar serie</translation>
+        </message>
+        <message>
+            <source>Cancel Series Recording</source>
+            <translation>Cancelar grabación de serie</translation>
+        </message>
+        <message>
+            <source>** EXPERIMENTAL** Support Direct Play of AV1 content if this Roku device supports it.</source>
+            <translation>**EXPERIMENTAL** Soporte de reproducción directa para contenido AV1 si este dispositivo Roku es compatible.</translation>
+            <extracomment>Description of a setting - should we try to direct play experimental av1 codec</extracomment>
+        </message>
+        <message>
+            <source>Item Count</source>
+            <translation>Cantidad de elementos</translation>
+            <extracomment>UI -&gt; Media Grid -&gt; Item Count in user setting screen.</extracomment>
+        </message>
+        <message>
+            <source>Ends at</source>
+            <translation>Termina a las</translation>
+            <extracomment>(Past Tense) For defining a day and time when a program ended (e.g. Ended Wednesday, 08:00) </extracomment>
+        </message>
+        <message>
+            <source>View Channel</source>
+            <translation>Ver Canal</translation>
+        </message>
+        <message>
+            <source>Record</source>
+            <translation>Grabar</translation>
+        </message>
+        <message>
+            <source>Version</source>
+            <translation>Versión</translation>
+        </message>
+        <message>
+            <source>Playback</source>
+            <translation>Reproducción</translation>
+            <extracomment>Title for Playback section in user setting screen.</extracomment>
+        </message>
+        <message>
+            <source>User Interface</source>
+            <translation>Interfaz de usuario</translation>
+            <extracomment>Title for User Interface section in user setting screen.</extracomment>
+        </message>
+        <message>
+            <source>Media Grid options.</source>
+            <translation>Opciones de la cuadrícula de multimedia.</translation>
+        </message>
+        <message>
+            <source>Codec Support</source>
+            <translation>Soporte de Codec</translation>
+            <extracomment>Settings Menu - Title for settings group related to codec support</extracomment>
+        </message>
+        <message>
+            <source>Enable or disable Direct Play for optional codecs</source>
+            <translation>Habilitar o desactivar la reproducción directa para codecs opcionales</translation>
+            <extracomment>Settings Menu - Title for settings group related to codec support</extracomment>
+        </message>
+        <message>
+            <source>MPEG-4</source>
+            <translation>MPEG-4</translation>
+            <extracomment>Name of codec used in settings menu</extracomment>
+        </message>
+        <message>
+            <source>AV1</source>
+            <translation>AV1</translation>
+            <extracomment>Name of a setting - should we try to direct play experimental av1 codec</extracomment>
+        </message>
+        <message>
+            <source>Started</source>
+            <translation>Empezado</translation>
+            <extracomment>(Past Tense) For defining a day and time when a program started (e.g. Started Wednesday, 08:00) </extracomment>
+        </message>
+        <message>
+            <source>The requested content does not exist on the server</source>
+            <translation>El contenido solicitado no existe en el servidor</translation>
+            <extracomment>Content of message box when the requested content is not found on the server</extracomment>
+        </message>
+        <message>
+            <source>Enter the server name or IP address</source>
+            <translation>Introduce el nombre del servidor o la dirección IP</translation>
+            <extracomment>Title of KeyboardDialog when manually entering a server URL</extracomment>
+        </message>
+        <message>
+            <source>...or enter server URL manually:</source>
+            <translation>Si arriba no hay ningún servidor listado, puedes introducir la URL del servidor manualmente:</translation>
+            <extracomment>Instructions on initial app launch when the user is asked to manually enter a server URL</extracomment>
+        </message>
+        <message>
+            <source>Disabled</source>
+            <translation>Deshabilitado</translation>
+        </message>
     </context>
 </TS>
