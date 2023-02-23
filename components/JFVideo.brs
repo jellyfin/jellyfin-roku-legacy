@@ -42,18 +42,6 @@ sub init()
     m.extrasGrp.opacity = 0
 
     m.showGuideAnimation = m.top.findNode("showGuide")
-end sub
-
-'
-' Runs Next Episode button animation and sets focus to button
-sub shownextEpisode()
-    if m.nextEpisodeButton.hasFocus() = false
-        m.shownextEpisodeButtonAnimation.control = "start"
-        m.nextEpisodeButton.setFocus(true)
-        m.nextEpisodeButton.visible = true
-    end if
-    m.top.observeField("state", "onState")
-    m.top.observeField("content", "onContentChange")
 
     'Captions
     m.captionGroup = m.top.findNode("captionGroup")
@@ -69,6 +57,18 @@ sub shownextEpisode()
         m.top.suppressCaptions = true
         toggleCaption()
     end if
+end sub
+
+'
+' Runs Next Episode button animation and sets focus to button
+sub shownextEpisode()
+    if m.nextEpisodeButton.hasFocus() = false
+        m.shownextEpisodeButtonAnimation.control = "start"
+        m.nextEpisodeButton.setFocus(true)
+        m.nextEpisodeButton.visible = true
+    end if
+    m.top.observeField("state", "onState")
+    m.top.observeField("content", "onContentChange")
 end sub
 
 sub loadCaption()

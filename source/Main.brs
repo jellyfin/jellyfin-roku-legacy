@@ -200,7 +200,7 @@ sub Main (args as dynamic) as void
                 ' play channel feed
                 video_id = selectedItem.id
 
-                ' Show Channel Loading spinner
+                'Show Channel Loading spinner
                 dialog = createObject("roSGNode", "ProgressDialog")
                 dialog.title = tr("Loading Channel Data")
                 m.scene.dialog = dialog
