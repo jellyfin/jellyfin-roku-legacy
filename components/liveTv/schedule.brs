@@ -23,12 +23,12 @@ sub init()
     m.LoadChannelsTask.observeField("channels", "onChannelsLoaded")
     m.LoadChannelsTask.control = "RUN"
 
-    m.top.lastFocus = m.scheduleGrid
-
     m.channelIndex = {}
 
     m.spinner = m.top.findNode("spinner")
     m.spinner.visible = false
+    m.top.lastFocus = m.top.lastFocus
+    m.top.lastFocus = m.scheduleGrid
 end sub
 
 sub channelFilterSet()

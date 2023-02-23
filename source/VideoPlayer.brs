@@ -17,11 +17,13 @@ function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle
     video.retrievingBar.filledBarBlendColor = jellyfin_blue
     video.bufferingBar.filledBarBlendColor = jellyfin_blue
     video.trickPlayBar.filledBarBlendColor = jellyfin_blue
+
     return video
 end function
 
 sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
     video.content = createObject("RoSGNode", "ContentNode")
+    stopLoadingSpinner()
     meta = ItemMetaData(video.id)
     if meta = invalid
         video.content = invalid

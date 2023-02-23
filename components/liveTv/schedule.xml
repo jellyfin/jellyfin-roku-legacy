@@ -7,7 +7,7 @@
     <ProgramDetails id="detailsPane" focusable="true" />
 
     <TimeGrid id="scheduleGrid" translation="[0,600]" 
-              automaticLoadingDataFeedback="true" showLoadingDataFeedback="false"
+              automaticLoadingDataFeedback="true" showLoadingDataFeedback="true"
               focusBitmapUri="pkg:/images/white.9.png" focusBitmapBlendColor="#006fab" 
               programTitleFocusedColor="#ffffff" iconFocusedColor="#ff0000"
               showPastTimeScreen="true" pastTimeScreenBlendColor="#555555" channelNoDataText="Loading"
