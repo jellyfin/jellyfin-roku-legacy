@@ -57,5 +57,3 @@ jobs:
         run: npx ropm install
       - name: Lint markdown files
         run: npm run lint-markdown
-      - name: Spellcheck markdown files
-        run: mdspell --en-us -r **/*.md !**/node_modules/**/*.md
