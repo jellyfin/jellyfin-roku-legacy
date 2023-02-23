@@ -52,6 +52,44 @@ sub shownextEpisode()
         m.nextEpisodeButton.setFocus(true)
         m.nextEpisodeButton.visible = true
     end if
+    m.top.observeField("state", "onState")
+    m.top.observeField("content", "onContentChange")
+
+    'Captions
+    m.captionGroup = m.top.findNode("captionGroup")
+    m.captionGroup.createchildren(9, "LayoutGroup")
+    m.captionTask = createObject("roSGNode", "captionTask")
+    m.captionTask.observeField("currentCaption", "updateCaption")
+    m.captionTask.observeField("useThis", "checkCaptionMode")
+    m.top.observeField("currentSubtitleTrack", "loadCaption")
+    m.top.observeField("globalCaptionMode", "toggleCaption")
+    if get_user_setting("playback.subs.custom") = "false"
+        m.top.suppressCaptions = false
+    else
+        m.top.suppressCaptions = true
+        toggleCaption()
+    end if
+end sub
+
+sub loadCaption()
+    if m.top.suppressCaptions
+        m.captionTask.url = m.top.currentSubtitleTrack
+    end if
+end sub
+
+sub toggleCaption()
+    m.captionTask.playerState = m.top.state + m.top.globalCaptionMode
+    if LCase(m.top.globalCaptionMode) = "on"
+        m.captionTask.playerState = m.top.state + m.top.globalCaptionMode + "w"
+        m.captionGroup.visible = true
+    else
+        m.captionGroup.visible = false
+    end if
+end sub
+
+sub updateCaption ()
+    m.captionGroup.removeChildrenIndex(m.captionGroup.getChildCount(), 0)
+    m.captionGroup.appendChildren(m.captionTask.currentCaption)
 end sub
 
 ' Event handler for when video content field changes
@@ -60,10 +98,6 @@ sub onContentChange()
 
     m.top.observeField("position", "onPositionChanged")
 
-    ' If video content type is not episode, remove position observer
-    if m.top.content.contenttype <> 4
-        m.top.unobserveField("position")
-    end if
 end sub
 
 sub onNextEpisodeDataLoaded()
@@ -80,6 +114,7 @@ end sub
 '
 ' Runs Next Episode button animation and sets focus to button
 sub showNextEpisodeButton()
+    if m.top.content.contenttype <> 4 then return
     if not m.nextEpisodeButton.visible
         m.showNextEpisodeButtonAnimation.control = "start"
         m.nextEpisodeButton.setFocus(true)
@@ -129,13 +164,9 @@ end sub
 
 ' Checks if we need to display the Next Episode button
 sub checkTimeToDisplayNextEpisode()
-    nextEpisodeCountdown = Int(m.top.runTime - m.top.position)
-    if nextEpisodeCountdown < 0
-        hideNextEpisodeButton()
-        return
-    end if
+    if m.top.content.contenttype <> 4 then return
 
-    if int(m.top.position) >= (m.top.runTime - Val(m.nextupbuttonseconds))
+    if int(m.top.position) >= (m.top.runTime - 30)
         showNextEpisodeButton()
         updateCount()
         return
@@ -149,6 +180,7 @@ end sub
 
 ' When Video Player state changes
 sub onPositionChanged()
+    m.captionTask.currentPos = Int(m.top.position * 1000)
     ' Check if dialog is open
     m.dialog = m.top.getScene().findNode("dialogBackground")
     if not isValid(m.dialog)
@@ -162,6 +194,7 @@ end sub
 '
 ' When Video Player state changes
 sub onState(msg)
+    m.captionTask.playerState = m.top.state + m.top.globalCaptionMode
     ' When buffering, start timer to monitor buffering process
     if m.top.state = "buffering" and m.bufferCheckTimer <> invalid
         ' start timer
@@ -182,7 +215,6 @@ sub onState(msg)
         m.top.control = "stop"
         m.top.backPressed = true
     else if m.top.state = "playing"
-
         ' Check if next episde is available
         if isValid(m.top.showID)
             if m.top.showID <> "" and not m.checkedForNextEpisode and m.top.content.contenttype = 4

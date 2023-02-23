@@ -890,6 +890,16 @@
             <extracomment>Trickplaybar button, Loop</extracomment>
         </message>
         <message>
+            <source>Custom Subtitles</source>
+            <translation>Custom Subtitles</translation>
+            <extracomment>Name of a setting - custom subtitles that support CJK fonts</extracomment>
+        </message>
+        <message>
+            <source>Replace Roku's default subtitle functions with custom functions that support CJK fonts. Fallback fonts must be configured and enabled on the server for CJK rendering to work.</source>
+            <translation>Replace Roku's default subtitle functions with custom functions that support CJK fonts. Fallback fonts must be configured and enabled on the server for CJK rendering to work.</translation>
+            <extracomment>Description of a setting - custom subtitles that support CJK fonts</extracomment>
+        </message>
+        <message>
             <source>Text Subtitles Only</source>
             <translation>Text Subtitles Only</translation>
             <extracomment>Name of a setting - should we hide subtitles that might transcode</extracomment>
@@ -1159,4 +1169,3 @@
         </message>
     </context>
 </TS>
-

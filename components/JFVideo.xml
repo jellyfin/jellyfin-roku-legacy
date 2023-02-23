@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="JFVideo" extends="Video">
   <interface>
     <field id="backPressed" type="boolean" alwaysNotify="true" />
@@ -9,7 +9,6 @@
     <field id="PlaySessionId" type="string" />
     <field id="Subtitles" type="array" />
     <field id="SelectedSubtitle" type="integer" />
-    <field id="captionMode" type="string" />
     <field id="container" type="string" />
     <field id="directPlaySupported" type="boolean" />
     <field id="systemOverlay" type="boolean" value="false" />
@@ -41,6 +40,8 @@
   <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
 
   <children>
+    <Group id="captionGroup" translation="[960,1020]"></Group>
+
     <timer id="playbackTimer" repeat="true" duration="30" />
     <timer id="bufferCheckTimer" repeat="true" />
     <JFButton id="nextEpisode" opacity="0" textColor="#f0f0f0" focusedTextColor="#202020" focusFootprintBitmapUri="pkg:/images/option-menu-bg.9.png" focusBitmapUri="pkg:/images/white.9.png" translation="[1500, 900]" />

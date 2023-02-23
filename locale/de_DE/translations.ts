@@ -9949,5 +9949,17 @@
         <source>DATE_ADDED</source>
         <translation>Datum</translation>
     </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Abmelden</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Server wechseln</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Zugangsdaten speichern?</translation>
+    </message>
 </context>
 </TS>
