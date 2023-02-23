@@ -1,4 +1,3 @@
-<p></p>
 <h1 style="text-align: center;">Jellyfin app for Roku</h1>
 <h3 style="text-align: center;">Part of the <a href="https://jellyfin.media/">Jellyfin</a> Project</h3>
 
