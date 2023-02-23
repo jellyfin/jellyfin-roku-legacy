@@ -1,7 +1,5 @@
-<p>
-    <h1 style="text-align: center;">Jellyfin app for Roku</h1>
-    <h3 style="text-align: center;">Part of the <a href="https://jellyfin.media/">Jellyfin</a> Project</h3>
-</p>
+<h1 style="text-align: center;">Jellyfin app for Roku</h1>
+<h3 style="text-align: center;">Part of the <a href="https://jellyfin.media/">Jellyfin</a> Project</h3>
 
 <p align="center">
 <img alt="Logo banner" src="https://raw.githubusercontent.com/jellyfin/jellyfin-ux/master/branding/SVG/banner-logo-solid.svg?sanitize=true"/>
@@ -25,8 +23,6 @@
 </p>
 
 The Jellyfin Roku App is a Jellyfin client for Roku Devices.  This is still very much a work in progress, so we would encourage you to [get involved](#get_involved) if you can.
-
-
 
 ## Getting Started
 

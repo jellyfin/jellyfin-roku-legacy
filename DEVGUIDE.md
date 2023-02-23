@@ -1,11 +1,30 @@
-## Developing The Jellyfin Roku App
-Follow the steps below to install the app on your personal Roku device for development.
+# Dev Guide For The Jellyfin Roku App
 
-### Developer Mode
+- [Dev Guide For The Jellyfin Roku App](#dev-guide-for-the-jellyfin-roku-app)
+  - [Developer Mode](#developer-mode)
+  - [Clone the GitHub Repo](#clone-the-github-repo)
+  - [Method 1: Visual Studio Code](#method-1-visual-studio-code)
+    - [Install VSCode](#install-vscode)
+    - [Usage](#usage)
+    - [Hardcoding Roku Information](#hardcoding-roku-information)
+  - [Method 2: Sideload to Roku Device Manually](#method-2-sideload-to-roku-device-manually)
+  - [Method 3: Direct load to Roku Device](#method-3-direct-load-to-roku-device)
+    - [Login Details](#login-details)
+    - [Install Necessary Packages](#install-necessary-packages)
+    - [Deploy](#deploy)
+  - [Bug/Crash Reports](#bugcrash-reports)
+  - [Upgrade](#upgrade)
+  - [Command Line Workflow](#command-line-workflow)
+  - [Committing](#committing)
+  - [(Optional) Update Images](#optional-update-images)
+
+Follow the steps below to install the app on your personal Roku device. This will enable you to write code for the app, install the latest beta release, as well as provide app logs to the developers if you encounter a bug.
+
+## Developer Mode
 
 Put your Roku device in [developer mode](https://blog.roku.com/developer/2016/02/04/developer-setup-guide). Write down your Roku device IP and the password you created, you will need these later.
 
-### Clone the GitHub Repo
+## Clone the GitHub Repo
 
 Navigate to where you'd like to install the app then copy the application files:
 
@@ -25,16 +44,17 @@ Install Dependencies:
 npm install
 ```
 
-
-
 ## Method 1: Visual Studio Code
+
 We recommend using Visual Studio Code when working on this project. The [BrightScript Language extension](https://marketplace.visualstudio.com/items?itemName=RokuCommunity.brightscript) provides a rich debugging experience, including in-editor syntax checking, debugging/breakpoint support, variable inspection at runtime, auto-formatting, an integrated remote control mode, and [much more](https://rokucommunity.github.io/vscode-brightscript-language/features.html).
 
-### Installation
+### Install VSCode
+
 1. Download and install [Visual Studio Code](https://code.visualstudio.com/)
 2. Install the **BrightScript Language** extension within VSCode in the _Extensions_ panel or by downloading it from the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=RokuCommunity.brightscript).
 
 ### Usage
+
 1. Open the `jellyfin-roku` folder in vscode
 2. Press `F5` on your keyboard or click `Run` -> `Start Debugging` from the vscode menu. ![image](https://user-images.githubusercontent.com/2544493/170696233-8ba49bf4-bebb-4655-88f3-ac45150dda02.png)
 
@@ -42,8 +62,8 @@ We recommend using Visual Studio Code when working on this project. The [BrightS
 
 That's it! vscode will auto-package the project, sideload it to the specified device, and the channel is up and running. (assuming you remembered to put your device in [developer mode](#developer-mode))
 
-
 ### Hardcoding Roku Information
+
 Out of the box, the Brightscript extension will prompt you to pick a Roku device (from devices found on your local network) and enter a password on every launch. If you'd prefer to hardcode this information rather than entering it every time, you can set these values in your vscode user settings:
 
 ```js
@@ -58,13 +78,14 @@ Example:
 
 ## Method 2: Sideload to Roku Device Manually
 
-### Install Necessary Packages
+Install Necessary Packages
 
 ```bash
 sudo apt-get install wget make zip
 ```
 
-### Build the package
+Build the package
+
 ```bash
 make dev
 ```
@@ -124,7 +145,7 @@ Deploy the app:
 make install
 ```
 
-### Command Line Workflow
+## Command Line Workflow
 
 Modify code -> `make install` -> Use Roku remote to test changes -> `telnet ${ROKU_DEV_TARGET} 8085` -> `CTRL + ]` -> `quit + ENTER`
 
@@ -136,7 +157,7 @@ Install necessary packages:
 sudo apt-get install nodejs npm
 ```
 
-### Committing
+## Committing
 
 Before commiting your code, please run:
 
@@ -146,7 +167,7 @@ make prep_commit
 
 This will format your code and run the CI checks locally to ensure you will pass the CI tests.
 
-### (Optional) Update Images
+## (Optional) Update Images
 
 This repo already contains all necessary images for the app. This script only needs to be run when the [official Jellyfin images](https://github.com/jellyfin/jellyfin-ux) are changed to allow us to update the repo images.
 
