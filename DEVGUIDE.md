@@ -1,5 +1,7 @@
 # Dev Guide For The Jellyfin Roku App
 
+Follow the steps below to install the app on your personal Roku device. This will enable you to write code for the app, install the latest beta release, as well as provide app logs to the developers if you encounter a bug.
+
 - [Dev Guide For The Jellyfin Roku App](#dev-guide-for-the-jellyfin-roku-app)
   - [Developer Mode](#developer-mode)
   - [Clone the GitHub Repo](#clone-the-github-repo)
@@ -22,8 +24,6 @@
     - [When giving your setting a name](#when-giving-your-setting-a-name)
     - [When giving your setting a description](#when-giving-your-setting-a-description)
       - [**Remember to add all new strings to locale/en\_US/translations.ts**](#remember-to-add-all-new-strings-to-localeen_ustranslationsts)
-
-Follow the steps below to install the app on your personal Roku device. This will enable you to write code for the app, install the latest beta release, as well as provide app logs to the developers if you encounter a bug.
 
 ## Developer Mode
 
@@ -194,9 +194,9 @@ Your new functionality may need a setting to configure its behavior, or, sometim
 
 ### The order of any particular menu is as follows
 
-First, any menu titled "General."
-Second, any settings that have children, in alphabetical order.
-Third, any settings that do not have children, in alphabetical order.
+1. Any menu titled "General."
+2. Any settings that have children, in alphabetical order.
+3. Any settings that do not have children, in alphabetical order.
 
 ### When giving your setting a name
 
