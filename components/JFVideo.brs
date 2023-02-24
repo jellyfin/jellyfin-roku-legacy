@@ -134,7 +134,7 @@ end sub
 
 sub handleNextEpisode()
     ' Dialog box is open
-    if int(m.top.position) >= (m.top.runTime - 30)
+    if int(m.top.position) >= (m.top.runTime - Val(m.nextupbuttonseconds))
         shownextEpisode()
         updateCount()
     else
