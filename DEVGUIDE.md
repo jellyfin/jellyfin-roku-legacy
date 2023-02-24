@@ -161,3 +161,24 @@ Download and convert images:
 ```bash
 make get_images
 ```
+
+## Adding a User Setting
+Your new functionality may need a setting to configure its behavior, or, sometimes, we may ask you to add a setting for your new functionality, so that users may enable or disable it.  If you find yourself in this position, please observe the following considerations when adding your new user setting.
+
+### The order of any particular menu is as follows:
+
+First, any menu titled "General."
+Second, any settings that have children, in alphabetical order.
+Third, any settings that do not have children, in alphabetical order.
+
+### When giving your setting a name
+
+Ideally, your setting will be named with a relevant noun such as ```Cinema Mode``` or ```Codec Support.``` Sometimes there is no such name that is sufficiently specific, such as with ```Clock```. In this case you must use a verb phrase to name your setting, such as ```Hide Clock.``` If your verb phrase *must* be long to be specific, you may drop implied verbs if absolutely necessary, such as how ```Text Subtitles Only``` drops the implied ```Show.``` Do not use the infinitive form ```action-doing``` or ```doing stuff.``` Instead, use the imperative: ```Do Action``` or ```Do Stuff.``` Remember that *characters are a commodity in names.*
+
+Generally, we should not repeat the name of a setting's parent in the setting's name. Being a child of that parent implies that the settings are related to it.
+
+### When giving your setting a description
+
+A setting's description should begin with a grammatically correct, complete, imperative sentence that ends with a period. *Characters are not a commodity in descriptions* so be specific. Again, do not use infinitive verb phrases ("...ing" should not appear anywhere in the text of your setting). While the first sentence should be imperative, additional sentences may be necessary to tell your user how to use the setting or why its doing what its doing. If you *must* use non-imperative sentences, be concise and consider the fact that your description will need to be translated into many languages. Do not use colloquialism, metaphor, or idiomatic phrases.
+
+#### **Remember to add all new strings to locale/en_US/translations.ts**
