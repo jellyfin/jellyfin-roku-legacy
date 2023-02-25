@@ -25,14 +25,6 @@ sub init()
         if clockNode[0] <> invalid then clockNode[0].parent.removeChild(clockNode[0].node)
     end if
 
-    m.nextItem = m.top.findNode("nextItem")
-    m.nextItem.text = tr("Next Item")
-    m.nextItem.setFocus(true)
-
-    m.previousItem = m.top.findNode("previousItem")
-    m.previousItem.text = tr("Previous Item")
-    m.previousItem.setFocus(false)
-
     'Play Next Episode button
     m.nextEpisodeButton = m.top.findNode("nextEpisode")
     m.nextEpisodeButton.text = tr("Next Episode")
@@ -273,20 +265,6 @@ sub dialogClosed(msg)
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
-
-    'if m.nextItem.hasFocus() and key = "OK"
-    '    m.global.queueManager.callFunc("moveForward")
-    '    m.global.queueManager.callFunc("playQueue")
-    '    m.top.control = "stop"
-    '    return true
-    'end if
-
-    'if m.previousItem.hasFocus() and key = "OK"
-    '    m.global.queueManager.callFunc("moveBack")
-    '    m.global.queueManager.callFunc("playQueue")
-    '    m.top.control = "stop"
-    '    return true
-    'end if
 
     if key = "OK" and m.nextEpisodeButton.hasfocus() and not m.top.trickPlayBar.visible
         m.top.control = "stop"
