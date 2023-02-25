@@ -115,7 +115,13 @@ end sub
 sub checkTimeToDisplayNextEpisode()
     if m.top.content.contenttype <> 4 then return
 
-    if int(m.top.position) >= (m.top.runTime - 30)
+    nextEpisodeCountdown = Int(m.top.runTime - m.top.position)
+    if nextEpisodeCountdown < 0
+        hideNextEpisodeButton()
+        return
+    end if
+
+    if int(m.top.position) >= (m.top.runTime - Val(m.nextupbuttonseconds))
         showNextEpisodeButton()
         updateCount()
         return

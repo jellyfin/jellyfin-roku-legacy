@@ -14,6 +14,21 @@ sub init()
     m.top.observeField("state", "onState")
     m.top.observeField("content", "onContentChange")
 
+    'Captions
+    m.captionGroup = m.top.findNode("captionGroup")
+    m.captionGroup.createchildren(9, "LayoutGroup")
+    m.captionTask = createObject("roSGNode", "captionTask")
+    m.captionTask.observeField("currentCaption", "updateCaption")
+    m.captionTask.observeField("useThis", "checkCaptionMode")
+    m.top.observeField("subtitleTrack", "loadCaption")
+    m.top.observeField("globalCaptionMode", "toggleCaption")
+    if get_user_setting("playback.subs.custom") = "false"
+        m.top.suppressCaptions = false
+    else
+        m.top.suppressCaptions = true
+        toggleCaption()
+    end if
+
     m.playbackTimer.observeField("fire", "ReportPlayback")
     m.bufferPercentage = 0 ' Track whether content is being loaded
     m.playReported = false
@@ -29,6 +44,7 @@ sub init()
     m.nextEpisodeButton = m.top.findNode("nextEpisode")
     m.nextEpisodeButton.text = tr("Next Episode")
     m.nextEpisodeButton.setFocus(false)
+    m.nextupbuttonseconds = get_user_setting("playback.nextupbuttonseconds", "30")
 
     m.showNextEpisodeButtonAnimation = m.top.findNode("showNextEpisodeButton")
     m.hideNextEpisodeButtonAnimation = m.top.findNode("hideNextEpisodeButton")
@@ -40,6 +56,27 @@ sub init()
     m.top.retrievingBar.filledBarBlendColor = m.global.constants.colors.blue
     m.top.bufferingBar.filledBarBlendColor = m.global.constants.colors.blue
     m.top.trickPlayBar.filledBarBlendColor = m.global.constants.colors.blue
+end sub
+
+sub loadCaption()
+    if m.top.suppressCaptions
+        m.captionTask.url = m.top.subtitleTrack
+    end if
+end sub
+
+sub toggleCaption()
+    m.captionTask.playerState = m.top.state + m.top.globalCaptionMode
+    if LCase(m.top.globalCaptionMode) = "on"
+        m.captionTask.playerState = m.top.state + m.top.globalCaptionMode + "w"
+        m.captionGroup.visible = true
+    else
+        m.captionGroup.visible = false
+    end if
+end sub
+
+sub updateCaption()
+    m.captionGroup.removeChildrenIndex(m.captionGroup.getChildCount(), 0)
+    m.captionGroup.appendChildren(m.captionTask.currentCaption)
 end sub
 
 sub onVideoContentLoaded()
@@ -76,39 +113,33 @@ end sub
 ' Event handler for when video content field changes
 sub onContentChange()
     if not isValid(m.top.content) then return
-
     m.top.observeField("position", "onPositionChanged")
-
-    ' If video content type is not episode, remove position observer
-    if m.top.content.contenttype <> 4
-        m.top.unobserveField("position")
-    end if
 end sub
 
 sub onNextEpisodeDataLoaded()
     m.checkedForNextEpisode = true
-
     m.top.observeField("position", "onPositionChanged")
-
-    if m.getNextEpisodeTask.nextEpisodeData.Items.count() <> 2
-        m.top.unobserveField("position")
-    end if
 end sub
 
 '
 ' Runs Next Episode button animation and sets focus to button
 sub showNextEpisodeButton()
-    if not m.nextEpisodeButton.visible
+    if m.top.content.contenttype <> 4 then return
+
+    if m.nextEpisodeButton.opacity = 0
         m.showNextEpisodeButtonAnimation.control = "start"
         m.nextEpisodeButton.setFocus(true)
-        m.nextEpisodeButton.visible = true
     end if
 end sub
 
 '
 'Update count down text
 sub updateCount()
-    m.nextEpisodeButton.text = tr("Next Episode") + " " + Int(m.top.duration - m.top.position).toStr()
+    nextEpisodeCountdown = Int(m.top.duration - m.top.position)
+    if nextEpisodeCountdown < 0
+        nextEpisodeCountdown = 0
+    end if
+    m.nextEpisodeButton.text = tr("Next Episode") + " " + nextEpisodeCountdown.toStr()
 end sub
 
 '
@@ -121,20 +152,31 @@ end sub
 
 ' Checks if we need to display the Next Episode button
 sub checkTimeToDisplayNextEpisode()
-    if int(m.top.position) >= (m.top.duration - 30)
+    if m.top.content.contenttype <> 4 then return
+
+    nextEpisodeCountdown = Int(m.top.duration - m.top.position)
+
+    if nextEpisodeCountdown < 0
+        hideNextEpisodeButton()
+        return
+    end if
+
+    if int(m.top.position) >= (m.top.duration - Val(m.nextupbuttonseconds))
         showNextEpisodeButton()
         updateCount()
         return
     end if
 
-    if m.nextEpisodeButton.visible or m.nextEpisodeButton.hasFocus()
-        m.nextEpisodeButton.visible = false
+    if m.nextEpisodeButton.opacity > 0 or m.nextEpisodeButton.hasFocus()
+        m.nextEpisodeButton.opacity = 0
         m.nextEpisodeButton.setFocus(false)
     end if
 end sub
 
 ' When Video Player state changes
 sub onPositionChanged()
+    m.captionTask.currentPos = Int(m.top.position * 1000)
+
     ' Check if dialog is open
     m.dialog = m.top.getScene().findNode("dialogBackground")
     if not isValid(m.dialog)
@@ -145,6 +187,8 @@ end sub
 '
 ' When Video Player state changes
 sub onState(msg)
+    m.captionTask.playerState = m.top.state + m.top.globalCaptionMode
+
     ' When buffering, start timer to monitor buffering process
     if m.top.state = "buffering" and m.bufferCheckTimer <> invalid
 
@@ -168,7 +212,6 @@ sub onState(msg)
         m.top.control = "stop"
         m.top.backPressed = true
     else if m.top.state = "playing"
-
         ' Check if next episde is available
         if isValid(m.top.showID)
             if m.top.showID <> "" and not m.checkedForNextEpisode and m.top.content.contenttype = 4
@@ -273,8 +316,8 @@ function onKeyEvent(key as string, press as boolean) as boolean
         return true
     else
         'Hide Next Episode Button
-        if m.nextEpisodeButton.visible or m.nextEpisodeButton.hasFocus()
-            m.nextEpisodeButton.visible = false
+        if m.nextEpisodeButton.opacity > 0 or m.nextEpisodeButton.hasFocus()
+            m.nextEpisodeButton.opacity = 0
             m.nextEpisodeButton.setFocus(false)
             m.top.setFocus(true)
         end if
