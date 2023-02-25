@@ -30,6 +30,7 @@ sub loadItems()
         params["ParentId"] = m.top.itemId
         params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
         params["ImageTypeLimit"] = 1
+        params["EnableTotalRecordCount"] = false
 
         resp = APIRequest(url, params)
         data = getJson(resp)
@@ -53,6 +54,10 @@ sub loadItems()
         params["SortOrder"] = "Descending"
         params["ImageTypeLimit"] = 1
         params["UserId"] = get_setting("active_user")
+        params["EnableRewatching"] = false
+        params["DisableFirstEpisode"] = false
+        params["limit"] = 24
+        params["EnableTotalRecordCount"] = false
 
         maxDaysInNextUp = get_user_setting("ui.details.maxdaysnextup", "365")
         if isValid(maxDaysInNextUp)
@@ -64,9 +69,6 @@ sub loadItems()
                 dateCutoff.FromSeconds(dateToday.AsSeconds() - (maxDaysInNextUp * 86400))
 
                 params["NextUpDateCutoff"] = dateCutoff.ToISOString()
-                params["EnableRewatching"] = false
-                params["DisableFirstEpisode"] = false
-                params["limit"] = 24
             end if
         end if
 
@@ -88,6 +90,7 @@ sub loadItems()
         params["SortBy"] = "DatePlayed"
         params["SortOrder"] = "Descending"
         params["Filters"] = "IsResumable"
+        params["EnableTotalRecordCount"] = false
 
         resp = APIRequest(url, params)
         data = getJson(resp)
@@ -109,6 +112,7 @@ sub loadItems()
         params["Limit"] = 20
         params["recursive"] = true
         params["sortby"] = "random"
+        params["EnableTotalRecordCount"] = false
 
         resp = APIRequest(url, params)
         data = getJson(resp)

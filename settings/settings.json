@@ -31,6 +31,26 @@
                 ]
             },
             {
+                "title": "Playback Bitrate Limits",
+                "description": "Set limits for how high playback bitrates are allowed to be.",
+                "children": [
+                    {
+                        "title": "Limits Enabled",
+                        "description": "If enabled, playback bitrates will be limited based on the 'Playback Bitrate Limit' setting.",
+                        "settingName": "playback.bitrate.maxlimited",
+                        "type": "bool",
+                        "default": "true"
+                    },
+                    {
+                        "title": "Playback Bitrate Limit",
+                        "description": "Max bitrate (Mbps) allowed if limits are enabled. Set to 0 to use Roku's specifications.",
+                        "settingName": "playback.bitrate.limit",
+                        "type": "integer",
+                        "default": "0"
+                    }
+                ]
+            },
+            {
                 "title": "Profile Level Support",
                 "description": "Attempt Direct Play of potentially unsupported profile levels",
                 "children": [
@@ -58,6 +78,20 @@
                 "default": "false"
             },
             {
+                "title": "Custom Subtitles",
+                "description": "Replace Roku's default subtitle functions with custom functions that support CJK fonts. Fallback fonts must be configured and enabled on the server for CJK rendering to work.",
+                "settingName": "playback.subs.custom",
+                "type": "bool",
+                "default": "false"
+            },
+            {
+                "title": "Next Episode Button Time",
+                "description": "Set how many seconds before the end of an episode the Next Episode button should appear. Set to 0 to disable.",
+                "settingName": "playback.nextupbuttonseconds",
+                "type": "integer",
+                "default": "30"
+            },
+            {
                 "title": "Text Subtitles Only",
                 "description": "Only display text subtitles to minimize transcoding.",
                 "settingName": "playback.subs.onlytext",
@@ -67,20 +101,20 @@
         ]
     },
     {
-        "title": "Show What's New Popup",
-        "description": "Show What's New popup when Jellyfin is updated to a new version.",
-        "settingName": "load.allowwhatsnew",
-        "type": "bool",
-        "default": "true"
-    },
-    {
         "title": "User Interface",
         "description": "Settings relating to how the application looks.",
         "children": [
             {
-                "title": "Home Page",
-                "description": "Options for Home page.",
+                "title": "General",
+                "description": "Settings relating to the appearance of the Home screen and the program in general.",
                 "children": [
+                    {
+                        "title": "Hide Clock",
+                        "description": "Hides all clocks in Jellyfin. Jellyfin will need to be closed and reopened for change to take effect.",
+                        "settingName": "ui.design.hideclock",
+                        "type": "bool",
+                        "default": "false"
+                    },
                     {
                         "title": "Max Days Next Up",
                         "description": "Set the maximum amount of days a show should stay in the 'Next Up' list without watching it.",
@@ -89,51 +123,25 @@
                         "default": "365"
                     },
                     {
+                        "title": "Show What's New Popup",
+                        "description": "Show What's New popup when Jellyfin is updated to a new version.",
+                        "settingName": "load.allowwhatsnew",
+                        "type": "bool",
+                        "default": "true"
+                    },
+                    {
                         "title": "Use Splashscreen as Home Background",
                         "description": "Use generated splashscreen image as Jellyfin's home background. Jellyfin will need to be closed and reopened for change to take effect.",
                         "settingName": "ui.home.splashBackground",
                         "type": "bool",
                         "default": "false"
-                    }
-                ]
-            },
-            {
-                "title": "Details Page",
-                "description": "Options for Details pages.",
-                "children": [
-                    {
-                        "title": "Hide Taglines",
-                        "description": "Hides tagline text on details pages.",
-                        "settingName": "ui.details.hidetagline",
-                        "type": "bool",
-                        "default": "false"
-                    }
-                ]
-            },
-            {
-                "title": "TV Shows",
-                "description": "Options for TV Shows.",
-                "children": [
-                    {
-                        "title": "Blur Unwatched Episodes",
-                        "description": "If enabled, images of unwatched episodes will be blurred.",
-                        "settingName": "ui.tvshows.blurunwatched",
-                        "type": "bool",
-                        "default": "false"
                     },
                     {
-                        "title": "Skip Details for Single Seasons",
-                        "description": "If enabled, selecting a TV series with only one season will go straight to the episode list rather than the show details and season list.",
-                        "settingName": "ui.tvshows.goStraightToEpisodeListing",
-                        "type": "bool",
-                        "default": "false"
-                    },
-                    {
-                        "title":"Disable Community Rating for Episodes",
+                        "title": "Disable Community Rating for Episodes",
                         "description": "If enabled, the star and community rating for episodes of a TV show will be removed. This is to prevent spoilers of an upcoming good/bad episode.",
                         "settingName": "ui.tvshows.disableCommunityRating",
-                        "type":"bool",
-                        "default":"false"
+                        "type": "bool",
+                        "default": "false"
                     }
                 ]
             },
@@ -151,80 +159,119 @@
                 ]
             },
             {
-                "title": "Design Elements",
-                "description": "Options that alter the design of Jellyfin.",
+                "title": "Libraries",
+                "description": "Settings relating to the appearance of Library pages.",
                 "children": [
                     {
-                        "title": "Hide Clock",
-                        "description": "Hides all clocks in Jellyfin. Jellyfin will need to be closed and reopened for change to take effect.",
-                        "settingName": "ui.design.hideclock",
-                        "type": "bool",
-                        "default": "false"
-                    }
-                ]
-            },
-            {
-                "title": "Media Grid",
-                "description": "Media Grid options.",
-                "children": [
-                    {
-                        "title": "Movie Library Default View",
-                        "description": "Default view for Movie Libraries.",
-                        "settingName": "itemgrid.movieDefaultView",
-                        "type": "radio",
-                        "default": "movies",
-                        "options": [
+                        "title": "General",
+                        "description": "Settings relating to the appearance of pages in all Libraries.",
+                        "children": [
                             {
-                                "title": "Movies (Presentation)",
-                                "id": "Movies"
+                                "title": "Grid View Settings",
+                                "description": "Settings that apply when Grid views are enabled.",
+                                "children": [
+                                    {
+                                        "title": "Item Count",
+                                        "description": "Show item count in the library and index of selected item.",
+                                        "settingName": "itemgrid.showItemCount",
+                                        "type": "bool",
+                                        "default": "false"
+                                    },
+                                    {
+                                        "title": "Item Titles",
+                                        "description": "Select when to show titles.",
+                                        "settingName": "itemgrid.gridTitles",
+                                        "type": "radio",
+                                        "default": "showonhover",
+                                        "options": [
+                                            {
+                                                "title": "Show On Hover",
+                                                "id": "showonhover"
+                                            },
+                                            {
+                                                "title": "Always Show",
+                                                "id": "showalways"
+                                            },
+                                            {
+                                                "title": "Always Hide",
+                                                "id": "hidealways"
+                                            }
+                                        ]
+                                    }
+                                ]
                             },
                             {
-                                "title": "Movies (Grid)",
-                                "id": "MoviesGrid"
+                                "title": "Hide Taglines",
+                                "description": "Hides tagline text on details pages.",
+                                "settingName": "ui.details.hidetagline",
+                                "type": "bool",
+                                "default": "false"
+                            },
+                            {
+                                "title": "Return to Top",
+                                "description": "Use the replay button to slowly animate to the first item in the folder. (If disabled, the folder will reset to the first item immediately).",
+                                "settingName": "itemgrid.reset",
+                                "type": "bool",
+                                "default": "true"
                             }
                         ]
                     },
                     {
-                        "title": "Movie Library Grid Titles",
-                        "description": "Select when to show titles.",
-                        "settingName": "itemgrid.movieGridTitles",
-                        "type": "radio",
-                        "default": "showonhover",
-                        "options": [
+                        "title": "Movies",
+                        "description": "Settings relating to the appearance of pages in Movie Libraries.",
+                        "children": [
                             {
-                                "title": "Show On Hover",
-                                "id": "showonhover"
-                            },
-                            {
-                                "title": "Always Show",
-                                "id": "showalways"
-                            },
-                            {
-                                "title": "Always Hide",
-                                "id": "hidealways"
+                                "title": "Default View",
+                                "description": "Default view for Movie Libraries.",
+                                "settingName": "itemgrid.movieDefaultView",
+                                "type": "radio",
+                                "default": "movies",
+                                "options": [
+                                    {
+                                        "title": "Movies (Presentation)",
+                                        "id": "Movies"
+                                    },
+                                    {
+                                        "title": "Movies (Grid)",
+                                        "id": "MoviesGrid"
+                                    }
+                                ]
                             }
                         ]
                     },
                     {
-                        "title": "Item Count",
-                        "description": "Show item count in the library and index of selected item.",
-                        "settingName": "itemgrid.showItemCount",
-                        "type": "bool",
-                        "default": "false"
-                    },
-                    {
-                        "title": "Item Titles",
-                        "description": "Always show the titles below the poster images. (If disabled, the title will be shown under the highlighted item only).",
-                        "settingName": "itemgrid.alwaysShowTitles",
-                        "type": "bool",
-                        "default": "false"
-                    },
-                    {
-                        "title": "Return to Top",
-                        "description": "Use the replay button to slowly animate to the first item in the folder. (If disabled, the folder will reset to the first item immediately).",
-                        "settingName": "itemgrid.reset",
-                        "type": "bool",
-                        "default": "true"
+                        "title": "TV Shows",
+                        "description": "Settings relating to the appearance of pages in TV Libraries.",
+                        "children": [
+                            {
+                                "title": "Blur Unwatched Episodes",
+                                "description": "If enabled, images of unwatched episodes will be blurred.",
+                                "settingName": "ui.tvshows.blurunwatched",
+                                "type": "bool",
+                                "default": "false"
+                            },
+                            {
+                                "title": "Disable Community Rating for Episodes",
+                                "description": "If enabled, the star and community rating for episodes of a TV show will be removed. This is to prevent spoilers of an upcoming good/bad episode.",
+                                "settingName": "ui.tvshows.disableCommunityRating",
+                                "type": "bool",
+                                "default": "false"
+                            },
+                            {
+                                "title": "Disable Unwatched Episode Count",
+                                "description": "If enabled, the number of unwatched episodes in a series/season will be removed.",
+                                "settingName": "ui.tvshows.disableUnwatchedEpisodeCount",
+                                "type": "bool",
+                                "default": "false"
+                            },
+                            {
+                                "title": "Skip Details for Single Seasons",
+                                "description": "If enabled, selecting a TV series with only one season will go straight to the episode list rather than the show details and season list.",
+                                "settingName": "ui.tvshows.goStraightToEpisodeListing",
+                                "type": "bool",
+                                "default": "false"
+                            }
+                        ]
                     }
                 ]
             }

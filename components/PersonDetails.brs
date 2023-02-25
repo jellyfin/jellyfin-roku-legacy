@@ -5,10 +5,7 @@ sub init()
     m.btnGrp.observeField("escape", "onButtonGroupEscaped")
     m.favBtn = m.top.findNode("favorite-button")
     m.extrasGrp = m.top.findNode("extrasGrp")
-    m.top.findNode("VertSlider").keyValue = "[[30, 998], [30, 789], [30, 580], [30,371 ], [30, 162]]"
     m.extrasGrp.opacity = 1.0
-    m.extrasGrp.translation = "[30, 998]"
-    m.dscr.observeField("isTextEllipsized", "onEllipsisChanged")
     createDialogPallete()
     m.top.optionsAvailable = false
 end sub
@@ -17,8 +14,18 @@ sub loadPerson()
     item = m.top.itemContent
     itemData = item.json
     m.top.Id = itemData.id
-    m.top.findNode("Name").Text = itemData.Name
+    name = m.top.findNode("Name")
+    name.Text = itemData.Name
+    name.font.size = 70
     if itemData.PremiereDate <> invalid and itemData.PremiereDate <> ""
+        lifeStringLabel = createObject("rosgnode", "Label")
+        lifeStringLabel.id = "premierDate"
+        lifeStringLabel.font = "font:SmallestBoldSystemFont"
+        lifeStringLabel.height = "100"
+        lifeStringLabel.vertAlign = "bottom"
+        name.vertAlign = "top"
+        name.font.size = 60
+        m.top.findNode("title_rectangle").appendChild(lifeStringLabel)
         birthDate = CreateObject("roDateTime")
         birthDate.FromISO8601String(itemData.PremiereDate)
         deathDate = CreateObject("roDatetime")
@@ -39,9 +46,15 @@ sub loadPerson()
             end if
         end if
         lifeString = lifeString + " * " + tr("Age") + ": " + stri(age)
-        m.top.findNode("premierDate").Text = lifeString
+        lifeStringLabel.Text = lifeString
     end if
-    m.dscr.text = itemData.Overview
+    if itemData.Overview <> invalid and itemData.Overview <> ""
+        m.dscr.text = itemData.Overview
+    else
+        m.dscr.text = tr("Biographical information for this person is not currently available.")
+        m.dscr.horizAlign = "center"
+        m.dscr.vertAlign = "center"
+    end if
     if item.posterURL <> invalid and item.posterURL <> ""
         m.top.findnode("personImage").uri = item.posterURL
     else
@@ -50,31 +63,21 @@ sub loadPerson()
     m.vidsList.callFunc("loadPersonVideos", m.top.Id)
 
     setFavoriteColor()
-    m.favBtn.setFocus(true)
-end sub
-
-sub onEllipsisChanged()
-    if m.dscr.isTextEllipsized
-        dscrShowFocus()
-    end if
+    if not m.favBtn.hasFocus() then dscrShowFocus()
 end sub
 
 sub dscrShowFocus()
-    if m.dscr.isTextEllipsized
-        m.dscr.setFocus(true)
-        m.dscr.opacity = 1.0
-        m.top.findNode("dscrBorder").color = "#d0d0d0ff"
-    end if
+    m.dscr.setFocus(true)
+    m.dscr.opacity = 1.0
+    m.top.findNode("dscrBorder").color = "#d0d0d0ff"
 end sub
 
 sub onButtonGroupEscaped()
     key = m.btnGrp.escape
     if key = "down"
-        m.vidsList.setFocus(true)
-        m.top.findNode("VertSlider").reverse = false
-        m.top.findNode("pplAnime").control = "start"
-    else if key = "up" and m.dscr.isTextEllipsized
-        dscrShowFocus()
+        m.dscr.setFocus(true)
+        m.dscr.opacity = 1.0
+        m.top.findNode("dscrBorder").color = "#d0d0d0ff"
     end if
 end sub
 
@@ -82,7 +85,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
 
     if key = "OK"
-        if m.dscr.hasFocus() and m.dscr.isTextEllipsized
+        if m.dscr.hasFocus()
             createFullDscrDlg()
             return true
         end if
@@ -96,16 +99,23 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     if key = "down"
         if m.dscr.hasFocus()
+            m.dscr.opacity = 0.6
+            m.top.findNode("dscrBorder").color = "#data202020ff"
+            m.vidsList.setFocus(true)
+            m.top.findNode("VertSlider").reverse = false
+            m.top.findNode("pplAnime").control = "start"
+            return true
+        end if
+    else if key = "up"
+        if m.dscr.hasFocus()
             m.favBtn.setFocus(true)
             m.dscr.opacity = 0.6
             m.top.findNode("dscrBorder").color = "#data202020ff"
             return true
-        end if
-    else if key = "up"
-        if m.vidsList.isInFocusChain() and m.vidsList.itemFocused = 0
+        else if m.vidsList.isInFocusChain() and m.vidsList.itemFocused = 0
             m.top.findNode("VertSlider").reverse = true
             m.top.findNode("pplAnime").control = "start"
-            m.favBtn.setFocus(true)
+            dscrShowFocus()
             return true
         end if
     end if
@@ -128,19 +138,13 @@ end sub
 
 sub createFullDscrDlg()
     dlg = CreateObject("roSGNode", "OverviewDialog")
-    dlg.Title = tr("Press 'OK' to Close")
+    dlg.Title = m.top.itemContent.json.Name
     dlg.width = 1290
     dlg.palette = m.dlgPalette
-    dlg.overview = [m.dscr.text]
+    dlg.overview = m.dscr.text
     m.fullDscrDlg = dlg
     m.top.getScene().dialog = dlg
-    border = createObject("roSGNode", "Poster")
-    border.uri = "pkg:/images/hd_focul_9.png"
-    border.blendColor = "#c9c9c9ff"
-    border.width = dlg.width + 6
-    border.height = dlg.height + 6
-    border.translation = [dlg.translation[0] - 3, dlg.translation[1] - 3]
-    border.visible = true
+
 end sub
 
 sub createDialogPallete()

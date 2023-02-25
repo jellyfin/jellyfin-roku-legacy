@@ -155,6 +155,11 @@ sub LoadUserAbilities(user)
     else
         set_user_setting("livetv.canrecord", "false")
     end if
+    if user.Policy.EnableContentDeletion = true
+        set_user_setting("content.candelete", "true")
+    else
+        set_user_setting("content.candelete", "false")
+    end if
 end sub
 
 function initQuickConnect()

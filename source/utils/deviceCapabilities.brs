@@ -171,13 +171,7 @@ function getDeviceProfile() as object
                         "Value": "41",
                         "IsRequired": false
                     },
-                    ' Roku only supports h264 up to 10Mpbs
-                    {
-                        "Condition": "LessThanEqual",
-                        "Property": "VideoBitrate",
-                        "Value": "10000000",
-                        IsRequired: true
-                    }
+                    GetBitRateLimit("H264")
                 ]
             }
         ],
@@ -211,13 +205,7 @@ function getDeviceProfile() as object
                     "Value": av1VideoRangeTypes,
                     "IsRequired": false
                 },
-                ' Roku only supports AVI up to 40Mpbs
-                {
-                    "Condition": "LessThanEqual",
-                    "Property": "VideoBitrate",
-                    "Value": "40000000",
-                    IsRequired: true
-                }
+                GetBitRateLimit("AV1")
             ]
         })
     end if
@@ -244,13 +232,7 @@ function getDeviceProfile() as object
                     "Value": (120 * 5.1).ToStr(),
                     "IsRequired": false
                 },
-                ' Roku only supports h265 up to 40Mpbs
-                {
-                    "Condition": "LessThanEqual",
-                    "Property": "VideoBitrate",
-                    "Value": "40000000",
-                    IsRequired: true
-                }
+                GetBitRateLimit("H265")
             ]
         })
     end if
@@ -265,13 +247,7 @@ function getDeviceProfile() as object
                     "Value": vp9VideoRangeTypes,
                     "IsRequired": false
                 },
-                ' Roku only supports VP9 up to 40Mpbs
-                {
-                    "Condition": "LessThanEqual",
-                    "Property": "VideoBitrate",
-                    "Value": "40000000",
-                    IsRequired: true
-                }
+                GetBitRateLimit("VP9")
             ]
         })
     end if
@@ -381,4 +357,57 @@ function GetDirectPlayProfiles() as object
         }
     ]
 
+end function
+
+function GetBitRateLimit(codec as string)
+    if get_user_setting("playback.bitrate.maxlimited") = "true"
+        userSetLimit = get_user_setting("playback.bitrate.limit").ToInt()
+        userSetLimit *= 1000000
+
+        if userSetLimit > 0
+            return {
+                "Condition": "LessThanEqual",
+                "Property": "VideoBitrate",
+                "Value": userSetLimit.ToStr(),
+                IsRequired: true
+            }
+        else
+            ' Some repeated values (e.g. same "40mbps" for several codecs)
+            ' but this makes it easy to update in the future if the bitrates start to deviate.
+            if codec = "H264"
+                ' Roku only supports h264 up to 10Mpbs
+                return {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "10000000",
+                    IsRequired: true
+                }
+            else if codec = "AV1"
+                ' Roku only supports AV1 up to 40Mpbs
+                return {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "40000000",
+                    IsRequired: true
+                }
+            else if codec = "H265"
+                ' Roku only supports h265 up to 40Mpbs
+                return {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "40000000",
+                    IsRequired: true
+                }
+            else if codec = "VP9"
+                ' Roku only supports VP9 up to 40Mpbs
+                return {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "40000000",
+                    IsRequired: true
+                }
+            end if
+        end if
+    end if
+    return {}
 end function

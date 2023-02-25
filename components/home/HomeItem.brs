@@ -38,10 +38,12 @@ sub itemContentChanged()
     end if
 
     if LCase(itemData.type) = "series"
-        if itemData?.json?.UserData?.UnplayedItemCount <> invalid
-            if itemData.json.UserData.UnplayedItemCount > 0
-                m.unplayedCount.visible = true
-                m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
+        if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
+            if itemData?.json?.UserData?.UnplayedItemCount <> invalid
+                if itemData.json.UserData.UnplayedItemCount > 0
+                    m.unplayedCount.visible = true
+                    m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
+                end if
             end if
         end if
     end if
@@ -73,8 +75,12 @@ sub itemContentChanged()
     ' "Program" is from clicking on an "On Now" item on the Home Screen
     if itemData.type = "Program"
         m.itemText.Text = itemData.json.name
-        if itemData.json.ImageURL <> invalid
-            m.itemPoster.uri = itemData.json.ImageURL
+        m.itemTextExtra.Text = itemData.json.ChannelName
+        if itemData.widePosterURL <> ""
+            m.itemPoster.uri = ImageURL(itemData.widePosterURL)
+        else
+            m.itemPoster.uri = ImageURL(itemData.json.ChannelId)
+            m.itemPoster.loadDisplayMode = "scaleToFill"
         end if
 
         ' Set Episode title if available

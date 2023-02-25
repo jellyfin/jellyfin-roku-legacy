@@ -57,10 +57,12 @@ sub itemContentChanged() as void
     itemData = m.top.itemContent
     m.title.text = itemData.title
 
-    if itemData?.json?.UserData?.UnplayedItemCount <> invalid
-        if itemData.json.UserData.UnplayedItemCount > 0
-            m.unplayedCount.visible = true
-            m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
+    if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
+        if itemData?.json?.UserData?.UnplayedItemCount <> invalid
+            if itemData.json.UserData.UnplayedItemCount > 0
+                m.unplayedCount.visible = true
+                m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
+            end if
         end if
     end if
 

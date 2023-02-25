@@ -135,6 +135,8 @@ sub loadInitialItems()
         m.sortAscending = false
     end if
 
+    m.top.showItemTitles = get_user_setting("itemgrid.gridTitles")
+
     if LCase(m.top.parentItem.json.type) = "musicgenre"
         m.itemGrid.translation = "[96, 60]"
         m.loadItemsTask.itemType = "MusicAlbum"
@@ -143,6 +145,7 @@ sub loadInitialItems()
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
     else if LCase(m.view) = "artistspresentation" or LCase(m.options.view) = "artistspresentation"
         m.loadItemsTask.genreIds = ""
+        m.top.showItemTitles = "hidealways"
     else if LCase(m.view) = "artistsgrid" or LCase(m.options.view) = "artistsgrid"
         m.loadItemsTask.genreIds = ""
     else
