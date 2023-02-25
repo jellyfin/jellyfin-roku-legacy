@@ -1,5 +1,6 @@
 sub init()
     m.queue = []
+    m.queueTypes = []
     m.position = 0
 end sub
 
@@ -7,6 +8,7 @@ end sub
 ' Clear all content from play queue
 sub clear()
     m.queue = []
+    m.queueTypes = []
     setPosition(0)
 end sub
 
@@ -15,6 +17,7 @@ end sub
 ' Delete item from play queue at passed index
 sub deleteAtIndex(index)
     m.queue.Delete(index)
+    m.queueTypes.Delete(index)
 end sub
 
 
@@ -68,6 +71,28 @@ end function
 
 
 '
+' Return the types of items in current play queue
+function getQueueTypes()
+    return m.queueTypes
+end function
+
+
+'
+' Return the unique types of items in current play queue
+function getQueueUniqueTypes()
+    itemTypes = []
+
+    for each item in getQueueTypes()
+        if not inArray(itemTypes, item)
+            itemTypes.push(item)
+        end if
+    end for
+
+    return itemTypes
+end function
+
+
+'
 ' Return item at end of play queue without removing
 function peek()
     return m.queue.peek()
@@ -77,19 +102,17 @@ end function
 '
 ' Play items in queue
 sub playQueue()
-    nextItem = top()
-    nextItemMediaType = invalid
-
-    if isValid(nextItem?.json?.mediatype) and nextItem.json.mediatype <> ""
-        nextItemMediaType = LCase(nextItem.json.mediatype)
-    else if isValid(nextItem?.type) and nextItem.type <> ""
-        nextItemMediaType = LCase(nextItem.type)
-    end if
+    nextItem = getCurrentItem()
+    nextItemMediaType = getItemType(nextItem)
 
     if not isValid(nextItemMediaType) then return
 
     if nextItemMediaType = "audio"
         CreateAudioPlayerView()
+    else if nextItemMediaType = "video"
+        CreateVideoPlayerView()
+    else if nextItemMediaType = "episode"
+        CreateVideoPlayerView()
     end if
 end sub
 
@@ -98,6 +121,7 @@ end sub
 ' Remove item at end of play queue
 sub pop()
     m.queue.pop()
+    m.queueTypes.pop()
 end sub
 
 
@@ -105,6 +129,7 @@ end sub
 ' Push new items to the play queue
 sub push(newItem)
     m.queue.push(newItem)
+    m.queueTypes.push(getItemType(newItem))
 end sub
 
 '
@@ -126,4 +151,18 @@ end function
 sub set(items)
     setPosition(0)
     m.queue = items
+    for each item in items
+        m.queueTypes.push(getItemType(item))
+    end for
 end sub
+
+function getItemType(item) as string
+
+    if isValid(item?.json?.mediatype) and item.json.mediatype <> ""
+        return LCase(item.json.mediatype)
+    else if isValid(item?.type) and item.type <> ""
+        return LCase(item.type)
+    end if
+
+    return invalid
+end function

@@ -448,6 +448,23 @@ function CreateAlbumView(album)
     return group
 end function
 
+' Shows details on selected playlist. Description text, image, and list of available items
+function CreatePlaylistView(album)
+    group = CreateObject("roSGNode", "PlaylistView")
+    m.global.sceneManager.callFunc("pushScene", group)
+
+    group.pageContent = ItemMetaData(album.id)
+    group.albumData = PlaylistItemList(album.id)
+
+    ' Watch for user clicking on an item
+    group.observeField("playItem", m.port)
+
+    ' Watch for user click on Play button
+    group.observeField("playAllSelected", m.port)
+
+    return group
+end function
+
 function CreateSeasonDetailsGroup(series, season)
     startLoadingSpinner()
     group = CreateObject("roSGNode", "TVEpisodes")

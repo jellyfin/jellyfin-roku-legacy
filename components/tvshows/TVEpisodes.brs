@@ -3,6 +3,7 @@ sub init()
 
     m.rows = m.top.findNode("picker")
     m.poster = m.top.findNode("seasonPoster")
+    m.Shuffle = m.top.findNode("Shuffle")
     m.Random = m.top.findNode("Random")
     m.tvEpisodeRow = m.top.findNode("tvEpisodeRow")
 
@@ -29,14 +30,25 @@ sub updateSeason()
     imgParams = { "maxHeight": 450, "maxWidth": 300 }
     m.poster.uri = ImageURL(m.top.seasonData.Id, "Primary", imgParams)
     m.Random.visible = true
+    m.Shuffle.visible = true
     m.top.overhangTitle = m.top.seasonData.SeriesName + " - " + m.top.seasonData.name
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
     handled = false
 
-    if key = "left" and not m.Random.hasFocus()
+    if key = "left" and not m.Shuffle.hasFocus()
+        m.Shuffle.setFocus(true)
+        return true
+    end if
+
+    if key = "down" and m.Shuffle.hasFocus()
         m.Random.setFocus(true)
+        return true
+    end if
+
+    if key = "up" and m.Random.hasFocus()
+        m.Shuffle.setFocus(true)
         return true
     end if
 
@@ -50,6 +62,21 @@ function onKeyEvent(key as string, press as boolean) as boolean
         if m.Random.hasFocus()
             randomEpisode = Rnd(m.rows.getChild(0).objects.items.count()) - 1
             m.top.quickPlayNode = m.rows.getChild(0).objects.items[randomEpisode]
+            return true
+        end if
+
+        if m.Shuffle.hasFocus()
+            episodeList = m.rows.getChild(0).objects.items
+
+            for i = 0 to episodeList.count() - 1
+                j = Rnd(episodeList.count() - 1)
+                temp = episodeList[i]
+                episodeList[i] = episodeList[j]
+                episodeList[j] = temp
+            end for
+
+            m.global.queueManager.callFunc("set", episodeList)
+            m.global.queueManager.callFunc("playQueue")
             return true
         end if
     end if

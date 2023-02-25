@@ -9,15 +9,13 @@ on:
     branches:
       - unstable
   pull_request_target:
-    types:
-      - synchronize
 
 jobs:
   project:
     name: Project board 📊
     runs-on: ubuntu-latest
     steps:
-      - uses: alex-page/github-project-automation-plus@v0.8.2
+      - uses: alex-page/github-project-automation-plus@7ffb872c64bd809d23563a130a0a97d01dfa8f43 # v0.8.3
         if: ${{ github.event_name == 'pull_request_target' }}
         continue-on-error: true
         with:
@@ -31,5 +29,5 @@ jobs:
       - name: Check all PRs for merge conflicts ⛔
         uses: eps1lon/actions-label-merge-conflict@releases/2.x
         with:
-          dirtyLabel: 'merge conflict'
-          repoToken: ${{ secrets.JF_BOT_TOKEN }}
+          dirtyLabel: "merge conflict"
+          repoToken: ${{ secrets.GITHUB_TOKEN }}

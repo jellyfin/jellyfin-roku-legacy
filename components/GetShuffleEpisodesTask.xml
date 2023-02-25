@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="GetShuffleEpisodesTask" extends="Task">
+    <interface>
+        <field id="showID" type="string" />
+        <field id="data" type="assocarray" />
+    </interface>
+    <script type="text/brightscript" uri="GetShuffleEpisodesTask.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
+</component>
