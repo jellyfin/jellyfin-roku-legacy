@@ -15,10 +15,12 @@ sub itemContentChanged()
     item = m.top.itemContent
     itemData = item.json
 
-    if itemData?.UserData?.UnplayedItemCount <> invalid
-        if itemData.UserData.UnplayedItemCount > 0
-            m.unplayedCount.visible = true
-            m.unplayedEpisodeCount.text = itemData.UserData.UnplayedItemCount
+    if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
+        if itemData?.UserData?.UnplayedItemCount <> invalid
+            if itemData.UserData.UnplayedItemCount > 0
+                m.unplayedCount.visible = true
+                m.unplayedEpisodeCount.text = itemData.UserData.UnplayedItemCount
+            end if
         end if
     end if
 

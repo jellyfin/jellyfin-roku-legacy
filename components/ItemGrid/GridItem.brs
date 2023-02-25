@@ -13,11 +13,11 @@ sub init()
 
     m.itemText.translation = [0, m.itemPoster.height + 7]
 
-    m.alwaysShowTitles = get_user_setting("itemgrid.alwaysShowTitles") = "true"
-    m.itemText.visible = m.alwaysShowTitles
+    m.gridTitles = get_user_setting("itemgrid.gridTitles")
+    m.itemText.visible = m.gridTitles = "showalways"
 
     ' Add some padding space when Item Titles are always showing
-    if m.alwaysShowTitles then m.itemText.maxWidth = 250
+    if m.itemText.visible then m.itemText.maxWidth = 250
 
     'Parent is MarkupGrid and it's parent is the ItemGrid
     m.topParent = m.top.GetParent().GetParent()
@@ -43,10 +43,12 @@ sub itemContentChanged()
         m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "Series"
-        if itemData?.json?.UserData?.UnplayedItemCount <> invalid
-            if itemData.json.UserData.UnplayedItemCount > 0
-                m.unplayedCount.visible = true
-                m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
+        if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
+            if itemData?.json?.UserData?.UnplayedItemCount <> invalid
+                if itemData.json.UserData.UnplayedItemCount > 0
+                    m.unplayedCount.visible = true
+                    m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
+                end if
             end if
         end if
 
@@ -131,15 +133,16 @@ end sub
 'Display or hide title Visibility on focus change
 sub focusChanged()
     if m.top.itemHasFocus = true
-        m.itemText.visible = true
         m.itemText.repeatCount = -1
         m.posterMask.scale = [1, 1]
     else
-        m.itemText.visible = m.alwaysShowTitles
         m.itemText.repeatCount = 0
         if m.topParent.alphaActive = true
             m.posterMask.scale = [0.85, 0.85]
         end if
+    end if
+    if m.gridTitles = "showonhover"
+        m.itemText.visible = m.top.itemHasFocus
     end if
 end sub
 

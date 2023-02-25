@@ -331,6 +331,7 @@ function CreateHomeGroup()
 end function
 
 function CreateMovieDetailsGroup(movie)
+    startLoadingSpinner()
     group = CreateObject("roSGNode", "MovieDetails")
     group.overhangTitle = movie.title
     group.optionsAvailable = false
@@ -353,15 +354,17 @@ function CreateMovieDetailsGroup(movie)
     extras = group.findNode("extrasGrid")
     extras.observeField("selectedItem", m.port)
     extras.callFunc("loadParts", movie.json)
-
+    stopLoadingSpinner()
     return group
 end function
 
 function CreateSeriesDetailsGroup(series)
+    startLoadingSpinner()
     ' Get season data early in the function so we can check number of seasons.
     seasonData = TVSeasons(series.id)
     ' Divert to season details if user setting goStraightToEpisodeListing is enabled and only one season exists.
     if get_user_setting("ui.tvshows.goStraightToEpisodeListing") = "true" and seasonData.Items.Count() = 1
+        stopLoadingSpinner()
         return CreateSeasonDetailsGroupByID(series.id, seasonData.Items[0].id)
     end if
     group = CreateObject("roSGNode", "TVShowDetails")
@@ -376,7 +379,7 @@ function CreateSeriesDetailsGroup(series)
     extras = group.findNode("extrasGrid")
     extras.observeField("selectedItem", m.port)
     extras.callFunc("loadParts", group.itemcontent.json)
-
+    stopLoadingSpinner()
     return group
 end function
 
@@ -446,6 +449,7 @@ function CreateAlbumView(album)
 end function
 
 function CreateSeasonDetailsGroup(series, season)
+    startLoadingSpinner()
     group = CreateObject("roSGNode", "TVEpisodes")
     group.optionsAvailable = false
     m.global.sceneManager.callFunc("pushScene", group)
@@ -456,10 +460,13 @@ function CreateSeasonDetailsGroup(series, season)
     group.observeField("episodeSelected", m.port)
     group.observeField("quickPlayNode", m.port)
 
+    stopLoadingSpinner()
+
     return group
 end function
 
 function CreateSeasonDetailsGroupByID(seriesID, seasonID)
+    startLoadingSpinner()
     group = CreateObject("roSGNode", "TVEpisodes")
     group.optionsAvailable = false
     m.global.sceneManager.callFunc("pushScene", group)
@@ -469,7 +476,7 @@ function CreateSeasonDetailsGroupByID(seriesID, seasonID)
 
     group.observeField("episodeSelected", m.port)
     group.observeField("quickPlayNode", m.port)
-
+    stopLoadingSpinner()
     return group
 end function
 
@@ -513,7 +520,7 @@ sub CreateSidePanel(buttons, options)
 end sub
 
 function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_idx = 1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
-
+    startMediaLoadingSpinner()
     ' Video is Playing
     video = VideoPlayer(video_id, mediaSourceId, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), forceTranscoding, showIntro, allowResumeDialog)
 
@@ -522,17 +529,18 @@ function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_
     video.observeField("selectSubtitlePressed", m.port)
     video.observeField("selectPlaybackInfoPressed", m.port)
     video.observeField("state", m.port)
-
+    stopLoadingSpinner()
     return video
 end function
 
 function CreatePersonView(personData as object) as object
+    startLoadingSpinner()
     person = CreateObject("roSGNode", "PersonDetails")
     m.global.SceneManager.callFunc("pushScene", person)
 
     info = ItemMetaData(personData.id)
     person.itemContent = info
-
+    stopLoadingSpinner()
     person.setFocus(true)
     person.observeField("selectedItem", m.port)
     person.findNode("favorite-button").observeField("buttonSelected", m.port)

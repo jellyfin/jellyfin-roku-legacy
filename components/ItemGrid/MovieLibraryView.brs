@@ -203,7 +203,7 @@ sub loadInitialItems()
         m.itemGrid.numRows = "3"
         m.selectedMovieOverview.visible = false
         m.infoGroup.visible = false
-        m.top.showItemTitles = get_user_setting("itemgrid.movieGridTitles")
+        m.top.showItemTitles = get_user_setting("itemgrid.gridTitles")
         if LCase(m.top.showItemTitles) = "hidealways"
             m.itemGrid.itemSize = "[230, 315]"
             m.itemGrid.rowHeights = "[315]"
@@ -439,6 +439,10 @@ sub ItemDataLoaded(msg)
 
         m.loading = false
         m.spinner.visible = false
+        ' Return focus to options menu if it was opened while library was loading
+        if m.options.visible
+            m.options.setFocus(true)
+        end if
         return
     end if
 
@@ -485,6 +489,10 @@ sub ItemDataLoaded(msg)
     end if
 
     m.spinner.visible = false
+    ' Return focus to options menu if it was opened while library was loading
+    if m.options.visible
+        m.options.setFocus(true)
+    end if
 end sub
 
 '

@@ -2,8 +2,15 @@
 <component name="TVListDetails" extends="Group">
   <children>
     <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[40]">
-      <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[30]">
-        <Poster id="poster" width="350" height="300" />
+      <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[30]">        
+        <Poster id="poster" width="350" height="300" loadDisplayMode="scaleToZoom">
+          <Rectangle id="playedIndicator" color="#00a4dcFF" width="60" height="46" visible="false" translation="[290, 0]">
+            <Label id="checkmark" width="60" height="42" font="font:SmallestBoldSystemFont" horizAlign="center" vertAlign="bottom" text="✓"/>
+          </Rectangle>
+          <Rectangle id="progressBackground" visible="false" color="0x00000098" width="350" height="16" translation="[0,286]">
+            <Rectangle id="progressBar" color="#00a4dcFF" width="0" height="16" visible="false"/>
+          </Rectangle>
+        </Poster>
         <LayoutGroup id="text" layoutDirection="vert" itemSpacings="[15]">
           <!-- Using poster of 1 length to get spacing. Not successful with adding translation to title -->
           <Poster id="null" height="1" />

@@ -389,11 +389,7 @@ function TVEpisodes(show_id as string, season_id as string)
     data = getJson(resp)
     results = []
     for each item in data.Items
-        imgParams = { "AddPlayedIndicator": item.UserData.Played, "maxWidth": 400, "maxheight": 250 }
-        if item.UserData.PlayedPercentage <> invalid
-            param = { "PercentPlayed": item.UserData.PlayedPercentage }
-            imgParams.Append(param)
-        end if
+        imgParams = { "maxWidth": 400, "maxheight": 250 }
         tmp = CreateObject("roSGNode", "TVEpisodeData")
         tmp.image = PosterImage(item.id, imgParams)
         if tmp.image <> invalid

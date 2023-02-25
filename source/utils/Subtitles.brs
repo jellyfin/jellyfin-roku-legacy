@@ -76,7 +76,6 @@ end function
 function setupSubtitle(video, subtitles, subtitle_idx = -1) as integer
     if subtitle_idx = -1
         ' If we are not using text-based subtitles, turn them off
-        video.globalCaptionMode = "Off"
         return -1
     end if
 

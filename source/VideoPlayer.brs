@@ -9,6 +9,7 @@ function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle
     end if
 
     if video.content = invalid
+        stopLoadingSpinner()
         return invalid
     end if
     jellyfin_blue = "#00a4dcFF"
@@ -46,7 +47,9 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     end if
 
     if m.videotype = "Episode" or m.videotype = "Series"
-        video.runTime = (meta.json.RunTimeTicks / 10000000.0)
+        if isValid(meta.json.RunTimeTicks)
+            video.runTime = (meta.json.RunTimeTicks / 10000000.0)
+        end if
         video.content.contenttype = "episode"
     end if
 
@@ -57,7 +60,9 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
         playbackPosition = meta.json.UserData.PlaybackPositionTicks
         if allowResumeDialog
             if playbackPosition > 0
+                stopLoadingSpinner()
                 dialogResult = startPlayBackOver(playbackPosition)
+                startMediaLoadingSpinner()
                 'Dialog returns -1 when back pressed, 0 for resume, and 1 for start over
                 if dialogResult = -1
                     'User pressed back, return invalid and don't load video
@@ -96,6 +101,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     for each item in data.Items
                         m.tmp = item
                     end for
+                    stopLoadingSpinner()
                     'Create Series Scene
                     CreateSeriesDetailsGroup(m.tmp)
                     video.content = invalid
@@ -133,6 +139,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     for each item in data.Items
                         m.Series_tmp = item
                     end for
+                    stopLoadingSpinner()
                     'Create Season Scene
                     CreateSeasonDetailsGroup(m.Series_tmp, m.Season_tmp)
                     video.content = invalid
@@ -149,6 +156,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     for each item in data.Items
                         m.episode_id = item
                     end for
+                    stopLoadingSpinner()
                     'Create Episode Scene
                     CreateMovieDetailsGroup(m.episode_id)
                     video.content = invalid
@@ -311,7 +319,6 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     if not fully_external
         video.content = authorize_request(video.content)
     end if
-
 end sub
 
 function PlayIntroVideo(video_id, audio_stream_idx) as boolean

@@ -17,10 +17,12 @@ sub setSeasonLoading()
 end sub
 
 sub updateSeason()
-    if m.top.seasonData?.UserData?.UnplayedItemCount <> invalid
-        if m.top.seasonData.UserData.UnplayedItemCount > 0
-            m.unplayedCount.visible = true
-            m.unplayedEpisodeCount.text = m.top.seasonData.UserData.UnplayedItemCount
+    if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
+        if m.top.seasonData?.UserData?.UnplayedItemCount <> invalid
+            if m.top.seasonData.UserData.UnplayedItemCount > 0
+                m.unplayedCount.visible = true
+                m.unplayedEpisodeCount.text = m.top.seasonData.UserData.UnplayedItemCount
+            end if
         end if
     end if
 
