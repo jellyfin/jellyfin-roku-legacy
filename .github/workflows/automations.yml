@@ -23,7 +23,7 @@ jobs:
         with:
           project: Ongoing development
           column: In progress
-          repo-token: ${{ secrets.JF_BOT_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
   label:
     name: Labeling 🏷️
     runs-on: ubuntu-latest
@@ -32,4 +32,4 @@ jobs:
         uses: eps1lon/actions-label-merge-conflict@releases/2.x
         with:
           dirtyLabel: "merge conflict"
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
