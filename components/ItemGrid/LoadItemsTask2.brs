@@ -226,7 +226,8 @@ sub loadItems()
                 tmp.json = item
                 tmp.type = "Folder"
                 tmp.posterUrl = api_API().items.getimageurl(item.id, "primary", 0, { "maxHeight": 280, "maxWidth": 280, "quality": "90" })
-
+            else if item.Type = "Trailer"
+                tmp = CreateObject("roSGNode", "MovieData")
             else
                 print "[LoadItems] Unknown Type: " item.Type
             end if

@@ -364,6 +364,9 @@ sub setDefaultOptions(options)
     options.sort = [
         { "Title": tr("TITLE"), "Name": "SortName" }
     ]
+    options.filter = [
+        { "Title": tr("All"), "Name": "All" }
+    ]
 end sub
 
 ' Return parent collection type
