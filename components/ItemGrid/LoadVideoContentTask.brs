@@ -10,20 +10,42 @@ sub init()
 end sub
 
 sub loadItems()
-    m.top.content = [LoadItems_VideoPlayer(m.top.itemId)]
+
+    ' Only show preroll once per queue
+    if m.global.queueManager.callFunc("prerollActive")
+        ' Prerolls not allowed if we're resuming video
+        if m.global.queueManager.callFunc("getCurrentItem").startingPoint = 0
+            preRoll = GetIntroVideos(m.top.itemId)
+            if isValid(preRoll) and preRoll.TotalRecordCount > 0 and isValid(preRoll.items[0])
+                ' Bypass joke pre-roll
+                if lcase(preRoll.items[0].name) <> "rick roll'd"
+                    m.global.queueManager.callFunc("push", m.global.queueManager.callFunc("getCurrentItem"))
+                    m.top.itemId = preRoll.items[0].id
+                    m.global.queueManager.callFunc("setPrerollStatus", false)
+                    m.top.isIntro = true
+                end if
+            end if
+        end if
+    end if
+
+
+    id = m.top.itemId
+    mediaSourceId = invalid
+    audio_stream_idx = m.top.selectedAudioStreamIndex
+    subtitle_idx = -1
+    playbackPosition = -1
+    forceTranscoding = false
+
+    m.top.content = [LoadItems_VideoPlayer(id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition, forceTranscoding)]
 end sub
 
-function LoadItems_VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
+function LoadItems_VideoPlayer(id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition, forceTranscoding)
 
     video = {}
     video.id = id
     video.content = createObject("RoSGNode", "ContentNode")
 
-    LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, forceTranscoding, showIntro, allowResumeDialog)
-
-    if video.errorMsg = "introaborted"
-        return video
-    end if
+    LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition, forceTranscoding)
 
     if video.content = invalid
         return invalid
@@ -32,11 +54,12 @@ function LoadItems_VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1
     return video
 end function
 
-sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
+sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false)
 
     meta = ItemMetaData(video.id)
 
     if not isValid(meta)
+        video.errorMsg = "Error loading metadata"
         video.content = invalid
         return
     end if
@@ -51,38 +74,13 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
     video.content.title = meta.title
     video.showID = meta.showID
 
-    if playbackPosition = -1
-        playbackPosition = meta.json.UserData.PlaybackPositionTicks
-        if allowResumeDialog
-            if playbackPosition > 0
-                dialogResult = startPlayBackOver(playbackPosition)
+    playbackPosition = 0
 
-                'Dialog returns -1 when back pressed, 0 for resume, and 1 for start over
-                if dialogResult.indexselected = -1
-                    'User pressed back, return invalid and don't load video
-                    video.content = invalid
-                    return
-                else if dialogResult.indexselected = 1
-                    'Start Over selected, change position to 0
-                    playbackPosition = 0
-                end if
-            end if
-        end if
-    end if
-
-    ' Don't attempt to play an intro for an intro video
-    if showIntro
-        ' Do not play intros when resuming playback
-        if playbackPosition = 0
-            if not PlayIntroVideo(video.id, audio_stream_idx)
-                video.errorMsg = "introaborted"
-                return
-            end if
-        end if
+    if isValid(m.global.queueManager.callFunc("getCurrentItem").startingPoint)
+        playbackPosition = m.global.queueManager.callFunc("getCurrentItem").startingPoint
     end if
 
     video.content.PlayStart = int(playbackPosition / 10000000)
-
 
     if not isValid(mediaSourceId) then mediaSourceId = video.id
     if meta.live then mediaSourceId = ""
@@ -93,6 +91,7 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
     video.audioIndex = audio_stream_idx
 
     if not isValid(m.playbackInfo)
+        video.errorMsg = "Error loading playback info"
         video.content = invalid
         return
     end if
@@ -122,7 +121,6 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
 
 
     ' 'TODO: allow user selection of subtitle track before playback initiated, for now set to no subtitles
-
     video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
     fully_external = false
 
@@ -151,6 +149,7 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
         if m.playbackInfo.MediaSources[0].TranscodingUrl = invalid
             ' If server does not provide a transcode URL, display a message to the user
             m.global.sceneManager.callFunc("userMessage", tr("Error Getting Playback Information"), tr("An error was encountered while playing this item.  Server did not provide required transcoding data."))
+            video.errorMsg = "Error getting playback information"
             video.content = invalid
             return
         end if
@@ -238,26 +237,6 @@ function getTranscodeReasons(url as string) as object
     end if
 
     return []
-end function
-
-'Opens dialog asking user if they want to resume video or start playback over only on the home screen
-function startPlayBackOver(time as longinteger)
-
-    ' If we're inside a play queue, start the episode from the beginning
-    if m.global.queueManager.callFunc("getCount") > 1 then return { indexselected: 1 }
-
-    resumeData = [
-        "Resume playing at " + ticksToHuman(time) + ".",
-        "Start over from the beginning."
-    ]
-
-    m.global.sceneManager.callFunc("optionDialog", tr("Playback Options"), ["Choose an option"], resumeData)
-
-    while not isValid(m.global.sceneManager.returnData)
-
-    end while
-
-    return m.global.sceneManager.returnData
 end function
 
 function directPlaySupported(meta as object) as boolean
@@ -1140,119 +1119,4 @@ function getSubtitleLanguages()
         "zxx": "No linguistic content; Not applicable",
         "zza": "Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki"
     }
-end function
-
-function CreateSeasonDetailsGroup(series, season)
-    group = CreateObject("roSGNode", "TVEpisodes")
-    group.optionsAvailable = false
-    m.global.sceneManager.callFunc("pushScene", group)
-
-    group.seasonData = ItemMetaData(season.id).json
-    group.objects = TVEpisodes(series.id, season.id)
-
-    group.observeField("episodeSelected", m.port)
-    group.observeField("quickPlayNode", m.port)
-
-    return group
-end function
-
-function PlayIntroVideo(video_id, audio_stream_idx) as boolean
-    ' Intro videos only play if user has cinema mode setting enabled
-    if get_user_setting("playback.cinemamode") = "true"
-
-        ' Check if server has intro videos setup and available
-        introVideos = GetIntroVideos(video_id)
-
-        if introVideos = invalid then return true
-
-        if introVideos.TotalRecordCount > 0
-            ' Bypass joke pre-roll
-            if lcase(introVideos.items[0].name) = "rick roll'd" then return true
-
-            introVideo = LoadItems_VideoPlayer(introVideos.items[0].id, introVideos.items[0].id, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), false, false)
-
-            port = CreateObject("roMessagePort")
-            introVideo.observeField("state", port)
-            m.global.sceneManager.callFunc("pushScene", introVideo)
-            introPlaying = true
-
-            while introPlaying
-                msg = wait(0, port)
-                if type(msg) = "roSGNodeEvent"
-                    if msg.GetData() = "finished"
-                        m.global.sceneManager.callFunc("clearPreviousScene")
-                        introPlaying = false
-                    else if msg.GetData() = "stopped"
-                        introPlaying = false
-                        return false
-                    end if
-                end if
-            end while
-        end if
-    end if
-    return true
-end function
-
-function CreateMovieDetailsGroup(movie)
-    group = CreateObject("roSGNode", "MovieDetails")
-    group.overhangTitle = movie.title
-    group.optionsAvailable = false
-    m.global.sceneManager.callFunc("pushScene", group)
-
-    movie = ItemMetaData(movie.id)
-    group.itemContent = movie
-    group.trailerAvailable = false
-
-    trailerData = api_API().users.getlocaltrailers(get_setting("active_user"), movie.id)
-    if isValid(trailerData)
-        group.trailerAvailable = trailerData.Count() > 0
-    end if
-
-    buttons = group.findNode("buttons")
-    for each b in buttons.getChildren(-1, 0)
-        b.observeField("buttonSelected", m.port)
-    end for
-
-    extras = group.findNode("extrasGrid")
-    extras.observeField("selectedItem", m.port)
-    extras.callFunc("loadParts", movie.json)
-
-    return group
-end function
-
-function CreateSeriesDetailsGroup(series)
-    ' Get season data early in the function so we can check number of seasons.
-    seasonData = TVSeasons(series.id)
-    ' Divert to season details if user setting goStraightToEpisodeListing is enabled and only one season exists.
-    if get_user_setting("ui.tvshows.goStraightToEpisodeListing") = "true" and seasonData.Items.Count() = 1
-        return CreateSeasonDetailsGroupByID(series.id, seasonData.Items[0].id)
-    end if
-    group = CreateObject("roSGNode", "TVShowDetails")
-    group.optionsAvailable = false
-    m.global.sceneManager.callFunc("pushScene", group)
-
-    group.itemContent = ItemMetaData(series.id)
-    group.seasonData = seasonData ' Re-use variable from beginning of function
-
-    group.observeField("seasonSelected", m.port)
-
-    extras = group.findNode("extrasGrid")
-    extras.observeField("selectedItem", m.port)
-    extras.callFunc("loadParts", group.itemcontent.json)
-
-    return group
-end function
-
-function CreateSeasonDetailsGroupByID(seriesID, seasonID)
-    group = CreateObject("roSGNode", "TVEpisodes")
-    group.optionsAvailable = false
-    m.global.sceneManager.callFunc("pushScene", group)
-
-    group.seasonData = ItemMetaData(seasonID).json
-    group.objects = TVEpisodes(seriesID, seasonID)
-
-    group.observeField("episodeSelected", m.port)
-    group.observeField("quickPlayNode", m.port)
-
-    return group
 end function

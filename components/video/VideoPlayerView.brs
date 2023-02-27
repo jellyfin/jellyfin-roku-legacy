@@ -1,11 +1,11 @@
 sub init()
-    currentItem = m.global.queueManager.callFunc("getCurrentItem")
+    m.currentItem = m.global.queueManager.callFunc("getCurrentItem")
 
-    m.top.id = currentItem.id
+    m.top.id = m.currentItem.id
 
     ' Load meta data
     m.LoadMetaDataTask = CreateObject("roSGNode", "LoadVideoContentTask")
-    m.LoadMetaDataTask.itemId = currentItem.id
+    m.LoadMetaDataTask.itemId = m.top.id
     m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
     m.LoadMetaDataTask.control = "RUN"
 
@@ -44,6 +44,7 @@ end sub
 
 sub onVideoContentLoaded()
     m.LoadMetaDataTask.unobserveField("content")
+    m.LoadMetaDataTask.control = "STOP"
 
     ' If we have nothing to play, return to previous screen
     if not isValid(m.LoadMetaDataTask.content)
@@ -67,6 +68,17 @@ sub onVideoContentLoaded()
     m.top.container = m.LoadMetaDataTask.content[0].container
     m.top.mediaSourceId = m.LoadMetaDataTask.content[0].mediaSourceId
     m.top.audioIndex = m.LoadMetaDataTask.content[0].audio_stream_idx
+    m.top.transcodeParams = m.LoadMetaDataTask.content[0].transcodeparams
+
+    if m.LoadMetaDataTask.isIntro
+        m.top.enableTrickPlay = false
+    end if
+
+    if isValid(m.currentItem.selectedAudioStreamIndex)
+        m.top.audioTrack = (m.currentItem.selectedAudioStreamIndex + 1).toStr()
+    else
+        m.top.audioTrack = "2"
+    end if
 
     m.top.setFocus(true)
     m.top.control = "play"

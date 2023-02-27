@@ -15,8 +15,14 @@ sub CreateVideoPlayerView()
     m.view.observeField("selectPlaybackInfoPressed", "onSelectPlaybackInfoPressed")
     m.view.observeField("selectSubtitlePressed", "onSelectSubtitlePressed")
 
+    mediaSourceId = m.global.queueManager.callFunc("getCurrentItem").mediaSourceId
+
+    if not isValid(mediaSourceId) or mediaSourceId = ""
+        mediaSourceId = m.global.queueManager.callFunc("getCurrentItem").id
+    end if
+
     m.getPlaybackInfoTask = createObject("roSGNode", "GetPlaybackInfoTask")
-    m.getPlaybackInfoTask.videoID = m.global.queueManager.callFunc("getCurrentItem").id
+    m.getPlaybackInfoTask.videoID = mediaSourceId
     m.getPlaybackInfoTask.observeField("data", "onPlaybackInfoLoaded")
 
     m.global.sceneManager.callFunc("pushScene", m.view)

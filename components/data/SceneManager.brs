@@ -292,6 +292,7 @@ end sub
 '
 ' Display dialog to user with an OK button
 sub optionDialog(title, message, buttons)
+    m.top.dataReturned = false
     m.top.returnData = invalid
     m.userselection = false
 
@@ -324,6 +325,7 @@ sub optionClosed()
         indexSelected: -1,
         buttonSelected: ""
     }
+    m.top.dataReturned = true
 end sub
 
 '
@@ -334,6 +336,7 @@ sub optionSelected()
         indexSelected: m.scene.dialog.buttonSelected,
         buttonSelected: m.scene.dialog.buttons[m.scene.dialog.buttonSelected]
     }
+    m.top.dataReturned = true
 
     dismiss_dialog()
 end sub

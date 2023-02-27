@@ -14,6 +14,7 @@
     <function name="optionDialog" />
     <field id="currentUser" type="string" onChange="updateUser" />
     <field id="returnData" type="assocarray" />
+    <field id="dataReturned" type="boolean" />
   </interface>
   <script type="text/brightscript" uri="SceneManager.brs" />
 </component>

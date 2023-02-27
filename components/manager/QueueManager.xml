@@ -2,25 +2,35 @@
 <component name="QueueManager" extends="Group">
   <interface>
     <function name="clear" />
+    <function name="clearHold" />
     <function name="deleteAtIndex" />
     <function name="getCount" />
     <function name="getCurrentItem" />
+    <function name="getHold" />
     <function name="getItemByIndex" />
     <function name="getPosition" />
     <function name="getQueue" />
     <function name="getQueueTypes" />
     <function name="getQueueUniqueTypes" />
+    <function name="hold" />
     <function name="moveBack" />
     <function name="moveForward" />
     <function name="peek" />
     <function name="playQueue" />
+    <function name="prerollActive" />
     <function name="pop" />
     <function name="push" />
     <function name="set" />
     <function name="setPosition" />
+    <function name="setPrerollStatus" />
     <function name="top" />
   </interface>
   <script type="text/brightscript" uri="QueueManager.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
   <script type="text/brightscript" uri="ViewCreator.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
 </component>

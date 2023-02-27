@@ -1,6 +1,9 @@
 sub init()
+    m.hold = []
     m.queue = []
     m.queueTypes = []
+    ' Preroll videos only play if user has cinema mode setting enabled
+    m.prerollActive = (get_user_setting("playback.cinemamode") = "true")
     m.position = 0
 end sub
 
@@ -8,7 +11,13 @@ end sub
 sub clear()
     m.queue = []
     m.queueTypes = []
+    m.prerollActive = (get_user_setting("playback.cinemamode") = "true")
     setPosition(0)
+end sub
+
+' Clear all hold content
+sub clearHold()
+    m.hold = []
 end sub
 
 ' Delete item from play queue at passed index
@@ -25,6 +34,11 @@ end function
 ' Return the item currently in focus from the play queue
 function getCurrentItem()
     return getItemByIndex(m.position)
+end function
+
+' Return the items in the hold
+function getHold()
+    return m.hold
 end function
 
 ' Return the item in the passed index from the play queue
@@ -75,19 +89,42 @@ function peek()
     return m.queue.peek()
 end function
 
+' Return prerollActive status
+function prerollActive()
+    return m.prerollActive
+end function
+
+' Set prerollActive status
+sub setPrerollStatus(newStatus)
+    m.prerollActive = newStatus
+end sub
+
 ' Play items in queue
 sub playQueue()
     nextItem = getCurrentItem()
-    nextItemMediaType = getItemType(nextItem)
+    if not isValid(nextItem) then return
 
-    if not isValid(nextItemMediaType) then return
+    nextItemMediaType = getItemType(nextItem)
+    if nextItemMediaType = "" then return
 
     if nextItemMediaType = "audio"
         CreateAudioPlayerView()
-    else if nextItemMediaType = "video"
+        return
+    end if
+
+    if nextItemMediaType = "trailer"
         CreateVideoPlayerView()
-    else if nextItemMediaType = "episode"
+        return
+    end if
+
+    if nextItemMediaType = "video"
         CreateVideoPlayerView()
+        return
+    end if
+
+    if nextItemMediaType = "episode"
+        CreateVideoPlayerView()
+        return
     end if
 end sub
 
@@ -103,6 +140,11 @@ sub push(newItem)
     m.queueTypes.push(getItemType(newItem))
 end sub
 
+' Hold an item
+sub hold(newItem)
+    m.hold.push(newItem)
+end sub
+
 ' Set the queue position
 sub setPosition(newPosition)
     m.position = newPosition
@@ -116,12 +158,14 @@ end function
 ' Replace play queue with passed array
 sub set(items)
     setPosition(0)
+    m.prerollActive = (get_user_setting("playback.cinemamode") = "true")
     m.queue = items
     for each item in items
         m.queueTypes.push(getItemType(item))
     end for
 end sub
 
+' Returns type of passed item
 function getItemType(item) as string
     if isValid(item) and isValid(item.json) and isValid(item.json.mediatype) and item.json.mediatype <> ""
         return LCase(item.json.mediatype)
@@ -129,5 +173,5 @@ function getItemType(item) as string
         return LCase(item.type)
     end if
 
-    return invalid
+    return ""
 end function

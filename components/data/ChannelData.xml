@@ -2,6 +2,7 @@
 <component name="ChannelData" extends="JFContentItem">
   <interface>
     <field id="channelID" type="string" />
+    <field id="selectedAudioStreamIndex" type="integer" value="1" />
   </interface>
   <script type="text/brightscript" uri="ChannelData.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />

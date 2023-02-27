@@ -6,7 +6,10 @@
     <field id="seasons" type="assocarray" />
     <field id="container" type="string" />
     <field id="mediaSourceCount" type="integer" />
+    <field id="startingPoint" type="longinteger" value="0" />
     <field id="mediaSources" type="array" />
+    <field id="mediaSourceId" type="string" />
+    <field id="selectedAudioStreamIndex" type="integer" value="1" />
   </interface>
   <script type="text/brightscript" uri="MovieData.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />

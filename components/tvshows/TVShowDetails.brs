@@ -180,6 +180,7 @@ end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if key = "OK" or key = "play"
+        topGrp = m.top.findNode("seasons")
         if m.Shuffle.hasFocus()
             m.getShuffleEpisodesTask.showID = m.top.itemContent.id
             m.getShuffleEpisodesTask.observeField("data", "onShuffleEpisodeDataLoaded")

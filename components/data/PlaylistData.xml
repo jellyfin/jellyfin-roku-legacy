@@ -4,6 +4,7 @@
     <field id="id" type="string" />
     <field id="title" type="string" />
     <field id="image" type="node" onChange="setPoster" />
+    <field id="selectedAudioStreamIndex" type="integer" value="1" />
     <field id="overview" type="string" />
   </interface>
   <script type="text/brightscript" uri="PlaylistData.brs" />
