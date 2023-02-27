@@ -249,15 +249,15 @@ end function
 
 function previousClicked() as boolean
     if m.playlistTypeCount > 1 then return false
+    if m.global.queueManager.callFunc("getPosition") = 0 then return false
 
-    if m.top.audio.state = "playing"
-        m.top.audio.control = "stop"
+    if m.global.audioPlayer.state = "playing"
+        m.global.audioPlayer.control = "stop"
     end if
 
-    if m.global.queueManager.callFunc("getPosition") > 0
-        m.global.queueManager.callFunc("moveBack")
-        pageContentChanged()
-    end if
+    m.global.queueManager.callFunc("moveBack")
+    pageContentChanged()
+
 
     return true
 end function
