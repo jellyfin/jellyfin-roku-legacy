@@ -231,6 +231,12 @@ sub itemContentChanged()
         return
     end if
 
+    if itemData.type = "Trailer"
+        m.itemText.text = itemData.name
+        m.itemPoster.uri = ImageURL(itemData.id)
+        return
+    end if
+
     print "Unhandled Home Item Type: " + itemData.type
 
 end sub
