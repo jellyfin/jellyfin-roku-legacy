@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="GetFiltersTask" extends="Task">
+    <interface>
+        <field id="params" type="assocarray" />
+        <field id="filters" type="assocarray" />
+    </interface>
+    <script type="text/brightscript" uri="GetFiltersTask.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
+</component>

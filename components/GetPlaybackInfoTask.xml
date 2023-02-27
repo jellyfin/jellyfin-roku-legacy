@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="GetPlaybackInfoTask" extends="Task">
+    <interface>
+        <field id="videoID" type="string" />
+        <field id="data" type="assocarray" />
+    </interface>
+    <script type="text/brightscript" uri="GetPlaybackInfoTask.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
+    <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+    <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
+</component>

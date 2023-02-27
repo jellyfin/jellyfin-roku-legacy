@@ -9,7 +9,8 @@ sub setConstants()
             poster_bg_pallet: ["#00455c", "#44bae1", "#00a4db", "#1c4c5c", "#007ea8"],
 
             colors: {
-                button: "#006fab"
+                button: "#006fab",
+                blue: "#00a4dcFF"
             },
 
             icons: {

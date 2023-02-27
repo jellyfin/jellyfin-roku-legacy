@@ -72,6 +72,10 @@ sub itemContentChanged()
         m.itemPoster.uri = itemData.PosterUrl
         m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
+    else if itemData.type = "Playlist"
+        m.itemPoster.uri = itemData.PosterUrl
+        m.itemIcon.uri = itemData.iconUrl
+        m.itemText.text = itemData.Title
     else if itemData.type = "Photo"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemIcon.uri = itemData.iconUrl

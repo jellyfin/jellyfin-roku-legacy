@@ -29,7 +29,7 @@
     <StdDlgTitleArea id="titleArea" />
     <StdDlgContentArea id="contentArea">
       <StdDlgTextItem id="description"
-          namedTextStyle="secondary" />
+          namedTextStyle="normal" />
     </StdDlgContentArea>
   </children>
 </component>

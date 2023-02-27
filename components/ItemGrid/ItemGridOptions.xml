@@ -6,15 +6,18 @@
       <Poster width="1720" height="880" uri="pkg:/images/dialog.9.png" />
       <LayoutGroup horizAlignment="center" translation="[860,50]" itemSpacings="[50]">
         <JFButtons id="buttons" />
+      </LayoutGroup>
+      <LayoutGroup id="menuOptions" horizAlignment="center" translation="[860,200]" itemSpacings="[50]">
         <Group>
           <RadiobuttonList id="viewMenu" itemspacing="[0,10]" vertFocusAnimationStyle="floatingFocus" opacity="0" drawFocusFeedback="false">
           </RadiobuttonList>
           <RadiobuttonList id="sortMenu" itemspacing="[0,10]" vertFocusAnimationStyle="floatingFocus" opacity="1" numRows="8" drawFocusFeedback="false">
           </RadiobuttonList>
-          <RadiobuttonList id="filterMenu" itemspacing="[0,10]" vertFocusAnimationStyle="floatingFocus" opacity="0" drawFocusFeedback="false">
+          <RadiobuttonList id="filterMenu" checkOnSelect="false" itemspacing="[0,10]" vertFocusAnimationStyle="floatingFocus" opacity="0" drawFocusFeedback="false">
           </RadiobuttonList>
         </Group>
       </LayoutGroup>
+      <CheckList opacity="0" translation="[900, 200]" id="filterOptions" numRows="8" itemSize="[250, 70]" />
       <ButtonGroup translation="[1250,50]">
         <Button id="favoriteMenu" iconUri="pkg:/images/icons/favorite.png" focusedIconUri="pkg:/images/icons/favorite.png" focusBitmapUri="" focusFootprintBitmapUri="" text="Favorite" showFocusFootprint="false"></Button>
       </ButtonGroup>
@@ -23,6 +26,16 @@
     <Animation id="fadeAnim" duration="0.5" repeat="false">
       <FloatFieldInterpolator id="outOpacity" key="[0.0, 0.5, 1.0]" keyValue="[ 1, 0, 0 ]" fieldToInterp="focus.opacity" />
       <FloatFieldInterpolator id="inOpacity" key="[0.0, 0.5, 1.0]" keyValue="[ 0, 0, 1 ]" fieldToInterp="focus.opacity" />
+    </Animation>
+
+    <Animation id="showChecklistAnimation" duration="0.5" repeat="false">
+      <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0, 1]" fieldToInterp="filterOptions.opacity" />
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[860, 200], [560, 200]]" fieldToInterp="menuOptions.translation" />
+    </Animation>
+
+    <Animation id="hideChecklistAnimation" duration="0.5" repeat="false">
+      <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[1, 0]" fieldToInterp="filterOptions.opacity" />
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[[560, 200], [860, 200]]" fieldToInterp="menuOptions.translation" />
     </Animation>
 
   </children>
@@ -35,8 +48,10 @@
     <field id="sortField" type="string" value="SortName" />
     <field id="sortAscending" type="boolean" value="false" />
     <field id="filter" type="string" value="All" />
+    <field id="filterOptions" type="assocarray" value="" />
     <field id="favorite" type="string" value="Favorite" />
 
   </interface>
   <script type="text/brightscript" uri="ItemGridOptions.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>

@@ -281,3 +281,74 @@ function findNodeBySubtype(node, subtype)
 
     return foundNodes
 end function
+
+function AssocArrayEqual(Array1 as object, Array2 as object) as boolean
+    if not isValid(Array1) or not isValid(Array2)
+        return false
+    end if
+
+    if not Array1.Count() = Array2.Count()
+        return false
+    end if
+
+    for each key in Array1
+        if not Array2.DoesExist(key)
+            return false
+        end if
+
+        if Array1[key] <> Array2[key]
+            return false
+        end if
+    end for
+
+    return true
+end function
+
+' Search string array for search value. Return if it's found
+function inArray(haystack, needle) as boolean
+    valueToFind = needle
+
+    if LCase(type(valueToFind)) <> "rostring" and LCase(type(valueToFind)) <> "string"
+        valueToFind = str(needle)
+    end if
+
+    valueToFind = lcase(valueToFind)
+
+    for each item in haystack
+        if lcase(item) = valueToFind then return true
+    end for
+
+    return false
+end function
+
+function toString(input) as string
+    if LCase(type(input)) = "rostring" or LCase(type(input)) = "string"
+        return input
+    end if
+
+    return str(input)
+end function
+
+sub startLoadingSpinner()
+    m.spinner = createObject("roSGNode", "Spinner")
+    m.spinner.translation = "[900, 450]"
+    m.spinner.visible = true
+    m.scene.appendChild(m.spinner)
+end sub
+
+sub startMediaLoadingSpinner()
+    dialog = createObject("roSGNode", "ProgressDialog")
+    dialog.id = "invisibiledialog"
+    dialog.visible = false
+    m.scene.dialog = dialog
+    startLoadingSpinner()
+end sub
+
+sub stopLoadingSpinner()
+    if isValid(m.spinner)
+        m.spinner.visible = false
+    end if
+    if isValid(m.scene?.dialog)
+        m.scene.dialog.close = true
+    end if
+end sub

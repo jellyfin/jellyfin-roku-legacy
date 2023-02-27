@@ -8,7 +8,7 @@
           <Label id="releaseYear" />
           <Label id="runtime" />
           <Label id="officialRating" />
-          <LayoutGroup id="communityRatingGroup" layoutDirection="horiz" itemSpacings="[-5]">
+          <LayoutGroup id="communityRatingGroup" layoutDirection="horiz" itemSpacings="[-5]" visible="false">
             <Poster id="star" uri="pkg:/images/sharp_star_white_18dp.png" height="32" width="32" blendColor="#cb272a" visible="false"/>
             <Label id="communityRating" />
           </LayoutGroup>
@@ -29,7 +29,7 @@
           <Label id="audio_codec" vertAlign="bottom" height="39" />
           <label id="audio_codec_count" font="font:smallestSystemFont" vertAlign="top" color="#ceffff" />
         </LayoutGroup>
-        <ButtonGroupHoriz id="buttons" itemSpacings="[10]">
+        <ButtonGroupHoriz id="buttons" itemSpacings="[10]" visible="false">
           <Button text="Play" id="play-button" iconUri="" focusedIconUri="" maxWidth="175" minWidth="175" />
           <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="250" minWidth="250" />
           <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="300" />
@@ -41,6 +41,8 @@
       </LayoutGroup>
     </LayoutGroup>
     <MovieOptions id="movieOptions" visible="false" />
+    <Spinner id="spinner" translation="[900, 450]" visible="true" />
+
     <!-- "Cast and Crew" row -->
     <extrasSlider id="movieExtras" />
   </children>

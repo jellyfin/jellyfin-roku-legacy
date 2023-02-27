@@ -8,8 +8,14 @@
   <children>
     <LayoutGroup layoutDirection="vert" >
       <Poster id="posterImg" width="234" height="300" translation="[8,243]" failedBitmapUri="pkg:/images/baseline_person_white_48dp.png" />
-      <ScrollingLabel id="pLabel" horizAlign="center" vertAlign="bottom" maxWidth="266" font="font:SmallestBoldSystemFont" height="48"  />
-      <Label id="SubTitle" horizAlign="center" vertAlign="center" font="font:SmallestBoldSystemFont" height="32" color="#A7A7A7FF"  />
-    </LayoutGroup>
+      <ScrollingLabel id="pLabel"
+        horizAlign="center" vertAlign="bottom"
+        height="48"
+        font="font:SmallestBoldSystemFont" repeatCount="0"/>
+      <ScrollingLabel id="SubTitle"
+        horizAlign="center" vertAlign="center"
+        height="32"
+        font="font:SmallestBoldSystemFont" color="#A7A7A7FF" repeatCount = "0" />
+    </LayoutGroup> 
   </children>
 </component>

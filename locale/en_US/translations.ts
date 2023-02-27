@@ -870,6 +870,16 @@
             <extracomment>Popup message when we find no audio data for an artist</extracomment>
         </message>
         <message>
+            <source>Custom Subtitles</source>
+            <translation>Custom Subtitles</translation>
+            <extracomment>Name of a setting - custom subtitles that support CJK fonts</extracomment>
+        </message>
+        <message>
+            <source>Replace Roku's default subtitle functions with custom functions that support CJK fonts. Fallback fonts must be configured and enabled on the server for CJK rendering to work.</source>
+            <translation>Replace Roku's default subtitle functions with custom functions that support CJK fonts. Fallback fonts must be configured and enabled on the server for CJK rendering to work.</translation>
+            <extracomment>Description of a setting - custom subtitles that support CJK fonts</extracomment>
+        </message>
+        <message>
             <source>Text Subtitles Only</source>
             <translation>Text Subtitles Only</translation>
             <extracomment>Name of a setting - should we hide subtitles that might transcode</extracomment>
@@ -922,6 +932,16 @@
             <source>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</source>
             <translation>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
+        <message>
+            <source>Parental Ratings</source>
+            <translation>Parental Ratings</translation>
+            <extracomment>Used in Filter menu</extracomment>
+        </message>
+        <message>
+            <source>Years</source>
+            <translation>Years</translation>
+            <extracomment>Used in Filter menu</extracomment>
         </message>
         <message>
             <source>Show What's New Popup</source>
@@ -1022,6 +1042,10 @@
             <translation>If enabled, the star and community rating for episodes of a TV show will be removed. This is to prevent spoilers of an upcoming good/bad episode.</translation>
         </message>
         <message>
+            <source>Biographical information for this person is not currently available.</source>
+            <translation>Biographical information for this person is not currently available.</translation>
+        </message>
+        <message>
             <source>Playback Bitrate Limits</source>
             <translation>Playback Bitrate Limits</translation>
         </message>
@@ -1097,6 +1121,11 @@
             <source>If enabled, the number of unwatched episodes in a series/season will be removed.</source>
             <translation>If enabled, the number of unwatched episodes in a series/season will be removed.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
+        <message>
+            <source>Loading trailer</source>
+            <translation>Loading trailer</translation>
+            <extracomment>Dialog title in Main.brs</extracomment>
         </message>
         <message>
             <source>Next Episode Button Time</source>

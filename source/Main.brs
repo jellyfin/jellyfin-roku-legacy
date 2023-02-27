@@ -58,6 +58,17 @@ sub Main (args as dynamic) as void
 
     m.scene.observeField("exit", m.port)
 
+    ' Downloads and stores a fallback font to tmp:/
+    if parseJSON(APIRequest("/System/Configuration/encoding").GetToString())["EnableFallbackFont"] = true
+        re = CreateObject("roRegex", "Name.:.(.*?).,.Size", "s")
+        filename = APIRequest("FallbackFont/Fonts").GetToString()
+        filename = re.match(filename)
+        if filename.count() > 0
+            filename = filename[1]
+            APIRequest("FallbackFont/Fonts/" + filename).gettofile("tmp:/font")
+        end if
+    end if
+
     ' Only show the Whats New popup the first time a user runs a new client version.
     if appInfo.GetVersion() <> get_setting("LastRunVersion")
         ' Ensure the user hasn't disabled Whats New popups
@@ -223,6 +234,8 @@ sub Main (args as dynamic) as void
                 end if
             else if selectedItem.type = "MusicAlbum"
                 group = CreateAlbumView(selectedItem.json)
+            else if selectedItem.type = "Playlist"
+                group = CreatePlaylistView(selectedItem.json)
             else if selectedItem.type = "Audio"
                 m.global.queueManager.callFunc("clear")
                 m.global.queueManager.callFunc("push", selectedItem.json)
@@ -259,6 +272,14 @@ sub Main (args as dynamic) as void
             node = albums.musicArtistAppearsOnData.items[ptr]
             group = CreateAlbumView(node)
         else if isNodeEvent(msg, "playSong")
+            ' User has selected audio they want us to play
+            selectedIndex = msg.getData()
+            screenContent = msg.getRoSGNode()
+
+            m.global.queueManager.callFunc("clear")
+            m.global.queueManager.callFunc("push", screenContent.albumData.items[selectedIndex])
+            m.global.queueManager.callFunc("playQueue")
+        else if isNodeEvent(msg, "playItem")
             ' User has selected audio they want us to play
             selectedIndex = msg.getData()
             screenContent = msg.getRoSGNode()
@@ -382,6 +403,7 @@ sub Main (args as dynamic) as void
             btn = getButton(msg)
             group = sceneManager.callFunc("getActiveScene")
             if btn <> invalid and btn.id = "play-button"
+
                 ' Check if a specific Audio Stream was selected
                 audio_stream_idx = 1
                 if group.selectedAudioStreamIndex <> invalid
@@ -394,7 +416,6 @@ sub Main (args as dynamic) as void
                     mediaSourceId = group.selectedVideoStreamId
                 end if
                 video_id = group.id
-
                 video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx)
                 if video <> invalid and video.errorMsg <> "introaborted"
                     sceneManager.callFunc("pushScene", video)
@@ -412,6 +433,9 @@ sub Main (args as dynamic) as void
                 end if
 
             else if btn <> invalid and btn.id = "trailer-button"
+                dialog = createObject("roSGNode", "ProgressDialog")
+                dialog.title = tr("Loading trailer")
+                m.scene.dialog = dialog
                 audio_stream_idx = 1
                 mediaSourceId = invalid
                 video_id = group.id
@@ -423,6 +447,7 @@ sub Main (args as dynamic) as void
                 video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx, false, false)
                 if video <> invalid and video.errorMsg <> "introaborted"
                     sceneManager.callFunc("pushScene", video)
+                    dialog.close = true
                 end if
 
                 if group.lastFocus <> invalid

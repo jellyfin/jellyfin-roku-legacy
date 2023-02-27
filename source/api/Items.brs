@@ -76,6 +76,7 @@ function ItemMetaData(id as string)
     resp = APIRequest(url)
     data = getJson(resp)
     if data = invalid then return invalid
+
     imgParams = {}
     if data.type <> "Audio"
         if data?.UserData?.PlayedPercentage <> invalid
@@ -250,6 +251,30 @@ function GetSongsByArtist(id as string)
     return data
 end function
 
+' Get Items that are under the provided item
+function PlaylistItemList(id as string)
+    url = Substitute("Playlists/{0}/Items", id)
+    resp = APIRequest(url, {
+        "UserId": get_setting("active_user")
+    })
+
+    results = []
+    data = getJson(resp)
+
+    if data = invalid then return invalid
+    if data.Items = invalid then return invalid
+    if data.Items.Count() = 0 then return invalid
+
+    for each item in data.Items
+        tmp = CreateObject("roSGNode", "PlaylistData")
+        tmp.image = PosterImage(item.id)
+        tmp.json = item
+        results.push(tmp)
+    end for
+    data.Items = results
+    return data
+end function
+
 ' Get Songs that are on an Album
 function MusicSongList(id as string)
     url = Substitute("Users/{0}/Items", get_setting("active_user"), id)
@@ -400,5 +425,25 @@ function TVEpisodes(show_id as string, season_id as string)
         results.push(tmp)
     end for
     data.Items = results
+    return data
+end function
+
+function TVEpisodeShuffleList(show_id as string)
+    url = Substitute("Shows/{0}/Episodes", show_id)
+    resp = APIRequest(url, {
+        "UserId": get_setting("active_user"),
+        "Limit": 200,
+        "sortBy": "Random"
+    })
+
+    data = getJson(resp)
+    results = []
+    for each item in data.Items
+        tmp = CreateObject("roSGNode", "TVEpisodeData")
+        tmp.json = item
+        results.push(tmp)
+    end for
+    data.Items = results
+
     return data
 end function

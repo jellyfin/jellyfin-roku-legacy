@@ -9,7 +9,11 @@
     <function name="clearPreviousScene" />
     <function name="resetTime" />
     <function name="userMessage" />
+    <function name="standardDialog" />
+    <function name="radioDialog" />
+    <function name="optionDialog" />
     <field id="currentUser" type="string" onChange="updateUser" />
+    <field id="returnData" type="assocarray" />
   </interface>
   <script type="text/brightscript" uri="SceneManager.brs" />
 </component>

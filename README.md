@@ -1,7 +1,5 @@
-<p>
-    <h1 style="text-align: center;">Jellyfin app for Roku</h1>
-    <h3 style="text-align: center;">Part of the <a href="https://jellyfin.media/">Jellyfin</a> Project</h3>
-</p>
+<h1 style="text-align: center;">Jellyfin app for Roku</h1>
+<h3 style="text-align: center;">Part of the <a href="https://jellyfin.media/">Jellyfin</a> Project</h3>
 
 <p align="center">
 <img alt="Logo banner" src="https://raw.githubusercontent.com/jellyfin/jellyfin-ux/master/branding/SVG/banner-logo-solid.svg?sanitize=true"/>
@@ -26,8 +24,6 @@
 
 The Jellyfin Roku App is a Jellyfin client for Roku Devices.  This is still very much a work in progress, so we would encourage you to [get involved](#get_involved) if you can.
 
-
-
 ## Getting Started
 
 The channel is available on the [Roku Channel Store](https://my.roku.com/add/jellyfin).
@@ -40,4 +36,4 @@ Feature requests are always welcome too, but please have a read though the exist
 
 If you fancy some development, then read the [DEVGUIDE](DEVGUIDE.md) to find out the best ways to help.
 
-As Roku have severely limited their Beta channel programme, the best way to test pre-release versions is by following the [DEVGUIDE](DEVGUIDE.md) to install and test the latest changes.  Feedback is always welcome.
+As Roku have severely limited their Beta channel program, the best way to test pre-release versions is by following the [DEVGUIDE](DEVGUIDE.md) to install and test the latest changes.  Feedback is always welcome.

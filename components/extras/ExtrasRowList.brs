@@ -59,7 +59,6 @@ sub onAdditionalPartsLoaded()
     else
         m.top.rowItemSize = [[234, 396]]
     end if
-    m.top.translation = "[75,10]"
 
     ' Load Cast and Crew and everything else...
     m.LoadPeopleTask.peopleList = m.people
