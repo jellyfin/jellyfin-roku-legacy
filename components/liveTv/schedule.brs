@@ -200,7 +200,7 @@ sub advanceGuide()
     startIdex = -1
     'Load more Channels when grid is scrolled
     'if focus comes within 6 rows of the end load more channels
-    if m.top.channelChanged > (m.top.channelsLoaded - 6)
+    if m.top.channelChanged > (m.top.channelsLoaded - 10)
         'add loaded channels count to advance guide
         m.top.channelsLoaded = m.top.channelsLoaded + m.LoadChannelsTask.limit
         'advance start index to get new channels
