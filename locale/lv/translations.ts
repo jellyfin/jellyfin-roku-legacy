@@ -192,59 +192,6 @@
             <source>Unable to load Channel Data from the server</source>
             <translation>Nespēja ielādēt Kanālu Datus no servera</translation>
         </message>
-    </context>
-    <context>
-        <name></name>
-        <message>
-            <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
-            <source>NO_ITEMS</source>
-            <translation>Šī %1 nesatur vienumus</translation>
-        </message>
-        <message>
-            <source>An error was encountered while playing this item.</source>
-            <translation>Notika kļūda atskaņojot šo vienumu.</translation>
-            <extracomment>Dialog detail when error occurs during playback</extracomment>
-        </message>
-        <message>
-            <source>There was an error retrieving the data for this item from the server.</source>
-            <translation>Notika kļūda saņemot datus šim vienumam no servera.</translation>
-            <extracomment>Dialog detail when unable to load Content from Server</extracomment>
-        </message>
-        <message>
-            <source>Error During Playback</source>
-            <translation>Kļūda Atskaņošanas Laikā</translation>
-            <extracomment>Dialog title when error occurs during playback</extracomment>
-        </message>
-        <message>
-            <source>Error Retrieving Content</source>
-            <translation>Kļūda Saņemot Saturu</translation>
-            <extracomment>Dialog title when unable to load Content from Server</extracomment>
-        </message>
-        <message>
-            <source>An error was encountered while playing this item.</source>
-            <translation>Notika kļūda atskaņojot šo vienumu.</translation>
-            <extracomment>Dialog detail when error occurs during playback</extracomment>
-        </message>
-        <message>
-            <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
-            <source>NO_ITEMS</source>
-            <translation>Šī %1 nesatur vienumus</translation>
-        </message>
-        <message>
-            <source>There was an error retrieving the data for this item from the server.</source>
-            <translation>Notika kļūda saņemot datus šim vienumam no servera.</translation>
-            <extracomment>Dialog detail when unable to load Content from Server</extracomment>
-        </message>
-        <message>
-            <source>Error During Playback</source>
-            <translation>Kļūda Atskaņošanas Laikā</translation>
-            <extracomment>Dialog title when error occurs during playback</extracomment>
-        </message>
-        <message>
-            <source>Error Retrieving Content</source>
-            <translation>Kļūda Saņemot Saturu</translation>
-            <extracomment>Dialog title when unable to load Content from Server</extracomment>
-        </message>
         <message>
             <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
             <source>NO_ITEMS</source>
