@@ -6,7 +6,7 @@
         <name>default</name>
         <message>
             <source>192.168.1.100:8096 or https://example.com/jellyfin</source>
-            <translation>Standard: 192.168.1.100:8096 oder https://example.com/jellyfin</translation>
+            <translation>192.168.1.100:8096 oder https://example.com/jellyfin</translation>
         </message>
         <message>
             <source>Cancel</source>
