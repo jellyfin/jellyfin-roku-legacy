@@ -337,11 +337,14 @@ function CreateMovieDetailsGroup(movie)
     group.optionsAvailable = false
     m.global.sceneManager.callFunc("pushScene", group)
 
-    movie = ItemMetaData(movie.id)
-    group.itemContent = movie
+    movieMetaData = ItemMetaData(movie.id)
+    group.itemContent = movieMetaData
     group.trailerAvailable = false
 
-    trailerData = api_API().users.getlocaltrailers(get_setting("active_user"), movie.id)
+    activeUser = get_setting("active_user")
+    if isValid(activeUser) and isValid(movie.id)
+        trailerData = api_API().users.getlocaltrailers(activeUser, movie.id)
+    end if
     if isValid(trailerData)
         group.trailerAvailable = trailerData.Count() > 0
     end if
@@ -353,7 +356,7 @@ function CreateMovieDetailsGroup(movie)
 
     extras = group.findNode("extrasGrid")
     extras.observeField("selectedItem", m.port)
-    extras.callFunc("loadParts", movie.json)
+    extras.callFunc("loadParts", movieMetaData.json)
     stopLoadingSpinner()
     return group
 end function
