@@ -24,9 +24,14 @@ jobs:
         with:
           packages: libxml2-utils xmlstarlet
       - name: Validate XML syntax
-        run: xmllint --noout ./locale/*/*.ts
-      - name: Check XML for duplicate entries
-        run: xmlstarlet sel -t -m '/TS/context/message/source' -o 'Duplicate entry found in:' -f -o ' ' -c '.' -nl ./locale/*/*.ts | sort | uniq -d
+        run: xmllint --noout ./locale/en_US/translations.ts
+      - name: Check for duplicates
+        run: xmlstarlet sel -t -m '/TS/context/message/source' -f -o ' ' -c '.' -nl ./locale/en_US/translations.ts | sort | uniq -d
+      - name: Save output of duplicate check
+        run: echo "tsDuplicates=$(xmlstarlet sel -t -m '/TS/context/message/source' -c '.' -nl ./locale/en_US/translations.ts | sort | uniq -d | awk '{ printf "%s", $0 }')" >> $GITHUB_ENV
+      - name: Duplicates found
+        if: env.tsDuplicates != ''
+        run: exit 1
   json:
     runs-on: ubuntu-latest
     steps:
