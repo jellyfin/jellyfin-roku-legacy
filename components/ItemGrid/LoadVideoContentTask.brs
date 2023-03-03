@@ -1204,6 +1204,7 @@ function CreateMovieDetailsGroup(movie)
     group.trailerAvailable = false
 
     activeUser = get_setting("active_user")
+    trailerData = invalid
     if isValid(activeUser) and isValid(movie.id)
         trailerData = api_API().users.getlocaltrailers(activeUser, movie.id)
     end if
