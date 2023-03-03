@@ -252,6 +252,14 @@ function getDeviceProfile() as object
         })
     end if
 
+    ' Allow more subtitles types to be streamed without transcoding
+    if get_user_setting("playback.subs.custom") = "true"
+        deviceProfile.SubtitleProfiles.push({
+            "Format": "ass",
+            "Method": "External"
+        })
+    end if
+
     return deviceProfile
 end function
 

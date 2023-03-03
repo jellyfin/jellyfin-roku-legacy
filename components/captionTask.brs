@@ -40,12 +40,17 @@ end sub
 
 sub fetchCaption()
     m.captionTimer.control = "stop"
-    re = CreateObject("roRegex", "(http.*?\.vtt)", "s")
-    url = re.match(m.top.url)[0]
-    if url <> invalid
-        m.reader.setUrl(url)
+    re = CreateObject("roRegex", "(http.*?\.(vtt|ass))", "s")
+    url = re.match(m.top.url)
+    if url[0] <> invalid
+        m.reader.setUrl(url[0])
         text = m.reader.GetToString()
-        m.captionList = parseVTT(text)
+        subtype = url[2]
+        if subtype = "vtt"
+            m.captionList = parseVTT(text)
+        else if subtype = "ass"
+            m.captionList = parseASS(text)
+        end if
         m.captionTimer.control = "start"
     else
         m.captionTimer.control = "stop"
@@ -143,5 +148,65 @@ function parseVTT(lines)
             end if
         end if
     end for
+    return entries
+end function
+
+function trimASSText(text)
+    text = text.trim()
+    ' filter out style override
+    ' TODO: honor the style and style override
+    ' TODO: inline comments
+    re = CreateObject("roRegex", "\{(?:[^}{]+|(?R))*+\}", "s")
+    text = re.ReplaceAll(text, "")
+    return text
+end function
+
+function parseASS(lines)
+    lines = lines.split(chr(10))
+
+    reFormat = CreateObject("roRegex", "Format: (.*)", "s")
+    reLine = CreateObject("roRegex", "Dialogue: (.*)", "s")
+
+    startIndex = -1
+    endIndex = -1
+    textIndex = -1
+
+    entries = []
+
+    for i = 0 to lines.count() - 1
+        format = reFormat.match(lines[i])[1]
+        if format <> invalid
+            format = format.tokenize(",")
+            for j = 0 to format.count() - 1
+                f = format[j].trim()
+                if f = "Start"
+                    startIndex = j
+                else if f = "End"
+                    endIndex = j
+                else if f = "Text"
+                    ' Text should always be the last field
+                    textIndex = j
+                end if
+            end for
+        end if
+
+        if startIndex <> -1
+            dialoge = reLine.match(lines[i])[1]
+            if dialoge <> invalid
+                dialoge = dialoge.split(",")
+                msStart = toMs(dialoge[startIndex].trim())
+                msEnd = toMs(dialoge[endIndex].trim())
+                text = []
+                for j = textIndex to dialoge.count() - 1
+                    text.push(dialoge[j])
+                end for
+                trimmed = trimASSText(text.join(","))
+
+                entry = { "start": msStart, "end": msEnd, "text": trimmed }
+                entries.push(entry)
+            end if
+        end if
+    end for
+
     return entries
 end function
