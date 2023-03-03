@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="SceneManager" extends="Group">
   <interface>
     <function name="pushScene" />
@@ -16,4 +16,5 @@
     <field id="returnData" type="assocarray" />
   </interface>
   <script type="text/brightscript" uri="SceneManager.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>

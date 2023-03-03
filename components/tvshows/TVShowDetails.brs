@@ -8,6 +8,8 @@ sub init()
     m.getShuffleEpisodesTask = createObject("roSGNode", "getShuffleEpisodesTask")
     m.Shuffle = m.top.findNode("Shuffle")
     m.extrasSlider.visible = true
+
+    updateFont(m.top)
 end sub
 
 sub itemContentChanged()

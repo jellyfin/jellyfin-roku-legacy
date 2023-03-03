@@ -18,6 +18,7 @@ sub init()
     posterBackgrounds = m.global.constants.poster_bg_pallet
     m.backdrop.color = posterBackgrounds[rnd(posterBackgrounds.count()) - 1]
 
+    updateFont(m.top)
 end sub
 
 

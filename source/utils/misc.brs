@@ -352,3 +352,24 @@ sub stopLoadingSpinner()
         m.scene.dialog.close = true
     end if
 end sub
+
+sub updateFont(parent)
+    if m.global.fallbackFont <> invalid
+        updateFontWorker(parent)
+    end if
+end sub
+
+sub updateFontWorker(parent)
+    for each node in parent.getChildren(-1, 0)
+        if node.font <> invalid
+            node.font.uri = m.global.fallbackFont
+            if node.isSubType("Label")
+                node.lineSpacing = 0
+            end if
+        else if node.rowLabelFont <> invalid
+            node.rowLabelFont.uri = m.global.fallbackFont
+        end if
+
+        updateFontWorker(node)
+    end for
+end sub

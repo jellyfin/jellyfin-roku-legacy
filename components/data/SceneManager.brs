@@ -202,6 +202,7 @@ end sub
 ' Update overhang title
 sub updateOverhangTitle(msg)
     m.overhang.title = msg.getData()
+    updateFont(m.overhang)
 end sub
 
 

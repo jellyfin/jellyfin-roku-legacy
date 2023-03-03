@@ -23,6 +23,7 @@ sub setupNodes()
     m.genreList = m.top.findNode("genrelist")
     m.infoGroup = m.top.findNode("infoGroup")
     m.star = m.top.findNode("star")
+    updateFont(m.top)
 end sub
 
 sub init()

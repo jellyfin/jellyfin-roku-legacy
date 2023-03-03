@@ -25,6 +25,8 @@ sub init()
     m.trailerButton.text = tr("Play Trailer")
 
     m.top.observeField("itemContent", "itemContentChanged")
+
+    updateFont(m.top)
 end sub
 
 sub OnScreenShown()

@@ -49,15 +49,6 @@ sub Main (args as dynamic) as void
     if not LoginFlow() then return
     sceneManager.callFunc("clearScenes")
 
-    ' load home page
-    sceneManager.currentUser = m.user.Name
-    group = CreateHomeGroup()
-    group.userConfig = m.user.configuration
-    group.callFunc("loadLibraries")
-    sceneManager.callFunc("pushScene", group)
-
-    m.scene.observeField("exit", m.port)
-
     ' Downloads and stores a fallback font to tmp:/
     if parseJSON(APIRequest("/System/Configuration/encoding").GetToString())["EnableFallbackFont"] = true
         re = CreateObject("roRegex", "Name.:.(.*?).,.Size", "s")
@@ -67,7 +58,24 @@ sub Main (args as dynamic) as void
             filename = filename[1]
             APIRequest("FallbackFont/Fonts/" + filename).gettofile("tmp:/font")
         end if
+
+
+        ' Check the result font
+        fs = CreateObject("roFileSystem")
+        fontlist = fs.Find("tmp:/", "font")
+        if fontlist.count() > 0
+            m.global.addFields({ fallbackFont: "tmp:/" + fontlist[0] })
+        end if
     end if
+
+    ' load home page
+    sceneManager.currentUser = m.user.Name
+    group = CreateHomeGroup()
+    group.userConfig = m.user.configuration
+    group.callFunc("loadLibraries")
+    sceneManager.callFunc("pushScene", group)
+
+    m.scene.observeField("exit", m.port)
 
     ' Only show the Whats New popup the first time a user runs a new client version.
     if appInfo.GetVersion() <> get_setting("LastRunVersion")

@@ -26,6 +26,7 @@ sub init()
         m.itemPoster.loadDisplayMode = m.topParent.imageDisplayMode
     end if
 
+    updateFont(m.top)
 end sub
 
 sub itemContentChanged()
