@@ -341,11 +341,7 @@ function CreateMovieDetailsGroup(movie)
     group.itemContent = movieMetaData
     group.trailerAvailable = false
 
-    activeUser = get_setting("active_user")
-    trailerData = invalid
-    if isValid(activeUser) and isValid(movie.id)
-        trailerData = api_API().users.getlocaltrailers(activeUser, movie.id)
-    end if
+    trailerData = api_API().users.getlocaltrailers(get_setting("active_user"), movie.id)
     if isValid(trailerData)
         group.trailerAvailable = trailerData.Count() > 0
     end if
