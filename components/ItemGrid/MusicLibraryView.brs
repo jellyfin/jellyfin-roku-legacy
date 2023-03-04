@@ -63,10 +63,12 @@ sub init()
     m.sortAscending = true
 
     m.filter = "All"
+    m.filterOptions = {}
     m.favorite = "Favorite"
 
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
     m.loadLogoTask = createObject("roSGNode", "LoadItemsTask2")
+    m.getFiltersTask = createObject("roSGNode", "GetFiltersTask")
 
     'set inital counts for overhang before content is loaded.
     m.loadItemsTask.totalRecordCount = 0
@@ -123,11 +125,15 @@ sub loadInitialItems()
     m.sortField = get_user_setting("display." + m.top.parentItem.Id + ".sortField")
     sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
     m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
+    m.filterOptions = get_user_setting("display." + m.top.parentItem.Id + ".filterOptions")
     m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
 
     if not isValid(m.sortField) then m.sortField = "SortName"
     if not isValid(m.filter) then m.filter = "All"
+    if not isValid(m.filterOptions) then m.filterOptions = "{}"
     if not isValid(m.view) then m.view = "ArtistsPresentation"
+
+    m.filterOptions = ParseJson(m.filterOptions)
 
     if sortAscendingStr = invalid or LCase(sortAscendingStr) = "true"
         m.sortAscending = true
@@ -158,6 +164,7 @@ sub loadInitialItems()
     m.loadItemsTask.sortField = m.sortField
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
+    m.loadItemsTask.filterOptions = m.filterOptions
     m.loadItemsTask.startIndex = 0
 
     ' Load Item Types
@@ -170,11 +177,13 @@ sub loadInitialItems()
     m.loadItemsTask.view = "Artists"
     m.itemGrid.translation = "[96, 420]"
     m.itemGrid.numRows = "3"
+    filterItemType = ""
 
     if LCase(m.options.view) = "albums" or LCase(m.view) = "albums"
         m.itemGrid.translation = "[96, 60]"
         m.itemGrid.numRows = "4"
         m.loadItemsTask.itemType = "MusicAlbum"
+        filterItemType = "musicalbum"
         m.top.imageDisplayMode = "scaleToFit"
     else if LCase(m.options.view) = "artistsgrid" or LCase(m.view) = "artistsgrid"
         m.itemGrid.translation = "[96, 60]"
@@ -197,7 +206,103 @@ sub loadInitialItems()
     m.loadItemsTask.observeField("content", "ItemDataLoaded")
     m.spinner.visible = true
     m.loadItemsTask.control = "RUN"
-    SetUpOptions()
+
+    m.getFiltersTask.observeField("filters", "FilterDataLoaded")
+    m.getFiltersTask.params = {
+        userid: get_setting("active_user"),
+        parentid: m.top.parentItem.Id,
+        includeitemtypes: filterItemType
+    }
+    m.getFiltersTask.control = "RUN"
+
+end sub
+
+'
+' Logo Image Loaded Event Handler
+sub FilterDataLoaded(msg)
+    options = {}
+    options.filter = []
+    options.favorite = []
+
+    setMusicOptions(options)
+
+    data = msg.GetData()
+    m.getFiltersTask.unobserveField("filters")
+
+    if not isValid(data) then return
+
+    ' Add Music filters from the API data
+    if LCase(m.loadItemsTask.itemType) = "musicartist" or LCase(m.loadItemsTask.itemType) = "musicalbum"
+        if isValid(data.genres)
+            options.filter.push({ "Title": tr("Genres"), "Name": "Genres", "Options": data.genres, "Delimiter": "|", "CheckedState": [] })
+        end if
+    end if
+
+    if LCase(m.loadItemsTask.itemType) = "musicalbum"
+        if isValid(data.Years)
+            options.filter.push({ "Title": tr("Years"), "Name": "Years", "Options": data.Years, "Delimiter": ",", "CheckedState": [] })
+        end if
+    end if
+
+    setSelectedOptions(options)
+
+    m.options.options = options
+end sub
+
+' Data to display when options button selected
+sub setSelectedOptions(options)
+
+    ' Set selected view option
+    for each o in options.views
+        if o.Name = m.view
+            o.Selected = true
+            o.Ascending = m.sortAscending
+            m.options.view = o.Name
+        end if
+    end for
+
+    ' Set selected sort option
+    for each o in options.sort
+        if o.Name = m.sortField
+            o.Selected = true
+            o.Ascending = m.sortAscending
+            m.options.sortField = o.Name
+        end if
+    end for
+
+    ' Set selected filter
+    for each o in options.filter
+        if o.Name = m.filter
+            o.Selected = true
+            m.options.filter = o.Name
+        end if
+
+        ' Select selected filter options
+        if isValid(o.options) and isValid(m.filterOptions)
+            if o.options.Count() > 0 and m.filterOptions.Count() > 0
+                if LCase(o.Name) = LCase(m.filterOptions.keys()[0])
+                    selectedFilterOptions = m.filterOptions[m.filterOptions.keys()[0]].split(o.delimiter)
+                    checkedState = []
+
+                    for each availableFilterOption in o.options
+                        matchFound = false
+
+                        for each selectedFilterOption in selectedFilterOptions
+                            if LCase(toString(availableFilterOption).trim()) = LCase(selectedFilterOption.trim())
+                                matchFound = true
+                            end if
+                        end for
+
+                        checkedState.push(matchFound)
+                    end for
+
+                    o.checkedState = checkedState
+                end if
+            end if
+        end if
+    end for
+
+    m.options.options = options
 end sub
 
 ' Set Music view, sort, and filter options
@@ -259,43 +364,6 @@ function inStringArray(array, searchValue) as boolean
     end for
     return false
 end function
-
-' Data to display when options button selected
-sub SetUpOptions()
-    options = {}
-    options.filter = []
-    options.favorite = []
-
-    setMusicOptions(options)
-
-    ' Set selected view option
-    for each o in options.views
-        if LCase(o.Name) = LCase(m.view)
-            o.Selected = true
-            o.Ascending = m.sortAscending
-            m.options.view = o.Name
-        end if
-    end for
-
-    ' Set selected sort option
-    for each o in options.sort
-        if LCase(o.Name) = LCase(m.sortField)
-            o.Selected = true
-            o.Ascending = m.sortAscending
-            m.options.sortField = o.Name
-        end if
-    end for
-
-    ' Set selected filter option
-    for each o in options.filter
-        if LCase(o.Name) = LCase(m.filter)
-            o.Selected = true
-            m.options.filter = o.Name
-        end if
-    end for
-
-    m.options.options = options
-end sub
 
 '
 ' Logo Image Loaded Event Handler
@@ -640,11 +708,20 @@ sub optionsClosed()
         set_user_setting("display." + m.top.parentItem.Id + ".filter", m.options.filter)
     end if
 
+    if not isValid(m.options.filterOptions)
+        m.filterOptions = {}
+    end if
+
+    if not AssocArrayEqual(m.options.filterOptions, m.filterOptions)
+        m.filterOptions = m.options.filterOptions
+        reload = true
+        set_user_setting("display." + m.top.parentItem.Id + ".filterOptions", FormatJson(m.options.filterOptions))
+    end if
+
     m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
 
     if m.options.view <> m.view
         m.view = m.options.view
-        m.top.view = m.view
         set_user_setting("display." + m.top.parentItem.Id + ".landing", m.view)
 
         ' Reset any filtering or search terms
@@ -652,6 +729,7 @@ sub optionsClosed()
         m.loadItemsTask.NameStartsWith = " "
         m.loadItemsTask.searchTerm = ""
         m.filter = "All"
+        m.filterOptions = {}
         m.sortField = "SortName"
         m.sortAscending = true
 
@@ -659,6 +737,7 @@ sub optionsClosed()
         set_user_setting("display." + m.top.parentItem.Id + ".sortField", m.sortField)
         set_user_setting("display." + m.top.parentItem.Id + ".sortAscending", "true")
         set_user_setting("display." + m.top.parentItem.Id + ".filter", m.filter)
+        set_user_setting("display." + m.top.parentItem.Id + ".filterOptions", FormatJson(m.filterOptions))
 
         reload = true
     end if
@@ -771,6 +850,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.top.alphaSelected = ""
         m.loadItemsTask.filter = "All"
         m.filter = "All"
+        m.filterOptions = {}
         m.data = CreateObject("roSGNode", "ContentNode")
         m.itemGrid.content = m.data
         loadInitialItems()

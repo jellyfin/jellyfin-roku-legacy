@@ -17,7 +17,7 @@
           </RadiobuttonList>
         </Group>
       </LayoutGroup>
-      <CheckList opacity="0" translation="[900, 200]" id="filterOptions" numRows="8" itemSize="[250, 70]" />
+      <CheckList opacity="0" translation="[900, 200]" id="filterOptions" numRows="8" itemSize="[450, 70]" />
       <ButtonGroup translation="[1250,50]">
         <Button id="favoriteMenu" iconUri="pkg:/images/icons/favorite.png" focusedIconUri="pkg:/images/icons/favorite.png" focusBitmapUri="" focusFootprintBitmapUri="" text="Favorite" showFocusFootprint="false"></Button>
       </ButtonGroup>
