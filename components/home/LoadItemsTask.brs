@@ -12,7 +12,7 @@ sub loadItems()
         url = Substitute("Users/{0}/Views/", get_setting("active_user"))
         resp = APIRequest(url)
         data = getJson(resp)
-        if isValid(data?.Items)
+        if isValid(data) and isValid(data.Items)
             for each item in data.Items
                 ' Skip Books for now as we don't support it (issue #525)
                 if item.CollectionType <> "books"
@@ -38,14 +38,16 @@ sub loadItems()
             resp = APIRequest(url, params)
             data = getJson(resp)
 
-            for each item in data
-                ' Skip Books for now as we don't support it (issue #525)
-                if item.Type <> "Book"
-                    tmp = CreateObject("roSGNode", "HomeData")
-                    tmp.json = item
-                    results.push(tmp)
-                end if
-            end for
+            if isValid(data)
+                for each item in data
+                    ' Skip Books for now as we don't support it (issue #525)
+                    if item.Type <> "Book"
+                        tmp = CreateObject("roSGNode", "HomeData")
+                        tmp.json = item
+                        results.push(tmp)
+                    end if
+                end for
+            end if
         end if
 
         ' Load Next Up
@@ -78,7 +80,7 @@ sub loadItems()
 
         resp = APIRequest(url, params)
         data = getJson(resp)
-        if isValid(data?.Items)
+        if isValid(data) and isValid(data.Items)
             for each item in data.Items
                 tmp = CreateObject("roSGNode", "HomeData")
                 tmp.json = item
@@ -100,7 +102,7 @@ sub loadItems()
 
             resp = APIRequest(url, params)
             data = getJson(resp)
-            if isValid(data?.Items)
+            if isValid(data) and isValid(data.Items)
                 for each item in data.Items
                     ' Skip Books for now as we don't support it (issue #558)
                     if item.Type <> "Book"
@@ -125,7 +127,7 @@ sub loadItems()
 
         resp = APIRequest(url, params)
         data = getJson(resp)
-        if isValid(data?.Items)
+        if isValid(data) and isValid(data.Items)
             for each item in data.Items
                 ' Skip Books for now as we don't support it (issue #558)
                 if item.Type <> "Book"
@@ -149,7 +151,7 @@ sub loadItems()
 
         resp = APIRequest(url, params)
         data = getJson(resp)
-        if isValid(data?.Items)
+        if isValid(data) and isValid(data.Items)
             for each item in data.Items
                 tmp = CreateObject("roSGNode", "HomeData")
                 item.ImageURL = ImageURL(item.Id)
@@ -208,7 +210,7 @@ sub loadItems()
         url = Substitute("Items/{0}/Similar", m.top.itemId)
         resp = APIRequest(url, params)
         data = getJson(resp)
-        if isValid(data?.Items)
+        if isValid(data) and isValid(data.Items)
             for each item in data.items
                 tmp = CreateObject("roSGNode", "ExtrasData")
                 tmp.posterURL = ImageUrl(item.Id, "Primary", { "Tags": item.PrimaryImageTag })
