@@ -6,7 +6,7 @@
         <name>default</name>
         <message>
             <source>192.168.1.100:8096 or https://example.com/jellyfin</source>
-            <translation>default192.168.1.100:8096 or https://example.com/jellyfin</translation>
+            <translation>192.168.1.100:8096 or https://example.com/jellyfin</translation>
         </message>
         <message>
             <source>Cancel</source>
@@ -929,11 +929,6 @@
             <extracomment>Settings Menu - Title for option</extracomment>
         </message>
         <message>
-            <source>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</source>
-            <translation>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</translation>
-            <extracomment>Settings Menu - Description for option</extracomment>
-        </message>
-        <message>
             <source>Parental Ratings</source>
             <translation>Parental Ratings</translation>
             <extracomment>Used in Filter menu</extracomment>
@@ -974,14 +969,6 @@
             <source>Default view for Movie Libraries.</source>
             <translation>Default view for Movie Libraries.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
-        </message>
-        <message>
-            <source>Movies (Presentation)</source>
-            <translation>Movies (Presentation)</translation>
-        </message>
-        <message>
-            <source>Movies (Grid)</source>
-            <translation>Movies (Grid)</translation>
         </message>
         <message>
             <source>Item Titles</source>
