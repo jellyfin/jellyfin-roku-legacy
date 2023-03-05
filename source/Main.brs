@@ -158,6 +158,8 @@ sub Main (args as dynamic) as void
                     group = CreateMovieLibraryView(selectedItem)
                 else if selectedItem.collectionType = "music"
                     group = CreateMusicLibraryView(selectedItem)
+                else if LCase(selectedItem.collectionType) = "tvshows"
+                    group = CreateTVShowLibraryView(selectedItem)
                 else
                     group = CreateItemGrid(selectedItem)
                 end if

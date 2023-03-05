@@ -521,6 +521,14 @@ function CreateMusicLibraryView(libraryItem)
     return group
 end function
 
+function CreateTVShowLibraryView(libraryItem)
+    group = CreateObject("roSGNode", "TVShowLibraryView")
+    group.parentItem = libraryItem
+    group.optionsAvailable = true
+    group.observeField("selectedItem", m.port)
+    return group
+end function
+
 function CreateSearchPage()
     ' Search + Results Page
     group = CreateObject("roSGNode", "searchResults")
