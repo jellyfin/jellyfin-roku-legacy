@@ -1,7 +1,3 @@
-'
-' View Creators
-' ----------------
-
 ' Play Audio
 sub CreateAudioPlayerView()
     m.view = CreateObject("roSGNode", "AudioPlayerView")
@@ -26,14 +22,12 @@ sub CreateVideoPlayerView()
     m.global.sceneManager.callFunc("pushScene", m.view)
 end sub
 
-
-'
+' -----------------
 ' Event Handlers
 ' -----------------
 
 ' User requested subtitle selection popup
 sub onSelectSubtitlePressed()
-
     ' None is always first in the subtitle list
     subtitleData = {
         data: [{ "description": "None", "type": "subtitleselection" }]
@@ -80,9 +74,8 @@ end sub
 
 ' User requested playback info
 sub onSelectPlaybackInfoPressed()
-
     ' Check if we already have playback info and show it in a popup
-    if isValid(m.playbackData?.playbackinfo)
+    if isValid(m.playbackData) and isValid(m.playbackData.playbackinfo)
         m.global.sceneManager.callFunc("standardDialog", tr("Playback Info"), m.playbackData.playbackinfo)
         return
     end if
@@ -95,11 +88,10 @@ sub onPlaybackInfoLoaded()
     m.playbackData = m.getPlaybackInfoTask.data
 
     ' Check if we have playback info and show it in a popup
-    if isValid(m.playbackData?.playbackinfo)
+    if isValid(m.playbackData) and isValid(m.playbackData.playbackinfo)
         m.global.sceneManager.callFunc("standardDialog", tr("Playback Info"), m.playbackData.playbackinfo)
     end if
 end sub
-
 
 ' Playback state change event handlers
 sub onStateChange()

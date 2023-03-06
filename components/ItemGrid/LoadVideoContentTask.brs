@@ -4,7 +4,7 @@ sub init()
     m.top.limit = 60
     usersettingLimit = get_user_setting("itemgrid.Limit")
 
-    if usersettingLimit <> invalid
+    if isValid(usersettingLimit)
         m.top.limit = usersettingLimit
     end if
 end sub
@@ -135,7 +135,7 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
     if m.playbackInfo.MediaSources[0].MediaStreams.Count() > 0 and meta.live = false
         tryDirectPlay = get_user_setting("playback.tryDirect.h264ProfileLevel") = "true" and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
         tryDirectPlay = tryDirectPlay or (get_user_setting("playback.tryDirect.hevcProfileLevel") = "true" and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "hevc")
-        if tryDirectPlay and m.playbackInfo.MediaSources[0].TranscodingUrl <> invalid and forceTranscoding = false
+        if tryDirectPlay and isValid(m.playbackInfo.MediaSources[0].TranscodingUrl) and forceTranscoding = false
             transcodingReasons = getTranscodeReasons(m.playbackInfo.MediaSources[0].TranscodingUrl)
             if transcodingReasons.Count() = 1 and transcodingReasons[0] = "VideoLevelNotSupported"
                 video.directPlaySupported = true
@@ -262,7 +262,7 @@ end function
 
 function directPlaySupported(meta as object) as boolean
     devinfo = CreateObject("roDeviceInfo")
-    if meta.json.MediaSources[0] <> invalid and meta.json.MediaSources[0].SupportsDirectPlay = false
+    if isValid(meta.json.MediaSources[0]) and meta.json.MediaSources[0].SupportsDirectPlay = false
         return false
     end if
 
@@ -271,10 +271,10 @@ function directPlaySupported(meta as object) as boolean
     end if
 
     streamInfo = { Codec: meta.json.MediaStreams[0].codec }
-    if meta.json.MediaStreams[0].Profile <> invalid and meta.json.MediaStreams[0].Profile.len() > 0
+    if isValid(meta.json.MediaStreams[0].Profile) and meta.json.MediaStreams[0].Profile.len() > 0
         streamInfo.Profile = LCase(meta.json.MediaStreams[0].Profile)
     end if
-    if meta.json.MediaSources[0].container <> invalid and meta.json.MediaSources[0].container.len() > 0
+    if isValid(meta.json.MediaSources[0].container) and meta.json.MediaSources[0].container.len() > 0
         'CanDecodeVideo() requires the .container to be format: “mp4”, “hls”, “mkv”, “ism”, “dash”, “ts” if its to direct stream
         if meta.json.MediaSources[0].container = "mov"
             streamInfo.Container = "mp4"
@@ -333,12 +333,12 @@ sub autoPlayNextEpisode(videoID as string, showID as string)
         resp = APIRequest(url, urlParams)
         data = getJson(resp)
 
-        if data <> invalid and data.Items.Count() = 2
+        if isValid(data) and data.Items.Count() = 2
             ' setup new video node
             nextVideo = invalid
             ' remove last videoplayer scene
             m.global.sceneManager.callFunc("clearPreviousScene")
-            if nextVideo <> invalid
+            if isValid(nextVideo)
                 m.global.sceneManager.callFunc("pushScene", nextVideo)
             else
                 m.global.sceneManager.callFunc("popScene")
@@ -356,7 +356,7 @@ end sub
 ' In the future, with a custom playback info view, we can return an associated array.
 function GetPlaybackInfo()
     sessions = api_API().sessions.get()
-    if sessions <> invalid and sessions.Count() > 0
+    if isValid(sessions) and sessions.Count() > 0
         return GetTranscodingStats(sessions[0])
     end if
 
@@ -507,7 +507,7 @@ end function
 ' returns the server-side track index for the appriate subtitle
 function defaultSubtitleTrackFromVid(video_id) as integer
     meta = ItemMetaData(video_id)
-    if meta?.json?.mediaSources <> invalid
+    if isValid(meta) and isValid(meta.json) and isValid(meta.json.mediaSources)
         subtitles = sortSubtitles(meta.id, meta.json.MediaSources[0].MediaStreams)
         default_text_subs = defaultSubtitleTrack(subtitles["all"], true) ' Find correct subtitle track (forced text)
         if default_text_subs <> -1
@@ -608,7 +608,7 @@ function sortSubtitles(id as string, MediaStreams)
         if stream.type = "Subtitle"
 
             url = ""
-            if stream.DeliveryUrl <> invalid
+            if isValid(stream.DeliveryUrl)
                 url = buildURL(stream.DeliveryUrl)
             end if
 
