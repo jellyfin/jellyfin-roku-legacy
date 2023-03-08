@@ -380,7 +380,10 @@ end function
 
 function directPlaySupported(meta as object) as boolean
     devinfo = CreateObject("roDeviceInfo")
-    if not isValid(meta.json.MediaSources[0]) or (isValid(meta.json.MediaSources[0]) and meta.json.MediaSources[0].SupportsDirectPlay = false)
+    if isValid(meta.json.MediaSources[0]) and meta.json.MediaSources[0].SupportsDirectPlay = false
+        return false
+    end if
+    if not isValid(meta.json.MediaSources[0])
         return false
     end if
 
@@ -399,7 +402,6 @@ function directPlaySupported(meta as object) as boolean
 
     decodeResult = devinfo.CanDecodeVideo(streamInfo)
     return isValid(decodeResult) and decodeResult.result
-
 end function
 
 function getContainerType(meta as object) as string

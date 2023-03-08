@@ -219,7 +219,7 @@ sub updateContinueItems()
         row.title = tr("Continue Watching")
         itemSize = [464, 331]
         for each item in itemData
-            if isValid(item.json.UserData) and isValid(item.json.UserData.PlayedPercentage)
+            if isValid(item.json) and isValid(item.json.UserData) and isValid(item.json.UserData.PlayedPercentage)
                 item.PlayedPercentage = item.json.UserData.PlayedPercentage
             end if
 
