@@ -22,7 +22,7 @@ sub init()
     'Parent is MarkupGrid and it's parent is the ItemGrid
     m.topParent = m.top.GetParent().GetParent()
     'Get the imageDisplayMode for these grid items
-    if m.topParent.imageDisplayMode <> invalid
+    if isValid(m.topParent.imageDisplayMode)
         m.itemPoster.loadDisplayMode = m.topParent.imageDisplayMode
     end if
 
@@ -44,7 +44,7 @@ sub itemContentChanged()
         m.itemText.text = itemData.Title
     else if itemData.type = "Series"
         if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
-            if itemData?.json?.UserData?.UnplayedItemCount <> invalid
+            if isValid(itemData.json) and isValid(itemData.json.UserData) and isValid(itemData.json.UserData.UnplayedItemCount)
                 if itemData.json.UserData.UnplayedItemCount > 0
                     m.unplayedCount.visible = true
                     m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
@@ -98,7 +98,7 @@ sub itemContentChanged()
 
         m.posterText.height = 200
         m.posterText.width = 280
-    else if itemData.json.type = "MusicAlbum"
+    else if isValid(itemData.json.type) and itemData.json.type = "MusicAlbum"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title
 

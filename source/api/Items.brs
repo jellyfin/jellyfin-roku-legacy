@@ -38,7 +38,6 @@ function searchMedia(query as string)
     ' This appears to be done differently on the web now
     ' For each potential type, a separate query is done:
     ' varying item types, and artists, and people
-
     if query <> ""
         resp = APIRequest(Substitute("Search/Hints", get_setting("active_user")), {
             "searchTerm": query,
@@ -54,7 +53,6 @@ function searchMedia(query as string)
             "Recursive": true,
             "limit": 100
         })
-
 
         data = getJson(resp)
         results = []
@@ -79,7 +77,7 @@ function ItemMetaData(id as string)
 
     imgParams = {}
     if data.type <> "Audio"
-        if data?.UserData?.PlayedPercentage <> invalid
+        if data.UserData <> invalid and data.UserData.PlayedPercentage <> invalid
             param = { "PercentPlayed": data.UserData.PlayedPercentage }
             imgParams.Append(param)
         end if

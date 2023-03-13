@@ -91,19 +91,23 @@ function get_dialog_result(dialog, port)
 end function
 
 function lastFocusedChild(obj as object) as object
-    if LCase(obj.focusedChild.focusedChild.subType()) = "tvepisodes"
-        if isValid(obj?.focusedChild?.focusedChild?.lastFocus)
-            return obj.focusedChild.focusedChild.lastFocus
+    if isValid(obj)
+        if isValid(obj.focusedChild) and isValid(obj.focusedChild.focusedChild) and LCase(obj.focusedChild.focusedChild.subType()) = "tvepisodes"
+            if isValid(obj.focusedChild.focusedChild.lastFocus)
+                return obj.focusedChild.focusedChild.lastFocus
+            end if
         end if
-    end if
 
-    child = obj
-    for i = 0 to obj.getChildCount()
-        if obj.focusedChild <> invalid
-            child = child.focusedChild
-        end if
-    end for
-    return child
+        child = obj
+        for i = 0 to obj.getChildCount()
+            if isValid(obj.focusedChild)
+                child = child.focusedChild
+            end if
+        end for
+        return child
+    else
+        return invalid
+    end if
 end function
 
 function show_dialog(message as string, options = [], defaultSelection = 0) as integer
@@ -348,7 +352,7 @@ sub stopLoadingSpinner()
     if isValid(m.spinner)
         m.spinner.visible = false
     end if
-    if isValid(m.scene?.dialog)
+    if isValid(m.scene) and isValid(m.scene.dialog)
         m.scene.dialog.close = true
     end if
 end sub
