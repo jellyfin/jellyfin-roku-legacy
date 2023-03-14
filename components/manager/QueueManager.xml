@@ -8,6 +8,8 @@
     <function name="getItemByIndex" />
     <function name="getPosition" />
     <function name="getQueue" />
+    <function name="getQueueTypes" />
+    <function name="getQueueUniqueTypes" />
     <function name="moveBack" />
     <function name="moveForward" />
     <function name="peek" />

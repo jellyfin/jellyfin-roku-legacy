@@ -5,7 +5,8 @@ sub init()
     m.extrasSlider = m.top.findNode("tvSeasonExtras")
     m.unplayedCount = m.top.findNode("unplayedCount")
     m.unplayedEpisodeCount = m.top.findNode("unplayedEpisodeCount")
-    'm.extrasSlider.translation = [30,1014]
+    m.getShuffleEpisodesTask = createObject("roSGNode", "getShuffleEpisodesTask")
+    m.Shuffle = m.top.findNode("Shuffle")
     m.extrasSlider.visible = true
 end sub
 
@@ -16,7 +17,7 @@ sub itemContentChanged()
     itemData = item.json
 
     if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
-        if itemData?.UserData?.UnplayedItemCount <> invalid
+        if isValid(itemData.UserData) and isValid(itemData.UserData.UnplayedItemCount)
             if itemData.UserData.UnplayedItemCount > 0
                 m.unplayedCount.visible = true
                 m.unplayedEpisodeCount.text = itemData.UserData.UnplayedItemCount
@@ -30,21 +31,21 @@ sub itemContentChanged()
     m.top.overhangTitle = itemData.name
 
     'Check production year, if invalid remove label
-    if itemData.productionYear <> invalid
+    if isValid(itemData.productionYear)
         setFieldText("releaseYear", itemData.productionYear)
     else
         m.top.findNode("main_group").removeChild(m.top.findNode("releaseYear"))
     end if
 
     'Check officialRating, if invalid remove label
-    if itemData.officialRating <> invalid
+    if isValid(itemData.officialRating)
         setFieldText("officialRating", itemData.officialRating)
     else
         m.top.findNode("main_group").removeChild(m.top.findNode("officialRating"))
     end if
 
     'Check communityRating, if invalid remove label
-    if itemData.communityRating <> invalid
+    if isValid(itemData.communityRating)
         m.top.findNode("star").visible = true
         setFieldText("communityRating", int(itemData.communityRating * 10) / 10)
     else
@@ -55,6 +56,7 @@ sub itemContentChanged()
 
     setFieldText("overview", itemData.overview)
 
+    m.Shuffle.visible = true
 
     if type(itemData.RunTimeTicks) = "LongInteger"
         setFieldText("runtime", stri(getRuntime()) + " mins")
@@ -132,7 +134,7 @@ function getHistory() as string
 
     airdays = itemData.airdays
     airtime = itemData.airtime
-    if airtime <> invalid and airdays.count() = 1
+    if isValid(airtime) and airdays.count() = 1
         airwords = airdays[0] + " at " + airtime
     end if
 
@@ -146,10 +148,10 @@ function getHistory() as string
     end if
 
     words = verb
-    if airwords <> invalid
+    if isValid(airwords)
         words = words + " " + airwords
     end if
-    if studio <> invalid
+    if isValid(studio)
         words = words + " on " + studio
     end if
 
@@ -170,7 +172,22 @@ function round(f as float) as integer
     end if
 end function
 
+sub onShuffleEpisodeDataLoaded()
+    m.getShuffleEpisodesTask.unobserveField("data")
+    m.global.queueManager.callFunc("set", m.getShuffleEpisodesTask.data.items)
+    m.global.queueManager.callFunc("playQueue")
+end sub
+
 function onKeyEvent(key as string, press as boolean) as boolean
+    if key = "OK" or key = "play"
+        if m.Shuffle.hasFocus()
+            m.getShuffleEpisodesTask.showID = m.top.itemContent.id
+            m.getShuffleEpisodesTask.observeField("data", "onShuffleEpisodeDataLoaded")
+            m.getShuffleEpisodesTask.control = "RUN"
+            return true
+        end if
+    end if
+
     if not press then return false
 
     overview = m.top.findNode("overview")
@@ -178,6 +195,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
     bottomGrp = m.top.findNode("extrasGrid")
 
     if key = "down" and overview.hasFocus()
+        m.Shuffle.setFocus(true)
+        return true
+    else if key = "down" and m.Shuffle.hasFocus()
         topGrp.setFocus(true)
         return true
     else if key = "down" and topGrp.hasFocus()
@@ -195,6 +215,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
             return true
         end if
     else if key = "up" and topGrp.hasFocus()
+        m.Shuffle.setFocus(true)
+        return true
+    else if key = "up" and m.Shuffle.hasFocus()
         overview.setFocus(true)
         return true
     end if

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="LoadVideoContentTask" extends="Task">
+  <interface>
+    <field id="itemId" type="string" />
+    <field id="startIndex" type="integer" value="0" />
+    <field id="itemType" type="string" value="" />
+    <field id="limit" type="integer" value="60" />
+    <field id="metadata" type="assocarray" />
+    <field id="sortField" type="string" value="SortName" />
+    <field id="sortAscending" type="boolean" value="true" />
+    <field id="nameStartsWith" type="string" value="" />
+    <field id="recursive" type="boolean" value="true" />
+    <field id="filter" type="string" value="All" />
+    <field id="searchTerm" type="string" value="" />
+    <field id="studioIds" type="string" value="" />
+    <field id="genreIds" type="string" value="" />
+    <field id="view" type="string" value="" />
+    <!-- Total records available from server-->
+    <field id="totalRecordCount" type="int" value="-1" />
+    <field id="content" type="array" />
+  </interface>
+  <script type="text/brightscript" uri="LoadVideoContentTask.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/UserLibrary.brs" />
+  <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
+  <script type="text/brightscript" uri="pkg:/source/api/userauth.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
+</component>

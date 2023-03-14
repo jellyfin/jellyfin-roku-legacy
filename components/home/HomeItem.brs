@@ -33,13 +33,13 @@ sub itemContentChanged()
 
     m.backdrop.width = itemData.imageWidth
 
-    if itemData.iconUrl <> invalid
+    if isValid(itemData.iconUrl)
         m.itemIcon.uri = itemData.iconUrl
     end if
 
     if LCase(itemData.type) = "series"
         if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
-            if itemData?.json?.UserData?.UnplayedItemCount <> invalid
+            if isValid(itemData.json.UserData) and isValid(itemData.json.UserData.UnplayedItemCount)
                 if itemData.json.UserData.UnplayedItemCount > 0
                     m.unplayedCount.visible = true
                     m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
@@ -84,7 +84,7 @@ sub itemContentChanged()
         end if
 
         ' Set Episode title if available
-        if itemData.json.EpisodeTitle <> invalid
+        if isValid(itemData.json.EpisodeTitle)
             m.itemTextExtra.text = itemData.json.EpisodeTitle
         end if
 
@@ -106,10 +106,10 @@ sub itemContentChanged()
 
         ' Set Series and Episode Number for Extra Text
         extraPrefix = ""
-        if itemData.json.ParentIndexNumber <> invalid
+        if isValid(itemData.json.ParentIndexNumber)
             extraPrefix = "S" + StrI(itemData.json.ParentIndexNumber).trim()
         end if
-        if itemData.json.IndexNumber <> invalid
+        if isValid(itemData.json.IndexNumber)
             extraPrefix = extraPrefix + "E" + StrI(itemData.json.IndexNumber).trim()
         end if
         if extraPrefix.len() > 0
@@ -136,10 +136,10 @@ sub itemContentChanged()
 
         ' Set Release Year and Age Rating for Extra Text
         textExtra = ""
-        if itemData.json.ProductionYear <> invalid
+        if isValid(itemData.json.ProductionYear)
             textExtra = StrI(itemData.json.ProductionYear).trim()
         end if
-        if itemData.json.OfficialRating <> invalid
+        if isValid(itemData.json.OfficialRating)
             if textExtra <> ""
                 textExtra = textExtra + " - " + itemData.json.OfficialRating
             else
@@ -181,14 +181,14 @@ sub itemContentChanged()
         end if
 
         textExtra = ""
-        if itemData.json.ProductionYear <> invalid
+        if isValid(itemData.json.ProductionYear)
             textExtra = StrI(itemData.json.ProductionYear).trim()
         end if
 
         ' Set Years Run for Extra Text
         if itemData.json.Status = "Continuing"
             textExtra = textExtra + " - Present"
-        else if itemData.json.Status = "Ended" and itemData.json.EndDate <> invalid
+        else if itemData.json.Status = "Ended" and isValid(itemData.json.EndDate)
             textExtra = textExtra + " - " + LEFT(itemData.json.EndDate, 4)
         end if
         m.itemTextExtra.text = textExtra

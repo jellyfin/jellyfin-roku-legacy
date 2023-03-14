@@ -6,13 +6,19 @@
   "devDependencies": {
     "@rokucommunity/bslint": "0.8.1",
     "brighterscript": "0.61.3",
-    "ropm": "0.10.11"
+    "ropm": "0.10.11",
+    "jshint": "^2.13.6",
+    "markdownlint-cli2": "0.6.0",
+    "spellchecker-cli": "6.1.1"
   },
   "scripts": {
     "postinstall": "npx ropm copy",
     "validate": "npx bsc --copy-to-staging=false --create-package=false",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "bslint",
+    "lint-json": "jshint --extra-ext .json --verbose --exclude node_modules ./",
+    "lint-markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
+    "lint-spelling": "spellchecker -d dictionary.txt --files \"**/*.md\" \"**/.*/**/*.md\" \"!node_modules/**/*.md\"",
     "check-formatting": "npx bsfmt --check",
     "format": "npx bsfmt --write"
   },

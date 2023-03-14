@@ -1,0 +1,15 @@
+---
+# MD013/line-length
+MD013: false
+# MD033/no-inline-html
+MD033: false
+# MD025/single-title
+MD025:
+    # Ignore front matter 'title' property, it is not used in generated markup
+    front_matter_title: ""
+# MD026/no-trailing-punctuation
+MD026:
+    # Allow headings to end with '?'
+    punctuation: ".,;:!"
+# MD028/no-blanks-blockquote
+MD028: false

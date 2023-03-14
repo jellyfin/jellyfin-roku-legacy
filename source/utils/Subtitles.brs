@@ -21,7 +21,7 @@ end function
 ' returns the server-side track index for the appriate subtitle
 function defaultSubtitleTrackFromVid(video_id) as integer
     meta = ItemMetaData(video_id)
-    if meta?.json?.mediaSources <> invalid
+    if isValid(meta) and isValid(meta.json) and isValid(meta.json.mediaSources)
         subtitles = sortSubtitles(meta.id, meta.json.MediaSources[0].MediaStreams)
         default_text_subs = defaultSubtitleTrack(subtitles["all"], true) ' Find correct subtitle track (forced text)
         if default_text_subs <> -1
@@ -130,7 +130,7 @@ function selectSubtitleTrackDialog(tracks, currentTrack = -1)
         default = ""
         if item.IsForced then forced = " [Forced]"
         if item.IsDefault then default = " - Default"
-        if item.Track.Language <> invalid
+        if isValid(item.Track.Language)
             language = iso6392.lookup(item.Track.Language)
             if language = invalid then language = item.Track.Language
         else
@@ -157,7 +157,7 @@ sub changeSubtitleDuringPlayback(newid)
     currentSubtitles = video.Subtitles[video.SelectedSubtitle]
     newSubtitles = video.Subtitles[newid]
 
-    if newSubtitles.IsEncoded or (currentSubtitles <> invalid and currentSubtitles.IsEncoded)
+    if newSubtitles.IsEncoded or (isValid(currentSubtitles) and currentSubtitles.IsEncoded)
         ' With encoded subtitles we need to stop/start playback
         video.control = "stop"
         AddVideoContent(video, video.mediaSourceId, video.audioIndex, newSubtitles.Index, video.position * 10000000)
@@ -195,7 +195,7 @@ function sortSubtitles(id as string, MediaStreams)
         if stream.type = "Subtitle"
 
             url = ""
-            if stream.DeliveryUrl <> invalid
+            if isValid(stream.DeliveryUrl)
                 url = buildURL(stream.DeliveryUrl)
             end if
 

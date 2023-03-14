@@ -42,6 +42,7 @@ sub Main (args as dynamic) as void
 
     m.global.addFields({ app_loaded: false, playstateTask: playstateTask, sceneManager: sceneManager })
     m.global.addFields({ queueManager: CreateObject("roSGNode", "QueueManager") })
+    m.global.addFields({ audioPlayer: CreateObject("roSGNode", "AudioPlayer") })
 
     app_start:
     ' First thing to do is validate the ability to use the API
@@ -226,6 +227,8 @@ sub Main (args as dynamic) as void
                 end if
             else if selectedItem.type = "MusicAlbum"
                 group = CreateAlbumView(selectedItem.json)
+            else if selectedItem.type = "Playlist"
+                group = CreatePlaylistView(selectedItem.json)
             else if selectedItem.type = "Audio"
                 m.global.queueManager.callFunc("clear")
                 m.global.queueManager.callFunc("push", selectedItem.json)
@@ -262,6 +265,14 @@ sub Main (args as dynamic) as void
             node = albums.musicArtistAppearsOnData.items[ptr]
             group = CreateAlbumView(node)
         else if isNodeEvent(msg, "playSong")
+            ' User has selected audio they want us to play
+            selectedIndex = msg.getData()
+            screenContent = msg.getRoSGNode()
+
+            m.global.queueManager.callFunc("clear")
+            m.global.queueManager.callFunc("push", screenContent.albumData.items[selectedIndex])
+            m.global.queueManager.callFunc("playQueue")
+        else if isNodeEvent(msg, "playItem")
             ' User has selected audio they want us to play
             selectedIndex = msg.getData()
             screenContent = msg.getRoSGNode()
