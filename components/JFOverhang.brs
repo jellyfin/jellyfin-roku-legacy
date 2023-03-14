@@ -101,6 +101,7 @@ sub updateTime()
 end sub
 
 sub resetTime()
+    if m.hideClock then return
     m.currentTimeTimer.control = "stop"
     m.currentTimeTimer.control = "start"
     updateTime()
