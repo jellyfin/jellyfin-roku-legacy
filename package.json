@@ -7,17 +7,18 @@
     "@rokucommunity/bslint": "0.8.1",
     "brighterscript": "0.61.3",
     "ropm": "0.10.11",
-    "jsonlint-cli": "1.0.1",
-    "markdownlint-cli": "0.33.0",
-    "markdown-spellcheck": "1.3.1"
+    "jshint": "^2.13.6",
+    "markdownlint-cli2": "0.6.0",
+    "spellchecker-cli": "6.1.1"
   },
   "scripts": {
     "postinstall": "npx ropm copy",
     "validate": "npx bsc --copy-to-staging=false --create-package=false",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "bslint",
-    "lint-json": "jsonlint-cli **/*.json",
-    "lint-markdown": "markdownlint **/*.md --ignore node_modules && mdspell --en-us -r **/*.md !**/node_modules/**/*.md",
+    "lint-json": "jshint --extra-ext .json --verbose --exclude node_modules ./",
+    "lint-markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
+    "lint-spelling": "spellchecker -d dictionary.txt --files \"**/*.md\" \"**/.*/**/*.md\" \"!node_modules/**/*.md\"",
     "check-formatting": "npx bsfmt --check",
     "format": "npx bsfmt --write"
   },

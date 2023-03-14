@@ -63,3 +63,18 @@ jobs:
       - uses: xt0rted/markdownlint-problem-matcher@98d94724052d20ca2e06c091f202e4c66c3c59fb # v2
       - name: Lint markdown files
         run: npm run lint-markdown
+  spelling:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone github repo
+        uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: "lts/*"
+          cache: "npm"
+      - name: Install npm dependencies
+        run: npm ci
+      - name: Install roku package dependencies
+        run: npx ropm install
+      - name: Check markdown files for spelling errors
+        run: npm run lint-spelling
