@@ -9,22 +9,23 @@ sub init()
     m.optionText.font.size = 20
     m.optionStar = m.top.findNode("overlayOptionsStar")
     m.optionStar.font.size = 58
-    m.overlayMeridian = m.top.findNode("overlayMeridian")
-    m.overlayMeridian.font.size = 20
     ' save node references
     m.title = m.top.findNode("overlayTitle")
     m.overlayRightGroup = m.top.findNode("overlayRightGroup")
     m.overlayTimeGroup = m.top.findNode("overlayTimeGroup")
     m.slideDownAnimation = m.top.findNode("slideDown")
     m.slideUpAnimation = m.top.findNode("slideUp")
-    ' hide clock based on user setting
+    ' show clock based on user setting
     m.hideClock = get_user_setting("ui.design.hideclock") = "true"
     if not m.hideClock
         ' get system preference clock format (12/24hr)
         di = CreateObject("roDeviceInfo")
         m.clockFormat = di.GetClockFormat()
+        ' save node references
         m.overlayHours = m.top.findNode("overlayHours")
         m.overlayMinutes = m.top.findNode("overlayMinutes")
+        m.overlayMeridian = m.top.findNode("overlayMeridian")
+        m.overlayMeridian.font.size = 20
         ' start timer
         m.currentTimeTimer = m.top.findNode("currentTimeTimer")
         m.currentTimeTimer.control = "start"
