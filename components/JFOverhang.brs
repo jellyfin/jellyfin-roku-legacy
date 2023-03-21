@@ -20,7 +20,6 @@ sub init()
     ' hide clock based on user setting
     m.hideClock = get_user_setting("ui.design.hideclock") = "true"
     if not m.hideClock
-        m.isClockFirstRun = true
         ' get system preference clock format (12/24hr)
         di = CreateObject("roDeviceInfo")
         m.clockFormat = di.GetClockFormat()
@@ -87,13 +86,9 @@ sub updateUser()
 end sub
 
 sub updateTime()
-    currentTime = CreateObject("roDateTime").ToLocalTime()
-    if m.isClockFirstRun
-        m.currentTimeTimer.duration = 60 - currentTime.GetSeconds()
-        m.isClockFirstRun = false
-    else
-        m.currentTimeTimer.duration = 60
-    end if
+    currentTime = CreateObject("roDateTime")
+    currentTime.ToLocalTime()
+    m.currentTimeTimer.duration = 60 - currentTime.GetSeconds()
     m.currentHours = currentTime.GetHours()
     m.currentMinutes = currentTime.GetMinutes()
     updateTimeDisplay()
