@@ -6,6 +6,7 @@
     <field id="image" type="node" onChange="setPoster" />
     <field id="selectedAudioStreamIndex" type="integer" value="1" />
     <field id="overview" type="string" />
+    <field id="startingPoint" type="longinteger" value="0" />
   </interface>
   <script type="text/brightscript" uri="PlaylistData.brs" />
 </component>

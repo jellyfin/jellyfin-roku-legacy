@@ -450,11 +450,6 @@ sub Main (args as dynamic) as void
                     m.global.queueManager.callFunc("push", group.itemContent)
                     m.global.queueManager.callFunc("playQueue")
                 end if
-                video_id = group.id
-                video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx)
-                if video <> invalid and video.errorMsg <> "introaborted"
-                    sceneManager.callFunc("pushScene", video)
-                end if
 
                 if isValid(group) and isValid(group.lastFocus) and isValid(group.lastFocus.id) and group.lastFocus.id = "main_group"
                     buttons = group.findNode("buttons")

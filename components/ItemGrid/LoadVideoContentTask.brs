@@ -28,7 +28,6 @@ sub loadItems()
         end if
     end if
 
-
     id = m.top.itemId
     mediaSourceId = invalid
     audio_stream_idx = m.top.selectedAudioStreamIndex
