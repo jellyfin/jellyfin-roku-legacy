@@ -1,5 +1,7 @@
 name: lint
-on: [push, pull_request]
+on:
+  pull_request:
+
 
 jobs:
   brightscript:
@@ -24,9 +26,14 @@ jobs:
         with:
           packages: libxml2-utils xmlstarlet
       - name: Validate XML syntax
-        run: xmllint --noout ./locale/*/*.ts
-      - name: Check XML for duplicate entries
-        run: xmlstarlet sel -t -m '/TS/context/message/source' -o 'Duplicate entry found in:' -f -o ' ' -c '.' -nl ./locale/*/*.ts | sort | uniq -d
+        run: xmllint --noout ./locale/en_US/translations.ts
+      - name: Save output of duplicate check
+        run: echo "tsDuplicates=$(xmlstarlet sel -t -m '/TS/context/message/source' -c '.' -nl ./locale/en_US/translations.ts | sort | uniq -d | awk '{ printf "%s", $0 }')" >> $GITHUB_ENV
+      - name: Check for duplicates
+        run: xmlstarlet sel -t -m '/TS/context/message/source' -f -o ' ' -c '.' -nl ./locale/en_US/translations.ts | sort | uniq -d
+      - name: Duplicates found
+        if: env.tsDuplicates != ''
+        run: exit 1
   json:
     runs-on: ubuntu-latest
     steps:
@@ -58,3 +65,18 @@ jobs:
       - uses: xt0rted/markdownlint-problem-matcher@98d94724052d20ca2e06c091f202e4c66c3c59fb # v2
       - name: Lint markdown files
         run: npm run lint-markdown
+  spelling:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone github repo
+        uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: "lts/*"
+          cache: "npm"
+      - name: Install npm dependencies
+        run: npm ci
+      - name: Install roku package dependencies
+        run: npx ropm install
+      - name: Check markdown files for spelling errors
+        run: npm run lint-spelling

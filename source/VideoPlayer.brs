@@ -31,10 +31,10 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
 
     ' Special handling for "Programs" or "Vidoes" launched from "On Now" or elsewhere on the home screen...
     ' basically anything that is a Live Channel.
-    if isValid(meta?.json?.ChannelId)
-        if meta.json.EpisodeTitle <> invalid
+    if isValid(meta.json) and isValid(meta.json.ChannelId)
+        if isValid(meta.json.EpisodeTitle)
             meta.title = meta.json.EpisodeTitle
-        else if meta.json.Name <> invalid
+        else if isValid(meta.json.Name)
             meta.title = meta.json.Name
         end if
         meta.showID = meta.json.id
@@ -47,7 +47,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     end if
 
     if m.videotype = "Episode" or m.videotype = "Series"
-        if isValid(meta.json.RunTimeTicks)
+        if isValid(meta.json) and isValid(meta.json.RunTimeTicks)
             video.runTime = (meta.json.RunTimeTicks / 10000000.0)
         end if
         video.content.contenttype = "episode"
@@ -243,10 +243,8 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     video.content.SubtitleTracks = subtitles["text"]
 
     ' 'TODO: allow user selection of subtitle track before playback initiated, for now set to no subtitles
-
     video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
     fully_external = false
-
 
     ' For h264/hevc video, Roku spec states that it supports specfic encoding levels
     ' The device can decode content with a Higher Encoding level but may play it back with certain
@@ -256,7 +254,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     if m.playbackInfo.MediaSources[0].MediaStreams.Count() > 0 and meta.live = false
         tryDirectPlay = get_user_setting("playback.tryDirect.h264ProfileLevel") = "true" and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
         tryDirectPlay = tryDirectPlay or (get_user_setting("playback.tryDirect.hevcProfileLevel") = "true" and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "hevc")
-        if tryDirectPlay and m.playbackInfo.MediaSources[0].TranscodingUrl <> invalid and forceTranscoding = false
+        if tryDirectPlay and isValid(m.playbackInfo.MediaSources[0].TranscodingUrl) and forceTranscoding = false
             transcodingReasons = getTranscodeReasons(m.playbackInfo.MediaSources[0].TranscodingUrl)
             if transcodingReasons.Count() = 1 and transcodingReasons[0] = "VideoLevelNotSupported"
                 video.directPlaySupported = true
@@ -324,7 +322,6 @@ end sub
 function PlayIntroVideo(video_id, audio_stream_idx) as boolean
     ' Intro videos only play if user has cinema mode setting enabled
     if get_user_setting("playback.cinemamode") = "true"
-
         ' Check if server has intro videos setup and available
         introVideos = GetIntroVideos(video_id)
 
@@ -362,7 +359,6 @@ end function
 ' Extract array of Transcode Reasons from the content URL
 ' @returns Array of Strings
 function getTranscodeReasons(url as string) as object
-
     regex = CreateObject("roRegex", "&TranscodeReasons=([^&]*)", "")
     match = regex.Match(url)
 
@@ -384,19 +380,18 @@ end function
 
 function directPlaySupported(meta as object) as boolean
     devinfo = CreateObject("roDeviceInfo")
-    if meta.json.MediaSources[0] <> invalid and meta.json.MediaSources[0].SupportsDirectPlay = false
+    if isValid(meta.json.MediaSources[0]) and meta.json.MediaSources[0].SupportsDirectPlay = false
         return false
     end if
-
-    if meta.json.MediaStreams[0] = invalid
+    if not isValid(meta.json.MediaSources[0])
         return false
     end if
 
     streamInfo = { Codec: meta.json.MediaStreams[0].codec }
-    if meta.json.MediaStreams[0].Profile <> invalid and meta.json.MediaStreams[0].Profile.len() > 0
+    if isValid(meta.json.MediaStreams[0].Profile) and meta.json.MediaStreams[0].Profile.len() > 0
         streamInfo.Profile = LCase(meta.json.MediaStreams[0].Profile)
     end if
-    if meta.json.MediaSources[0].container <> invalid and meta.json.MediaSources[0].container.len() > 0
+    if isValid(meta.json.MediaSources[0].container) and meta.json.MediaSources[0].container.len() > 0
         'CanDecodeVideo() requires the .container to be format: “mp4”, “hls”, “mkv”, “ism”, “dash”, “ts” if its to direct stream
         if meta.json.MediaSources[0].container = "mov"
             streamInfo.Container = "mp4"
@@ -406,8 +401,7 @@ function directPlaySupported(meta as object) as boolean
     end if
 
     decodeResult = devinfo.CanDecodeVideo(streamInfo)
-    return decodeResult <> invalid and decodeResult.result
-
+    return isValid(decodeResult) and decodeResult.result
 end function
 
 function getContainerType(meta as object) as string
@@ -455,12 +449,12 @@ sub autoPlayNextEpisode(videoID as string, showID as string)
         resp = APIRequest(url, urlParams)
         data = getJson(resp)
 
-        if data <> invalid and data.Items.Count() = 2
+        if isValid(data) and data.Items.Count() = 2
             ' setup new video node
             nextVideo = CreateVideoPlayerGroup(data.Items[1].Id, invalid, 1, false, false)
             ' remove last videoplayer scene
             m.global.sceneManager.callFunc("clearPreviousScene")
-            if nextVideo <> invalid
+            if isValid(nextVideo)
                 m.global.sceneManager.callFunc("pushScene", nextVideo)
             else
                 m.global.sceneManager.callFunc("popScene")
@@ -478,7 +472,7 @@ end sub
 ' In the future, with a custom playback info view, we can return an associated array.
 function GetPlaybackInfo()
     sessions = api_API().sessions.get()
-    if sessions <> invalid and sessions.Count() > 0
+    if isValid(sessions) and sessions.Count() > 0
         return GetTranscodingStats(sessions[0])
     end if
 

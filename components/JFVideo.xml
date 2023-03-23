@@ -35,12 +35,12 @@
     <timer id="playbackTimer" repeat="true" duration="30" />
     <timer id="bufferCheckTimer" repeat="true" />
     <JFButton id="nextEpisode"
-              opacity="0"
-              textColor="#f0f0f0"
-              focusedTextColor="#202020"
-              focusFootprintBitmapUri="pkg:/images/option-menu-bg.9.png"
-              focusBitmapUri="pkg:/images/white.9.png"
-              translation="[1500, 900]" />
+      opacity="0"
+      textColor="#f0f0f0"
+      focusedTextColor="#202020"
+      focusFootprintBitmapUri="pkg:/images/option-menu-bg.9.png"
+      focusBitmapUri="pkg:/images/white.9.png"
+      translation="[1500, 900]" />
 
     <!--animation for the play next episode button-->
     <Animation id="showNextEpisodeButton" duration="1.0" repeat="false" easeFunction="inQuad">

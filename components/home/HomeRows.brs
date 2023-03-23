@@ -96,8 +96,8 @@ sub onLibrariesLoaded()
     m.LoadFavoritesTask.control = "RUN"
 
     ' validate library data
-    if m.libraryData <> invalid and m.libraryData.count() > 0
-        userConfig = m.top.userConfig
+    if isValid(m.libraryData) and m.libraryData.count() > 0
+        userConfig = m.global.userConfig
 
         ' populate My Media row
         filteredMedia = filterNodeArray(m.libraryData, "id", userConfig.MyMediaExcludes)
@@ -163,7 +163,7 @@ sub updateFavoritesItems()
     rowIndex = getRowIndex("Favorites")
 
     if itemData.count() < 1
-        if rowIndex <> invalid
+        if isValid(rowIndex)
             ' remove the row
             deleteFromSizeArray(rowIndex)
             homeRows.removeChildIndex(rowIndex)
@@ -208,7 +208,7 @@ sub updateContinueItems()
     continueRowIndex = getRowIndex("Continue Watching")
 
     if itemData.count() < 1
-        if continueRowIndex <> invalid
+        if isValid(continueRowIndex)
             ' remove the row
             deleteFromSizeArray(continueRowIndex)
             homeRows.removeChildIndex(continueRowIndex)
@@ -219,7 +219,7 @@ sub updateContinueItems()
         row.title = tr("Continue Watching")
         itemSize = [464, 331]
         for each item in itemData
-            if item.json?.UserData?.PlayedPercentage <> invalid
+            if isValid(item.json) and isValid(item.json.UserData) and isValid(item.json.UserData.PlayedPercentage)
                 item.PlayedPercentage = item.json.UserData.PlayedPercentage
             end if
 
@@ -250,7 +250,7 @@ sub updateNextUpItems()
     nextUpRowIndex = getRowIndex("Next Up >")
 
     if itemData.count() < 1
-        if nextUpRowIndex <> invalid
+        if isValid(nextUpRowIndex)
             ' remove the row
             deleteFromSizeArray(nextUpRowIndex)
             homeRows.removeChildIndex(nextUpRowIndex)
@@ -269,7 +269,7 @@ sub updateNextUpItems()
         if nextUpRowIndex = invalid
             ' insert new row under "Continue Watching"
             continueRowIndex = getRowIndex("Continue Watching")
-            if continueRowIndex <> invalid
+            if isValid(continueRowIndex)
                 updateSizeArray(itemSize, continueRowIndex + 1)
                 homeRows.insertChild(row, continueRowIndex + 1)
             else
@@ -305,7 +305,7 @@ sub updateLatestItems(msg)
 
     if itemData.count() < 1
         ' remove row
-        if rowIndex <> invalid
+        if isValid(rowIndex)
             deleteFromSizeArray(rowIndex)
             homeRows.removeChildIndex(rowIndex)
         end if
@@ -355,7 +355,7 @@ sub updateOnNowItems()
     onNowRowIndex = getRowIndex("On Now")
 
     if itemData.count() < 1
-        if onNowRowIndex <> invalid
+        if isValid(onNowRowIndex)
             ' remove the row
             deleteFromSizeArray(onNowRowIndex)
             homeRows.removeChildIndex(onNowRowIndex)
@@ -409,11 +409,11 @@ sub updateSizeArray(rowItemSize, rowIndex = invalid, action = "insert")
                 newSizeArray.Push(rowItemSize)
             else if action = "insert"
                 newSizeArray.Push(rowItemSize)
-                if sizeArray[i] <> invalid
+                if isValid(sizeArray[i])
                     newSizeArray.Push(sizeArray[i])
                 end if
             end if
-        else if sizeArray[i] <> invalid
+        else if isValid(sizeArray[i])
             newSizeArray.Push(sizeArray[i])
         end if
     end for
@@ -433,7 +433,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if press
         if key = "play"
             itemToPlay = m.top.content.getChild(m.top.rowItemFocused[0]).getChild(m.top.rowItemFocused[1])
-            if itemToPlay <> invalid and (itemToPlay.type = "Movie" or itemToPlay.type = "Episode")
+            if isValid(itemToPlay) and (itemToPlay.type = "Movie" or itemToPlay.type = "Episode")
                 m.top.quickPlayNode = itemToPlay
             end if
             handled = true
