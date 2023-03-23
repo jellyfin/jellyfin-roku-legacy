@@ -18,9 +18,8 @@ sub init()
 end sub
 
 sub updateSize()
-
     image = invalid
-    if m.top.itemContent <> invalid and m.top.itemContent.image <> invalid
+    if isValid(m.top.itemContent) and isValid(m.top.itemContent.image)
         image = m.top.itemContent.image
     end if
 
@@ -49,7 +48,6 @@ sub updateSize()
 
     m.backdrop.width = m.poster.width
     m.backdrop.height = m.poster.height
-
 end sub
 
 sub itemContentChanged() as void
@@ -58,7 +56,7 @@ sub itemContentChanged() as void
     m.title.text = itemData.title
 
     if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
-        if itemData?.json?.UserData?.UnplayedItemCount <> invalid
+        if isValid(itemData.json.UserData) and isValid(itemData.json.UserData.UnplayedItemCount)
             if itemData.json.UserData.UnplayedItemCount > 0
                 m.unplayedCount.visible = true
                 m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
@@ -66,12 +64,11 @@ sub itemContentChanged() as void
         end if
     end if
 
-    if itemData.json.lookup("Type") = "Episode" and itemData.json.IndexNumber <> invalid
+    if itemData.json.lookup("Type") = "Episode" and isValid(itemData.json.IndexNumber)
         m.title.text = StrI(itemData.json.IndexNumber) + ". " + m.title.text
 
         m.series.text = itemData.json.Series
         m.series.visible = true
-
     else if itemData.json.lookup("Type") = "MusicAlbum"
         m.title.font = "font:SmallestSystemFont"
         m.staticTitle.font = "font:SmallestSystemFont"
@@ -83,8 +80,7 @@ sub itemContentChanged() as void
     imageUrl = itemData.posterURL
 
     if get_user_setting("ui.tvshows.blurunwatched") = "true"
-
-        if itemData.json.lookup("Type") = "Episode" and itemData.json.userdata <> invalid
+        if itemData.json.lookup("Type") = "Episode" and isValid(itemData.json.userdata)
             if not itemData.json.userdata.played
                 imageUrl = imageUrl + "&blur=15"
             end if
@@ -99,25 +95,21 @@ end sub
 '
 ' Enable title scrolling based on item Focus
 sub focusChanged()
-
     if m.top.itemHasFocus = true
         m.title.repeatCount = -1
         m.series.repeatCount = -1
         m.staticTitle.visible = false
         m.title.visible = true
-
         ' text to speech for accessibility
         if m.deviceInfo.IsAudioGuideEnabled() = true
             txt2Speech = CreateObject("roTextToSpeech")
             txt2Speech.Flush()
             txt2Speech.Say(m.title.text)
         end if
-
     else
         m.title.repeatCount = 0
         m.series.repeatCount = 0
         m.staticTitle.visible = true
         m.title.visible = false
     end if
-
 end sub

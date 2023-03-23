@@ -72,7 +72,7 @@ sub onPeopleLoaded()
         row = m.top.content.createChild("ContentNode")
         row.Title = tr("Cast & Crew")
         for each person in people
-            if person.json.type = "Actor" and person.json.Role <> invalid
+            if person.json.type = "Actor" and person.json.Role <> invalid and person.json.Role.ToStr().Trim() <> ""
                 person.subTitle = "as " + person.json.Role
             else
                 person.subTitle = person.json.Type

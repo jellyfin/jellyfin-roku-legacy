@@ -60,16 +60,16 @@ We recommend using Visual Studio Code when working on this project. The [BrightS
 
 ### Usage
 
-1. Open the `jellyfin-roku` folder in vscode
-2. Press `F5` on your keyboard or click `Run` -> `Start Debugging` from the vscode menu. ![image](https://user-images.githubusercontent.com/2544493/170696233-8ba49bf4-bebb-4655-88f3-ac45150dda02.png)
+1. Open the `jellyfin-roku` folder in VSCode
+2. Press `F5` on your keyboard or click `Run` -> `Start Debugging` from the VSCode menu. ![image](https://user-images.githubusercontent.com/2544493/170696233-8ba49bf4-bebb-4655-88f3-ac45150dda02.png)
 
 3. Enter your Roku IP address and developer password when prompted
 
-That's it! vscode will auto-package the project, sideload it to the specified device, and the channel is up and running. (assuming you remembered to put your device in [developer mode](#developer-mode))
+That's it! VSCode will auto-package the project, sideload it to the specified device, and the channel is up and running. (assuming you remembered to put your device in [developer mode](#developer-mode))
 
 ### Hardcoding Roku Information
 
-Out of the box, the Brightscript extension will prompt you to pick a Roku device (from devices found on your local network) and enter a password on every launch. If you'd prefer to hardcode this information rather than entering it every time, you can set these values in your vscode user settings:
+Out of the box, the BrightScript extension will prompt you to pick a Roku device (from devices found on your local network) and enter a password on every launch. If you'd prefer to hardcode this information rather than entering it every time, you can set these values in your VSCode user settings:
 
 ```js
 {
@@ -95,7 +95,7 @@ Build the package
 make dev
 ```
 
-This will create a zip in `out/apps/Jellyfin_Roku-dev.zip`. Login to your roku's device in your browser and upload the zip file then run install.
+This will create a zip in `out/apps/Jellyfin_Roku-dev.zip`. Login to your Roku's device in your browser and upload the zip file then run install.
 
 ## Method 3: Direct load to Roku Device
 
@@ -154,7 +154,7 @@ make install
 
 Modify code -> `make install` -> Use Roku remote to test changes -> `telnet ${ROKU_DEV_TARGET} 8085` -> `CTRL + ]` -> `quit + ENTER`
 
-Unfortunately there is no debugger. You will need to use telnet to see log statements, warnings, and error reports. You won't always need to telnet into your device but the workflow above is typical when you are new to Brightscript or are working on tricky code.
+Unfortunately there is no debugger. You will need to use telnet to see log statements, warnings, and error reports. You won't always need to telnet into your device but the workflow above is typical when you are new to BrightScript or are working on tricky code.
 
 Install necessary packages:
 

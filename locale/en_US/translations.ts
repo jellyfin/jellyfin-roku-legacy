@@ -764,8 +764,8 @@
             <extracomment>Name of codec used in settings menu</extracomment>
         </message>
         <message>
-            <source>Attempt Direct Play for HEVC media with unsupported profile levels before falling back to trancoding if it fails.</source>
-            <translation>Attempt Direct Play for HEVC media with unsupported profile levels before falling back to trancoding if it fails.</translation>
+            <source>Attempt Direct Play for HEVC media with unsupported profile levels before falling back to transcoding if it fails.</source>
+            <translation>Attempt Direct Play for HEVC media with unsupported profile levels before falling back to transcoding if it fails.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
         </message>
         <message>
