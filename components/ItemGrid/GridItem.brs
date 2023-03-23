@@ -83,7 +83,11 @@ sub itemContentChanged()
     else if itemData.type = "Episode"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemIcon.uri = itemData.iconUrl
-        m.itemText.text = itemData.json.SeriesName + " - " + itemData.Title
+        if isValid(itemData.json) and isValid(itemData.json.SeriesName)
+            m.itemText.text = itemData.json.SeriesName + " - " + itemData.Title
+        else
+            m.itemText.text = itemData.Title
+        end if
     else if itemData.type = "MusicArtist"
         m.itemPoster.uri = itemData.PosterUrl
         m.itemText.text = itemData.Title

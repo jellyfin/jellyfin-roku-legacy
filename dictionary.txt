@@ -1,0 +1,17 @@
+Jellyfin
+VSCode
+BrightScript
+sideload
+Sideload
+DEVGUIDE
+ing
+hardcode
+Hardcoding
+pre-release
+breakpoint
+repo
+Repo
+dev
+Dev
+assignees
+HTTPS
