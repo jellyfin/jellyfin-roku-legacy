@@ -17,7 +17,7 @@ sub itemContentChanged()
     itemData = item.json
 
     if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
-        if itemData?.UserData?.UnplayedItemCount <> invalid
+        if isValid(itemData.UserData) and isValid(itemData.UserData.UnplayedItemCount)
             if itemData.UserData.UnplayedItemCount > 0
                 m.unplayedCount.visible = true
                 m.unplayedEpisodeCount.text = itemData.UserData.UnplayedItemCount
@@ -31,21 +31,21 @@ sub itemContentChanged()
     m.top.overhangTitle = itemData.name
 
     'Check production year, if invalid remove label
-    if itemData.productionYear <> invalid
+    if isValid(itemData.productionYear)
         setFieldText("releaseYear", itemData.productionYear)
     else
         m.top.findNode("main_group").removeChild(m.top.findNode("releaseYear"))
     end if
 
     'Check officialRating, if invalid remove label
-    if itemData.officialRating <> invalid
+    if isValid(itemData.officialRating)
         setFieldText("officialRating", itemData.officialRating)
     else
         m.top.findNode("main_group").removeChild(m.top.findNode("officialRating"))
     end if
 
     'Check communityRating, if invalid remove label
-    if itemData.communityRating <> invalid
+    if isValid(itemData.communityRating)
         m.top.findNode("star").visible = true
         setFieldText("communityRating", int(itemData.communityRating * 10) / 10)
     else
@@ -134,7 +134,7 @@ function getHistory() as string
 
     airdays = itemData.airdays
     airtime = itemData.airtime
-    if airtime <> invalid and airdays.count() = 1
+    if isValid(airtime) and airdays.count() = 1
         airwords = airdays[0] + " at " + airtime
     end if
 
@@ -148,10 +148,10 @@ function getHistory() as string
     end if
 
     words = verb
-    if airwords <> invalid
+    if isValid(airwords)
         words = words + " " + airwords
     end if
-    if studio <> invalid
+    if isValid(studio)
         words = words + " on " + studio
     end if
 

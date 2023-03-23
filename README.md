@@ -30,7 +30,7 @@ The channel is available on the [Roku Channel Store](https://my.roku.com/add/jel
 
 ## Getting Involved<a name="get_involved"></a>
 
-No matter what your interests or skill are, you can help to make this client better for everyone by simply using the client and letting us know if you find a problem with it.   Either give us a shout on [matrix](https://matrix.to/#/+jellyfin:matrix.org) or create a github issue.
+No matter what your interests or skill are, you can help to make this client better for everyone by simply using the client and letting us know if you find a problem with it.   Either give us a shout on [matrix](https://matrix.to/#/+jellyfin:matrix.org) or create a GitHub issue.
 
 Feature requests are always welcome too, but please have a read though the existing issues to see if someone has already raised one for something similar.
 

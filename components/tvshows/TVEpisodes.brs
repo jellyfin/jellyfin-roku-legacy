@@ -19,7 +19,7 @@ end sub
 
 sub updateSeason()
     if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
-        if m.top.seasonData?.UserData?.UnplayedItemCount <> invalid
+        if isValid(m.top.seasonData) and isValid(m.top.seasonData.UserData) and isValid(m.top.seasonData.UserData.UnplayedItemCount)
             if m.top.seasonData.UserData.UnplayedItemCount > 0
                 m.unplayedCount.visible = true
                 m.unplayedEpisodeCount.text = m.top.seasonData.UserData.UnplayedItemCount
@@ -57,7 +57,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
         return true
     end if
 
-
     if key = "OK" or key = "play"
         if m.Random.hasFocus()
             randomEpisode = Rnd(m.rows.getChild(0).objects.items.count()) - 1
@@ -81,7 +80,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
         end if
     end if
 
-
     focusedChild = m.top.focusedChild.focusedChild
     if focusedChild.content = invalid then return handled
 
@@ -94,7 +92,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if press and key = "play" or proceed = true
         m.top.lastFocus = focusedChild
         itemToPlay = focusedChild.content.getChild(focusedChild.rowItemFocused[0]).getChild(0)
-        if itemToPlay <> invalid and itemToPlay.id <> ""
+        if isValid(itemToPlay) and isValid(itemToPlay.id) and itemToPlay.id <> ""
             itemToPlay.type = "Episode"
             m.top.quickPlayNode = itemToPlay
         end if

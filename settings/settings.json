@@ -63,7 +63,7 @@
                     },
                     {
                         "title": "HEVC",
-                        "description": "Attempt Direct Play for HEVC media with unsupported profile levels before falling back to trancoding if it fails.",
+                        "description": "Attempt Direct Play for HEVC media with unsupported profile levels before falling back to transcoding if it fails.",
                         "settingName": "playback.tryDirect.hevcProfileLevel",
                         "type": "bool",
                         "default": "true"

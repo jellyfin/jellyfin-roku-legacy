@@ -99,7 +99,7 @@ sub itemContentChanged()
     end if
 
     ' show tags if there are no genres to display
-    if itemData.genres.count() = 0 and itemData.tags.count() > 0
+    if itemData.genres.count() = 0 and isValid(itemData.tags) and itemData.tags.count() > 0
         setFieldText("genres", tr("Tags") + ": " + itemData.tags.join(", "))
     end if
 

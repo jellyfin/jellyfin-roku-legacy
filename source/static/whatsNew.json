@@ -1,98 +1,146 @@
 [
     {
-        "description": "Bug Fix: Don't crash when viewing in progress recording.",
+        "description": "Feature: Phase 1 CJK subtitle support - external files only",
+        "author": "jkim2492"
+    },
+    {
+        "description": "Bug Fix: Fix multiple client crashes identified by crashlogs",
+        "author": "cewert"
+    },
+    {
+        "description": "Feature: Add TV series & season shuffle",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Updated View: Show \"Actor\" when an actor has no role",
+        "author": "cewert"
+    },
+    {
+        "description": "Feature: Phase 1 playlist support",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Fix Typo: trancoding -> transcoding",
+        "author": "RussianCow"
+    },
+    {
+        "description": "Feature: Create global audio player",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Core: Add user policy to check if canDelete",
+        "author": "candry7731"
+    },
+    {
+        "description": "Bug Fix: Only show next episode button if \"Play next episode automatically\" setting is enabled in web client",
+        "author": "cewert"
+    },
+    {
+        "description": "New Setting: Disable unwatched episode count",
+        "author": "1hitsong"
+    },
+    {
+        "description": "New Setting: Next episode button time",
+        "author": "candry7731"
+    },
+    {
+        "description": "New View: New persondetails view",
+        "author": "sevenrats"
+    },
+    {
+        "description": "Updated View: Make title scrolling consistent in extras slider",
+        "author": "sevenrats"
+    },
+    {
+        "description": "Feature: Make pressing the options button close settings menu",
+        "author": "sevenrats"
+    },
+    {
+        "description": "Bug Fix: Graceful episode playback failure",
+        "author": "sevenrats"
+    },
+    {
+        "description": "Bug Fix: Fix default view setting for movie genres",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Core: Update CI ubuntu version and node version",
+        "author": "sevenrats"
+    },
+    {
+        "description": "New Setting: Custom max video bitrate",
         "author": "jimdogx"
     },
     {
-        "description": "New Setting: Disable Community Rating for Episodes of TV shows.",
-        "author": "dezchai"
+        "description": "Updated View: Updated \"OnNow\" home row to default to channel images if program images are not availible",
+        "author": "candry7731"
     },
     {
-        "description": "New View: Music Grid View",
-        "author": "1hitsong"
-    },
-    {
-        "description": "New Setting: Movie Grid Title Display",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Updated View: TV Library Genre View",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Bug Fix: Fix Crash When Options Button Pressed, but Options Are Not Available",
-        "author": "ApexArray"
-    },
-    {
-        "description": "Bug Fix: Fix Crash When Invalid Deep Link Arguments Are Passed",
-        "author": "ApexArray"
-    },
-    {
-        "description": "New Setting: Go straight to episode listing (if only 1 season available)",
-        "author": "ApexArray"
-    },
-    {
-        "description": "Feature: Create What's New Popup that tells users what's changed the first time they run a new version.",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Feature: Toggle video playback when OK button is pressed",
-        "author": "ApexArray"
-    },
-    {
-        "description": "Bug Fix: Fix TV Season List Crash when showing 27+ Episodes",
-        "author": "1hitsong"
-    },
-    {
-        "description": "New View: Create Movie Grid View and new default setting",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Core: Set Maximum Bitrates values based on Roku Guidelines",
-        "author": "ApexArray"
-    },
-    {
-        "description": "Core: Reorganize Roku Settings",
+        "description": "Updated View: Improve settings menu, implement title hover and hide in missing locations",
         "author": "sevenrats"
     },
     {
-        "description": "Updated View: Add resumable filter to Movies",
+        "description": "Updated View: Make home view load faster",
         "author": "1hitsong"
     },
     {
-        "description": "Updated View: Filter Movies & Series by Played/Unplayed status",
+        "description": "Bug Fix: Fix option menu focus if opened while library still loading",
+        "author": "ApexArray"
+    },
+    {
+        "description": "Updated View: Add Genres, Parental Ratings, and Years as movie filters",
         "author": "1hitsong"
     },
     {
-        "description": "New Setting: Hide subtitles that might transcode",
+        "description": "Bug Fix: Revert change that removed image cache busting",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Updated View: Fix distorted TV episode posters. Add client-side progress bar and played indicator.",
+        "author": "ApexArray"
+    },
+    {
+        "description": "Updated View: Improve quality of album art on now playing view",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Updated View: Loading spinner, Progress Dialog and movie details button animate",
+        "author": "candry7731"
+    },
+    {
+        "description": "Core: Add settings guidelines to Dev Guide",
         "author": "sevenrats"
     },
     {
-        "description": "Bug Fix: Show Unwatched Episode Count",
-        "author": "1hitsong"
+        "description": "Core: Add workflow to validate language translation files",
+        "author": "cewert"
     },
     {
-        "description": "New View: Add Artist Presentation View & Genre View to Music Library",
-        "author": "1hitsong"
+        "description": "Core: Remove optional chaining operators from code",
+        "author": "cewert"
     },
     {
-        "description": "Core: Draw Homepage Continue Watching percent complete bar instead of using image API",
-        "author": "1hitsong"
+        "description": "Core: Make CI throw error for duplicate translation entries",
+        "author": "cewert"
     },
     {
-        "description": "Bug Fix: Fix TV Episode focus issues",
-        "author": "1hitsong"
+        "description": "Core: Fix en_US translation file",
+        "author": "cewert"
     },
     {
-        "description": "Bug Fix: Fix Movie Detail View lost focus bug when going back from resume dialog",
-        "author": "1hitsong"
+        "description": "Core: Add a production build workflow",
+        "author": "cewert"
     },
     {
-        "description": "Core: Add new questions to GitHub bug template",
-        "author": "1hitsong"
+        "description": "Core: Add json and markdown to lint workflow + add automation workflow",
+        "author": "cewert"
     },
     {
-        "description": "Core: Create Queue Manager and use for Music",
+        "description": "Core: Make workflows use latest LTS release + cache npm",
+        "author": "cewert"
+    },
+    {
+        "description": "Core: Install & Configure code unit test suite",
         "author": "1hitsong"
     }
 ]

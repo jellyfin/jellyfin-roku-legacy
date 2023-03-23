@@ -1,15 +1,18 @@
-##   Channel Details
+## Channel Details
+
 title=Jellyfin
 major_version=1
 minor_version=6
-build_version=3
+build_version=4
 
-###  Main Menu Icons / Channel Poster Artwork
+### Main Menu Icons / Channel Poster Artwork
+
 mm_icon_focus_fhd=pkg:/images/channel-poster_fhd.png
 mm_icon_focus_hd=pkg:/images/channel-poster_hd.png
 mm_icon_focus_sd=pkg:/images/channel-poster_sd.png
 
-###  Splash Screen + Loading Screen Artwork
+### Splash Screen + Loading Screen Artwork
+
 splash_screen_fhd=pkg:/images/splash-screen_fhd.png
 splash_screen_hd=pkg:/images/splash-screen_hd.png
 splash_screen_sd=pkg:/images/splash-screen_sd.png
