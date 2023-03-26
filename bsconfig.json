@@ -13,8 +13,9 @@
         "rooibos-roku"
     ],
     "diagnosticFilters": [
-        "**/roku_modules/**/*",
-        "**/testFramework/*",
-        "**/tests/*"
+        "node_modules/**",
+        "**/roku_modules/**",
+        "**/testFramework/**",
+        "**/tests/**"
     ]
 }
