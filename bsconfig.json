@@ -9,7 +9,8 @@
         "settings/*.*"
     ],
     "plugins": [
-        "@rokucommunity/bslint"
+        "@rokucommunity/bslint",
+        "rooibos-roku"
     ],
     "diagnosticFilters": [
         "**/roku_modules/**/*",
