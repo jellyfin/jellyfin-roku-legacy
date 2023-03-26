@@ -5,7 +5,7 @@
   "main": "index.js",
   "devDependencies": {
     "@rokucommunity/bslint": "0.8.2",
-    "brighterscript": "0.62.0",
+    "brighterscript": "0.52.3",
     "jshint": "^2.13.6",
     "markdownlint-cli2": "0.6.0",
     "rooibos-roku": "^5.4.2",
