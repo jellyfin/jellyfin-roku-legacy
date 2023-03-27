@@ -14,6 +14,8 @@
     ],
     "diagnosticFilters": [
         "node_modules/**",
-        "**/roku_modules/**"
+        "**/roku_modules/**",
+        "**/testFramework/**",
+        "**/tests/**"
     ]
 }

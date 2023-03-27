@@ -1,6 +1,26 @@
 sub Main (args as dynamic) as void
+
+    appInfo = CreateObject("roAppInfo")
+
+    if appInfo.IsDev() and args.RunTests = "true" and TF_Utils__IsFunction(TestRunner)
+        ' POST to {ROKU ADDRESS}:8060/launch/dev?RunTests=true
+        Runner = TestRunner()
+
+        Runner.SetFunctions([
+            TestSuite__Misc
+        ])
+
+        Runner.Logger.SetVerbosity(1)
+        Runner.Logger.SetEcho(false)
+        Runner.Logger.SetJUnit(false)
+        Runner.SetFailFast(true)
+
+        Runner.Run()
+    end if
+
     ' The main function that runs when the application is launched.
     m.screen = CreateObject("roSGScreen")
+
     ' Set global constants
     setConstants()
     ' Write screen tracker for screensaver
@@ -23,15 +43,6 @@ sub Main (args as dynamic) as void
     m.global.addFields({ app_loaded: false, playstateTask: playstateTask, sceneManager: sceneManager })
     m.global.addFields({ queueManager: CreateObject("roSGNode", "QueueManager") })
     m.global.addFields({ audioPlayer: CreateObject("roSGNode", "AudioPlayer") })
-
-    appInfo = CreateObject("roAppInfo")
-    m.global.addFields({ app: {
-            id: appInfo.GetID(),
-            isDev: appInfo.IsDev(),
-            version: appInfo.GetVersion()
-    } })
-    ' delete object
-    appInfo = invalid 'bs:disable-line
 
     app_start:
     ' First thing to do is validate the ability to use the API
@@ -60,10 +71,10 @@ sub Main (args as dynamic) as void
     end if
 
     ' Only show the Whats New popup the first time a user runs a new client version.
-    if m.global.app.version <> get_setting("LastRunVersion")
+    if appInfo.GetVersion() <> get_setting("LastRunVersion")
         ' Ensure the user hasn't disabled Whats New popups
         if get_user_setting("load.allowwhatsnew") = "true"
-            set_setting("LastRunVersion", m.global.app.version)
+            set_setting("LastRunVersion", appInfo.GetVersion())
             dialog = createObject("roSGNode", "WhatsNewDialog")
             m.scene.dialog = dialog
             m.scene.dialog.observeField("buttonSelected", m.port)
