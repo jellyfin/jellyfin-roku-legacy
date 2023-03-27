@@ -6,7 +6,7 @@ source/globals.brs
 ###BrightScript specific
 dist/apps
 out/
-
+build/
 roku_modules
 
 #NPM modules
