@@ -4,17 +4,17 @@
   "description": "Roku app for Jellyfin media server",
   "main": "index.js",
   "devDependencies": {
-    "@rokucommunity/bslint": "^0.8.2",
+    "@rokucommunity/bslint": "0.8.2",
     "brighterscript": "0.62.0",
-    "bslib": "npm:@rokucommunity/bslib@^0.1.1",
-    "jshint": "^2.13.6",
+    "bslib": "npm:@rokucommunity/bslib@0.1.1",
+    "jshint": "2.13.6",
     "markdownlint-cli2": "0.6.0",
-    "roku-deploy": "^3.7.0",
-    "roku-log-bsc-plugin": "^0.6.1",
-    "rooibos-roku": "^5.4.2",
+    "roku-deploy": "3.10.0",
+    "roku-log-bsc-plugin": "0.7.0",
+    "rooibos-roku": "5.4.2",
     "ropm": "0.10.12",
     "spellchecker-cli": "6.1.1",
-    "undent": "^0.1.0"
+    "undent": "0.1.0"
   },
   "scripts": {
     "build-tests": "npx bsc --project bsconfig-tests.json",
