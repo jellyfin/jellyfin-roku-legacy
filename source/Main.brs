@@ -1,26 +1,6 @@
 sub Main (args as dynamic) as void
-
-    appInfo = CreateObject("roAppInfo")
-
-    if appInfo.IsDev() and args.RunTests = "true" and TF_Utils__IsFunction(TestRunner)
-        ' POST to {ROKU ADDRESS}:8060/launch/dev?RunTests=true
-        Runner = TestRunner()
-
-        Runner.SetFunctions([
-            TestSuite__Misc
-        ])
-
-        Runner.Logger.SetVerbosity(1)
-        Runner.Logger.SetEcho(false)
-        Runner.Logger.SetJUnit(false)
-        Runner.SetFailFast(true)
-
-        Runner.Run()
-    end if
-
     ' The main function that runs when the application is launched.
     m.screen = CreateObject("roSGScreen")
-
     ' Set global constants
     setConstants()
     ' Write screen tracker for screensaver
