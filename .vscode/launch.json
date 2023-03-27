@@ -18,6 +18,68 @@
                 "source/**/*",
                 "manifest"
             ]
+        },
+        {
+            "name": "test",
+            "type": "brightscript",
+            "request": "launch",
+            "consoleOutput": "full",
+            "internalConsoleOptions": "neverOpen",
+            "preLaunchTask": "build-tests",
+            "envFile": "${workspaceFolder}/.vscode/.env",
+            "retainStagingFolder": true,
+            "stopOnEntry": false,
+            "files": [
+                "!**/images/*.*",
+                "!**/fonts/*.*",
+                "!*.jpg",
+                "!*.png",
+                "*",
+                "*.*",
+                "**/*.*",
+                "!*.zip",
+                "!**/*.zip"
+            ],
+            "rootDir": "${workspaceFolder}/build",
+            "sourceDirs": [
+                "${workspaceFolder}/test-app"
+            ],
+            "enableDebuggerAutoRecovery": true,
+            "stopDebuggerOnAppExit": true,
+            "enableVariablesPanel": false,
+            "injectRaleTrackerTask": false,
+            "enableDebugProtocol": false
+        },
+        {
+            "name": "tdd",
+            "type": "brightscript",
+            "request": "launch",
+            "consoleOutput": "full",
+            "internalConsoleOptions": "neverOpen",
+            "preLaunchTask": "build-tdd",
+            "envFile": "${workspaceFolder}/.vscode/.env",
+            "retainStagingFolder": true,
+            "stopOnEntry": false,
+            "files": [
+                "!**/images/*.*",
+                "!**/fonts/*.*",
+                "!*.jpg",
+                "!*.png",
+                "*",
+                "*.*",
+                "**/*.*",
+                "!*.zip",
+                "!**/*.zip"
+            ],
+            "rootDir": "${workspaceFolder}/build",
+            "sourceDirs": [
+                "${workspaceFolder}/test-app"
+            ],
+            "enableDebuggerAutoRecovery": true,
+            "stopDebuggerOnAppExit": true,
+            "enableVariablesPanel": false,
+            "injectRaleTrackerTask": false,
+            "enableDebugProtocol": false
         }
     ]
 }
