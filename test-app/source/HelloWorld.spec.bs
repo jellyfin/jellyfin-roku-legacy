@@ -1,0 +1,52 @@
+namespace tests
+
+    @suite
+    class HelloWorldTests extends tests.BaseTestSuite
+
+        private person
+
+        protected override function beforeEach()
+            super.beforeEach()
+            m.person = { "name": "number 6" }
+            'Do some things here specific to this test
+        end function
+
+        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        @describe("Hello World")
+        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        @it("made a person")
+        function _()
+            m.assertNotEmpty(m.person)
+            m.assertEqual(m.person.name, "number 6")
+        end function
+
+        @it("says hello")
+        function _()
+            m.expectOnce(m.person, "sayHello", [m.person.name], "hello number 6")
+
+            response = m.person.sayHello("number 6")
+
+            m.assertEqual(response, "hello number 6")
+        end function
+
+        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        @describe("Hello From a particular person")
+        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        @BeforeEach
+        private function particularPersonBeforeEach()
+            m.beforeEach()
+            m.person.name = "the new number 2"
+        end function
+
+        @it("says hello")
+        function _()
+            m.expectOnce(m.person, "sayHello", [m.person.name], "hello the new number 2")
+
+            response = m.person.sayHello(m.person.name)
+
+            m.assertEqual(response, "hello the new number 2")
+        end function
+    end class
+end namespace
