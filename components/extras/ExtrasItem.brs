@@ -2,6 +2,8 @@ sub init()
     m.posterImg = m.top.findNode("posterImg")
     m.name = m.top.findNode("pLabel")
     m.role = m.top.findNode("subTitle")
+
+    m.deviceInfo = CreateObject("roDeviceInfo")
 end sub
 
 sub showContent()
@@ -28,7 +30,7 @@ sub focusChanged()
         m.role.repeatCount = 0
     end if
 
-    if m.global.device.isAudioGuideEnabled = true
+    if m.deviceInfo.IsAudioGuideEnabled() = true
         txt2Speech = CreateObject("roTextToSpeech")
         txt2Speech.Flush()
         txt2Speech.Say(m.name.text)

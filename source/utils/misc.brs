@@ -45,7 +45,8 @@ end function
 function formatTime(time) as string
     hours = time.getHours()
     minHourDigits = 1
-    if m.global.device.clockFormat = "12h"
+    di = CreateObject("roDeviceInfo")
+    if di.GetClockFormat() = "12h"
         meridian = "AM"
         if hours = 0
             hours = 12

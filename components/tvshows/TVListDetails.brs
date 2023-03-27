@@ -4,6 +4,7 @@ sub init()
     m.options = m.top.findNode("tvListOptions")
     m.overview = m.top.findNode("overview")
     m.poster = m.top.findNode("poster")
+    m.deviceInfo = CreateObject("roDeviceInfo")
 
     m.rating = m.top.findnode("rating")
     m.infoBar = m.top.findnode("infoBar")
@@ -145,7 +146,7 @@ end function
 sub focusChanged()
     if m.top.itemHasFocus = true
         ' text to speech for accessibility
-        if m.global.device.isAudioGuideEnabled = true
+        if m.deviceInfo.IsAudioGuideEnabled() = true
             txt2Speech = CreateObject("roTextToSpeech")
             txt2Speech.Flush()
             txt2Speech.Say(m.title.text)

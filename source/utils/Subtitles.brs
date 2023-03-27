@@ -177,8 +177,7 @@ sub turnoffSubtitles()
     current = video.SelectedSubtitle
     video.SelectedSubtitle = -1
     video.globalCaptionMode = "Off"
-    device = CreateObject("roDeviceInfo")
-    device.EnableAppFocusEvent(false)
+    m.device.EnableAppFocusEvent(false)
     ' Check if Enoded subtitles are being displayed, and turn off
     if current > -1 and video.Subtitles[current].IsEncoded
         video.control = "stop"
