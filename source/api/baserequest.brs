@@ -136,7 +136,6 @@ end function
 
 function authorize_request(request)
     devinfo = CreateObject("roDeviceInfo")
-    appinfo = CreateObject("roAppInfo")
 
     auth = "MediaBrowser"
 
@@ -156,8 +155,7 @@ function authorize_request(request)
     end if
     auth = auth + ", DeviceId=" + Chr(34) + device_id + Chr(34)
 
-    version = appinfo.GetVersion()
-    auth = auth + ", Version=" + Chr(34) + version + Chr(34)
+    auth = auth + ", Version=" + Chr(34) + m.global.app.version + Chr(34)
 
     user = get_setting("active_user")
     if user <> invalid and user <> ""
