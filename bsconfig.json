@@ -13,6 +13,7 @@
         "rooibos-roku"
     ],
     "diagnosticFilters": [
+        "node_modules/**",
         "**/roku_modules/**"
     ]
 }
