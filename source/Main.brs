@@ -33,6 +33,29 @@ sub Main (args as dynamic) as void
     ' delete object
     appInfo = invalid 'bs:disable-line
 
+    deviceInfo = CreateObject("roDeviceInfo")
+    ' remove special characters
+    regex = CreateObject("roRegex", "[^a-zA-Z0-9\ \-\_]", "")
+    filteredFriendly = regex.ReplaceAll(deviceInfo.getFriendlyName(), "")
+    m.global.addFields({ device: {
+            id: deviceInfo.getChannelClientID(),
+            uuid: deviceInfo.GetRandomUUID(),
+            name: deviceInfo.getModelDisplayName(),
+            friendlyName: filteredFriendly,
+            model: deviceInfo.GetModel(),
+            modelType: deviceInfo.GetModelType(),
+            osVersion: deviceInfo.GetOSVersion(),
+            locale: deviceInfo.GetCurrentLocale(),
+            clockFormat: deviceInfo.GetClockFormat(),
+            isAudioGuideEnabled: deviceInfo.IsAudioGuideEnabled(),
+            hasVoiceRemote: deviceInfo.HasFeature("voice_remote"),
+
+            displayType: deviceInfo.GetDisplayType(),
+            displayMode: deviceInfo.GetDisplayMode()
+    } })
+    ' delete object
+    deviceInfo = invalid 'bs:disable-line
+
     app_start:
     ' First thing to do is validate the ability to use the API
     if not LoginFlow() then return
@@ -74,10 +97,10 @@ sub Main (args as dynamic) as void
     input = CreateObject("roInput")
     input.SetMessagePort(m.port)
 
-    m.device = CreateObject("roDeviceInfo")
-    m.device.setMessagePort(m.port)
-    m.device.EnableScreensaverExitedEvent(true)
-    m.device.EnableAppFocusEvent(false)
+    device = CreateObject("roDeviceInfo")
+    device.setMessagePort(m.port)
+    device.EnableScreensaverExitedEvent(true)
+    device.EnableAppFocusEvent(false)
 
     ' Check if we were sent content to play with the startup command (Deep Link)
     if isValidAndNotEmpty(args.mediaType) and isValidAndNotEmpty(args.contentId)

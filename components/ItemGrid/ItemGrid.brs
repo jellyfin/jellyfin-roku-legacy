@@ -67,13 +67,10 @@ sub init()
     'Get reset folder setting
     m.resetGrid = get_user_setting("itemgrid.reset") = "true"
 
-    'Check if device has voice remote
-    devinfo = CreateObject("roDeviceInfo")
-    m.deviFeature = devinfo.HasFeature("voice_remote")
     m.micButton = m.top.findNode("micButton")
     m.micButtonText = m.top.findNode("micButtonText")
     'Hide voice search if device does not have voice remote
-    if m.deviFeature = false
+    if m.global.device.hasVoiceRemote = false
         m.micButton.visible = false
         m.micButtonText.visible = false
     end if
@@ -104,7 +101,7 @@ sub loadInitialItems()
         ' Translate between app and server nomenclature
         viewSetting = get_user_setting("display.livetv.landing")
         'Move mic to be visiable on TV Guide screen
-        if m.deviFeature = true
+        if m.global.device.hasVoiceRemote = true
             m.micButton.translation = "[1540, 92]"
             m.micButtonText.visible = true
             m.micButtonText.translation = "[1600,130]"

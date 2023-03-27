@@ -8,8 +8,6 @@ sub init()
 
     m.backdrop = m.top.findNode("backdrop")
 
-    m.deviceInfo = CreateObject("roDeviceInfo")
-
     ' Randmomise the background colors
     posterBackgrounds = m.global.constants.poster_bg_pallet
     m.backdrop.color = posterBackgrounds[rnd(posterBackgrounds.count()) - 1]
@@ -101,7 +99,7 @@ sub focusChanged()
         m.staticTitle.visible = false
         m.title.visible = true
         ' text to speech for accessibility
-        if m.deviceInfo.IsAudioGuideEnabled() = true
+        if m.global.device.isAudioGuideEnabled = true
             txt2Speech = CreateObject("roTextToSpeech")
             txt2Speech.Flush()
             txt2Speech.Say(m.title.text)

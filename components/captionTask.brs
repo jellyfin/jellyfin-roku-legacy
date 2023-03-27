@@ -17,12 +17,12 @@ sub init()
     m.textColorDict = { "Default": &HFFFFFFFF, "White": &HFFFFFFFF, "Black": &H000000FF, "Red": &HFF0000FF, "Green": &H008000FF, "Blue": &H0000FFFF, "Yellow": &HFFFF00FF, "Magenta": &HFF00FFFF, "Cyan": &H00FFFFFF }
     m.bgColorDict = { "Default": &H000000FF, "White": &HFFFFFFFF, "Black": &H000000FF, "Red": &HFF0000FF, "Green": &H008000FF, "Blue": &H0000FFFF, "Yellow": &HFFFF00FF, "Magenta": &HFF00FFFF, "Cyan": &H00FFFFFF }
 
-    m.settings = CreateObject("roDeviceInfo")
-    m.fontSize = m.fontSizeDict[m.settings.GetCaptionsOption("Text/Size")]
-    m.textColor = m.textColorDict[m.settings.GetCaptionsOption("Text/Color")]
-    m.textOpac = m.percentageDict[m.settings.GetCaptionsOption("Text/Opacity")]
-    m.bgColor = m.bgColorDict[m.settings.GetCaptionsOption("Background/Color")]
-    m.bgOpac = m.percentageDict[m.settings.GetCaptionsOption("Background/Opacity")]
+    captionSettings = CreateObject("roDeviceInfo")
+    m.fontSize = m.fontSizeDict[captionSettings.GetCaptionsOption("Text/Size")]
+    m.textColor = m.textColorDict[captionSettings.GetCaptionsOption("Text/Color")]
+    m.textOpac = m.percentageDict[captionSettings.GetCaptionsOption("Text/Opacity")]
+    m.bgColor = m.bgColorDict[captionSettings.GetCaptionsOption("Background/Color")]
+    m.bgOpac = m.percentageDict[captionSettings.GetCaptionsOption("Background/Opacity")]
     setFont()
 end sub
 
