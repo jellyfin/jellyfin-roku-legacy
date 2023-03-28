@@ -4,7 +4,7 @@
         {
             "type": "brightscript",
             "request": "launch",
-            "name": "Jellyfin Debug: Launch",
+            "name": "Jellyfin Debug",
             "stopOnEntry": false,
             //WARNING: don't edit this value. Instead, set "brightscript.debug.host": "YOUR_HOST_HERE" in your vscode user settings
             //"host": "${promptForHost}",
@@ -20,12 +20,12 @@
             ]
         },
         {
-            "name": "test",
+            "name": "Run tests",
             "type": "brightscript",
             "request": "launch",
             "consoleOutput": "full",
             "internalConsoleOptions": "neverOpen",
-            "preLaunchTask": "build-tests",
+            "preLaunchTask": "tests",
             "envFile": "${workspaceFolder}/.vscode/.env",
             "retainStagingFolder": true,
             "stopOnEntry": false,
@@ -51,12 +51,12 @@
             "enableDebugProtocol": false
         },
         {
-            "name": "tdd",
+            "name": "Run test-tdd",
             "type": "brightscript",
             "request": "launch",
             "consoleOutput": "full",
             "internalConsoleOptions": "neverOpen",
-            "preLaunchTask": "build-tdd",
+            "preLaunchTask": "test-tdd",
             "envFile": "${workspaceFolder}/.vscode/.env",
             "retainStagingFolder": true,
             "stopOnEntry": false,
