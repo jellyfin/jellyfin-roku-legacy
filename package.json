@@ -17,11 +17,10 @@
     "undent": "0.1.0"
   },
   "scripts": {
-    "build-tests": "npx bsc --project bsconfig-tests.json",
-    "build-tdd": "npx bsc --project bsconfig-tdd.json",
     "postinstall": "npx ropm copy",
     "validate": "npx bsc --copy-to-staging=false --create-package=false",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx bsc --project bsconfig-tests.json",
+    "test-tdd": "npx bsc --project bsconfig-tdd.json",
     "lint": "bslint",
     "lint-json": "jshint --extra-ext .json --verbose --exclude node_modules ./",
     "lint-markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
