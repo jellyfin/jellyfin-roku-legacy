@@ -2,9 +2,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "tests",
+            "label": "build-tests",
             "type": "shell",
-            "command": "npm run tests",
+            "command": "npm run build-tests",
             "problemMatcher": [],
             "presentation": {
                 "echo": true,
@@ -20,9 +20,9 @@
             }
         },
         {
-            "label": "test-tdd",
+            "label": "build-tdd",
             "type": "shell",
-            "command": "npm run test-tdd",
+            "command": "npm run build-tdd",
             "problemMatcher": [],
             "presentation": {
                 "echo": true,

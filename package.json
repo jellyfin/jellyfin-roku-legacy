@@ -17,6 +17,8 @@
     "undent": "0.1.0"
   },
   "scripts": {
+    "build-tests": "npx bsc --project bsconfig-tests.json",
+    "build-tdd": "npx bsc --project bsconfig-tdd.json",
     "check-formatting": "npx bsfmt --check",
     "format": "npx bsfmt --write",
     "lint": "bslint",
@@ -24,8 +26,6 @@
     "lint-markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
     "lint-spelling": "spellchecker -d dictionary.txt --files \"**/*.md\" \"**/.*/**/*.md\" \"!node_modules/**/*.md\"",
     "postinstall": "npx ropm copy",
-    "tests": "npx bsc --project bsconfig-tests.json",
-    "test-tdd": "npx bsc --project bsconfig-tdd.json",
     "validate": "npx bsc --copy-to-staging=false --create-package=false"
   },
   "repository": {
