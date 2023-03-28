@@ -17,16 +17,16 @@
     "undent": "0.1.0"
   },
   "scripts": {
-    "postinstall": "npx ropm copy",
-    "validate": "npx bsc --copy-to-staging=false --create-package=false",
-    "test": "npx bsc --project bsconfig-tests.json",
-    "test-tdd": "npx bsc --project bsconfig-tdd.json",
+    "check-formatting": "npx bsfmt --check",
+    "format": "npx bsfmt --write",
     "lint": "bslint",
     "lint-json": "jshint --extra-ext .json --verbose --exclude node_modules ./",
     "lint-markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
     "lint-spelling": "spellchecker -d dictionary.txt --files \"**/*.md\" \"**/.*/**/*.md\" \"!node_modules/**/*.md\"",
-    "check-formatting": "npx bsfmt --check",
-    "format": "npx bsfmt --write"
+    "postinstall": "npx ropm copy",
+    "test": "npx bsc --project bsconfig-tests.json",
+    "test-tdd": "npx bsc --project bsconfig-tdd.json",
+    "validate": "npx bsc --copy-to-staging=false --create-package=false",
   },
   "repository": {
     "type": "git",
