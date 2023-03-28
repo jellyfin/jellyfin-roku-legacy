@@ -2,7 +2,13 @@
   "name": "jellyfin-roku",
   "version": "1.6.4",
   "description": "Roku app for Jellyfin media server",
-  "main": "index.js",
+  "dependencies": {
+    "api": "npm:jellyfin-api-bs-client@1.0.5",
+    "bgv": "npm:button-group-vert@1.0.2",
+    "brighterscript-formatter": "1.6.24",
+    "intKeyboard": "npm:integer-keyboard@1.0.12",
+    "sob": "npm:slide-out-button@1.0.1"
+  },
   "devDependencies": {
     "@rokucommunity/bslint": "0.8.2",
     "brighterscript": "0.62.0",
@@ -41,12 +47,5 @@
   "bugs": {
     "url": "https://github.com/jellyfin/jellyfin-roku/issues"
   },
-  "homepage": "https://github.com/jellyfin/jellyfin-roku#readme",
-  "dependencies": {
-    "api": "npm:jellyfin-api-bs-client@1.0.5",
-    "bgv": "npm:button-group-vert@1.0.2",
-    "brighterscript-formatter": "1.6.24",
-    "intKeyboard": "npm:integer-keyboard@1.0.12",
-    "sob": "npm:slide-out-button@1.0.1"
-  }
+  "homepage": "https://github.com/jellyfin/jellyfin-roku#readme"
 }
