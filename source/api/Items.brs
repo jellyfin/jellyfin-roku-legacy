@@ -38,7 +38,6 @@ function searchMedia(query as string)
     ' This appears to be done differently on the web now
     ' For each potential type, a separate query is done:
     ' varying item types, and artists, and people
-
     if query <> ""
         resp = APIRequest(Substitute("Search/Hints", get_setting("active_user")), {
             "searchTerm": query,
@@ -54,7 +53,6 @@ function searchMedia(query as string)
             "Recursive": true,
             "limit": 100
         })
-
 
         data = getJson(resp)
         results = []
@@ -79,7 +77,7 @@ function ItemMetaData(id as string)
 
     imgParams = {}
     if data.type <> "Audio"
-        if data?.UserData?.PlayedPercentage <> invalid
+        if data.UserData <> invalid and data.UserData.PlayedPercentage <> invalid
             param = { "PercentPlayed": data.UserData.PlayedPercentage }
             imgParams.Append(param)
         end if
@@ -356,28 +354,37 @@ end function
 
 function AudioStream(id as string)
     songData = AudioItem(id)
+    if songData <> invalid
+        content = createObject("RoSGNode", "ContentNode")
+        if songData.title <> invalid
+            content.title = songData.title
+        end if
 
-    content = createObject("RoSGNode", "ContentNode")
-    content.title = songData.title
+        playbackInfo = ItemPostPlaybackInfo(songData.id, songData.mediaSources[0].id)
+        if playbackInfo <> invalid
+            content.id = playbackInfo.PlaySessionId
 
-    playbackInfo = ItemPostPlaybackInfo(songData.id, songData.mediaSources[0].id)
-    content.id = playbackInfo.PlaySessionId
+            if useTranscodeAudioStream(playbackInfo)
+                ' Transcode the audio
+                content.url = buildURL(playbackInfo.mediaSources[0].TranscodingURL)
+            else
+                ' Direct Stream the audio
+                params = {
+                    "Static": "true",
+                    "Container": songData.mediaSources[0].container,
+                    "MediaSourceId": songData.mediaSources[0].id
+                }
+                content.streamformat = songData.mediaSources[0].container
+                content.url = buildURL(Substitute("Audio/{0}/stream", songData.id), params)
+            end if
+        else
+            return invalid
+        end if
 
-    if useTranscodeAudioStream(playbackInfo)
-        ' Transcode the audio
-        content.url = buildURL(playbackInfo.mediaSources[0].TranscodingURL)
+        return content
     else
-        ' Direct Stream the audio
-        params = {
-            "Static": "true",
-            "Container": songData.mediaSources[0].container,
-            "MediaSourceId": songData.mediaSources[0].id
-        }
-        content.streamformat = songData.mediaSources[0].container
-        content.url = buildURL(Substitute("Audio/{0}/stream", songData.id), params)
+        return invalid
     end if
-
-    return content
 end function
 
 function useTranscodeAudioStream(playbackInfo)

@@ -67,10 +67,12 @@ sub init()
     m.sortAscending = true
 
     m.filter = "All"
+    m.filterOptions = {}
     m.favorite = "Favorite"
 
     m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
     m.loadLogoTask = createObject("roSGNode", "LoadItemsTask2")
+    m.getFiltersTask = createObject("roSGNode", "GetFiltersTask")
 
     'set inital counts for overhang before content is loaded.
     m.loadItemsTask.totalRecordCount = 0
@@ -126,6 +128,7 @@ sub loadInitialItems()
 
     m.sortField = get_user_setting("display." + m.top.parentItem.Id + ".sortField")
     m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
+    m.filterOptions = get_user_setting("display." + m.top.parentItem.Id + ".filterOptions")
     m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
     sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
 
@@ -136,7 +139,10 @@ sub loadInitialItems()
 
     if not isValid(m.sortField) then m.sortField = "SortName"
     if not isValid(m.filter) then m.filter = "All"
+    if not isValid(m.filterOptions) then m.filterOptions = "{}"
     if not isValid(m.view) then m.view = "Movies"
+
+    m.filterOptions = ParseJson(m.filterOptions)
 
     if sortAscendingStr = invalid or sortAscendingStr = "true"
         m.sortAscending = true
@@ -165,6 +171,7 @@ sub loadInitialItems()
     m.loadItemsTask.sortField = m.sortField
     m.loadItemsTask.sortAscending = m.sortAscending
     m.loadItemsTask.filter = m.filter
+    m.loadItemsTask.filterOptions = m.filterOptions
     m.loadItemsTask.startIndex = 0
 
     ' Load Item Types
@@ -216,7 +223,14 @@ sub loadInitialItems()
     m.loadItemsTask.observeField("content", "ItemDataLoaded")
     m.spinner.visible = true
     m.loadItemsTask.control = "RUN"
-    SetUpOptions()
+
+    m.getFiltersTask.observeField("filters", "FilterDataLoaded")
+    m.getFiltersTask.params = {
+        userid: get_setting("active_user"),
+        parentid: m.top.parentItem.Id,
+        includeitemtypes: "Movie"
+    }
+    m.getFiltersTask.control = "RUN"
 end sub
 
 ' Set Movies view, sort, and filter options
@@ -291,12 +305,7 @@ function inStringArray(array, searchValue) as boolean
 end function
 
 ' Data to display when options button selected
-sub SetUpOptions()
-    options = {}
-    options.filter = []
-    options.favorite = []
-
-    setMoviesOptions(options)
+sub setSelectedOptions(options)
 
     ' Set selected view option
     for each o in options.views
@@ -316,16 +325,75 @@ sub SetUpOptions()
         end if
     end for
 
-    ' Set selected filter option
+    ' Set selected filter
     for each o in options.filter
         if o.Name = m.filter
             o.Selected = true
             m.options.filter = o.Name
         end if
+
+        ' Select selected filter options
+        if isValid(o.options) and isValid(m.filterOptions)
+            if o.options.Count() > 0 and m.filterOptions.Count() > 0
+                if LCase(o.Name) = LCase(m.filterOptions.keys()[0])
+                    selectedFilterOptions = m.filterOptions[m.filterOptions.keys()[0]].split(o.delimiter)
+                    checkedState = []
+
+                    for each availableFilterOption in o.options
+                        matchFound = false
+
+                        for each selectedFilterOption in selectedFilterOptions
+                            if LCase(toString(availableFilterOption).trim()) = LCase(selectedFilterOption.trim())
+                                matchFound = true
+                            end if
+                        end for
+
+                        checkedState.push(matchFound)
+                    end for
+
+                    o.checkedState = checkedState
+                end if
+            end if
+        end if
     end for
 
     m.options.options = options
 end sub
+
+'
+' Logo Image Loaded Event Handler
+sub FilterDataLoaded(msg)
+    options = {}
+    options.filter = []
+    options.favorite = []
+
+    setMoviesOptions(options)
+
+    data = msg.GetData()
+    m.getFiltersTask.unobserveField("filters")
+
+    if not isValid(data) then return
+
+    ' Add Movie filters from the API data
+    if LCase(m.loadItemsTask.view) = "movies"
+        if isValid(data.genres)
+            options.filter.push({ "Title": tr("Genres"), "Name": "Genres", "Options": data.genres, "Delimiter": "|", "CheckedState": [] })
+        end if
+
+        if isValid(data.OfficialRatings)
+            options.filter.push({ "Title": tr("Parental Ratings"), "Name": "OfficialRatings", "Options": data.OfficialRatings, "Delimiter": "|", "CheckedState": [] })
+        end if
+
+        if isValid(data.Years)
+            options.filter.push({ "Title": tr("Years"), "Name": "Years", "Options": data.Years, "Delimiter": ",", "CheckedState": [] })
+        end if
+    end if
+
+    setSelectedOptions(options)
+
+    m.options.options = options
+end sub
+
 
 '
 ' Logo Image Loaded Event Handler
@@ -383,6 +451,10 @@ sub ItemDataLoaded(msg)
 
     m.itemGrid.setFocus(true)
     m.genreList.setFocus(false)
+
+    if m.data.getChildCount() = 0
+        m.itemGrid.jumpToItem = 0
+    end if
 
     for each item in itemData
         m.data.appendChild(item)
@@ -709,6 +781,16 @@ sub optionsClosed()
         set_user_setting("display." + m.top.parentItem.Id + ".filter", m.options.filter)
     end if
 
+    if not isValid(m.options.filterOptions)
+        m.filterOptions = {}
+    end if
+
+    if not AssocArrayEqual(m.options.filterOptions, m.filterOptions)
+        m.filterOptions = m.options.filterOptions
+        reload = true
+        set_user_setting("display." + m.top.parentItem.Id + ".filterOptions", FormatJson(m.options.filterOptions))
+    end if
+
     m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
 
     if m.options.view <> m.view
@@ -720,6 +802,7 @@ sub optionsClosed()
         m.loadItemsTask.NameStartsWith = " "
         m.loadItemsTask.searchTerm = ""
         m.filter = "All"
+        m.filterOptions = {}
         m.sortField = "SortName"
         m.sortAscending = true
 
@@ -727,6 +810,7 @@ sub optionsClosed()
         set_user_setting("display." + m.top.parentItem.Id + ".sortField", m.sortField)
         set_user_setting("display." + m.top.parentItem.Id + ".sortAscending", "true")
         set_user_setting("display." + m.top.parentItem.Id + ".filter", m.filter)
+        set_user_setting("display." + m.top.parentItem.Id + ".filterOptions", FormatJson(m.filterOptions))
 
         reload = true
     end if
@@ -845,6 +929,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.top.alphaSelected = ""
         m.loadItemsTask.filter = "All"
         m.filter = "All"
+        m.filterOptions = {}
         m.data = CreateObject("roSGNode", "ContentNode")
         m.itemGrid.content = m.data
         loadInitialItems()

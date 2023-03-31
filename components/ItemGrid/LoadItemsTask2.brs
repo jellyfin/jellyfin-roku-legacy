@@ -83,6 +83,12 @@ sub loadItems()
         params.append({ Filters: "IsResumable" })
     end if
 
+    if isValid(m.top.filterOptions)
+        if m.top.filterOptions.count() > 0
+            params.append(m.top.filterOptions)
+        end if
+    end if
+
     if m.top.ItemType <> ""
         params.append({ IncludeItemTypes: m.top.ItemType })
     end if

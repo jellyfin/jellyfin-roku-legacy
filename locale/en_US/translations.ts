@@ -6,7 +6,7 @@
         <name>default</name>
         <message>
             <source>192.168.1.100:8096 or https://example.com/jellyfin</source>
-            <translation>default192.168.1.100:8096 or https://example.com/jellyfin</translation>
+            <translation>192.168.1.100:8096 or https://example.com/jellyfin</translation>
         </message>
         <message>
             <source>Cancel</source>
@@ -764,8 +764,8 @@
             <extracomment>Name of codec used in settings menu</extracomment>
         </message>
         <message>
-            <source>Attempt Direct Play for HEVC media with unsupported profile levels before falling back to trancoding if it fails.</source>
-            <translation>Attempt Direct Play for HEVC media with unsupported profile levels before falling back to trancoding if it fails.</translation>
+            <source>Attempt Direct Play for HEVC media with unsupported profile levels before falling back to transcoding if it fails.</source>
+            <translation>Attempt Direct Play for HEVC media with unsupported profile levels before falling back to transcoding if it fails.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
         </message>
         <message>
@@ -929,9 +929,14 @@
             <extracomment>Settings Menu - Title for option</extracomment>
         </message>
         <message>
-            <source>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</source>
-            <translation>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</translation>
-            <extracomment>Settings Menu - Description for option</extracomment>
+            <source>Parental Ratings</source>
+            <translation>Parental Ratings</translation>
+            <extracomment>Used in Filter menu</extracomment>
+        </message>
+        <message>
+            <source>Years</source>
+            <translation>Years</translation>
+            <extracomment>Used in Filter menu</extracomment>
         </message>
         <message>
             <source>Show What's New Popup</source>
@@ -964,14 +969,6 @@
             <source>Default view for Movie Libraries.</source>
             <translation>Default view for Movie Libraries.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
-        </message>
-        <message>
-            <source>Movies (Presentation)</source>
-            <translation>Movies (Presentation)</translation>
-        </message>
-        <message>
-            <source>Movies (Grid)</source>
-            <translation>Movies (Grid)</translation>
         </message>
         <message>
             <source>Item Titles</source>

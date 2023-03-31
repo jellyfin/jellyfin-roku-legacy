@@ -91,19 +91,23 @@ function get_dialog_result(dialog, port)
 end function
 
 function lastFocusedChild(obj as object) as object
-    if LCase(obj.focusedChild.focusedChild.subType()) = "tvepisodes"
-        if isValid(obj?.focusedChild?.focusedChild?.lastFocus)
-            return obj.focusedChild.focusedChild.lastFocus
+    if isValid(obj)
+        if isValid(obj.focusedChild) and isValid(obj.focusedChild.focusedChild) and LCase(obj.focusedChild.focusedChild.subType()) = "tvepisodes"
+            if isValid(obj.focusedChild.focusedChild.lastFocus)
+                return obj.focusedChild.focusedChild.lastFocus
+            end if
         end if
-    end if
 
-    child = obj
-    for i = 0 to obj.getChildCount()
-        if obj.focusedChild <> invalid
-            child = child.focusedChild
-        end if
-    end for
-    return child
+        child = obj
+        for i = 0 to obj.getChildCount()
+            if isValid(obj.focusedChild)
+                child = child.focusedChild
+            end if
+        end for
+        return child
+    else
+        return invalid
+    end if
 end function
 
 function show_dialog(message as string, options = [], defaultSelection = 0) as integer
@@ -282,12 +286,51 @@ function findNodeBySubtype(node, subtype)
     return foundNodes
 end function
 
-' Search string array for search value. Return if it's found
-function inArray(array, searchValue) as boolean
-    for each item in array
-        if lcase(item) = lcase(searchValue) then return true
+function AssocArrayEqual(Array1 as object, Array2 as object) as boolean
+    if not isValid(Array1) or not isValid(Array2)
+        return false
+    end if
+
+    if not Array1.Count() = Array2.Count()
+        return false
+    end if
+
+    for each key in Array1
+        if not Array2.DoesExist(key)
+            return false
+        end if
+
+        if Array1[key] <> Array2[key]
+            return false
+        end if
     end for
+
+    return true
+end function
+
+' Search string array for search value. Return if it's found
+function inArray(haystack, needle) as boolean
+    valueToFind = needle
+
+    if LCase(type(valueToFind)) <> "rostring" and LCase(type(valueToFind)) <> "string"
+        valueToFind = str(needle)
+    end if
+
+    valueToFind = lcase(valueToFind)
+
+    for each item in haystack
+        if lcase(item) = valueToFind then return true
+    end for
+
     return false
+end function
+
+function toString(input) as string
+    if LCase(type(input)) = "rostring" or LCase(type(input)) = "string"
+        return input
+    end if
+
+    return str(input)
 end function
 
 sub startLoadingSpinner()
@@ -309,7 +352,7 @@ sub stopLoadingSpinner()
     if isValid(m.spinner)
         m.spinner.visible = false
     end if
-    if isValid(m.scene?.dialog)
+    if isValid(m.scene) and isValid(m.scene.dialog)
         m.scene.dialog.close = true
     end if
 end sub

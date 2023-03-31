@@ -1,34 +1,31 @@
 sub init()
     m.top.id = "overhang"
     ' hide seperators till they're needed
-    leftSeperator = m.top.findNode("overlayLeftSeperator")
-    leftSeperator.visible = "false"
+    m.leftSeperator = m.top.findNode("overlayLeftSeperator")
+    m.leftSeperator.visible = "false"
     m.rightSeperator = m.top.findNode("overlayRightSeperator")
-
-    m.hideClock = get_user_setting("ui.design.hideclock") = "true"
-
     ' set font sizes
-    optionText = m.top.findNode("overlayOptionsText")
-    optionText.font.size = 20
-    optionStar = m.top.findNode("overlayOptionsStar")
-    optionStar.font.size = 58
-    overlayMeridian = m.top.findNode("overlayMeridian")
-    overlayMeridian.font.size = 20
-
+    m.optionText = m.top.findNode("overlayOptionsText")
+    m.optionText.font.size = 20
+    m.optionStar = m.top.findNode("overlayOptionsStar")
+    m.optionStar.font.size = 58
+    ' save node references
+    m.title = m.top.findNode("overlayTitle")
     m.overlayRightGroup = m.top.findNode("overlayRightGroup")
     m.overlayTimeGroup = m.top.findNode("overlayTimeGroup")
-
     m.slideDownAnimation = m.top.findNode("slideDown")
     m.slideUpAnimation = m.top.findNode("slideUp")
-
+    ' show clock based on user setting
+    m.hideClock = get_user_setting("ui.design.hideclock") = "true"
     if not m.hideClock
         ' get system preference clock format (12/24hr)
         di = CreateObject("roDeviceInfo")
         m.clockFormat = di.GetClockFormat()
+        ' save node references
         m.overlayHours = m.top.findNode("overlayHours")
         m.overlayMinutes = m.top.findNode("overlayMinutes")
         m.overlayMeridian = m.top.findNode("overlayMeridian")
-
+        m.overlayMeridian.font.size = 20
         ' start timer
         m.currentTimeTimer = m.top.findNode("currentTimeTimer")
         m.currentTimeTimer.control = "start"
@@ -52,14 +49,12 @@ sub onVisibleChange()
 end sub
 
 sub updateTitle()
-    leftSeperator = m.top.findNode("overlayLeftSeperator")
     if m.top.title <> ""
-        leftSeperator.visible = "true"
+        m.leftSeperator.visible = "true"
     else
-        leftSeperator.visible = "false"
+        m.leftSeperator.visible = "false"
     end if
-    title = m.top.findNode("overlayTitle")
-    title.text = m.top.title
+    m.title.text = m.top.title
 
     if not m.hideClock
         resetTime()
@@ -92,15 +87,16 @@ sub updateUser()
 end sub
 
 sub updateTime()
-    m.currentTime = CreateObject("roDateTime")
-    m.currentTime.ToLocalTime()
-    m.currentTimeTimer.duration = 60 - m.currentTime.GetSeconds()
-    m.currentHours = m.currentTime.GetHours()
-    m.currentMinutes = m.currentTime.GetMinutes()
+    currentTime = CreateObject("roDateTime")
+    currentTime.ToLocalTime()
+    m.currentTimeTimer.duration = 60 - currentTime.GetSeconds()
+    m.currentHours = currentTime.GetHours()
+    m.currentMinutes = currentTime.GetMinutes()
     updateTimeDisplay()
 end sub
 
 sub resetTime()
+    if m.hideClock then return
     m.currentTimeTimer.control = "stop"
     m.currentTimeTimer.control = "start"
     updateTime()
@@ -140,13 +136,11 @@ sub updateTimeDisplay()
 end sub
 
 sub updateOptions()
-    optionText = m.top.findNode("overlayOptionsText")
-    optionStar = m.top.findNode("overlayOptionsStar")
     if m.top.showOptions = true
-        optionText.visible = true
-        optionStar.visible = true
+        m.optionText.visible = true
+        m.optionStar.visible = true
     else
-        optionText.visible = false
-        optionStar.visible = false
+        m.optionText.visible = false
+        m.optionStar.visible = false
     end if
 end sub

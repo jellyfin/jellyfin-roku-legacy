@@ -125,8 +125,8 @@ end sub
 ' Runs Next Episode button animation and sets focus to button
 sub showNextEpisodeButton()
     if m.top.content.contenttype <> 4 then return
-
-    if m.nextEpisodeButton.opacity = 0
+    
+    if m.global.userConfig.EnableNextEpisodeAutoPlay and m.nextEpisodeButton.opacity = 0
         m.showNextEpisodeButtonAnimation.control = "start"
         m.nextEpisodeButton.setFocus(true)
     end if

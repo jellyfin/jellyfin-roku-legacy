@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="HomeRows" extends="RowList">
   <interface>
     <field id="selectedItem" type="node" alwaysNotify="true" />
-    <field id="userConfig" type="assocarray" />
     <field id="quickPlayNode" type="node" alwaysNotify="true" />
     <function name="updateHomeRows" />
     <function name="loadLibraries" />
   </interface>
-  <script type="text/brightscript" uri="HomeRows.brs"/>
+  <script type="text/brightscript" uri="HomeRows.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>
