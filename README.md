@@ -14,7 +14,7 @@
 <img src="https://translate.jellyfin.org/widgets/jellyfin/-/jellyfin-roku/svg-badge.svg" alt="Translation status" />
 </a>
 <br/>
-<a href="https://matrix.to/#/+jellyfin:matrix.org">
+<a href="https://matrix.to/#/#jellyfin-dev-roku:matrix.org">
 <img alt="Chat on Matrix" src="https://img.shields.io/matrix/jellyfin:matrix.org.svg?logo=matrix"/>
 </a>
 <a href="https://www.reddit.com/r/jellyfin">

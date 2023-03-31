@@ -70,6 +70,9 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
         end if
     end if
 
+    ' For phase 1 of playlist support, we don't support intros yet
+    showIntro = false
+
     ' Don't attempt to play an intro for an intro video
     if showIntro
         ' Do not play intros when resuming playback
