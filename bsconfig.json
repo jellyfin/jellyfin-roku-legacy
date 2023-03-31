@@ -9,8 +9,12 @@
         "settings/*.*"
     ],
     "plugins": [
-        "@rokucommunity/bslint"
+        "@rokucommunity/bslint",
+        "roku-log-bsc-plugin"
     ],
+    "rokuLog": {
+        "insertPkgPath": true
+    },
     "diagnosticFilters": [
         "**/roku_modules/**/*",
         "**/testFramework/*",
