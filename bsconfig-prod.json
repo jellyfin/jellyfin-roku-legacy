@@ -4,7 +4,6 @@
         "source/**/*.*",
         "components/**/*.*",
         "images/**/*.*",
-        "resources/**/*.*",
         "locale/en_US/translations.ts",
         "locale/en_GB/translations.ts",
         "locale/fr_CA/translations.ts",
@@ -14,7 +13,7 @@
         "locale/pt_BR/translations.ts",
         "settings/**/*.*",
         {
-            "src": "resources/branding/release/**/*",
+            "src": "resources/branding/release/*.*",
             "dest": "images"
         }
     ],
@@ -32,6 +31,11 @@
         "**/testFramework/*",
         "**/tests/*"
     ],
+    "diagnosticSeverityOverrides": {
+        "LINT1001": "warn",
+        "1001": "warn"
+    },
     "outFile": "./out/Jellyfin-Roku-release",
-    "retainStagingDir": false
+    "allowBrighterScriptInBrightScript": true,
+    "retainStagingDir": true
 }
