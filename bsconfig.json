@@ -19,5 +19,13 @@
         "**/roku_modules/**/*",
         "**/testFramework/*",
         "**/tests/*"
-    ]
+    ],
+    "diagnosticSeverityOverrides": {
+        "LINT1001": "warn",
+        "1001": "warn"
+    },
+    "sourceMap": true,
+    // "autoImportComponentScript": true,
+    "allowBrighterScriptInBrightScript": true,
+    "retainStagingDir": true
 }
