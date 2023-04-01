@@ -6,49 +6,16 @@ sub init()
     setupButtons()
     setupInfoNodes()
     setupDataTasks()
-    setupScreenSaver()
 
     m.playlistTypeCount = m.global.queueManager.callFunc("getQueueUniqueTypes").count()
 
     m.shuffleEnabled = false
     m.buttonCount = m.buttons.getChildCount()
 
-    m.screenSaverTimeout = 300
-
-    m.LoadScreenSaverTimeoutTask.observeField("content", "onScreensaverTimeoutLoaded")
-    m.LoadScreenSaverTimeoutTask.control = "RUN"
-
     m.di = CreateObject("roDeviceInfo")
-
-    ' Write screen tracker for screensaver
-    WriteAsciiFile("tmp:/scene.temp", "nowplaying")
-    MoveFile("tmp:/scene.temp", "tmp:/scene")
 
     loadButtons()
     pageContentChanged()
-end sub
-
-sub onScreensaverTimeoutLoaded()
-    data = m.LoadScreenSaverTimeoutTask.content
-    m.LoadScreenSaverTimeoutTask.unobserveField("content")
-    if isValid(data)
-        m.screenSaverTimeout = data
-    end if
-end sub
-
-sub setupScreenSaver()
-    m.screenSaverBackground = m.top.FindNode("screenSaverBackground")
-
-    ' Album Art Screensaver
-    m.screenSaverAlbumCover = m.top.FindNode("screenSaverAlbumCover")
-    m.screenSaverAlbumAnimation = m.top.findNode("screenSaverAlbumAnimation")
-    m.screenSaverAlbumCoverFadeIn = m.top.findNode("screenSaverAlbumCoverFadeIn")
-
-    ' Jellyfin Screensaver
-    m.PosterOne = m.top.findNode("PosterOne")
-    m.PosterOne.uri = "pkg:/images/logo.png"
-    m.BounceAnimation = m.top.findNode("BounceAnimation")
-    m.PosterOneFadeIn = m.top.findNode("PosterOneFadeIn")
 end sub
 
 sub setupAnimationTasks()
@@ -58,8 +25,6 @@ sub setupAnimationTasks()
 
     m.bufferPositionAnimation = m.top.FindNode("bufferPositionAnimation")
     m.bufferPositionAnimationWidth = m.top.FindNode("bufferPositionAnimationWidth")
-
-    m.screenSaverStartAnimation = m.top.FindNode("screenSaverStartAnimation")
 end sub
 
 ' Creates tasks to gather data needed to render Scene and play song
@@ -75,8 +40,6 @@ sub setupDataTasks()
     ' Load audio stream
     m.LoadAudioStreamTask = CreateObject("roSGNode", "LoadItemsTask")
     m.LoadAudioStreamTask.itemsToLoad = "audioStream"
-
-    m.LoadScreenSaverTimeoutTask = CreateObject("roSGNode", "LoadScreenSaverTimeoutTask")
 end sub
 
 ' Creates audio node used to play song(s)
@@ -155,46 +118,6 @@ sub audioPositionChanged()
     ' Use animation to make the display smooth
     m.playPositionAnimationWidth.keyValue = [m.playPosition.width, playPositionBarWidth]
     m.playPositionAnimation.control = "start"
-
-    ' Only fall into screensaver logic if the user has screensaver enabled in Roku settings
-    if m.screenSaverTimeout > 0
-        if m.di.TimeSinceLastKeypress() >= m.screenSaverTimeout - 2
-            if not screenSaverActive()
-                startScreenSaver()
-            end if
-        end if
-    end if
-end sub
-
-function screenSaverActive() as boolean
-    return m.screenSaverBackground.visible or m.screenSaverAlbumCover.opacity > 0 or m.PosterOne.opacity > 0
-end function
-
-sub startScreenSaver()
-    m.screenSaverBackground.visible = true
-    m.top.overhangVisible = false
-
-    if m.albumCover.uri = ""
-        ' Jellyfin Logo Screensaver
-        m.PosterOne.visible = true
-        m.PosterOneFadeIn.control = "start"
-        m.BounceAnimation.control = "start"
-    else
-        ' Album Art Screensaver
-        m.screenSaverAlbumCoverFadeIn.control = "start"
-        m.screenSaverAlbumAnimation.control = "start"
-    end if
-end sub
-
-sub endScreenSaver()
-    m.PosterOneFadeIn.control = "pause"
-    m.screenSaverAlbumCoverFadeIn.control = "pause"
-    m.screenSaverAlbumAnimation.control = "pause"
-    m.BounceAnimation.control = "pause"
-    m.screenSaverBackground.visible = false
-    m.screenSaverAlbumCover.opacity = 0
-    m.PosterOne.opacity = 0
-    m.top.overhangVisible = true
 end sub
 
 sub audioStateChanged()
@@ -228,19 +151,10 @@ end sub
 function playAction() as boolean
     if m.global.audioPlayer.state = "playing"
         m.global.audioPlayer.control = "pause"
-        ' Allow screen to go to real screensaver
-        WriteAsciiFile("tmp:/scene.temp", "nowplaying-paused")
-        MoveFile("tmp:/scene.temp", "tmp:/scene")
     else if m.global.audioPlayer.state = "paused"
         m.global.audioPlayer.control = "resume"
-        ' Write screen tracker for screensaver
-        WriteAsciiFile("tmp:/scene.temp", "nowplaying")
-        MoveFile("tmp:/scene.temp", "tmp:/scene")
     else if m.global.audioPlayer.state = "finished"
         m.global.audioPlayer.control = "play"
-        ' Write screen tracker for screensaver
-        WriteAsciiFile("tmp:/scene.temp", "nowplaying")
-        MoveFile("tmp:/scene.temp", "tmp:/scene")
     end if
 
     return true
@@ -464,7 +378,6 @@ sub setPosterImage(posterURL)
     if isValid(posterURL)
         if m.albumCover.uri <> posterURL
             m.albumCover.uri = posterURL
-            m.screenSaverAlbumCover.uri = posterURL
         end if
     end if
 end sub
@@ -521,12 +434,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     ' Key bindings for remote control buttons
     if press
-        ' If user presses key to turn off screensaver, don't do anything else with it
-        if screenSaverActive()
-            endScreenSaver()
-            return true
-        end if
-
         if key = "play"
             return playAction()
         else if key = "back"
@@ -567,9 +474,3 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
     return false
 end function
-
-sub OnScreenHidden()
-    ' Write screen tracker for screensaver
-    WriteAsciiFile("tmp:/scene.temp", "")
-    MoveFile("tmp:/scene.temp", "tmp:/scene")
-end sub

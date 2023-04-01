@@ -23,9 +23,6 @@ sub Main (args as dynamic) as void
 
     ' Set global constants
     setConstants()
-    ' Write screen tracker for screensaver
-    WriteAsciiFile("tmp:/scene.temp", "")
-    MoveFile("tmp:/scene.temp", "tmp:/scene")
 
     m.port = CreateObject("roMessagePort")
     m.screen.setMessagePort(m.port)
@@ -750,9 +747,6 @@ end sub
 
 sub RunScreenSaver()
     print "Starting screensaver..."
-
-    scene = ReadAsciiFile("tmp:/scene")
-    if scene = "nowplaying" then return
 
     screen = createObject("roSGScreen")
     m.port = createObject("roMessagePort")
