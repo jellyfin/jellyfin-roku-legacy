@@ -5,6 +5,7 @@
             "type": "brightscript",
             "request": "launch",
             "name": "Jellyfin Debug: Launch",
+            "preLaunchTask": "build-dev",
             "stopOnEntry": false,
             //WARNING: don't edit this value. Instead, set "brightscript.debug.host": "YOUR_HOST_HERE" in your vscode user settings
             //"host": "${promptForHost}",
