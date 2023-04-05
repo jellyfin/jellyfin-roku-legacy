@@ -28,13 +28,12 @@ end sub
 
 sub setFont()
     fs = CreateObject("roFileSystem")
-    fontlist = fs.Find("tmp:/", "font")
-    if fontlist.count() > 0
-        m.font.uri = "tmp:/" + fontlist[0]
+
+    if fs.Exists("tmp:/font")
+        m.font.uri = "tmp:/font"
         m.font.size = m.fontSize
     else
-        reg = CreateObject("roFontRegistry")
-        m.font = reg.GetDefaultFont(m.fontSize, false, false)
+        m.font = "font:LargeSystemFont"
     end if
 end sub
 
@@ -56,6 +55,7 @@ function newlabel(txt)
     label = CreateObject("roSGNode", "Label")
     label.text = txt
     label.font = m.font
+    label.font.size = m.fontSize
     label.color = m.textColor
     label.opacity = m.textOpac
     return label
@@ -89,7 +89,7 @@ function newRect(lg)
 end function
 
 
-sub updateCaption ()
+sub updateCaption()
     m.top.currentCaption = []
     if LCase(m.top.playerState) = "playingon"
         m.top.currentPos = m.top.currentPos + 100

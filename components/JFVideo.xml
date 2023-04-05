@@ -16,6 +16,7 @@
     <field id="transcodeAvailable" type="boolean" value="false" />
     <field id="retryWithTranscoding" type="boolean" value="false" />
     <field id="isTranscoded" type="boolean" />
+    <field id="allowCaptions" type="boolean" value="false" />
     <field id="transcodeReasons" type="array" />
 
     <field id="videoId" type="string" />
