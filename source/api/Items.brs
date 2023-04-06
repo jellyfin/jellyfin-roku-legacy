@@ -138,7 +138,7 @@ function ItemMetaData(id as string)
     else if data.type = "MusicAlbum"
         ' User clicked on an album and wants to see the list of songs
         tmp = CreateObject("roSGNode", "MusicAlbumSongListData")
-        tmp.image = PosterImage(data.id)
+        tmp.image = PosterImage(data.id, { "maxHeight": 450, "maxWidth": 450, "quality": "90" })
         tmp.json = data
         return tmp
     else if data.type = "Audio"
@@ -292,7 +292,7 @@ function MusicSongList(id as string)
 
     for each item in data.Items
         tmp = CreateObject("roSGNode", "MusicSongData")
-        tmp.image = PosterImage(item.id)
+        tmp.image = PosterImage(item.id, { "maxHeight": 450, "maxWidth": 450, "quality": "90" })
         tmp.json = item
         results.push(tmp)
     end for
