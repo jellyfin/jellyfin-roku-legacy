@@ -1,3 +1,6 @@
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/config.brs"
+
 sub init()
     m.extrasGrp = m.top.findnode("extrasGrp")
     m.extrasGrid = m.top.findNode("extrasGrid")

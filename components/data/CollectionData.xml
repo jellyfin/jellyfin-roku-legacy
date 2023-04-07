@@ -1,12 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="CollectionData" extends="JFContentItem">
   <interface>
     <field id="collectionID" type="string" />
     <field id="description" type="string" />
     <field id="overview" type="string" value="boxsets" />
   </interface>
-  <script type="text/brightscript" uri="CollectionData.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

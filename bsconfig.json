@@ -25,7 +25,7 @@
         "1001": "warn"
     },
     "sourceMap": true,
-    // "autoImportComponentScript": true,
+    "autoImportComponentScript": true,
     "allowBrighterScriptInBrightScript": true,
     "stagingDir": "build/staging",
     "retainStagingDir": true

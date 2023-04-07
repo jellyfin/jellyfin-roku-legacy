@@ -1,3 +1,6 @@
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/utils/misc.brs"
+
 sub init()
 
     m.top.overhangTitle = tr("Settings")

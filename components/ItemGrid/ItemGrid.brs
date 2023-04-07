@@ -1,3 +1,8 @@
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/utils/deviceCapabilities.brs"
+
 sub init()
 
     m.options = m.top.findNode("options")

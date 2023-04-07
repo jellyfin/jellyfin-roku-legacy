@@ -12,8 +12,4 @@
     <function name="refresh" />
     <function name="loadLibraries" />
   </interface>
-  <script type="text/brightscript" uri="Home.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>

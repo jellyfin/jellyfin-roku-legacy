@@ -1,5 +1,9 @@
-sub init()
+import "pkg:/source/api/Image.brs"
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/utils/misc.brs"
 
+sub init()
     m.itemText = m.top.findNode("itemText")
     m.itemPoster = m.top.findNode("itemPoster")
     m.itemProgress = m.top.findNode("progress")
@@ -17,7 +21,6 @@ sub init()
     m.backdrop = m.top.findNode("backdrop")
     posterBackgrounds = m.global.constants.poster_bg_pallet
     m.backdrop.color = posterBackgrounds[rnd(posterBackgrounds.count()) - 1]
-
 end sub
 
 

@@ -1,35 +1,14 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="OverviewDialog" extends="StandardDialog">
-  <interface>
-      <field id="Title" type="string" onchange="setTitle" />
-      <field id="Overview" type="string" onChange="setOverview" />
-  </interface>
-  <script type="text/brightscript">
-  <![CDATA[
-  sub setTitle()
-      m.top.findNode("titleArea").primaryTitle = m.top.title
-  end sub
-
-  sub setOverview()
-      m.top.findNode("description").text = m.top.overview
-  end sub
-
-  function onKeyEvent(key as string, press as boolean) as boolean
-      if press = false then return false
-
-      if key = "OK" and m.top.findNode("contentArea").isInFocusChain()
-          m.top.close = true
-      end if
-
-      return false
-  end function
-  ]]>
-  </script>
-  <children>
-    <StdDlgTitleArea id="titleArea" />
-    <StdDlgContentArea id="contentArea">
-      <StdDlgTextItem id="description"
-          namedTextStyle="normal" />
-    </StdDlgContentArea>
-  </children>
+    <interface>
+        <field id="Title" type="string" onchange="setTitle" />
+        <field id="Overview" type="string" onChange="setOverview" />
+    </interface>
+    <children>
+        <StdDlgTitleArea id="titleArea" />
+        <StdDlgContentArea id="contentArea">
+            <StdDlgTextItem id="description"
+                namedTextStyle="normal" />
+        </StdDlgContentArea>
+    </children>
 </component>

@@ -1,5 +1,6 @@
-sub init()
+import "pkg:/source/utils/misc.brs"
 
+sub init()
     m.buttons = m.top.findNode("buttons")
     m.buttons.buttons = [tr("View"), tr("Sort"), tr("Filter")]
     m.buttons.selectedIndex = 1

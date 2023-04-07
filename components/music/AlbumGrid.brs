@@ -1,3 +1,5 @@
+import "pkg:/source/utils/misc.brs"
+
 sub init()
     getData()
 end sub

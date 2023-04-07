@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="Section" extends="JFGroup">
     <children>
         <Animation id="showFromBottomAnimation" duration="0.5" repeat="false">
@@ -37,6 +37,4 @@
         <function name="scrollDownToOnDeck" />
         <function name="scrollOffOnDeck" />
     </interface>
-    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
-    <script type="text/brightscript" uri="section.brs" />
 </component>

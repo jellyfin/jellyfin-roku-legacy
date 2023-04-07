@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="UserSelect" extends="JFGroup">
   <children>
     <Label text="Please sign in" horizAlign="center" font="font:LargeSystemFont" height="100" width="1920" translation="[0, 200]" />
@@ -6,13 +6,12 @@
     <LabelList id="alternateOptions" vertFocusAnimationStyle="floatingFocus" textHorizAlign="center" translation="[400,850]" itemSize="[1120,60]" itemSpacing="[0,20]" focusedColor="#EBEBEB" focusBitmapBlendColor="#00a4dcFF" focusFootprintBlendColor="#303030">
       <ContentNode id="alternate" role="content">
         <ContentNode title="Manual Login" />
-<!--         <ContentNode title="Forgot Password" />  -->
+        <!--         <ContentNode title="Forgot Password" />  -->
       </ContentNode>
     </LabelList>
   </children>
   <interface>
     <field id="itemSelected" type="string" alwaysNotify="true" />
-    <field id="itemContent" type="array" onChange="itemContentChanged"/>
+    <field id="itemContent" type="array" onChange="itemContentChanged" />
   </interface>
-  <script type="text/brightscript" uri="UserSelect.brs" />
 </component>

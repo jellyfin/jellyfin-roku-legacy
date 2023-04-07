@@ -4,6 +4,4 @@
     <function name="OnScreenShown" />
     <function name="OnScreenHidden" />
   </interface>
-  <script type="text/brightscript" uri="JFScreen.brs" />
-  <script type="text/brightscript" uri="pkg:/source/roku_modules/log/LogMixin.brs" />
 </component>

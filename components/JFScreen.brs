@@ -1,3 +1,5 @@
+import "pkg:/source/roku_modules/log/LogMixin.brs"
+
 sub init()
     ' initialize the log manager. second param sets log output:
     ' 1 error, 2 warn, 3 info, 4 verbose, 5 debug

@@ -6,9 +6,6 @@
               <field id="playerState" type="string" value="stopped" />
               <field id="currentPos" type="int" />
        </interface>
-       <script type="text/brightscript" uri="captionTask.brs" />
-       <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-       <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
        <children>
               <timer id="captionTimer" repeat="true" duration="0.1" />
        </children>

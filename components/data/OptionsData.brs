@@ -1,3 +1,5 @@
+import "pkg:/source/utils/config.brs"
+
 sub init()
     m.top.value_index = 0
 end sub

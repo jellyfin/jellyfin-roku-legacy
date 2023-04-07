@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="TVShowDescription" extends="Group">
   <children>
-    <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[15]" >
+    <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[15]">
       <Poster id="tvshowPoster" width="400" height="600" />
       <LayoutGroup layoutDirection="vert" itemSpacings="[25]">
         <Label id="title" font="font:LargeBoldSystemFont" />
@@ -25,6 +25,4 @@
   <interface>
     <field id="itemContent" type="node" onChange="itemContentChanged" />
   </interface>
-  <script type="text/brightscript" uri="TVShowDescription.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>

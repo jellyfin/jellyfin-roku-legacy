@@ -1,21 +1,20 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="ExtrasItem" extends="JFGroup">
   <interface>
     <field id="itemContent" type="node" onChange="showContent" />
     <field id="itemHasFocus" type="boolean" onChange="focusChanged" />
   </interface>
-  <script type="text/brightscript" uri="ExtrasItem.brs" />
   <children>
-    <LayoutGroup layoutDirection="vert" >
+    <LayoutGroup layoutDirection="vert">
       <Poster id="posterImg" width="234" height="300" translation="[8,243]" failedBitmapUri="pkg:/images/baseline_person_white_48dp.png" />
       <ScrollingLabel id="pLabel"
         horizAlign="center" vertAlign="bottom"
         height="48"
-        font="font:SmallestBoldSystemFont" repeatCount="0"/>
+        font="font:SmallestBoldSystemFont" repeatCount="0" />
       <ScrollingLabel id="SubTitle"
         horizAlign="center" vertAlign="center"
         height="32"
-        font="font:SmallestBoldSystemFont" color="#A7A7A7FF" repeatCount = "0" />
-    </LayoutGroup> 
+        font="font:SmallestBoldSystemFont" color="#A7A7A7FF" repeatCount="0" />
+    </LayoutGroup>
   </children>
 </component>
