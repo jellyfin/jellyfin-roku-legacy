@@ -2,8 +2,10 @@ import "pkg:/source/api/Image.brs"
 import "pkg:/source/api/baserequest.brs"
 import "pkg:/source/utils/config.brs"
 import "pkg:/source/utils/misc.brs"
+import "pkg:/source/roku_modules/log/LogMixin.brs"
 
 sub init()
+    m.log = log_Logger("HomeItem") 'bs:disable-line
     m.itemText = m.top.findNode("itemText")
     m.itemPoster = m.top.findNode("itemPoster")
     m.itemProgress = m.top.findNode("progress")
@@ -234,8 +236,7 @@ sub itemContentChanged()
         return
     end if
 
-    print "Unhandled Home Item Type: " + itemData.type
-
+    m.log.warn("Unhandled Home Item Type", itemData.type)
 end sub
 
 '
