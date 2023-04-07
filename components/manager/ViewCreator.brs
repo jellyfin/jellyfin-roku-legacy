@@ -106,5 +106,6 @@ sub onStateChange()
 
         ' Playback completed, return user to previous screen
         m.global.sceneManager.callFunc("popScene")
+        m.global.audioPlayer.loopMode = ""
     end if
 end sub

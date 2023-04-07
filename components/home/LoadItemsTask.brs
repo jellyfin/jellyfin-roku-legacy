@@ -12,37 +12,43 @@ sub loadItems()
         url = Substitute("Users/{0}/Views/", get_setting("active_user"))
         resp = APIRequest(url)
         data = getJson(resp)
-        for each item in data.Items
-            ' Skip Books for now as we don't support it (issue #525)
-            if item.CollectionType <> "books"
-                tmp = CreateObject("roSGNode", "HomeData")
-                tmp.json = item
-                results.push(tmp)
-            end if
-        end for
+        if isValid(data) and isValid(data.Items)
+            for each item in data.Items
+                ' Skip Books for now as we don't support it (issue #525)
+                if item.CollectionType <> "books"
+                    tmp = CreateObject("roSGNode", "HomeData")
+                    tmp.json = item
+                    results.push(tmp)
+                end if
+            end for
+        end if
 
         ' Load Latest Additions to Libraries
     else if m.top.itemsToLoad = "latest"
+        activeUser = get_setting("active_user")
+        if isValid(activeUser)
+            url = Substitute("Users/{0}/Items/Latest", activeUser)
+            params = {}
+            params["Limit"] = 16
+            params["ParentId"] = m.top.itemId
+            params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
+            params["ImageTypeLimit"] = 1
+            params["EnableTotalRecordCount"] = false
 
-        url = Substitute("Users/{0}/Items/Latest", get_setting("active_user"))
-        params = {}
-        params["Limit"] = 16
-        params["ParentId"] = m.top.itemId
-        params["EnableImageTypes"] = "Primary,Backdrop,Thumb"
-        params["ImageTypeLimit"] = 1
-        params["EnableTotalRecordCount"] = false
+            resp = APIRequest(url, params)
+            data = getJson(resp)
 
-        resp = APIRequest(url, params)
-        data = getJson(resp)
-
-        for each item in data
-            ' Skip Books for now as we don't support it (issue #525)
-            if item.Type <> "Book"
-                tmp = CreateObject("roSGNode", "HomeData")
-                tmp.json = item
-                results.push(tmp)
+            if isValid(data)
+                for each item in data
+                    ' Skip Books for now as we don't support it (issue #525)
+                    if item.Type <> "Book"
+                        tmp = CreateObject("roSGNode", "HomeData")
+                        tmp.json = item
+                        results.push(tmp)
+                    end if
+                end for
             end if
-        end for
+        end if
 
         ' Load Next Up
     else if m.top.itemsToLoad = "nextUp"
@@ -74,34 +80,39 @@ sub loadItems()
 
         resp = APIRequest(url, params)
         data = getJson(resp)
-        for each item in data.Items
-            tmp = CreateObject("roSGNode", "HomeData")
-            tmp.json = item
-            results.push(tmp)
-        end for
-
-        ' Load Continue Watching
-    else if m.top.itemsToLoad = "continue"
-
-        url = Substitute("Users/{0}/Items/Resume", get_setting("active_user"))
-
-        params = {}
-        params["recursive"] = true
-        params["SortBy"] = "DatePlayed"
-        params["SortOrder"] = "Descending"
-        params["Filters"] = "IsResumable"
-        params["EnableTotalRecordCount"] = false
-
-        resp = APIRequest(url, params)
-        data = getJson(resp)
-        for each item in data.Items
-            ' Skip Books for now as we don't support it (issue #558)
-            if item.Type <> "Book"
+        if isValid(data) and isValid(data.Items)
+            for each item in data.Items
                 tmp = CreateObject("roSGNode", "HomeData")
                 tmp.json = item
                 results.push(tmp)
+            end for
+        end if
+        ' Load Continue Watching
+    else if m.top.itemsToLoad = "continue"
+        activeUser = get_setting("active_user")
+        if isValid(activeUser)
+            url = Substitute("Users/{0}/Items/Resume", activeUser)
+
+            params = {}
+            params["recursive"] = true
+            params["SortBy"] = "DatePlayed"
+            params["SortOrder"] = "Descending"
+            params["Filters"] = "IsResumable"
+            params["EnableTotalRecordCount"] = false
+
+            resp = APIRequest(url, params)
+            data = getJson(resp)
+            if isValid(data) and isValid(data.Items)
+                for each item in data.Items
+                    ' Skip Books for now as we don't support it (issue #558)
+                    if item.Type <> "Book"
+                        tmp = CreateObject("roSGNode", "HomeData")
+                        tmp.json = item
+                        results.push(tmp)
+                    end if
+                end for
             end if
-        end for
+        end if
 
     else if m.top.itemsToLoad = "favorites"
 
@@ -116,14 +127,16 @@ sub loadItems()
 
         resp = APIRequest(url, params)
         data = getJson(resp)
-        for each item in data.Items
-            ' Skip Books for now as we don't support it (issue #558)
-            if item.Type <> "Book"
-                tmp = CreateObject("roSGNode", "HomeData")
-                tmp.json = item
-                results.push(tmp)
-            end if
-        end for
+        if isValid(data) and isValid(data.Items)
+            for each item in data.Items
+                ' Skip Books for now as we don't support it (issue #558)
+                if item.Type <> "Book"
+                    tmp = CreateObject("roSGNode", "HomeData")
+                    tmp.json = item
+                    results.push(tmp)
+                end if
+            end for
+        end if
 
     else if m.top.itemsToLoad = "onNow"
         url = "LiveTv/Programs/Recommended"
@@ -138,12 +151,14 @@ sub loadItems()
 
         resp = APIRequest(url, params)
         data = getJson(resp)
-        for each item in data.Items
-            tmp = CreateObject("roSGNode", "HomeData")
-            item.ImageURL = ImageURL(item.Id)
-            tmp.json = item
-            results.push(tmp)
-        end for
+        if isValid(data) and isValid(data.Items)
+            for each item in data.Items
+                tmp = CreateObject("roSGNode", "HomeData")
+                item.ImageURL = ImageURL(item.Id)
+                tmp.json = item
+                results.push(tmp)
+            end for
+        end if
 
         ' Extract array of persons from Views and download full metadata for each
     else if m.top.itemsToLoad = "people"
@@ -195,12 +210,14 @@ sub loadItems()
         url = Substitute("Items/{0}/Similar", m.top.itemId)
         resp = APIRequest(url, params)
         data = getJson(resp)
-        for each item in data.items
-            tmp = CreateObject("roSGNode", "ExtrasData")
-            tmp.posterURL = ImageUrl(item.Id, "Primary", { "Tags": item.PrimaryImageTag })
-            tmp.json = item
-            results.push(tmp)
-        end for
+        if isValid(data) and isValid(data.Items)
+            for each item in data.items
+                tmp = CreateObject("roSGNode", "ExtrasData")
+                tmp.posterURL = ImageUrl(item.Id, "Primary", { "Tags": item.PrimaryImageTag })
+                tmp.json = item
+                results.push(tmp)
+            end for
+        end if
     else if m.top.itemsToLoad = "personMovies"
         getPersonVideos("Movie", results, {})
     else if m.top.itemsToLoad = "personTVShows"

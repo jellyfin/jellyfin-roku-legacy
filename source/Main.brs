@@ -30,7 +30,7 @@ sub Main (args as dynamic) as void
     m.port = CreateObject("roMessagePort")
     m.screen.setMessagePort(m.port)
     m.scene = m.screen.CreateScene("JFScene")
-    m.screen.show()
+    m.screen.show() ' vscode_rale_tracker_entry
 
     ' Set any initial Global Variables
     m.global = m.screen.getGlobalNode()
@@ -47,12 +47,13 @@ sub Main (args as dynamic) as void
     app_start:
     ' First thing to do is validate the ability to use the API
     if not LoginFlow() then return
+    ' remove previous scenes from the stack
     sceneManager.callFunc("clearScenes")
-
+    ' save user config
+    m.global.addFields({ userConfig: m.user.configuration })
     ' load home page
     sceneManager.currentUser = m.user.Name
     group = CreateHomeGroup()
-    group.userConfig = m.user.configuration
     group.callFunc("loadLibraries")
     sceneManager.callFunc("pushScene", group)
 
@@ -250,8 +251,10 @@ sub Main (args as dynamic) as void
             ptr = msg.getData()
             ' ptr is for [row, col] of selected item... but we only have 1 row
             series = msg.getRoSGNode()
-            node = series.seasonData.items[ptr[1]]
-            group = CreateSeasonDetailsGroup(series.itemContent, node)
+            if isValid(ptr) and ptr.count() >= 2 and isValid(ptr[1]) and isValid(series) and isValid(series.seasonData) and isValid(series.seasonData.items)
+                node = series.seasonData.items[ptr[1]]
+                group = CreateSeasonDetailsGroup(series.itemContent, node)
+            end if
         else if isNodeEvent(msg, "musicAlbumSelected")
             ' If you select a Music Album from ANYWHERE, follow this flow
             ptr = msg.getData()
@@ -395,33 +398,33 @@ sub Main (args as dynamic) as void
             ' If a button is selected, we have some determining to do
             btn = getButton(msg)
             group = sceneManager.callFunc("getActiveScene")
-            if btn <> invalid and btn.id = "play-button"
+            if isValid(btn) and btn.id = "play-button"
 
                 ' Check if a specific Audio Stream was selected
                 audio_stream_idx = 1
-                if group.selectedAudioStreamIndex <> invalid
+                if isValid(group) and isValid(group.selectedAudioStreamIndex)
                     audio_stream_idx = group.selectedAudioStreamIndex
                 end if
 
                 ' Check to see if a specific video "version" was selected
                 mediaSourceId = invalid
-                if group.selectedVideoStreamId <> invalid
+                if isValid(group) and isValid(group.selectedVideoStreamId)
                     mediaSourceId = group.selectedVideoStreamId
                 end if
                 video_id = group.id
                 video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx)
-                if video <> invalid and video.errorMsg <> "introaborted"
+                if isValid(video) and video.errorMsg <> "introaborted"
                     sceneManager.callFunc("pushScene", video)
                 end if
 
-                if group.lastfocus.id = "main_group"
+                if isValid(group) and isValid(group.lastFocus) and isValid(group.lastFocus.id) and group.lastFocus.id = "main_group"
                     buttons = group.findNode("buttons")
                     if isValid(buttons)
-                        group.lastfocus = group.findNode("buttons")
+                        group.lastFocus = group.findNode("buttons")
                     end if
                 end if
 
-                if group.lastFocus <> invalid
+                if isValid(group) and isValid(group.lastFocus)
                     group.lastFocus.setFocus(true)
                 end if
 
@@ -434,26 +437,31 @@ sub Main (args as dynamic) as void
                 video_id = group.id
 
                 trailerData = api_API().users.getlocaltrailers(get_setting("active_user"), group.id)
+                video = invalid
 
-                video_id = trailerData[0].id
+                if isValid(trailerData) and isValid(trailerData[0]) and isValid(trailerData[0].id)
+                    video_id = trailerData[0].id
+                    video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx, false, false)
+                end if
 
-                video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx, false, false)
-                if video <> invalid and video.errorMsg <> "introaborted"
+                if isValid(video) and video.errorMsg <> "introaborted"
                     sceneManager.callFunc("pushScene", video)
                     dialog.close = true
                 end if
 
-                if group.lastFocus <> invalid
+                if isValid(group) and isValid(group.lastFocus)
                     group.lastFocus.setFocus(true)
                 end if
             else if btn <> invalid and btn.id = "watched-button"
                 movie = group.itemContent
-                if movie.watched
-                    UnmarkItemWatched(movie.id)
-                else
-                    MarkItemWatched(movie.id)
+                if isValid(movie) and isValid(movie.watched) and isValid(movie.id)
+                    if movie.watched
+                        UnmarkItemWatched(movie.id)
+                    else
+                        MarkItemWatched(movie.id)
+                    end if
+                    movie.watched = not movie.watched
                 end if
-                movie.watched = not movie.watched
             else if btn <> invalid and btn.id = "favorite-button"
                 movie = group.itemContent
                 if movie.favorite
@@ -473,11 +481,11 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "optionSelected")
             button = msg.getRoSGNode()
             group = sceneManager.callFunc("getActiveScene")
-            if button.id = "goto_search"
+            if button.id = "goto_search" and isValid(group)
                 ' Exit out of the side panel
                 panel = group.findNode("options")
                 panel.visible = false
-                if group.lastFocus <> invalid
+                if isValid(group.lastFocus)
                     group.lastFocus.setFocus(true)
                 else
                     group.setFocus(true)
@@ -500,7 +508,7 @@ sub Main (args as dynamic) as void
                 ' Exit out of the side panel
                 panel = group.findNode("options")
                 panel.visible = false
-                if group.lastFocus <> invalid
+                if isValid(group) and isValid(group.lastFocus)
                     group.lastFocus.setFocus(true)
                 else
                     group.setFocus(true)
@@ -518,9 +526,10 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "state")
             node = msg.getRoSGNode()
 
-            if LCase(m.selectedItemType) = "tvchannel" and node.selectedItem <> ""
-                video = CreateVideoPlayerGroup(node.selectedItem)
-                m.global.sceneManager.callFunc("pushScene", video)
+if isValid(node) and isValid(node.state)
+            if m.selectedItemType = "TvChannel" and node.state = "finished"
+                    video = CreateVideoPlayerGroup(node.id)
+                    m.global.sceneManager.callFunc("pushScene", video)
             else if m.selectedItemType = "TvChannel" and node.state = "finished"
                 video = CreateVideoPlayerGroup(node.id)
                 m.global.sceneManager.callFunc("pushScene", video)
@@ -532,30 +541,35 @@ sub Main (args as dynamic) as void
                 if isValid(node.retryWithTranscoding) and node.retryWithTranscoding
                     retryVideo = CreateVideoPlayerGroup(node.Id, invalid, node.audioIndex, true, false)
                     m.global.sceneManager.callFunc("popScene")
-                    if retryVideo <> invalid
+                     if isValid(retryVideo)
                         m.global.sceneManager.callFunc("pushScene", retryVideo)
                     end if
-                else if node.showID = invalid
+                else if not isValid(node.showID)
                     sceneManager.callFunc("popScene")
                 else
                     if video.errorMsg = ""
                         autoPlayNextEpisode(node.id, node.showID)
                     else
-                        sceneManager.callFunc("popScene")
+                            sceneManager.callFunc("popScene")
+                        end if
                     end if
                 end if
             end if
         else if type(msg) = "roDeviceInfoEvent"
             event = msg.GetInfo()
-            group = sceneManager.callFunc("getActiveScene")
+
             if event.exitedScreensaver = true
                 sceneManager.callFunc("resetTime")
-                if group.subtype() = "Home"
-                    currentTime = CreateObject("roDateTime").AsSeconds()
-                    group.timeLastRefresh = currentTime
-                    group.callFunc("refresh")
+                group = sceneManager.callFunc("getActiveScene")
+                if isValid(group) and isValid(group.subtype())
+                    ' refresh the current view
+                    if group.subtype() = "Home"
+                        currentTime = CreateObject("roDateTime").AsSeconds()
+                        group.timeLastRefresh = currentTime
+                        group.callFunc("refresh")
+                    end if
+                    ' todo: add other screens to be refreshed - movie detail, tv series, episode list etc.
                 end if
-                ' todo: add other screens to be refreshed - movie detail, tv series, episode list etc.
             else
                 print "Unhandled roDeviceInfoEvent:"
                 print msg.GetInfo()
@@ -723,31 +737,6 @@ sub DeleteFromServerList(urlToDelete)
         end for
         set_setting("saved_servers", FormatJson(newServers))
     end if
-end sub
-
-sub RunScreenSaver()
-    print "Starting screensaver..."
-
-    scene = ReadAsciiFile("tmp:/scene")
-    if scene = "nowplaying" then return
-
-    screen = createObject("roSGScreen")
-    m.port = createObject("roMessagePort")
-    screen.setMessagePort(m.port)
-
-    screen.createScene("Screensaver")
-    screen.Show()
-
-    while true
-        msg = wait(8000, m.port)
-        if msg <> invalid
-            msgType = type(msg)
-            if msgType = "roSGScreenEvent"
-                if msg.isScreenClosed() then return
-            end if
-        end if
-    end while
-
 end sub
 
 ' Roku Performance monitoring

@@ -337,8 +337,8 @@ function CreateMovieDetailsGroup(movie)
     group.optionsAvailable = false
     m.global.sceneManager.callFunc("pushScene", group)
 
-    movie = ItemMetaData(movie.id)
-    group.itemContent = movie
+    movieMetaData = ItemMetaData(movie.id)
+    group.itemContent = movieMetaData
     group.trailerAvailable = false
 
     trailerData = api_API().users.getlocaltrailers(get_setting("active_user"), movie.id)
@@ -353,7 +353,7 @@ function CreateMovieDetailsGroup(movie)
 
     extras = group.findNode("extrasGrid")
     extras.observeField("selectedItem", m.port)
-    extras.callFunc("loadParts", movie.json)
+    extras.callFunc("loadParts", movieMetaData.json)
     stopLoadingSpinner()
     return group
 end function
@@ -554,6 +554,9 @@ function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_
     video = VideoPlayer(video_id, mediaSourceId, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), forceTranscoding, showIntro, allowResumeDialog)
 
     if video = invalid then return invalid
+
+    video.allowCaptions = true
+
     if video.errorMsg = "introaborted" then return video
     video.observeField("selectSubtitlePressed", m.port)
     video.observeField("selectPlaybackInfoPressed", m.port)

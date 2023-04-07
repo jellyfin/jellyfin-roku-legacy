@@ -14,7 +14,7 @@
 <img src="https://translate.jellyfin.org/widgets/jellyfin/-/jellyfin-roku/svg-badge.svg" alt="Translation status" />
 </a>
 <br/>
-<a href="https://matrix.to/#/+jellyfin:matrix.org">
+<a href="https://matrix.to/#/#jellyfin-dev-roku:matrix.org">
 <img alt="Chat on Matrix" src="https://img.shields.io/matrix/jellyfin:matrix.org.svg?logo=matrix"/>
 </a>
 <a href="https://www.reddit.com/r/jellyfin">
@@ -26,7 +26,7 @@ The Jellyfin Roku App is a Jellyfin client for Roku Devices.  This is still very
 
 ## Getting Started
 
-The channel is available on the [Roku Channel Store](https://my.roku.com/add/jellyfin).
+The channel is available on the [Roku Channel Store](https://channelstore.roku.com/details/cc5e559d08d9ec87c5f30dcebdeebc12/jellyfin).
 
 ## Getting Involved<a name="get_involved"></a>
 

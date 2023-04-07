@@ -35,6 +35,7 @@ sub init()
     m.getNextEpisodeTask = createObject("roSGNode", "GetNextEpisodeTask")
     m.getNextEpisodeTask.observeField("nextEpisodeData", "onNextEpisodeDataLoaded")
 
+
     m.getItemQueryTask = createObject("roSGNode", "GetItemQueryTask")
 
     m.extras = m.top.findNode("extrasGrid")
@@ -42,8 +43,14 @@ sub init()
     m.extrasGrp.opacity = 0
 
     m.showGuideAnimation = m.top.findNode("showGuide")
+    m.top.observeField("state", "onState")
+    m.top.observeField("content", "onContentChange")
+    m.top.observeField("allowCaptions", "onAllowCaptionsChange")
+end sub
 
-    'Captions
+sub onAllowCaptionsChange()
+    if not m.top.allowCaptions then return
+    
     m.captionGroup = m.top.findNode("captionGroup")
     m.captionGroup.createchildren(9, "LayoutGroup")
     m.captionTask = createObject("roSGNode", "captionTask")
@@ -115,7 +122,7 @@ end sub
 ' Runs Next Episode button animation and sets focus to button
 sub showNextEpisodeButton()
     if m.top.content.contenttype <> 4 then return
-    if not m.nextEpisodeButton.visible
+    if m.global.userConfig.EnableNextEpisodeAutoPlay and not m.nextEpisodeButton.visible
         m.showNextEpisodeButtonAnimation.control = "start"
         m.nextEpisodeButton.setFocus(true)
         m.nextEpisodeButton.visible = true
@@ -180,7 +187,9 @@ end sub
 
 ' When Video Player state changes
 sub onPositionChanged()
-    m.captionTask.currentPos = Int(m.top.position * 1000)
+    if isValid(m.captionTask)
+        m.captionTask.currentPos = Int(m.top.position * 1000)
+    end if
     ' Check if dialog is open
     m.dialog = m.top.getScene().findNode("dialogBackground")
     if not isValid(m.dialog)
@@ -194,7 +203,9 @@ end sub
 '
 ' When Video Player state changes
 sub onState(msg)
-    m.captionTask.playerState = m.top.state + m.top.globalCaptionMode
+    if isValid(m.captionTask)
+        m.captionTask.playerState = m.top.state + m.top.globalCaptionMode
+    end if
     ' When buffering, start timer to monitor buffering process
     if m.top.state = "buffering" and m.bufferCheckTimer <> invalid
         ' start timer

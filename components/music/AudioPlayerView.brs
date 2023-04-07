@@ -11,7 +11,6 @@ sub init()
     m.playlistTypeCount = m.global.queueManager.callFunc("getQueueUniqueTypes").count()
 
     m.shuffleEnabled = false
-    m.loopMode = ""
     m.buttonCount = m.buttons.getChildCount()
 
     m.screenSaverTimeout = 300
@@ -203,7 +202,7 @@ sub audioStateChanged()
     ' Song Finished, attempt to move to next song
     if m.global.audioPlayer.state = "finished"
         ' User has enabled single song loop, play current song again
-        if m.loopMode = "one"
+        if m.global.audioPlayer.loopMode = "one"
             playAction()
             return
         end if
@@ -214,7 +213,7 @@ sub audioStateChanged()
             ' We are at the end of the song queue
 
             ' User has enabled loop for entire song queue, move back to first song
-            if m.loopMode = "all"
+            if m.global.audioPlayer.loopMode = "all"
                 m.global.queueManager.callFunc("setPosition", -1)
                 LoadNextSong()
                 return
@@ -255,6 +254,11 @@ function previousClicked() as boolean
         m.global.audioPlayer.control = "stop"
     end if
 
+    ' Reset loop mode due to manual user interaction
+    if m.global.audioPlayer.loopMode = "one"
+        resetLoopModeToDefault()
+    end if
+
     m.global.queueManager.callFunc("moveBack")
     pageContentChanged()
 
@@ -262,25 +266,44 @@ function previousClicked() as boolean
     return true
 end function
 
+sub resetLoopModeToDefault()
+    m.global.audioPlayer.loopMode = ""
+    setLoopButtonImage()
+end sub
+
 function loopClicked() as boolean
 
-    if m.loopMode = ""
-        m.loopIndicator.opacity = "1"
-        m.loopIndicator.uri = m.loopIndicator.uri.Replace("-off", "-on")
-        m.loopMode = "all"
-    else if m.loopMode = "all"
-        m.loopIndicator.uri = m.loopIndicator.uri.Replace("-on", "1-on")
-        m.loopMode = "one"
+    if m.global.audioPlayer.loopMode = ""
+        m.global.audioPlayer.loopMode = "all"
+    else if m.global.audioPlayer.loopMode = "all"
+        m.global.audioPlayer.loopMode = "one"
     else
-        m.loopIndicator.uri = m.loopIndicator.uri.Replace("1-on", "-off")
-        m.loopMode = ""
+        m.global.audioPlayer.loopMode = ""
     end if
+
+    setLoopButtonImage()
 
     return true
 end function
 
+sub setLoopButtonImage()
+    if m.global.audioPlayer.loopMode = "all"
+        m.loopIndicator.opacity = "1"
+        m.loopIndicator.uri = m.loopIndicator.uri.Replace("-off", "-on")
+    else if m.global.audioPlayer.loopMode = "one"
+        m.loopIndicator.uri = m.loopIndicator.uri.Replace("-on", "1-on")
+    else
+        m.loopIndicator.uri = m.loopIndicator.uri.Replace("1-on", "-off")
+    end if
+end sub
+
 function nextClicked() as boolean
     if m.playlistTypeCount > 1 then return false
+
+    ' Reset loop mode due to manual user interaction
+    if m.global.audioPlayer.loopMode = "one"
+        resetLoopModeToDefault()
+    end if
 
     if m.global.queueManager.callFunc("getPosition") < m.global.queueManager.callFunc("getCount") - 1
         LoadNextSong()
@@ -408,6 +431,7 @@ sub loadButtons()
         m.shuffleIndicator.opacity = ".4"
         m.loopIndicator.opacity = ".4"
         m.displayButtonsAnimation.control = "start"
+        setLoopButtonImage()
     end if
 end sub
 
@@ -432,26 +456,21 @@ end sub
 sub onMetaDataLoaded()
     data = m.LoadMetaDataTask.content[0]
     m.LoadMetaDataTask.unobserveField("content")
-    if data <> invalid and data.count() > 0
-
+    if isValid(data) and data.count() > 0 and isValid(data.json)
         ' Use metadata to load backdrop image
-        if isValid(data.json)
-            if isValid(data.json.ArtistItems)
-                if data.json.ArtistItems.count() > 0
-                    if isValid(data.json.ArtistItems[0].id)
-                        m.LoadBackdropImageTask.itemId = data.json.ArtistItems[0].id
-                        m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
-                        m.LoadBackdropImageTask.control = "RUN"
-                    end if
-                end if
-            end if
+        if isValid(data.json.ArtistItems) and isValid(data.json.ArtistItems[0]) and isValid(data.json.ArtistItems[0].id)
+            m.LoadBackdropImageTask.itemId = data.json.ArtistItems[0].id
+            m.LoadBackdropImageTask.observeField("content", "onBackdropImageLoaded")
+            m.LoadBackdropImageTask.control = "RUN"
         end if
 
         setPosterImage(data.posterURL)
         setScreenTitle(data.json)
         setOnScreenTextValues(data.json)
 
-        m.songDuration = data.json.RunTimeTicks / 10000000.0
+        if isValid(data.json.RunTimeTicks)
+            m.songDuration = data.json.RunTimeTicks / 10000000.0
+        end if
     end if
 end sub
 
@@ -527,6 +546,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             return playAction()
         else if key = "back"
             m.global.audioPlayer.control = "stop"
+            m.global.audioPlayer.loopMode = ""
         else if key = "rewind"
             return previousClicked()
         else if key = "fastforward"
