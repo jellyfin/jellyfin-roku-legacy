@@ -4,6 +4,7 @@
   "description": "Roku app for Jellyfin media server",
   "main": "index.js",
   "devDependencies": {
+    "brighterscript": "0.64.0",
     "@rokucommunity/bslint": "0.8.2",
     "jshint": "^2.13.6",
     "markdownlint-cli2": "0.6.0",
@@ -13,8 +14,8 @@
     "spellchecker-cli": "6.1.1"
   },
   "scripts": {
-    "build": "npx rimraf build/ && npx bsc --project bsconfig.json",
-    "build-prod": "npx rimraf build/ && npx bsc --project bsconfig-prod.json",
+    "build": "npx rimraf build/ out/ && npx bsc --project bsconfig.json",
+    "build-prod": "npx rimraf build/ out/ && npx bsc --project bsconfig-prod.json",
     "postinstall": "npx ropm copy",
     "validate": "npx bsc --copy-to-staging=false --create-package=false",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -42,7 +43,6 @@
   "dependencies": {
     "api": "npm:jellyfin-api-bs-client@^1.0.5",
     "bgv": "npm:button-group-vert@^1.0.2",
-    "brighterscript": "0.62.0",
     "brighterscript-formatter": "^1.6.8",
     "intKeyboard": "npm:integer-keyboard@^1.0.12",
     "log": "npm:roku-log@0.9.3",

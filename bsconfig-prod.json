@@ -27,9 +27,7 @@
         "removeComments": true
     },
     "diagnosticFilters": [
-        "**/roku_modules/**/*",
-        "**/testFramework/*",
-        "**/tests/*"
+        "**/roku_modules/**/*"
     ],
     "diagnosticSeverityOverrides": {
         "LINT1001": "warn",
