@@ -3,6 +3,7 @@
         "source/**/*.brs",
         "source/**/*.bs",
         "components/**/*.brs",
-        "components/**/*.bs"
+        "components/**/*.bs",
+        "!**/roku_modules/**/*.*"
     ]
 }
