@@ -675,31 +675,13 @@
             <extracomment>Settings Menu - Title for option</extracomment>
         </message>
         <message>
-            <source>If enabled, selecting a TV series with only one season will go straight to the episode list rather than the show details and season list.</source>
-            <translation>If enabled, selecting a TV series with only one season will go straight to the episode list rather than the show details and season list.</translation>
+            <source>Go directly to the episode list if a TV series has only one season.</source>
+            <translation>Go directly to the episode list if a TV series has only one season.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
         </message>
         <message>
-            <source>If enabled, images of unwatched episodes will be blurred.</source>
-            <translation>If enabled, images of unwatched episodes will be blurred.</translation>
-        </message>
-        <message>
-            <source>Screensaver</source>
-            <translation>Screensaver</translation>
-        </message>
-        <message>
-            <source>Options for Jellyfin&apos;s screensaver.</source>
-            <translation>Options for Jellyfin&apos;s screensaver.</translation>
-            <extracomment>Description for Screensaver user settings.</extracomment>
-        </message>
-        <message>
-            <source>Use Splashscreen as Screensaver</source>
-            <translation>Use Splashscreen as Screensaver</translation>
-            <extracomment>Option Title in user setting screen</extracomment>
-        </message>
-        <message>
-            <source>Use generated splashscreen image as Jellyfin&apos;s screensaver background. Jellyfin will need to be closed and reopened for change to take effect.</source>
-            <translation>Use generated splashscreen image as Jellyfin&apos;s screensaver background. Jellyfin will need to be closed and reopened for change to take effect.</translation>
+            <source>Blur images of unwatched episodes.</source>
+            <translation>Blur images of unwatched episodes.</translation>
         </message>
         <message>
             <source>Design Elements</source>
@@ -726,8 +708,8 @@
             <extracomment>Settings Menu - Title for option</extracomment>
         </message>
         <message>
-            <source>Cinema Mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.</source>
-            <translation>Cinema Mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.</translation>
+            <source>Bring the theater experience straight to your living room with the ability to play custom intros before the main feature.</source>
+            <translation>Bring the theater experience straight to your living room with the ability to play custom intros before the main feature.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
         </message>
         <message>
@@ -736,8 +718,8 @@
             <extracomment>Option Title in user setting screen</extracomment>
         </message>
         <message>
-            <source>Hides all clocks in Jellyfin. Jellyfin will need to be closed and reopened for change to take effect.</source>
-            <translation>Hides all clocks in Jellyfin. Jellyfin will need to be closed and reopened for change to take effect.</translation>
+            <source>Hide all clocks in Jellyfin. Jellyfin will need to be closed and reopened for changes to take effect.</source>
+            <translation>Hide all clocks in Jellyfin. Jellyfin will need to be closed and reopened for changes to take effect.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
         </message>
         <message>
@@ -1025,36 +1007,36 @@
             <translation>Disable Community Rating for Episodes</translation>
         </message>
         <message>
-            <source>If enabled, the star and community rating for episodes of a TV show will be removed. This is to prevent spoilers of an upcoming good/bad episode.</source>
-            <translation>If enabled, the star and community rating for episodes of a TV show will be removed. This is to prevent spoilers of an upcoming good/bad episode.</translation>
+            <source>Hide the star and community rating for episodes of a TV show. This is to prevent spoilers of an upcoming good/bad episode.</source>
+            <translation>Hide the star and community rating for episodes of a TV show. This is to prevent spoilers of an upcoming good/bad episode.</translation>
+        </message>
+        <message>
+            <source>Configure the maximum playback bitrate.</source>
+            <translation>Configure the maximum playback bitrate.</translation>
         </message>
         <message>
             <source>Biographical information for this person is not currently available.</source>
             <translation>Biographical information for this person is not currently available.</translation>
         </message>
         <message>
-            <source>Playback Bitrate Limits</source>
-            <translation>Playback Bitrate Limits</translation>
+            <source>Enable Limit</source>
+            <translation>Enable Limit</translation>
         </message>
         <message>
-            <source>Set limits for how high playback bitrates are allowed to be.</source>
-            <translation>Set limits for how high playback bitrates are allowed to be.</translation>
+            <source>Enable or disable  the 'Maximum Bitrate' setting.</source>
+            <translation>Enable or disable  the 'Maximum Bitrate' setting.</translation>
         </message>
         <message>
-            <source>Limits Enabled</source>
-            <translation>Limits Enabled</translation>
+            <source>Bitrate Limit</source>
+            <translation>Bitrate Limit</translation>
         </message>
         <message>
-            <source>If enabled, playback bitrates will be limited based on the 'Playback Bitrate Limit' setting.</source>
-            <translation>If enabled, playback bitrates will be limited based on the 'Playback Bitrate Limit' setting.</translation>
+            <source>Maximum Bitrate</source>
+            <translation>Maximum Bitrate</translation>
         </message>
         <message>
-            <source>Playback Bitrate Limit</source>
-            <translation>Playback Bitrate Limit</translation>
-        </message>
-        <message>
-            <source>Max bitrate (Mbps) allowed if limits are enabled. Set to 0 to use Roku's specifications.</source>
-            <translation>Max bitrate (Mbps) allowed if limits are enabled. Set to 0 to use Roku's specifications.</translation>
+            <source>Set the maximum bitrate in Mbps. Set to 0 to use Roku's specifications. This setting must be enabled to take effect.</source>
+            <translation>Set the maximum bitrate in Mbps. Set to 0 to use Roku's specifications. This setting must be enabled to take effect.</translation>
         </message>
         <message>
             <source>Libraries</source>

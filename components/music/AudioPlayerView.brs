@@ -259,12 +259,22 @@ function previousClicked() as boolean
         m.global.audioPlayer.control = "stop"
     end if
 
+    ' Reset loop mode due to manual user interaction
+    if m.global.audioPlayer.loopMode = "one"
+        resetLoopModeToDefault()
+    end if
+
     m.global.queueManager.callFunc("moveBack")
     pageContentChanged()
 
 
     return true
 end function
+
+sub resetLoopModeToDefault()
+    m.global.audioPlayer.loopMode = ""
+    setLoopButtonImage()
+end sub
 
 function loopClicked() as boolean
 
@@ -294,6 +304,11 @@ end sub
 
 function nextClicked() as boolean
     if m.playlistTypeCount > 1 then return false
+
+    ' Reset loop mode due to manual user interaction
+    if m.global.audioPlayer.loopMode = "one"
+        resetLoopModeToDefault()
+    end if
 
     if m.global.queueManager.callFunc("getPosition") < m.global.queueManager.callFunc("getCount") - 1
         LoadNextSong()

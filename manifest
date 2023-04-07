@@ -21,7 +21,6 @@ splash_min_time=1500
 
 ui_resolutions=fhd
 
-screensaver_private=1
-screensaver_title=Jellyfin
+confirm_partner_button=1
 
 supports_input_launch=1

@@ -30,7 +30,7 @@ sub Main (args as dynamic) as void
     m.port = CreateObject("roMessagePort")
     m.screen.setMessagePort(m.port)
     m.scene = m.screen.CreateScene("JFScene")
-    m.screen.show()
+    m.screen.show() ' vscode_rale_tracker_entry
 
     ' Set any initial Global Variables
     m.global = m.screen.getGlobalNode()
@@ -746,31 +746,6 @@ sub DeleteFromServerList(urlToDelete)
         end for
         set_setting("saved_servers", FormatJson(newServers))
     end if
-end sub
-
-sub RunScreenSaver()
-    print "Starting screensaver..."
-
-    scene = ReadAsciiFile("tmp:/scene")
-    if scene = "nowplaying" then return
-
-    screen = createObject("roSGScreen")
-    m.port = createObject("roMessagePort")
-    screen.setMessagePort(m.port)
-
-    screen.createScene("Screensaver")
-    screen.Show()
-
-    while true
-        msg = wait(8000, m.port)
-        if msg <> invalid
-            msgType = type(msg)
-            if msgType = "roSGScreenEvent"
-                if msg.isScreenClosed() then return
-            end if
-        end if
-    end while
-
 end sub
 
 ' Roku Performance monitoring
