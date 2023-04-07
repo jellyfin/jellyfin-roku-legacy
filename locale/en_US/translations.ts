@@ -856,26 +856,6 @@
             <extracomment>Popup message when we find no audio data for an artist</extracomment>
         </message>
         <message>
-            <source>Guide</source>
-            <translation>Guide</translation>
-            <extracomment>Trickplaybar button, Guide</extracomment>
-        </message>
-        <message>
-            <source>Info</source>
-            <translation>Info</translation>
-            <extracomment>Trickplaybar button, Info</extracomment>
-        </message>
-        <message>
-            <source>Cast</source>
-            <translation>Cast</translation>
-            <extracomment>Trickplaybar button, Cast</extracomment>
-        </message>
-        <message>
-            <source>Loop</source>
-            <translation>Loop</translation>
-            <extracomment>Trickplaybar button, Loop</extracomment>
-        </message>
-        <message>
             <source>Custom Subtitles</source>
             <translation>Custom Subtitles</translation>
             <extracomment>Name of a setting - custom subtitles that support CJK fonts</extracomment>
