@@ -35,7 +35,8 @@
         "LINT1001": "warn",
         "1001": "warn"
     },
-    "outFile": "./out/Jellyfin-Roku-release",
+    "outFile": "build/Jellyfin-Roku-release",
     "allowBrighterScriptInBrightScript": true,
+    "stagingDir": "build/staging",
     "retainStagingDir": true
 }

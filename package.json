@@ -13,8 +13,8 @@
     "spellchecker-cli": "6.1.1"
   },
   "scripts": {
-    "build": "npx rimraf out/ && npx bsc --project bsconfig.json",
-    "build-prod": "npx rimraf out/ && npx bsc --project bsconfig-prod.json",
+    "build": "npx rimraf build/ && npx bsc --project bsconfig.json",
+    "build-prod": "npx rimraf build/ && npx bsc --project bsconfig-prod.json",
     "postinstall": "npx ropm copy",
     "validate": "npx bsc --copy-to-staging=false --create-package=false",
     "test": "echo \"Error: no test specified\" && exit 1",

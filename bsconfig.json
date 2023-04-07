@@ -27,5 +27,7 @@
     "sourceMap": true,
     // "autoImportComponentScript": true,
     "allowBrighterScriptInBrightScript": true,
+    "stagingDir": "build/staging",
+    "outFile": "build/dev-build.zip",
     "retainStagingDir": true
 }
