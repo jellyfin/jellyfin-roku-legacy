@@ -27,15 +27,17 @@
         "removeComments": true
     },
     "diagnosticFilters": [
-        "**/roku_modules/**/*"
+        "**/roku_modules/**/*",
+        "**/testFramework/*",
+        "**/tests/*"
     ],
     "diagnosticSeverityOverrides": {
         "LINT1001": "warn",
         "1001": "warn"
     },
-    "outFile": "build/Jellyfin-Roku-release",
     "allowBrighterScriptInBrightScript": true,
     "autoImportComponentScript": true,
     "stagingDir": "build/staging",
-    "retainStagingDir": true
+    "retainStagingDir": true,
+    "outFile": "out/Jellyfin-Roku-release"
 }
