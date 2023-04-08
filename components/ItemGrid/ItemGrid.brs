@@ -5,7 +5,7 @@ import "pkg:/source/utils/deviceCapabilities.brs"
 import "pkg:/source/roku_modules/log/LogMixin.brs"
 
 sub init()
-    m.log = log_Logger("ItemGrid") 'bs:disable-line
+    m.log = log.Logger("ItemGrid")
     m.options = m.top.findNode("options")
 
     m.showItemCount = get_user_setting("itemgrid.showItemCount") = "true"

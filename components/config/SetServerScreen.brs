@@ -2,7 +2,7 @@ import "pkg:/source/roku_modules/log/LogMixin.brs"
 import "pkg:/source/utils/config.brs"
 
 sub init()
-    m.log = log_Logger("SetServerScreen") 'bs:disable-line
+    m.log = log.Logger("SetServerScreen")
     m.top.setFocus(true)
 
     m.spinner = m.top.findNode("spinner")

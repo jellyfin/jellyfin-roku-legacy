@@ -3,7 +3,7 @@ import "pkg:/source/utils/config.brs"
 import "pkg:/source/roku_modules/log/LogMixin.brs"
 
 sub init()
-    m.log = log_Logger("RecordProgramTask") 'bs:disable-line
+    m.log = log.Logger("RecordProgramTask")
     m.top.functionName = "RecordOrCancelProgram"
 end sub
 

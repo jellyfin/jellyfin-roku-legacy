@@ -1,7 +1,7 @@
 import "pkg:/source/roku_modules/log/LogMixin.brs"
 
 sub init()
-    m.log = log_Logger("SceneManager") 'bs:disable-line
+    m.log = log.Logger("SceneManager")
     m.groups = []
     m.scene = m.top.getScene()
     m.content = m.scene.findNode("content")

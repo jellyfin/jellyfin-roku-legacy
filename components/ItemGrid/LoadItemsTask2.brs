@@ -8,7 +8,7 @@ import "pkg:/source/utils/deviceCapabilities.brs"
 import "pkg:/source/roku_modules/log/LogMixin.brs"
 
 sub init()
-    m.log = log_Logger("LoadItemsTask2") 'bs:disable-line
+    m.log = log.Logger("LoadItemsTask2")
     m.top.functionName = "loadItems"
 
     m.top.limit = 60

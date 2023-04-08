@@ -31,10 +31,6 @@
         "**/testFramework/*",
         "**/tests/*"
     ],
-    "diagnosticSeverityOverrides": {
-        "LINT1001": "warn",
-        "1001": "warn"
-    },
     "allowBrighterScriptInBrightScript": true,
     "autoImportComponentScript": true,
     "stagingDir": "build/staging",

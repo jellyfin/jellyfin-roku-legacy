@@ -3,7 +3,7 @@ import "pkg:/source/utils/misc.brs"
 import "pkg:/source/roku_modules/log/LogMixin.brs"
 
 sub init()
-    m.log = log_Logger("GridItem") 'bs:disable-line
+    m.log = log.Logger("GridItem")
     m.posterMask = m.top.findNode("posterMask")
     m.itemPoster = m.top.findNode("itemPoster")
     m.itemIcon = m.top.findNode("itemIcon")

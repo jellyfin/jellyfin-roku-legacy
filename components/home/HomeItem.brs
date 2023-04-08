@@ -5,7 +5,7 @@ import "pkg:/source/utils/misc.brs"
 import "pkg:/source/roku_modules/log/LogMixin.brs"
 
 sub init()
-    m.log = log_Logger("HomeItem") 'bs:disable-line
+    m.log = log.Logger("HomeItem")
     m.itemText = m.top.findNode("itemText")
     m.itemPoster = m.top.findNode("itemPoster")
     m.itemProgress = m.top.findNode("progress")

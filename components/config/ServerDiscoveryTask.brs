@@ -4,7 +4,7 @@ import "pkg:/source/roku_modules/log/LogMixin.brs"
 ' Task used to discover jellyfin servers on the local network
 '
 sub init()
-    m.log = log_Logger("ServerDiscoveryTask") 'bs:disable-line
+    m.log = log.Logger("ServerDiscoveryTask")
     m.top.functionName = "execute"
 end sub
 

@@ -3,7 +3,7 @@ import "pkg:/source/utils/misc.brs"
 import "pkg:/source/roku_modules/log/LogMixin.brs"
 
 sub init()
-    m.log = log_Logger("Settings") 'bs:disable-line
+    m.log = log.Logger("Settings")
     m.top.overhangTitle = tr("Settings")
     m.top.optionsAvailable = false
 
