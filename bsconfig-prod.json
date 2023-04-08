@@ -38,6 +38,5 @@
     "allowBrighterScriptInBrightScript": true,
     "autoImportComponentScript": true,
     "stagingDir": "build/staging",
-    "retainStagingDir": true,
-    "outFile": "out/Jellyfin-Roku-release"
+    "retainStagingDir": true
 }
