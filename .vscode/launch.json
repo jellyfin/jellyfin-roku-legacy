@@ -26,7 +26,6 @@
             "consoleOutput": "full",
             "internalConsoleOptions": "neverOpen",
             "preLaunchTask": "build-tests",
-            "envFile": "${workspaceFolder}/.vscode/.env",
             "retainStagingFolder": true,
             "stopOnEntry": false,
             "files": [
@@ -57,7 +56,6 @@
             "consoleOutput": "full",
             "internalConsoleOptions": "neverOpen",
             "preLaunchTask": "build-tdd",
-            "envFile": "${workspaceFolder}/.vscode/.env",
             "retainStagingFolder": true,
             "stopOnEntry": false,
             "files": [
