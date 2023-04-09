@@ -15,6 +15,7 @@
     "bslib": "npm:@rokucommunity/bslib@0.1.1",
     "jshint": "2.13.6",
     "markdownlint-cli2": "0.6.0",
+    "rimraf": "4.4.1",
     "roku-deploy": "3.10.0",
     "roku-log-bsc-plugin": "0.7.0",
     "rooibos-roku": "5.4.2",
@@ -23,8 +24,8 @@
     "undent": "0.1.0"
   },
   "scripts": {
-    "build-tests": "rm -rf build/ && npx bsc --project bsconfig-tests.json",
-    "build-tdd": "rm -rf build/ && npx bsc --project bsconfig-tdd.json",
+    "build-tests": "npx rimraf build/ && npx bsc --project bsconfig-tests.json",
+    "build-tdd": "npx rimraf build/ && npx bsc --project bsconfig-tdd.json",
     "check-formatting": "npx bsfmt --check",
     "format": "npx bsfmt --write",
     "lint": "bslint",
