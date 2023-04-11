@@ -148,8 +148,14 @@ sub updateHomeRows()
     else
         m.global.playstateTask.unobserveField("state")
     end if
+
+    ' Refresh Continue Watching Data
     m.LoadContinueTask.observeField("content", "updateContinueItems")
     m.LoadContinueTask.control = "RUN"
+
+    ' Refresh NextUp Data
+    m.LoadNextUpTask.observeField("content", "updateNextUpItems")
+    m.LoadNextUpTask.control = "RUN"
 end sub
 
 sub updateFavoritesItems()
