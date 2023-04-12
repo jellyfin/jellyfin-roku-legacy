@@ -60,21 +60,21 @@ sub onLibrariesLoaded()
     m.LoadLibrariesTask.unobserveField("content")
     m.LoadLibrariesTask.content = []
     ' create My Media, Continue Watching, and Next Up rows
-    content = CreateObject("roSGNode", "ContentNode")
+    m.content = CreateObject("roSGNode", "ContentNode")
 
-    mediaRow = content.CreateChild("HomeRow")
-    mediaRow.title = tr("My Media")
+    m.mediaRow = m.content.CreateChild("HomeRow")
+    m.mediaRow.title = tr("My Media")
 
-    continueRow = content.CreateChild("HomeRow")
+    continueRow = m.content.CreateChild("HomeRow")
     continueRow.title = tr("Continue Watching")
 
-    nextUpRow = content.CreateChild("HomeRow")
+    nextUpRow = m.content.CreateChild("HomeRow")
     nextUpRow.title = tr("Next Up >")
 
-    favoritesRow = content.CreateChild("HomeRow")
+    favoritesRow = m.content.CreateChild("HomeRow")
     favoritesRow.title = tr("Favorites")
 
-    sizeArray = [
+    m.sizeArray = [
         [464, 311], ' My Media
         [464, 331], ' Continue Watching
         [464, 331], ' Next Up
@@ -96,6 +96,13 @@ sub onLibrariesLoaded()
     m.LoadFavoritesTask.control = "RUN"
 
     ' validate library data
+    refreshLatestInLibraries(m.mediaRow, m.sizeArray, m.content)
+
+    m.top.rowItemSize = m.sizeArray
+    m.top.content = m.content
+end sub
+
+sub refreshLatestInLibraries(mediaRow, sizeArray, content)
     if isValid(m.libraryData) and m.libraryData.count() > 0
         userConfig = m.global.userConfig
 
@@ -137,9 +144,6 @@ sub onLibrariesLoaded()
             end if
         end for
     end if
-
-    m.top.rowItemSize = sizeArray
-    m.top.content = content
 end sub
 
 sub updateHomeRows()
@@ -156,6 +160,13 @@ sub updateHomeRows()
     ' Refresh NextUp Data
     m.LoadNextUpTask.observeField("content", "updateNextUpItems")
     m.LoadNextUpTask.control = "RUN"
+
+    ' Refresh the Favorites Data
+    m.LoadFavoritesTask.observeField("content", "updateFavoritesItems")
+    m.LoadFavoritesTask.control = "RUN"
+
+    ' Refresh My Media, Latest In, and On Now Data
+    refreshLatestInLibraries(m.mediaRow, m.sizeArray, m.content)
 end sub
 
 sub updateFavoritesItems()
