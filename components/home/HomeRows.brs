@@ -81,8 +81,6 @@ sub onLibrariesLoaded()
         [464, 331] ' Favorites
     ]
 
-    haveLiveTV = false
-
     ' Load the NextUp Data
     m.LoadNextUpTask.observeField("content", "updateNextUpItems")
     m.LoadNextUpTask.control = "RUN"
@@ -103,6 +101,8 @@ sub onLibrariesLoaded()
 end sub
 
 sub refreshLatestInLibraries(mediaRow, sizeArray, content)
+    haveLiveTV = false
+
     if isValid(m.libraryData) and m.libraryData.count() > 0
         userConfig = m.global.userConfig
 
