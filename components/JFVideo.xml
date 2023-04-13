@@ -28,11 +28,10 @@
     <field id="audioIndex" type="integer" />
     <field id="runTime" type="integer" />
     <field id="selectedButtonIndex" type="integer" />
-
     <field id="selectedItem" type="string" alwaysNotify="true" />
-
     <field id="playbackInfo" type="array" />
     <field id="control" type="string" />
+
 
   </interface>
   <script type="text/brightscript" uri="JFVideo.brs" />

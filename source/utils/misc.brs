@@ -41,6 +41,18 @@ function ticksToHuman(ticks as longinteger) as string
     return r
 end function
 
+function secondsToHuman(totalSeconds as integer) as string
+    hours = stri(int(totalSeconds / 3600)).trim()
+    minutes = stri(int((totalSeconds - (val(hours) * 3600)) / 60)).trim()
+    seconds = stri(totalSeconds - (val(hours) * 3600) - (val(minutes) * 60)).trim()
+    if val(hours) > 0 and val(minutes) < 10 then minutes = "0" + minutes
+    if val(seconds) < 10 then seconds = "0" + seconds
+    r = ""
+    if val(hours) > 0 then r = hours + ":"
+    r = r + minutes + ":" + seconds
+    return r
+end function
+
 ' Format time as 12 or 24 hour format based on system clock setting
 function formatTime(time) as string
     hours = time.getHours()
