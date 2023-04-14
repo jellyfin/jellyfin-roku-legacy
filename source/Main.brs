@@ -155,6 +155,7 @@ sub Main (args as dynamic) as void
                 reportingNode.quickPlayNode.type = ""
             end if
         else if isNodeEvent(msg, "selectedItem")
+            print "selected Item msg = " msg.getData()
             ' If you select a library from ANYWHERE, follow this flow
             selectedItem = msg.getData()
 
@@ -206,6 +207,7 @@ sub Main (args as dynamic) as void
                 CreatePersonView(selectedItem)
             else if selectedItem.type = "TvChannel" or selectedItem.type = "Video" or selectedItem.type = "Program"
                 ' play channel feed
+                print selectedItem.id
                 video_id = selectedItem.id
 
                 if LCase(selectedItem.subtype()) = "extrasdata"
@@ -393,6 +395,7 @@ sub Main (args as dynamic) as void
             else if node.type = "Person"
                 group = CreatePersonView(node)
             else if node.type = "TvChannel"
+                print "itemSelected Push Scene #2"
                 group = CreateVideoPlayerGroup(node.id)
                 sceneManager.callFunc("pushScene", group)
             else if node.type = "Episode"
@@ -541,30 +544,28 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "state")
             node = msg.getRoSGNode()
 
-if isValid(node) and isValid(node.state)
-            if m.selectedItemType = "TvChannel" and node.state = "finished"
+            if isValid(node) and isValid(node.state)
+                if m.selectedItemType = "TvChannel" and node.state = "finished"
                     video = CreateVideoPlayerGroup(node.id)
                     m.global.sceneManager.callFunc("pushScene", video)
-            else if m.selectedItemType = "TvChannel" and node.state = "finished"
-                video = CreateVideoPlayerGroup(node.id)
-                m.global.sceneManager.callFunc("pushScene", video)
-                m.global.sceneManager.callFunc("deleteSceneAtIndex", 2)
-            else if node.state = "finished"
-                node.control = "stop"
+                    m.global.sceneManager.callFunc("deleteSceneAtIndex", 2)
+                    print "tvchannel DeleteSceneIndex2 #4"
+                else if node.state = "finished"
+                    node.control = "stop"
 
-                ' If node allows retrying using Transcode Url, give that shot
-                if isValid(node.retryWithTranscoding) and node.retryWithTranscoding
-                    retryVideo = CreateVideoPlayerGroup(node.Id, invalid, node.audioIndex, true, false)
-                    m.global.sceneManager.callFunc("popScene")
-                     if isValid(retryVideo)
-                        m.global.sceneManager.callFunc("pushScene", retryVideo)
-                    end if
-                else if not isValid(node.showID)
-                    sceneManager.callFunc("popScene")
-                else
-                    if video.errorMsg = ""
-                        autoPlayNextEpisode(node.id, node.showID)
+                    ' If node allows retrying using Transcode Url, give that shot
+                    if isValid(node.retryWithTranscoding) and node.retryWithTranscoding
+                        retryVideo = CreateVideoPlayerGroup(node.Id, invalid, node.audioIndex, true, false)
+                        m.global.sceneManager.callFunc("popScene")
+                        if isValid(retryVideo)
+                            m.global.sceneManager.callFunc("pushScene", retryVideo)
+                        end if
+                    else if not isValid(node.showID)
+                        sceneManager.callFunc("popScene")
                     else
+                        if video.errorMsg = ""
+                            autoPlayNextEpisode(node.id, node.showID)
+                        else
                             sceneManager.callFunc("popScene")
                         end if
                     end if
