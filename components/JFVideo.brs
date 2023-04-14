@@ -54,7 +54,7 @@ end sub
 
 sub onAllowCaptionsChange()
     if not m.top.allowCaptions then return
-    
+
     m.captionGroup = m.top.findNode("captionGroup")
     m.captionGroup.createchildren(9, "LayoutGroup")
     m.captionTask = createObject("roSGNode", "captionTask")
@@ -592,6 +592,21 @@ function onKeyEvent(key as string, press as boolean) as boolean
     end if
 
     if not press then return false
+
+    if key = "OK"
+        ' OK will play/pause depending on current state
+        ' return false to allow selection during seeking
+        if m.top.state = "paused"
+            m.top.trickPlayBar.visible = false
+            m.top.control = "resume"
+            return false
+        else if m.top.state = "playing"
+            m.top.trickPlayBar.visible = true
+            m.top.control = "pause"
+            return false
+        end if
+    end if
+
 
     return false
 end function
