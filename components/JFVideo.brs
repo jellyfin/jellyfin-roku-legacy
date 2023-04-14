@@ -36,6 +36,7 @@ sub init()
 
     m.checkedForNextEpisode = false
     m.movieInfo = false
+    m.guideLoaded = false
 
     m.getNextEpisodeTask = createObject("roSGNode", "GetNextEpisodeTask")
     m.getNextEpisodeTask.observeField("nextEpisodeData", "onNextEpisodeDataLoaded")
@@ -50,6 +51,7 @@ sub init()
     m.top.observeField("state", "onState")
     m.top.observeField("content", "onContentChange")
     m.top.observeField("allowCaptions", "onAllowCaptionsChange")
+
 end sub
 
 sub onAllowCaptionsChange()
@@ -326,7 +328,7 @@ sub bufferCheck(msg)
         if m.top.bufferingStatus["percentage"] > m.bufferPercentage
             m.bufferPercentage = m.top.bufferingStatus["percentage"]
         else if m.top.content.live = true
-            m.top.callFunc("refresh")
+            ' m.top.callFunc("refresh")
         else
             ' If buffering has stopped Display dialog
             dialog = createObject("roSGNode", "PlaybackDialog")
@@ -457,6 +459,7 @@ sub showTVGuide()
     m.buttonGrp.visible = false
     m.showGuideAnimation.control = "start"
     m.top.enableTrickPlay = false
+    m.guideLoaded = true
 end sub
 
 sub onChannelSelected(msg)
@@ -464,6 +467,7 @@ sub onChannelSelected(msg)
     m.top.lastFocus = lastFocusedChild(node)
     if node.watchChannel <> invalid
         m.top.selectedItem = node.watchChannel.id
+        print "Selected channel ID "node.watchChannel.id
         m.top.control = "stop"
         m.global.sceneManager.callfunc("clearPreviousScene")
     end if
