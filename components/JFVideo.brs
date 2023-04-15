@@ -467,13 +467,13 @@ sub onChannelSelected(msg)
     m.top.lastFocus = lastFocusedChild(node)
     if node.watchChannel <> invalid
         m.top.selectedItem = node.watchChannel.id
-        print "Selected channel ID "node.watchChannel.id
         m.top.control = "stop"
         m.global.sceneManager.callfunc("clearPreviousScene")
     end if
     'remove guide from view while new channel is loading
     m.top.removeChild(m.tvGuide)
     m.tvGuide.setFocus(false)
+    m.top.getScene().findNode("overhang").visible = false
 end sub
 
 
@@ -486,8 +486,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
         return true
     end if
 
-    if key = "OK" and m.nextEpisodeButton.isinfocuschain() and m.top.trickPlayMode = "play"
+    if key = "OK" and m.nextEpisodeButton.isinfocuschain() and m.top.state = "playing"
+        m.top.control = "stop"
         m.top.state = "finished"
+        m.nextEpisodeButton.visible = false
         return true
     else
         'Hide Next Episode Button
@@ -539,6 +541,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         else
             if not m.buttonGrp.visible
                 m.top.control = "resume"
+                m.top.setFocus(true)
             end if
         end if
     end if
@@ -603,10 +606,12 @@ function onKeyEvent(key as string, press as boolean) as boolean
         if m.top.state = "paused"
             m.top.trickPlayBar.visible = false
             m.top.control = "resume"
+            m.top.setFocus(true)
             return false
         else if m.top.state = "playing"
             m.top.trickPlayBar.visible = true
             m.top.control = "pause"
+            m.top.setFocus(true)
             return false
         end if
     end if
