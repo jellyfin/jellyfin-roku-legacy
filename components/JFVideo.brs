@@ -20,6 +20,11 @@ sub init()
     m.nextEpisodeButton.text = tr("Next Episode")
     m.nextEpisodeButton.setFocus(false)
     m.nextupbuttonseconds = get_user_setting("playback.nextupbuttonseconds", "30")
+    if isValid(m.nextupbuttonseconds)
+        m.nextupbuttonseconds = val(m.nextupbuttonseconds)
+    else
+        m.nextupbuttonseconds = 30
+    end if
 
     m.showNextEpisodeButtonAnimation = m.top.findNode("showNextEpisodeButton")
     m.hideNextEpisodeButtonAnimation = m.top.findNode("hideNextEpisodeButton")
@@ -28,8 +33,6 @@ sub init()
     m.getNextEpisodeTask = createObject("roSGNode", "GetNextEpisodeTask")
     m.getNextEpisodeTask.observeField("nextEpisodeData", "onNextEpisodeDataLoaded")
 
-    m.top.observeField("state", "onState")
-    m.top.observeField("content", "onContentChange")
     m.top.observeField("allowCaptions", "onAllowCaptionsChange")
 end sub
 
@@ -89,7 +92,6 @@ end sub
 '
 ' Runs Next Episode button animation and sets focus to button
 sub showNextEpisodeButton()
-    if m.top.content.contenttype <> 4 then return
     if m.global.userConfig.EnableNextEpisodeAutoPlay and not m.nextEpisodeButton.visible
         m.showNextEpisodeButtonAnimation.control = "start"
         m.nextEpisodeButton.setFocus(true)
@@ -100,7 +102,7 @@ end sub
 '
 'Update count down text
 sub updateCount()
-    nextEpisodeCountdown = Int(m.top.runTime - m.top.position)
+    nextEpisodeCountdown = Int(m.top.duration - m.top.position)
     if nextEpisodeCountdown < 0
         nextEpisodeCountdown = 0
     end if
@@ -118,8 +120,9 @@ end sub
 ' Checks if we need to display the Next Episode button
 sub checkTimeToDisplayNextEpisode()
     if m.top.content.contenttype <> 4 then return
+    if m.nextupbuttonseconds = 0 then return
 
-    if int(m.top.position) >= (m.top.runTime - 30)
+    if int(m.top.position) >= (m.top.duration - m.nextupbuttonseconds)
         showNextEpisodeButton()
         updateCount()
         return

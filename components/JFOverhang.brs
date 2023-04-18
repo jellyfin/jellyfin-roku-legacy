@@ -26,8 +26,10 @@ sub init()
         m.overlayMinutes = m.top.findNode("overlayMinutes")
         m.overlayMeridian = m.top.findNode("overlayMeridian")
         m.overlayMeridian.font.size = 20
-        ' start timer
         m.currentTimeTimer = m.top.findNode("currentTimeTimer")
+        ' display current time
+        updateTime()
+        ' start timer to update clock every minute
         m.currentTimeTimer.control = "start"
         m.currentTimeTimer.ObserveField("fire", "updateTime")
     end if

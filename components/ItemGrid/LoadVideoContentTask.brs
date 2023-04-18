@@ -44,7 +44,6 @@ sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtit
     videotype = LCase(meta.type)
 
     if videotype = "episode" or videotype = "series"
-        video.runTime = (meta.json.RunTimeTicks / 10000000.0)
         video.content.contenttype = "episode"
     end if
 

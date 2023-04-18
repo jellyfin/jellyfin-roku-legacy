@@ -5,19 +5,23 @@
     <function name="deleteAtIndex" />
     <function name="getCount" />
     <function name="getCurrentItem" />
+    <function name="getIsShuffled" />
     <function name="getItemByIndex" />
     <function name="getPosition" />
     <function name="getQueue" />
     <function name="getQueueTypes" />
     <function name="getQueueUniqueTypes" />
+    <function name="getUnshuffledQueue" />
     <function name="moveBack" />
     <function name="moveForward" />
     <function name="peek" />
     <function name="playQueue" />
     <function name="pop" />
     <function name="push" />
+    <function name="resetShuffle" />
     <function name="set" />
     <function name="setPosition" />
+    <function name="toggleShuffle" />
     <function name="top" />
   </interface>
   <script type="text/brightscript" uri="QueueManager.brs" />

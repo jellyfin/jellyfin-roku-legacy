@@ -83,18 +83,6 @@ sub onLibrariesLoaded()
 
     haveLiveTV = false
 
-    ' Load the NextUp Data
-    m.LoadNextUpTask.observeField("content", "updateNextUpItems")
-    m.LoadNextUpTask.control = "RUN"
-
-    ' Load the Continue Watching Data
-    m.LoadContinueTask.observeField("content", "updateContinueItems")
-    m.LoadContinueTask.control = "RUN"
-
-    ' Load the Favorites Data
-    m.LoadFavoritesTask.observeField("content", "updateFavoritesItems")
-    m.LoadFavoritesTask.control = "RUN"
-
     ' validate library data
     if isValid(m.libraryData) and m.libraryData.count() > 0
         userConfig = m.global.userConfig
@@ -112,42 +100,42 @@ sub onLibrariesLoaded()
                 latestInRow = content.CreateChild("HomeRow")
                 latestInRow.title = tr("Latest in") + " " + lib.name + " >"
                 sizeArray.Push([464, 331])
-
-                loadLatest = createObject("roSGNode", "LoadItemsTask")
-                loadLatest.itemsToLoad = "latest"
-                loadLatest.itemId = lib.id
-
-                metadata = { "title": lib.name }
-                metadata.Append({ "contentType": lib.json.CollectionType })
-                loadLatest.metadata = metadata
-
-                loadLatest.observeField("content", "updateLatestItems")
-                loadLatest.control = "RUN"
             else if lib.collectionType = "livetv"
                 ' If we have Live TV, add "On Now"
                 onNowRow = content.CreateChild("HomeRow")
                 onNowRow.title = tr("On Now")
                 sizeArray.Push([464, 331])
                 haveLiveTV = true
-                ' If we have Live TV access, load "On Now" data
-                if haveLiveTV
-                    m.LoadOnNowTask.observeField("content", "updateOnNowItems")
-                    m.LoadOnNowTask.control = "RUN"
-                end if
             end if
         end for
     end if
 
     m.top.rowItemSize = sizeArray
     m.top.content = content
+
+    ' Load the Continue Watching Data
+    m.LoadContinueTask.observeField("content", "updateContinueItems")
+    m.LoadContinueTask.control = "RUN"
+
+    ' Load the Favorites Data
+    m.LoadFavoritesTask.observeField("content", "updateFavoritesItems")
+    m.LoadFavoritesTask.control = "RUN"
+
+    ' If we have Live TV access, load "On Now" data
+    if haveLiveTV
+        m.LoadOnNowTask.observeField("content", "updateOnNowItems")
+        m.LoadOnNowTask.control = "RUN"
+    end if
 end sub
 
 sub updateHomeRows()
     if m.global.playstateTask.state = "run"
         m.global.playstateTask.observeField("state", "updateHomeRows")
-    else
-        m.global.playstateTask.unobserveField("state")
+        return
     end if
+
+    m.global.playstateTask.unobserveField("state")
+
     m.LoadContinueTask.observeField("content", "updateContinueItems")
     m.LoadContinueTask.control = "RUN"
 end sub
@@ -237,6 +225,9 @@ sub updateContinueItems()
             homeRows.replaceChild(row, continueRowIndex)
         end if
     end if
+
+    m.LoadNextUpTask.observeField("content", "updateNextUpItems")
+    m.LoadNextUpTask.control = "RUN"
 end sub
 
 sub updateNextUpItems()
@@ -288,6 +279,24 @@ sub updateNextUpItems()
         m.top.signalBeacon("AppLaunchComplete") ' Roku Performance monitoring
         m.global.app_loaded = true
     end if
+
+    ' create task nodes for "Latest In" rows
+    userConfig = m.global.userConfig
+    filteredLatest = filterNodeArray(m.libraryData, "id", userConfig.LatestItemsExcludes)
+    for each lib in filteredLatest
+        if lib.collectionType <> "livetv" and lib.collectionType <> "boxsets" and lib.json.CollectionType <> "Program"
+            loadLatest = createObject("roSGNode", "LoadItemsTask")
+            loadLatest.itemsToLoad = "latest"
+            loadLatest.itemId = lib.id
+
+            metadata = { "title": lib.name }
+            metadata.Append({ "contentType": lib.json.CollectionType })
+            loadLatest.metadata = metadata
+
+            loadLatest.observeField("content", "updateLatestItems")
+            loadLatest.control = "RUN"
+        end if
+    end for
 
 end sub
 
