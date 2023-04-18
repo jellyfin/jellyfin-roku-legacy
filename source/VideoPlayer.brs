@@ -47,9 +47,6 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     end if
 
     if m.videotype = "Episode" or m.videotype = "Series"
-        if isValid(meta.json) and isValid(meta.json.RunTimeTicks)
-            video.runTime = (meta.json.RunTimeTicks / 10000000.0)
-        end if
         video.content.contenttype = "episode"
     end if
 

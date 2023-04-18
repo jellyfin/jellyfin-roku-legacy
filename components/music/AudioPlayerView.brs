@@ -15,7 +15,6 @@ sub init()
 
     m.playlistTypeCount = m.global.queueManager.callFunc("getQueueUniqueTypes").count()
 
-    m.shuffleEnabled = false
     m.buttonCount = m.buttons.getChildCount()
 
     m.screenSaverTimeout = 300
@@ -31,6 +30,8 @@ sub init()
 
     loadButtons()
     pageContentChanged()
+    setShuffleIconState()
+    setLoopButtonImage()
 end sub
 
 sub onScreensaverTimeoutLoaded()
@@ -116,9 +117,10 @@ sub setupInfoNodes()
     m.playPosition = m.top.findNode("playPosition")
     m.bufferPosition = m.top.findNode("bufferPosition")
     m.seekBar = m.top.findNode("seekBar")
-    m.numberofsongsField = m.top.findNode("numberofsongs")
     m.shuffleIndicator = m.top.findNode("shuffleIndicator")
     m.loopIndicator = m.top.findNode("loopIndicator")
+    m.positionTimestamp = m.top.findNode("positionTimestamp")
+    m.totalLengthTimestamp = m.top.findNode("totalLengthTimestamp")
 end sub
 
 sub bufferPositionChanged()
@@ -160,6 +162,13 @@ sub audioPositionChanged()
     ' Use animation to make the display smooth
     m.playPositionAnimationWidth.keyValue = [m.playPosition.width, playPositionBarWidth]
     m.playPositionAnimation.control = "start"
+
+    ' Update displayed position timestamp
+    if isValid(m.global.audioPlayer.position)
+        m.positionTimestamp.text = secondsToHuman(m.global.audioPlayer.position)
+    else
+        m.positionTimestamp.text = "0:00"
+    end if
 
     ' Only fall into screensaver logic if the user has screensaver enabled in Roku settings
     if m.screenSaverTimeout > 0
@@ -318,10 +327,12 @@ function nextClicked() as boolean
 end function
 
 sub toggleShuffleEnabled()
-    m.shuffleEnabled = not m.shuffleEnabled
+    m.global.queueManager.callFunc("toggleShuffle")
 end sub
 
 function findCurrentSongIndex(songList) as integer
+    if not isValidAndNotEmpty(songList) then return 0
+
     for i = 0 to songList.count() - 1
         if songList[i].id = m.global.queueManager.callFunc("getCurrentItem").id
             return i
@@ -333,43 +344,35 @@ end function
 
 function shuffleClicked() as boolean
 
+    currentSongIndex = findCurrentSongIndex(m.global.queueManager.callFunc("getUnshuffledQueue"))
+
     toggleShuffleEnabled()
 
-    if not m.shuffleEnabled
+    if not m.global.queueManager.callFunc("getIsShuffled")
         m.shuffleIndicator.opacity = ".4"
         m.shuffleIndicator.uri = m.shuffleIndicator.uri.Replace("-on", "-off")
-
-        currentSongIndex = findCurrentSongIndex(m.originalSongList)
-        m.global.queueManager.callFunc("set", m.originalSongList)
         m.global.queueManager.callFunc("setPosition", currentSongIndex)
-        setFieldTextValue("numberofsongs", "Track " + stri(m.global.queueManager.callFunc("getPosition") + 1) + "/" + stri(m.global.queueManager.callFunc("getCount")))
-
+        setTrackNumberDisplay()
         return true
     end if
 
     m.shuffleIndicator.opacity = "1"
     m.shuffleIndicator.uri = m.shuffleIndicator.uri.Replace("-off", "-on")
-
-    m.originalSongList = m.global.queueManager.callFunc("getQueue")
-
-    songIDArray = m.global.queueManager.callFunc("getQueue")
-
-    ' Move the currently playing song to the front of the queue
-    temp = m.global.queueManager.callFunc("top")
-    songIDArray[0] = m.global.queueManager.callFunc("getCurrentItem")
-    songIDArray[m.global.queueManager.callFunc("getPosition")] = temp
-
-    for i = 1 to songIDArray.count() - 1
-        j = Rnd(songIDArray.count() - 1)
-        temp = songIDArray[i]
-        songIDArray[i] = songIDArray[j]
-        songIDArray[j] = temp
-    end for
-
-    m.global.queueManager.callFunc("set", songIDArray)
+    setTrackNumberDisplay()
 
     return true
 end function
+
+sub setShuffleIconState()
+    if m.global.queueManager.callFunc("getIsShuffled")
+        m.shuffleIndicator.opacity = "1"
+        m.shuffleIndicator.uri = m.shuffleIndicator.uri.Replace("-off", "-on")
+    end if
+end sub
+
+sub setTrackNumberDisplay()
+    setFieldTextValue("numberofsongs", "Track " + stri(m.global.queueManager.callFunc("getPosition") + 1) + "/" + stri(m.global.queueManager.callFunc("getCount")))
+end sub
 
 sub LoadNextSong()
     if m.global.audioPlayer.state = "playing"
@@ -420,6 +423,9 @@ sub pageContentChanged()
         setScreenTitle(currentItem)
         setOnScreenTextValues(currentItem)
         m.songDuration = currentItem.RunTimeTicks / 10000000.0
+
+        ' Update displayed total audio length
+        m.totalLengthTimestamp.text = ticksToHuman(currentItem.RunTimeTicks)
     end if
 
     m.LoadAudioStreamTask.itemId = currentItem.id
@@ -475,6 +481,9 @@ sub onMetaDataLoaded()
 
         if isValid(data.json.RunTimeTicks)
             m.songDuration = data.json.RunTimeTicks / 10000000.0
+
+            ' Update displayed total audio length
+            m.totalLengthTimestamp.text = ticksToHuman(data.json.RunTimeTicks)
         end if
     end if
 end sub
@@ -512,14 +521,8 @@ end sub
 ' Populate on screen text variables
 sub setOnScreenTextValues(json)
     if isValid(json)
-        currentSongIndex = m.global.queueManager.callFunc("getPosition")
-
-        if m.shuffleEnabled
-            currentSongIndex = findCurrentSongIndex(m.originalSongList)
-        end if
-
         if m.playlistTypeCount = 1
-            setFieldTextValue("numberofsongs", "Track " + stri(currentSongIndex + 1) + "/" + stri(m.global.queueManager.callFunc("getCount")))
+            setTrackNumberDisplay()
         end if
 
         setFieldTextValue("artist", json.Artists[0])

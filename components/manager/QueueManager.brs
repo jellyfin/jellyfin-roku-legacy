@@ -3,8 +3,10 @@ import "ViewCreator.brs"
 
 sub init()
     m.queue = []
+    m.originalQueue = []
     m.queueTypes = []
     m.position = 0
+    m.shuffleEnabled = false
 end sub
 
 ' Clear all content from play queue
@@ -28,6 +30,11 @@ end function
 ' Return the item currently in focus from the play queue
 function getCurrentItem()
     return getItemByIndex(m.position)
+end function
+
+' Return whether or not shuffle is enabled
+function getIsShuffled()
+    return m.shuffleEnabled
 end function
 
 ' Return the item in the passed index from the play queue
@@ -111,6 +118,54 @@ sub setPosition(newPosition)
     m.position = newPosition
 end sub
 
+' Reset shuffle to off state
+sub resetShuffle()
+    m.shuffleEnabled = false
+end sub
+
+' Toggle shuffleEnabled state
+sub toggleShuffle()
+    m.shuffleEnabled = not m.shuffleEnabled
+
+    if m.shuffleEnabled
+        shuffleQueueItems()
+        return
+    end if
+
+    resetQueueItemOrder()
+end sub
+
+' Reset queue items back to original, unshuffled order
+sub resetQueueItemOrder()
+    set(m.originalQueue)
+end sub
+
+' Return original, unshuffled queue
+function getUnshuffledQueue()
+    return m.originalQueue
+end function
+
+' Save a copy of the original queue and randomize order of queue items
+sub shuffleQueueItems()
+    ' By calling getQueue 2 different ways, Roku avoids needing to do a deep copy
+    m.originalQueue = m.global.queueManager.callFunc("getQueue")
+    songIDArray = getQueue()
+
+    ' Move the currently playing song to the front of the queue
+    temp = top()
+    songIDArray[0] = getCurrentItem()
+    songIDArray[getPosition()] = temp
+
+    for i = 1 to songIDArray.count() - 1
+        j = Rnd(songIDArray.count() - 1)
+        temp = songIDArray[i]
+        songIDArray[i] = songIDArray[j]
+        songIDArray[j] = temp
+    end for
+
+    set(songIDArray)
+end sub
+
 ' Return the fitst item in the play queue
 function top()
     return getItemByIndex(0)
@@ -118,7 +173,7 @@ end function
 
 ' Replace play queue with passed array
 sub set(items)
-    setPosition(0)
+    clear()
     m.queue = items
     for each item in items
         m.queueTypes.push(getItemType(item))
