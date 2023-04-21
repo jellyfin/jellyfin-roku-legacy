@@ -166,6 +166,20 @@ sub itemContentChanged()
         return
     end if
 
+    if itemData.type = "BoxSet"
+        m.itemText.text = itemData.name
+        m.itemPoster.uri = itemData.posterURL
+
+        ' Set small text to number of items in the collection
+        if isValid(itemData.json) and isValid(itemData.json.ChildCount)
+            m.itemTextExtra.text = StrI(itemData.json.ChildCount).trim() + " item"
+            if itemData.json.ChildCount > 1
+                m.itemTextExtra.text += "s"
+            end if
+        end if
+        return
+    end if
+
     if itemData.type = "Series"
 
         m.itemText.text = itemData.name

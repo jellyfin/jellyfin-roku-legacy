@@ -139,7 +139,7 @@ sub Main (args as dynamic) as void
 
             m.selectedItemType = selectedItem.type
 
-            if selectedItem.type = "CollectionFolder"
+            if selectedItem.type = "CollectionFolder" or selectedItem.type = "BoxSet"
                 if selectedItem.collectionType = "movies"
                     group = CreateMovieLibraryView(selectedItem)
                 else if selectedItem.collectionType = "music"
