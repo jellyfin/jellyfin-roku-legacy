@@ -1,6 +1,6 @@
 {
   "name": "jellyfin-roku",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "Roku app for Jellyfin media server",
   "main": "index.js",
   "devDependencies": {

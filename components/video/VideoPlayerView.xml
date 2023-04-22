@@ -23,7 +23,6 @@
     <field id="videoId" type="string" />
     <field id="mediaSourceId" type="string" />
     <field id="audioIndex" type="integer" />
-    <field id="runTime" type="integer" />
   </interface>
   <script type="text/brightscript" uri="VideoPlayerView.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />

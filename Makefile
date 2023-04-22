@@ -10,7 +10,7 @@
 ##########################################################################
 
 APPNAME = Jellyfin_Roku
-VERSION = 1.6.4
+VERSION = 1.6.5
 
 ZIP_EXCLUDE= -x xml/* -x artwork/* -x \*.pkg -x storeassets\* -x keys\* -x \*/.\* -x *.git* -x *.DS* -x *.pkg* -x dist/**\*  -x out/**\* 
 

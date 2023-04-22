@@ -25,16 +25,21 @@ sub init()
     m.nextEpisodeButton.text = tr("Next Episode")
     m.nextEpisodeButton.setFocus(false)
     m.nextupbuttonseconds = get_user_setting("playback.nextupbuttonseconds", "30")
+    if isValid(m.nextupbuttonseconds)
+        m.nextupbuttonseconds = val(m.nextupbuttonseconds)
+    else
+        m.nextupbuttonseconds = 30
+    end if
 
     m.showNextEpisodeButtonAnimation = m.top.findNode("showNextEpisodeButton")
     m.hideNextEpisodeButtonAnimation = m.top.findNode("hideNextEpisodeButton")
 
     m.checkedForNextEpisode = false
     m.movieInfo = false
+    m.guideLoaded = false
 
     m.getNextEpisodeTask = createObject("roSGNode", "GetNextEpisodeTask")
     m.getNextEpisodeTask.observeField("nextEpisodeData", "onNextEpisodeDataLoaded")
-
 
     m.getItemQueryTask = createObject("roSGNode", "GetItemQueryTask")
 
@@ -46,11 +51,12 @@ sub init()
     m.top.observeField("state", "onState")
     m.top.observeField("content", "onContentChange")
     m.top.observeField("allowCaptions", "onAllowCaptionsChange")
+
 end sub
 
 sub onAllowCaptionsChange()
     if not m.top.allowCaptions then return
-    
+
     m.captionGroup = m.top.findNode("captionGroup")
     m.captionGroup.createchildren(9, "LayoutGroup")
     m.captionTask = createObject("roSGNode", "captionTask")
@@ -121,7 +127,6 @@ end sub
 '
 ' Runs Next Episode button animation and sets focus to button
 sub showNextEpisodeButton()
-    if m.top.content.contenttype <> 4 then return
     if m.global.userConfig.EnableNextEpisodeAutoPlay and not m.nextEpisodeButton.visible
         m.showNextEpisodeButtonAnimation.control = "start"
         m.nextEpisodeButton.setFocus(true)
@@ -154,7 +159,7 @@ end sub
 '
 'Update count down text
 sub updateCount()
-    nextEpisodeCountdown = Int(m.top.runTime - m.top.position)
+    nextEpisodeCountdown = Int(m.top.duration - m.top.position)
     if nextEpisodeCountdown < 0
         nextEpisodeCountdown = 0
     end if
@@ -172,8 +177,9 @@ end sub
 ' Checks if we need to display the Next Episode button
 sub checkTimeToDisplayNextEpisode()
     if m.top.content.contenttype <> 4 then return
+    if m.nextupbuttonseconds = 0 then return
 
-    if int(m.top.position) >= (m.top.runTime - 30)
+    if int(m.top.position) >= (m.top.duration - m.nextupbuttonseconds)
         showNextEpisodeButton()
         updateCount()
         return
@@ -322,7 +328,7 @@ sub bufferCheck(msg)
         if m.top.bufferingStatus["percentage"] > m.bufferPercentage
             m.bufferPercentage = m.top.bufferingStatus["percentage"]
         else if m.top.content.live = true
-            m.top.callFunc("refresh")
+            ' m.top.callFunc("refresh")
         else
             ' If buffering has stopped Display dialog
             dialog = createObject("roSGNode", "PlaybackDialog")
@@ -453,6 +459,7 @@ sub showTVGuide()
     m.buttonGrp.visible = false
     m.showGuideAnimation.control = "start"
     m.top.enableTrickPlay = false
+    m.guideLoaded = true
 end sub
 
 sub onChannelSelected(msg)
@@ -466,6 +473,7 @@ sub onChannelSelected(msg)
     'remove guide from view while new channel is loading
     m.top.removeChild(m.tvGuide)
     m.tvGuide.setFocus(false)
+    m.top.getScene().findNode("overhang").visible = false
 end sub
 
 
@@ -478,8 +486,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
         return true
     end if
 
-    if key = "OK" and m.nextEpisodeButton.isinfocuschain() and m.top.trickPlayMode = "play"
+    if key = "OK" and m.nextEpisodeButton.isinfocuschain() and m.top.state = "playing"
+        m.top.control = "stop"
         m.top.state = "finished"
+        m.nextEpisodeButton.visible = false
         return true
     else
         'Hide Next Episode Button
@@ -531,6 +541,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         else
             if not m.buttonGrp.visible
                 m.top.control = "resume"
+                m.top.setFocus(true)
             end if
         end if
     end if
@@ -588,6 +599,23 @@ function onKeyEvent(key as string, press as boolean) as boolean
     end if
 
     if not press then return false
+
+    if key = "OK"
+        ' OK will play/pause depending on current state
+        ' return false to allow selection during seeking
+        if m.top.state = "paused"
+            m.top.trickPlayBar.visible = false
+            m.top.control = "resume"
+            m.top.setFocus(true)
+            return false
+        else if m.top.state = "playing"
+            m.top.trickPlayBar.visible = true
+            m.top.control = "pause"
+            m.top.setFocus(true)
+            return false
+        end if
+    end if
+
 
     return false
 end function

@@ -1,146 +1,38 @@
 [
     {
-        "description": "Feature: Phase 1 CJK subtitle support - external files only",
-        "author": "jkim2492"
+        "description": "Bug Fix: Crash when fallback font API call fails",
+        "author": "1hitsong"
     },
     {
-        "description": "Bug Fix: Fix multiple client crashes identified by crashlogs",
+        "description": "Core: Fix Jellyfin links in readme",
         "author": "cewert"
     },
     {
-        "description": "Feature: Add TV series & season shuffle",
+        "description": "Bug Fix: Music shuffle not working",
         "author": "1hitsong"
     },
     {
-        "description": "Updated View: Show \"Actor\" when an actor has no role",
+        "description": "Updated View: Add current playback time and song length to the sides of the audio progress bar",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Bug Fix: Turn off loop mode when user manually changes song",
+        "author": "1hitsong"
+    },
+    {
+        "description": "Core: Enable confirm partner button and setup RALE",
         "author": "cewert"
     },
     {
-        "description": "Feature: Phase 1 playlist support",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Fix Typo: trancoding -> transcoding",
-        "author": "RussianCow"
-    },
-    {
-        "description": "Feature: Create global audio player",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Core: Add user policy to check if canDelete",
-        "author": "candry7731"
-    },
-    {
-        "description": "Bug Fix: Only show next episode button if \"Play next episode automatically\" setting is enabled in web client",
+        "description": "Bug Fix: Clock not displaying on login view",
         "author": "cewert"
     },
     {
-        "description": "New Setting: Disable unwatched episode count",
-        "author": "1hitsong"
+        "description": "Core: Add build badge and rework readme content",
+        "author": "cewert"
     },
     {
-        "description": "New Setting: Next episode button time",
-        "author": "candry7731"
-    },
-    {
-        "description": "New View: New persondetails view",
+        "description": "Core: Adjust settings to follow latest guidelines",
         "author": "sevenrats"
-    },
-    {
-        "description": "Updated View: Make title scrolling consistent in extras slider",
-        "author": "sevenrats"
-    },
-    {
-        "description": "Feature: Make pressing the options button close settings menu",
-        "author": "sevenrats"
-    },
-    {
-        "description": "Bug Fix: Graceful episode playback failure",
-        "author": "sevenrats"
-    },
-    {
-        "description": "Bug Fix: Fix default view setting for movie genres",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Core: Update CI ubuntu version and node version",
-        "author": "sevenrats"
-    },
-    {
-        "description": "New Setting: Custom max video bitrate",
-        "author": "jimdogx"
-    },
-    {
-        "description": "Updated View: Updated \"OnNow\" home row to default to channel images if program images are not availible",
-        "author": "candry7731"
-    },
-    {
-        "description": "Updated View: Improve settings menu, implement title hover and hide in missing locations",
-        "author": "sevenrats"
-    },
-    {
-        "description": "Updated View: Make home view load faster",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Bug Fix: Fix option menu focus if opened while library still loading",
-        "author": "ApexArray"
-    },
-    {
-        "description": "Updated View: Add Genres, Parental Ratings, and Years as movie filters",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Bug Fix: Revert change that removed image cache busting",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Updated View: Fix distorted TV episode posters. Add client-side progress bar and played indicator.",
-        "author": "ApexArray"
-    },
-    {
-        "description": "Updated View: Improve quality of album art on now playing view",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Updated View: Loading spinner, Progress Dialog and movie details button animate",
-        "author": "candry7731"
-    },
-    {
-        "description": "Core: Add settings guidelines to Dev Guide",
-        "author": "sevenrats"
-    },
-    {
-        "description": "Core: Add workflow to validate language translation files",
-        "author": "cewert"
-    },
-    {
-        "description": "Core: Remove optional chaining operators from code",
-        "author": "cewert"
-    },
-    {
-        "description": "Core: Make CI throw error for duplicate translation entries",
-        "author": "cewert"
-    },
-    {
-        "description": "Core: Fix en_US translation file",
-        "author": "cewert"
-    },
-    {
-        "description": "Core: Add a production build workflow",
-        "author": "cewert"
-    },
-    {
-        "description": "Core: Add json and markdown to lint workflow + add automation workflow",
-        "author": "cewert"
-    },
-    {
-        "description": "Core: Make workflows use latest LTS release + cache npm",
-        "author": "cewert"
-    },
-    {
-        "description": "Core: Install & Configure code unit test suite",
-        "author": "1hitsong"
     }
 ]
