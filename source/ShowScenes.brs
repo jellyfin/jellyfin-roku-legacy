@@ -79,11 +79,8 @@ function LoginFlow(startOver = false as boolean)
     LoadUserAbilities(m.user)
     m.global.sceneManager.callFunc("clearScenes")
 
-    'Send Device Profile information to server
-    body = getDeviceCapabilities()
-    req = APIRequest("/Sessions/Capabilities/Full")
-    req.SetRequest("POST")
-    postJson(req, FormatJson(body))
+    PostDeviceProfile()
+
     return true
 end function
 

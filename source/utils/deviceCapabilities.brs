@@ -1,6 +1,5 @@
 'Device Capabilities for Roku.
 'This will likely need further tweaking
-
 function getDeviceCapabilities() as object
 
     return {
@@ -15,6 +14,13 @@ function getDeviceCapabilities() as object
     }
 end function
 
+' Send Device Profile information to server
+sub PostDeviceProfile()
+    body = getDeviceCapabilities()
+    req = APIRequest("/Sessions/Capabilities/Full")
+    req.SetRequest("POST")
+    postJson(req, FormatJson(body))
+end sub
 
 function getDeviceProfile() as object
     playMpeg2 = get_user_setting("playback.mpeg2") = "true"
