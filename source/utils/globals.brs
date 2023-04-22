@@ -35,3 +35,37 @@ sub SaveDeviceToGlobal()
         }
     })
 end sub
+
+' Save information about the user's current session to m.global.session
+sub SaveSessionToGlobal()
+    userConfig = AboutMe()
+    userConfig.Append({ "authToken": get_user_setting("token") })
+
+    myServerInfo = ServerInfo()
+    myServerInfo.Append({ "name": myServerInfo.ServerName })
+    ' grab server url from registry
+    serverURL = get_setting("server")
+    myServerInfo.Append({ "url": serverURL })
+    ' search server URL for https protocol
+    isServerHTTPS = false
+    if serverURL.left(8) = "https://" then isServerHTTPS = true
+    myServerInfo.Append({ "isHTTPS": isServerHTTPS })
+
+    if m.global.session = invalid
+        m.global.addFields({
+            session: {
+                server: myServerInfo,
+                user: userConfig
+            }
+        })
+    else
+        m.global.setFields({
+            session: {
+                server: myServerInfo,
+                user: userConfig
+            }
+        })
+    end if
+    print "m.global.session.server = ", m.global.session.server
+    print "m.global.session.user = ", m.global.session.user
+end sub

@@ -9,11 +9,13 @@ sub Main (args as dynamic) as void
 
     m.port = CreateObject("roMessagePort")
     m.screen.setMessagePort(m.port)
-    m.scene = m.screen.CreateScene("JFScene")
-    m.screen.show() ' vscode_rale_tracker_entry
-
     ' Set any initial Global Variables
     m.global = m.screen.getGlobalNode()
+    SaveAppToGlobal()
+    SaveDeviceToGlobal()
+
+    m.scene = m.screen.CreateScene("JFScene")
+    m.screen.show() ' vscode_rale_tracker_entry
 
     playstateTask = CreateObject("roSGNode", "PlaystateTask")
     playstateTask.id = "playstateTask"
@@ -24,18 +26,15 @@ sub Main (args as dynamic) as void
     m.global.addFields({ queueManager: CreateObject("roSGNode", "QueueManager") })
     m.global.addFields({ audioPlayer: CreateObject("roSGNode", "AudioPlayer") })
 
-    SaveAppToGlobal()
-    SaveDeviceToGlobal()
-
     app_start:
     ' First thing to do is validate the ability to use the API
     if not LoginFlow() then return
     ' remove previous scenes from the stack
     sceneManager.callFunc("clearScenes")
-    ' save user config
-    m.global.addFields({ userConfig: m.user.configuration })
+
+    SaveSessionToGlobal()
     ' load home page
-    sceneManager.currentUser = m.user.Name
+    sceneManager.currentUser = m.global.session.user.name
     group = CreateHomeGroup()
     group.callFunc("loadLibraries")
     sceneManager.callFunc("pushScene", group)
