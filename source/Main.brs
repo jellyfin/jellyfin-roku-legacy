@@ -526,30 +526,30 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "state")
             node = msg.getRoSGNode()
 
-if isValid(node) and isValid(node.state)
-            if m.selectedItemType = "TvChannel" and node.state = "finished"
+            if isValid(node) and isValid(node.state)
+                if LCase(m.selectedItemType) = "tvchannel" and node.selectedItem <> ""
+                    video = CreateVideoPlayerGroup(node.selectedItem)
+                    m.global.sceneManager.callFunc("pushScene", video)
+                else if m.selectedItemType = "TvChannel" and node.state = "finished"
                     video = CreateVideoPlayerGroup(node.id)
                     m.global.sceneManager.callFunc("pushScene", video)
-            else if m.selectedItemType = "TvChannel" and node.state = "finished"
-                video = CreateVideoPlayerGroup(node.id)
-                m.global.sceneManager.callFunc("pushScene", video)
-                m.global.sceneManager.callFunc("deleteSceneAtIndex", 2)
-            else if node.state = "finished"
-                node.control = "stop"
+                    m.global.sceneManager.callFunc("deleteSceneAtIndex", 2)
+                else if node.state = "finished"
+                    node.control = "stop"
 
-                ' If node allows retrying using Transcode Url, give that shot
-                if isValid(node.retryWithTranscoding) and node.retryWithTranscoding
-                    retryVideo = CreateVideoPlayerGroup(node.Id, invalid, node.audioIndex, true, false)
-                    m.global.sceneManager.callFunc("popScene")
-                     if isValid(retryVideo)
-                        m.global.sceneManager.callFunc("pushScene", retryVideo)
-                    end if
-                else if not isValid(node.showID)
-                    sceneManager.callFunc("popScene")
-                else
-                    if video.errorMsg = ""
-                        autoPlayNextEpisode(node.id, node.showID)
+                    ' If node allows retrying using Transcode Url, give that shot
+                    if isValid(node.retryWithTranscoding) and node.retryWithTranscoding
+                        retryVideo = CreateVideoPlayerGroup(node.Id, invalid, node.audioIndex, true, false)
+                        m.global.sceneManager.callFunc("popScene")
+                        if isValid(retryVideo)
+                            m.global.sceneManager.callFunc("pushScene", retryVideo)
+                        end if
+                    else if not isValid(node.showID)
+                        sceneManager.callFunc("popScene")
                     else
+                        if video.errorMsg = ""
+                            autoPlayNextEpisode(node.id, node.showID)
+                        else
                             sceneManager.callFunc("popScene")
                         end if
                     end if
