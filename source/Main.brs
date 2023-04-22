@@ -75,12 +75,11 @@ sub Main (args as dynamic) as void
     m.device = CreateObject("roDeviceInfo")
     m.device.setMessagePort(m.port)
     m.device.EnableScreensaverExitedEvent(true)
-    m.device.EnableAppFocusEvent(false)
+    m.device.EnableAppFocusEvent(true)
     m.device.EnableLowGeneralMemoryEvent(true)
     m.device.EnableLinkStatusEvent(true)
     m.device.EnableLowGeneralMemoryEvent(true)
     m.device.EnableCodecCapChangedEvent(true)
-    m.device.EnableAppFocusEvent(true)
 
     ' Check if we were sent content to play with the startup command (Deep Link)
     if isValidAndNotEmpty(args.mediaType) and isValidAndNotEmpty(args.contentId)
