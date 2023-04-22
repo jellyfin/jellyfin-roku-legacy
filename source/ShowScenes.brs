@@ -50,9 +50,9 @@ function LoginFlow(startOver = false as boolean)
                 'Try to login without password. If the token is valid, we're done
                 get_token(userSelected, "")
                 if get_setting("active_user") <> invalid
-                    m.user = AboutMe()
+                    currentUser = AboutMe()
                     LoadUserPreferences()
-                    LoadUserAbilities(m.user)
+                    LoadUserAbilities(currentUser)
                     SendPerformanceBeacon("AppDialogComplete") ' Roku Performance monitoring - Dialog Closed
                     return true
                 end if
@@ -68,15 +68,15 @@ function LoginFlow(startOver = false as boolean)
         end if
     end if
 
-    m.user = AboutMe()
-    if m.user = invalid or m.user.id <> get_setting("active_user")
+    currentUser = AboutMe()
+    if currentUser = invalid or currentUser.id <> get_setting("active_user")
         print "Login failed, restart flow"
         unset_setting("active_user")
         goto start_login
     end if
 
     LoadUserPreferences()
-    LoadUserAbilities(m.user)
+    LoadUserAbilities(currentUser)
     m.global.sceneManager.callFunc("clearScenes")
 
     'Send Device Profile information to server
@@ -196,33 +196,33 @@ function CreateServerGroup()
                 dialog.title = tr("Connecting to Server")
                 m.scene.dialog = dialog
 
-                m.serverInfoResult = ServerInfo()
+                serverInfoResult = ServerInfo()
 
                 dialog.close = true
 
-                if m.serverInfoResult = invalid
+                if serverInfoResult = invalid
                     ' Maybe don't unset setting, but offer as a prompt
                     ' Server not found, is it online? New values / Retry
                     print "Server not found, is it online? New values / Retry"
                     screen.errorMessage = tr("Server not found, is it online?")
                     SignOut(false)
-                else if m.serverInfoResult.Error <> invalid and m.serverInfoResult.Error
+                else if serverInfoResult.Error <> invalid and serverInfoResult.Error
                     ' If server redirected received, update the URL
-                    if m.serverInfoResult.UpdatedUrl <> invalid
-                        serverUrl = m.serverInfoResult.UpdatedUrl
+                    if serverInfoResult.UpdatedUrl <> invalid
+                        serverUrl = serverInfoResult.UpdatedUrl
                         set_setting("server", serverUrl)
                     end if
                     ' Display Error Message to user
                     message = tr("Error: ")
-                    if m.serverInfoResult.ErrorCode <> invalid
-                        message = message + "[" + m.serverInfoResult.ErrorCode.toStr() + "] "
+                    if serverInfoResult.ErrorCode <> invalid
+                        message = message + "[" + serverInfoResult.ErrorCode.toStr() + "] "
                     end if
-                    screen.errorMessage = message + tr(m.serverInfoResult.ErrorMessage)
+                    screen.errorMessage = message + tr(serverInfoResult.ErrorMessage)
                     SignOut(false)
                 else
                     screen.visible = false
-                    if m.serverInfoResult.serverName <> invalid
-                        return m.serverInfoResult.ServerName + " (Saved)"
+                    if serverInfoResult.serverName <> invalid
+                        return serverInfoResult.ServerName + " (Saved)"
                     else
                         return "Saved"
                     end if
@@ -332,11 +332,10 @@ function CreateSigninGroup(user = "")
     checkbox.content = items
     checkbox.checkedState = [true]
     quickConnect = group.findNode("quickConnect")
-    if m.serverInfoResult = invalid
-        m.serverInfoResult = ServerInfo()
-    end if
+    serverInfoResult = ServerInfo()
+    print "serverInfoResult = ", serverInfoResult
     ' Quick Connect only supported for server version 10.8+ right now...
-    if versionChecker(m.serverInfoResult.Version, "10.8.0")
+    if versionChecker(serverInfoResult.Version, "10.8.0")
         ' Add option for Quick Connect
         quickConnect.text = tr("Quick Connect")
         quickConnect.observeField("buttonSelected", port)

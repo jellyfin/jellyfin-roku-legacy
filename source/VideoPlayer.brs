@@ -441,7 +441,7 @@ end function
 
 sub autoPlayNextEpisode(videoID as string, showID as string)
     ' use web client setting
-    if m.user.Configuration.EnableNextEpisodeAutoPlay
+    if m.global.session.user.configuration.EnableNextEpisodeAutoPlay
         ' query API for next episode ID
         url = Substitute("Shows/{0}/Episodes", showID)
         urlParams = { "UserId": get_setting("active_user") }

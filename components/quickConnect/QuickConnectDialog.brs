@@ -27,9 +27,9 @@ sub OnAuthenticated()
         ' We've been given the go ahead, try to authenticate via Quick Connect...
         authenticated = AuthenticateViaQuickConnect(m.top.quickConnectJson.secret)
         if authenticated <> invalid and authenticated = true
-            m.user = AboutMe()
+            currentUser = AboutMe()
             LoadUserPreferences()
-            LoadUserAbilities(m.user)
+            LoadUserAbilities(currentUser)
             m.top.close = true
             m.top.authenticated = true
         else

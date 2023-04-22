@@ -92,7 +92,7 @@ end sub
 '
 ' Runs Next Episode button animation and sets focus to button
 sub showNextEpisodeButton()
-    if m.global.userConfig.EnableNextEpisodeAutoPlay and not m.nextEpisodeButton.visible
+    if m.global.session.user.configuration.EnableNextEpisodeAutoPlay and not m.nextEpisodeButton.visible
         m.showNextEpisodeButtonAnimation.control = "start"
         m.nextEpisodeButton.setFocus(true)
         m.nextEpisodeButton.visible = true
