@@ -78,7 +78,6 @@ sub Main (args as dynamic) as void
     m.device.EnableAppFocusEvent(true)
     m.device.EnableLowGeneralMemoryEvent(true)
     m.device.EnableLinkStatusEvent(true)
-    m.device.EnableLowGeneralMemoryEvent(true)
     m.device.EnableCodecCapChangedEvent(true)
 
     ' Check if we were sent content to play with the startup command (Deep Link)
