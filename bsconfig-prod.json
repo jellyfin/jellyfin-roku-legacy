@@ -27,9 +27,8 @@
         "removeComments": true
     },
     "diagnosticFilters": [
-        "**/roku_modules/**/*",
-        "**/testFramework/*",
-        "**/tests/*"
+        "node_modules/**/*",
+        "**/roku_modules/**/*"
     ],
     "allowBrighterScriptInBrightScript": true,
     "autoImportComponentScript": true,
