@@ -10,8 +10,7 @@
     ],
     "plugins": [
         "@rokucommunity/bslint",
-        "roku-log-bsc-plugin",
-        "rooibos-roku"
+        "roku-log-bsc-plugin"
     ],
     "rokuLog": {
         "insertPkgPath": true
