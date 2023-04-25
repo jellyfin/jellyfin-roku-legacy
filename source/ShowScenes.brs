@@ -545,36 +545,57 @@ function CreateHomeGroup()
     return group
 end function
 
-function CreateMovieDetailsGroup(movie)
+function CreateMovieDetailsGroup(movie as object) as dynamic
+    ' validate movie node
+    if not isValid(movie) or not isValid(movie.id) then return invalid
+
     startLoadingSpinner()
+    ' get movie meta data
+    movieMetaData = ItemMetaData(movie.id)
+    ' validate movie meta data
+    if not isValid(movieMetaData)
+        stopLoadingSpinner()
+        return invalid
+    end if
+    ' start building MovieDetails view
     group = CreateObject("roSGNode", "MovieDetails")
     group.overhangTitle = movie.title
     group.optionsAvailable = false
-    m.global.sceneManager.callFunc("pushScene", group)
-
-    movieMetaData = ItemMetaData(movie.id)
-    group.itemContent = movieMetaData
     group.trailerAvailable = false
-
+    ' push scene asap (to prevent extra button presses when retriving series/movie info)
+    m.global.sceneManager.callFunc("pushScene", group)
+    group.itemContent = movieMetaData
+    ' local trailers
     trailerData = api_API().users.getlocaltrailers(m.global.session.user.id, movie.id)
     if isValid(trailerData)
         group.trailerAvailable = trailerData.Count() > 0
     end if
-
+    ' watch for button presses
     buttons = group.findNode("buttons")
     for each b in buttons.getChildren(-1, 0)
         b.observeField("buttonSelected", m.port)
     end for
-
+    ' setup and load movie extras
     extras = group.findNode("extrasGrid")
     extras.observeField("selectedItem", m.port)
     extras.callFunc("loadParts", movieMetaData.json)
+    ' done building MovieDetails view
     stopLoadingSpinner()
     return group
 end function
 
-function CreateSeriesDetailsGroup(series)
+function CreateSeriesDetailsGroup(series as object) as dynamic
+    ' validate series node
+    if not isValid(series) or not isValid(series.id) then return invalid
+
     startLoadingSpinner()
+    ' get series meta data
+    seriesMetaData = ItemMetaData(series.id)
+    ' validate series meta data
+    if not isValid(seriesMetaData)
+        stopLoadingSpinner()
+        return invalid
+    end if
     ' Get season data early in the function so we can check number of seasons.
     seasonData = TVSeasons(series.id)
     ' Divert to season details if user setting goStraightToEpisodeListing is enabled and only one season exists.
@@ -582,38 +603,43 @@ function CreateSeriesDetailsGroup(series)
         stopLoadingSpinner()
         return CreateSeasonDetailsGroupByID(series.id, seasonData.Items[0].id)
     end if
+    ' start building SeriesDetails view
     group = CreateObject("roSGNode", "TVShowDetails")
     group.optionsAvailable = false
+    ' push scene asap (to prevent extra button presses when retriving series/movie info)
     m.global.sceneManager.callFunc("pushScene", group)
-
-    group.itemContent = ItemMetaData(series.id)
-    group.seasonData = seasonData ' Re-use variable from beginning of function
-
+    group.itemContent = seriesMetaData
+    group.seasonData = seasonData
+    ' watch for button presses
     group.observeField("seasonSelected", m.port)
-
+    ' setup and load series extras
     extras = group.findNode("extrasGrid")
     extras.observeField("selectedItem", m.port)
-    extras.callFunc("loadParts", group.itemcontent.json)
+    extras.callFunc("loadParts", seriesMetaData.json)
+    ' done building SeriesDetails view
     stopLoadingSpinner()
     return group
 end function
 
 ' Shows details on selected artist. Bio, image, and list of available albums
-function CreateArtistView(musicartist)
-    musicData = MusicAlbumList(musicartist.id)
-    appearsOnData = AppearsOnList(musicartist.id)
+function CreateArtistView(artist as object) as dynamic
+    ' validate artist node
+    if not isValid(artist) or not isValid(artist.id) then return invalid
+
+    musicData = MusicAlbumList(artist.id)
+    appearsOnData = AppearsOnList(artist.id)
 
     if (musicData = invalid or musicData.Items.Count() = 0) and (appearsOnData = invalid or appearsOnData.Items.Count() = 0)
         ' Just songs under artists...
         group = CreateObject("roSGNode", "AlbumView")
-        group.pageContent = ItemMetaData(musicartist.id)
+        group.pageContent = ItemMetaData(artist.id)
 
         ' Lookup songs based on artist id
-        songList = GetSongsByArtist(musicartist.id)
+        songList = GetSongsByArtist(artist.id)
 
         if not isValid(songList)
             ' Lookup songs based on folder parent / child relationship
-            songList = MusicSongList(musicartist.id)
+            songList = MusicSongList(artist.id)
         end if
 
         if not isValid(songList)
@@ -627,10 +653,10 @@ function CreateArtistView(musicartist)
     else
         ' User has albums under artists
         group = CreateObject("roSGNode", "ArtistView")
-        group.pageContent = ItemMetaData(musicartist.id)
+        group.pageContent = ItemMetaData(artist.id)
         group.musicArtistAlbumData = musicData
         group.musicArtistAppearsOnData = appearsOnData
-        group.artistOverview = ArtistOverview(musicartist.name)
+        group.artistOverview = ArtistOverview(artist.name)
 
         group.observeField("musicAlbumSelected", m.port)
         group.observeField("playArtistSelected", m.port)
@@ -644,7 +670,10 @@ function CreateArtistView(musicartist)
 end function
 
 ' Shows details on selected album. Description text, image, and list of available songs
-function CreateAlbumView(album)
+function CreateAlbumView(album as object) as dynamic
+    ' validate album node
+    if not isValid(album) or not isValid(album.id) then return invalid
+
     group = CreateObject("roSGNode", "AlbumView")
     m.global.sceneManager.callFunc("pushScene", group)
 
@@ -664,12 +693,15 @@ function CreateAlbumView(album)
 end function
 
 ' Shows details on selected playlist. Description text, image, and list of available items
-function CreatePlaylistView(album)
+function CreatePlaylistView(playlist as object) as dynamic
+    ' validate playlist node
+    if not isValid(playlist) or not isValid(playlist.id) then return invalid
+
     group = CreateObject("roSGNode", "PlaylistView")
     m.global.sceneManager.callFunc("pushScene", group)
 
-    group.pageContent = ItemMetaData(album.id)
-    group.albumData = PlaylistItemList(album.id)
+    group.pageContent = ItemMetaData(playlist.id)
+    group.albumData = PlaylistItemList(playlist.id)
 
     ' Watch for user clicking on an item
     group.observeField("playItem", m.port)
@@ -680,39 +712,66 @@ function CreatePlaylistView(album)
     return group
 end function
 
-function CreateSeasonDetailsGroup(series, season)
+function CreateSeasonDetailsGroup(series as object, season as object) as dynamic
+    ' validate series node
+    if not isValid(series) or not isValid(series.id) then return invalid
+    ' validate season node
+    if not isValid(season) or not isValid(season.id) then return invalid
+
     startLoadingSpinner()
+    ' get season meta data
+    seasonMetaData = ItemMetaData(season.id)
+    ' validate season meta data
+    if not isValid(seasonMetaData)
+        stopLoadingSpinner()
+        return invalid
+    end if
+    ' start building SeasonDetails view
     group = CreateObject("roSGNode", "TVEpisodes")
     group.optionsAvailable = false
+    ' push scene asap (to prevent extra button presses when retriving series/movie info)
     m.global.sceneManager.callFunc("pushScene", group)
-
-    group.seasonData = ItemMetaData(season.id).json
+    group.seasonData = seasonMetaData.json
     group.objects = TVEpisodes(series.id, season.id)
-
+    ' watch for button presses
     group.observeField("episodeSelected", m.port)
     group.observeField("quickPlayNode", m.port)
-
+    ' finished building SeasonDetails view
     stopLoadingSpinner()
-
     return group
 end function
 
-function CreateSeasonDetailsGroupByID(seriesID, seasonID)
+function CreateSeasonDetailsGroupByID(seriesID as string, seasonID as string) as dynamic
+    ' validate parameters
+    if seriesID = "" or seasonID = "" then return invalid
+
     startLoadingSpinner()
+    ' get season meta data
+    seasonMetaData = ItemMetaData(seasonID)
+    ' validate season meta data
+    if not isValid(seasonMetaData)
+        stopLoadingSpinner()
+        return invalid
+    end if
+    ' start building SeasonDetails view
     group = CreateObject("roSGNode", "TVEpisodes")
     group.optionsAvailable = false
+    ' push scene asap (to prevent extra button presses when retriving series/movie info)
     m.global.sceneManager.callFunc("pushScene", group)
-
-    group.seasonData = ItemMetaData(seasonID).json
+    group.seasonData = seasonMetaData.json
     group.objects = TVEpisodes(seriesID, seasonID)
-
+    ' watch for button presses
     group.observeField("episodeSelected", m.port)
     group.observeField("quickPlayNode", m.port)
+    ' finished building SeasonDetails view
     stopLoadingSpinner()
     return group
 end function
 
-function CreateItemGrid(libraryItem)
+function CreateItemGrid(libraryItem as object) as dynamic
+    ' validate libraryItem
+    if not isValid(libraryItem) then return invalid
+
     group = CreateObject("roSGNode", "ItemGrid")
     group.parentItem = libraryItem
     group.optionsAvailable = true
@@ -720,7 +779,10 @@ function CreateItemGrid(libraryItem)
     return group
 end function
 
-function CreateMovieLibraryView(libraryItem)
+function CreateMovieLibraryView(libraryItem as object) as dynamic
+    ' validate libraryItem
+    if not isValid(libraryItem) then return invalid
+
     group = CreateObject("roSGNode", "MovieLibraryView")
     group.parentItem = libraryItem
     group.optionsAvailable = true
@@ -728,7 +790,10 @@ function CreateMovieLibraryView(libraryItem)
     return group
 end function
 
-function CreateMusicLibraryView(libraryItem)
+function CreateMusicLibraryView(libraryItem as object) as dynamic
+    ' validate libraryItem
+    if not isValid(libraryItem) then return invalid
+
     group = CreateObject("roSGNode", "MusicLibraryView")
     group.parentItem = libraryItem
     group.optionsAvailable = true
@@ -745,13 +810,10 @@ function CreateSearchPage()
     return group
 end function
 
-sub CreateSidePanel(buttons, options)
-    group = CreateObject("roSGNode", "OptionsSlider")
-    group.buttons = buttons
-    group.options = options
-end sub
+function CreateVideoPlayerGroup(video_id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, forceTranscoding = false as boolean, showIntro = true as boolean, allowResumeDialog = true as boolean)
+    ' validate video_id
+    if not isValid(video_id) or video_id = "" then return invalid
 
-function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_idx = 1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
     startMediaLoadingSpinner()
     ' Video is Playing
     video = VideoPlayer(video_id, mediaSourceId, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), forceTranscoding, showIntro, allowResumeDialog)
@@ -768,18 +830,29 @@ function CreateVideoPlayerGroup(video_id, mediaSourceId = invalid, audio_stream_
     return video
 end function
 
-function CreatePersonView(personData as object) as object
-    startLoadingSpinner()
-    person = CreateObject("roSGNode", "PersonDetails")
-    m.global.SceneManager.callFunc("pushScene", person)
+function CreatePersonView(personData as object) as dynamic
+    ' validate personData node
+    if not isValid(personData) or not isValid(personData.id) then return invalid
 
-    info = ItemMetaData(personData.id)
-    person.itemContent = info
-    stopLoadingSpinner()
+    startLoadingSpinner()
+    ' get person meta data
+    personMetaData = ItemMetaData(personData.id)
+    ' validate season meta data
+    if not isValid(personMetaData)
+        stopLoadingSpinner()
+        return invalid
+    end if
+    ' start building Person View
+    person = CreateObject("roSGNode", "PersonDetails")
+    ' push scene asap (to prevent extra button presses when retriving series/movie info)
+    m.global.SceneManager.callFunc("pushScene", person)
+    person.itemContent = personMetaData
     person.setFocus(true)
+    ' watch for button presses
     person.observeField("selectedItem", m.port)
     person.findNode("favorite-button").observeField("buttonSelected", m.port)
-
+    ' finished building Person View
+    stopLoadingSpinner()
     return person
 end function
 

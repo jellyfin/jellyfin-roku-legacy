@@ -1,4 +1,4 @@
-function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
+function VideoPlayer(id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, forceTranscoding = false as boolean, showIntro = true as boolean, allowResumeDialog = true as boolean) as dynamic
     ' Get video controls and UI
     video = CreateObject("roSGNode", "JFVideo")
     video.id = id
@@ -20,7 +20,7 @@ function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle
     return video
 end function
 
-sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
+sub AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, playbackPosition = -1 as integer, forceTranscoding = false as boolean, showIntro = true as boolean, allowResumeDialog = true as boolean)
     video.content = createObject("RoSGNode", "ContentNode")
     meta = ItemMetaData(video.id)
     if meta = invalid
