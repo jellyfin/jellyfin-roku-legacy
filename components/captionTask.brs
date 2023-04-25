@@ -41,10 +41,10 @@ sub fetchCaption()
     m.captionTimer.control = "stop"
     re = CreateObject("roRegex", "(http.*?\.(vtt|ass))", "s")
     url = re.match(m.top.url)
-    if url[0] <> invalid
+    if isValid(url[0])
         m.reader.setUrl(url[0])
         text = m.reader.GetToString()
-        subtype = url[2]
+        subtype = LCase(url[2])
         if subtype = "vtt"
             m.captionList = parseVTT(text)
         else if subtype = "ass"
@@ -154,14 +154,18 @@ end function
 function trimASSText(text)
     text = text.trim()
     ' filter out style override
-    ' TODO: honor the style and style override
-    ' TODO: inline comments
-    re = CreateObject("roRegex", "\{(?:[^}{]+|(?R))*+\}", "s")
-    text = re.ReplaceAll(text, "")
-    return text
+    for each r in m.assControlRegex
+        text = r.ReplaceAll(text, "")
+    end for
+    return text.split("\N")
 end function
 
 function parseASS(lines)
+    m.assControlRegex = [
+        ' drawing sequence
+        CreateObject("roRegex", "\{p[1-9]+\}[^{]*\{p0\}", "s"),
+        CreateObject("roRegex", "\{(?:[^}{]+|(?R))*+\}", "s")
+    ]
     lines = lines.split(chr(10))
 
     reFormat = CreateObject("roRegex", "Format: (.*)", "s")
@@ -175,7 +179,7 @@ function parseASS(lines)
 
     for i = 0 to lines.count() - 1
         format = reFormat.match(lines[i])[1]
-        if format <> invalid
+        if isValid(format)
             format = format.tokenize(",")
             for j = 0 to format.count() - 1
                 f = format[j].trim()
@@ -191,19 +195,21 @@ function parseASS(lines)
         end if
 
         if startIndex <> -1
-            dialoge = reLine.match(lines[i])[1]
-            if dialoge <> invalid
-                dialoge = dialoge.split(",")
-                msStart = toMs(dialoge[startIndex].trim())
-                msEnd = toMs(dialoge[endIndex].trim())
+            dialogLine = reLine.match(lines[i])[1]
+            if isValid(dialogLine)
+                dialog = dialogLine.split(",")
+                msStart = toMs(dialog[startIndex].trim())
+                msEnd = toMs(dialog[endIndex].trim())
                 text = []
-                for j = textIndex to dialoge.count() - 1
-                    text.push(dialoge[j])
+                for j = textIndex to dialog.count() - 1
+                    text.push(dialog[j])
                 end for
                 trimmed = trimASSText(text.join(","))
 
-                entry = { "start": msStart, "end": msEnd, "text": trimmed }
-                entries.push(entry)
+                for each t in trimmed
+                    entry = { "start": msStart, "end": msEnd, "text": t }
+                    entries.push(entry)
+                end for
             end if
         end if
     end for
