@@ -1,10 +1,10 @@
 {
         "files": [
-                "!**/roku_modules/**/*.*",
                 "source/**/*.brs",
                 "source/**/*.bs",
                 "components/**/*.brs",
                 "components/**/*.bs",
-                "test-app/**/*.bs"
+                "test-app/**/*.bs",
+                "!**/roku_modules/**/*.*"
         ]
 }

@@ -17,8 +17,8 @@
         "insertPkgPath": true
     },
     "diagnosticFilters": [
-        "node_modules/**",
-        "**/roku_modules/**"
+        "node_modules/**/*",
+        "**/roku_modules/**/*"
     ],
     "sourceMap": true,
     "autoImportComponentScript": true,
