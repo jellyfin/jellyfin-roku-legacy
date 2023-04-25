@@ -1,26 +1,6 @@
 sub Main (args as dynamic) as void
-
-    appInfo = CreateObject("roAppInfo")
-
-    if appInfo.IsDev() and args.RunTests = "true" and TF_Utils__IsFunction(TestRunner)
-        ' POST to {ROKU ADDRESS}:8060/launch/dev?RunTests=true
-        Runner = TestRunner()
-
-        Runner.SetFunctions([
-            TestSuite__Misc
-        ])
-
-        Runner.Logger.SetVerbosity(1)
-        Runner.Logger.SetEcho(false)
-        Runner.Logger.SetJUnit(false)
-        Runner.SetFailFast(true)
-
-        Runner.Run()
-    end if
-
     ' The main function that runs when the application is launched.
     m.screen = CreateObject("roSGScreen")
-
     ' Set global constants
     setConstants()
     ' Write screen tracker for screensaver
@@ -77,6 +57,7 @@ sub Main (args as dynamic) as void
     end if
 
     ' Only show the Whats New popup the first time a user runs a new client version.
+    appInfo = CreateObject("roAppInfo")
     if appInfo.GetVersion() <> get_setting("LastRunVersion")
         ' Ensure the user hasn't disabled Whats New popups
         if get_user_setting("load.allowwhatsnew") = "true"
@@ -158,7 +139,7 @@ sub Main (args as dynamic) as void
 
             m.selectedItemType = selectedItem.type
 
-            if selectedItem.type = "CollectionFolder"
+            if selectedItem.type = "CollectionFolder" or selectedItem.type = "BoxSet"
                 if selectedItem.collectionType = "movies"
                     group = CreateMovieLibraryView(selectedItem)
                 else if selectedItem.collectionType = "music"
@@ -620,150 +601,4 @@ sub Main (args as dynamic) as void
         end if
     end while
 
-end sub
-
-function LoginFlow(startOver = false as boolean)
-    'Collect Jellyfin server and user information
-    start_login:
-
-    if get_setting("server") = invalid then startOver = true
-
-    invalidServer = true
-    if not startOver
-        ' Show Connecting to Server spinner
-        dialog = createObject("roSGNode", "ProgressDialog")
-        dialog.title = tr("Connecting to Server")
-        m.scene.dialog = dialog
-        invalidServer = ServerInfo().Error
-        dialog.close = true
-    end if
-
-    m.serverSelection = "Saved"
-    if startOver or invalidServer
-        print "Get server details"
-        SendPerformanceBeacon("AppDialogInitiate") ' Roku Performance monitoring - Dialog Starting
-        m.serverSelection = CreateServerGroup()
-        SendPerformanceBeacon("AppDialogComplete") ' Roku Performance monitoring - Dialog Closed
-        if m.serverSelection = "backPressed"
-            print "backPressed"
-            m.global.sceneManager.callFunc("clearScenes")
-            return false
-        end if
-        SaveServerList()
-    end if
-
-    if get_setting("active_user") = invalid
-        SendPerformanceBeacon("AppDialogInitiate") ' Roku Performance monitoring - Dialog Starting
-        publicUsers = GetPublicUsers()
-        if publicUsers.count()
-            publicUsersNodes = []
-            for each item in publicUsers
-                user = CreateObject("roSGNode", "PublicUserData")
-                user.id = item.Id
-                user.name = item.Name
-                if item.PrimaryImageTag <> invalid
-                    user.ImageURL = UserImageURL(user.id, { "tag": item.PrimaryImageTag })
-                end if
-                publicUsersNodes.push(user)
-            end for
-            userSelected = CreateUserSelectGroup(publicUsersNodes)
-            if userSelected = "backPressed"
-                SendPerformanceBeacon("AppDialogComplete") ' Roku Performance monitoring - Dialog Closed
-                return LoginFlow(true)
-            else
-                'Try to login without password. If the token is valid, we're done
-                get_token(userSelected, "")
-                if get_setting("active_user") <> invalid
-                    m.user = AboutMe()
-                    LoadUserPreferences()
-                    LoadUserAbilities(m.user)
-                    SendPerformanceBeacon("AppDialogComplete") ' Roku Performance monitoring - Dialog Closed
-                    return true
-                end if
-            end if
-        else
-            userSelected = ""
-        end if
-        passwordEntry = CreateSigninGroup(userSelected)
-        SendPerformanceBeacon("AppDialogComplete") ' Roku Performance monitoring - Dialog Closed
-        if passwordEntry = "backPressed"
-            m.global.sceneManager.callFunc("clearScenes")
-            return LoginFlow(true)
-        end if
-    end if
-
-    m.user = AboutMe()
-    if m.user = invalid or m.user.id <> get_setting("active_user")
-        print "Login failed, restart flow"
-        unset_setting("active_user")
-        goto start_login
-    end if
-
-    LoadUserPreferences()
-    LoadUserAbilities(m.user)
-    m.global.sceneManager.callFunc("clearScenes")
-
-    'Send Device Profile information to server
-    body = getDeviceCapabilities()
-    req = APIRequest("/Sessions/Capabilities/Full")
-    req.SetRequest("POST")
-    postJson(req, FormatJson(body))
-    return true
-end function
-
-sub SaveServerList()
-    'Save off this server to our list of saved servers for easier navigation between servers
-    server = get_setting("server")
-    saved = get_setting("saved_servers")
-    if server <> invalid
-        server = LCase(server)'Saved server data is always lowercase
-    end if
-    entryCount = 0
-    addNewEntry = true
-    savedServers = { serverList: [] }
-    if saved <> invalid
-        savedServers = ParseJson(saved)
-        entryCount = savedServers.serverList.Count()
-        if savedServers.serverList <> invalid and entryCount > 0
-            for each item in savedServers.serverList
-                if item.baseUrl = server
-                    addNewEntry = false
-                    exit for
-                end if
-            end for
-        end if
-    end if
-
-    if addNewEntry
-        if entryCount = 0
-            set_setting("saved_servers", FormatJson({ serverList: [{ name: m.serverSelection, baseUrl: server, iconUrl: "pkg:/images/logo-icon120.jpg", iconWidth: 120, iconHeight: 120 }] }))
-        else
-            savedServers.serverList.Push({ name: m.serverSelection, baseUrl: server, iconUrl: "pkg:/images/logo-icon120.jpg", iconWidth: 120, iconHeight: 120 })
-            set_setting("saved_servers", FormatJson(savedServers))
-        end if
-    end if
-end sub
-
-sub DeleteFromServerList(urlToDelete)
-    saved = get_setting("saved_servers")
-    if urlToDelete <> invalid
-        urlToDelete = LCase(urlToDelete)
-    end if
-    if saved <> invalid
-        savedServers = ParseJson(saved)
-        newServers = { serverList: [] }
-        for each item in savedServers.serverList
-            if item.baseUrl <> urlToDelete
-                newServers.serverList.Push(item)
-            end if
-        end for
-        set_setting("saved_servers", FormatJson(newServers))
-    end if
-end sub
-
-' Roku Performance monitoring
-sub SendPerformanceBeacon(signalName as string)
-    if m.global.app_loaded = false
-        m.scene.signalBeacon(signalName)
-    end if
 end sub

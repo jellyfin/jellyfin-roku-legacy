@@ -207,13 +207,13 @@ sub setFieldTextValue(field, value)
 end sub
 
 ' Returns whether or not passed value is valid
-function isValid(input) as boolean
+function isValid(input as dynamic) as boolean
     return input <> invalid
 end function
 
 ' Returns whether or not passed value is valid and not empty
 ' Accepts a string, or any countable type (arrays and lists)
-function isValidAndNotEmpty(input) as boolean
+function isValidAndNotEmpty(input as dynamic) as boolean
     if not isValid(input) then return false
     ' Use roAssociativeArray instead of list so we get access to the doesExist() method
     countableTypes = { "array": 1, "list": 1, "roarray": 1, "roassociativearray": 1, "rolist": 1 }

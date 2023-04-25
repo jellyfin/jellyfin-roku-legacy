@@ -1,0 +1,18 @@
+namespace tests
+
+    class BaseTestSuite extends rooibos.BaseTestSuite
+        private appController
+
+        protected override function setup()
+            'Do something here all your files need like setup the logger, etc
+        end function
+
+        protected override function beforeEach()
+            'do things here that all your tests need
+        end function
+
+        protected override function afterEach()
+            'tidy things up
+        end function
+    end class
+end namespace

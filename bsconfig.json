@@ -10,15 +10,15 @@
     ],
     "plugins": [
         "@rokucommunity/bslint",
-        "roku-log-bsc-plugin"
+        "roku-log-bsc-plugin",
+        "rooibos-roku"
     ],
     "rokuLog": {
         "insertPkgPath": true
     },
     "diagnosticFilters": [
-        "**/roku_modules/**/*",
-        "**/testFramework/*",
-        "**/tests/*"
+        "node_modules/**",
+        "**/roku_modules/**"
     ],
     "sourceMap": true,
     "autoImportComponentScript": true,

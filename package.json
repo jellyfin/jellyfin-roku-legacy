@@ -2,33 +2,45 @@
   "name": "jellyfin-roku",
   "version": "1.6.5",
   "description": "Roku app for Jellyfin media server",
-  "main": "index.js",
+  "dependencies": {
+    "api": "npm:jellyfin-api-bs-client@1.0.5",
+    "bgv": "npm:button-group-vert@1.0.2",
+    "brighterscript-formatter": "1.6.26",
+    "intKeyboard": "npm:integer-keyboard@1.0.12",
+    "log": "npm:roku-log@0.9.3",
+    "sob": "npm:slide-out-button@1.0.1"
+  },
   "devDependencies": {
-    "brighterscript": "0.64.2",
     "@rokucommunity/bslint": "0.8.3",
-    "jshint": "^2.13.6",
-    "markdownlint-cli2": "0.6.0",
-    "rimraf": "4.4.1",
+    "brighterscript": "0.64.2",
+    "bslib": "npm:@rokucommunity/bslib@0.1.1",
+    "jshint": "2.13.6",
+    "markdownlint-cli2": "0.7.0",
+    "rimraf": "5.0.0",
+    "roku-deploy": "3.10.1",
     "roku-log-bsc-plugin": "0.7.0",
+    "rooibos-roku": "5.4.2",
     "ropm": "0.10.13",
-    "spellchecker-cli": "6.1.1"
+    "spellchecker-cli": "6.1.1",
+    "undent": "0.1.0"
   },
   "scripts": {
     "build": "npx rimraf build/ out/ && npx bsc --project bsconfig.json",
     "build-prod": "npx rimraf build/ out/ && npx bsc --project bsconfig-prod.json",
-    "postinstall": "npx ropm copy",
-    "validate": "npx bsc --copy-to-staging=false --create-package=false",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-tests": "npx rimraf build/ && npx bsc --project bsconfig-tests.json",
+    "build-tdd": "npx rimraf build/ && npx bsc --project bsconfig-tdd.json",
+    "check-formatting": "npx bsfmt --check",
+    "format": "npx bsfmt --write",
     "lint": "bslint",
     "lint-json": "jshint --extra-ext .json --verbose --exclude node_modules ./",
     "lint-markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
     "lint-spelling": "spellchecker -d dictionary.txt --files \"**/*.md\" \"**/.*/**/*.md\" \"!node_modules/**/*.md\"",
-    "check-formatting": "npx bsfmt --check",
-    "format": "npx bsfmt --write"
+    "postinstall": "npx ropm copy",
+    "validate": "npx bsc --copy-to-staging=false --create-package=false"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jellyfin/jellyfin-roku.git"
+    "url": "https://github.com/jellyfin/jellyfin-roku.git"
   },
   "keywords": [
     "jellyfin",
@@ -39,13 +51,5 @@
   "bugs": {
     "url": "https://github.com/jellyfin/jellyfin-roku/issues"
   },
-  "homepage": "https://github.com/jellyfin/jellyfin-roku#readme",
-  "dependencies": {
-    "api": "npm:jellyfin-api-bs-client@^1.0.5",
-    "bgv": "npm:button-group-vert@^1.0.2",
-    "brighterscript-formatter": "^1.6.8",
-    "intKeyboard": "npm:integer-keyboard@^1.0.12",
-    "log": "npm:roku-log@0.9.3",
-    "sob": "npm:slide-out-button@^1.0.1"
-  }
+  "homepage": "https://github.com/jellyfin/jellyfin-roku"
 }
