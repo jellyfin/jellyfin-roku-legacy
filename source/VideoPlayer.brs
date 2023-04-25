@@ -82,7 +82,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     params = {
                         ids: video.Id
                     }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    url = Substitute("Users/{0}/Items/", m.global.session.user.id)
                     resp = APIRequest(url, params)
                     data = getJson(resp)
                     for each item in data.Items
@@ -92,7 +92,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     params = {
                         ids: m.series_id
                     }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    url = Substitute("Users/{0}/Items/", m.global.session.user.id)
                     resp = APIRequest(url, params)
                     data = getJson(resp)
                     for each item in data.Items
@@ -109,7 +109,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     params = {
                         ids: video.Id
                     }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    url = Substitute("Users/{0}/Items/", m.global.session.user.id)
                     resp = APIRequest(url, params)
                     data = getJson(resp)
                     for each item in data.Items
@@ -120,7 +120,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     params = {
                         ids: m.season_id
                     }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    url = Substitute("Users/{0}/Items/", m.global.session.user.id)
                     resp = APIRequest(url, params)
                     data = getJson(resp)
                     for each item in data.Items
@@ -130,7 +130,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     params = {
                         ids: m.series_id
                     }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    url = Substitute("Users/{0}/Items/", m.global.session.user.id)
                     resp = APIRequest(url, params)
                     data = getJson(resp)
                     for each item in data.Items
@@ -147,7 +147,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     params = {
                         ids: video.Id
                     }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    url = Substitute("Users/{0}/Items/", m.global.session.user.id)
                     resp = APIRequest(url, params)
                     data = getJson(resp)
                     for each item in data.Items
@@ -444,7 +444,7 @@ sub autoPlayNextEpisode(videoID as string, showID as string)
     if m.global.session.user.configuration.EnableNextEpisodeAutoPlay
         ' query API for next episode ID
         url = Substitute("Shows/{0}/Episodes", showID)
-        urlParams = { "UserId": get_setting("active_user") }
+        urlParams = { "UserId": m.global.session.user.id }
         urlParams.Append({ "StartItemId": videoID })
         urlParams.Append({ "Limit": 2 })
         resp = APIRequest(url, urlParams)

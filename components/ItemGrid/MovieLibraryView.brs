@@ -223,7 +223,7 @@ sub loadInitialItems()
 
     m.getFiltersTask.observeField("filters", "FilterDataLoaded")
     m.getFiltersTask.params = {
-        userid: get_setting("active_user"),
+        userid: m.global.session.user.id,
         parentid: m.top.parentItem.Id,
         includeitemtypes: "Movie"
     }

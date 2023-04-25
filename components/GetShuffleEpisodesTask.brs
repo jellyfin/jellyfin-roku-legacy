@@ -4,7 +4,7 @@ end sub
 
 sub getShuffleEpisodesTask()
     data = api_API().shows.getepisodes(m.top.showID, {
-        UserId: get_setting("active_user"),
+        UserId: m.global.session.user.id,
         SortBy: "Random",
         Limit: 200
     })

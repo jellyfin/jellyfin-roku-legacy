@@ -329,7 +329,7 @@ sub autoPlayNextEpisode(videoID as string, showID as string)
     if m.global.session.user.configuration.EnableNextEpisodeAutoPlay
         ' query API for next episode ID
         url = Substitute("Shows/{0}/Episodes", showID)
-        urlParams = { "UserId": get_setting("active_user") }
+        urlParams = { "UserId": m.global.session.user.id }
         urlParams.Append({ "StartItemId": videoID })
         urlParams.Append({ "Limit": 2 })
         resp = APIRequest(url, urlParams)
@@ -1204,7 +1204,7 @@ function CreateMovieDetailsGroup(movie)
     group.itemContent = movieMetaData
     group.trailerAvailable = false
 
-    activeUser = get_setting("active_user")
+    activeUser = m.global.session.user.id
     trailerData = invalid
     if isValid(activeUser) and isValid(movie.id)
         trailerData = api_API().users.getlocaltrailers(activeUser, movie.id)

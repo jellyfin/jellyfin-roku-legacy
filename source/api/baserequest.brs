@@ -53,15 +53,15 @@ end function
 
 function APIRequest(url as string, params = {} as object)
     req = createObject("roUrlTransfer")
-    serverURL = get_setting("server")
+    serverURL = m.global.session.server.url
     if serverURL <> invalid and serverURL.left(8) = "https://"
         req.setCertificatesFile("common:/certs/ca-bundle.crt")
     end if
 
     full_url = buildURL(url, params)
+    print "full_url = ", full_url
     req.setUrl(full_url)
     req = authorize_request(req)
-
     return req
 end function
 
@@ -120,7 +120,7 @@ function deleteVoid(req)
 end function
 
 function get_url()
-    base = get_setting("server")
+    base = m.global.session.server.url
     if base <> invalid
         if base.right(1) = "/"
             base = base.left(base.len() - 1)
@@ -135,23 +135,18 @@ function get_url()
 end function
 
 function authorize_request(request)
-    user = get_setting("active_user")
-
     auth = "MediaBrowser" + " Client=" + Chr(34) + "Jellyfin Roku" + Chr(34)
     auth = auth + ", Device=" + Chr(34) + m.global.device.name + " (" + m.global.device.friendlyName + ")" + Chr(34)
-
-    if user <> invalid and user <> ""
-        auth = auth + ", DeviceId=" + Chr(34) + m.global.device.id + Chr(34)
-        auth = auth + ", UserId=" + Chr(34) + user + Chr(34)
-    else
-        auth = auth + ", DeviceId=" + Chr(34) + m.global.device.uuid + Chr(34)
-    end if
-
     auth = auth + ", Version=" + Chr(34) + m.global.app.version + Chr(34)
 
-    token = get_user_setting("token")
-    if token <> invalid and token <> ""
-        auth = auth + ", Token=" + Chr(34) + token + Chr(34)
+    if m.global.session.user.id <> invalid
+        auth = auth + ", DeviceId=" + Chr(34) + m.global.device.id + Chr(34)
+        auth = auth + ", UserId=" + Chr(34) + m.global.session.user.id + Chr(34)
+        if m.global.session.user.authToken <> invalid
+            auth = auth + ", Token=" + Chr(34) + m.global.session.user.authToken + Chr(34)
+        end if
+    else
+        auth = auth + ", DeviceId=" + Chr(34) + m.global.device.uuid + Chr(34)
     end if
 
     request.AddHeader("Authorization", auth)

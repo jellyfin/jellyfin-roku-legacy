@@ -2,7 +2,15 @@ function LoginFlow(startOver = false as boolean)
     'Collect Jellyfin server and user information
     start_login:
 
-    if get_setting("server") = invalid then startOver = true
+    serverUrl = get_setting("server")
+    if serverUrl = invalid
+        startOver = true
+        print "No previous server connection saved to registry"
+    else
+        print "Previous server connection saved to registry"
+        UpdateSessionServer("url", serverUrl)
+        PopulateSessionServer()
+    end if
 
     invalidServer = true
     if not startOver
@@ -28,7 +36,9 @@ function LoginFlow(startOver = false as boolean)
         SaveServerList()
     end if
 
-    if get_setting("active_user") = invalid
+    activeUser = get_setting("active_user")
+    if activeUser = invalid
+        print "No active user found in registry"
         SendPerformanceBeacon("AppDialogInitiate") ' Roku Performance monitoring - Dialog Starting
         publicUsers = GetPublicUsers()
         if publicUsers.count()
@@ -48,11 +58,11 @@ function LoginFlow(startOver = false as boolean)
                 return LoginFlow(true)
             else
                 'Try to login without password. If the token is valid, we're done
-                get_token(userSelected, "")
-                if get_setting("active_user") <> invalid
-                    currentUser = AboutMe()
+                userData = get_token(userSelected, "")
+                if userData <> invalid
+                    SessionLogin(userData)
                     LoadUserPreferences()
-                    LoadUserAbilities(currentUser)
+                    LoadUserAbilities()
                     SendPerformanceBeacon("AppDialogComplete") ' Roku Performance monitoring - Dialog Closed
                     return true
                 end if
@@ -66,17 +76,74 @@ function LoginFlow(startOver = false as boolean)
             m.global.sceneManager.callFunc("clearScenes")
             return LoginFlow(true)
         end if
+    else
+        print "Active user found in registry"
+        UpdateSessionUser("id", activeUser)
+
+        myAuthToken = get_user_setting("token")
+        if myAuthToken <> invalid
+            print "Auth token found in registry"
+            UpdateSessionUser("authToken", myAuthToken)
+            print "Attempting to use API with auth token"
+            currentUser = AboutMe()
+            if currentUser = invalid
+                print "Auth token is no longer valid - restart login flow"
+                unset_user_setting("token")
+                unset_setting("active_user")
+                UpdateSession("user")
+                goto start_login
+            else
+                print "Success! Auth token is still valid"
+                SessionLogin(currentUser)
+            end if
+        else
+            print "No auth token found in registry"
+            myUsername = get_setting("username")
+            myPassword = get_setting("password")
+            userData = invalid
+
+            if myUsername <> invalid and myPassword <> invalid
+                if myUsername <> ""
+                    print "Username and password found in registry. Attempting to login"
+                    userData = get_token(myUsername, myPassword)
+                else
+                    print "Username in registry is an empty string"
+                    unset_setting("username")
+                    unset_setting("password")
+                end if
+            else if myUsername <> invalid and myPassword = invalid
+                print "Username found in registry but no password"
+                if myUsername <> ""
+                    print "Attempting to login with no password"
+                    userData = get_token(myUsername, "")
+                else
+                    print "Username in registry is an empty string"
+                    unset_setting("username")
+                end if
+
+            else if myUsername = invalid and myPassword = invalid
+                print "Neither username nor password found in registry - restart login flow"
+                unset_setting("active_user")
+                UpdateSession("user")
+                goto start_login
+            end if
+
+            if userData <> invalid
+                print "login success!"
+                SessionLogin(userData)
+            end if
+        end if
     end if
 
-    currentUser = AboutMe()
-    if currentUser = invalid or currentUser.id <> get_setting("active_user")
+    if m.global.session.user.id = invalid or m.global.session.user.authToken = invalid
         print "Login failed, restart flow"
         unset_setting("active_user")
+        UpdateSession("user")
         goto start_login
     end if
 
     LoadUserPreferences()
-    LoadUserAbilities(currentUser)
+    LoadUserAbilities()
     m.global.sceneManager.callFunc("clearScenes")
 
     'Send Device Profile information to server
@@ -89,7 +156,7 @@ end function
 
 sub SaveServerList()
     'Save off this server to our list of saved servers for easier navigation between servers
-    server = get_setting("server")
+    server = m.global.session.server.url
     saved = get_setting("saved_servers")
     if server <> invalid
         server = LCase(server)'Saved server data is always lowercase
@@ -151,8 +218,8 @@ function CreateServerGroup()
     port = CreateObject("roMessagePort")
     m.colors = {}
 
-    if get_setting("server") <> invalid
-        screen.serverUrl = get_setting("server")
+    if m.global.session.server.url <> invalid
+        screen.serverUrl = m.global.session.server.url
     end if
     m.viewModel = {}
     button = screen.findNode("submit")
@@ -186,11 +253,12 @@ function CreateServerGroup()
             if node = "submit"
                 serverUrl = standardize_jellyfin_url(screen.serverUrl)
                 'If this is a different server from what we know, reset username/password setting
-                if get_setting("server") <> serverUrl
+                if m.global.session.server.url <> serverUrl
                     set_setting("username", "")
                     set_setting("password", "")
                 end if
                 set_setting("server", serverUrl)
+                UpdateSessionServer("url", serverUrl)
                 ' Show Connecting to Server spinner
                 dialog = createObject("roSGNode", "ProgressDialog")
                 dialog.title = tr("Connecting to Server")
@@ -211,6 +279,7 @@ function CreateServerGroup()
                     if serverInfoResult.UpdatedUrl <> invalid
                         serverUrl = serverInfoResult.UpdatedUrl
                         set_setting("server", serverUrl)
+                        UpdateSessionServer("url", serverUrl)
                     end if
                     ' Display Error Message to user
                     message = tr("Error: ")
@@ -288,7 +357,7 @@ function CreateSigninGroup(user = "")
     group.findNode("prompt").text = tr("Sign In")
 
     'Load in any saved server data and see if we can just log them in...
-    server = get_setting("server")
+    server = m.global.session.server.url
     if server <> invalid
         server = LCase(server)'Saved server data is always lowercase
     end if
@@ -297,8 +366,9 @@ function CreateSigninGroup(user = "")
         savedServers = ParseJson(saved)
         for each item in savedServers.serverList
             if item.baseUrl = server and item.username <> invalid and item.password <> invalid
-                get_token(item.username, item.password)
-                if get_setting("active_user") <> invalid
+                userData = get_token(item.username, item.password)
+                if userData <> invalid
+                    SessionLogin(userData)
                     return "true"
                 end if
             end if
@@ -319,8 +389,9 @@ function CreateSigninGroup(user = "")
     password_field.label = tr("Password")
     password_field.field = "password"
     password_field.type = "password"
-    if get_setting("password") <> invalid
-        password_field.value = get_setting("password")
+    registryPassword = get_setting("password")
+    if registryPassword <> invalid
+        password_field.value = registryPassword
     end if
     ' Add checkbox for saving credentials
     checkbox = group.findNode("onOff")
@@ -332,10 +403,8 @@ function CreateSigninGroup(user = "")
     checkbox.content = items
     checkbox.checkedState = [true]
     quickConnect = group.findNode("quickConnect")
-    serverInfoResult = ServerInfo()
-    print "serverInfoResult = ", serverInfoResult
     ' Quick Connect only supported for server version 10.8+ right now...
-    if versionChecker(serverInfoResult.Version, "10.8.0")
+    if versionChecker(m.global.session.server.version, "10.8.0")
         ' Add option for Quick Connect
         quickConnect.text = tr("Quick Connect")
         quickConnect.observeField("buttonSelected", port)
@@ -369,8 +438,9 @@ function CreateSigninGroup(user = "")
             node = msg.getNode()
             if node = "submit"
                 ' Validate credentials
-                get_token(username.value, password.value)
-                if get_setting("active_user") <> invalid
+                activeUser = get_token(username.value, password.value)
+                if activeUser <> invalid
+                    SessionLogin(activeUser)
                     set_setting("username", username.value)
                     set_setting("password", password.value)
                     if checkbox.checkedState[0] = true
@@ -467,7 +537,7 @@ function CreateHomeGroup()
         user_options.push({ display: user.username + "@" + user.server, value: user.id })
     end for
     user_node.choices = user_options
-    user_node.value = get_setting("active_user")
+    user_node.value = m.global.session.user.id
     new_options.push(user_node)
 
     sidepanel.options = new_options
@@ -486,7 +556,7 @@ function CreateMovieDetailsGroup(movie)
     group.itemContent = movieMetaData
     group.trailerAvailable = false
 
-    trailerData = api_API().users.getlocaltrailers(get_setting("active_user"), movie.id)
+    trailerData = api_API().users.getlocaltrailers(m.global.session.user.id, movie.id)
     if isValid(trailerData)
         group.trailerAvailable = trailerData.Count() > 0
     end if
@@ -714,7 +784,7 @@ function CreatePersonView(personData as object) as object
 end function
 
 sub UpdateSavedServerList()
-    server = get_setting("server")
+    server = m.global.session.server.url
     username = get_setting("username")
     password = get_setting("password")
 

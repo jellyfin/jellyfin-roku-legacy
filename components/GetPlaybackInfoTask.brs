@@ -7,7 +7,7 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
         "DeviceProfile": getDeviceProfile()
     }
     params = {
-        "UserId": get_setting("active_user"),
+        "UserId": m.global.session.user.id,
         "StartTimeTicks": startTimeTicks,
         "IsPlayback": true,
         "AutoOpenLiveStream": true,

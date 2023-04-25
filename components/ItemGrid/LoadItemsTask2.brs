@@ -95,26 +95,26 @@ sub loadItems()
 
     if m.top.ItemType = "LiveTV"
         url = "LiveTv/Channels"
-        params.append({ UserId: get_setting("active_user") })
+        params.append({ UserId: m.global.session.user.id })
     else if m.top.view = "Networks"
         url = "Studios"
-        params.append({ UserId: get_setting("active_user") })
+        params.append({ UserId: m.global.session.user.id })
     else if m.top.view = "Genres"
         url = "Genres"
-        params.append({ UserId: get_setting("active_user"), includeItemTypes: m.top.itemType })
+        params.append({ UserId: m.global.session.user.id, includeItemTypes: m.top.itemType })
     else if m.top.ItemType = "MusicArtist"
         url = "Artists"
         params.append({
-            UserId: get_setting("active_user"),
+            UserId: m.global.session.user.id,
             Fields: "Genres"
         })
         params.IncludeItemTypes = "MusicAlbum,Audio"
     else if m.top.ItemType = "MusicAlbum"
-        url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+        url = Substitute("Users/{0}/Items/", m.global.session.user.id)
         params.append({ ImageTypeLimit: 1 })
         params.append({ EnableImageTypes: "Primary,Backdrop,Banner,Thumb" })
     else
-        url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+        url = Substitute("Users/{0}/Items/", m.global.session.user.id)
     end if
 
     resp = APIRequest(url, params)
@@ -151,7 +151,7 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "ContentNode")
                 tmp.title = item.name
 
-                genreData = api_API().users.getitemsbyquery(get_setting("active_user"), {
+                genreData = api_API().users.getitemsbyquery(m.global.session.user.id, {
                     SortBy: "Random",
                     SortOrder: "Ascending",
                     IncludeItemTypes: m.top.itemType,

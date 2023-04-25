@@ -29,7 +29,8 @@ sub OnAuthenticated()
         if authenticated <> invalid and authenticated = true
             currentUser = AboutMe()
             LoadUserPreferences()
-            LoadUserAbilities(currentUser)
+            LoadUserAbilities()
+            SessionLogin(currentUser)
             m.top.close = true
             m.top.authenticated = true
         else

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <component name="LoadVideoContentTask" extends="Task">
   <interface>
@@ -30,4 +30,5 @@
   <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
   <script type="text/brightscript" uri="pkg:/source/api/userauth.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils/globals.brs" />
 </component>

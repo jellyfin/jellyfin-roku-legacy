@@ -13,6 +13,7 @@ sub Main (args as dynamic) as void
     m.global = m.screen.getGlobalNode()
     SaveAppToGlobal()
     SaveDeviceToGlobal()
+    InitSession()
 
     m.scene = m.screen.CreateScene("JFScene")
     m.screen.show() ' vscode_rale_tracker_entry
@@ -32,7 +33,6 @@ sub Main (args as dynamic) as void
     ' remove previous scenes from the stack
     sceneManager.callFunc("clearScenes")
 
-    SaveSessionToGlobal()
     ' load home page
     sceneManager.currentUser = m.global.session.user.name
     group = CreateHomeGroup()
@@ -439,7 +439,7 @@ sub Main (args as dynamic) as void
                 mediaSourceId = invalid
                 video_id = group.id
 
-                trailerData = api_API().users.getlocaltrailers(get_setting("active_user"), group.id)
+                trailerData = api_API().users.getlocaltrailers(m.global.session.user.id, group.id)
                 video = invalid
 
                 if isValid(trailerData) and isValid(trailerData[0]) and isValid(trailerData[0].id)

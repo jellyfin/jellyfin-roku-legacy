@@ -7,7 +7,7 @@ sub loadSchedule()
     results = []
 
     params = {
-        UserId: get_setting("active_user"),
+        UserId: m.global.session.user.id,
         SortBy: "startDate",
         EnableImages: false,
         EnableTotalRecordCount: false,
