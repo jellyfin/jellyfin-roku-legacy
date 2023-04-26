@@ -167,10 +167,6 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     ' is enabled/will be enabled, indexed on the provided list of subtitles
     video.SelectedSubtitle = setupSubtitle(video, video.Subtitles, subtitle_idx)
 
-    if not fully_external
-        video.content = authorize_request(video.content)
-    end if
-
 end sub
 
 sub addVideoContentURL(video, mediaSourceId, audio_stream_idx)
