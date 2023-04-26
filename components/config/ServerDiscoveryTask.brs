@@ -77,7 +77,8 @@ sub ProcessClientDiscoveryResponse(message)
             })
             print "Found Jellyfin server using client discovery at " + server.Address
         catch e
-            print "Error scanning for jellyfin server", message
+            print "Error scanning for jellyfin server", e.message
+            print "Error triggered by", message
         end try
     end if
 end sub

@@ -22,7 +22,7 @@ end function
 function defaultSubtitleTrackFromVid(video_id) as integer
     meta = ItemMetaData(video_id)
     if isValid(meta) and isValid(meta.json) and isValid(meta.json.mediaSources)
-        subtitles = sortSubtitles(meta.id, meta.json.MediaSources[0].MediaStreams)
+        subtitles = sortSubtitles(meta.json.MediaSources[0].MediaStreams)
         default_text_subs = defaultSubtitleTrack(subtitles["all"], true) ' Find correct subtitle track (forced text)
         if default_text_subs <> -1
             return default_text_subs
@@ -111,7 +111,7 @@ function getSubtitleSelIdxFromSubIdx(subtitles, sub_idx) as integer
     return -1
 end function
 
-function selectSubtitleTrack(tracks, current = -1) as integer
+function selectSubtitleTrack() as integer
     video = m.scene.focusedChild.focusedChild
     trackSelected = selectSubtitleTrackDialog(video.Subtitles, video.SelectedSubtitle)
     if trackSelected = invalid or trackSelected = -1 ' back pressed in Dialog - no selection made
@@ -187,7 +187,7 @@ sub turnoffSubtitles()
 end sub
 
 'Checks available subtitle tracks and puts subtitles in forced, default, and non-default/forced but preferred language at the top
-function sortSubtitles(id as string, MediaStreams)
+function sortSubtitles(MediaStreams)
     tracks = { "forced": [], "default": [], "normal": [] }
     'Too many args for using substitute
     prefered_lang = m.user.Configuration.SubtitleLanguagePreference

@@ -226,7 +226,7 @@ sub saveFavoriteItemSelected(msg)
     end if
 end sub
 
-function onKeyEvent(key as string, press as boolean) as boolean
+function onKeyEvent(key as string) as boolean
 
     if key = "down" or (key = "OK" and m.buttons.hasFocus())
         m.buttons.setFocus(false)

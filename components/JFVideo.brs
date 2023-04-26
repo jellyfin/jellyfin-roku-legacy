@@ -148,7 +148,7 @@ end sub
 
 '
 ' When Video Player state changes
-sub onState(msg)
+sub onState()
     if isValid(m.captionTask)
         m.captionTask.playerState = m.top.state + m.top.globalCaptionMode
     end if
@@ -229,7 +229,7 @@ end sub
 
 '
 ' Check the the buffering has not hung
-sub bufferCheck(msg)
+sub bufferCheck()
 
     if m.top.state <> "buffering"
         ' If video is not buffering, stop timer

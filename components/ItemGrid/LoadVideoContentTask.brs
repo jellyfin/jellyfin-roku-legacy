@@ -112,7 +112,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
         m.playbackInfo = meta.json
     end if
 
-    addSubtitlesToVideo(video, meta)
+    addSubtitlesToVideo(video)
 
     if meta.live
         video.transcodeParams = {
@@ -126,8 +126,6 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     ' 'TODO: allow user selection of subtitle track before playback initiated, for now set to no subtitles
 
     video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
-    fully_external = false
-
 
     ' For h264/hevc video, Roku spec states that it supports specfic encoding levels
     ' The device can decode content with a Higher Encoding level but may play it back with certain
@@ -147,7 +145,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     end if
 
     if video.directPlaySupported
-        addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
+        addVideoContentURL(video, mediaSourceId, audio_stream_idx)
         video.isTranscoded = false
     else
         if m.playbackInfo.MediaSources[0].TranscodingUrl = invalid
@@ -175,7 +173,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
 
 end sub
 
-sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
+sub addVideoContentURL(video, mediaSourceId, audio_stream_idx)
     protocol = LCase(m.playbackInfo.MediaSources[0].Protocol)
     if protocol <> "file"
         uriRegex = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
@@ -189,7 +187,6 @@ sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
             ' later we will substitute the users provided URL for this case
             video.content.url = buildURL(uri[4])
         else
-            fully_external = true
             video.content.url = m.playbackInfo.MediaSources[0].Path
         end if
     else:
@@ -210,8 +207,8 @@ sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
     end if
 end sub
 
-sub addSubtitlesToVideo(video, meta)
-    subtitles = sortSubtitles(meta.id, m.playbackInfo.MediaSources[0].MediaStreams)
+sub addSubtitlesToVideo(video)
+    subtitles = sortSubtitles(m.playbackInfo.MediaSources[0].MediaStreams)
     if get_user_setting("playback.subs.onlytext") = "true"
         safesubs = []
         for each subtitle in subtitles["all"]
@@ -510,7 +507,7 @@ end function
 function defaultSubtitleTrackFromVid(video_id) as integer
     meta = ItemMetaData(video_id)
     if isValid(meta) and isValid(meta.json) and isValid(meta.json.mediaSources)
-        subtitles = sortSubtitles(meta.id, meta.json.MediaSources[0].MediaStreams)
+        subtitles = sortSubtitles(meta.json.MediaSources[0].MediaStreams)
         default_text_subs = defaultSubtitleTrack(subtitles["all"], true) ' Find correct subtitle track (forced text)
         if default_text_subs <> -1
             return default_text_subs
@@ -601,7 +598,7 @@ function getSubtitleSelIdxFromSubIdx(subtitles, sub_idx) as integer
 end function
 
 'Checks available subtitle tracks and puts subtitles in forced, default, and non-default/forced but preferred language at the top
-function sortSubtitles(id as string, MediaStreams)
+function sortSubtitles(MediaStreams)
     m.user = AboutMe()
     tracks = { "forced": [], "default": [], "normal": [] }
     'Too many args for using substitute

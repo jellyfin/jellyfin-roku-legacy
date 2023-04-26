@@ -144,7 +144,7 @@ end sub
 
 '
 ' When Video Player state changes
-sub onState(msg)
+sub onState()
     ' When buffering, start timer to monitor buffering process
     if m.top.state = "buffering" and m.bufferCheckTimer <> invalid
 
@@ -224,8 +224,7 @@ end sub
 
 '
 ' Check the the buffering has not hung
-sub bufferCheck(msg)
-
+sub bufferCheck()
     if m.top.state <> "buffering"
         ' If video is not buffering, stop timer
         m.bufferCheckTimer.control = "stop"
@@ -253,7 +252,6 @@ sub bufferCheck(msg)
             m.top.backPressed = true
         end if
     end if
-
 end sub
 
 '

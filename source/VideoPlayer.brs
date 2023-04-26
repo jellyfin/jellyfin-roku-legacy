@@ -216,7 +216,7 @@ sub AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx 
         m.playbackInfo = meta.json
     end if
 
-    subtitles = sortSubtitles(meta.id, m.playbackInfo.MediaSources[0].MediaStreams)
+    subtitles = sortSubtitles(m.playbackInfo.MediaSources[0].MediaStreams)
     if get_user_setting("playback.subs.onlytext") = "true"
         safesubs = []
         for each subtitle in subtitles["all"]

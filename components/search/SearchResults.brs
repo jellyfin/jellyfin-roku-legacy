@@ -39,7 +39,7 @@ sub loadResults()
     m.searchAlphabox.translation = "[470, 85]"
 end sub
 
-function onKeyEvent(key as string, press as boolean) as boolean
+function onKeyEvent(key as string) as boolean
 
     m.searchAlphabox = m.top.findNode("search_Key")
     if m.searchAlphabox.textEditBox.hasFocus()
