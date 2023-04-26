@@ -1,6 +1,5 @@
 sub init()
     m.playReported = false
-    m.top.disableScreenSaver = true
     m.top.observeField("state", "audioStateChanged")
 end sub
 

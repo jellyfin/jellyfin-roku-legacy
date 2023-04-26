@@ -238,15 +238,18 @@ function playAction() as boolean
     if m.global.audioPlayer.state = "playing"
         m.global.audioPlayer.control = "pause"
         ' Allow screen to go to real screensaver
+        m.global.audioPlayer.disableScreenSaver = false
         WriteAsciiFile("tmp:/scene.temp", "nowplaying-paused")
         MoveFile("tmp:/scene.temp", "tmp:/scene")
     else if m.global.audioPlayer.state = "paused"
         m.global.audioPlayer.control = "resume"
+        m.global.audioPlayer.disableScreenSaver = true
         ' Write screen tracker for screensaver
         WriteAsciiFile("tmp:/scene.temp", "nowplaying")
         MoveFile("tmp:/scene.temp", "tmp:/scene")
     else if m.global.audioPlayer.state = "finished"
         m.global.audioPlayer.control = "play"
+        m.global.audioPlayer.disableScreenSaver = true
         ' Write screen tracker for screensaver
         WriteAsciiFile("tmp:/scene.temp", "nowplaying")
         MoveFile("tmp:/scene.temp", "tmp:/scene")
@@ -550,6 +553,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         else if key = "back"
             m.global.audioPlayer.control = "stop"
             m.global.audioPlayer.loopMode = ""
+            m.global.audioPlayer.disableScreenSaver = false
         else if key = "rewind"
             return previousClicked()
         else if key = "fastforward"

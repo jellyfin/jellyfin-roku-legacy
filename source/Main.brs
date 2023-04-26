@@ -265,6 +265,7 @@ sub Main (args as dynamic) as void
             selectedIndex = msg.getData()
             screenContent = msg.getRoSGNode()
 
+            m.global.audioPlayer.disableScreenSaver = true
             m.global.queueManager.callFunc("clear")
             m.global.queueManager.callFunc("resetShuffle")
             m.global.queueManager.callFunc("push", screenContent.albumData.items[selectedIndex])
@@ -274,6 +275,7 @@ sub Main (args as dynamic) as void
             selectedIndex = msg.getData()
             screenContent = msg.getRoSGNode()
 
+            m.global.audioPlayer.disableScreenSaver = true
             m.global.queueManager.callFunc("clear")
             m.global.queueManager.callFunc("resetShuffle")
             m.global.queueManager.callFunc("push", screenContent.albumData.items[selectedIndex])
@@ -284,6 +286,7 @@ sub Main (args as dynamic) as void
             m.spinner = screenContent.findNode("spinner")
             m.spinner.visible = true
 
+            m.global.audioPlayer.disableScreenSaver = true
             m.global.queueManager.callFunc("clear")
             m.global.queueManager.callFunc("resetShuffle")
             m.global.queueManager.callFunc("set", screenContent.albumData.items)
@@ -292,6 +295,7 @@ sub Main (args as dynamic) as void
             ' User has selected playlist of of audio they want us to play
             screenContent = msg.getRoSGNode()
 
+            m.global.audioPlayer.disableScreenSaver = true
             m.global.queueManager.callFunc("clear")
             m.global.queueManager.callFunc("resetShuffle")
             m.global.queueManager.callFunc("set", CreateArtistMix(screenContent.pageContent.id).Items)
@@ -312,6 +316,7 @@ sub Main (args as dynamic) as void
             if isValid(screenContent.albumData)
                 if isValid(screenContent.albumData.items)
                     if screenContent.albumData.items.count() > 0
+                        m.global.audioPlayer.disableScreenSaver = true
                         m.global.queueManager.callFunc("clear")
                         m.global.queueManager.callFunc("resetShuffle")
                         m.global.queueManager.callFunc("set", CreateInstantMix(screenContent.albumData.items[0].id).Items)
@@ -324,6 +329,7 @@ sub Main (args as dynamic) as void
 
             if not viewHandled
                 ' Create instant mix based on selected artist
+                m.global.audioPlayer.disableScreenSaver = true
                 m.global.queueManager.callFunc("clear")
                 m.global.queueManager.callFunc("resetShuffle")
                 m.global.queueManager.callFunc("set", CreateInstantMix(screenContent.pageContent.id).Items)
