@@ -3,7 +3,7 @@
   "version": "1.6.5",
   "description": "Roku app for Jellyfin media server",
   "dependencies": {
-    "api": "npm:jellyfin-api-bs-client@1.0.5",
+    "api": "npm:jellyfin-api-bs-client@1.0.6",
     "bgv": "npm:button-group-vert@1.0.2",
     "brighterscript-formatter": "1.6.26",
     "intKeyboard": "npm:integer-keyboard@1.0.12",
@@ -17,7 +17,7 @@
     "markdownlint-cli2": "0.7.0",
     "rimraf": "5.0.0",
     "roku-deploy": "3.10.1",
-    "roku-log-bsc-plugin": "0.8.0",
+    "roku-log-bsc-plugin": "0.8.1",
     "rooibos-roku": "5.4.2",
     "ropm": "0.10.13",
     "spellchecker-cli": "6.1.1",
