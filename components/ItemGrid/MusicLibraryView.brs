@@ -219,17 +219,17 @@ end sub
 
 ' Filter Data Loaded Event Handler
 sub FilterDataLoaded(msg)
-    options = {}
-    options.filter = []
-    options.favorite = []
-
-    setMusicOptions(options)
-
     data = msg.GetData()
     m.getFiltersTask.unobserveField("filters")
     m.getFiltersTask.filters = {}
 
     if not isValid(data) then return
+
+    options = {}
+    options.filter = []
+    options.favorite = []
+
+    setMusicOptions(options)
 
     ' Add Music filters from the API data
     if LCase(m.loadItemsTask.itemType) = "musicartist" or LCase(m.loadItemsTask.itemType) = "musicalbum"
@@ -244,13 +244,13 @@ sub FilterDataLoaded(msg)
         end if
     end if
 
-    setSelectedOptions(options)
+    SetSelectedOptions(options)
 
     m.options.options = options
 end sub
 
 ' Data to display when options button selected
-sub setSelectedOptions(options)
+sub SetSelectedOptions(options)
 
     ' Set selected view option
     for each o in options.views
