@@ -1,18 +1,17 @@
 *.svg
-jellyfin-roku.zip
-source/globals.brs
 .env
-
-###BrightScript specific
+# BrightScript 
 dist/apps
 out/
-
+build/
 roku_modules
-
-#NPM modules
+source/globals.brs
+jellyfin-roku.zip
+# Rooibos
+bsconfig-tdd.json
+# NPM 
 node_modules/
-
-#Eclipse
+# Eclipse
 .buildpath
 .project
 .settings

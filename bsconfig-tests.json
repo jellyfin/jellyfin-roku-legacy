@@ -1,0 +1,44 @@
+{
+    "files": [
+        {
+            "src": "test-app/**/*"
+        },
+        {
+            "src": "source/**/!(Main.brs)",
+            "dest": "source"
+        },
+        {
+            "src": "components/**/*",
+            "dest": "components"
+        },
+        {
+            "src": "locale/**/*",
+            "dest": "locale"
+        },
+        {
+            "src": "settings/**/*",
+            "dest": "settings"
+        }
+    ],
+    "autoImportComponentScript": true,
+    "createPackage": false,
+    "stagingFolderPath": "build",
+    "plugins": [
+        "rooibos-roku"
+    ],
+    "rooibos": {
+        "isRecordingCodeCoverage": false,
+        "testsFilePattern": null,
+        "tags": [
+            "!integration",
+            "!deprecated",
+            "!fixme"
+        ],
+        "showOnlyFailures": true,
+        "catchCrashes": true,
+        "lineWidth": 70,
+        "failFast": false,
+        "sendHomeOnFinish": false
+    },
+    "sourceMap": true
+}

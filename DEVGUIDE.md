@@ -27,7 +27,7 @@ Follow the steps below to install the app on your personal Roku device. This wil
 
 ## Developer Mode
 
-Put your Roku device in [developer mode](https://blog.roku.com/developer/2016/02/04/developer-setup-guide). Write down your Roku device IP and the password you created, you will need these later.
+Put your Roku device in [developer mode](https://blog.roku.com/developer/2016/02/04/developer-setup-guide). Write down your Roku device IP and the password you created - you will need these!
 
 ## Clone the GitHub Repo
 
@@ -71,7 +71,7 @@ That's it! VSCode will auto-package the project, sideload it to the specified de
 
 Out of the box, the BrightScript extension will prompt you to pick a Roku device (from devices found on your local network) and enter a password on every launch. If you'd prefer to hardcode this information rather than entering it every time, you can set these values in your VSCode user settings:
 
-```js
+```json
 {
     "brightscript.debug.host": "YOUR_ROKU_HOST_HERE",
     "brightscript.debug.password": "YOUR_ROKU_DEV_PASSWORD_HERE",

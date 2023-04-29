@@ -148,6 +148,11 @@ sub loadInitialItems()
         m.top.showItemTitles = "hidealways"
     else if LCase(m.view) = "artistsgrid" or LCase(m.options.view) = "artistsgrid"
         m.loadItemsTask.genreIds = ""
+    else if LCase(m.view) = "albumartistsgrid" or LCase(m.options.view) = "albumartistsgrid"
+        m.loadItemsTask.genreIds = ""
+    else if LCase(m.view) = "albumartistspresentation" or LCase(m.options.view) = "albumartistspresentation"
+        m.loadItemsTask.genreIds = ""
+        m.top.showItemTitles = "hidealways"
     else
         m.loadItemsTask.itemId = m.top.parentItem.Id
     end if
@@ -179,6 +184,12 @@ sub loadInitialItems()
     else if LCase(m.options.view) = "artistsgrid" or LCase(m.view) = "artistsgrid"
         m.itemGrid.translation = "[96, 60]"
         m.itemGrid.numRows = "4"
+    else if LCase(m.options.view) = "albumartistsgrid" or LCase(m.view) = "albumartistsgrid"
+        m.loadItemsTask.itemType = "AlbumArtists"
+        m.itemGrid.translation = "[96, 60]"
+        m.itemGrid.numRows = "4"
+    else if LCase(m.options.view) = "albumartistspresentation" or LCase(m.view) = "albumartistspresentation"
+        m.loadItemsTask.itemType = "AlbumArtists"
     else if LCase(m.options.view) = "genres" or LCase(m.view) = "genres"
         m.loadItemsTask.itemType = ""
         m.loadItemsTask.recursive = true
@@ -206,6 +217,8 @@ sub setMusicOptions(options)
     options.views = [
         { "Title": tr("Artists (Presentation)"), "Name": "ArtistsPresentation" },
         { "Title": tr("Artists (Grid)"), "Name": "ArtistsGrid" },
+        { "Title": tr("Album Artists (Presentation)"), "Name": "AlbumArtistsPresentation" },
+        { "Title": tr("Album Artists (Grid)"), "Name": "AlbumArtistsGrid" },
         { "Title": tr("Albums"), "Name": "Albums" },
         { "Title": tr("Genres"), "Name": "Genres" }
     ]
@@ -446,6 +459,10 @@ sub onItemFocused()
     end if
 
     if LCase(m.options.view) = "artistsgrid" or LCase(m.view) = "artistsgrid"
+        return
+    end if
+
+    if LCase(m.options.view) = "albumartistsgrid" or LCase(m.view) = "albumartistsgrid"
         return
     end if
 

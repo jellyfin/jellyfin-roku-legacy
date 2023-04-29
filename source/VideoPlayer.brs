@@ -1,4 +1,4 @@
-function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
+function VideoPlayer(id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, forceTranscoding = false as boolean, showIntro = true as boolean, allowResumeDialog = true as boolean) as dynamic
     ' Get video controls and UI
     video = CreateObject("roSGNode", "JFVideo")
     video.id = id
@@ -20,7 +20,7 @@ function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle
     return video
 end function
 
-sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
+sub AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, playbackPosition = -1 as integer, forceTranscoding = false as boolean, showIntro = true as boolean, allowResumeDialog = true as boolean)
     video.content = createObject("RoSGNode", "ContentNode")
     meta = ItemMetaData(video.id)
     if meta = invalid
@@ -47,9 +47,6 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     end if
 
     if m.videotype = "Episode" or m.videotype = "Series"
-        if isValid(meta.json) and isValid(meta.json.RunTimeTicks)
-            video.runTime = (meta.json.RunTimeTicks / 10000000.0)
-        end if
         video.content.contenttype = "episode"
     end if
 
@@ -332,11 +329,15 @@ function PlayIntroVideo(video_id, audio_stream_idx) as boolean
             if lcase(introVideos.items[0].name) = "rick roll'd" then return true
 
             introVideo = VideoPlayer(introVideos.items[0].id, introVideos.items[0].id, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), false, false)
+            if isValid(introVideo)
+                introVideo.allowCaptions = false
+            end if
 
             port = CreateObject("roMessagePort")
             introVideo.observeField("state", port)
             m.global.sceneManager.callFunc("pushScene", introVideo)
             introPlaying = true
+            stopLoadingSpinner()
 
             while introPlaying
                 msg = wait(0, port)

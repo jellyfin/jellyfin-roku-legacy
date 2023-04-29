@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="HomeData" extends="ContentNode">
   <interface>
     <field id="id" type="string" />
@@ -13,6 +13,7 @@
     <field id="imageWidth" type="integer" value="464" />
     <field id="PlayedPercentage" type="float" value="0" />
     <field id="usePoster" type="bool" value="false" />
+    <field id="isWatched" type="bool" value="false" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />

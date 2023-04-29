@@ -9,6 +9,8 @@ sub audioStateChanged()
 
     reportedPlaybackState = "update"
 
+    m.top.disableScreenSaver = (currentState = "playing")
+
     if currentState = "playing" and not m.playReported
         reportedPlaybackState = "start"
         m.playReported = true

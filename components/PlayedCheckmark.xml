@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="PlayedCheckmark" extends="Rectangle">
+  <children>
+    <Label id="checkmark" width="60" height="50" font="font:MediumBoldSystemFont" horizAlign="center" vertAlign="bottom" text="✓" />
+  </children>
+  <script type="text/brightscript" uri="PlayedCheckmark.brs" />
+</component>

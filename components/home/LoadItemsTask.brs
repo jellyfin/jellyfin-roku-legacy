@@ -132,6 +132,12 @@ sub loadItems()
                 ' Skip Books for now as we don't support it (issue #558)
                 if item.Type <> "Book"
                     tmp = CreateObject("roSGNode", "HomeData")
+
+                    params = {}
+                    params["Tags"] = item.PrimaryImageTag
+                    params["MaxWidth"] = 234
+                    params["MaxHeight"] = 330
+                    tmp.posterURL = ImageUrl(item.Id, "Primary", params)
                     tmp.json = item
                     results.push(tmp)
                 end if

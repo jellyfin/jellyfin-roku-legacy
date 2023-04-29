@@ -3,6 +3,7 @@ VSCode
 BrightScript
 sideload
 Sideload
+Reddit
 DEVGUIDE
 ing
 hardcode
