@@ -217,8 +217,7 @@ sub loadInitialItems()
 
 end sub
 
-'
-' Logo Image Loaded Event Handler
+' Filter Data Loaded Event Handler
 sub FilterDataLoaded(msg)
     options = {}
     options.filter = []
@@ -228,6 +227,7 @@ sub FilterDataLoaded(msg)
 
     data = msg.GetData()
     m.getFiltersTask.unobserveField("filters")
+    m.getFiltersTask.filters = {}
 
     if not isValid(data) then return
 
