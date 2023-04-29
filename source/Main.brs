@@ -27,6 +27,8 @@ sub Main (args as dynamic) as void
     app_start:
     ' First thing to do is validate the ability to use the API
     if not LoginFlow() then return
+    ' tell jellyfin server about device capabilities
+    PostDeviceProfile()
     ' remove previous scenes from the stack
     sceneManager.callFunc("clearScenes")
     ' save user config

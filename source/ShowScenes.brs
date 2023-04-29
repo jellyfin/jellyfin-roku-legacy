@@ -79,8 +79,6 @@ function LoginFlow(startOver = false as boolean)
     LoadUserAbilities(m.user)
     m.global.sceneManager.callFunc("clearScenes")
 
-    PostDeviceProfile()
-
     return true
 end function
 
