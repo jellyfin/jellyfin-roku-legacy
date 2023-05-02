@@ -580,6 +580,12 @@ sub Main (args as dynamic) as void
                     end if
                     ' todo: add other screens to be refreshed - movie detail, tv series, episode list etc.
                 end if
+            else if event.audioGuideEnabled <> invalid
+                tmpGlobalDevice = m.global.device
+                tmpGlobalDevice.AddReplace("isaudioguideenabled", event.audioGuideEnabled)
+
+                ' update global device array
+                m.global.setFields({ device: tmpGlobalDevice })
             else if event.Mode <> invalid
                 ' Indicates the current global setting for the Caption Mode property, which may be one of the following values:
                 ' "On"
