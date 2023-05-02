@@ -580,6 +580,38 @@ sub Main (args as dynamic) as void
                     end if
                     ' todo: add other screens to be refreshed - movie detail, tv series, episode list etc.
                 end if
+            else if event.Mode <> invalid
+                ' Indicates the current global setting for the Caption Mode property, which may be one of the following values:
+                ' "On"
+                ' "Off"
+                ' "Instant replay"
+                ' "When mute" (Only returned for a TV; this option is not available on STBs).
+                print "event.Mode = ", event.Mode
+                if event.Mute <> invalid
+                    print "event.Mute = ", event.Mute
+                end if
+            else if event.linkStatus <> invalid
+                ' True if the device currently seems to have an active network connection.
+                print "event.linkStatus = ", event.linkStatus
+            else if event.generalMemoryLevel <> invalid
+                ' This event will be sent first when the OS transitions from "normal" to "low" state and will continue to be sent while in "low" or "critical" states.
+                '   - "normal" means that the general memory is within acceptable levels
+                '   - "low" means that the general memory is below acceptable levels but not critical
+                '   - "critical" means that general memory are at dangerously low level and that the OS may force terminate the application
+                print "event.generalMemoryLevel = ", event.generalMemoryLevel
+            else if event.audioCodecCapabilityChanged <> invalid
+                ' The audio codec capability has changed if true.
+                print "event.audioCodecCapabilityChanged = ", event.audioCodecCapabilityChanged
+
+                PostDeviceProfile()
+            else if event.videoCodecCapabilityChanged <> invalid
+                ' The video codec capability has changed if true.
+                print "event.videoCodecCapabilityChanged = ", event.videoCodecCapabilityChanged
+
+                PostDeviceProfile()
+            else if event.appFocus <> invalid
+                ' It is set to False when the System Overlay (such as the confirm partner button HUD or the caption control overlay) takes focus and True when the channel regains focus
+                print "event.appFocus = ", event.appFocus
             else
                 print "Unhandled roDeviceInfoEvent:"
                 print msg.GetInfo()
