@@ -9,11 +9,13 @@ sub Main (args as dynamic) as void
 
     m.port = CreateObject("roMessagePort")
     m.screen.setMessagePort(m.port)
-    m.scene = m.screen.CreateScene("JFScene")
-    m.screen.show() ' vscode_rale_tracker_entry
-
     ' Set any initial Global Variables
     m.global = m.screen.getGlobalNode()
+    SaveAppToGlobal()
+    SaveDeviceToGlobal()
+
+    m.scene = m.screen.CreateScene("JFScene")
+    m.screen.show() ' vscode_rale_tracker_entry
 
     playstateTask = CreateObject("roSGNode", "PlaystateTask")
     playstateTask.id = "playstateTask"
@@ -59,11 +61,10 @@ sub Main (args as dynamic) as void
     end if
 
     ' Only show the Whats New popup the first time a user runs a new client version.
-    appInfo = CreateObject("roAppInfo")
-    if appInfo.GetVersion() <> get_setting("LastRunVersion")
+    if m.global.app.version <> get_setting("LastRunVersion")
         ' Ensure the user hasn't disabled Whats New popups
         if get_user_setting("load.allowwhatsnew") = "true"
-            set_setting("LastRunVersion", appInfo.GetVersion())
+            set_setting("LastRunVersion", m.global.app.version)
             dialog = createObject("roSGNode", "WhatsNewDialog")
             m.scene.dialog = dialog
             m.scene.dialog.observeField("buttonSelected", m.port)
@@ -74,13 +75,14 @@ sub Main (args as dynamic) as void
     input = CreateObject("roInput")
     input.SetMessagePort(m.port)
 
-    m.device = CreateObject("roDeviceInfo")
-    m.device.setMessagePort(m.port)
-    m.device.EnableScreensaverExitedEvent(true)
-    m.device.EnableAppFocusEvent(true)
-    m.device.EnableLowGeneralMemoryEvent(true)
-    m.device.EnableLinkStatusEvent(true)
-    m.device.EnableCodecCapChangedEvent(true)
+    device = CreateObject("roDeviceInfo")
+    device.setMessagePort(m.port)
+    device.EnableScreensaverExitedEvent(true)
+    device.EnableAppFocusEvent(true)
+    device.EnableLowGeneralMemoryEvent(true)
+    device.EnableLinkStatusEvent(true)
+    device.EnableCodecCapChangedEvent(true)
+    device.EnableAudioGuideChangedEvent(true)
 
     ' Check if we were sent content to play with the startup command (Deep Link)
     if isValidAndNotEmpty(args.mediaType) and isValidAndNotEmpty(args.contentId)
@@ -578,38 +580,6 @@ sub Main (args as dynamic) as void
                     end if
                     ' todo: add other screens to be refreshed - movie detail, tv series, episode list etc.
                 end if
-            else if event.Mode <> invalid
-                ' Indicates the current global setting for the Caption Mode property, which may be one of the following values:
-                ' "On"
-                ' "Off"
-                ' "Instant replay"
-                ' "When mute" (Only returned for a TV; this option is not available on STBs).
-                print "event.Mode = ", event.Mode
-                if event.Mute <> invalid
-                    print "event.Mute = ", event.Mute
-                end if
-            else if event.linkStatus <> invalid
-                ' True if the device currently seems to have an active network connection.
-                print "event.linkStatus = ", event.linkStatus
-            else if event.generalMemoryLevel <> invalid
-                ' This event will be sent first when the OS transitions from "normal" to "low" state and will continue to be sent while in "low" or "critical" states.
-                '   - "normal" means that the general memory is within acceptable levels
-                '   - "low" means that the general memory is below acceptable levels but not critical
-                '   - "critical" means that general memory are at dangerously low level and that the OS may force terminate the application
-                print "event.generalMemoryLevel = ", event.generalMemoryLevel
-            else if event.audioCodecCapabilityChanged <> invalid
-                ' The audio codec capability has changed if true.
-                print "event.audioCodecCapabilityChanged = ", event.audioCodecCapabilityChanged
-
-                PostDeviceProfile()
-            else if event.videoCodecCapabilityChanged <> invalid
-                ' The video codec capability has changed if true.
-                print "event.videoCodecCapabilityChanged = ", event.videoCodecCapabilityChanged
-
-                PostDeviceProfile()
-            else if event.appFocus <> invalid
-                ' It is set to False when the System Overlay (such as the confirm partner button HUD or the caption control overlay) takes focus and True when the channel regains focus
-                print "event.appFocus = ", event.appFocus
             else
                 print "Unhandled roDeviceInfoEvent:"
                 print msg.GetInfo()

@@ -4,6 +4,7 @@ sub init()
     m.top.optionsAvailable = false
 
     m.options = m.top.findNode("movieOptions")
+    m.infoGroup = m.top.findNode("infoGroup")
 
     m.main_group = m.top.findNode("main_group")
 
@@ -62,15 +63,15 @@ sub itemContentChanged()
     if itemData.officialRating <> invalid
         setFieldText("officialRating", itemData.officialRating)
     else
-        m.top.findNode("infoGroup").removeChild(m.top.findNode("officialRating"))
+        m.infoGroup.removeChild(m.top.findNode("officialRating"))
     end if
 
     if itemData.communityRating <> invalid
         setFieldText("communityRating", int(itemData.communityRating * 10) / 10)
-        m.top.findNode("star").visible = "true"
+        m.top.findNode("communityRatingGroup").visible = "true"
     else
         ' hide the star icon
-        m.top.findNode("infoGroup").removeChild(m.top.findNode("communityRatingGroup"))
+        m.infoGroup.removeChild(m.top.findNode("communityRatingGroup"))
     end if
 
     if itemData.CriticRating <> invalid
@@ -82,7 +83,7 @@ sub itemContentChanged()
         end if
         m.top.findNode("criticRatingIcon").uri = tomato
     else
-        m.top.findNode("infoGroup").removeChild(m.top.findNode("criticRatingGroup"))
+        m.infoGroup.removeChild(m.top.findNode("criticRatingGroup"))
     end if
 
     if type(itemData.RunTimeTicks) = "LongInteger"
@@ -129,7 +130,7 @@ sub itemContentChanged()
         airDate.FromISO8601String(itemData.PremiereDate)
         m.top.findNode("aired").text = tr("Aired") + ": " + airDate.AsDateString("short-month-no-weekday")
         'remove movie release year label
-        m.top.findNode("infoGroup").removeChild(m.top.findNode("releaseYear"))
+        m.infoGroup.removeChild(m.top.findNode("releaseYear"))
     end if
 
     setFavoriteColor()

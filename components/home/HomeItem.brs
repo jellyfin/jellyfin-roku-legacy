@@ -9,6 +9,7 @@ sub init()
     m.itemPoster.observeField("loadStatus", "onPosterLoadStatusChanged")
     m.unplayedCount = m.top.findNode("unplayedCount")
     m.unplayedEpisodeCount = m.top.findNode("unplayedEpisodeCount")
+    m.playedIndicator = m.top.findNode("playedIndicator")
 
     m.showProgressBarAnimation = m.top.findNode("showProgressBar")
     m.showProgressBarField = m.top.findNode("showProgressBarField")
@@ -37,12 +38,19 @@ sub itemContentChanged()
         m.itemIcon.uri = itemData.iconUrl
     end if
 
-    if LCase(itemData.type) = "series"
-        if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
-            if isValid(itemData.json.UserData) and isValid(itemData.json.UserData.UnplayedItemCount)
-                if itemData.json.UserData.UnplayedItemCount > 0
-                    m.unplayedCount.visible = true
-                    m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
+    if itemData.isWatched
+        m.playedIndicator.visible = true
+        m.unplayedCount.visible = false
+    else
+        m.playedIndicator.visible = false
+
+        if LCase(itemData.type) = "series"
+            if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
+                if isValid(itemData.json.UserData) and isValid(itemData.json.UserData.UnplayedItemCount)
+                    if itemData.json.UserData.UnplayedItemCount > 0
+                        m.unplayedCount.visible = true
+                        m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
+                    end if
                 end if
             end if
         end if
@@ -64,6 +72,8 @@ sub itemContentChanged()
         return
     end if
 
+    playedIndicatorLeftPosition = m.itemPoster.width - 60
+    m.playedIndicator.translation = [playedIndicatorLeftPosition, 0]
 
     m.itemText.height = 34
     m.itemText.font.size = 25

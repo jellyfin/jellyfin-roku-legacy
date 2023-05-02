@@ -13,7 +13,7 @@ sub loadItems()
     m.top.content = [LoadItems_VideoPlayer(m.top.itemId)]
 end sub
 
-function LoadItems_VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
+function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, forceTranscoding = false as boolean, showIntro = true as boolean, allowResumeDialog = true as boolean) as dynamic
 
     video = {}
     video.id = id
@@ -32,7 +32,7 @@ function LoadItems_VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1
     return video
 end function
 
-sub LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
+sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, playbackPosition = -1 as integer, forceTranscoding = false as boolean, showIntro = true as boolean, allowResumeDialog = true as boolean)
 
     meta = ItemMetaData(video.id)
 
