@@ -1,50 +1,6 @@
 [
     {
-        "description": "Bug Fix: Rows on home view not refreshing when data has changed",
+        "description": "Bug Fix: System screensaver not working",
         "author": "1hitsong"
-    },
-    {
-        "description": "Bug Fix: Next up section does not populate correctly after watching a TV episode",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Bug Fix: Next episode button does not display consistently",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Bug Fix: Crash when fallback font API call fails",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Core: Fix Jellyfin links in readme",
-        "author": "cewert"
-    },
-    {
-        "description": "Bug Fix: Music shuffle not working",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Updated View: Add current playback time and song length to the sides of the audio progress bar",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Bug Fix: Turn off loop mode when user manually changes song",
-        "author": "1hitsong"
-    },
-    {
-        "description": "Core: Enable confirm partner button and setup RALE",
-        "author": "cewert"
-    },
-    {
-        "description": "Bug Fix: Clock not displaying on login view",
-        "author": "cewert"
-    },
-    {
-        "description": "Core: Add build badge and rework readme content",
-        "author": "cewert"
-    },
-    {
-        "description": "Core: Adjust settings to follow latest guidelines",
-        "author": "sevenrats"
     }
 ]
