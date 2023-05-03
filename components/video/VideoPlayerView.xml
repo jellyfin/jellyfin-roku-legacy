@@ -24,10 +24,6 @@
     <field id="mediaSourceId" type="string" />
     <field id="audioIndex" type="integer" />
   </interface>
-  <script type="text/brightscript" uri="VideoPlayerView.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-  <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
 
   <children>
     <timer id="playbackTimer" repeat="true" duration="30" />

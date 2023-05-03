@@ -1,3 +1,7 @@
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/api/Image.brs"
+
 sub setData()
     ' We keep json around just as a reference,
     ' but ideally everything should be going through one of the interfaces

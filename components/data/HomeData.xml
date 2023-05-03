@@ -15,8 +15,4 @@
     <field id="usePoster" type="bool" value="false" />
     <field id="isWatched" type="bool" value="false" />
   </interface>
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
-  <script type="text/brightscript" uri="HomeData.brs" />
 </component>

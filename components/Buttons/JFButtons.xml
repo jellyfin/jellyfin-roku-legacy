@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="JFButtons" extends="Group">
   <children>
     <Group>
@@ -8,13 +8,13 @@
 
       <rectangle id="focus" />
 
-      <LayoutGroup id="buttonGroup" layoutDirection="horiz" itemSpacings = "[75]" translation="[50,20]">
+      <LayoutGroup id="buttonGroup" layoutDirection="horiz" itemSpacings="[75]" translation="[50,20]">
       </LayoutGroup>
 
       <Animation id="moveFocusAnimation" duration="0.25" repeat="false" easeFunction="outQuad">
-        <FloatFieldInterpolator id = "focusWidth" key="[0.0, 1.0]" keyValue="[ 0.00, 0.25 ]" fieldToInterp="focus.width" />
-        <FloatFieldInterpolator id = "focusHeight" key="[0.0, 1.0]" keyValue="[ 0.25, 0.00 ]" fieldToInterp="focus.height" />
-        <Vector2DFieldInterpolator id = "focusLocation" key="[0.0, 1.0]" keyValue="[]" fieldToInterp="focus.translation" />
+        <FloatFieldInterpolator id="focusWidth" key="[0.0, 1.0]" keyValue="[ 0.00, 0.25 ]" fieldToInterp="focus.width" />
+        <FloatFieldInterpolator id="focusHeight" key="[0.0, 1.0]" keyValue="[ 0.25, 0.00 ]" fieldToInterp="focus.height" />
+        <Vector2DFieldInterpolator id="focusLocation" key="[0.0, 1.0]" keyValue="[]" fieldToInterp="focus.translation" />
       </Animation>
     </Group>
 
@@ -25,5 +25,4 @@
     <field id="focusedIndex" type="integer" alwaysNotify="true" />
     <field id="selectedIndex" type="integer" onChange="selectedIndexChanged" />
   </interface>
-  <script type="text/brightscript" uri="JFButtons.brs" />
 </component>

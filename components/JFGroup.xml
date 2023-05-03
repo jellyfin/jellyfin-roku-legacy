@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="JFGroup" extends="Group">
   <interface>
     <field id="backPressed" type="boolean" alwaysNotify="true" />
@@ -7,5 +7,4 @@
     <field id="optionsAvailable" value="true" type="boolean" />
     <field id="overhangVisible" value="true" type="boolean" />
   </interface>
-  <script type="text/brightscript" uri="JFGroup.brs" />
 </component>

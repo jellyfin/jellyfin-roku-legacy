@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="StandardDialog" extends="StandardMessageDialog">
   <children>
     <StdDlgContentArea id="content" />
@@ -6,5 +6,4 @@
   <interface>
     <field id="contentData" type="assocarray" />
   </interface>
-  <script type="text/brightscript" uri="StandardDialog.brs" />
 </component>

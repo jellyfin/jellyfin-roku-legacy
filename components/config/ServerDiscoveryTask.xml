@@ -3,5 +3,4 @@
     <interface>
         <field id="content" type="array" />
     </interface>
-    <script type="text/brightscript" uri="ServerDiscoveryTask.brs" />
 </component>

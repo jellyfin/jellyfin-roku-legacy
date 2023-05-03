@@ -10,5 +10,6 @@
     },
     "xml.format.maxLineWidth": 0,
     "editor.formatOnSave": true,
+    "brightscript.output.hyperlinkFormat": "FilenameAndFunction",
     "brightscript.bsdk": "node_modules/brighterscript"
 }

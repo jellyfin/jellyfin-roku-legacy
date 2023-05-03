@@ -1,27 +1,27 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="Settings" extends="JFGroup">
   <children>
 
-    <Label id="path" translation = "[95,175]" font="font:SmallestBoldSystemFont" />
+    <Label id="path" translation="[95,175]" font="font:SmallestBoldSystemFont" />
 
     <LabelList
-            translation = "[120,250]"
-            id = "settingsMenu"
-            itemSize = "[440,48]"
-            vertFocusAnimationStyle = "floatingFocus"
-            focusBitmapBlendColor = "#006fab"
-            focusedColor = "#ffffff"
-            itemSpacing = "[0,5]" />
+      translation="[120,250]"
+      id="settingsMenu"
+      itemSize="[440,48]"
+      vertFocusAnimationStyle="floatingFocus"
+      focusBitmapBlendColor="#006fab"
+      focusedColor="#ffffff"
+      itemSpacing="[0,5]" />
 
     <Poster
-               translation = "[710,250]" id="testRectangle" width="880" height="700" uri="pkg:/images/white.9.png"
-               blendColor = "#3f3f3f" />
+      translation="[710,250]" id="testRectangle" width="880" height="700" uri="pkg:/images/white.9.png"
+      blendColor="#3f3f3f" />
 
-    <LayoutGroup translation = "[1150,275]" id="settingDetail" vertAlignment="top" horizAlignment="center" itemSpacings="[50]">
+    <LayoutGroup translation="[1150,275]" id="settingDetail" vertAlignment="top" horizAlignment="center" itemSpacings="[50]">
 
       <ScrollingLabel font="font:LargeSystemFont" id="settingTitle" maxWidth="750" />
 
-      <Label id="settingDesc" width="750" wrap = "true" />
+      <Label id="settingDesc" width="750" wrap="true" />
 
       <RadioButtonList id="boolSetting" vertFocusAnimationStyle="floatingFocus">
         <ContentNode role="content">
@@ -35,7 +35,4 @@
     <intkeyboard_integerKeyboard translation="[900, 520]" id="integerSetting" maxLength="3" domain="numeric" visible="false" />
 
   </children>
-  <script type="text/brightscript" uri="settings.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>

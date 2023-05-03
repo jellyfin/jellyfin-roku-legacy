@@ -1,4 +1,4 @@
-name: build
+name: build-prod
 
 on:
   pull_request:
@@ -66,11 +66,14 @@ jobs:
         with:
           node-version: "lts/*"
           cache: "npm"
-      - run: npm ci
-      - run: npx ropm install
-      - run: make release
+      - name: NPM install
+        run: npm ci
+      - name: Install roku module dependencies
+        run: npx ropm install
+      - name: Build app for production
+        run: npm run build-prod
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
         with:
-          name: Jellyfin-Roku-release-${{ github.sha }}
-          path: ${{ github.workspace }}/out/staging
+          name: Jellyfin-Roku-v${{ env.newManVersion }}-${{ github.sha }}
+          path: ${{ github.workspace }}/build/staging
           if-no-files-found: error

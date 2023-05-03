@@ -20,15 +20,4 @@
     <field id="totalRecordCount" type="int" value="-1" />
     <field id="content" type="array" />
   </interface>
-  <script type="text/brightscript" uri="LoadVideoContentTask.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/UserLibrary.brs" />
-  <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/userauth.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/globals.brs" />
 </component>

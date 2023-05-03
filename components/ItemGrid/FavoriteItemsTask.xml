@@ -1,12 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <component name="FavoriteItemsTask" extends="Task">
   <interface>
     <field id="itemId" type="string" />
     <field id="favTask" type="string" value="" />
   </interface>
-  <script type="text/brightscript" uri="FavoriteItemsTask.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/UserLibrary.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

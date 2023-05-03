@@ -1,10 +1,6 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="ChannelData" extends="JFContentItem">
   <interface>
     <field id="channelID" type="string" />
   </interface>
-  <script type="text/brightscript" uri="ChannelData.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="JFOverhang" extends="Group">
   <children>
     <Poster id="overlayLogo" uri="pkg:/images/logo.png" translation="[70, 53]" width="270" height="72" />
     <LayoutGroup id="overlayLeftGroup" layoutDirection="horiz" translation="[375, 53]" itemSpacings="30">
-      <Rectangle id="overlayLeftSeperator" color="#666666" width="2" height="64"/>
+      <Rectangle id="overlayLeftSeperator" color="#666666" width="2" height="64" />
       <ScrollingLabel id="overlayTitle" font="font:LargeSystemFont" vertAlign="center" height="64" maxWidth="1100" repeatCount="0" />
     </LayoutGroup>
     <LayoutGroup id="overlayRightGroup" layoutDirection="horiz" itemSpacings="30" translation="[1820, 53]" horizAlignment="right">
       <Label id="overlayCurrentUser" font="font:MediumSystemFont" width="300" horizAlign="right" vertAlign="center" height="64" />
-      <Rectangle id="overlayRightSeperator" color="#666666" width="2" height="64" visible="false"/>
+      <Rectangle id="overlayRightSeperator" color="#666666" width="2" height="64" visible="false" />
       <LayoutGroup id="overlayTimeGroup" layoutDirection="horiz" horizAlignment="right" itemSpacings="0">
         <Label id="overlayHours" font="font:MediumSystemFont" vertAlign="center" height="64" />
         <Label font="font:MediumSystemFont" text=":" vertAlign="center" height="64" />
@@ -40,6 +40,4 @@
     <field id="disableMoveAnimation" value="false" type="boolean" />
     <function name="resetTime" />
   </interface>
-  <script type="text/brightscript" uri="JFOverhang.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

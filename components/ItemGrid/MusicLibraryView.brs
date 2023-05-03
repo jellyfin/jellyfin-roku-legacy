@@ -1,3 +1,9 @@
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/api/Image.brs"
+import "pkg:/source/utils/deviceCapabilities.brs"
+
 sub setupNodes()
     m.options = m.top.findNode("options")
     m.itemGrid = m.top.findNode("itemGrid")

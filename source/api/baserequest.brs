@@ -67,7 +67,6 @@ end function
 
 function getJson(req)
     'req.retainBodyOnError(True)
-    'print req.GetToString()
     data = req.GetToString()
     if data = invalid or data = ""
         return invalid

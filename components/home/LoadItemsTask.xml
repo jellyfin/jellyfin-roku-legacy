@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <component name="LoadItemsTask" extends="Task">
   <interface>
@@ -8,12 +8,4 @@
     <field id="peopleList" type="array" />
     <field id="content" type="array" />
   </interface>
-  <script type="text/brightscript" uri="LoadItemsTask.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
-  <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
 </component>

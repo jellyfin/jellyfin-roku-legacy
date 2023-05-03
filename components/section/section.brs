@@ -1,3 +1,5 @@
+import "pkg:/source/utils/misc.brs"
+
 sub init()
     m.showFromBottomAnimation = m.top.findNode("showFromBottomAnimation")
     m.showFromBottomPosition = m.top.findNode("showFromBottomPosition")
