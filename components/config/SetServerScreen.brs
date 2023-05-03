@@ -1,4 +1,8 @@
+import "pkg:/source/roku_modules/log/LogMixin.brs"
+import "pkg:/source/utils/config.brs"
+
 sub init()
+    m.log = log.Logger("SetServerScreen")
     m.top.setFocus(true)
 
     m.spinner = m.top.findNode("spinner")
@@ -14,7 +18,7 @@ sub init()
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
-    print "SetServerScreen onKeyEvent", key, press
+    m.log.debug("SetServerScreen onKeyEvent", key, press)
 
     if not press then return true
     handled = true

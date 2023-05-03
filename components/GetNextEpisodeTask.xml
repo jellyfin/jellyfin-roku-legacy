@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <component name="GetNextEpisodeTask" extends="Task">
     <interface>
@@ -6,7 +6,4 @@
         <field id="showID" type="string" />
         <field id="nextEpisodeData" type="assocarray" />
     </interface>
-    <script type="text/brightscript" uri="GetNextEpisodeTask.brs" />
-    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-    <script type="text/brightscript" uri="pkg:/source/roku_modules/api/api.brs" />
 </component>

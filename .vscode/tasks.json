@@ -1,6 +1,42 @@
 {
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+        {
+            "label": "build-dev",
+            "type": "shell",
+            "command": "npm run build",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build-prod",
+            "type": "shell",
+            "command": "npm run build-prod",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
         {
             "label": "build-tests",
             "type": "shell",
@@ -8,7 +44,7 @@
             "problemMatcher": [],
             "presentation": {
                 "echo": true,
-                "reveal": "silent",
+                "reveal": "always",
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": false,
@@ -26,7 +62,7 @@
             "problemMatcher": [],
             "presentation": {
                 "echo": true,
-                "reveal": "silent",
+                "reveal": "always",
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": false,

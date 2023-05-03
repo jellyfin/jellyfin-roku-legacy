@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="OptionsData" extends="ContentNode">
   <interface>
     <field id="base_title" type="string" />
@@ -9,6 +9,4 @@
     <field id="value" type="string" onChange="update_title" />
     <function name="press" />
   </interface>
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-  <script type="text/brightscript" uri="OptionsData.brs" />
 </component>

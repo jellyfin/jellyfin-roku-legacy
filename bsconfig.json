@@ -10,10 +10,18 @@
     ],
     "plugins": [
         "@rokucommunity/bslint",
-        "rooibos-roku"
+        "roku-log-bsc-plugin"
     ],
+    "rokuLog": {
+        "insertPkgPath": true
+    },
     "diagnosticFilters": [
-        "node_modules/**",
-        "**/roku_modules/**"
-    ]
+        "node_modules/**/*",
+        "**/roku_modules/**/*"
+    ],
+    "sourceMap": true,
+    "autoImportComponentScript": true,
+    "allowBrighterScriptInBrightScript": true,
+    "stagingDir": "build/staging",
+    "retainStagingDir": true
 }

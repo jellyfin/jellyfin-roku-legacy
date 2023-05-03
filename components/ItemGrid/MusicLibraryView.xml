@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="MusicLibraryView" extends="JFScreen">
   <children>
     <Rectangle id="screenSaverBackground" width="1920" height="1080" color="#000000" />
 
-    <VoiceTextEditBox id="VoiceBox" visible="true" width = "40" translation = "[52, 120]" />
-    <Rectangle id="VoiceBoxCover" height="240" width="100" color="0x000000ff" translation = "[25, 75]" />
+    <VoiceTextEditBox id="VoiceBox" visible="true" width="40" translation="[52, 120]" />
+    <Rectangle id="VoiceBoxCover" height="240" width="100" color="0x000000ff" translation="[25, 75]" />
 
     <maskGroup translation="[820, 0]" id="backgroundMask" maskUri="pkg:/images/backgroundmask.png" maskSize="[1220,445]">
       <poster id="backdrop" loadDisplayMode="scaleToFill" width="1100" height="450" opacity="1" />
@@ -21,18 +21,18 @@
     <MarkupGrid id="genrelist" itemComponentName="MusicArtistGridItem" numColumns="6" numRows="4" vertFocusAnimationStyle="fixed" translation="[96, 60]" itemSize="[280, 280]" itemSpacing="[20, 20]" opacity="0" />
 
     <Label id="micButtonText" font="font:SmallSystemFont" visible="false" />
-    <Button id = "micButton"  maxWidth = "20" translation = "[20, 120]" iconUri = "pkg:/images/icons/mic_icon.png"/>
+    <Button id="micButton" maxWidth="20" translation="[20, 120]" iconUri="pkg:/images/icons/mic_icon.png" />
     <Label translation="[0,540]" id="emptyText" font="font:LargeSystemFont" width="1910" horizAlign="center" vertAlign="center" height="64" visible="false" />
     <ItemGridOptions id="options" visible="false" />
     <Spinner id="spinner" translation="[900, 450]" />
     <Animation id="backroundSwapAnimation" duration="1" repeat="false" easeFunction="linear">
-      <FloatFieldInterpolator id = "fadeinLoading" key="[0.0, 1.0]" keyValue="[ 0.00, 1.00 ]" fieldToInterp="backdropTransition.opacity" />
-      <FloatFieldInterpolator id = "fadeoutLoaded" key="[0.0, 1.0]" keyValue="[ 1.00, 0.00 ]" fieldToInterp="backdrop.opacity" />
+      <FloatFieldInterpolator id="fadeinLoading" key="[0.0, 1.0]" keyValue="[ 0.00, 1.00 ]" fieldToInterp="backdropTransition.opacity" />
+      <FloatFieldInterpolator id="fadeoutLoaded" key="[0.0, 1.0]" keyValue="[ 1.00, 0.00 ]" fieldToInterp="backdrop.opacity" />
     </Animation>
     <Alpha id="AlphaMenu" />
   </children>
   <interface>
-    <field id="HomeLibraryItem" type="string"/>
+    <field id="HomeLibraryItem" type="string" />
     <field id="parentItem" type="node" onChange="loadInitialItems" />
     <field id="selectedItem" type="node" alwaysNotify="true" />
     <field id="quickPlayNode" type="node" alwaysNotify="true" />
@@ -42,10 +42,4 @@
     <field id="showItemTitles" type="string" value="showonhover" />
     <field id="jumpToItem" type="integer" value="" />
   </interface>
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
-  <script type="text/brightscript" uri="MusicLibraryView.brs" />
 </component>

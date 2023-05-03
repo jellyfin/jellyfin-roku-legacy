@@ -1,3 +1,5 @@
+import "pkg:/source/utils/config.brs"
+
 sub setDataFromJSON()
     json = m.top.json
     loadFromJSON(json)

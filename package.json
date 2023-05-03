@@ -7,6 +7,7 @@
     "bgv": "npm:button-group-vert@1.0.2",
     "brighterscript-formatter": "1.6.27",
     "intKeyboard": "npm:integer-keyboard@1.0.12",
+    "log": "npm:roku-log@0.10.1",
     "sob": "npm:slide-out-button@1.0.1"
   },
   "devDependencies": {
@@ -24,8 +25,10 @@
     "undent": "0.1.0"
   },
   "scripts": {
-    "build-tests": "npx rimraf build/ && npx bsc --project bsconfig-tests.json",
-    "build-tdd": "npx rimraf build/ && npx bsc --project bsconfig-tdd.json",
+    "build": "npx rimraf build/ out/ && npx bsc --project bsconfig.json",
+    "build-prod": "npx rimraf build/ out/ && npx bsc --project bsconfig-prod.json",
+    "build-tests": "npx rimraf build/ out/ && npx bsc --project bsconfig-tests.json",
+    "build-tdd": "npx rimraf build/ out/ && npx bsc --project bsconfig-tdd.json",
     "check-formatting": "npx bsfmt --check",
     "format": "npx bsfmt --write",
     "lint": "bslint",
@@ -48,5 +51,5 @@
   "bugs": {
     "url": "https://github.com/jellyfin/jellyfin-roku/issues"
   },
-  "homepage": "https://github.com/jellyfin/jellyfin-roku#readme"
+  "homepage": "https://github.com/jellyfin/jellyfin-roku"
 }

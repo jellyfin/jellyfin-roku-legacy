@@ -1,4 +1,7 @@
+import "pkg:/source/roku_modules/log/LogMixin.brs"
+
 sub init()
+    m.log = log.Logger("SceneManager")
     m.groups = []
     m.scene = m.top.getScene()
     m.content = m.scene.findNode("content")
@@ -186,7 +189,7 @@ sub registerOverhangData(group)
     else if group.isSubType("JFVideo")
         m.overhang.visible = false
     else
-        print "registerOverhangData(): Unexpected group type."
+        m.log.error("registerOverhangData(): Unexpected group type.", group, group.subtype())
     end if
 end sub
 

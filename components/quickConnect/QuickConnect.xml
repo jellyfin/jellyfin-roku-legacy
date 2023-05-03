@@ -5,9 +5,4 @@
     <field id="secret" type="string" />
     <field id="authenticated" type="integer" value="0" />
   </interface>
-  <script type="text/brightscript" uri="QuickConnect.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/userauth.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/globals.brs" />
 </component>

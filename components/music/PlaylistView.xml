@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="PlaylistView" extends="JFScreen">
   <children>
     <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[-10]">
@@ -27,6 +27,4 @@
     <field id="playItem" alias="songList.itemSelected" />
     <field id="playAllSelected" alias="playAll.buttonSelected" />
   </interface>
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
-  <script type="text/brightscript" uri="PlaylistView.brs" />
 </component>

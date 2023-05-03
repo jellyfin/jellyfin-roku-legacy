@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="OptionNode" extends="ContentNode">
   <interface>
     <field id="name" type="string" />
     <field id="delimiter" type="string" />
     <field id="checkedState" type="array" />
   </interface>
-  <script type="text/brightscript" uri="OptionNode.brs" />
 </component>
