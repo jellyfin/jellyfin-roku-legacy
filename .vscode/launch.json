@@ -5,6 +5,8 @@
             "type": "brightscript",
             "request": "launch",
             "name": "Jellyfin Debug",
+            "rootDir": "${workspaceFolder}/build/staging",
+            "preLaunchTask": "build-dev",
             "stopOnEntry": false,
             // To enable RALE:
             // set "brightscript.debug.raleTrackerTaskFileLocation": "/absolute/path/to/rale/TrackerTask.xml" in your vscode user settings
@@ -14,14 +16,6 @@
             //"host": "${promptForHost}",
             //WARNING: don't edit this value. Instead, set "brightscript.debug.password": "YOUR_PASSWORD_HERE" in your vscode user settings
             //"password": "${promptForPassword}",
-            "files": [
-                "components/**/*",
-                "images/**/*",
-                "locale/**/*",
-                "settings/**/*",
-                "source/**/*",
-                "manifest"
-            ]
         },
         {
             "name": "Run tests",

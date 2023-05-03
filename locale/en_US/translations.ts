@@ -979,8 +979,16 @@
             <translation>Artists (Presentation)</translation>
         </message>
         <message>
+            <source>Album Artists (Presentation)</source>
+            <translation>Album Artists (Presentation)</translation>
+        </message>
+        <message>
             <source>Artists (Grid)</source>
             <translation>Artists (Grid)</translation>
+        </message>
+        <message>
+            <source>Album Artists (Grid)</source>
+            <translation>Album Artists (Grid)</translation>
         </message>
         <message>
             <source>Song</source>

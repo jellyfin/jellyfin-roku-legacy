@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="PersonDetails" extends="JFGroup">
   <interface>
     <field id="itemContent" type="node" onChange="loadPerson" />
@@ -7,26 +7,26 @@
   </interface>
   <children>
     <LayoutGroup id="main_group"
-        layoutdirection="vert" translation="[60, 180]" itemSpacings="[36]" >
-        <LayoutGroup id="header_group" layoutdirection="horiz" >
-          <LayoutGroup id="title_group" layoutdirection="vert" itemSpacings="[11]" >
-            <Rectangle id="title_rectangle" height="100" width="1426" color="#262626">
-              <Label id="name" font="font:LargeBoldSystemFont" height="100" width="1426" vertAlign="bottom" />
-            </Rectangle>
-          </LayoutGroup>
-          <ButtonGroupHoriz id="buttons" >
-            <Button id="favorite-button" text="Favorite" iconUri="" focusedIconUri="" />
-          </ButtonGroupHoriz>
+      layoutdirection="vert" translation="[60, 180]" itemSpacings="[36]">
+      <LayoutGroup id="header_group" layoutdirection="horiz">
+        <LayoutGroup id="title_group" layoutdirection="vert" itemSpacings="[11]">
+          <Rectangle id="title_rectangle" height="100" width="1426" color="#262626">
+            <Label id="name" font="font:LargeBoldSystemFont" height="100" width="1426" vertAlign="bottom" />
+          </Rectangle>
         </LayoutGroup>
+        <ButtonGroupHoriz id="buttons">
+          <Button id="favorite-button" text="Favorite" iconUri="" focusedIconUri="" />
+        </ButtonGroupHoriz>
+      </LayoutGroup>
       <LayoutGroup id="personInfoGroup"
-          layoutDirection="horiz" itemSpacings="[46]">
+        layoutDirection="horiz" itemSpacings="[46]">
         <Poster id="personImage"
-            width="430" height="645" />
+          width="430" height="645" />
         <LayoutGroup id="vertSpacer" layoutDirection="vert" itemSpacings="[24]">
           <LayoutGroup id="dataGroup>" layoutDirection="vert" translation="[450,180]">
             <Rectangle id="dscrBorder" height="645" width="1322" color="0x202020ff" visible="true">
               <Rectangle id='dscrRect' translation="[3, 3]" height="639" width="1316" color="0x202020ff">
-              <Label id="description"
+                <Label id="description"
                   height="627" width="1280" wrap="true" translation="[18, 15]"
                   font="font:SmallestSystemFont" color="#e4e4e4ff" ellipsisText=" ...  (-OK- for More)" />
               </Rectangle>
@@ -37,8 +37,4 @@
     </LayoutGroup>
     <extrasSlider id="personVideos" />
   </children>
-  <script type="text/brightscript" uri="PersonDetails.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

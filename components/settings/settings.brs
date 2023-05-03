@@ -1,5 +1,9 @@
-sub init()
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/roku_modules/log/LogMixin.brs"
 
+sub init()
+    m.log = log.Logger("Settings")
     m.top.overhangTitle = tr("Settings")
     m.top.optionsAvailable = false
 
@@ -123,7 +127,7 @@ sub settingFocused()
 
         m.radioSetting.visible = true
     else
-        print "Unknown setting type " + selectedSetting.type
+        m.log.warn("Unknown setting type", selectedSetting.type)
     end if
 
 end sub

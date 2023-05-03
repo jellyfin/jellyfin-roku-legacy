@@ -1,3 +1,10 @@
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/api/Image.brs"
+import "pkg:/source/utils/deviceCapabilities.brs"
+import "pkg:/source/roku_modules/api/api.brs"
+
 sub setupNodes()
     m.options = m.top.findNode("options")
     m.itemGrid = m.top.findNode("itemGrid")
@@ -82,11 +89,8 @@ sub init()
     'Get reset folder setting
     m.resetGrid = get_user_setting("itemgrid.reset") = "true"
 
-    'Check if device has voice remote
-    devinfo = CreateObject("roDeviceInfo")
-
     'Hide voice search if device does not have voice remote
-    if devinfo.HasFeature("voice_remote") = false
+    if m.global.device.hasVoiceRemote = false
         m.micButton.visible = false
         m.micButtonText.visible = false
     end if

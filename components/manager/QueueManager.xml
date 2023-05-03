@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="QueueManager" extends="Group">
   <interface>
     <function name="clear" />
@@ -24,7 +24,4 @@
     <function name="toggleShuffle" />
     <function name="top" />
   </interface>
-  <script type="text/brightscript" uri="QueueManager.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
-  <script type="text/brightscript" uri="ViewCreator.brs" />
 </component>

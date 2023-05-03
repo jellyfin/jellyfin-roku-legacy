@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="searchResults" extends="JFGroup">
   <children>
     <Rectangle width="1920" height="1080" color="#000000" opacity="0.75" />
-    <LayoutGroup layoutDirection="horiz"  id="SearchAlphabox" translation="[70, 120]">
-      <SearchBox id="SearchBox" visible="true" focusable="true"/>
+    <LayoutGroup layoutDirection="horiz" id="SearchAlphabox" translation="[70, 120]">
+      <SearchBox id="SearchBox" visible="true" focusable="true" />
     </LayoutGroup>
-    <LayoutGroup layoutDirection="vert"  id="searchResults" translation="[470, 150]" >
-      <Label id = "SearchHelpText" text=""/>
-      <SearchRow id="searchSelect" visible="true" focusable="true"/>
-    </LayoutGroup>    
+    <LayoutGroup layoutDirection="vert" id="searchResults" translation="[470, 150]">
+      <Label id="SearchHelpText" text="" />
+      <SearchRow id="searchSelect" visible="true" focusable="true" />
+    </LayoutGroup>
     <OptionsSlider id="options" />
-    <Spinner id = "searchSpinner"  visible="false" translation="[1050, 500]"/>
+    <Spinner id="searchSpinner" visible="false" translation="[1050, 500]" />
   </children>
   <interface>
     <field id="query" type="string" alwaysNotify="true" />
@@ -19,10 +19,4 @@
     <field id="imageDisplayMode" type="string" value="scaleToZoom" />
     <field id="searchAlpha" type="string" alias="SearchBox.search_values" alwaysNotify="true" onChange="searchMedias" />
   </interface>
-  <script type="text/brightscript" uri="SearchResults.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Items.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/deviceCapabilities.brs" />
 </component>

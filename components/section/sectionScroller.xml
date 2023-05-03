@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="SectionScroller" extends="JFGroup">
     <children>
     </children>
@@ -7,6 +7,4 @@
         <field id="affectsFocus" type="boolean" value="true" />
         <field id="displayedIndex" type="integer" value="0" onChange="displayedIndexChanged" />
     </interface>
-    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
-    <script type="text/brightscript" uri="sectionScroller.brs" />
 </component>

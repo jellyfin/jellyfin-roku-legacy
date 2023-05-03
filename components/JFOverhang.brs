@@ -1,3 +1,5 @@
+import "pkg:/source/utils/config.brs"
+
 sub init()
     m.top.id = "overhang"
     ' hide seperators till they're needed
@@ -18,9 +20,6 @@ sub init()
     ' show clock based on user setting
     m.hideClock = get_user_setting("ui.design.hideclock") = "true"
     if not m.hideClock
-        ' get system preference clock format (12/24hr)
-        di = CreateObject("roDeviceInfo")
-        m.clockFormat = di.GetClockFormat()
         ' save node references
         m.overlayHours = m.top.findNode("overlayHours")
         m.overlayMinutes = m.top.findNode("overlayMinutes")
@@ -105,7 +104,7 @@ sub resetTime()
 end sub
 
 sub updateTimeDisplay()
-    if m.clockFormat = "24h"
+    if m.global.device.clockFormat = "24h"
         m.overlayMeridian.text = ""
         if m.currentHours < 10
             m.overlayHours.text = "0" + StrI(m.currentHours).trim()

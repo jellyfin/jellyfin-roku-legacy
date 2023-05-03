@@ -20,7 +20,12 @@
             "dest": "settings"
         }
     ],
+    "diagnosticFilters": [
+        "node_modules/**/*",
+        "**/roku_modules/**/*"
+    ],
     "autoImportComponentScript": true,
+    "allowBrighterScriptInBrightScript": true,
     "createPackage": false,
     "stagingFolderPath": "build",
     "plugins": [

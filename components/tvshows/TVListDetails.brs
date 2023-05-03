@@ -1,10 +1,12 @@
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/config.brs"
+
 sub init()
     m.title = m.top.findNode("title")
     m.title.text = tr("Loading...")
     m.options = m.top.findNode("tvListOptions")
     m.overview = m.top.findNode("overview")
     m.poster = m.top.findNode("poster")
-    m.deviceInfo = CreateObject("roDeviceInfo")
 
     m.rating = m.top.findnode("rating")
     m.infoBar = m.top.findnode("infoBar")
@@ -146,7 +148,7 @@ end function
 sub focusChanged()
     if m.top.itemHasFocus = true
         ' text to speech for accessibility
-        if m.deviceInfo.IsAudioGuideEnabled() = true
+        if m.global.device.isAudioGuideEnabled = true
             txt2Speech = CreateObject("roTextToSpeech")
             txt2Speech.Flush()
             txt2Speech.Say(m.title.text)

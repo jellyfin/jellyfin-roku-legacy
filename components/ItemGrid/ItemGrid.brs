@@ -1,5 +1,11 @@
-sub init()
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/utils/deviceCapabilities.brs"
+import "pkg:/source/roku_modules/log/LogMixin.brs"
 
+sub init()
+    m.log = log.Logger("ItemGrid")
     m.options = m.top.findNode("options")
 
     m.showItemCount = get_user_setting("itemgrid.showItemCount") = "true"
@@ -67,13 +73,10 @@ sub init()
     'Get reset folder setting
     m.resetGrid = get_user_setting("itemgrid.reset") = "true"
 
-    'Check if device has voice remote
-    devinfo = CreateObject("roDeviceInfo")
-    m.deviFeature = devinfo.HasFeature("voice_remote")
     m.micButton = m.top.findNode("micButton")
     m.micButtonText = m.top.findNode("micButtonText")
     'Hide voice search if device does not have voice remote
-    if m.deviFeature = false
+    if m.global.device.hasVoiceRemote = false
         m.micButton.visible = false
         m.micButtonText.visible = false
     end if
@@ -104,7 +107,7 @@ sub loadInitialItems()
         ' Translate between app and server nomenclature
         viewSetting = get_user_setting("display.livetv.landing")
         'Move mic to be visiable on TV Guide screen
-        if m.deviFeature = true
+        if m.global.device.hasVoiceRemote = true
             m.micButton.translation = "[1540, 92]"
             m.micButtonText.visible = true
             m.micButtonText.translation = "[1600,130]"
@@ -209,7 +212,7 @@ sub loadInitialItems()
         m.loadItemsTask.itemType = "Series,Movie"
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
     else
-        print "[ItemGrid] Unknown Type: " m.top.parentItem
+        m.log.warn("Unknown Item Type", m.top.parentItem)
     end if
 
     if m.top.parentItem.type <> "Folder" and (m.options.view = "Networks" or m.view = "Networks" or m.options.view = "Studios" or m.view = "Studios")

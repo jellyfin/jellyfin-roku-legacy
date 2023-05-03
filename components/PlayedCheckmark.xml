@@ -3,5 +3,4 @@
   <children>
     <Label id="checkmark" width="60" height="50" font="font:MediumBoldSystemFont" horizAlign="center" vertAlign="bottom" text="✓" />
   </children>
-  <script type="text/brightscript" uri="PlayedCheckmark.brs" />
 </component>

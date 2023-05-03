@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="Schedule" extends="JFGroup">
   <children>
     <rectangle translation="[0,150]" width="1920" height="930" color="#262626" />
@@ -6,22 +6,21 @@
     <!-- Selected Item Details -->
     <ProgramDetails id="detailsPane" focusable="true" />
 
-    <TimeGrid id="scheduleGrid" translation="[0,600]" 
-              automaticLoadingDataFeedback="false" showLoadingDataFeedback="true"
-              focusBitmapUri="pkg:/images/white.9.png" focusBitmapBlendColor="#006fab" 
-              programTitleFocusedColor="#ffffff" iconFocusedColor="#ff0000"
-              showPastTimeScreen="true" pastTimeScreenBlendColor="#555555"
-              />
+    <TimeGrid id="scheduleGrid" translation="[0,600]"
+      automaticLoadingDataFeedback="false" showLoadingDataFeedback="true"
+      focusBitmapUri="pkg:/images/white.9.png" focusBitmapBlendColor="#006fab"
+      programTitleFocusedColor="#ffffff" iconFocusedColor="#ff0000"
+      showPastTimeScreen="true" pastTimeScreenBlendColor="#555555"
+    />
     <Spinner id="spinner" translation="[900, 450]" />
-    <Animation id="gridMoveAnimation" duration="1" repeat="false" easeFunction="outQuad" >
+    <Animation id="gridMoveAnimation" duration="1" repeat="false" easeFunction="outQuad">
       <Vector2DFieldInterpolator id="gridMoveAnimationPosition" key="[0.0, 0.5]" fieldToInterp="scheduleGrid.translation" />
     </Animation>
   </children>
   <interface>
-        <field id="watchChannel" type="node" alwaysNotify="false" />
-        <field id="focusedChannel" type="node" alwaysNotify="false" />
-        <field id="filter" type="string" value="All" onChange="channelFilterSet" />
-        <field id="searchTerm" type="string" value="" onChange="channelsearchTermSet" />
+    <field id="watchChannel" type="node" alwaysNotify="false" />
+    <field id="focusedChannel" type="node" alwaysNotify="false" />
+    <field id="filter" type="string" value="All" onChange="channelFilterSet" />
+    <field id="searchTerm" type="string" value="" onChange="channelsearchTermSet" />
   </interface>
-  <script type="text/brightscript" uri="schedule.brs" />
 </component>

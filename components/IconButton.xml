@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="IconButton" extends="Group">
   <children>
     <Poster id="buttonBackground" uri="pkg:/images/white.9.png" />
@@ -17,5 +17,4 @@
     <field id="focus" type="boolean" />
     <field id="escape" type="string" value="" />
   </interface>
-  <script type="text/brightscript" uri="IconButton.brs" />
 </component>
