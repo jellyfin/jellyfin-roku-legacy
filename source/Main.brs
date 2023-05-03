@@ -9,11 +9,13 @@ sub Main (args as dynamic) as void
 
     m.port = CreateObject("roMessagePort")
     m.screen.setMessagePort(m.port)
-    m.scene = m.screen.CreateScene("JFScene")
-    m.screen.show() ' vscode_rale_tracker_entry
-
     ' Set any initial Global Variables
     m.global = m.screen.getGlobalNode()
+    SaveAppToGlobal()
+    SaveDeviceToGlobal()
+
+    m.scene = m.screen.CreateScene("JFScene")
+    m.screen.show() ' vscode_rale_tracker_entry
 
     playstateTask = CreateObject("roSGNode", "PlaystateTask")
     playstateTask.id = "playstateTask"
@@ -57,11 +59,10 @@ sub Main (args as dynamic) as void
     end if
 
     ' Only show the Whats New popup the first time a user runs a new client version.
-    appInfo = CreateObject("roAppInfo")
-    if appInfo.GetVersion() <> get_setting("LastRunVersion")
+    if m.global.app.version <> get_setting("LastRunVersion")
         ' Ensure the user hasn't disabled Whats New popups
         if get_user_setting("load.allowwhatsnew") = "true"
-            set_setting("LastRunVersion", appInfo.GetVersion())
+            set_setting("LastRunVersion", m.global.app.version)
             dialog = createObject("roSGNode", "WhatsNewDialog")
             m.scene.dialog = dialog
             m.scene.dialog.observeField("buttonSelected", m.port)
@@ -72,10 +73,11 @@ sub Main (args as dynamic) as void
     input = CreateObject("roInput")
     input.SetMessagePort(m.port)
 
-    m.device = CreateObject("roDeviceInfo")
-    m.device.setMessagePort(m.port)
-    m.device.EnableScreensaverExitedEvent(true)
-    m.device.EnableAppFocusEvent(false)
+    device = CreateObject("roDeviceInfo")
+    device.setMessagePort(m.port)
+    device.EnableScreensaverExitedEvent(true)
+    device.EnableAppFocusEvent(false)
+    device.EnableAudioGuideChangedEvent(true)
 
     ' Check if we were sent content to play with the startup command (Deep Link)
     if isValidAndNotEmpty(args.mediaType) and isValidAndNotEmpty(args.contentId)
@@ -573,6 +575,12 @@ sub Main (args as dynamic) as void
                     end if
                     ' todo: add other screens to be refreshed - movie detail, tv series, episode list etc.
                 end if
+            else if event.audioGuideEnabled <> invalid
+                tmpGlobalDevice = m.global.device
+                tmpGlobalDevice.AddReplace("isaudioguideenabled", event.audioGuideEnabled)
+
+                ' update global device array
+                m.global.setFields({ device: tmpGlobalDevice })
             else
                 print "Unhandled roDeviceInfoEvent:"
                 print msg.GetInfo()
