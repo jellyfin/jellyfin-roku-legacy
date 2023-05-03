@@ -1,5 +1,3 @@
-import "pkg:/source/utils/config.brs"
-
 sub init()
     m.top.id = "overhang"
     ' hide seperators till they're needed

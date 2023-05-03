@@ -1,6 +1,3 @@
-import "pkg:/source/utils/config.brs"
-import "pkg:/source/utils/misc.brs"
-
 sub init()
     m.title = m.top.findNode("title")
     m.staticTitle = m.top.findNode("staticTitle")

@@ -1,9 +1,4 @@
-import "pkg:/source/api/baserequest.brs"
-import "pkg:/source/utils/config.brs"
-import "pkg:/source/roku_modules/log/LogMixin.brs"
-
 sub init()
-    m.log = log.Logger("RecordProgramTask")
     m.top.functionName = "RecordOrCancelProgram"
 end sub
 
@@ -40,7 +35,7 @@ sub RecordOrCancelProgram()
                 m.top.programDetails.hdSmallIconUrl = "pkg:/images/red.png"
             else
                 ' Error msg to user?
-                m.log.error("Could not retrieve live TV Defaults from Server")
+                print "Error getting Live TV Defaults from Server"
             end if
         else
             ' Cancelling a recording...

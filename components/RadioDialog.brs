@@ -1,5 +1,3 @@
-import "pkg:/source/utils/misc.brs"
-
 sub init()
     m.content = m.top.findNode("content")
     m.top.observeField("contentData", "onContentDataChanged")

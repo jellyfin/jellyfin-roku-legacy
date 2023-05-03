@@ -1,5 +1,3 @@
-import "pkg:/source/utils/misc.brs"
-
 sub init()
     m.playReported = false
     m.top.observeField("state", "audioStateChanged")

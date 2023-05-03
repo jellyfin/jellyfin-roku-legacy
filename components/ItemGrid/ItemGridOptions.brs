@@ -1,8 +1,5 @@
-import "pkg:/source/utils/misc.brs"
-import "pkg:/source/roku_modules/log/LogMixin.brs"
-
 sub init()
-    m.log = log.Logger("ItemGridOptions")
+
     m.buttons = m.top.findNode("buttons")
     m.buttons.buttons = [tr("View"), tr("Sort"), tr("Filter")]
     m.buttons.selectedIndex = 1
@@ -206,7 +203,7 @@ sub setHeartColor(color as string)
             end if
         end for
     catch e
-        m.log.error("setHeartColor()", e.number, e.message)
+        print e.number, e.message
     end try
 end sub
 

@@ -1,9 +1,4 @@
-import "pkg:/source/utils/config.brs"
-import "pkg:/source/utils/misc.brs"
-import "pkg:/source/roku_modules/log/LogMixin.brs"
-
 sub init()
-    m.log = log.Logger("GridItem")
     m.posterMask = m.top.findNode("posterMask")
     m.itemPoster = m.top.findNode("itemPoster")
     m.itemIcon = m.top.findNode("itemIcon")
@@ -122,7 +117,7 @@ sub itemContentChanged()
         m.posterText.height = 200
         m.posterText.width = 280
     else
-        m.log.warn("Unhandled Grid Item Type", itemData.type)
+        print "Unhandled Grid Item Type: " + itemData.type
     end if
 
     'If Poster not loaded, ensure "blue box" is shown until loaded

@@ -1,5 +1,3 @@
-import "pkg:/source/utils/misc.brs"
-
 sub init()
     m.itemText = m.top.findNode("itemText")
     m.trackNumber = m.top.findNode("trackNumber")

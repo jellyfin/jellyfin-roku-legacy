@@ -1,5 +1,3 @@
-import "pkg:/source/utils/misc.brs"
-
 sub init()
     m.top.itemComponentName = "HomeItem"
     ' how many rows are visible on the screen

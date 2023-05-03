@@ -1,5 +1,3 @@
-import "pkg:/source/utils/misc.brs"
-
 sub init()
     m.top.optionsAvailable = false
     setupMainNode()

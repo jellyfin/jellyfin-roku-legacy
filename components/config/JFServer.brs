@@ -15,6 +15,7 @@ sub itemContentChanged() as void
 end sub
 
 sub onFocusPercentChange(event)
+    'print "focusPercentChange: " ; event.getData()
     setTextColor(event.getData())
 end sub
 

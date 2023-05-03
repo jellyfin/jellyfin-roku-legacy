@@ -1,7 +1,3 @@
-import "pkg:/source/api/Image.brs"
-import "pkg:/source/api/baserequest.brs"
-import "pkg:/source/utils/config.brs"
-
 sub setFields()
     json = m.top.json
     m.top.id = json.id

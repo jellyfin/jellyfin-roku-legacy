@@ -1,6 +1,3 @@
-import "pkg:/source/utils/misc.brs"
-import "pkg:/source/utils/config.brs"
-
 sub init()
     m.title = m.top.findNode("title")
     m.title.text = tr("Loading...")

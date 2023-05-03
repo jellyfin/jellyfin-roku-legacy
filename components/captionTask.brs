@@ -1,6 +1,3 @@
-import "pkg:/source/utils/config.brs"
-import "pkg:/source/api/baserequest.brs"
-
 sub init()
     m.top.observeField("url", "fetchCaption")
     m.top.currentCaption = []

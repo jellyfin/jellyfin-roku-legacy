@@ -1,14 +1,4 @@
-import "pkg:/source/api/Items.brs"
-import "pkg:/source/roku_modules/api/api.brs"
-import "pkg:/source/api/baserequest.brs"
-import "pkg:/source/utils/config.brs"
-import "pkg:/source/utils/misc.brs"
-import "pkg:/source/api/Image.brs"
-import "pkg:/source/utils/deviceCapabilities.brs"
-import "pkg:/source/roku_modules/log/LogMixin.brs"
-
 sub init()
-    m.log = log.Logger("LoadItemsTask2")
     m.top.functionName = "loadItems"
 
     m.top.limit = 60
@@ -245,7 +235,7 @@ sub loadItems()
                 tmp.posterUrl = api_API().items.getimageurl(item.id, "primary", 0, { "maxHeight": 280, "maxWidth": 280, "quality": "90" })
 
             else
-                m.log.warn("Unknown Type", item.Type)
+                print "[LoadItems] Unknown Type: " item.Type
             end if
 
             if tmp <> invalid

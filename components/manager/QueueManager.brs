@@ -1,6 +1,3 @@
-import "pkg:/source/utils/misc.brs"
-import "ViewCreator.brs"
-
 sub init()
     m.queue = []
     m.originalQueue = []
