@@ -3784,5 +3784,53 @@
         <source>Movies</source>
         <translation>Películas</translation>
     </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>Se encontró un error al reproducir este elemento.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>¿Guardar credenciales?</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Cambiar de Servidor</translation>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Transmitiendo Ahora</translation>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Error al recuperar el contenido</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Error durante la reproducción</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Se produjo un error al recuperar los datos de este elemento del servidor.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Cerrar Sesión</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Eliminar Guardado</translation>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Cargando información del canal</translation>
+    </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Error al cargar la información del canal</translation>
+    </message>
 </context>
 </TS>
