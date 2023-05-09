@@ -68,7 +68,8 @@ sub buttonFocusChanged()
 end sub
 
 
-function onKeyEvent(key as string) as boolean
+function onKeyEvent(key as string, press as boolean) as boolean
+    if not press then return false
 
     if key = "down" or (key = "OK" and m.top.findNode("buttons").hasFocus())
         m.top.findNode("buttons").setFocus(false)
@@ -114,5 +115,4 @@ function onKeyEvent(key as string) as boolean
     end if
 
     return false
-
 end function

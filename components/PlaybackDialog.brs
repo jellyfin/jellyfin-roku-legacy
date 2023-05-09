@@ -1,4 +1,5 @@
-function onKeyEvent(key as string) as boolean
+function onKeyEvent(key as string, press as boolean) as boolean
+    if not press then return false
 
     if key = "OK"
         m.top.close = true

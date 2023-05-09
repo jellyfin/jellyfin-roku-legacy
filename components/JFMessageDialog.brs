@@ -6,14 +6,6 @@ sub init()
     options.setFocus(true)
 end sub
 
-function onKeyEvent(key as string) as boolean
-    if key = "back"
-        m.top.backPressed = true
-        return true
-    end if
-    return false
-end function
-
 sub updateOptions()
     for each item in m.top.options
         row = CreateObject("roSGNode", "ContentNode")
@@ -71,3 +63,13 @@ sub redraw()
 
     m.top.translation = [(1920 - boxWidth) / 2, (1080 - boxHeight) / 2]
 end sub
+
+function onKeyEvent(key as string, press as boolean) as boolean
+    if not press then return false
+
+    if key = "back"
+        m.top.backPressed = true
+        return true
+    end if
+    return false
+end function

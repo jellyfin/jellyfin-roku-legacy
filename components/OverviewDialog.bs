@@ -7,7 +7,7 @@ sub setOverview()
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
-    if press = false then return false
+    if not press then return false
 
     if key = "OK" and m.top.findNode("contentArea").isInFocusChain()
         m.top.close = true
