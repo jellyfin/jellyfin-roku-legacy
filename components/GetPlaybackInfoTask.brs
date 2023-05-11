@@ -8,24 +8,24 @@ sub init()
     m.top.functionName = "getPlaybackInfoTask"
 end sub
 
-function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioTrackIndex = -1 as integer, subtitleTrackIndex = -1 as integer, startTimeTicks = 0 as longinteger)
+function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioTrackIndex = -1 as integer, startTimeTicks = 0 as longinteger)
+    currentView = m.global.sceneManager.callFunc("getActiveScene")
+    currentItem = m.global.queueManager.callFunc("getCurrentItem")
+
     body = {
         "DeviceProfile": getDeviceProfile()
     }
     params = {
         "UserId": get_setting("active_user"),
-        "StartTimeTicks": startTimeTicks,
+        "StartTimeTicks": currentItem.startingPoint,
         "IsPlayback": true,
         "AutoOpenLiveStream": true,
         "MaxStreamingBitrate": "140000000",
         "MaxStaticBitrate": "140000000",
-        "SubtitleStreamIndex": subtitleTrackIndex
+        "SubtitleStreamIndex": currentView.selectedSubtitle,
+        "MediaSourceId": currentItem.id,
+        "AudioStreamIndex": currentItem.selectedAudioStreamIndex
     }
-
-    mediaSourceId = id
-    if mediaSourceId <> "" then params.MediaSourceId = mediaSourceId
-
-    if audioTrackIndex > -1 then params.AudioStreamIndex = audioTrackIndex
 
     req = APIRequest(Substitute("Items/{0}/PlaybackInfo", id), params)
     req.SetRequest("POST")

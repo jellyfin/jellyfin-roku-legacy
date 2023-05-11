@@ -51,10 +51,11 @@ sub itemContentChanged()
     m.top.id = itemData.id
     m.top.findNode("moviePoster").uri = m.top.itemContent.posterURL
 
-    ' Set default video source
-    if itemData.MediaSources <> invalid
+    ' Set default video source if user hasn't selected one yet
+    if m.top.selectedVideoStreamId = "" and isValid(itemData.MediaSources)
         m.top.selectedVideoStreamId = itemData.MediaSources[0].id
     end if
+
     ' Find first Audio Stream and set that as default
     SetDefaultAudioTrack(itemData)
 

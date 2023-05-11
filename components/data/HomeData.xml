@@ -14,5 +14,7 @@
     <field id="PlayedPercentage" type="float" value="0" />
     <field id="usePoster" type="bool" value="false" />
     <field id="isWatched" type="bool" value="false" />
+    <field id="selectedAudioStreamIndex" type="integer" value="1" />
+    <field id="startingPoint" type="longinteger" value="0" />
   </interface>
 </component>

@@ -3,13 +3,18 @@ import "pkg:/source/utils/config.brs"
 import "pkg:/source/roku_modules/api/api.brs"
 
 sub init()
-    currentItem = m.global.queueManager.callFunc("getCurrentItem")
+    ' Hide the overhang on init to prevent showing 2 clocks
+    m.top.getScene().findNode("overhang").visible = false
 
-    m.top.id = currentItem.id
+    m.currentItem = m.global.queueManager.callFunc("getCurrentItem")
+
+    m.top.id = m.currentItem.id
 
     ' Load meta data
     m.LoadMetaDataTask = CreateObject("roSGNode", "LoadVideoContentTask")
-    m.LoadMetaDataTask.itemId = currentItem.id
+    m.LoadMetaDataTask.itemId = m.currentItem.id
+    m.LoadMetaDataTask.itemType = m.currentItem.type
+    m.LoadMetaDataTask.selectedAudioStreamIndex = m.currentItem.selectedAudioStreamIndex
     m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
     m.LoadMetaDataTask.control = "RUN"
 
@@ -17,6 +22,7 @@ sub init()
     m.bufferCheckTimer = m.top.findNode("bufferCheckTimer")
     m.top.observeField("state", "onState")
     m.top.observeField("content", "onContentChange")
+    m.top.observeField("selectedSubtitle", "onSubtitleChange")
 
     m.playbackTimer.observeField("fire", "ReportPlayback")
     m.bufferPercentage = 0 ' Track whether content is being loaded
@@ -46,8 +52,21 @@ sub init()
     m.top.trickPlayBar.filledBarBlendColor = m.global.constants.colors.blue
 end sub
 
+sub onSubtitleChange()
+    ' Save the current video position
+    m.global.queueManager.callFunc("setTopStartingPoint", int(m.top.position) * 10000000&)
+
+    m.top.control = "stop"
+
+    m.LoadMetaDataTask.selectedSubtitleIndex = m.top.SelectedSubtitle
+    m.LoadMetaDataTask.itemId = m.currentItem.id
+    m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
+    m.LoadMetaDataTask.control = "RUN"
+end sub
+
 sub onVideoContentLoaded()
     m.LoadMetaDataTask.unobserveField("content")
+    m.LoadMetaDataTask.control = "STOP"
 
     ' If we have nothing to play, return to previous screen
     if not isValid(m.LoadMetaDataTask.content)
@@ -70,11 +89,22 @@ sub onVideoContentLoaded()
     m.top.videoId = m.LoadMetaDataTask.content[0].id
     m.top.container = m.LoadMetaDataTask.content[0].container
     m.top.mediaSourceId = m.LoadMetaDataTask.content[0].mediaSourceId
+    m.top.fullSubtitleData = m.LoadMetaDataTask.content[0].fullSubtitleData
     m.top.audioIndex = m.LoadMetaDataTask.content[0].audio_stream_idx
+    m.top.transcodeParams = m.LoadMetaDataTask.content[0].transcodeparams
+
+    if m.LoadMetaDataTask.isIntro
+        m.top.enableTrickPlay = false
+    end if
+
+    if isValid(m.currentItem.selectedAudioStreamIndex)
+        m.top.audioTrack = (m.currentItem.selectedAudioStreamIndex + 1).toStr()
+    else
+        m.top.audioTrack = "2"
+    end if
 
     m.top.setFocus(true)
     m.top.control = "play"
-    m.top.getScene().findNode("overhang").visible = false
 end sub
 
 ' Event handler for when video content field changes
