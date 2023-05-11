@@ -31,6 +31,6 @@
   <interface>
     <field id="itemContent" type="node" onChange="itemContentChanged" />
     <field id="seasonData" type="assocarray" alias="seasons.TVSeasonData" />
-    <field id="seasonSelected" alias="seasons.rowItemSelected" alwaysNotify="true" />
+    <field id="seasonSelected" alias="seasons.rowItemSelected" />
   </interface>
 </component>

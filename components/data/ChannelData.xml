@@ -2,6 +2,5 @@
 <component name="ChannelData" extends="JFContentItem">
   <interface>
     <field id="channelID" type="string" />
-    <field id="selectedAudioStreamIndex" type="integer" value="1" />
   </interface>
 </component>

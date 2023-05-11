@@ -1,18 +1,10 @@
 import "pkg:/source/utils/misc.brs"
 import "ViewCreator.brs"
-import "pkg:/source/api/Items.brs"
-import "pkg:/source/api/baserequest.brs"
-import "pkg:/source/utils/config.brs"
-import "pkg:/source/api/Image.brs"
-import "pkg:/source/utils/deviceCapabilities.brs"
 
 sub init()
-    m.hold = []
     m.queue = []
     m.originalQueue = []
     m.queueTypes = []
-    ' Preroll videos only play if user has cinema mode setting enabled
-    m.isPrerollActive = (get_user_setting("playback.cinemamode") = "true")
     m.position = 0
     m.shuffleEnabled = false
 end sub
@@ -21,13 +13,7 @@ end sub
 sub clear()
     m.queue = []
     m.queueTypes = []
-    m.isPrerollActive = (get_user_setting("playback.cinemamode") = "true")
     setPosition(0)
-end sub
-
-' Clear all hold content
-sub clearHold()
-    m.hold = []
 end sub
 
 ' Delete item from play queue at passed index
@@ -46,11 +32,6 @@ function getCurrentItem()
     return getItemByIndex(m.position)
 end function
 
-' Return the items in the hold
-function getHold()
-    return m.hold
-end function
-
 ' Return whether or not shuffle is enabled
 function getIsShuffled()
     return m.shuffleEnabled
@@ -65,11 +46,6 @@ end function
 function getPosition()
     return m.position
 end function
-
-' Hold an item
-sub hold(newItem)
-    m.hold.push(newItem)
-end sub
 
 ' Move queue position back one
 sub moveBack()
@@ -112,29 +88,16 @@ end function
 ' Play items in queue
 sub playQueue()
     nextItem = getCurrentItem()
-    if not isValid(nextItem) then return
-
     nextItemMediaType = getItemType(nextItem)
-    if nextItemMediaType = "" then return
+
+    if not isValid(nextItemMediaType) then return
 
     if nextItemMediaType = "audio"
         CreateAudioPlayerView()
-        return
-    end if
-
-    if nextItemMediaType = "video"
+    else if nextItemMediaType = "video"
         CreateVideoPlayerView()
-        return
-    end if
-
-    if nextItemMediaType = "episode"
+    else if nextItemMediaType = "episode"
         CreateVideoPlayerView()
-        return
-    end if
-
-    if nextItemMediaType = "trailer"
-        CreateVideoPlayerView()
-        return
     end if
 end sub
 
@@ -142,16 +105,6 @@ end sub
 sub pop()
     m.queue.pop()
     m.queueTypes.pop()
-end sub
-
-' Return isPrerollActive status
-function isPrerollActive() as boolean
-    return m.isPrerollActive
-end function
-
-' Set prerollActive status
-sub setPrerollStatus(newStatus as boolean)
-    m.isPrerollActive = newStatus
 end sub
 
 ' Push new items to the play queue
@@ -227,11 +180,6 @@ sub set(items)
     end for
 end sub
 
-' Set starting point for top item in the queue
-sub setTopStartingPoint(positionTicks)
-    m.queue[0].startingPoint = positionTicks
-end sub
-
 function getItemType(item) as string
     if isValid(item) and isValid(item.json) and isValid(item.json.mediatype) and item.json.mediatype <> ""
         return LCase(item.json.mediatype)
@@ -239,5 +187,5 @@ function getItemType(item) as string
         return LCase(item.type)
     end if
 
-    return ""
+    return invalid
 end function
