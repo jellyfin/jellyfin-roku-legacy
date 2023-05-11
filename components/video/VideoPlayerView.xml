@@ -6,7 +6,7 @@
     <field id="selectPlaybackInfoPressed" type="boolean" alwaysNotify="true" />
     <field id="PlaySessionId" type="string" />
     <field id="Subtitles" type="array" />
-    <field id="SelectedSubtitle" type="integer" />
+    <field id="SelectedSubtitle" type="integer" value="-1" alwaysNotify="true" />
     <field id="captionMode" type="string" />
     <field id="container" type="string" />
     <field id="directPlaySupported" type="boolean" />
@@ -22,6 +22,7 @@
 
     <field id="videoId" type="string" />
     <field id="mediaSourceId" type="string" />
+    <field id="fullSubtitleData" type="array" />
     <field id="audioIndex" type="integer" />
   </interface>
 

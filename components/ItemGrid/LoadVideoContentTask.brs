@@ -10,30 +10,46 @@ import "pkg:/source/utils/deviceCapabilities.brs"
 
 sub init()
     m.top.functionName = "loadItems"
-
-    m.top.limit = 60
-    usersettingLimit = get_user_setting("itemgrid.Limit")
-
-    if isValid(usersettingLimit)
-        m.top.limit = usersettingLimit
-    end if
 end sub
 
 sub loadItems()
-    m.top.content = [LoadItems_VideoPlayer(m.top.itemId)]
+    ' Reset intro tracker in case task gets reused
+    m.top.isIntro = false
+
+    ' Only show preroll once per queue
+    if m.global.queueManager.callFunc("isPrerollActive")
+        ' Prerolls not allowed if we're resuming video
+        if m.global.queueManager.callFunc("getCurrentItem").startingPoint = 0
+            preRoll = GetIntroVideos(m.top.itemId)
+            if isValid(preRoll) and preRoll.TotalRecordCount > 0 and isValid(preRoll.items[0])
+                ' If an error is thrown in the Intros plugin, instead of passing the error they pass the entire rick roll music video.
+                ' Bypass the music video and treat it as an error message
+                if lcase(preRoll.items[0].name) <> "rick roll'd"
+                    m.global.queueManager.callFunc("push", m.global.queueManager.callFunc("getCurrentItem"))
+                    m.top.itemId = preRoll.items[0].id
+                    m.global.queueManager.callFunc("setPrerollStatus", false)
+                    m.top.isIntro = true
+                end if
+            end if
+        end if
+    end if
+
+    id = m.top.itemId
+    mediaSourceId = invalid
+    audio_stream_idx = m.top.selectedAudioStreamIndex
+    subtitle_idx = m.top.selectedSubtitleIndex
+    forceTranscoding = false
+
+    m.top.content = [LoadItems_VideoPlayer(id, mediaSourceId, audio_stream_idx, subtitle_idx, forceTranscoding)]
 end sub
 
-function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, forceTranscoding = false as boolean, showIntro = true as boolean, allowResumeDialog = true as boolean) as dynamic
+function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, forceTranscoding = false as boolean) as dynamic
 
     video = {}
     video.id = id
     video.content = createObject("RoSGNode", "ContentNode")
 
-    LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, -1, forceTranscoding, showIntro, allowResumeDialog)
-
-    if video.errorMsg = "introaborted"
-        return video
-    end if
+    LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, forceTranscoding)
 
     if video.content = invalid
         return invalid
@@ -42,11 +58,12 @@ function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic,
     return video
 end function
 
-sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, playbackPosition = -1 as integer, forceTranscoding = false as boolean, showIntro = true as boolean, allowResumeDialog = true as boolean)
+sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, forceTranscoding = false as boolean)
 
     meta = ItemMetaData(video.id)
 
     if not isValid(meta)
+        video.errorMsg = "Error loading metadata"
         video.content = invalid
         return
     end if
@@ -60,41 +77,23 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     video.content.title = meta.title
     video.showID = meta.showID
 
-    if playbackPosition = -1
-        playbackPosition = meta.json.UserData.PlaybackPositionTicks
-        if allowResumeDialog
-            if playbackPosition > 0
-                dialogResult = startPlayBackOver(playbackPosition)
-
-                'Dialog returns -1 when back pressed, 0 for resume, and 1 for start over
-                if dialogResult.indexselected = -1
-                    'User pressed back, return invalid and don't load video
-                    video.content = invalid
-                    return
-                else if dialogResult.indexselected = 1
-                    'Start Over selected, change position to 0
-                    playbackPosition = 0
-                end if
-            end if
+    user = AboutMe()
+    if user.Configuration.EnableNextEpisodeAutoPlay
+        if LCase(m.top.itemType) = "episode"
+            addNextEpisodesToQueue(video.showID)
         end if
     end if
 
-    ' For phase 1 of playlist support, we don't support intros yet
-    showIntro = false
+    playbackPosition = 0!
 
-    ' Don't attempt to play an intro for an intro video
-    if showIntro
-        ' Do not play intros when resuming playback
-        if playbackPosition = 0
-            if not PlayIntroVideo(video.id, audio_stream_idx)
-                video.errorMsg = "introaborted"
-                return
-            end if
-        end if
+    currentItem = m.global.queueManager.callFunc("getCurrentItem")
+
+    if isValid(currentItem) and isValid(currentItem.startingPoint)
+        playbackPosition = currentItem.startingPoint
     end if
 
+    ' PlayStart requires the time to be in seconds
     video.content.PlayStart = int(playbackPosition / 10000000)
-
 
     if not isValid(mediaSourceId) then mediaSourceId = video.id
     if meta.live then mediaSourceId = ""
@@ -105,6 +104,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     video.audioIndex = audio_stream_idx
 
     if not isValid(m.playbackInfo)
+        video.errorMsg = "Error loading playback info"
         video.content = invalid
         return
     end if
@@ -161,6 +161,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
         if m.playbackInfo.MediaSources[0].TranscodingUrl = invalid
             ' If server does not provide a transcode URL, display a message to the user
             m.global.sceneManager.callFunc("userMessage", tr("Error Getting Playback Information"), tr("An error was encountered while playing this item.  Server did not provide required transcoding data."))
+            video.errorMsg = "Error getting playback information"
             video.content = invalid
             return
         end if
@@ -173,9 +174,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     video.content.setCertificatesFile("common:/certs/ca-bundle.crt")
     video.audioTrack = (audio_stream_idx + 1).ToStr() ' Roku's track indexes count from 1. Our index is zero based
 
-    ' Perform relevant setup work for selected subtitle, and return the index of the subtitle
-    ' is enabled/will be enabled, indexed on the provided list of subtitles
-    video.SelectedSubtitle = setupSubtitle(video, video.Subtitles, subtitle_idx)
+    video.SelectedSubtitle = subtitle_idx
 
 end sub
 
@@ -215,18 +214,19 @@ end sub
 
 sub addSubtitlesToVideo(video)
     subtitles = sortSubtitles(m.playbackInfo.MediaSources[0].MediaStreams)
+    safesubs = subtitles["all"]
+    subtitleTracks = []
+
     if get_user_setting("playback.subs.onlytext") = "true"
-        safesubs = []
-        for each subtitle in subtitles["all"]
-            if subtitle["IsTextSubtitleStream"]
-                safesubs.push(subtitle)
-            end if
-        end for
-        video.Subtitles = safesubs
-    else
-        video.Subtitles = subtitles["all"]
+        safesubs = subtitles["text"]
     end if
-    video.content.SubtitleTracks = subtitles["text"]
+
+    for each subtitle in safesubs
+        subtitleTracks.push(subtitle.track)
+    end for
+
+    video.content.SubtitleTracks = subtitleTracks
+    video.fullSubtitleData = safesubs
 end sub
 
 
@@ -243,26 +243,6 @@ function getTranscodeReasons(url as string) as object
     end if
 
     return []
-end function
-
-'Opens dialog asking user if they want to resume video or start playback over only on the home screen
-function startPlayBackOver(time as longinteger)
-
-    ' If we're inside a play queue, start the episode from the beginning
-    if m.global.queueManager.callFunc("getCount") > 1 then return { indexselected: 1 }
-
-    resumeData = [
-        "Resume playing at " + ticksToHuman(time) + ".",
-        "Start over from the beginning."
-    ]
-
-    m.global.sceneManager.callFunc("optionDialog", tr("Playback Options"), ["Choose an option"], resumeData)
-
-    while not isValid(m.global.sceneManager.returnData)
-
-    end while
-
-    return m.global.sceneManager.returnData
 end function
 
 function directPlaySupported(meta as object) as boolean
@@ -307,306 +287,52 @@ function getContainerType(meta as object) as string
     return container
 end function
 
-function getAudioFormat(meta as object) as string
-    ' Determine the codec of the audio file source
-    if meta.json.mediaSources = invalid then return ""
+' Add next episodes to the playback queue
+sub addNextEpisodesToQueue(showID)
+    ' Don't queue next episodes if we already have a playback queue
+    maxQueueCount = 1
 
-    audioInfo = getAudioInfo(meta)
-    if audioInfo.count() = 0 or audioInfo[0].codec = invalid then return ""
-    return audioInfo[0].codec
-end function
+    if m.top.isIntro
+        maxQueueCount = 2
+    end if
 
-function getAudioInfo(meta as object) as object
-    ' Return audio metadata for a given stream
-    results = []
-    for each source in meta.json.mediaSources[0].mediaStreams
-        if source["type"] = "Audio"
-            results.push(source)
-        end if
-    end for
-    return results
-end function
+    if m.global.queueManager.callFunc("getCount") > maxQueueCount then return
 
-sub autoPlayNextEpisode(videoID as string, showID as string)
-    ' use web client setting
-    if m.user.Configuration.EnableNextEpisodeAutoPlay
-        ' query API for next episode ID
-        url = Substitute("Shows/{0}/Episodes", showID)
-        urlParams = { "UserId": get_setting("active_user") }
-        urlParams.Append({ "StartItemId": videoID })
-        urlParams.Append({ "Limit": 2 })
-        resp = APIRequest(url, urlParams)
-        data = getJson(resp)
+    videoID = m.top.itemId
 
-        if isValid(data) and data.Items.Count() = 2
-            ' setup new video node
-            nextVideo = invalid
-            ' remove last videoplayer scene
-            m.global.sceneManager.callFunc("clearPreviousScene")
-            if isValid(nextVideo)
-                m.global.sceneManager.callFunc("pushScene", nextVideo)
-            else
-                m.global.sceneManager.callFunc("popScene")
+    ' If first item is an intro video, use the next item in the queue
+    if m.top.isIntro
+        currentVideo = m.global.queueManager.callFunc("getItemByIndex", 1)
+
+        if isValid(currentVideo) and isValid(currentVideo.id)
+            videoID = currentVideo.id
+
+            ' Override showID value since it's for the intro video
+            meta = ItemMetaData(videoID)
+            if isValid(meta)
+                showID = meta.showID
             end if
-        else
-            ' can't play next episode
-            m.global.sceneManager.callFunc("popScene")
         end if
-    else
-        m.global.sceneManager.callFunc("popScene")
+    end if
+
+    url = Substitute("Shows/{0}/Episodes", showID)
+    urlParams = { "UserId": get_setting("active_user") }
+    urlParams.Append({ "StartItemId": videoID })
+    urlParams.Append({ "Limit": 50 })
+    resp = APIRequest(url, urlParams)
+    data = getJson(resp)
+
+    if isValid(data) and data.Items.Count() > 1
+        for i = 1 to data.Items.Count() - 1
+            m.global.queueManager.callFunc("push", data.Items[i])
+        end for
     end if
 end sub
-
-' Returns an array of playback info to be displayed during playback.
-' In the future, with a custom playback info view, we can return an associated array.
-function GetPlaybackInfo()
-    sessions = api_API().sessions.get()
-    if isValid(sessions) and sessions.Count() > 0
-        return GetTranscodingStats(sessions[0])
-    end if
-
-    errMsg = tr("Unable to get playback information")
-    return [errMsg]
-end function
-
-function GetTranscodingStats(session)
-    sessionStats = []
-
-    if isValid(session.TranscodingInfo) and session.TranscodingInfo.Count() > 0
-        transcodingReasons = session.TranscodingInfo.TranscodeReasons
-        videoCodec = session.TranscodingInfo.VideoCodec
-        audioCodec = session.TranscodingInfo.AudioCodec
-        totalBitrate = session.TranscodingInfo.Bitrate
-        audioChannels = session.TranscodingInfo.AudioChannels
-
-        if isValid(transcodingReasons) and transcodingReasons.Count() > 0
-            sessionStats.push("** " + tr("Transcoding Information") + " **")
-            for each item in transcodingReasons
-                sessionStats.push(tr("Reason") + ": " + item)
-            end for
-        end if
-
-        if isValid(videoCodec)
-            data = tr("Video Codec") + ": " + videoCodec
-            if session.TranscodingInfo.IsVideoDirect
-                data = data + " (" + tr("direct") + ")"
-            end if
-            sessionStats.push(data)
-        end if
-
-        if isValid(audioCodec)
-            data = tr("Audio Codec") + ": " + audioCodec
-            if session.TranscodingInfo.IsAudioDirect
-                data = data + " (" + tr("direct") + ")"
-            end if
-            sessionStats.push(data)
-        end if
-
-        if isValid(totalBitrate)
-            data = tr("Total Bitrate") + ": " + getDisplayBitrate(totalBitrate)
-            sessionStats.push(data)
-        end if
-
-        if isValid(audioChannels)
-            data = tr("Audio Channels") + ": " + Str(audioChannels)
-            sessionStats.push(data)
-        end if
-    end if
-
-    if havePlaybackInfo()
-        stream = m.playbackInfo.mediaSources[0].MediaStreams[0]
-        sessionStats.push("** " + tr("Stream Information") + " **")
-        if isValid(stream.Container)
-            data = tr("Container") + ": " + stream.Container
-            sessionStats.push(data)
-        end if
-        if isValid(stream.Size)
-            data = tr("Size") + ": " + stream.Size
-            sessionStats.push(data)
-        end if
-        if isValid(stream.BitRate)
-            data = tr("Bit Rate") + ": " + getDisplayBitrate(stream.BitRate)
-            sessionStats.push(data)
-        end if
-        if isValid(stream.Codec)
-            data = tr("Codec") + ": " + stream.Codec
-            sessionStats.push(data)
-        end if
-        if isValid(stream.CodecTag)
-            data = tr("Codec Tag") + ": " + stream.CodecTag
-            sessionStats.push(data)
-        end if
-        if isValid(stream.VideoRangeType)
-            data = tr("Video range type") + ": " + stream.VideoRangeType
-            sessionStats.push(data)
-        end if
-        if isValid(stream.PixelFormat)
-            data = tr("Pixel format") + ": " + stream.PixelFormat
-            sessionStats.push(data)
-        end if
-        if isValid(stream.Width) and isValid(stream.Height)
-            data = tr("WxH") + ": " + Str(stream.Width) + " x " + Str(stream.Height)
-            sessionStats.push(data)
-        end if
-        if isValid(stream.Level)
-            data = tr("Level") + ": " + Str(stream.Level)
-            sessionStats.push(data)
-        end if
-    end if
-
-    return sessionStats
-end function
-
-function havePlaybackInfo()
-    if not isValid(m.playbackInfo)
-        return false
-    end if
-
-    if not isValid(m.playbackInfo.mediaSources)
-        return false
-    end if
-
-    if m.playbackInfo.mediaSources.Count() <= 0
-        return false
-    end if
-
-    if not isValid(m.playbackInfo.mediaSources[0].MediaStreams)
-        return false
-    end if
-
-    if m.playbackInfo.mediaSources[0].MediaStreams.Count() <= 0
-        return false
-    end if
-
-    return true
-end function
-
-function getDisplayBitrate(bitrate)
-    if bitrate > 1000000
-        return Str(Fix(bitrate / 1000000)) + " Mbps"
-    else
-        return Str(Fix(bitrate / 1000)) + " Kbps"
-    end if
-end function
-
-' Roku translates the info provided in subtitleTracks into availableSubtitleTracks
-' Including ignoring tracks, if they are not understood, thus making indexing unpredictable.
-' This function translates between our internel selected subtitle index
-' and the corresponding index in availableSubtitleTracks.
-function availSubtitleTrackIdx(video, sub_idx) as integer
-    url = video.Subtitles[sub_idx].Track.TrackName
-    idx = 0
-    for each availTrack in video.availableSubtitleTracks
-        ' The TrackName must contain the URL we supplied originally, though
-        ' Roku mangles the name a bit, so we check if the URL is a substring, rather
-        ' than strict equality
-        if Instr(1, availTrack.TrackName, url)
-            return idx
-        end if
-        idx = idx + 1
-    end for
-    return -1
-end function
-
-' Identify the default subtitle track for a given video id
-' returns the server-side track index for the appriate subtitle
-function defaultSubtitleTrackFromVid(video_id) as integer
-    meta = ItemMetaData(video_id)
-    if isValid(meta) and isValid(meta.json) and isValid(meta.json.mediaSources)
-        subtitles = sortSubtitles(meta.json.MediaSources[0].MediaStreams)
-        default_text_subs = defaultSubtitleTrack(subtitles["all"], true) ' Find correct subtitle track (forced text)
-        if default_text_subs <> -1
-            return default_text_subs
-        else
-            if get_user_setting("playback.subs.onlytext") = "false"
-                return defaultSubtitleTrack(subtitles["all"]) ' if no appropriate text subs exist, allow non-text
-            else
-                return -1
-            end if
-        end if
-    end if
-    ' No valid mediaSources (i.e. LiveTV)
-    return -1
-end function
-
-
-' Identify the default subtitle track
-' if "requires_text" is true, only return a track if it is textual
-'     This allows forcing text subs, since roku requires transcoding of non-text subs
-' returns the server-side track index for the appriate subtitle
-function defaultSubtitleTrack(sorted_subtitles, require_text = false) as integer
-    if m.user.Configuration.SubtitleMode = "None"
-        return -1 ' No subtitles desired: select none
-    end if
-
-    for each item in sorted_subtitles
-        ' Only auto-select subtitle if language matches preference
-        languageMatch = (m.user.Configuration.SubtitleLanguagePreference = item.Track.Language)
-        ' Ensure textuality of subtitle matches preferenced passed as arg
-        matchTextReq = ((require_text and item.IsTextSubtitleStream) or not require_text)
-        if languageMatch and matchTextReq
-            if m.user.Configuration.SubtitleMode = "Default" and (item.isForced or item.IsDefault or item.IsExternal)
-                return item.Index ' Finds first forced, or default, or external subs in sorted list
-            else if m.user.Configuration.SubtitleMode = "Always" and not item.IsForced
-                return item.Index ' Select the first non-forced subtitle option in the sorted list
-            else if m.user.Configuration.SubtitleMode = "OnlyForced" and item.IsForced
-                return item.Index ' Select the first forced subtitle option in the sorted list
-            else if m.user.Configuration.SubtitlePlaybackMode = "Smart" and (item.isForced or item.IsDefault or item.IsExternal)
-                ' Simplified "Smart" logic here mimics Default (as that is fallback behavior normally)
-                ' Avoids detecting preferred audio language (as is utilized in main client)
-                return item.Index
-            end if
-        end if
-    end for
-    return -1 ' Keep current default behavior of "None", if no correct subtitle is identified
-end function
-
-' Given a set of subtitles, and a subtitle index (the index on the server, not in the list provided)
-' this will set all relevant settings for roku (mainly closed captions) and return the index of the
-' subtitle track specified, but indexed based on the provided list of subtitles
-function setupSubtitle(video, subtitles, subtitle_idx = -1) as integer
-    if subtitle_idx = -1
-        ' If we are not using text-based subtitles, turn them off
-        video.globalCaptionMode = "Off"
-        return -1
-    end if
-
-    ' Translate the raw index to one relative to the provided list
-    subtitleSelIdx = getSubtitleSelIdxFromSubIdx(subtitles, subtitle_idx)
-
-    selectedSubtitle = subtitles[subtitleSelIdx]
-
-    if selectedSubtitle.IsEncoded
-        ' With encoded subtitles, turn off captions
-        video.globalCaptionMode = "Off"
-    else
-        ' If this is a text-based subtitle, set relevant settings for roku captions
-        video.globalCaptionMode = "On"
-        video.subtitleTrack = video.availableSubtitleTracks[availSubtitleTrackIdx(video, subtitleSelIdx)].TrackName
-    end if
-
-    return subtitleSelIdx
-
-end function
-
-' The subtitle index on the server differs from the index we track locally
-' This function converts the former into the latter
-function getSubtitleSelIdxFromSubIdx(subtitles, sub_idx) as integer
-    selIdx = 0
-    if sub_idx = -1 then return -1
-    for each item in subtitles
-        if item.Index = sub_idx
-            return selIdx
-        end if
-        selIdx = selIdx + 1
-    end for
-    return -1
-end function
 
 'Checks available subtitle tracks and puts subtitles in forced, default, and non-default/forced but preferred language at the top
 function sortSubtitles(MediaStreams)
     m.user = AboutMe()
-    tracks = { "forced": [], "default": [], "normal": [] }
+    tracks = { "forced": [], "default": [], "normal": [], "text": [] }
     'Too many args for using substitute
     prefered_lang = m.user.Configuration.SubtitleLanguagePreference
     for each stream in MediaStreams
@@ -630,6 +356,8 @@ function sortSubtitles(MediaStreams)
                 trackType = "forced"
             else if stream.IsDefault
                 trackType = "default"
+            else if stream.IsTextSubtitleStream
+                trackType = "text"
             else
                 trackType = "normal"
             end if
@@ -643,14 +371,9 @@ function sortSubtitles(MediaStreams)
 
     tracks["default"].append(tracks["normal"])
     tracks["forced"].append(tracks["default"])
+    tracks["forced"].append(tracks["text"])
 
-    textTracks = []
-    for i = 0 to tracks["forced"].count() - 1
-        if tracks["forced"][i].IsTextSubtitleStream
-            textTracks.push(tracks["forced"][i].Track)
-        end if
-    end for
-    return { "all": tracks["forced"], "text": textTracks }
+    return { "all": tracks["forced"], "text": tracks["text"] }
 end function
 
 function getSubtitleLanguages()
@@ -1145,123 +868,4 @@ function getSubtitleLanguages()
         "zxx": "No linguistic content; Not applicable",
         "zza": "Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki"
     }
-end function
-
-function CreateSeasonDetailsGroup(series, season)
-    group = CreateObject("roSGNode", "TVEpisodes")
-    group.optionsAvailable = false
-    m.global.sceneManager.callFunc("pushScene", group)
-
-    group.seasonData = ItemMetaData(season.id).json
-    group.objects = TVEpisodes(series.id, season.id)
-
-    group.observeField("episodeSelected", m.port)
-    group.observeField("quickPlayNode", m.port)
-
-    return group
-end function
-
-function PlayIntroVideo(video_id, audio_stream_idx) as boolean
-    ' Intro videos only play if user has cinema mode setting enabled
-    if get_user_setting("playback.cinemamode") = "true"
-
-        ' Check if server has intro videos setup and available
-        introVideos = GetIntroVideos(video_id)
-
-        if introVideos = invalid then return true
-
-        if introVideos.TotalRecordCount > 0
-            ' Bypass joke pre-roll
-            if lcase(introVideos.items[0].name) = "rick roll'd" then return true
-
-            introVideo = LoadItems_VideoPlayer(introVideos.items[0].id, introVideos.items[0].id, audio_stream_idx, defaultSubtitleTrackFromVid(video_id), false, false)
-
-            port = CreateObject("roMessagePort")
-            introVideo.observeField("state", port)
-            m.global.sceneManager.callFunc("pushScene", introVideo)
-            introPlaying = true
-
-            while introPlaying
-                msg = wait(0, port)
-                if type(msg) = "roSGNodeEvent"
-                    if msg.GetData() = "finished"
-                        m.global.sceneManager.callFunc("clearPreviousScene")
-                        introPlaying = false
-                    else if msg.GetData() = "stopped"
-                        introPlaying = false
-                        return false
-                    end if
-                end if
-            end while
-        end if
-    end if
-    return true
-end function
-
-function CreateMovieDetailsGroup(movie)
-    group = CreateObject("roSGNode", "MovieDetails")
-    group.overhangTitle = movie.title
-    group.optionsAvailable = false
-    m.global.sceneManager.callFunc("pushScene", group)
-
-    movieMetaData = ItemMetaData(movie.id)
-    group.itemContent = movieMetaData
-    group.trailerAvailable = false
-
-    activeUser = get_setting("active_user")
-    trailerData = invalid
-    if isValid(activeUser) and isValid(movie.id)
-        trailerData = api_API().users.getlocaltrailers(activeUser, movie.id)
-    end if
-    if isValid(trailerData)
-        group.trailerAvailable = trailerData.Count() > 0
-    end if
-
-    buttons = group.findNode("buttons")
-    for each b in buttons.getChildren(-1, 0)
-        b.observeField("buttonSelected", m.port)
-    end for
-
-    extras = group.findNode("extrasGrid")
-    extras.observeField("selectedItem", m.port)
-    extras.callFunc("loadParts", movieMetaData.json)
-
-    return group
-end function
-
-function CreateSeriesDetailsGroup(series)
-    ' Get season data early in the function so we can check number of seasons.
-    seasonData = TVSeasons(series.id)
-    ' Divert to season details if user setting goStraightToEpisodeListing is enabled and only one season exists.
-    if get_user_setting("ui.tvshows.goStraightToEpisodeListing") = "true" and seasonData.Items.Count() = 1
-        return CreateSeasonDetailsGroupByID(series.id, seasonData.Items[0].id)
-    end if
-    group = CreateObject("roSGNode", "TVShowDetails")
-    group.optionsAvailable = false
-    m.global.sceneManager.callFunc("pushScene", group)
-
-    group.itemContent = ItemMetaData(series.id)
-    group.seasonData = seasonData ' Re-use variable from beginning of function
-
-    group.observeField("seasonSelected", m.port)
-
-    extras = group.findNode("extrasGrid")
-    extras.observeField("selectedItem", m.port)
-    extras.callFunc("loadParts", group.itemcontent.json)
-
-    return group
-end function
-
-function CreateSeasonDetailsGroupByID(seriesID, seasonID)
-    group = CreateObject("roSGNode", "TVEpisodes")
-    group.optionsAvailable = false
-    m.global.sceneManager.callFunc("pushScene", group)
-
-    group.seasonData = ItemMetaData(seasonID).json
-    group.objects = TVEpisodes(seriesID, seasonID)
-
-    group.observeField("episodeSelected", m.port)
-    group.observeField("quickPlayNode", m.port)
-
-    return group
 end function

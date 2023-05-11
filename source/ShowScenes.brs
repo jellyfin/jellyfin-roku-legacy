@@ -515,24 +515,24 @@ function CreateMovieDetailsGroup(movie as object) as dynamic
     return group
 end function
 
-function CreateSeriesDetailsGroup(series as object) as dynamic
+function CreateSeriesDetailsGroup(seriesID as string) as dynamic
     ' validate series node
-    if not isValid(series) or not isValid(series.id) then return invalid
+    if not isValid(seriesID) or seriesID = "" then return invalid
 
     startLoadingSpinner()
     ' get series meta data
-    seriesMetaData = ItemMetaData(series.id)
+    seriesMetaData = ItemMetaData(seriesID)
     ' validate series meta data
     if not isValid(seriesMetaData)
         stopLoadingSpinner()
         return invalid
     end if
     ' Get season data early in the function so we can check number of seasons.
-    seasonData = TVSeasons(series.id)
+    seasonData = TVSeasons(seriesID)
     ' Divert to season details if user setting goStraightToEpisodeListing is enabled and only one season exists.
     if get_user_setting("ui.tvshows.goStraightToEpisodeListing") = "true" and seasonData.Items.Count() = 1
         stopLoadingSpinner()
-        return CreateSeasonDetailsGroupByID(series.id, seasonData.Items[0].id)
+        return CreateSeasonDetailsGroupByID(seriesID, seasonData.Items[0].id)
     end if
     ' start building SeriesDetails view
     group = CreateObject("roSGNode", "TVShowDetails")
@@ -813,4 +813,25 @@ sub UpdateSavedServerList()
             set_setting("saved_servers", FormatJson(newServers))
         end if
     end if
+end sub
+
+'Opens dialog asking user if they want to resume video or start playback over only on the home screen
+sub playbackOptionDialog(time as longinteger, meta as object)
+
+    resumeData = [
+        tr("Resume playing at ") + ticksToHuman(time) + ".",
+        tr("Start over from the beginning.")
+    ]
+
+    group = m.global.sceneManager.callFunc("getActiveScene")
+
+    if LCase(group.subtype()) = "home"
+        if LCase(meta.type) = "episode"
+            resumeData.push(tr("Go to series"))
+            resumeData.push(tr("Go to season"))
+            resumeData.push(tr("Go to episode"))
+        end if
+    end if
+
+    m.global.sceneManager.callFunc("optionDialog", tr("Playback Options"), [], resumeData)
 end sub

@@ -3699,5 +3699,13 @@
         <source>Save Credentials?</source>
         <translation>Save Credentials?</translation>
     </message>
+    <message>
+        <source>More Like This</source>
+        <translation>More Like This</translation>
+    </message>
+    <message>
+        <source>Cast &amp; Crew</source>
+        <translation>Cast &amp; Crew</translation>
+    </message>
 </context>
 </TS>

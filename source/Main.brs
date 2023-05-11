@@ -21,6 +21,7 @@ sub Main (args as dynamic) as void
     playstateTask.id = "playstateTask"
 
     sceneManager = CreateObject("roSGNode", "SceneManager")
+    sceneManager.observeField("dataReturned", m.port)
 
     m.global.addFields({ app_loaded: false, playstateTask: playstateTask, sceneManager: sceneManager })
     m.global.addFields({ queueManager: CreateObject("roSGNode", "QueueManager") })
@@ -83,7 +84,7 @@ sub Main (args as dynamic) as void
     if isValidAndNotEmpty(args.mediaType) and isValidAndNotEmpty(args.contentId)
         video = CreateVideoPlayerGroup(args.contentId)
 
-        if isValid(video) and video.errorMsg <> "introaborted"
+        if isValid(video)
             sceneManager.callFunc("pushScene", video)
         else
             dialog = createObject("roSGNode", "Dialog")
@@ -118,120 +119,153 @@ sub Main (args as dynamic) as void
             group = sceneManager.callFunc("getActiveScene")
             reportingNode = msg.getRoSGNode()
             itemNode = reportingNode.quickPlayNode
-            if itemNode = invalid or itemNode.id = "" then return
-            if itemNode.type = "Episode" or itemNode.type = "Movie" or itemNode.type = "Video"
-                if itemNode.type = "Episode" and itemNode.selectedAudioStreamIndex <> invalid and itemNode.selectedAudioStreamIndex > 1
-                    video = CreateVideoPlayerGroup(itemNode.id, invalid, itemNode.selectedAudioStreamIndex)
-                else
-                    video = CreateVideoPlayerGroup(itemNode.id)
-                end if
-                if video <> invalid and video.errorMsg <> "introaborted"
-                    sceneManager.callFunc("pushScene", video)
-                end if
+            if isValid(itemNode) and isValid(itemNode.id) and itemNode.id <> ""
+                if itemNode.type = "Episode" or itemNode.type = "Movie" or itemNode.type = "Video"
+                    audio_stream_idx = 0
+                    if isValid(itemNode.selectedAudioStreamIndex)
+                        audio_stream_idx = itemNode.selectedAudioStreamIndex
+                    end if
 
-                if LCase(group.subtype()) = "tvepisodes"
-                    if isValid(group.lastFocus)
-                        group.lastFocus.setFocus(true)
+                    itemNode.selectedAudioStreamIndex = audio_stream_idx
+
+                    playbackPosition = 0
+
+                    ' Display playback options dialog
+                    if isValid(itemNode.json) and isValid(itemNode.json.userdata) and isValid(itemNode.json.userdata.PlaybackPositionTicks)
+                        playbackPosition = itemNode.json.userdata.PlaybackPositionTicks
+                    end if
+
+                    if playbackPosition > 0
+                        m.global.queueManager.callFunc("hold", itemNode)
+                        playbackOptionDialog(playbackPosition, itemNode.json)
+                    else
+                        m.global.queueManager.callFunc("clear")
+                        m.global.queueManager.callFunc("push", itemNode)
+                        m.global.queueManager.callFunc("playQueue")
+                    end if
+
+                    ' Prevent quick play node from double firing
+                    reportingNode.quickPlayNode = invalid
+
+                    if LCase(group.subtype()) = "tvepisodes"
+                        if isValid(group.lastFocus)
+                            group.lastFocus.setFocus(true)
+                        end if
                     end if
                 end if
             end if
         else if isNodeEvent(msg, "selectedItem")
             ' If you select a library from ANYWHERE, follow this flow
             selectedItem = msg.getData()
+            if isValid(selectedItem)
+                selectedItemType = selectedItem.type
 
-            m.selectedItemType = selectedItem.type
 
-            if selectedItem.type = "CollectionFolder" or selectedItem.type = "BoxSet"
-                if selectedItem.collectionType = "movies"
-                    group = CreateMovieLibraryView(selectedItem)
-                else if selectedItem.collectionType = "music"
+                if selectedItemType = "CollectionFolder"
+                    if selectedItem.collectionType = "movies"
+                        group = CreateMovieLibraryView(selectedItem)
+                    else if selectedItem.collectionType = "music"
+                        group = CreateMusicLibraryView(selectedItem)
+                    else
+                        group = CreateItemGrid(selectedItem)
+                    end if
+                    sceneManager.callFunc("pushScene", group)
+                else if selectedItemType = "Folder" and selectedItem.json.type = "Genre"
+                    ' User clicked on a genre folder
+                    if selectedItem.json.MovieCount > 0
+                        group = CreateMovieLibraryView(selectedItem)
+                    else
+                        group = CreateItemGrid(selectedItem)
+                    end if
+                    sceneManager.callFunc("pushScene", group)
+                else if selectedItemType = "Folder" and selectedItem.json.type = "MusicGenre"
                     group = CreateMusicLibraryView(selectedItem)
-                else
+                    sceneManager.callFunc("pushScene", group)
+                else if selectedItemType = "UserView" or selectedItemType = "Folder" or selectedItemType = "Channel" or selectedItemType = "Boxset"
                     group = CreateItemGrid(selectedItem)
-                end if
-                sceneManager.callFunc("pushScene", group)
-            else if selectedItem.type = "Folder" and selectedItem.json.type = "Genre"
-                ' User clicked on a genre folder
-                if selectedItem.json.MovieCount > 0
-                    group = CreateMovieLibraryView(selectedItem)
-                else
-                    group = CreateItemGrid(selectedItem)
-                end if
-                sceneManager.callFunc("pushScene", group)
-            else if selectedItem.type = "Folder" and selectedItem.json.type = "MusicGenre"
-                group = CreateMusicLibraryView(selectedItem)
-                sceneManager.callFunc("pushScene", group)
-            else if selectedItem.type = "UserView" or selectedItem.type = "Folder" or selectedItem.type = "Channel" or selectedItem.type = "Boxset"
-                group = CreateItemGrid(selectedItem)
-                sceneManager.callFunc("pushScene", group)
-            else if selectedItem.type = "Episode"
-                ' play episode
-                ' todo: create an episode page to link here
-                video_id = selectedItem.id
-                if selectedItem.selectedAudioStreamIndex <> invalid and selectedItem.selectedAudioStreamIndex > 1
-                    video = CreateVideoPlayerGroup(video_id, invalid, selectedItem.selectedAudioStreamIndex)
-                else
-                    video = CreateVideoPlayerGroup(video_id)
-                end if
-                if video <> invalid and video.errorMsg <> "introaborted"
-                    sceneManager.callFunc("pushScene", video)
-                end if
-            else if selectedItem.type = "Series"
-                group = CreateSeriesDetailsGroup(selectedItem.json)
-            else if selectedItem.type = "Season"
-                group = CreateSeasonDetailsGroupByID(selectedItem.json.SeriesId, selectedItem.id)
-            else if selectedItem.type = "Movie"
-                ' open movie detail page
-                group = CreateMovieDetailsGroup(selectedItem)
-            else if selectedItem.type = "Person"
-                CreatePersonView(selectedItem)
-            else if selectedItem.type = "TvChannel" or selectedItem.type = "Video" or selectedItem.type = "Program"
-                ' play channel feed
-                video_id = selectedItem.id
+                    sceneManager.callFunc("pushScene", group)
+                else if selectedItemType = "Episode"
+                    ' User has selected a TV episode they want us to play
+                    audio_stream_idx = 0
+                    if isValid(selectedItem.selectedAudioStreamIndex)
+                        audio_stream_idx = selectedItem.selectedAudioStreamIndex
+                    end if
 
-                ' Show Channel Loading spinner
-                dialog = createObject("roSGNode", "ProgressDialog")
-                dialog.title = tr("Loading Channel Data")
-                m.scene.dialog = dialog
+                    selectedItem.selectedAudioStreamIndex = audio_stream_idx
 
-                if LCase(selectedItem.subtype()) = "extrasdata"
-                    video = CreateVideoPlayerGroup(video_id, invalid, 1, false, true, false)
-                else
-                    video = CreateVideoPlayerGroup(video_id)
-                end if
+                    ' If we are playing a playlist, always start at the beginning
+                    if m.global.queueManager.callFunc("getCount") > 1
+                        selectedItem.startingPoint = 0
+                        m.global.queueManager.callFunc("clear")
+                        m.global.queueManager.callFunc("push", selectedItem)
+                        m.global.queueManager.callFunc("playQueue")
+                    else
+                        ' Display playback options dialog
+                        if selectedItem.json.userdata.PlaybackPositionTicks > 0
+                            m.global.queueManager.callFunc("hold", selectedItem)
+                            playbackOptionDialog(selectedItem.json.userdata.PlaybackPositionTicks, selectedItem.json)
+                        else
+                            m.global.queueManager.callFunc("clear")
+                            m.global.queueManager.callFunc("push", selectedItem)
+                            m.global.queueManager.callFunc("playQueue")
+                        end if
+                    end if
 
-                dialog.close = true
 
-                if video <> invalid and video.errorMsg <> "introaborted"
-                    sceneManager.callFunc("pushScene", video)
-                else
-                    dialog = createObject("roSGNode", "Dialog")
-                    dialog.id = "OKDialog"
-                    dialog.title = tr("Error loading Channel Data")
-                    dialog.message = tr("Unable to load Channel Data from the server")
-                    dialog.buttons = [tr("OK")]
+                else if selectedItemType = "Series"
+                    group = CreateSeriesDetailsGroup(selectedItem.json.id)
+                else if selectedItemType = "Season"
+                    group = CreateSeasonDetailsGroupByID(selectedItem.json.SeriesId, selectedItem.id)
+                else if selectedItemType = "Movie"
+                    ' open movie detail page
+                    group = CreateMovieDetailsGroup(selectedItem)
+                else if selectedItemType = "Person"
+                    CreatePersonView(selectedItem)
+                else if selectedItemType = "TvChannel" or selectedItemType = "Video" or selectedItemType = "Program"
+                    ' User selected a Live TV channel / program
+
+                    ' Show Channel Loading spinner
+                    dialog = createObject("roSGNode", "ProgressDialog")
+                    dialog.title = tr("Loading Channel Data")
                     m.scene.dialog = dialog
-                    m.scene.dialog.observeField("buttonSelected", m.port)
+
+                    ' User selected a program. Play the channel the program is on
+                    if LCase(selectedItemType) = "program"
+                        selectedItem.id = selectedItem.json.ChannelId
+                    end if
+
+                    ' Display playback options dialog
+                    if selectedItem.json.userdata.PlaybackPositionTicks > 0
+                        dialog.close = true
+                        m.global.queueManager.callFunc("hold", selectedItem)
+                        playbackOptionDialog(selectedItem.json.userdata.PlaybackPositionTicks, selectedItem.json)
+                    else
+                        m.global.queueManager.callFunc("clear")
+                        m.global.queueManager.callFunc("push", selectedItem)
+                        m.global.queueManager.callFunc("playQueue")
+                        dialog.close = true
+                    end if
+
+                else if selectedItemType = "Photo"
+                    ' Nothing to do here, handled in ItemGrid
+                else if selectedItemType = "MusicArtist"
+                    group = CreateArtistView(selectedItem.json)
+                    if not isValid(group)
+                        message_dialog(tr("Unable to find any albums or songs belonging to this artist"))
+                    end if
+                else if selectedItemType = "MusicAlbum"
+                    group = CreateAlbumView(selectedItem.json)
+                else if selectedItemType = "Playlist"
+                    group = CreatePlaylistView(selectedItem.json)
+                else if selectedItemType = "Audio"
+                    m.global.queueManager.callFunc("clear")
+                    m.global.queueManager.callFunc("resetShuffle")
+                    m.global.queueManager.callFunc("push", selectedItem.json)
+                    m.global.queueManager.callFunc("playQueue")
+                else
+                    ' TODO - switch on more node types
+                    message_dialog("This type is not yet supported: " + selectedItemType + ".")
                 end if
-            else if selectedItem.type = "Photo"
-                ' Nothing to do here, handled in ItemGrid
-            else if selectedItem.type = "MusicArtist"
-                group = CreateArtistView(selectedItem.json)
-                if not isValid(group)
-                    message_dialog(tr("Unable to find any albums or songs belonging to this artist"))
-                end if
-            else if selectedItem.type = "MusicAlbum"
-                group = CreateAlbumView(selectedItem.json)
-            else if selectedItem.type = "Playlist"
-                group = CreatePlaylistView(selectedItem.json)
-            else if selectedItem.type = "Audio"
-                m.global.queueManager.callFunc("clear")
-                m.global.queueManager.callFunc("resetShuffle")
-                m.global.queueManager.callFunc("push", selectedItem.json)
-                m.global.queueManager.callFunc("playQueue")
-            else
-                ' TODO - switch on more node types
-                message_dialog("This type is not yet supported: " + selectedItem.type + ".")
             end if
         else if isNodeEvent(msg, "movieSelected")
             ' If you select a movie from ANYWHERE, follow this flow
@@ -240,7 +274,7 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "seriesSelected")
             ' If you select a TV Series from ANYWHERE, follow this flow
             node = getMsgPicker(msg, "picker")
-            group = CreateSeriesDetailsGroup(node)
+            group = CreateSeriesDetailsGroup(node.id)
         else if isNodeEvent(msg, "seasonSelected")
             ' If you select a TV Season from ANYWHERE, follow this flow
             ptr = msg.getData()
@@ -332,19 +366,6 @@ sub Main (args as dynamic) as void
                 m.global.queueManager.callFunc("playQueue")
             end if
 
-        else if isNodeEvent(msg, "episodeSelected")
-            ' If you select a TV Episode from ANYWHERE, follow this flow
-            m.selectedItemType = "Episode"
-            node = getMsgPicker(msg, "picker")
-            video_id = node.id
-            if node.selectedAudioStreamIndex <> invalid and node.selectedAudioStreamIndex > 1
-                video = CreateVideoPlayerGroup(video_id, invalid, node.selectedAudioStreamIndex)
-            else
-                video = CreateVideoPlayerGroup(video_id)
-            end if
-            if video <> invalid and video.errorMsg <> "introaborted"
-                sceneManager.callFunc("pushScene", video)
-            end if
         else if isNodeEvent(msg, "search_value")
             query = msg.getRoSGNode().search_value
             group.findNode("SearchBox").visible = false
@@ -364,9 +385,8 @@ sub Main (args as dynamic) as void
             node = getMsgPicker(msg)
             ' TODO - swap this based on target.mediatype
             ' types: [ Series (Show), Episode, Movie, Audio, Person, Studio, MusicArtist ]
-            m.selectedItemType = node.type
             if node.type = "Series"
-                group = CreateSeriesDetailsGroup(node)
+                group = CreateSeriesDetailsGroup(node.id)
             else if node.type = "Movie"
                 group = CreateMovieDetailsGroup(node)
             else if node.type = "MusicArtist"
@@ -402,22 +422,25 @@ sub Main (args as dynamic) as void
             btn = getButton(msg)
             group = sceneManager.callFunc("getActiveScene")
             if isValid(btn) and btn.id = "play-button"
+                ' User chose Play button from movie detail view
 
                 ' Check if a specific Audio Stream was selected
-                audio_stream_idx = 1
+                audio_stream_idx = 0
                 if isValid(group) and isValid(group.selectedAudioStreamIndex)
                     audio_stream_idx = group.selectedAudioStreamIndex
                 end if
 
-                ' Check to see if a specific video "version" was selected
-                mediaSourceId = invalid
-                if isValid(group) and isValid(group.selectedVideoStreamId)
-                    mediaSourceId = group.selectedVideoStreamId
-                end if
-                video_id = group.id
-                video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx)
-                if isValid(video) and video.errorMsg <> "introaborted"
-                    sceneManager.callFunc("pushScene", video)
+                group.itemContent.selectedAudioStreamIndex = audio_stream_idx
+                group.itemContent.id = group.selectedVideoStreamId
+
+                ' Display playback options dialog
+                if group.itemContent.json.userdata.PlaybackPositionTicks > 0
+                    m.global.queueManager.callFunc("hold", group.itemContent)
+                    playbackOptionDialog(group.itemContent.json.userdata.PlaybackPositionTicks, group.itemContent.json)
+                else
+                    m.global.queueManager.callFunc("clear")
+                    m.global.queueManager.callFunc("push", group.itemContent)
+                    m.global.queueManager.callFunc("playQueue")
                 end if
 
                 if isValid(group) and isValid(group.lastFocus) and isValid(group.lastFocus.id) and group.lastFocus.id = "main_group"
@@ -432,23 +455,17 @@ sub Main (args as dynamic) as void
                 end if
 
             else if btn <> invalid and btn.id = "trailer-button"
+                ' User chose to play a trailer from the movie detail view
                 dialog = createObject("roSGNode", "ProgressDialog")
                 dialog.title = tr("Loading trailer")
                 m.scene.dialog = dialog
-                audio_stream_idx = 1
-                mediaSourceId = invalid
-                video_id = group.id
 
                 trailerData = api_API().users.getlocaltrailers(get_setting("active_user"), group.id)
-                video = invalid
 
                 if isValid(trailerData) and isValid(trailerData[0]) and isValid(trailerData[0].id)
-                    video_id = trailerData[0].id
-                    video = CreateVideoPlayerGroup(video_id, mediaSourceId, audio_stream_idx, false, false)
-                end if
-
-                if isValid(video) and video.errorMsg <> "introaborted"
-                    sceneManager.callFunc("pushScene", video)
+                    m.global.queueManager.callFunc("clear")
+                    m.global.queueManager.callFunc("set", trailerData)
+                    m.global.queueManager.callFunc("playQueue")
                     dialog.close = true
                 end if
 
@@ -535,7 +552,7 @@ sub Main (args as dynamic) as void
         else if isNodeEvent(msg, "state")
             node = msg.getRoSGNode()
             if isValid(node) and isValid(node.state)
-                if m.selectedItemType = "TvChannel" and node.state = "finished"
+                if node.selectedItemType = "TvChannel" and node.state = "finished"
                     video = CreateVideoPlayerGroup(node.id)
                     m.global.sceneManager.callFunc("pushScene", video)
                     m.global.sceneManager.callFunc("deleteSceneAtIndex", 2)
@@ -590,7 +607,7 @@ sub Main (args as dynamic) as void
                 info = msg.GetInfo()
                 if info.DoesExist("mediatype") and info.DoesExist("contentid")
                     video = CreateVideoPlayerGroup(info.contentId)
-                    if video <> invalid and video.errorMsg <> "introaborted"
+                    if video <> invalid
                         sceneManager.callFunc("pushScene", video)
                     else
                         dialog = createObject("roSGNode", "Dialog")
@@ -600,6 +617,45 @@ sub Main (args as dynamic) as void
                         dialog.buttons = [tr("OK")]
                         m.scene.dialog = dialog
                         m.scene.dialog.observeField("buttonSelected", m.port)
+                    end if
+                end if
+            end if
+        else if isNodeEvent(msg, "dataReturned")
+            popupNode = msg.getRoSGNode()
+            if isValid(popupNode) and isValid(popupNode.returnData)
+                selectedItem = m.global.queueManager.callFunc("getHold")
+                m.global.queueManager.callFunc("clearHold")
+
+                if isValid(selectedItem) and selectedItem.count() > 0 and isValid(selectedItem[0])
+                    if popupNode.returnData.indexselected = 0
+                        'Resume video from resume point
+                        startingPoint = 0
+
+                        if isValid(selectedItem[0].json) and isValid(selectedItem[0].json.UserData) and isValid(selectedItem[0].json.UserData.PlaybackPositionTicks)
+                            if selectedItem[0].json.UserData.PlaybackPositionTicks > 0
+                                startingPoint = selectedItem[0].json.UserData.PlaybackPositionTicks
+                            end if
+                        end if
+
+                        selectedItem[0].startingPoint = startingPoint
+                        m.global.queueManager.callFunc("clear")
+                        m.global.queueManager.callFunc("push", selectedItem[0])
+                        m.global.queueManager.callFunc("playQueue")
+                    else if popupNode.returnData.indexselected = 1
+                        'Start Over from beginning selected, set position to 0
+                        selectedItem[0].startingPoint = 0
+                        m.global.queueManager.callFunc("clear")
+                        m.global.queueManager.callFunc("push", selectedItem[0])
+                        m.global.queueManager.callFunc("playQueue")
+                    else if popupNode.returnData.indexselected = 2
+                        ' User chose Go to series
+                        CreateSeriesDetailsGroup(selectedItem[0].json.SeriesId)
+                    else if popupNode.returnData.indexselected = 3
+                        ' User chose Go to season
+                        CreateSeasonDetailsGroupByID(selectedItem[0].json.SeriesId, selectedItem[0].json.seasonID)
+                    else if popupNode.returnData.indexselected = 4
+                        ' User chose Go to episode
+                        CreateMovieDetailsGroup(selectedItem[0])
                     end if
                 end if
             end if

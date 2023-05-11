@@ -5,21 +5,21 @@
   "dependencies": {
     "api": "npm:jellyfin-api-bs-client@1.0.6",
     "bgv": "npm:button-group-vert@1.0.2",
-    "brighterscript-formatter": "1.6.27",
+    "brighterscript-formatter": "1.6.28",
     "intKeyboard": "npm:integer-keyboard@1.0.12",
     "log": "npm:roku-log@0.9.3",
     "sob": "npm:slide-out-button@1.0.1"
   },
   "devDependencies": {
-    "@rokucommunity/bslint": "0.8.4",
-    "brighterscript": "0.64.3",
+    "@rokucommunity/bslint": "0.8.5",
+    "brighterscript": "0.64.4",
     "bslib": "npm:@rokucommunity/bslib@0.1.1",
     "jshint": "2.13.6",
     "markdownlint-cli2": "0.7.1",
     "rimraf": "5.0.0",
-    "roku-deploy": "3.10.1",
+    "roku-deploy": "3.10.2",
     "roku-log-bsc-plugin": "0.8.1",
-    "rooibos-roku": "5.4.2",
+    "rooibos-roku": "5.5.1",
     "ropm": "0.10.14",
     "spellchecker-cli": "6.1.1",
     "undent": "0.1.0"
