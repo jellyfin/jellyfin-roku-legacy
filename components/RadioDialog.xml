@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component name="RadioDialog" extends="StandardMessageDialog">
+<component name="RadioDialog" extends="StandardMessageDialog" initialFocus="radioOptions">
   <children>
-    <StdDlgContentArea>
-      <StdDlgItemGroup id="content" />
+    <StdDlgContentArea id="contentArea">
+      <StdDlgItemGroup id="radioOptions" />
     </StdDlgContentArea>
   </children>
   <interface>
