@@ -8,7 +8,7 @@ sub init()
     m.top.functionName = "getPlaybackInfoTask"
 end sub
 
-function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioTrackIndex = -1 as integer, startTimeTicks = 0 as longinteger)
+function ItemPostPlaybackInfo()
     currentView = m.global.sceneManager.callFunc("getActiveScene")
     currentItem = m.global.queueManager.callFunc("getCurrentItem")
 
@@ -27,7 +27,7 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
         "AudioStreamIndex": currentItem.selectedAudioStreamIndex
     }
 
-    req = APIRequest(Substitute("Items/{0}/PlaybackInfo", id), params)
+    req = APIRequest(Substitute("Items/{0}/PlaybackInfo", currentItem.id), params)
     req.SetRequest("POST")
     return postJson(req, FormatJson(body))
 end function
@@ -37,7 +37,7 @@ end function
 sub getPlaybackInfoTask()
     sessions = api_API().sessions.get()
 
-    m.playbackInfo = ItemPostPlaybackInfo(m.top.videoID)
+    m.playbackInfo = ItemPostPlaybackInfo()
 
     if isValid(sessions) and sessions.Count() > 0
         m.top.data = { playbackInfo: GetTranscodingStats(sessions[0]) }

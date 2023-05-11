@@ -212,8 +212,8 @@ sub addVideoContentURL(video, mediaSourceId, audio_stream_idx)
     end if
 end sub
 
-sub addSubtitlesToVideo(video, meta)
-    subtitles = sortSubtitles(meta.id, m.playbackInfo.MediaSources[0].MediaStreams)
+sub addSubtitlesToVideo(video)
+    subtitles = sortSubtitles(m.playbackInfo.MediaSources[0].MediaStreams)
     safesubs = subtitles["all"]
     subtitleTracks = []
 
