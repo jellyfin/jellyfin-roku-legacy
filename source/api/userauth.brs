@@ -187,11 +187,11 @@ function AuthenticateViaQuickConnect(secret)
     }
     req = APIRequest("Users/AuthenticateWithQuickConnect")
     jsonResponse = postJson(req, FormatJson(params))
-    if jsonResponse <> invalid and jsonResponse.AccessToken <> invalid
+    if jsonResponse <> invalid and jsonResponse.AccessToken <> invalid and jsonResponse.User <> invalid
         userdata = CreateObject("roSGNode", "UserData")
         userdata.json = jsonResponse
-        session.user.Update("id", jsonResponse.id)
-        session.user.Update("authToken", jsonResponse.token)
+        session.user.Update("id", jsonResponse.User.Id)
+        session.user.Update("authToken", jsonResponse.AccessToken)
         userdata.callFunc("setActive")
         userdata.callFunc("saveToRegistry")
         return true
