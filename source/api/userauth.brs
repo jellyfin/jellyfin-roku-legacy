@@ -1,3 +1,5 @@
+import "pkg:/source/api/baserequest.brs"
+
 function get_token(user as string, password as string)
     url = "Users/AuthenticateByName?format=json"
     req = APIRequest(url)

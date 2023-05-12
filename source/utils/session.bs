@@ -1,10 +1,16 @@
+import "pkg:/source/api/userauth.brs"
+
 namespace session
     ' Initialize the global session array
     sub Init()
         m.global.addFields({
             session: {
                 server: {},
-                user: {}
+                user: {
+                    Configuration: {},
+                    Policy: {},
+                    settings: {}
+                }
             }
         })
     end sub
@@ -113,7 +119,7 @@ namespace session
             ' make copy of global user session array
             tmpSession = m.global.session
             if userData.json = invalid
-                ' we were passed data from AboutMe
+                ' we were passed data from AboutMe()
                 myAuthToken = tmpSession.user.authToken
                 tmpSession.AddReplace("user", userData)
                 tmpSession.user.AddReplace("authToken", myAuthToken)
@@ -132,5 +138,31 @@ namespace session
             set_user_setting("username", tmpSession.user.name)
             set_user_setting("token", tmpSession.user.authToken)
         end sub
+
+        namespace settings
+            ' Remove a value from the global user session settings (m.global.session.user.settings)
+            sub Delete(key as string)
+                ' validate parameters
+                if key = "" then return
+                ' make copy of global user session settings
+                tmpSessionUser = m.global.session.user
+                ' delete key from user settings array
+                tmpSessionUser.settings.Delete(key)
+                ' update global user session using the temp array
+                session.Update("user", tmpSessionUser)
+            end sub
+
+            ' Add or update one value from the global user session settings array (m.global.session.user.settings)
+            sub Update(key as string, value as dynamic)
+                ' validate parameters
+                if key = "" or value = invalid then return
+                ' make copy of global user session settings
+                tmpSessionUser = m.global.session.user
+                ' update the temp user settings array
+                tmpSessionUser.settings[key] = value
+                ' update global user session using the temp array
+                session.Update("user", tmpSessionUser)
+            end sub
+        end namespace
     end namespace
 end namespace
