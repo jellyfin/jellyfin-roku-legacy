@@ -481,15 +481,15 @@ function GetPlaybackInfo()
     return [errMsg]
 end function
 
-function GetTranscodingStats(session)
+function GetTranscodingStats(deviceSession)
     sessionStats = []
 
-    if isValid(session.TranscodingInfo) and session.TranscodingInfo.Count() > 0
-        transcodingReasons = session.TranscodingInfo.TranscodeReasons
-        videoCodec = session.TranscodingInfo.VideoCodec
-        audioCodec = session.TranscodingInfo.AudioCodec
-        totalBitrate = session.TranscodingInfo.Bitrate
-        audioChannels = session.TranscodingInfo.AudioChannels
+    if isValid(deviceSession.TranscodingInfo) and deviceSession.TranscodingInfo.Count() > 0
+        transcodingReasons = deviceSession.TranscodingInfo.TranscodeReasons
+        videoCodec = deviceSession.TranscodingInfo.VideoCodec
+        audioCodec = deviceSession.TranscodingInfo.AudioCodec
+        totalBitrate = deviceSession.TranscodingInfo.Bitrate
+        audioChannels = deviceSession.TranscodingInfo.AudioChannels
 
         if isValid(transcodingReasons) and transcodingReasons.Count() > 0
             sessionStats.push("** " + tr("Transcoding Information") + " **")
@@ -500,7 +500,7 @@ function GetTranscodingStats(session)
 
         if isValid(videoCodec)
             data = tr("Video Codec") + ": " + videoCodec
-            if session.TranscodingInfo.IsVideoDirect
+            if deviceSession.TranscodingInfo.IsVideoDirect
                 data = data + " (" + tr("direct") + ")"
             end if
             sessionStats.push(data)
@@ -508,7 +508,7 @@ function GetTranscodingStats(session)
 
         if isValid(audioCodec)
             data = tr("Audio Codec") + ": " + audioCodec
-            if session.TranscodingInfo.IsAudioDirect
+            if deviceSession.TranscodingInfo.IsAudioDirect
                 data = data + " (" + tr("direct") + ")"
             end if
             sessionStats.push(data)
