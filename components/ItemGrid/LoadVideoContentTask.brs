@@ -324,7 +324,7 @@ sub addNextEpisodesToQueue(showID)
     end if
 
     url = Substitute("Shows/{0}/Episodes", showID)
-    urlParams = { "UserId": get_setting("active_user") }
+    urlParams = { "UserId": m.global.session.user.id }
     urlParams.Append({ "StartItemId": videoID })
     urlParams.Append({ "Limit": 50 })
     resp = APIRequest(url, urlParams)

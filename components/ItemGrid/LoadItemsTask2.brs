@@ -122,7 +122,7 @@ sub loadItems()
     else if m.top.ItemType = "AlbumArtists"
         url = "Artists/AlbumArtists"
         params.append({
-            UserId: get_setting("active_user"),
+            UserId: m.global.session.user.id,
             Fields: "Genres"
         })
         params.IncludeItemTypes = "MusicAlbum,Audio"
