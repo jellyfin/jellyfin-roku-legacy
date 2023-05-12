@@ -8,8 +8,7 @@ function LoginFlow(startOver = false as boolean)
         print "No previous server connection saved to registry"
     else
         print "Previous server connection saved to registry"
-        UpdateSessionServer("url", serverUrl)
-        PopulateSessionServer()
+        session.server.UpdateURL(serverUrl)
     end if
 
     invalidServer = true
@@ -60,7 +59,7 @@ function LoginFlow(startOver = false as boolean)
                 'Try to login without password. If the token is valid, we're done
                 userData = get_token(userSelected, "")
                 if userData <> invalid
-                    SessionLogin(userData)
+                    session.user.Login(userData)
                     LoadUserPreferences()
                     LoadUserAbilities()
                     SendPerformanceBeacon("AppDialogComplete") ' Roku Performance monitoring - Dialog Closed
@@ -78,23 +77,23 @@ function LoginFlow(startOver = false as boolean)
         end if
     else
         print "Active user found in registry"
-        UpdateSessionUser("id", activeUser)
+        session.user.Update("id", activeUser)
 
         myAuthToken = get_user_setting("token")
         if myAuthToken <> invalid
             print "Auth token found in registry"
-            UpdateSessionUser("authToken", myAuthToken)
+            session.user.Update("authToken", myAuthToken)
             print "Attempting to use API with auth token"
             currentUser = AboutMe()
             if currentUser = invalid
                 print "Auth token is no longer valid - restart login flow"
                 unset_user_setting("token")
                 unset_setting("active_user")
-                UpdateSession("user")
+                session.user.Delete()
                 goto start_login
             else
                 print "Success! Auth token is still valid"
-                SessionLogin(currentUser)
+                session.user.Login(currentUser)
             end if
         else
             print "No auth token found in registry"
@@ -124,13 +123,13 @@ function LoginFlow(startOver = false as boolean)
             else if myUsername = invalid and myPassword = invalid
                 print "Neither username nor password found in registry - restart login flow"
                 unset_setting("active_user")
-                UpdateSession("user")
+                session.user.Delete()
                 goto start_login
             end if
 
             if userData <> invalid
                 print "login success!"
-                SessionLogin(userData)
+                session.user.Login(userData)
             end if
         end if
     end if
@@ -138,7 +137,7 @@ function LoginFlow(startOver = false as boolean)
     if m.global.session.user.id = invalid or m.global.session.user.authToken = invalid
         print "Login failed, restart flow"
         unset_setting("active_user")
-        UpdateSession("user")
+        session.user.Delete()
         goto start_login
     end if
 
@@ -258,7 +257,7 @@ function CreateServerGroup()
                     set_setting("password", "")
                 end if
                 set_setting("server", serverUrl)
-                UpdateSessionServer("url", serverUrl)
+                session.server.UpdateURL(serverUrl)
                 ' Show Connecting to Server spinner
                 dialog = createObject("roSGNode", "ProgressDialog")
                 dialog.title = tr("Connecting to Server")
@@ -279,7 +278,7 @@ function CreateServerGroup()
                     if serverInfoResult.UpdatedUrl <> invalid
                         serverUrl = serverInfoResult.UpdatedUrl
                         set_setting("server", serverUrl)
-                        UpdateSessionServer("url", serverUrl)
+                        session.server.UpdateURL(serverUrl)
                     end if
                     ' Display Error Message to user
                     message = tr("Error: ")
@@ -368,7 +367,7 @@ function CreateSigninGroup(user = "")
             if item.baseUrl = server and item.username <> invalid and item.password <> invalid
                 userData = get_token(item.username, item.password)
                 if userData <> invalid
-                    SessionLogin(userData)
+                    session.user.Login(userData)
                     return "true"
                 end if
             end if
@@ -440,7 +439,7 @@ function CreateSigninGroup(user = "")
                 ' Validate credentials
                 activeUser = get_token(username.value, password.value)
                 if activeUser <> invalid
-                    SessionLogin(activeUser)
+                    session.user.Login(activeUser)
                     set_setting("username", username.value)
                     set_setting("password", password.value)
                     if checkbox.checkedState[0] = true

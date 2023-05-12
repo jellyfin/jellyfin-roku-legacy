@@ -13,7 +13,7 @@ sub Main (args as dynamic) as void
     m.global = m.screen.getGlobalNode()
     SaveAppToGlobal()
     SaveDeviceToGlobal()
-    InitSession()
+    session.Init()
 
     m.scene = m.screen.CreateScene("JFScene")
     m.screen.show() ' vscode_rale_tracker_entry

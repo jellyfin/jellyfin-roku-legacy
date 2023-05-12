@@ -1,7 +1,7 @@
 import "pkg:/source/api/userauth.brs"
 import "pkg:/source/api/baserequest.brs"
 import "pkg:/source/utils/config.brs"
-import "pkg:/source/utils/globals.brs"
+import "pkg:/source/utils/session.bs"
 
 sub init()
     m.top.functionName = "monitorQuickConnect"

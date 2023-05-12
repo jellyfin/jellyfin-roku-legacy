@@ -7,7 +7,7 @@ import "pkg:/source/utils/config.brs"
 import "pkg:/source/api/Image.brs"
 import "pkg:/source/api/userauth.brs"
 import "pkg:/source/utils/deviceCapabilities.brs"
-import "pkg:/source/utils/globals.brs"
+import "pkg:/source/utils/session.bs"
 
 sub init()
     m.top.functionName = "loadItems"

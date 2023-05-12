@@ -53,7 +53,7 @@ sub SignOut(deleteSavedEntry = true as boolean)
         end if
     end if
     unset_setting("active_user")
-    UpdateSession("user")
+    session.user.Delete()
     m.global.sceneManager.currentUser = ""
     group = m.global.sceneManager.callFunc("getActiveScene")
     group.optionsAvailable = false
@@ -87,7 +87,7 @@ function ServerInfo()
         ' set the server to new location and try again
         if right(headers.location, 19) = "/System/Info/Public"
             set_setting("server", left(headers.location, len(headers.location) - 19))
-            UpdateSessionServer("url", left(headers.location, len(headers.location) - 19))
+            session.server.UpdateURL(left(headers.location, len(headers.location) - 19))
             info = ServerInfo()
             if info.Error
                 info.UpdatedUrl = left(headers.location, len(headers.location) - 19)
@@ -190,8 +190,8 @@ function AuthenticateViaQuickConnect(secret)
     if jsonResponse <> invalid and jsonResponse.AccessToken <> invalid
         userdata = CreateObject("roSGNode", "UserData")
         userdata.json = jsonResponse
-        UpdateSessionUser("id", jsonResponse.id)
-        UpdateSessionUser("authToken", jsonResponse.token)
+        session.user.Update("id", jsonResponse.id)
+        session.user.Update("authToken", jsonResponse.token)
         userdata.callFunc("setActive")
         userdata.callFunc("saveToRegistry")
         return true

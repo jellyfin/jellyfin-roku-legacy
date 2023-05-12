@@ -1,7 +1,7 @@
 import "pkg:/source/api/userauth.brs"
 import "pkg:/source/api/baserequest.brs"
 import "pkg:/source/utils/config.brs"
-import "pkg:/source/utils/globals.brs"
+import "pkg:/source/utils/session.bs"
 
 sub init()
     m.quickConnectTimer = m.top.findNode("quickConnectTimer")
@@ -35,7 +35,7 @@ sub OnAuthenticated()
             currentUser = AboutMe()
             LoadUserPreferences()
             LoadUserAbilities()
-            SessionLogin(currentUser)
+            session.user.Login(currentUser)
             m.top.close = true
             m.top.authenticated = true
         else
