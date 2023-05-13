@@ -31,7 +31,7 @@ sub init()
 
     m.overhang.isVisible = false
 
-    m.showItemCount = get_user_setting("itemgrid.showItemCount") = "true"
+    m.showItemCount = get_user_setting("itemgrid.showItemCount")
 
     m.swapAnimation.observeField("state", "swapDone")
 
@@ -80,7 +80,7 @@ sub init()
     m.spinner.visible = true
 
     'Get reset folder setting
-    m.resetGrid = get_user_setting("itemgrid.reset") = "true"
+    m.resetGrid = get_user_setting("itemgrid.reset")
 
     'Hide voice search if device does not have voice remote
     if m.global.device.hasVoiceRemote = false
@@ -124,19 +124,13 @@ sub loadInitialItems()
     end if
 
     m.sortField = get_user_setting("display." + m.top.parentItem.Id + ".sortField")
-    sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
+    m.sortAscending = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
     m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
     m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
 
     if not isValid(m.sortField) then m.sortField = "SortName"
     if not isValid(m.filter) then m.filter = "All"
     if not isValid(m.view) then m.view = "ArtistsPresentation"
-
-    if sortAscendingStr = invalid or LCase(sortAscendingStr) = "true"
-        m.sortAscending = true
-    else
-        m.sortAscending = false
-    end if
 
     m.top.showItemTitles = get_user_setting("itemgrid.gridTitles")
 

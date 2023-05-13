@@ -95,7 +95,7 @@ sub settingFocused()
 
         m.boolSetting.visible = true
 
-        if get_user_setting(selectedSetting.settingName) = "true"
+        if get_user_setting(selectedSetting.settingName) = true
             m.boolSetting.checkedItem = 1
         else
             m.boolSetting.checkedItem = 0

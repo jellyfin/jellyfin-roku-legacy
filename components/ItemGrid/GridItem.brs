@@ -48,7 +48,7 @@ sub itemContentChanged()
         m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "Series"
-        if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
+        if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount") = false
             if isValid(itemData.json) and isValid(itemData.json.UserData) and isValid(itemData.json.UserData.UnplayedItemCount)
                 if itemData.json.UserData.UnplayedItemCount > 0
                     m.unplayedCount.visible = true

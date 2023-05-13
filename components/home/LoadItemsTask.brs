@@ -73,9 +73,8 @@ sub loadItems()
         params["limit"] = 24
         params["EnableTotalRecordCount"] = false
 
-        maxDaysInNextUp = get_user_setting("ui.details.maxdaysnextup", "365")
+        maxDaysInNextUp = get_user_setting("ui.details.maxdaysnextup")
         if isValid(maxDaysInNextUp)
-            maxDaysInNextUp = Val(maxDaysInNextUp)
             if maxDaysInNextUp > 0
                 dateToday = CreateObject("roDateTime")
                 dateCutoff = CreateObject("roDateTime")

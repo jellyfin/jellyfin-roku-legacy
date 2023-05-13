@@ -8,7 +8,7 @@ sub init()
     m.log = log.Logger("ItemGrid")
     m.options = m.top.findNode("options")
 
-    m.showItemCount = get_user_setting("itemgrid.showItemCount") = "true"
+    m.showItemCount = get_user_setting("itemgrid.showItemCount")
 
     m.tvGuide = invalid
     m.channelFocused = invalid
@@ -71,7 +71,7 @@ sub init()
     m.AlphaSelected = m.top.findNode("AlphaSelected")
 
     'Get reset folder setting
-    m.resetGrid = get_user_setting("itemgrid.reset") = "true"
+    m.resetGrid = get_user_setting("itemgrid.reset")
 
     m.micButton = m.top.findNode("micButton")
     m.micButtonText = m.top.findNode("micButtonText")

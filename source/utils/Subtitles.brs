@@ -27,7 +27,7 @@ function defaultSubtitleTrackFromVid(video_id) as integer
         if default_text_subs <> -1
             return default_text_subs
         else
-            if get_user_setting("playback.subs.onlytext") = "false"
+            if get_user_setting("playback.subs.onlytext") = false
                 return defaultSubtitleTrack(subtitles["all"]) ' if no appropriate text subs exist, allow non-text
             else
                 return -1

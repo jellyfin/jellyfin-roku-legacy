@@ -37,7 +37,7 @@ sub init()
 
     m.overhang.isVisible = false
 
-    m.showItemCount = get_user_setting("itemgrid.showItemCount") = "true"
+    m.showItemCount = get_user_setting("itemgrid.showItemCount")
 
     m.swapAnimation.observeField("state", "swapDone")
 
@@ -87,7 +87,7 @@ sub init()
     m.spinner.visible = true
 
     'Get reset folder setting
-    m.resetGrid = get_user_setting("itemgrid.reset") = "true"
+    m.resetGrid = get_user_setting("itemgrid.reset")
 
     'Hide voice search if device does not have voice remote
     if m.global.device.hasVoiceRemote = false
@@ -134,7 +134,7 @@ sub loadInitialItems()
     m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
     m.filterOptions = get_user_setting("display." + m.top.parentItem.Id + ".filterOptions")
     m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
-    sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
+    m.sortAscending = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
 
     ' If user has not set a preferred view for this folder, check if they've set a default view
     if not isValid(m.view)
@@ -147,12 +147,6 @@ sub loadInitialItems()
     if not isValid(m.view) then m.view = "Movies"
 
     m.filterOptions = ParseJson(m.filterOptions)
-
-    if sortAscendingStr = invalid or sortAscendingStr = "true"
-        m.sortAscending = true
-    else
-        m.sortAscending = false
-    end if
 
     if m.top.parentItem.json.type = "Studio"
         m.loadItemsTask.studioIds = m.top.parentItem.id
