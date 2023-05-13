@@ -13,12 +13,18 @@ namespace session
                 }
             }
         })
+        session.user.settings.SaveDefaults()
     end sub
 
     ' Empty the global session array
     sub Delete()
         Update("server")
-        Update("user")
+        Update("user", {
+            Configuration: {},
+            Policy: {},
+            settings: {}
+        })
+        session.user.settings.SaveDefaults()
     end sub
 
     ' Update one value from the global session array (m.global.session)
@@ -34,7 +40,7 @@ namespace session
         tmpSession.AddReplace(key, value)
         ' use the temp session array to update the global node
         m.global.setFields({ session: tmpSession })
-        print "m.global.session." + key + " = ", m.global.session[key]
+        ' print "m.global.session." + key + " = ", m.global.session[key]
     end sub
 
     namespace server
@@ -96,7 +102,13 @@ namespace session
     namespace user
         ' Empty the global user session array
         sub Delete()
-            session.Update("user")
+            session.Update("user", {
+                Configuration: {},
+                Policy: {},
+                settings: {}
+            })
+            ' reload default user settings
+            session.user.settings.SaveDefaults()
         end sub
 
         ' Add or update one value from the global user session array (m.global.session.user)
@@ -118,6 +130,7 @@ namespace session
             if userData = invalid or userData.id = invalid then return
             ' make copy of global user session array
             tmpSession = m.global.session
+            oldUserSettings = tmpSession.user.settings
             if userData.json = invalid
                 ' we were passed data from AboutMe()
                 myAuthToken = tmpSession.user.authToken
@@ -129,10 +142,16 @@ namespace session
                 tmpSession.user.AddReplace("authToken", userData.json.AccessToken)
             end if
 
-            userSettings = RegistryReadAll(tmpSession.user.id)
-            tmpSession.user.AddReplace("settings", userSettings)
+            tmpSession.user.AddReplace("settings", oldUserSettings)
             ' update global user session
             session.Update("user", tmpSession.user)
+
+            ' update user session settings with values from registry
+            userSettings = RegistryReadAll(tmpSession.user.id)
+            for each setting in userSettings
+                session.user.settings.Save(setting, userSettings[setting])
+            end for
+
             print "m.global.session.user.settings = ", m.global.session.user.settings
             ' ensure registry is updated
             set_user_setting("username", tmpSession.user.name)
@@ -140,17 +159,115 @@ namespace session
         end sub
 
         namespace settings
-            ' Remove a value from the global user session settings (m.global.session.user.settings)
-            sub Delete(key as string)
+            ' Delete the user setting from the global session (m.global.session.user.settings)
+            sub Delete(name as string)
                 ' validate parameters
-                if key = "" then return
-                ' make copy of global user session settings
-                tmpSessionUser = m.global.session.user
-                ' delete key from user settings array
-                tmpSessionUser.settings.Delete(key)
-                ' update global user session using the temp array
-                session.Update("user", tmpSessionUser)
+                if name = "" then return
+
+                tmpSettingArray = m.global.session.user.settings
+                ' supports user setting names upto 5 deep i.e. one.two.three.four.five
+                splitName = name.Split(".")
+                splitCount = splitName.Count()
+
+                if splitCount = 1
+                    tmpSettingArray.Delete(splitName[0])
+                else if splitCount = 2
+                    if tmpSettingArray.[splitName[0]] = invalid
+                        return
+                    end if
+                    tmpSettingArray.[splitName[0]].Delete(splitName[1])
+                else if splitCount = 3
+                    if tmpSettingArray[splitName[0]] = invalid
+                        return
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]] = invalid
+                        return
+                    end if
+                    tmpSettingArray.[splitName[0]].[splitName[1]].Delete(splitName[2])
+                else if splitCount = 4
+                    if tmpSettingArray.[splitName[0]] = invalid
+                        return
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]] = invalid
+                        return
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]] = invalid
+                        return
+                    end if
+                    tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]].Delete(splitName[3])
+                else if splitCount = 5
+                    if tmpSettingArray.[splitName[0]] = invalid
+                        return
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]] = invalid
+                        return
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]] = invalid
+                        return
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]].[splitName[3]] = invalid
+                        return
+                    end if
+                    tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]].[splitName[3]].Delete(splitName[4])
+                end if
+
+                session.user.Update("settings", tmpSettingArray)
             end sub
+
+            ' Read the user setting from the global session (m.global.session.user.settings)
+            function Read(name as string) as dynamic
+                ' validate parameters
+                if name = "" then return invalid
+
+                tmpSettingArray = m.global.session.user.settings
+                ' supports user setting names upto 5 deep i.e. one.two.three.four.five
+                splitName = name.Split(".")
+                splitCount = splitName.Count()
+
+                if splitCount = 1
+                    return tmpSettingArray.[splitName[0]]
+                else if splitCount = 2
+                    if tmpSettingArray.[splitName[0]] = invalid
+                        return invalid
+                    end if
+                    return tmpSettingArray.[splitName[0]].[splitName[1]]
+                else if splitCount = 3
+                    if tmpSettingArray[splitName[0]] = invalid
+                        return invalid
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]] = invalid
+                        return invalid
+                    end if
+                    return tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]]
+                else if splitCount = 4
+                    if tmpSettingArray.[splitName[0]] = invalid
+                        return invalid
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]] = invalid
+                        return invalid
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]] = invalid
+                        return invalid
+                    end if
+                    return tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]].[splitName[3]]
+                else if splitCount = 5
+                    if tmpSettingArray.[splitName[0]] = invalid
+                        return invalid
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]] = invalid
+                        return invalid
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]] = invalid
+                        return invalid
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]].[splitName[3]] = invalid
+                        return invalid
+                    end if
+                    return tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]].[splitName[3]].[splitName[4]]
+                end if
+
+                return invalid
+            end function
 
             ' Add or update one value from the global user session settings array (m.global.session.user.settings)
             sub Update(key as string, value as dynamic)
@@ -162,6 +279,120 @@ namespace session
                 tmpSessionUser.settings[key] = value
                 ' update global user session using the temp array
                 session.Update("user", tmpSessionUser)
+            end sub
+
+            ' retrieve all default user settings from Config Tree
+            sub SaveDefaults()
+                configTree = GetConfigTree()
+                if configTree = invalid then return
+
+                for each item in configTree
+                    if item.default <> invalid and item.settingName <> invalid
+                        session.user.settings.Save(item.settingName, item.default)
+                    else if item.children <> invalid and item.children.Count() > 0
+                        for each child in item.children
+                            if child.default <> invalid and child.settingName <> invalid
+                                session.user.settings.Save(child.settingName, child.default)
+                            else if child.children <> invalid and child.children.Count() > 0
+                                for each child in child.children
+                                    if child.default <> invalid and child.settingName <> invalid
+                                        session.user.settings.Save(child.settingName, child.default)
+                                    else if child.children <> invalid and child.children.Count() > 0
+                                        for each child in child.children
+                                            if child.default <> invalid and child.settingName <> invalid
+                                                session.user.settings.Save(child.settingName, child.default)
+                                            else if child.children <> invalid and child.children.Count() > 0
+                                                for each child in child.children
+                                                    if child.default <> invalid and child.settingName <> invalid
+                                                        session.user.settings.Save(child.settingName, child.default)
+                                                    else if child.children <> invalid and child.children.Count() > 0
+                                                        for each child in child.children
+                                                            if child.default <> invalid and child.settingName <> invalid
+                                                                session.user.settings.Save(child.settingName, child.default)
+                                                            end if
+                                                        end for
+                                                    end if
+                                                end for
+                                            end if
+                                        end for
+                                    end if
+                                end for
+                            end if
+                        end for
+                    end if
+                end for
+            end sub
+
+            ' Saves the user setting to the global session.
+            ' This turns the user setting into associate arrays instead of saving the period delimited name as a string.
+            ' This also converts strings to boolean and integer as necessary before saving to global session
+            sub Save(name as string, defaultValue as string)
+                if name = invalid or defaultValue = invalid then return
+                tmpSettingArray = m.global.session.user.settings
+                convertedDefaultValue = defaultValue
+
+                ' convert to int
+                defaultValueInteger = defaultValue.ToInt()
+                if defaultValue = "0" or defaultValueInteger <> 0
+                    convertedDefaultValue = defaultValueInteger
+                end if
+
+                ' convert to boolean
+                if type(defaultValue) = "String"
+                    if defaultValue = "true"
+                        convertedDefaultValue = true
+                    else if defaultValue = "false"
+                        convertedDefaultValue = false
+                    end if
+                end if
+
+                ' supports user setting names upto 5 deep i.e. one.two.three.four.five
+                splitName = name.Split(".")
+                splitCount = splitName.Count()
+
+                if splitCount = 1
+                    tmpSettingArray.AddReplace(splitName[0], convertedDefaultValue)
+                else if splitCount = 2
+                    if tmpSettingArray.[splitName[0]] = invalid
+                        tmpSettingArray.[splitName[0]] = {}
+                    end if
+                    tmpSettingArray.[splitName[0]].AddReplace(splitName[1], convertedDefaultValue)
+                else if splitCount = 3
+                    if tmpSettingArray[splitName[0]] = invalid
+                        tmpSettingArray[splitName[0]] = {}
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]] = invalid
+                        tmpSettingArray.[splitName[0]].[splitName[1]] = {}
+                    end if
+                    tmpSettingArray.[splitName[0]].[splitName[1]].AddReplace(splitName[2], convertedDefaultValue)
+                else if splitCount = 4
+                    if tmpSettingArray.[splitName[0]] = invalid
+                        tmpSettingArray.[splitName[0]] = {}
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]] = invalid
+                        tmpSettingArray.[splitName[0]].[splitName[1]] = {}
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]] = invalid
+                        tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]] = {}
+                    end if
+                    tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]].AddReplace(splitName[3], convertedDefaultValue)
+                else if splitCount = 5
+                    if tmpSettingArray.[splitName[0]] = invalid
+                        tmpSettingArray.[splitName[0]] = {}
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]] = invalid
+                        tmpSettingArray.[splitName[0]].[splitName[1]] = {}
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]] = invalid
+                        tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]] = {}
+                    end if
+                    if tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]].[splitName[3]] = invalid
+                        tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]].[splitName[3]] = {}
+                    end if
+                    tmpSettingArray.[splitName[0]].[splitName[1]].[splitName[2]].[splitName[3]].AddReplace(splitName[4], convertedDefaultValue)
+                end if
+
+                session.user.Update("settings", tmpSettingArray)
             end sub
         end namespace
     end namespace

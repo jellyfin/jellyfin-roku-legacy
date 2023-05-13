@@ -65,30 +65,14 @@ end sub
 function get_user_setting(key as string, default = invalid) as dynamic
     if key = "" or m.global.session.user.id = invalid then return default
 
-    value = m.global.session.user.settings[key]
-    if value = invalid
-        ' Check for default in Config Tree
-        configTree = GetConfigTree()
-        configKey = findConfigTreeKey(key, configTree)
-
-        if configKey <> invalid and configKey.default <> invalid
-            ' Update session
-            session.user.settings.Update(key, configKey.default)
-            ' Set user setting to default
-            set_user_setting(key, configKey.default)
-            return configKey.default
-        end if
-
-        return default
-    end if
-    return value
+    return session.user.settings.Read(key)
 end function
 
 sub set_user_setting(key as string, value as dynamic)
     if m.global.session.user.id = invalid then return
     ' dont add session related tokens to settings array
     if key <> "token" and key <> "username" and key <> "password"
-        session.user.settings.Update(key, value)
+        session.user.settings.Save(key, value)
     end if
     registry_write(key, value, m.global.session.user.id)
 end sub
