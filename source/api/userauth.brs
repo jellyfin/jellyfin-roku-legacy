@@ -55,7 +55,7 @@ sub SignOut(deleteSavedEntry = true as boolean)
         end if
     end if
     unset_setting("active_user")
-    session.user.Delete()
+    session.user.Logout()
     m.global.sceneManager.currentUser = ""
     group = m.global.sceneManager.callFunc("getActiveScene")
     group.optionsAvailable = false

@@ -89,7 +89,7 @@ function LoginFlow(startOver = false as boolean)
                 print "Auth token is no longer valid - restart login flow"
                 unset_user_setting("token")
                 unset_setting("active_user")
-                session.user.Delete()
+                session.user.Logout()
                 goto start_login
             else
                 print "Success! Auth token is still valid"
@@ -123,7 +123,7 @@ function LoginFlow(startOver = false as boolean)
             else if myUsername = invalid and myPassword = invalid
                 print "Neither username nor password found in registry - restart login flow"
                 unset_setting("active_user")
-                session.user.Delete()
+                session.user.Logout()
                 goto start_login
             end if
 
@@ -137,7 +137,7 @@ function LoginFlow(startOver = false as boolean)
     if m.global.session.user.id = invalid or m.global.session.user.authToken = invalid
         print "Login failed, restart flow"
         unset_setting("active_user")
-        session.user.Delete()
+        session.user.Logout()
         goto start_login
     end if
 

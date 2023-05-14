@@ -18,13 +18,8 @@ namespace session
 
     ' Empty the global session array
     sub Delete()
-        Update("server")
-        Update("user", {
-            Configuration: {},
-            Policy: {},
-            settings: {}
-        })
-        session.user.settings.SaveDefaults()
+        session.server.Delete()
+        session.user.Logout()
     end sub
 
     ' Update one value from the global session array (m.global.session)
@@ -100,16 +95,6 @@ namespace session
     end namespace
 
     namespace user
-        ' Empty the global user session array
-        sub Delete()
-            session.Update("user", {
-                Configuration: {},
-                Policy: {},
-                settings: {}
-            })
-            ' reload default user settings
-            session.user.settings.SaveDefaults()
-        end sub
 
         ' Add or update one value from the global user session array (m.global.session.user)
         sub Update(key as string, value as dynamic)
@@ -156,6 +141,17 @@ namespace session
             ' ensure registry is updated
             set_user_setting("username", tmpSession.user.name)
             set_user_setting("token", tmpSession.user.authToken)
+        end sub
+
+        ' Empty the global user session array and reload defaults
+        sub Logout()
+            session.Update("user", {
+                Configuration: {},
+                Policy: {},
+                settings: {}
+            })
+            ' reload default user settings
+            session.user.settings.SaveDefaults()
         end sub
 
         namespace settings
