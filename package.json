@@ -7,7 +7,7 @@
     "bgv": "npm:button-group-vert@1.0.2",
     "brighterscript-formatter": "1.6.28",
     "intKeyboard": "npm:integer-keyboard@1.0.12",
-    "log": "npm:roku-log@0.9.3",
+    "log": "npm:roku-log@0.11.1",
     "sob": "npm:slide-out-button@1.0.1"
   },
   "devDependencies": {
