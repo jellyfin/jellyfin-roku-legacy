@@ -17,8 +17,8 @@ end function
 
 
 function getDeviceProfile() as object
-    playMpeg2 = get_user_setting("playback.mpeg2")
-    playAv1 = get_user_setting("playback.av1")
+    playMpeg2 = m.global.session.user.settings["playback.mpeg2"]
+    playAv1 = m.global.session.user.settings["playback.av1"]
 
     'Check if 5.1 Audio Output connected
     maxAudioChannels = 2
@@ -264,7 +264,7 @@ function GetDirectPlayProfiles() as object
     mkvAudio = "mp3,pcm,lpcm,wav"
     audio = "mp3,pcm,lpcm,wav"
 
-    playMpeg2 = get_user_setting("playback.mpeg2")
+    playMpeg2 = m.global.session.user.settings["playback.mpeg2"]
 
     di = CreateObject("roDeviceInfo")
 
@@ -283,7 +283,7 @@ function GetDirectPlayProfiles() as object
         mkvVideo = mkvVideo + ",mpeg2video"
     end if
 
-    if get_user_setting("playback.mpeg4") = true
+    if m.global.session.user.settings["playback.mpeg4"] = true
         mp4Video = mp4Video + ",mpeg4"
     end if
 
@@ -360,8 +360,8 @@ function GetDirectPlayProfiles() as object
 end function
 
 function GetBitRateLimit(codec as string)
-    if get_user_setting("playback.bitrate.maxlimited") = true
-        userSetLimit = get_user_setting("playback.bitrate.limit")
+    if m.global.session.user.settings["playback.bitrate.maxlimited"] = true
+        userSetLimit = m.global.session.user.settings["playback.bitrate.limit"]
         userSetLimit *= 1000000
 
         if userSetLimit > 0

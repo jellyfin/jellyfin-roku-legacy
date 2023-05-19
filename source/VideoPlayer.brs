@@ -217,7 +217,7 @@ sub AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx 
     end if
 
     subtitles = sortSubtitles(meta.id, m.playbackInfo.MediaSources[0].MediaStreams)
-    if get_user_setting("playback.subs.onlytext") = true
+    if m.global.session.user.settings["playback.subs.onlytext"] = true
         safesubs = []
         for each subtitle in subtitles["all"]
             if subtitle["IsTextSubtitleStream"]
@@ -249,8 +249,8 @@ sub AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx 
     ' transcode is that the Encoding Level is not supported, then try to direct play but silently
     ' fall back to the transcode if that fails.
     if m.playbackInfo.MediaSources[0].MediaStreams.Count() > 0 and meta.live = false
-        tryDirectPlay = get_user_setting("playback.tryDirect.h264ProfileLevel") = true and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
-        tryDirectPlay = tryDirectPlay or (get_user_setting("playback.tryDirect.hevcProfileLevel") = true and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "hevc")
+        tryDirectPlay = m.global.session.user.settings["playback.tryDirect.h264ProfileLevel"] = true and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
+        tryDirectPlay = tryDirectPlay or (m.global.session.user.settings["playback.tryDirect.hevcProfileLevel"] = true and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "hevc")
         if tryDirectPlay and isValid(m.playbackInfo.MediaSources[0].TranscodingUrl) and forceTranscoding = false
             transcodingReasons = getTranscodeReasons(m.playbackInfo.MediaSources[0].TranscodingUrl)
             if transcodingReasons.Count() = 1 and transcodingReasons[0] = "VideoLevelNotSupported"
@@ -318,7 +318,7 @@ end sub
 
 function PlayIntroVideo(video_id, audio_stream_idx) as boolean
     ' Intro videos only play if user has cinema mode setting enabled
-    if get_user_setting("playback.cinemamode") = true
+    if m.global.session.user.settings["playback.cinemamode"] = true
         ' Check if server has intro videos setup and available
         introVideos = GetIntroVideos(video_id)
 

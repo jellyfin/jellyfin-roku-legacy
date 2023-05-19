@@ -598,7 +598,7 @@ function CreateSeriesDetailsGroup(seriesID as string) as dynamic
     ' Get season data early in the function so we can check number of seasons.
     seasonData = TVSeasons(seriesID)
     ' Divert to season details if user setting goStraightToEpisodeListing is enabled and only one season exists.
-    if get_user_setting("ui.tvshows.goStraightToEpisodeListing") = true and seasonData.Items.Count() = 1
+    if m.global.session.user.settings["ui.tvshows.goStraightToEpisodeListing"] = true and seasonData.Items.Count() = 1
         stopLoadingSpinner()
         return CreateSeasonDetailsGroupByID(seriesID, seasonData.Items[0].id)
     end if

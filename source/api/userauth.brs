@@ -1,4 +1,5 @@
-import "pkg:/source/api/baserequest.brs"
+' needed for SignOut() and ServerInfo()
+import "pkg:/source/utils/session.bs"
 
 function get_token(user as string, password as string)
     url = "Users/AuthenticateByName?format=json"

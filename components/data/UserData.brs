@@ -48,8 +48,8 @@ sub removeFromRegistry()
     set_setting("available_users", formatJson(new_users))
 end sub
 
-function getPreference(key as string, default as string)
-    return get_user_setting("pref-" + key, default)
+function getPreference(key as string)
+    return get_user_setting("pref-" + key)
 end function
 
 function setPreference(key as string, value as string)

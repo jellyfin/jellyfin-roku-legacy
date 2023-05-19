@@ -62,7 +62,7 @@ sub Main (args as dynamic) as void
     ' Only show the Whats New popup the first time a user runs a new client version.
     if m.global.app.version <> get_setting("LastRunVersion")
         ' Ensure the user hasn't disabled Whats New popups
-        if get_user_setting("load.allowwhatsnew") = true
+        if m.global.session.user.settings["load.allowwhatsnew"] = true
             set_setting("LastRunVersion", m.global.app.version)
             dialog = createObject("roSGNode", "WhatsNewDialog")
             m.scene.dialog = dialog
