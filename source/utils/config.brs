@@ -1,3 +1,4 @@
+' needed for set_user_setting() and unset_user_setting()
 import "pkg:/source/utils/session.bs"
 
 ' Read config tree from json config file and return
@@ -62,18 +63,15 @@ sub unset_setting(key)
 end sub
 
 ' User registry accessors for the currently active user
-function get_user_setting(key as string, default = invalid) as dynamic
-    if key = "" or m.global.session.user.id = invalid then return default
-
-    return session.user.settings.Read(key)
+function get_user_setting(key as string) as dynamic
+    if key = "" or m.global.session.user.id = invalid then return invalid
+    value = registry_read(key, m.global.session.user.id)
+    return value
 end function
 
 sub set_user_setting(key as string, value as dynamic)
     if m.global.session.user.id = invalid then return
-    ' dont add session related tokens to settings array
-    if key <> "token" and key <> "username" and key <> "password"
-        session.user.settings.Save(key, value)
-    end if
+    session.user.settings.Save(key, value)
     registry_write(key, value, m.global.session.user.id)
 end sub
 
