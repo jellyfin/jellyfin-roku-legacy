@@ -90,15 +90,15 @@ sub onVideoContentLoaded()
     m.top.container = m.LoadMetaDataTask.content[0].container
     m.top.mediaSourceId = m.LoadMetaDataTask.content[0].mediaSourceId
     m.top.fullSubtitleData = m.LoadMetaDataTask.content[0].fullSubtitleData
-    m.top.audioIndex = m.LoadMetaDataTask.content[0].audio_stream_idx
+    m.top.audioIndex = m.LoadMetaDataTask.content[0].audioIndex
     m.top.transcodeParams = m.LoadMetaDataTask.content[0].transcodeparams
 
     if m.LoadMetaDataTask.isIntro
         m.top.enableTrickPlay = false
     end if
 
-    if isValid(m.currentItem.selectedAudioStreamIndex)
-        m.top.audioTrack = (m.currentItem.selectedAudioStreamIndex + 1).toStr()
+    if isValid(m.top.audioIndex)
+        m.top.audioTrack = (m.top.audioIndex + 1).toStr()
     else
         m.top.audioTrack = "2"
     end if

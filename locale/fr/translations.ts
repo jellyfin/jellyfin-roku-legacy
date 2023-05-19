@@ -6346,5 +6346,24 @@
         <source>Disabled</source>
         <translation>Désactivé</translation>
     </message>
+    <message>
+        <source>Unable to load Channel Data from the server</source>
+        <translation>Impossible de charger les données de la chaîne à partir du serveur</translation>
+    </message>
+    <message>
+        <source>Use voice remote to search</source>
+        <translation>Utilisez la télécommande pour chercher avec votre voix</translation>
+        <extracomment>Help text in search voice text box</extracomment>
+    </message>
+    <message>
+        <source>Options for TV Shows.</source>
+        <translation>Options pour les programmes télévisés.</translation>
+        <extracomment>Description for TV Shows user settings.</extracomment>
+    </message>
+    <message>
+        <source>Pick a Jellyfin server from the local network</source>
+        <translation>Sélectionnez un serveur disponible sur votre réseau local:</translation>
+        <extracomment>Instructions on initial app launch when the user is asked to pick a server from a list</extracomment>
+    </message>
 </context>
 </TS>

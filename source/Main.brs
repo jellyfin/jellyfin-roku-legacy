@@ -122,7 +122,7 @@ sub Main (args as dynamic) as void
             if isValid(itemNode) and isValid(itemNode.id) and itemNode.id <> ""
                 if itemNode.type = "Episode" or itemNode.type = "Movie" or itemNode.type = "Video"
                     audio_stream_idx = 0
-                    if isValid(itemNode.selectedAudioStreamIndex)
+                    if isValid(itemNode.selectedAudioStreamIndex) and itemNode.selectedAudioStreamIndex > 0
                         audio_stream_idx = itemNode.selectedAudioStreamIndex
                     end if
 
@@ -187,7 +187,7 @@ sub Main (args as dynamic) as void
                 else if selectedItemType = "Episode"
                     ' User has selected a TV episode they want us to play
                     audio_stream_idx = 0
-                    if isValid(selectedItem.selectedAudioStreamIndex)
+                    if isValid(selectedItem.selectedAudioStreamIndex) and selectedItem.selectedAudioStreamIndex > 0
                         audio_stream_idx = selectedItem.selectedAudioStreamIndex
                     end if
 
@@ -569,11 +569,7 @@ sub Main (args as dynamic) as void
                     else if not isValid(node.showID)
                         sceneManager.callFunc("popScene")
                     else
-                        if video.errorMsg = ""
-                            autoPlayNextEpisode(node.id, node.showID)
-                        else
-                            sceneManager.callFunc("popScene")
-                        end if
+                        autoPlayNextEpisode(node.id, node.showID)
                     end if
                 end if
             end if

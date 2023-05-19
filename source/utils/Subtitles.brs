@@ -84,17 +84,18 @@ function setupSubtitle(video, subtitles, subtitle_idx = -1) as integer
 
     selectedSubtitle = subtitles[subtitleSelIdx]
 
-    if selectedSubtitle.IsEncoded
-        ' With encoded subtitles, turn off captions
-        video.globalCaptionMode = "Off"
-    else
-        ' If this is a text-based subtitle, set relevant settings for roku captions
-        video.globalCaptionMode = "On"
-        video.subtitleTrack = video.availableSubtitleTracks[availSubtitleTrackIdx(video, subtitleSelIdx)].TrackName
+    if isValid(selectedSubtitle) and isValid(selectedSubtitle.IsEncoded)
+        if selectedSubtitle.IsEncoded
+            ' With encoded subtitles, turn off captions
+            video.globalCaptionMode = "Off"
+        else
+            ' If this is a text-based subtitle, set relevant settings for roku captions
+            video.globalCaptionMode = "On"
+            video.subtitleTrack = video.availableSubtitleTracks[availSubtitleTrackIdx(video, subtitleSelIdx)].TrackName
+        end if
     end if
 
     return subtitleSelIdx
-
 end function
 
 ' The subtitle index on the server differs from the index we track locally

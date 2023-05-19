@@ -10014,5 +10014,256 @@
         <source>Change Server</source>
         <translation>Server ändern</translation>
     </message>
+    <message>
+        <source>Unable to load Channel Data from the server</source>
+        <translation>Kanaldaten konnten nicht vom Server geladen werden</translation>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Fehler beim Laden der Daten vom Server</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>RUNTIME</source>
+        <translation>Laufzeit</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for switching &quot;views&quot; when looking at a library</comment>
+        <source>TAB_VIEW</source>
+        <translation>Ansicht</translation>
+    </message>
+    <message>
+        <source>Born</source>
+        <translation>Geboren am</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Sonntag</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Samstag</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Started at</source>
+        <translation>Gestartet um</translation>
+        <extracomment>(Past Tense) For defining time when a program started today (e.g. Started at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Ausloggen</translation>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Fehler beim Abspielen</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>Bei der Wiedergabe trat ein Fehler auf</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Lade Kanaldaten</translation>
+    </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Fehler beim Laden der Kanaldaten</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Name</translation>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>Dieses %1 hat keine Inhalte</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Anmeldedaten merken?</translation>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Fehler beim Laden des Inhalts</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <comment>Title of Tab for options to sort library content</comment>
+        <source>TAB_SORT</source>
+        <translation>Sortierung</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to filter library content</comment>
+        <source>TAB_FILTER</source>
+        <translation>Filter</translation>
+    </message>
+    <message>
+        <source>More Like This</source>
+        <translation>Ähnliches</translation>
+    </message>
+    <message>
+        <source>Movies (Grid)</source>
+        <translation>Filme (Raster)</translation>
+        <extracomment>Movie library view option</extracomment>
+    </message>
+    <message>
+        <source>today</source>
+        <translation>heute</translation>
+        <extracomment>Current day</extracomment>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Dienstag</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation>Wiederholung</translation>
+        <extracomment>If TV Shows has previously been broadcasted</extracomment>
+    </message>
+    <message>
+        <source>RELEASE_DATE</source>
+        <translation>Veröffentlichungsdatum</translation>
+    </message>
+    <message>
+        <source>yesterday</source>
+        <translation>gestern</translation>
+        <extracomment>Previous day</extracomment>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation>morgen</translation>
+        <extracomment>Next day</extracomment>
+    </message>
+    <message>
+        <source>Live</source>
+        <translation>Live</translation>
+        <extracomment>If TV Show is being broadcast live (not pre-recorded)</extracomment>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Server wechseln</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Kritiker Bewertung</translation>
+    </message>
+    <message>
+        <source>Died</source>
+        <translation>Gestorben am</translation>
+    </message>
+    <message>
+        <source>Age</source>
+        <translation>Alter</translation>
+    </message>
+    <message>
+        <source>Cast &amp; Crew</source>
+        <translation>Besetzung &amp; Mitwirkende</translation>
+    </message>
+    <message>
+        <source>Press &apos;OK&apos; to Close</source>
+        <translation>klicke &apos;OK&apos; zum Schließen</translation>
+    </message>
+    <message>
+        <source>Additional Parts</source>
+        <translation>Zusätzliche Inhalte</translation>
+        <extracomment>Additional parts of a video</extracomment>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation>Montag</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Donnerstag</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation>Gestartet</translation>
+        <extracomment>(Past Tense) For defining a day and time when a program started (e.g. Started Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Ends at</source>
+        <translation>Endete um</translation>
+        <extracomment>(Past Tense) For defining a day and time when a program ended (e.g. Ended Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation>Sender</translation>
+        <extracomment>Menu option for showing Live TV Channel List</extracomment>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>Freitag</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Movies</source>
+        <translation>Filme</translation>
+    </message>
+    <message>
+        <source>OFFICIAL_RATING</source>
+        <translation>Altersfreigabe</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>IMDb Bewertung</translation>
+    </message>
+    <message>
+        <source>PLAY_COUNT</source>
+        <translation>Wiedergabeanzahl</translation>
+    </message>
+    <message>
+        <source>TV Shows</source>
+        <translation>Serien</translation>
+    </message>
+    <message>
+        <source>Starts at</source>
+        <translation>Startet um</translation>
+        <extracomment>(Future Tense) For defining time when a program will start today (e.g. Starts at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>TV Guide</source>
+        <translation>TV Programm</translation>
+        <extracomment>Menu option for showing Live TV Guide / Schedule</extracomment>
+    </message>
+    <message>
+        <source>Starts</source>
+        <translation>Startet</translation>
+        <extracomment>(Future Tense) For defining a day and time when a program will start (e.g. Starts Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>DATE_PLAYED</source>
+        <translation>Abspieldatum</translation>
+    </message>
+    <message>
+        <source>Ended at</source>
+        <translation>Endet um</translation>
+        <extracomment>(Past Tense) For defining time when a program will ended (e.g. Ended at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>DATE_ADDED</source>
+        <translation>Hinzufügedatum</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Mittwoch</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>View Channel</source>
+        <translation>Sender ansehen</translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation>Aufnehmen</translation>
+    </message>
 </context>
 </TS>

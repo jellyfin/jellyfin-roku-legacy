@@ -35,13 +35,15 @@ function buildParams(params = {} as object) as string
     return param_array.join("&")
 end function
 
-function buildURL(path as string, params = {} as object) as string
+function buildURL(path as string, params = {} as object) as dynamic
+    serverURL = get_url()
+    if serverURL = invalid then return invalid
 
     ' Add intial '/' if path does not start with one
     if path.Left(1) = "/"
-        full_url = get_url() + path
+        full_url = serverURL + path
     else
-        full_url = get_url() + "/" + path
+        full_url = serverURL + "/" + path
     end if
 
     if params.count() > 0
@@ -51,17 +53,21 @@ function buildURL(path as string, params = {} as object) as string
     return full_url
 end function
 
-function APIRequest(url as string, params = {} as object)
-    req = createObject("roUrlTransfer")
+function APIRequest(url as string, params = {} as object) as dynamic
+    full_url = buildURL(url, params)
+    if full_url = invalid then return invalid
+
     serverURL = m.global.session.server.url
-    if serverURL <> invalid and serverURL.left(8) = "https://"
+    if serverURL = invalid then return invalid
+
+    req = createObject("roUrlTransfer")
+    req.setUrl(full_url)
+    req = authorize_request(req)
+    ' SSL cert
+    if serverURL.left(8) = "https://"
         req.setCertificatesFile("common:/certs/ca-bundle.crt")
     end if
 
-    full_url = buildURL(url, params)
-    print "full_url = ", full_url
-    req.setUrl(full_url)
-    req = authorize_request(req)
     return req
 end function
 
@@ -119,18 +125,18 @@ function deleteVoid(req)
 end function
 
 function get_url()
-    base = m.global.session.server.url
-    if base <> invalid
-        if base.right(1) = "/"
-            base = base.left(base.len() - 1)
+    serverURL = m.global.session.server.url
+    if serverURL <> invalid
+        if serverURL.right(1) = "/"
+            serverURL = serverURL.left(serverURL.len() - 1)
         end if
 
         ' append http:// to the start if not specified
-        if base.left(7) <> "http://" and base.left(8) <> "https://"
-            base = "http://" + base
+        if serverURL.left(7) <> "http://" and serverURL.left(8) <> "https://"
+            serverURL = "http://" + serverURL
         end if
     end if
-    return base
+    return serverURL
 end function
 
 function authorize_request(request)

@@ -19,7 +19,7 @@
     <field id="Type" type="string" />
     <field id="subTitle" type="string" />
     <field id="labelText" type="string" />
-    <field id="selectedAudioStreamIndex" type="integer" value="1" />
+    <field id="selectedAudioStreamIndex" type="integer" value="0" />
     <field id="posterUrl" type="string" />
     <field id="imageWidth" type="integer" value="234" />
     <field id="json" type="assocarray" />

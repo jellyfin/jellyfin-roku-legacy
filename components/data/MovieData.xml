@@ -9,6 +9,6 @@
     <field id="mediaSources" type="array" />
     <field id="startingPoint" type="longinteger" value="0" />
     <field id="mediaSourceId" type="string" />
-    <field id="selectedAudioStreamIndex" type="integer" value="1" />
+    <field id="selectedAudioStreamIndex" type="integer" value="0" />
   </interface>
 </component>

@@ -9,6 +9,7 @@ import "pkg:/source/api/userauth.brs"
 import "pkg:/source/utils/deviceCapabilities.brs"
 
 sub init()
+    m.user = AboutMe()
     m.top.functionName = "loadItems"
 end sub
 
@@ -31,6 +32,13 @@ sub loadItems()
                     m.top.isIntro = true
                 end if
             end if
+        end if
+    end if
+
+    if m.top.selectedAudioStreamIndex = 0
+        currentItem = m.global.queueManager.callFunc("getCurrentItem")
+        if isValid(currentItem) and isValid(currentItem.json)
+            m.top.selectedAudioStreamIndex = FindPreferredAudioStream(currentItem.json.MediaStreams)
         end if
     end if
 
@@ -380,6 +388,36 @@ function sortSubtitles(id as string, MediaStreams)
     tracks["forced"].append(tracks["text"])
 
     return { "all": tracks["forced"], "text": tracks["text"] }
+end function
+
+function FindPreferredAudioStream(streams as dynamic) as integer
+    preferredLanguage = m.user.Configuration.AudioLanguagePreference
+    playDefault = m.user.Configuration.PlayDefaultAudioTrack
+
+    if playDefault <> invalid and playDefault = true
+        return 1
+    end if
+
+    ' Do we already have the MediaStreams or not?
+    if streams = invalid
+        url = Substitute("Users/{0}/Items/{1}", m.user.id, m.top.itemId)
+        resp = APIRequest(url)
+        jsonResponse = getJson(resp)
+
+        if jsonResponse = invalid or jsonResponse.MediaStreams = invalid then return 1
+
+        streams = jsonResponse.MediaStreams
+    end if
+
+    if preferredLanguage <> invalid
+        for i = 0 to streams.Count() - 1
+            if LCase(streams[i].Type) = "audio" and LCase(streams[i].Language) = LCase(preferredLanguage)
+                return i
+            end if
+        end for
+    end if
+
+    return 1
 end function
 
 function getSubtitleLanguages()
