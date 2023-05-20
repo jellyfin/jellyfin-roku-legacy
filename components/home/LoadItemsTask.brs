@@ -4,7 +4,7 @@ import "pkg:/source/utils/config.brs"
 import "pkg:/source/utils/misc.brs"
 import "pkg:/source/utils/deviceCapabilities.brs"
 import "pkg:/source/api/Image.brs"
-import "pkg:/source/roku_modules/api/api.brs"
+import "pkg:/source/api/sdk.bs"
 
 sub init()
     m.top.functionName = "loadItems"
@@ -205,7 +205,7 @@ sub loadItems()
             end for
         end if
     else if m.top.itemsToLoad = "additionalparts"
-        additionalParts = api_API().videos.getAdditionalParts(m.top.itemId)
+        additionalParts = api.videos.GetAdditionalParts(m.top.itemId)
         if isValid(additionalParts)
             for each part in additionalParts.items
                 tmp = CreateObject("roSGNode", "ExtrasData")

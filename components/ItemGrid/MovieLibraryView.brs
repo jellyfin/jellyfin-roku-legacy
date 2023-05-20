@@ -3,7 +3,6 @@ import "pkg:/source/utils/config.brs"
 import "pkg:/source/api/baserequest.brs"
 import "pkg:/source/api/Image.brs"
 import "pkg:/source/utils/deviceCapabilities.brs"
-import "pkg:/source/roku_modules/api/api.brs"
 
 sub setupNodes()
     m.options = m.top.findNode("options")

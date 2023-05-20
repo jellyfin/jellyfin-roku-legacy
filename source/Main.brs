@@ -43,7 +43,7 @@ sub Main (args as dynamic) as void
     m.scene.observeField("exit", m.port)
 
     ' Downloads and stores a fallback font to tmp:/
-    configEncoding = api_API().system.getconfigurationbyname("encoding")
+    configEncoding = api.system.GetConfigurationByName("encoding")
 
     if isValid(configEncoding) and isValid(configEncoding.EnableFallbackFont)
         if configEncoding.EnableFallbackFont
@@ -460,7 +460,7 @@ sub Main (args as dynamic) as void
                 dialog.title = tr("Loading trailer")
                 m.scene.dialog = dialog
 
-                trailerData = api_API().users.getlocaltrailers(m.global.session.user.id, group.id)
+                trailerData = api.users.GetLocalTrailers(m.global.session.user.id, group.id)
 
                 if isValid(trailerData) and isValid(trailerData[0]) and isValid(trailerData[0].id)
                     m.global.queueManager.callFunc("clear")

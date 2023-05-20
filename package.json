@@ -3,7 +3,6 @@
   "version": "1.6.6",
   "description": "Roku app for Jellyfin media server",
   "dependencies": {
-    "api": "npm:jellyfin-api-bs-client@1.0.6",
     "bgv": "npm:button-group-vert@1.0.2",
     "brighterscript-formatter": "1.6.28",
     "intKeyboard": "npm:integer-keyboard@1.0.12",

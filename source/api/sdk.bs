@@ -1,0 +1,2154 @@
+import "pkg:/source/api/baserequest.brs"
+
+namespace api
+    namespace albums
+        ' Creates an instant playlist based on a given album.
+        function GetInstantMix(id as string, params = {} as object)
+            req = APIRequest(Substitute("/albums/{0}/instantmix", id), params)
+            return getJson(req)
+        end function
+
+        ' Gets similar items.
+        function GetSimilar(id as string, params = {} as object)
+            req = APIRequest(Substitute("/albums/{0}/similar", id), params)
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace artists
+        ' Gets all artists from a given item, folder, or the entire library.
+        function Get(params = {} as object)
+            req = APIRequest("/artists", params)
+            return getJson(req)
+        end function
+
+        ' Gets an artist by name.
+        function GetByName(name as string, params = {} as object)
+            req = APIRequest(Substitute("/artists/{0}", name), params)
+            return getJson(req)
+        end function
+
+        ' Gets all album artists from a given item, folder, or the entire library.
+        function GetAlbumArtists(params = {} as object)
+            req = APIRequest("/artists/albumartists", params)
+            return getJson(req)
+        end function
+
+        ' Get artist image by name.
+        function GetImageURLByName(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+            return buildURL(Substitute("/artists/{0}/images/{1}/{2}", name, imagetype, imageindex.ToStr()), params)
+        end function
+
+        ' Get artist image by name.
+        function HeadImageURLByName(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+            req = APIRequest(Substitute("/artists/{0}/images/{1}/{2}", name, imagetype, imageindex.ToStr()), params)
+            return headVoid(req)
+        end function
+
+        ' Creates an instant playlist based on a given artist.
+        function GetInstantMix(id as string, params = {} as object)
+            req = APIRequest(Substitute("/artists/{0}/instantmix", id), params)
+            return getJson(req)
+        end function
+
+        ' Gets similar items.
+        function GetSimilar(id as string, params = {} as object)
+            req = APIRequest(Substitute("/artists/{0}/similar", id), params)
+            return getJson(req)
+        end function
+
+    end namespace
+
+    namespace audio
+        ' Gets an audio stream.
+        function GetStreamURL(id as string, params = {} as object)
+            return buildURL(Substitute("Audio/{0}/stream", id), params)
+        end function
+
+        ' Gets an audio stream.
+        function HeadStreamURL(id as string, params = {} as object)
+            req = APIRequest(Substitute("Audio/{0}/stream", id), params)
+            return headVoid(req)
+        end function
+
+        ' Gets an audio stream.
+        function GetStreamURLWithContainer(id as string, container as string, params = {} as object)
+            return buildURL(Substitute("Audio/{0}/stream.{1}", id, container), params)
+        end function
+
+        ' Gets an audio stream.
+        function HeadStreamURLWithContainer(id as string, container as string, params = {} as object)
+            req = APIRequest(Substitute("Audio/{0}/stream.{1}", id, container), params)
+            return headVoid(req)
+        end function
+
+        ' Gets an audio stream.
+        function GetUniversalURL(id as string, params = {} as object)
+            return buildURL(Substitute("Audio/{0}/universal", id), params)
+        end function
+
+        ' Gets an audio stream.
+        sub HeadUniversalURL()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+    end namespace
+
+    namespace auth
+        ' Get all keys.
+        function GetKeys()
+            req = APIRequest("/auth/keys")
+            return getJson(req)
+        end function
+
+        ' Create a new api key.
+        function PostKeys(params = {} as object)
+            req = APIRequest("/auth/keys", params)
+            return postVoid(req)
+        end function
+
+        ' Remove an api key.
+        function DeleteKeys(key as string)
+            req = APIRequest(Substitute("/auth/keys/{0}", key))
+            return deleteVoid(req)
+        end function
+
+        ' Get all password reset providers.
+        function GetPasswordResetProviders()
+            req = APIRequest("/auth/passwordresetproviders")
+            return getJson(req)
+        end function
+
+        ' Get all auth providers.
+        function GetAuthProviders()
+            req = APIRequest("/auth/providers")
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace branding
+        ' Get user's splashscreen image
+        function GetSplashScreen(params = {} as object)
+            return buildURL("/branding/splashscreen", params)
+        end function
+
+        ' Uploads a custom splashscreen.
+        sub PostSplashScreen()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Delete a custom splashscreen.
+        function DeleteSplashScreen()
+            req = APIRequest("/branding/splashscreen")
+            return deleteVoid(req)
+        end function
+
+        ' Gets branding configuration.
+        function GetConfiguration()
+            req = APIRequest("/branding/configuration")
+            return getJson(req)
+        end function
+
+        ' Gets branding css.
+        function GetCSS()
+            req = APIRequest("/branding/css")
+            return getJson(req)
+        end function
+
+        ' Gets branding css.
+        function GetCSSWithExtension()
+            req = APIRequest("/branding/css.css")
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace channels
+        ' Gets available channels.
+        function Get(params = {} as object)
+            req = APIRequest("/channels", params)
+            return getJson(req)
+        end function
+
+        function GetFeatures(id as string)
+            req = APIRequest(Substitute("/channels/{0}/features", id))
+            return getJson(req)
+        end function
+
+        function GetItems(id as string, params = {} as object)
+            req = APIRequest(Substitute("/channels/{0}/items", id), params)
+            return getJson(req)
+        end function
+
+        function GetAllFeatures()
+            req = APIRequest("/channels/features")
+            return getJson(req)
+        end function
+
+        function GetLatestItems(params = {} as object)
+            req = APIRequest("/channels/items/latest", params)
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace clientLog
+        sub Document()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+    end namespace
+
+    namespace collections
+        ' Creates a new collection.
+        function Create(params = {} as object)
+            req = APIRequest("/collections", params)
+            return postJson(req)
+        end function
+
+        ' Adds items to a collection.
+        function AddItems(id as string, params = {} as object)
+            req = APIRequest(Substitute("/collections/{0}/items", id), params)
+            return postVoid(req)
+        end function
+
+        ' Removes items from a collection.
+        function DeleteItems(id as string, params = {} as object)
+            req = APIRequest(Substitute("/collections/{0}/items", id), params)
+            return deleteVoid(req)
+        end function
+    end namespace
+
+    namespace devices
+        ' Get Devices.
+        function Get(params = {} as object)
+            req = APIRequest("/devices", params)
+            return getJson(req)
+        end function
+
+        function GetInfo(params = {} as object)
+            req = APIRequest("/devices/info", params)
+            return getJson(req)
+        end function
+
+        function GetOptions(params = {} as object)
+            req = APIRequest("/devices/options", params)
+            return getJson(req)
+        end function
+
+        function UpdateOptions(params = {} as object, body = {} as object)
+            req = APIRequest("/devices/options", params)
+            return postVoid(req, FormatJson(body))
+        end function
+
+        function Delete(params = {} as object)
+            req = APIRequest("/devices", params)
+            return deleteVoid(req)
+        end function
+    end namespace
+
+    namespace displayPreferences
+        ' Get Display Preferences.
+        '  m.api.displaypreferences.get("usersettings", {
+        '    "userid": "bde7e54f2d7f45d79525265640239c03",
+        '    "client": "roku"
+        '})
+        function Get(id as string, params = {} as object)
+            req = APIRequest(Substitute("/displaypreferences/{0}", id), params)
+            return getJson(req)
+        end function
+
+        function Update(id, params = {} as object, body = {} as object)
+            req = APIRequest(Substitute("/displaypreferences/{0}", id), params)
+            return postVoid(req, FormatJson(body))
+        end function
+    end namespace
+
+    namespace dlna
+        ' Get profile infos.
+        function GetProfileInfos()
+            req = APIRequest("/dlna/profileinfos")
+            return getJson(req)
+        end function
+
+        ' Creates a profile.
+        function CreateProfile(body = {} as object)
+            req = APIRequest("/dlna/profiles")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Updates a profile.
+        sub UpdateProfile()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Gets a single profile.
+        function GetProfileByID(id as string)
+            req = APIRequest(Substitute("/dlna/profiles/{0}", id))
+            return getJson(req)
+        end function
+
+        ' Deletes a profile.
+        function DeleteProfile(id as string)
+            req = APIRequest(Substitute("/dlna/profiles/{0}", id))
+            return deleteVoid(req)
+        end function
+
+        ' Gets the default profile.
+        function GetDefaultProfile()
+            req = APIRequest("/dlna/profiles/default")
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace environment
+        ' Get Default directory browser.
+        function GetDefaultDirectoryBrowser()
+            req = APIRequest("/environment/defaultdirectorybrowser")
+            return getJson(req)
+        end function
+
+        ' Gets the contents of a given directory in the file system.
+        function GetDirectoryContents(params = {} as object)
+            req = APIRequest("/environment/directorycontents", params)
+            return getJson(req)
+        end function
+
+        ' Gets the parent path of a given path.
+        function GetParentPath(params = {} as object)
+            req = APIRequest("/environment/parentpath", params)
+            return getJson(req)
+        end function
+
+        ' Gets available drives from the server's file system.
+        function GetDrives()
+            req = APIRequest("/environment/drives")
+            return getJson(req)
+        end function
+
+        ' Validates path.
+        function ValidatePath(body = {} as object)
+            req = APIRequest("/environment/validatepath")
+            return postVoid(req, FormatJson(body))
+        end function
+    end namespace
+
+    namespace fallbackFont
+        ' Gets a list of available fallback font files.
+        function GetFonts()
+            req = APIRequest("/fallbackfont/fonts")
+            return getJson(req)
+        end function
+
+        ' Gets a fallback font file.
+        function GetFontURL(name as string)
+            return buildURL(Substitute("/fallbackfont/fonts/{0}", name))
+        end function
+    end namespace
+
+    namespace getUTCTime
+        ' Get profile info.
+        function Get()
+            req = APIRequest("/getutctime")
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace genres
+        ' Gets all genres from a given item, folder, or the entire library.
+        function Get(params = {} as object)
+            req = APIRequest("/genres", params)
+            return getJson(req)
+        end function
+
+        ' Gets a genre, by name.
+        function GetByName(name as string, params = {} as object)
+            req = APIRequest(Substitute("/genres/{0}", name), params)
+            return getJson(req)
+        end function
+
+        ' Get genre image by name.
+        function GetImageURLByName(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+            return buildURL(Substitute("/genres/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+        end function
+
+        ' Get genre image by name.
+        function HeadImageURLByName(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+            req = APIRequest(Substitute("/genres/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+            return headVoid(req)
+        end function
+    end namespace
+
+    namespace images
+        ' Get all general images.
+        function GetGeneral()
+            req = APIRequest("/images/general")
+            return getJson(req)
+        end function
+
+        ' Get General Image.
+        function GetGeneralURLByName(name as string, imagetype = "primary" as string)
+            return buildURL(Substitute("/images/general/{0}/{1}", name, imagetype))
+        end function
+
+        ' Get all media info images.
+        function GetMediaInfo()
+            req = APIRequest("/images/mediainfo")
+            return getJson(req)
+        end function
+
+        ' Get media info image.
+        function GetMediaInfoURL(theme as string, name as string)
+            return buildURL(Substitute("/images/mediainfo/{0}/{1}", theme, name))
+        end function
+
+        ' Get all general images.
+        function GetRatings()
+            req = APIRequest("/images/ratings")
+            return getJson(req)
+        end function
+
+        ' Get rating image.
+        function GetRatingsURL(theme as string, name as string)
+            return buildURL(Substitute("/images/ratings/{0}/{1}", theme, name))
+        end function
+    end namespace
+
+    namespace items
+        ' Gets legacy query filters.
+        function GetFilters(params = {} as object)
+            req = APIRequest("/items/filters", params)
+            return getJson(req)
+        end function
+
+        ' Gets query filters.
+        function GetFilters2(params = {} as object)
+            req = APIRequest("/items/filters2", params)
+            return getJson(req)
+        end function
+
+        ' Get item image infos.
+        function GetImages(id as string)
+            req = APIRequest(Substitute("/items/{0}/images", id))
+            return getJson(req)
+        end function
+
+        ' Delete an item's image.
+        sub DeleteImage()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Set item image.
+        sub PostImage()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Gets the item's image.
+        function GetImageURL(id as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+            return buildURL(Substitute("/items/{0}/images/{1}/{2}", id, imagetype, imageindex.toStr()), params)
+        end function
+
+        ' Gets the item's image.
+        function HeadImageURLByName(id as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+            req = APIRequest(Substitute("/items/{0}/images/{1}/{2}", id, imagetype, imageindex.toStr()), params)
+            return headVoid(req)
+        end function
+
+        ' Delete an item's image.
+        sub DeleteImageByIndex()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Updates the index for an item image.
+        function UpdateImageIndex(id as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+            req = APIRequest(Substitute("/items/{0}/images/{1}/{2}/index", id, imagetype, imageindex.toStr()), params)
+            return postVoid(req)
+        end function
+
+        ' Creates an instant playlist based on a given item.
+        function GetInstantMix(id as string, params = {} as object)
+            req = APIRequest(Substitute("/items/{0}/instantmix", id), params)
+            return getJson(req)
+        end function
+
+        ' Get the item's external id info.
+        function GetExternalIDInfos(id as string)
+            req = APIRequest(Substitute("/items/{0}/externalidinfos", id))
+            return getJson(req)
+        end function
+
+        ' Applies search criteria to an item and refreshes metadata.
+        sub ApplySearchResult()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Get book remote search.
+        function GetBookRemoteSearch(body = {} as object)
+            req = APIRequest("/items/remotesearch/book")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Get box set remote search.
+        function GetBoxsetRemoteSearch(body = {} as object)
+            req = APIRequest("/items/remotesearch/boxset")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Get movie remote search.
+        function GetMovieRemoteSearch(body = {} as object)
+            req = APIRequest("/items/remotesearch/movie")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Get music album remote search.
+        function GetMusicAlbumRemoteSearch(body = {} as object)
+            req = APIRequest("/items/remotesearch/musicalbum")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Get music artist remote search.
+        function GetMusicArtistRemoteSearch(body = {} as object)
+            req = APIRequest("/items/remotesearch/musicartist")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Get music video remote search.
+        function GetMusicVideoRemoteSearch(body = {} as object)
+            req = APIRequest("/items/remotesearch/musicvideo")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Get person remote search.
+        function GetPersonRemoteSearch(body = {} as object)
+            req = APIRequest("/items/remotesearch/person")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Get series remote search.
+        function GetSeriesRemoteSearch(body = {} as object)
+            req = APIRequest("/items/remotesearch/series")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Get trailer remote search.
+        function GetTrailerRemoteSearch(body = {} as object)
+            req = APIRequest("/items/remotesearch/trailer")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Refreshes metadata for an item.
+        function RefreshMetaData(id as string, params = {} as object)
+            req = APIRequest(Substitute("/items/{0}/refresh", id), params)
+            return postVoid(req)
+        end function
+
+        ' Gets items based on a query.
+        ' requires userid passed in params
+        function GetByQuery(params = {} as object)
+            req = APIRequest("/items/", params)
+            return getJson(req)
+        end function
+
+        ' Deletes items from the library and filesystem.
+        function Delete(params = {} as object)
+            req = APIRequest("/items/", params)
+            return deleteVoid(req)
+        end function
+
+        ' Deletes an item from the library and filesystem.
+        function DeleteByID(id as string)
+            req = APIRequest(Substitute("/items/{0}", id))
+            return deleteVoid(req)
+        end function
+
+        ' Gets all parents of an item.
+        function GetAncestors(id as string, params = {} as object)
+            req = APIRequest(Substitute("/items/{0}/ancestors", id), params)
+            return getJson(req)
+        end function
+
+        ' Downloads item media.
+        sub GetDownload()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Get the original file of an item.
+        function GetOriginalFile(id as string)
+            return buildURL(Substitute("/items/{0}/file", id))
+        end function
+
+        ' Gets similar items.
+        function GetSimilar(id as string, params = {} as object)
+            req = APIRequest(Substitute("/items/{0}/similar", id), params)
+            return getJson(req)
+        end function
+
+        ' Get theme songs and videos for an item.
+        function GetThemeMedia(id as string, params = {} as object)
+            req = APIRequest(Substitute("/items/{0}/thememedia", id), params)
+            return getJson(req)
+        end function
+
+        ' Get theme songs for an item.
+        function GetThemeSongs(id as string, params = {} as object)
+            req = APIRequest(Substitute("/items/{0}/themesongs", id), params)
+            return getJson(req)
+        end function
+
+        ' Get theme videos for an item.
+        function GetThemeVideos(id as string, params = {} as object)
+            req = APIRequest(Substitute("/items/{0}/themevideos", id), params)
+            return getJson(req)
+        end function
+
+        ' Get item counts.
+        function GetCounts(params = {} as object)
+            req = APIRequest("/items/counts", params)
+            return getJson(req)
+        end function
+
+        ' Updates an item.
+        function Update(id as string, body = {} as object)
+            req = APIRequest(Substitute("/items/{0}", id))
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Updates an item's content type.
+        function UpdateContentType(id as string, body = {} as object)
+            req = APIRequest(Substitute("/items/{0}/contenttype", id))
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Gets metadata editor info for an item.
+        function GetMedaDataEditor(id as string)
+            req = APIRequest(Substitute("/items/{0}/metadataeditor", id))
+            return getJson(req)
+        end function
+
+        ' Gets live playback media info for an item.
+        function GetPlaybackInfo(id as string, params = {} as object)
+            req = APIRequest(Substitute("/items/{0}/playbackinfo", id), params)
+            return getJson(req)
+        end function
+
+        ' Gets live playback media info for an item.
+        function PostPlayBackInfo(id as string, body = {} as object)
+            req = APIRequest(Substitute("/items/{0}/playbackinfo", id))
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Gets available remote images for an item.
+        function GetRemoteImages(id as string)
+            req = APIRequest(Substitute("/items/{0}/remoteimages", id))
+            return getJson(req)
+        end function
+
+        ' Gets available remote image providers for an item.
+        function GetRemoteImageProviders(id as string)
+            req = APIRequest(Substitute("/items/{0}/remoteimages/providers", id))
+            return getJson(req)
+        end function
+
+        ' Downloads a remote image for an item.
+        sub DownloadRemoteImages()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Search remote subtitles.
+        function SearchRemoteSubtitles(id as string, language as string, params = {} as object)
+            req = APIRequest(Substitute("/items/{0}/remotesearch/subtitles/{1}", id, language), params)
+            return getJson(req)
+        end function
+
+        ' Downloads a remote subtitle.
+        sub DownloadRemoteSubtitles()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+    end namespace
+
+    namespace libraries
+        ' Gets the library options info.
+        function GetAvailableOptions(params = {} as object)
+            req = APIRequest("/libraries/availableoptions", params)
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace library
+        ' Reports that new movies have been added by an external source.
+        sub ReportMediaUpdated()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Gets all user media folders.
+        function GetMediaFolders(params = {} as object)
+            req = APIRequest("/library/mediafolders", params)
+            return getJson(req)
+        end function
+
+        ' Reports that new movies have been added by an external source.
+        sub ReportMoviesAdded()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Reports that new movies have been added by an external source.
+        sub ReportMoviesUpdated()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Gets a list of physical paths from virtual folders.
+        function GetPhysicalPaths()
+            req = APIRequest("/library/physicalpaths")
+            return getJson(req)
+        end function
+
+        ' Starts a library scan.
+        function Refresh()
+            req = APIRequest("/library/refresh")
+            return postVoid(req)
+        end function
+
+        ' Reports that new episodes of a series have been added by an external source.
+        sub ReportTVSeriesAdded()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Reports that new episodes of a series have been added by an external source.
+        sub ReportTVSeriesUpdated()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Gets all virtual folders.
+        function GetVirtualFolders()
+            req = APIRequest("/library/virtualfolders")
+            return getJson(req)
+        end function
+
+        ' Adds a virtual folder.
+        function AddVirtualFolder(params as object, body = {} as object)
+            req = APIRequest("/library/virtualfolders", params)
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Removes a virtual folder.
+        function DeleteVirtualFolder(params as object)
+            req = APIRequest("/library/virtualfolders", params)
+            return deleteVoid(req)
+        end function
+
+        ' Update library options.
+        function UpdateOptions(body = {} as object)
+            req = APIRequest("/library/virtualfolders/libraryoptions")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Renames a virtual folder.
+        function RenameVirtualFolder(params as object)
+            req = APIRequest("/library/virtualfolders/name", params)
+            return postVoid(req)
+        end function
+
+        ' Add a media path to a library.
+        function AddPath(params as object, body = {} as object)
+            req = APIRequest("/library/virtualfolders/paths", params)
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Remove a media path.
+        function DeletePath(params as object)
+            req = APIRequest("/library/virtualfolders/paths", params)
+            return deleteVoid(req)
+        end function
+
+        ' Updates a media path.
+        function UpdatePath(body = {} as object)
+            req = APIRequest("/library/virtualfolders/paths/update")
+            return postVoid(req, FormatJson(body))
+        end function
+    end namespace
+
+    namespace livestreams
+        ' Opens a media source.
+        function Open(params = {} as object, body = {} as object)
+            req = APIRequest("/livestreams/open", params)
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Closes a media source.
+        function Close(params = {} as object)
+            req = APIRequest("/livestreams/close", params)
+            return postVoid(req)
+        end function
+    end namespace
+
+    namespace liveTV
+        ' Get channel mapping options
+        function GetChannelMappingOptions(params = {} as object)
+            req = APIRequest("/livetv/channelmappingoptions", params)
+            return getJson(req)
+        end function
+
+        ' Set channel mappings
+        function SetChannelMappings(body = {} as object)
+            req = APIRequest("livetv/channelmappings")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Gets available live tv channels
+        function GetChannels(params = {} as object)
+            req = APIRequest("/livetv/channels", params)
+            return getJson(req)
+        end function
+
+        ' Gets a live tv channel
+        function GetChannelByID(id as string, params = {} as object)
+            req = APIRequest(Substitute("/livetv/channels/{0}", id), params)
+            return getJson(req)
+        end function
+
+        ' Get guide info.
+        function GetGuideInfo()
+            req = APIRequest("/livetv/guideinfo")
+            return getJson(req)
+        end function
+
+        ' Gets available live tv services.
+        function GetInfo()
+            req = APIRequest("/livetv/info")
+            return getJson(req)
+        end function
+
+        ' Adds a listings provider
+        function AddListingProvider(params = {} as object, body = {} as object)
+            req = APIRequest("/livetv/listingproviders", params)
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Delete listing provider
+        function DeleteListingProvider(id as string)
+            req = APIRequest(Substitute("livetv/listingproviders", id))
+            return deleteVoid(req)
+        end function
+
+        ' Gets default listings provider info.
+        function GetDefaultListingProvider()
+            req = APIRequest("/livetv/listingproviders/default")
+            return getJson(req)
+        end function
+
+        'Gets available lineups.
+        function GetLineups(params = {} as object)
+            req = APIRequest("/livetv/listingproviders/lineups", params)
+            return getJson(req)
+        end function
+
+        ' Gets available countries.
+        function GetCountries()
+            req = APIRequest("/livetv/listingproviders/schedulesdirect/countries")
+            return getJson(req)
+        end function
+
+        ' Gets a live tv recording stream.
+        function GetRecordingStream(id as string)
+            return buildURL(Substitute("/livetv/listingproviders/{0}/stream", id))
+        end function
+
+        ' Gets a live tv channel stream.
+        function GetChannelStream(id as string, container as string)
+            return buildURL(Substitute("/livetv/livestreamfiles/{0}/stream.{1}", id, container))
+        end function
+
+        ' Gets available live tv epgs.
+        function GetPrograms(params = {} as object)
+            req = APIRequest("/livetv/programs", params)
+            return getJson(req)
+        end function
+
+        ' Gets available live tv epgs.
+        function PostPrograms(body = {} as object)
+            req = APIRequest("/livetv/programs")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Gets a live tv program.
+        function PostProgramByID(id as string, params = {} as object)
+            req = APIRequest(Substitute("/livetv/programs/{0}", id), params)
+            return getJson(req)
+        end function
+
+        ' Gets recommended live tv epgs.
+        function GetRecommendedPrograms(params = {} as object)
+            req = APIRequest("/livetv/programs/recommended", params)
+            return getJson(req)
+        end function
+
+        ' Gets live tv recordings.
+        function GetRecordings(params = {} as object)
+            req = APIRequest("/livetv/recordings", params)
+            return getJson(req)
+        end function
+
+        ' Gets a live tv recording.
+        function GetRecordingByID(id as string, params = {} as object)
+            req = APIRequest(Substitute("/livetv/recordings/{0}", id), params)
+            return getJson(req)
+        end function
+
+        ' Deletes a live tv recording.
+        function DeleteRecordingByID(id as string)
+            req = APIRequest(Substitute("/livetv/recordings/{0}", id))
+            return deleteVoid(req)
+        end function
+
+        ' Gets recording folders.
+        function GetRecordingsFolders(params = {} as object)
+            req = APIRequest("/livetv/recordings/folders", params)
+            return getJson(req)
+        end function
+
+        ' Gets live tv series timers.
+        function GetSeriesTimers(params = {} as object)
+            req = APIRequest("/livetv/seriestimers", params)
+            return getJson(req)
+        end function
+
+        ' Creates a live tv series timer.
+        function CreateSeriesTimer(body = {} as object)
+            req = APIRequest("/livetv/seriestimers")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Gets a live tv series timer.
+        function GetSeriesTimerByID(id as string)
+            req = APIRequest(Substitute("/livetv/seriestimers/{0}", id))
+            return getJson(req)
+        end function
+
+        ' Cancels a live tv series timer.
+        function DeleteSeriesTimer(id as string)
+            req = APIRequest(Substitute("/livetv/seriestimers/{0}", id))
+            return deleteVoid(req)
+        end function
+
+        ' Updates a live tv series timer.
+        function UpdateSeriesTimer(id as string, body = {} as object)
+            req = APIRequest(Substitute("/livetv/seriestimers/{0}", id))
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Gets the live tv timers.
+        function GetTimers(params = {} as object)
+            req = APIRequest("/livetv/timers", params)
+            return getJson(req)
+        end function
+
+        ' Creates a live tv timer.
+        function CreateTimer(body = {} as object)
+            req = APIRequest("/livetv/timers")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Gets a timer.
+        function GetTimerByID(id as string)
+            req = APIRequest(Substitute("/livetv/timers/{0}", id))
+            return getJson(req)
+        end function
+
+        ' Cancels a live tv timer.
+        function DeleteTimer(id as string)
+            req = APIRequest(Substitute("/livetv/timers/{0}", id))
+            return deleteVoid(req)
+        end function
+
+        ' Updates a live tv timer.
+        function UpdateTimer(id as string, body = {} as object)
+            req = APIRequest(Substitute("/livetv/timers/{0}", id))
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Gets the default values for a new timer.
+        function GetTimerDefaults()
+            req = APIRequest("/livetv/timers/defaults")
+            return getJson(req)
+        end function
+
+        ' Adds a tuner host.
+        function AddTunerHost(body = {} as object)
+            req = APIRequest("/livetv/tunerhosts")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Deletes a tuner host.
+        function DeleteTunerHost(params = {} as object)
+            req = APIRequest("/livetv/tunerhosts", params)
+            return deleteVoid(req)
+        end function
+
+        ' Get tuner host types.
+        function GetTunerHostTypes()
+            req = APIRequest("/livetv/tunerhosts/types")
+            return getJson(req)
+        end function
+
+        ' Resets a tv tuner.
+        function ResetTunerHost(id as string)
+            req = APIRequest(Substitute("/livetv/tuners/{0}/reset", id))
+            return postVoid(req)
+        end function
+
+        ' Discover tuners.
+        function GetTunersDiscover(params = {} as object)
+            req = APIRequest("/livetv/tuners/discover", params)
+            return getJson(req)
+        end function
+
+        ' Discvover tuners :D
+        function GetTunersDiscvover(params = {} as object)
+            req = APIRequest("/livetv/tuners/discvover", params)
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace localization
+        ' Gets known countries.
+        function GetCountries()
+            req = APIRequest("/localization/countries")
+            return getJson(req)
+        end function
+
+        ' Gets known cultures.
+        function GetCultures()
+            req = APIRequest("/localization/cultures")
+            return getJson(req)
+        end function
+
+        ' Gets localization options.
+        function GetOptions()
+            req = APIRequest("/localization/options")
+            return getJson(req)
+        end function
+
+        ' Gets known parental ratings.
+        function GetParentalRatings()
+            req = APIRequest("/localization/parentalratings")
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace movies
+        ' Gets similar items.
+        function GetSimilar(id as string, params = {} as object)
+            req = APIRequest(Substitute("/movies/{0}/similar", id), params)
+            return getJson(req)
+        end function
+
+        ' Gets movie recommendations.
+        ' Requires userid passed in params
+        function GetRecommendations(params = {} as object)
+            req = APIRequest("/movies/recommendations", params)
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace musicGenres
+        ' Get music genre image by name.
+        function GetImageURLByName(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+            return buildURL(Substitute("/musicgenres/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+        end function
+
+        ' Get music genre image by name.
+        function HeadImageURLByName(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+            req = APIRequest(Substitute("/musicgenres/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+            return headVoid(req)
+        end function
+
+        ' Creates an instant playlist based on a given genre.
+        function GetInstantMix(params = {} as object)
+            req = APIRequest("/musicgenres/instantmix", params)
+            return getJson(req)
+        end function
+
+        ' Gets a music genre, by name.
+        function GetByName(name as string, params = {} as object)
+            req = APIRequest(Substitute("/musicgenres/{0}", name), params)
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace notifications
+        ' Gets a user's notifications.
+        function Get(id as string)
+            req = APIRequest(Substitute("/notifications/{0}", id))
+            return getJson(req)
+        end function
+
+        ' Sets notifications as read.
+        function MarkRead(id as string)
+            req = APIRequest(Substitute("/notifications/{0}/read", id))
+            return postVoid(req)
+        end function
+
+        ' Gets a user's notification summary.
+        function GetSummary(id as string)
+            req = APIRequest(Substitute("/notifications/{0}/summary", id))
+            return getJson(req)
+        end function
+
+        ' Sets notifications as unread.
+        function MarkUnread(id as string)
+            req = APIRequest(Substitute("/notifications/{0}/unread", id))
+            return postVoid(req)
+        end function
+
+        ' Sends a notification to all admins.
+        function NotifyAdmins(body = {} as object)
+            req = APIRequest("/notifications/admin")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Gets notification services.
+        function GetServices()
+            req = APIRequest("/notifications/services")
+            return getJson(req)
+        end function
+
+        ' Gets notification types.
+        function GetTypes()
+            req = APIRequest("/notifications/types")
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace packages
+        ' Gets available packages.
+        function Get()
+            req = APIRequest("/packages")
+            return getJson(req)
+        end function
+
+        ' Gets a package by name or assembly GUID.
+        function GetByName(name as string, params = {} as object)
+            req = APIRequest(Substitute("/packages/{0}", name), params)
+            return getJson(req)
+        end function
+
+        ' Installs a package.
+        function Install(name as string, params = {} as object)
+            req = APIRequest(Substitute("/packages/installed/{0}", name), params)
+            return postVoid(req)
+        end function
+
+        ' Cancels a package installation.
+        function CancelInstall(id as string)
+            req = APIRequest(Substitute("/packages/installing/{0}", id))
+            return deleteVoid(req)
+        end function
+    end namespace
+
+    namespace persons
+        ' Get person image by name.
+        function GetImageURLByName(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+            return buildURL(Substitute("/persons/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+        end function
+
+        ' Get person image by name.
+        function HeadImageURLByName(name as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+            req = APIRequest(Substitute("/persons/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+            return headVoid(req)
+        end function
+
+        ' Gets all persons.
+        function Get(params = {} as object)
+            req = APIRequest("/persons", params)
+            return getJson(req)
+        end function
+
+        ' Get person by name.
+        function GetByName(name as string, params = {} as object)
+            req = APIRequest(Substitute("/persons/{0}", name), params)
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace playback
+        ' Tests the network with a request with the size of the bitrate.
+        function BitrateTest(params = {} as object)
+            req = APIRequest("/playback/bitratetest", params)
+            return getVoid(req)
+        end function
+    end namespace
+
+    namespace playlists
+        ' Creates an instant playlist based on a given playlist.
+        function GetInstantMix(id as string, params = {} as object)
+            req = APIRequest(Substitute("/playlists/{0}/instantmix", id), params)
+            return getJson(req)
+        end function
+
+        ' Creates a new playlist.
+        function Create(body = {} as object)
+            req = APIRequest("/playlists")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Adds items to a playlist.
+        function Add(id as string, params = {} as object)
+            req = APIRequest(Substitute("/playlists/{0}/items", id), params)
+            return postVoid(req)
+        end function
+
+        ' Removes items from a playlist.
+        function Remove(id as string, params = {} as object)
+            req = APIRequest(Substitute("/playlists/{0}/items", id), params)
+            return deleteVoid(req)
+        end function
+
+        ' Gets the original items of a playlist.
+        function GetItems(id as string, params = {} as object)
+            req = APIRequest(Substitute("/playlists/{0}/items", id), params)
+            return getJson(req)
+        end function
+
+        ' Moves a playlist item.
+        function Move(playlistid as string, itemid as string, newindex as integer)
+            req = APIRequest(Substitute("/playlists/{0}/items/{1}/move/{2}", playlistid, itemid, newindex))
+            return postVoid(req)
+        end function
+    end namespace
+
+    namespace plugins
+        ' Gets a list of currently installed plugins.
+        function Get()
+            req = APIRequest("/plugins")
+            return getJson(req)
+        end function
+
+        ' Uninstalls a plugin by version.
+        sub Uninstall()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Disable a plugin.
+        function Disable(id as string, version as string)
+            req = APIRequest(Substitute("/plugins/{0}/{1}/disable", id, version))
+            return postVoid(req)
+        end function
+
+        ' Enables a disabled plugin.
+        function Enable(id as string, version as string)
+            req = APIRequest(Substitute("/plugins/{0}/{1}/enable", id, version))
+            return postVoid(req)
+        end function
+
+        ' Gets a plugin's image.
+        function GetImage(id as string, version as string)
+            return buildURL(Substitute("/plugins/{0}/{1}/image", id, version))
+        end function
+
+        ' Gets plugin configuration.
+        function GetConfiguration(id as string)
+            req = APIRequest(Substitute("/plugins/{0}/configuration", id))
+            return getJson(req)
+        end function
+
+        ' Updates plugin configuration.
+        function UpdateConfiguration(id as string, body = {} as object)
+            req = APIRequest(Substitute("/plugins/{0}/configuration", id))
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Gets a plugin's manifest.
+        function GetManifest(id as string)
+            req = APIRequest(Substitute("/plugins/{0}/manifest", id))
+            return postJson(req)
+        end function
+    end namespace
+
+    namespace providers
+        ' Gets the remote subtitles.
+        function GetRemoteSubtitles(id as string)
+            req = APIRequest(Substitute("/providers/subtitles/subtitles/{0}", id))
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace quickConnect
+        ' Authorizes a pending quick connect request.
+        function Authorize(params = {} as object)
+            req = APIRequest("/quickconnect/authorize", params)
+            return postString(req)
+        end function
+
+        ' Attempts to retrieve authentication information.
+        function Connect()
+            req = APIRequest("/quickconnect/connect")
+            return getJson(req)
+        end function
+
+        ' Gets the current quick connect state.
+        function IsEnabled()
+            req = APIRequest("/quickconnect/enabled")
+            return getString(req)
+        end function
+
+        ' Initiate a new quick connect request.
+        function Initiate()
+            req = APIRequest("/quickconnect/initiate")
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace repositories
+        ' Gets all package repositories.
+        function Get()
+            req = APIRequest("/repositories")
+            return getJson(req)
+        end function
+
+        ' Sets the enabled and existing package repositories.
+        function Set(body = {} as object)
+            req = APIRequest("/repositories")
+            return postVoid(req, FormatJson(body))
+        end function
+    end namespace
+
+    namespace scheduledTasks
+        ' Get tasks.
+        function Get(params = {} as object)
+            req = APIRequest("/scheduledtasks", params)
+            return getJson(req)
+        end function
+
+        ' Get task by id.
+        function GetByID(id as string)
+            req = APIRequest(Substitute("/scheduledtasks/{0}", id))
+            return getJson(req)
+        end function
+
+        ' Update specified task triggers.
+        function UpdateTriggers(id as string, body = {} as object)
+            req = APIRequest(Substitute("/scheduledtasks/{0}/triggers", id))
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Start specified task.
+        function Start(id as string)
+            req = APIRequest(Substitute("/scheduledtasks/running/{0}", id))
+            return postVoid(req)
+        end function
+
+        ' Stop specified task.
+        function stop(id as string)
+            req = APIRequest(Substitute("/scheduledtasks/running/{0}", id))
+            return deleteVoid(req)
+        end function
+    end namespace
+
+    namespace search
+        ' Gets the search hint result.
+        function GetHints(params = {} as object)
+            req = APIRequest("/search/hints", params)
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace sessions
+        ' Reports playback has started within a session.
+        function Playing(body = {} as object)
+            req = APIRequest("/sessions/playing")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Pings a playback session.
+        function Ping(params = {} as object)
+            req = APIRequest("/sessions/playing/ping", params)
+            return postVoid(req)
+        end function
+
+        ' Reports playback progress within a session.
+        function PostProgress(body = {} as object)
+            req = APIRequest("/sessions/playing/progress")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Reports playback has stopped within a session.
+        function PostStopped(body = {} as object)
+            req = APIRequest("/sessions/playing/stopped")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Gets a list of sessions.
+        function Get(params = {} as object)
+            req = APIRequest("/sessions", params)
+            return getJson(req)
+        end function
+
+        ' Issues a full general command to a client.
+        function PostFullCommand(id as string, body = {} as object)
+            req = APIRequest(Substitute("/sessions/{0}/command", id))
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Issues a general command to a client.
+        function PostCommand(id as string, command as string)
+            req = APIRequest(Substitute("/sessions/{0}/command/{1}", id, command))
+            return postVoid(req)
+        end function
+
+        ' Issues a command to a client to display a message to the user.
+        function PostMessage(id as string, body = {} as object)
+            req = APIRequest(Substitute("/sessions/{0}/message", id))
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Instructs a session to play an item.
+        function Play(id as string, params = {} as object)
+            req = APIRequest(Substitute("/sessions/{0}/playing", id), params)
+            return postVoid(req)
+        end function
+
+        ' Issues a playstate command to a client.
+        function PlayCommand(id as string, command as string)
+            req = APIRequest(Substitute("/sessions/{0}/playing/{1}", id, command))
+            return postVoid(req)
+        end function
+
+        ' Issues a system command to a client.
+        function SystemCommand(id as string, command as string)
+            req = APIRequest(Substitute("/sessions/{0}/system/{1}", id, command))
+            return postVoid(req)
+        end function
+
+        ' Adds an additional user to a session.
+        function AddUser(id as string, userid as string)
+            req = APIRequest(Substitute("/sessions/{0}/user/{1}", id, userid))
+            return postVoid(req)
+        end function
+
+        ' Removes an additional user from a session.
+        function RemoveUser(id as string, userid as string)
+            req = APIRequest(Substitute("/sessions/{0}/user/{1}", id, userid))
+            return deleteVoid(req)
+        end function
+
+        ' Instructs a session to browse to an item or view.
+        function BrowseTo(id as string, params = {} as object)
+            req = APIRequest(Substitute("/sessions/{0}/viewing", id), params)
+            return postVoid(req)
+        end function
+
+        ' Updates capabilities for a device.
+        function PostCapabilities(params = {} as object)
+            req = APIRequest("/sessions/capabilities", params)
+            return postVoid(req)
+        end function
+
+        ' Updates capabilities for a device.
+        function PostFullCapabilities(params = {} as object, body = {} as object)
+            req = APIRequest("/sessions/capabilities/full", params)
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Reports that a session has ended.
+        function Logout()
+            req = APIRequest("/sessions/logout")
+            return postVoid(req)
+        end function
+
+        ' Reports that a session is viewing an item.
+        function PostViewing(params = {} as object)
+            req = APIRequest("/sessions/viewing", params)
+            return postVoid(req)
+        end function
+    end namespace
+
+    namespace shows
+        ' Gets similar items.
+        function GetSimilar(id as string, params = {} as object)
+            req = APIRequest(Substitute("/shows/{0}/similar", id), params)
+            return getJson(req)
+        end function
+
+        ' Gets episodes for a tv season.
+        function GetEpisodes(id as string, params = {} as object)
+            req = APIRequest(Substitute("/shows/{0}/episodes", id), params)
+            return getJson(req)
+        end function
+
+        ' Gets seasons for a tv series.
+        function GetSeasons(id as string, params = {} as object)
+            req = APIRequest(Substitute("/shows/{0}/seasons", id), params)
+            return getJson(req)
+        end function
+
+        ' Gets a list of next up episodes.
+        function GetNextUp(params = {} as object)
+            req = APIRequest("/shows/nextup", params)
+            return getJson(req)
+        end function
+
+        ' Gets a list of upcoming episodes.
+        function GetUpcoming(params = {} as object)
+            req = APIRequest("/shows/upcoming", params)
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace songs
+        ' Creates an instant playlist based on a given song.
+        function GetInstantMix(id as string, params = {} as object)
+            req = APIRequest(Substitute("/songs/{0}/instantmix", id), params)
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace startup
+        ' Completes the startup wizard.
+        function Complete()
+            req = APIRequest("/startup/complete")
+            return postVoid(req)
+        end function
+
+        ' Gets the initial startup wizard configuration.
+        function GetConfiguration()
+            req = APIRequest("/startup/configuration")
+            return getJson(req)
+        end function
+
+        ' Sets the initial startup wizard configuration.
+        function PostConfiguration(body = {} as object)
+            req = APIRequest("/startup/configuration")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Gets the first user.
+        function GetFirstUser()
+            req = APIRequest("/startup/firstuser")
+            return getJson(req)
+        end function
+
+        ' Sets remote access and UPnP.
+        function PostRemoteAccess(body = {} as object)
+            req = APIRequest("/startup/remoteaccess")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Gets the first user.
+        function GetUser()
+            req = APIRequest("/startup/user")
+            return getJson(req)
+        end function
+
+        ' Sets the user name and password.
+        function PostUser(body = {} as object)
+            req = APIRequest("/startup/user")
+            return postVoid(req, FormatJson(body))
+        end function
+    end namespace
+
+    namespace studios
+        ' Gets all studios from a given item, folder, or the entire library.
+        function Get(params = {} as object)
+            req = APIRequest("/studios", params)
+            return getJson(req)
+        end function
+
+        ' Gets a studio by name.
+        function GetByName(name as string, params = {} as object)
+            req = APIRequest(Substitute("/studios/{0}", name), params)
+            return getJson(req)
+        end function
+
+        ' Get studio image by name.
+        function GetImageURLByName(name as string, imagetype = "thumb" as string, imageindex = 0 as integer, params = {} as object)
+            return buildURL(Substitute("/studios/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+        end function
+
+        ' Get studio image by name.
+        function HeadImageURLByName(name as string, imagetype = "thumb" as string, imageindex = 0 as integer, params = {} as object)
+            req = APIRequest(Substitute("/studios/{0}/images/{1}/{2}", name, imagetype, imageindex.toStr()), params)
+            return headVoid(req)
+        end function
+    end namespace
+
+    namespace syncPlay
+        ' Notify SyncPlay group that member is buffering.
+        function Buffering(body = {} as object)
+            req = APIRequest("/syncplay/buffering")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Join an existing SyncPlay group.
+        function Join(body = {} as object)
+            req = APIRequest("/syncplay/join")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Leave the joined SyncPlay group.
+        function Leave(body = {} as object)
+            req = APIRequest("/syncplay/leave")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Gets all SyncPlay groups.
+        function GetList()
+            req = APIRequest("/syncplay/list")
+            return getJson(req)
+        end function
+
+        ' Request to move an item in the playlist in SyncPlay group.
+        function MovePlaylistItem(body = {} as object)
+            req = APIRequest("/syncplay/moveplaylistitem")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Create a new SyncPlay group.
+        function New(body = {} as object)
+            req = APIRequest("/syncplay/new")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Request next item in SyncPlay group.
+        function NextItem(body = {} as object)
+            req = APIRequest("/syncplay/nextitem")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Request next item in SyncPlay group.
+        function Pause()
+            req = APIRequest("/syncplay/pause")
+            return postVoid(req)
+        end function
+
+        ' Update session ping.
+        function Ping(body = {} as object)
+            req = APIRequest("/syncplay/ping")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Request previous item in SyncPlay group.
+        function Previous(body = {} as object)
+            req = APIRequest("/syncplay/previousitem")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Request to queue items to the playlist of a SyncPlay group.
+        function Queue(body = {} as object)
+            req = APIRequest("/syncplay/queue")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Notify SyncPlay group that member is ready for playback.
+        function Ready(body = {} as object)
+            req = APIRequest("/syncplay/ready")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Request to remove items from the playlist in SyncPlay group.
+        function RemoveFromPlaylist(body = {} as object)
+            req = APIRequest("/syncplay/removefromplaylist")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Request seek in SyncPlay group.
+        function Seek(body = {} as object)
+            req = APIRequest("/syncplay/seek")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Request SyncPlay group to ignore member during group-wait.
+        function SetIgnoreWait(body = {} as object)
+            req = APIRequest("/syncplay/setignorewait")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Request to set new playlist in SyncPlay group.
+        function SetNewQueue(body = {} as object)
+            req = APIRequest("/syncplay/setnewqueue")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Request to change playlist item in SyncPlay group.
+        function SetPlaylistItem(body = {} as object)
+            req = APIRequest("/syncplay/setplaylistitem")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Request to set repeat mode in SyncPlay group.
+        function SetRepeatMode(body = {} as object)
+            req = APIRequest("/syncplay/setrepeatmode")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Request to set shuffle mode in SyncPlay group.
+        function SetShuffleMode(body = {} as object)
+            req = APIRequest("/syncplay/setshufflemode")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Request stop in SyncPlay group.
+        function stop()
+            req = APIRequest("/syncplay/stop")
+            return postVoid(req)
+        end function
+
+        ' Request unpause in SyncPlay group.
+        function Unpause()
+            req = APIRequest("/syncplay/unpause")
+            return postVoid(req)
+        end function
+    end namespace
+
+    namespace system
+        ' Gets activity log entries.
+        function GetActivityLogEntries(params = {} as object)
+            req = APIRequest("/system/activitylog/entries", params)
+            return getJson(req)
+        end function
+
+        ' Gets application configuration.
+        function GetConfiguration()
+            req = APIRequest("/system/configuration")
+            return getJson(req)
+        end function
+
+        ' Updates application configuration.
+        function UpdateConfiguration(body = {} as object)
+            req = APIRequest("/system/configuration")
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Gets a named configuration.
+        function GetConfigurationByName(name as string)
+            req = APIRequest(Substitute("/system/configuration/{0}", name))
+            return getJson(req)
+        end function
+
+        ' Updates named configuration.
+        sub UpdateConfigurationByName()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Gets a default MetadataOptions object.
+        function GetDefaultMetaDataOptions()
+            req = APIRequest("/system/configuration/metadataoptions/default")
+            return getJson(req)
+        end function
+
+        ' Updates the path to the media encoder.
+        sub UpdateMediaEncoderPath()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Gets information about the request endpoint.
+        function GetEndpoint()
+            req = APIRequest("/system/endpoint")
+            return getJson(req)
+        end function
+
+        ' Gets information about the server.
+        function GetInfo()
+            req = APIRequest("/system/info")
+            return getJson(req)
+        end function
+
+        ' Gets public information about the server.
+        function GetPublicInfo()
+            req = APIRequest("/system/info/public")
+            return getJson(req)
+        end function
+
+        ' Gets a list of available server log files.
+        function GetLogs()
+            req = APIRequest("/system/logs")
+            return getJson(req)
+        end function
+
+        ' Gets a log file.
+        function GetLog(params = {} as object)
+            req = APIRequest("/system/logs/log", params)
+            return getString(req)
+        end function
+
+        ' Pings the system.
+        function GetPing()
+            req = APIRequest("/system/ping")
+            return getString(req)
+        end function
+
+        ' Pings the system.
+        function PostPing()
+            req = APIRequest("/system/ping")
+            return postString(req)
+        end function
+
+        ' Restarts the application.
+        function Restart()
+            req = APIRequest("/system/restart")
+            return postVoid(req)
+        end function
+
+        ' Shuts down the application.
+        function Shutdown()
+            req = APIRequest("/system/shutdown")
+            return postVoid(req)
+        end function
+    end namespace
+
+    namespace tmdb
+        ' Gets the TMDb image configuration options.
+        function GetClientConfiguration()
+            req = APIRequest("/tmdb/clientconfiguration")
+            return getJson(req)
+        end function
+
+    end namespace
+
+    namespace trailers
+        ' Gets similar items.
+        function GetSimilar(id as string, params = {} as object)
+            req = APIRequest(Substitute("/trailers/{0}/similar", id), params)
+            return getJson(req)
+        end function
+
+        ' Finds movies and trailers similar to a given trailer.
+        function Get(params = {} as object)
+            req = APIRequest("/trailers/", params)
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace users
+        ' Gets a list of users.
+        ' If id is passed, gets a user by Id.
+        function Get(id = "")
+            url = "/users"
+            if id <> ""
+                url = url + "/" + id
+            end if
+            req = APIRequest(url)
+            return getJson(req)
+        end function
+
+        ' Gets the user based on auth token.
+        function GetMe()
+            req = APIRequest("/users/me")
+            return getJson(req)
+        end function
+
+        ' Gets a list of publicly visible users for display on a login screen.
+        function GetPublic()
+            resp = APIRequest("/users/public")
+            return getJson(resp)
+        end function
+
+        ' Creates a user.
+        function Create(body = {} as object)
+            req = APIRequest("/users/new")
+            return postJson(req, FormatJson(body))
+        end function
+
+        ' Deletes a user.
+        function Delete(id)
+            req = APIRequest(Substitute("/users/{0}", id))
+            return deleteVoid(req)
+        end function
+
+        ' Updates a user.
+        function Update(id, body = {} as object)
+            req = APIRequest(Substitute("/users/{0}", id))
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Updates a user configuration.
+        function UpdateConfiguration(id, body = {} as object)
+            req = APIRequest(Substitute("/users/{0}/configuration", id))
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Updates a user's easy password.
+        function UpdateEasyPassword(id, body = {} as object)
+            req = APIRequest(Substitute("/users/{0}/easypassword", id))
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Updates a user's password.
+        function UpdatePassword(id, body = {} as object)
+            req = APIRequest(Substitute("/users/{0}/password", id))
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Updates a user's policy.
+        function UpdatePolicy(id, body = {} as object)
+            req = APIRequest(Substitute("/users/{0}/policy", id))
+            return postVoid(req, FormatJson(body))
+        end function
+
+        ' Authenticates a user.
+        function AuthenticateByName(body = {} as object)
+            req = APIRequest("users/authenticatebyname")
+            json = postJson(req, FormatJson(body))
+            return json
+        end function
+
+        ' Authenticates a user with quick connect.
+        sub AuthenticateWithQuickConnect()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Initiates the forgot password process for a local user.
+        function ForgotPassword(body = {} as object)
+            req = APIRequest("users/forgotpassword")
+            json = postJson(req, FormatJson(body))
+            return json
+        end function
+
+        ' Redeems a forgot password pin.
+        function ForgotPasswordPin(body = {} as object)
+            req = APIRequest("users/forgotpassword/pin")
+            json = postJson(req, FormatJson(body))
+            return json
+        end function
+
+        ' Sets the user image.
+        sub UpdateImage()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Delete the user's image.
+        sub DeleteImage()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Get user profile image.
+        function GetImageURL(id as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+            return buildURL(Substitute("/users/{0}/images/{1}/{2}", id, imagetype, imageindex.toStr()), params)
+        end function
+
+        ' Get music genre image by name.
+        function HeadImageURL(id as string, imagetype = "primary" as string, imageindex = 0 as integer, params = {} as object)
+            req = APIRequest(Substitute("/users/{0}/images/{1}/{2}", id, imagetype, imageindex.toStr()), params)
+            return headVoid(req)
+        end function
+
+        ' Gets items based on a query.
+        function GetItemsByQuery(id as string, params = {} as object)
+            req = APIRequest(Substitute("/users/{0}/items", id), params)
+            return getJson(req)
+        end function
+
+        ' Gets items based on a query.
+        function GetResumeItemsByQuery(id as string, params = {} as object)
+            req = APIRequest(Substitute("/users/{0}/items/resume", id), params)
+            return getJson(req)
+        end function
+
+        ' Gets suggestions.
+        function GetSuggestions(id as string, params = {} as object)
+            resp = APIRequest(Substitute("/users/{0}/suggestions", id), params)
+            return getJson(resp)
+        end function
+
+        ' Get user view grouping options.
+        function GetGroupingOptions(id as string)
+            resp = APIRequest(Substitute("/users/{0}/groupingoptions", id))
+            return getJson(resp)
+        end function
+
+        ' Get user views.
+        function GetViews(id as string, params = {} as object)
+            resp = APIRequest(Substitute("/users/{0}/views", id), params)
+            return getJson(resp)
+        end function
+
+        ' Marks an item as a favorite.
+        function MarkFavorite(userid as string, itemid as string)
+            req = APIRequest(Substitute("users/{0}/favoriteitems/{1}", userid, itemid))
+            json = postJson(req)
+            return json
+        end function
+
+        ' Unmarks item as a favorite.
+        function UnmarkFavorite(userid as string, itemid as string)
+            req = APIRequest(Substitute("users/{0}/favoriteitems/{1}", userid, itemid))
+            json = deleteVoid(req)
+            return json
+        end function
+
+        ' Gets an item from a user's library.
+        function GetItem(userid as string, itemid as string)
+            resp = APIRequest(Substitute("/users/{0}/items/{1}", userid, itemid))
+            return getJson(resp)
+        end function
+
+        ' Gets intros to play before the main media item plays.
+        function GetIntros(userid as string, itemid as string)
+            resp = APIRequest(Substitute("/users/{0}/items/{1}/intros", userid, itemid))
+            return getJson(resp)
+        end function
+
+        ' Gets local trailers for an item.
+        function GetLocalTrailers(userid as string, itemid as string)
+            resp = APIRequest(Substitute("/users/{0}/items/{1}/localtrailers", userid, itemid))
+            return getJson(resp)
+        end function
+
+        ' Deletes a user's saved personal rating for an item.
+        function DeleteRating(userid as string, itemid as string)
+            req = APIRequest(Substitute("users/{0}/items/{1}/rating", userid, itemid))
+            json = deleteVoid(req)
+            return json
+        end function
+
+        ' Updates a user's rating for an item.
+        function UpdateRating(userid as string, itemid as string, params = {} as object)
+            req = APIRequest(Substitute("users/{0}/items/{1}/rating", userid, itemid), params)
+            json = postJson(req)
+            return json
+        end function
+
+        ' Gets special features for an item.
+        function GetSpecialFeatures(userid as string, itemid as string)
+            resp = APIRequest(Substitute("/users/{0}/items/{1}/specialfeatures", userid, itemid))
+            return getJson(resp)
+        end function
+
+        ' Gets latest media.
+        function GetLatestMedia(userid as string, params = {} as object)
+            resp = APIRequest(Substitute("/users/{0}/items/latest", userid), params)
+            return getJson(resp)
+        end function
+
+        ' Gets the root folder from a user's library.
+        function GetRoot(userid as string)
+            resp = APIRequest(Substitute("/users/{0}/items/root", userid))
+            return getJson(resp)
+        end function
+
+        ' Marks an item as played for user.
+        function MarkPlayed(userid as string, itemid as string, params = {} as object)
+            req = APIRequest(Substitute("users/{0}/playeditems/{1}", userid, itemid), params)
+            return postJson(req)
+        end function
+
+        ' Marks an item as unplayed for user.
+        function UnmarkPlayed(userid as string, itemid as string)
+            req = APIRequest(Substitute("users/{0}/playeditems/{1}", userid, itemid))
+            return deleteVoid(req)
+        end function
+
+        ' Reports that a user has begun playing an item.
+        function MarkPlaying(userid as string, itemid as string, params = {} as object)
+            req = APIRequest(Substitute("users/{0}/playingitems/{1}", userid, itemid), params)
+            return postJson(req)
+        end function
+
+        ' Reports that a user has stopped playing an item.
+        function MarkStoppedPlaying(userid as string, itemid as string, params = {} as object)
+            req = APIRequest(Substitute("users/{0}/playingitems/{1}", userid, itemid), params)
+            return deleteVoid(req)
+        end function
+
+        ' Reports a user's playback progress.
+        function ReportPlayProgress(userid as string, itemid as string, params = {} as object)
+            req = APIRequest(Substitute("users/{0}/playingitems/{1}/progress", userid, itemid), params)
+            return postJson(req)
+        end function
+    end namespace
+
+    namespace videos
+        ' Gets additional parts for a video.
+        function GetAdditionalParts(id as string, params = {} as object)
+            req = APIRequest(Substitute("/videos/{0}/additionalparts", id), params)
+            return getJson(req)
+        end function
+
+        ' Removes alternate video sources.
+        sub DeleteAdditionalParts()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Gets a video stream.
+        function GetStreamURL(id as string, params = {} as object)
+            return buildURL(Substitute("/videos/{0}/stream", id), params)
+        end function
+
+        ' Gets a video stream.
+        function HeadStreamURL(id as string, params = {} as object)
+            req = APIRequest(Substitute("videos/{0}/stream", id), params)
+            return headVoid(req)
+        end function
+
+        ' Gets an video stream.
+        function GetStreamURLWithContainer(id as string, container as string, params = {} as object)
+            return buildURL(Substitute("videos/{0}/stream.{1}", id, container), params)
+        end function
+
+        ' Gets an video stream.
+        function HeadStreamURLWithContainer(id as string, container as string, params = {} as object)
+            req = APIRequest(Substitute("videos/{0}/stream.{1}", id, container), params)
+            return headVoid(req)
+        end function
+
+        ' Merges videos into a single record.
+        function MergeVersions(params = {} as object)
+            req = APIRequest("videos/mergeversions", params)
+            return postVoid(req)
+        end function
+
+        ' Get video attachment.
+        sub GetAttachments()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Gets an HLS subtitle playlist.
+        function GetHLSSubtitlePlaylistURL(id as string, streamindex as integer, mediasourceid as string, params = {} as object)
+            return buildURL(Substitute("/videos/{0}/{1}/subtitles/{2}/subtitles.m3u8", id, streamindex, mediasourceid), params)
+        end function
+
+        ' Upload an external subtitle file.
+        sub UploadSubtitle()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Deletes an external subtitle file.
+        sub DeleteSubtitle()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Gets subtitles in a specified format.
+        function GetSubtitlesWithStartPosition(routeitemid as string, routemediasourceid as string, routeindex as integer, routestartpositionticks as integer, routeformat as string, params = {} as object)
+            ' We maxed out params for substitute() so we must manually add the routeformat value
+            return buildURL(Substitute("/videos/{0}/{1}/subtitles/{2}/{3}/stream." + routeformat, routeitemid, routemediasourceid, routeindex, routestartpositionticks), params)
+        end function
+
+        ' Gets subtitles in a specified format.
+        function GetSubtitles(routeitemid as string, routemediasourceid as string, routeindex as integer, routestartpositionticks as integer, routeformat as string, params = {} as object)
+            ' We maxed out params for substitute() so we must manually add the routeformat value
+            return buildURL(Substitute("/videos/{0}/{1}/subtitles/{2}/{3}/stream." + routeformat, routeitemid, routemediasourceid, routeindex, routestartpositionticks), params)
+        end function
+    end namespace
+
+    namespace web
+        ' Gets a dashboard configuration page.
+        sub GetConfigurationPage()
+            throw "System.NotImplementedException: The function is not implemented."
+        end sub
+
+        ' Gets the configuration pages.
+        function GetConfigurationPages()
+            req = APIRequest("/web/configurationpages")
+            return getJson(req)
+        end function
+    end namespace
+
+    namespace years
+        ' Gets years
+        function Get(params = {} as object)
+            req = APIRequest("/years", params)
+            return getJson(req)
+        end function
+
+        ' Gets a year.
+        function GetYear(year as string, params = {} as object)
+            req = APIRequest(Substitute("/years/{0}", year), params)
+            return getJson(req)
+        end function
+    end namespace
+end namespace

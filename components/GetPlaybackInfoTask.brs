@@ -2,7 +2,7 @@ import "pkg:/source/utils/config.brs"
 import "pkg:/source/utils/misc.brs"
 import "pkg:/source/utils/deviceCapabilities.brs"
 import "pkg:/source/api/baserequest.brs"
-import "pkg:/source/roku_modules/api/api.brs"
+import "pkg:/source/api/sdk.bs"
 
 sub init()
     m.top.functionName = "getPlaybackInfoTask"
@@ -35,7 +35,7 @@ end function
 ' Returns an array of playback info to be displayed during playback.
 ' In the future, with a custom playback info view, we can return an associated array.
 sub getPlaybackInfoTask()
-    sessions = api_API().sessions.get()
+    sessions = api.sessions.Get()
 
     m.playbackInfo = ItemPostPlaybackInfo(m.top.videoID)
 

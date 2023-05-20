@@ -97,6 +97,39 @@ function postVoid(req, data = "" as string) as boolean
     return false
 end function
 
+function headVoid(req) as boolean
+    req.setMessagePort(CreateObject("roMessagePort"))
+    req.AddHeader("Content-Type", "application/json")
+    req.AsyncHead()
+    resp = wait(30000, req.GetMessagePort())
+    if type(resp) <> "roUrlEvent"
+        return false
+    end if
+
+    if resp.GetResponseCode() = 200
+        return true
+    end if
+
+    return false
+end function
+
+function getVoid(req) as boolean
+    req.setMessagePort(CreateObject("roMessagePort"))
+    req.AddHeader("Content-Type", "application/json")
+    req.AsyncGetToString()
+    resp = wait(30000, req.GetMessagePort())
+
+    if type(resp) <> "roUrlEvent"
+        return false
+    end if
+
+    if resp.GetResponseCode() = 200
+        return true
+    end if
+
+    return false
+end function
+
 function postJson(req, data = "" as string)
     req.setMessagePort(CreateObject("roMessagePort"))
     req.AddHeader("Content-Type", "application/json")
@@ -137,6 +170,23 @@ function get_url()
         end if
     end if
     return serverURL
+end function
+
+function getString(req)
+    data = req.GetToString()
+    return data
+end function
+
+function postString(req, data = "" as string)
+    req.setMessagePort(CreateObject("roMessagePort"))
+    req.AddHeader("Content-Type", "application/json")
+    req.AsyncPostFromString(data)
+    resp = wait(30000, req.GetMessagePort())
+    if type(resp) <> "roUrlEvent"
+        return invalid
+    end if
+
+    return resp.getString()
 end function
 
 function authorize_request(request)

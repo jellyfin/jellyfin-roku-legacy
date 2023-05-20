@@ -1,6 +1,5 @@
 import "pkg:/source/utils/misc.brs"
 import "pkg:/source/utils/config.brs"
-import "pkg:/source/roku_modules/api/api.brs"
 
 sub init()
     ' Hide the overhang on init to prevent showing 2 clocks

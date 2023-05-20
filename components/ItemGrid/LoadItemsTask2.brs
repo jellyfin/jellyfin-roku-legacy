@@ -1,11 +1,11 @@
 import "pkg:/source/api/Items.brs"
-import "pkg:/source/roku_modules/api/api.brs"
 import "pkg:/source/api/baserequest.brs"
 import "pkg:/source/utils/config.brs"
 import "pkg:/source/utils/misc.brs"
 import "pkg:/source/api/Image.brs"
 import "pkg:/source/utils/deviceCapabilities.brs"
 import "pkg:/source/roku_modules/log/LogMixin.brs"
+import "pkg:/source/api/sdk.bs"
 
 sub init()
     m.log = log.Logger("LoadItemsTask2")
@@ -31,9 +31,9 @@ sub loadItems()
     end if
 
     if m.top.ItemType = "LogoImage"
-        logoImageExists = api_API().items.headimageurlbyname(m.top.itemId, "logo")
+        logoImageExists = api.items.HeadImageURLByName(m.top.itemId, "logo")
         if logoImageExists
-            m.top.content = [api_API().items.getimageurl(m.top.itemId, "logo", 0, { "maxHeight": 500, "maxWidth": 500, "quality": "90" })]
+            m.top.content = [api.items.GetImageURL(m.top.itemId, "logo", 0, { "maxHeight": 500, "maxWidth": 500, "quality": "90" })]
         else
             m.top.content = []
         end if
@@ -168,7 +168,7 @@ sub loadItems()
                 tmp = CreateObject("roSGNode", "ContentNode")
                 tmp.title = item.name
 
-                genreData = api_API().users.getitemsbyquery(m.global.session.user.id, {
+                genreData = api.users.GetItemsByQuery(m.global.session.user.id, {
                     SortBy: "Random",
                     SortOrder: "Ascending",
                     IncludeItemTypes: m.top.itemType,
@@ -192,7 +192,7 @@ sub loadItems()
                     row.type = "Folder"
 
                     if LCase(m.top.itemType) = "movie"
-                        genreItemImage = api_API().items.getimageurl(item.id)
+                        genreItemImage = api.items.GetImageURL(item.id)
                     else
                         genreItemImage = invalid
                         row.posterURL = invalid
@@ -210,7 +210,7 @@ sub loadItems()
                         row = tmp.createChild("SeriesData")
                     end if
 
-                    genreItemImage = api_API().items.getimageurl(genreItem.id)
+                    genreItemImage = api.items.GetImageURL(genreItem.id)
                     row.title = genreItem.name
                     row.FHDPOSTERURL = genreItemImage
                     row.HDPOSTERURL = genreItemImage
@@ -225,7 +225,7 @@ sub loadItems()
             else if item.Type = "MusicAlbum"
                 tmp = CreateObject("roSGNode", "MusicAlbumData")
                 tmp.type = "MusicAlbum"
-                if api_API().items.headimageurlbyname(item.id, "primary")
+                if api.items.HeadImageURLByName(item.id, "primary")
                     tmp.posterURL = ImageURL(item.id, "Primary")
                 else
                     tmp.posterURL = ImageURL(item.id, "backdrop")
@@ -235,14 +235,14 @@ sub loadItems()
             else if item.Type = "Audio"
                 tmp = CreateObject("roSGNode", "MusicSongData")
                 tmp.type = "Audio"
-                tmp.image = api_API().items.getimageurl(item.id, "primary", 0, { "maxHeight": 280, "maxWidth": 280, "quality": "90" })
+                tmp.image = api.items.GetImageURL(item.id, "primary", 0, { "maxHeight": 280, "maxWidth": 280, "quality": "90" })
             else if item.Type = "MusicGenre"
                 tmp = CreateObject("roSGNode", "FolderData")
                 tmp.title = item.name
                 tmp.parentFolder = m.top.itemId
                 tmp.json = item
                 tmp.type = "Folder"
-                tmp.posterUrl = api_API().items.getimageurl(item.id, "primary", 0, { "maxHeight": 280, "maxWidth": 280, "quality": "90" })
+                tmp.posterUrl = api.items.GetImageURL(item.id, "primary", 0, { "maxHeight": 280, "maxWidth": 280, "quality": "90" })
 
             else
                 m.log.warn("Unknown Type", item.Type)
