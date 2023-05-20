@@ -8,6 +8,7 @@ sub init()
     m.favoriteMenu = m.top.findNode("favoriteMenu")
     m.selectedFavoriteItem = m.top.findNode("selectedFavoriteItem")
 
+    m.startingFilterIndex = 0
     m.selectedSortIndex = 0
     m.selectedItem = 1
 
@@ -148,6 +149,7 @@ sub optionsSet()
         end for
         m.menus[2].content = filterContent
         m.menus[2].checkedItem = m.selectedFilterIndex
+        m.startingFilterIndex = m.selectedFilterIndex
     else
         filterContent = CreateObject("roSGNode", "ContentNode")
         entry = filterContent.CreateChild("ContentNode")
@@ -301,6 +303,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             if m.selectedItem = 2
                 ' If filter has no options, select it
                 if m.filterMenu.content.getChild(m.filterMenu.itemFocused).getChildCount() = 0
+                    m.startingFilterIndex = m.menus[2].itemSelected
                     m.menus[2].checkedItem = m.menus[2].itemSelected
                     m.selectedFilterIndex = m.menus[2].itemSelected
                     m.top.filter = m.filterNames[m.selectedFilterIndex]
@@ -317,13 +320,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
         ' User pressed OK from inside the filter's options
         if m.filterOptions.isInFocusChain()
-            selectedOptions = []
-            for i = 0 to m.filterOptions.checkedState.count() - 1
-                if m.filterOptions.checkedState[i]
-                    selectedValue = toString(m.filterOptions.content.getChild(i).title)
-                    selectedOptions.push(selectedValue)
-                end if
-            end for
+            selectedOptions = getSelectedFilterOptions()
 
             if selectedOptions.Count() > 0
                 m.menus[2].checkedItem = m.menus[2].itemFocused
@@ -334,9 +331,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
                 newFilter[m.top.filter] = selectedOptions.join(m.filterMenu.content.getChild(m.filterMenu.itemFocused).delimiter)
                 m.top.filterOptions = newFilter
             else
-                m.menus[2].checkedItem = 0
-                m.selectedFilterIndex = 0
-                m.top.filter = m.filterNames[0]
+                m.menus[2].checkedItem = m.startingFilterIndex
+                m.selectedFilterIndex = m.startingFilterIndex
+                m.top.filter = m.filterNames[m.startingFilterIndex]
                 m.top.filterOptions = {}
             end if
 
@@ -344,6 +341,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
             return true
         end if
+
         return true
     else if key = "back" or key = "up"
         if key = "back" then hideChecklist()
@@ -364,3 +362,15 @@ function onKeyEvent(key as string, press as boolean) as boolean
     return false
 
 end function
+
+function getSelectedFilterOptions()
+    selectedOptions = []
+    for i = 0 to m.filterOptions.checkedState.count() - 1
+        if m.filterOptions.checkedState[i]
+            selectedValue = toString(m.filterOptions.content.getChild(i).title)
+            selectedOptions.push(selectedValue)
+        end if
+    end for
+    return selectedOptions
+end function
+
