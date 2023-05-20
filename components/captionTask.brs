@@ -1,3 +1,6 @@
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/api/baserequest.brs"
+
 sub init()
     m.top.observeField("url", "fetchCaption")
     m.top.currentCaption = []
@@ -17,24 +20,23 @@ sub init()
     m.textColorDict = { "Default": &HFFFFFFFF, "White": &HFFFFFFFF, "Black": &H000000FF, "Red": &HFF0000FF, "Green": &H008000FF, "Blue": &H0000FFFF, "Yellow": &HFFFF00FF, "Magenta": &HFF00FFFF, "Cyan": &H00FFFFFF }
     m.bgColorDict = { "Default": &H000000FF, "White": &HFFFFFFFF, "Black": &H000000FF, "Red": &HFF0000FF, "Green": &H008000FF, "Blue": &H0000FFFF, "Yellow": &HFFFF00FF, "Magenta": &HFF00FFFF, "Cyan": &H00FFFFFF }
 
-    m.settings = CreateObject("roDeviceInfo")
-    m.fontSize = m.fontSizeDict[m.settings.GetCaptionsOption("Text/Size")]
-    m.textColor = m.textColorDict[m.settings.GetCaptionsOption("Text/Color")]
-    m.textOpac = m.percentageDict[m.settings.GetCaptionsOption("Text/Opacity")]
-    m.bgColor = m.bgColorDict[m.settings.GetCaptionsOption("Background/Color")]
-    m.bgOpac = m.percentageDict[m.settings.GetCaptionsOption("Background/Opacity")]
+    deviceInfo = CreateObject("roDeviceInfo")
+    m.fontSize = m.fontSizeDict[deviceInfo.GetCaptionsOption("Text/Size")]
+    m.textColor = m.textColorDict[deviceInfo.GetCaptionsOption("Text/Color")]
+    m.textOpac = m.percentageDict[deviceInfo.GetCaptionsOption("Text/Opacity")]
+    m.bgColor = m.bgColorDict[deviceInfo.GetCaptionsOption("Background/Color")]
+    m.bgOpac = m.percentageDict[deviceInfo.GetCaptionsOption("Background/Opacity")]
     setFont()
 end sub
 
 sub setFont()
     fs = CreateObject("roFileSystem")
-    fontlist = fs.Find("tmp:/", "font")
-    if fontlist.count() > 0
-        m.font.uri = "tmp:/" + fontlist[0]
+
+    if fs.Exists("tmp:/font")
+        m.font.uri = "tmp:/font"
         m.font.size = m.fontSize
     else
-        reg = CreateObject("roFontRegistry")
-        m.font = reg.GetDefaultFont(m.fontSize, false, false)
+        m.font = "font:LargeSystemFont"
     end if
 end sub
 
@@ -56,6 +58,7 @@ function newlabel(txt)
     label = CreateObject("roSGNode", "Label")
     label.text = txt
     label.font = m.font
+    label.font.size = m.fontSize
     label.color = m.textColor
     label.opacity = m.textOpac
     return label
@@ -89,7 +92,7 @@ function newRect(lg)
 end function
 
 
-sub updateCaption ()
+sub updateCaption()
     m.top.currentCaption = []
     if LCase(m.top.playerState) = "playingon"
         m.top.currentPos = m.top.currentPos + 100

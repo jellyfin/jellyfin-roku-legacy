@@ -2,6 +2,14 @@
     "files.associations": {
         "*.ts": "xml"
     },
+    "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+    },
     "xml.format.maxLineWidth": 0,
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "brightscript.output.hyperlinkFormat": "FilenameAndFunction",
+    "brightscript.bsdk": "node_modules/brighterscript"
 }

@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<component name="RadioDialog" extends="StandardMessageDialog">
+<?xml version="1.0" encoding="utf-8"?>
+<component name="RadioDialog" extends="StandardMessageDialog" initialFocus="radioOptions">
   <children>
-    <StdDlgContentArea>
-      <StdDlgItemGroup id="content" />
+    <StdDlgContentArea id="contentArea">
+      <StdDlgItemGroup id="radioOptions" />
     </StdDlgContentArea>
   </children>
   <interface>
     <field id="contentData" type="assocarray" />
   </interface>
-  <script type="text/brightscript" uri="RadioDialog.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>

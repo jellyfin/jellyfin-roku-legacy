@@ -84,17 +84,18 @@ function setupSubtitle(video, subtitles, subtitle_idx = -1) as integer
 
     selectedSubtitle = subtitles[subtitleSelIdx]
 
-    if selectedSubtitle.IsEncoded
-        ' With encoded subtitles, turn off captions
-        video.globalCaptionMode = "Off"
-    else
-        ' If this is a text-based subtitle, set relevant settings for roku captions
-        video.globalCaptionMode = "On"
-        video.subtitleTrack = video.availableSubtitleTracks[availSubtitleTrackIdx(video, subtitleSelIdx)].TrackName
+    if isValid(selectedSubtitle) and isValid(selectedSubtitle.IsEncoded)
+        if selectedSubtitle.IsEncoded
+            ' With encoded subtitles, turn off captions
+            video.globalCaptionMode = "Off"
+        else
+            ' If this is a text-based subtitle, set relevant settings for roku captions
+            video.globalCaptionMode = "On"
+            video.subtitleTrack = video.availableSubtitleTracks[availSubtitleTrackIdx(video, subtitleSelIdx)].TrackName
+        end if
     end if
 
     return subtitleSelIdx
-
 end function
 
 ' The subtitle index on the server differs from the index we track locally
@@ -177,7 +178,8 @@ sub turnoffSubtitles()
     current = video.SelectedSubtitle
     video.SelectedSubtitle = -1
     video.globalCaptionMode = "Off"
-    m.device.EnableAppFocusEvent(false)
+    device = CreateObject("roDeviceInfo")
+    device.EnableAppFocusEvent(false)
     ' Check if Enoded subtitles are being displayed, and turn off
     if current > -1 and video.Subtitles[current].IsEncoded
         video.control = "stop"

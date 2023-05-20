@@ -1,3 +1,7 @@
+import "pkg:/source/api/Image.brs"
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/utils/config.brs"
+
 sub init()
     m.dscr = m.top.findNode("description")
     m.vidsList = m.top.findNode("extrasGrid")

@@ -9,11 +9,19 @@
         "settings/*.*"
     ],
     "plugins": [
-        "@rokucommunity/bslint"
+        "@rokucommunity/bslint",
+        "roku-log-bsc-plugin"
     ],
+    "rokuLog": {
+        "insertPkgPath": true
+    },
     "diagnosticFilters": [
-        "**/roku_modules/**/*",
-        "**/testFramework/*",
-        "**/tests/*"
-    ]
+        "node_modules/**/*",
+        "**/roku_modules/**/*"
+    ],
+    "sourceMap": true,
+    "autoImportComponentScript": true,
+    "allowBrighterScriptInBrightScript": true,
+    "stagingDir": "build/staging",
+    "retainStagingDir": true
 }

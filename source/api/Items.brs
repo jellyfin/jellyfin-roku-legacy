@@ -397,11 +397,13 @@ function BackdropImage(id as string)
 end function
 
 ' Seasons for a TV Show
-function TVSeasons(id as string)
+function TVSeasons(id as string) as dynamic
     url = Substitute("Shows/{0}/Seasons", id)
     resp = APIRequest(url, { "UserId": get_setting("active_user") })
-
     data = getJson(resp)
+    ' validate data
+    if data = invalid or data.Items = invalid then return invalid
+
     results = []
     for each item in data.Items
         imgParams = { "AddPlayedIndicator": item.UserData.Played }
@@ -414,11 +416,14 @@ function TVSeasons(id as string)
     return data
 end function
 
-function TVEpisodes(show_id as string, season_id as string)
+function TVEpisodes(show_id as string, season_id as string) as dynamic
     url = Substitute("Shows/{0}/Episodes", show_id)
     resp = APIRequest(url, { "seasonId": season_id, "UserId": get_setting("active_user"), "fields": "MediaStreams" })
 
     data = getJson(resp)
+    ' validate data
+    if data = invalid or data.Items = invalid then return invalid
+
     results = []
     for each item in data.Items
         imgParams = { "maxWidth": 400, "maxheight": 250 }
@@ -428,7 +433,11 @@ function TVEpisodes(show_id as string, season_id as string)
             tmp.image.posterDisplayMode = "scaleToZoom"
         end if
         tmp.json = item
-        tmp.overview = ItemMetaData(item.id).overview
+        tmpMetaData = ItemMetaData(item.id)
+        ' validate meta data
+        if tmpMetaData <> invalid and tmpMetaData.overview <> invalid
+            tmp.overview = tmpMetaData.overview
+        end if
         results.push(tmp)
     end for
     data.Items = results

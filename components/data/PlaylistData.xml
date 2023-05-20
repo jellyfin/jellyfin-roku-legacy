@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="PlaylistData" extends="JFContentItem">
   <interface>
     <field id="id" type="string" />
     <field id="title" type="string" />
     <field id="image" type="node" onChange="setPoster" />
     <field id="overview" type="string" />
+    <field id="selectedAudioStreamIndex" type="integer" value="0" />
+    <field id="startingPoint" type="longinteger" value="0" />
   </interface>
-  <script type="text/brightscript" uri="PlaylistData.brs" />
 </component>

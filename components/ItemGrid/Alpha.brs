@@ -24,5 +24,20 @@ function onKeyEvent(key as string, press as boolean) as boolean
         end if
         return true
     end if
+
+    if key = "up"
+        if m.Alphamenu.itemFocused = 0
+            m.Alphamenu.jumpToItem = m.Alphamenu.numRows - 1
+            return true
+        end if
+    end if
+
+    if key = "down"
+        if m.Alphamenu.itemFocused = m.Alphamenu.numRows - 1
+            m.Alphamenu.jumpToItem = 0
+            return true
+        end if
+    end if
+
     return false
 end function

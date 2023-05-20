@@ -41,12 +41,23 @@ function ticksToHuman(ticks as longinteger) as string
     return r
 end function
 
+function secondsToHuman(totalSeconds as integer) as string
+    hours = stri(int(totalSeconds / 3600)).trim()
+    minutes = stri(int((totalSeconds - (val(hours) * 3600)) / 60)).trim()
+    seconds = stri(totalSeconds - (val(hours) * 3600) - (val(minutes) * 60)).trim()
+    if val(hours) > 0 and val(minutes) < 10 then minutes = "0" + minutes
+    if val(seconds) < 10 then seconds = "0" + seconds
+    r = ""
+    if val(hours) > 0 then r = hours + ":"
+    r = r + minutes + ":" + seconds
+    return r
+end function
+
 ' Format time as 12 or 24 hour format based on system clock setting
 function formatTime(time) as string
     hours = time.getHours()
     minHourDigits = 1
-    di = CreateObject("roDeviceInfo")
-    if di.GetClockFormat() = "12h"
+    if m.global.device.clockFormat = "12h"
         meridian = "AM"
         if hours = 0
             hours = 12
@@ -195,13 +206,13 @@ sub setFieldTextValue(field, value)
 end sub
 
 ' Returns whether or not passed value is valid
-function isValid(input) as boolean
+function isValid(input as dynamic) as boolean
     return input <> invalid
 end function
 
 ' Returns whether or not passed value is valid and not empty
 ' Accepts a string, or any countable type (arrays and lists)
-function isValidAndNotEmpty(input) as boolean
+function isValidAndNotEmpty(input as dynamic) as boolean
     if not isValid(input) then return false
     ' Use roAssociativeArray instead of list so we get access to the doesExist() method
     countableTypes = { "array": 1, "list": 1, "roarray": 1, "roassociativearray": 1, "rolist": 1 }

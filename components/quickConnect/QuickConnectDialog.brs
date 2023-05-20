@@ -1,3 +1,7 @@
+import "pkg:/source/api/userauth.brs"
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/utils/config.brs"
+
 sub init()
     m.quickConnectTimer = m.top.findNode("quickConnectTimer")
     m.quickConnectTimer.observeField("fire", "quickConnectStatus")

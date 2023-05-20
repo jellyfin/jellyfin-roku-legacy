@@ -1,3 +1,7 @@
+import "pkg:/source/api/UserLibrary.brs"
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/utils/config.brs"
+
 sub init()
     m.top.functionName = "setFavoriteStatus"
 end sub

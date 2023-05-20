@@ -18,7 +18,4 @@
     <field id="itemHasFocus" type="boolean" onChange="focusChanged" />
     <field id="focusPercent" type="float" onChange="focusChanging" />
   </interface>
-  <script type="text/brightscript" uri="GridItem.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>

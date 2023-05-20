@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- The top-Level RowList for the Extras rows -->
 <component name="ExtrasRowList" extends="RowList">
   <interface>
@@ -8,5 +8,4 @@
     <function name="loadParts" />
     <function name="loadPersonVideos" />
   </interface>
-  <script type="text/brightscript" uri="ExtrasRowList.brs" />
 </component>
