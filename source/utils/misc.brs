@@ -177,7 +177,6 @@ function determine_server_url(url as string)
     end for
     handled = 0
     timeout = CreateObject("roTimespan")
-    timeout.Mark()
     while timeout.totalseconds() < 15
         resp = wait(0, port)
         if type(resp) = "roUrlEvent"
