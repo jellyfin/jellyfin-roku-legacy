@@ -139,7 +139,7 @@ function show_dialog(message as string, options = [], defaultSelection = 0) as i
     end if
 
     dialog.visible = true
-    m.scene.pushChild(dialog)
+    m.scene.appendChild(dialog)
     dialog.setFocus(true)
 
     port = CreateObject("roMessagePort")
@@ -410,7 +410,7 @@ sub startLoadingSpinner()
     m.spinner = createObject("roSGNode", "Spinner")
     m.spinner.translation = "[900, 450]"
     m.spinner.visible = true
-    m.scene.pushChild(m.spinner)
+    m.scene.appendChild(m.spinner)
 end sub
 
 sub startMediaLoadingSpinner()
