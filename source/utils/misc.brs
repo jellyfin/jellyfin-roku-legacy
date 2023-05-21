@@ -139,7 +139,7 @@ function show_dialog(message as string, options = [], defaultSelection = 0) as i
     end if
 
     dialog.visible = true
-    m.scene.appendChild(dialog)
+    m.scene.pushChild(dialog)
     dialog.setFocus(true)
 
     port = CreateObject("roMessagePort")
@@ -162,31 +162,93 @@ function option_dialog(options, message = "", defaultSelection = 0) as integer
     return show_dialog(message, options, defaultSelection)
 end function
 
-'
-' Take a jellyfin hostname and ensure it's a full url.
-' prepend http or https and append default ports, and remove excess slashes
-'
-function standardize_jellyfin_url(url as string)
-    'Append default ports
-    maxSlashes = 0
-    if left(url, 8) = "https://" or left(url, 7) = "http://"
-        maxSlashes = 2
-    end if
-    'Check to make sure entry has no extra slashes before adding default ports.
-    if Instr(0, url, "/") = maxSlashes
-        if url.len() > 5 and mid(url, url.len() - 4, 1) <> ":" and mid(url, url.len() - 5, 1) <> ":"
-            if left(url, 5) = "https"
-                url = url + ":8920"
-            else
-                url = url + ":8096"
+function determine_server_url(url as string)
+    port = CreateObject("roMessagePort")
+    hosts = CreateObject("roAssociativeArray")
+    reqs = []
+    candidates = url_candidates(url)
+    for each endpoint in candidates
+        req = CreateObject("roUrlTransfer")
+        reqs.push(req) ' keep in scope outside of loop, else -10001
+        req.seturl(endpoint + "/system/info/public")
+        req.setMessagePort(port)
+        hosts.addreplace(req.getidentity().ToStr(), endpoint)
+        req.AsyncGetToString()
+    end for
+    handled = 0
+    timeout = CreateObject("roTimespan")
+    timeout.Mark()
+    while timeout.totalseconds() < 15
+        resp = wait(0, port)
+        if type(resp) = "roUrlEvent"
+            ' TODO
+            ' if response code is a 300 redirect then we should return the redirect url
+            ' Make sure this happens or make it happen
+            if resp.GetResponseCode() = 200
+                print "THE SELECTED URL"
+                print hosts.lookup(resp.GetSourceIdentity().ToStr())
+                print ""
+                return hosts.lookup(resp.GetSourceIdentity().ToStr())
             end if
         end if
+        handled += 1
+        if handled = reqs.count()
+            return invalid
+        end if
+    end while
+    ' we never actually get here but the linter can't tell
+    return invalid
+end function
+
+function url_candidates(input as string)
+    urlRegex = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
+    input_url = urlRegex.Match(input)
+    ' proto $1, host $2, port $3, the-rest $4
+    if input_url[2] = invalid
+        ' a proto wasn't declared
+        input_url = urlRegex.Match("none://" + input)
     end if
-    'Append http:// to server
-    if left(url, 4) <> "http"
-        url = "http://" + url
+    proto = input_url[1]
+    host = input_url[2]
+    port = input_url[3]
+    print ""
+    print "THE PROTO"
+    print proto
+    print "THE HOST"
+    print host
+    print "THE PORT"
+    print port
+    proto_candidates = []
+    if proto = "none:" ' the user did not declare a protocol
+        proto_candidates.push("http://" + host) ' use http and https if user declared nothing
+        proto_candidates.push("https://" + host)
+    else
+        proto_candidates.push(proto + "//" + host) ' but still allow arbitrary protocols if they are declared
     end if
-    return url
+    print "THE PROTO CANDIDATES"
+    print proto_candidates
+    final_candidates = []
+    if isValid(port) and port <> "" ' if the port is defined just use that
+        for each candidate in proto_candidates
+            final_candidates.push(candidate + port)
+        end for
+    else ' the port wasnt declared so use default jellyfin and proto ports
+        for each candidate in proto_candidates:
+            if candidate.startswith("https")
+                final_candidates.push(candidate + ":443")
+                final_candidates.push(candidate + ":8920")
+            else if candidate.startswith("http")
+                final_candidates.push(candidate + ":80")
+                final_candidates.push(candidate + ":8096")
+                ' TODO
+                ' handle any other protocols that the user may enter. what does roku support?
+            end if
+        end for
+    end if
+    final_candidates.push(input)
+    print "FINAL CANDIDATES"
+    print final_candidates
+    return final_candidates
 end function
 
 sub setFieldTextValue(field, value)
@@ -348,7 +410,7 @@ sub startLoadingSpinner()
     m.spinner = createObject("roSGNode", "Spinner")
     m.spinner.translation = "[900, 450]"
     m.spinner.visible = true
-    m.scene.appendChild(m.spinner)
+    m.scene.pushChild(m.spinner)
 end sub
 
 sub startMediaLoadingSpinner()

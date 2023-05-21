@@ -184,48 +184,54 @@ function CreateServerGroup()
         else if type(msg) = "roSGNodeEvent"
             node = msg.getNode()
             if node = "submit"
-                serverUrl = standardize_jellyfin_url(screen.serverUrl)
-                'If this is a different server from what we know, reset username/password setting
-                if get_setting("server") <> serverUrl
-                    set_setting("username", "")
-                    set_setting("password", "")
-                end if
-                set_setting("server", serverUrl)
                 ' Show Connecting to Server spinner
                 dialog = createObject("roSGNode", "ProgressDialog")
                 dialog.title = tr("Connecting to Server")
                 m.scene.dialog = dialog
 
-                m.serverInfoResult = ServerInfo()
-
-                dialog.close = true
-
-                if m.serverInfoResult = invalid
-                    ' Maybe don't unset setting, but offer as a prompt
-                    ' Server not found, is it online? New values / Retry
-                    print "Server not found, is it online? New values / Retry"
-                    screen.errorMessage = tr("Server not found, is it online?")
-                    SignOut(false)
-                else if m.serverInfoResult.Error <> invalid and m.serverInfoResult.Error
-                    ' If server redirected received, update the URL
-                    if m.serverInfoResult.UpdatedUrl <> invalid
-                        serverUrl = m.serverInfoResult.UpdatedUrl
-                        set_setting("server", serverUrl)
+                serverUrl = determine_server_url(screen.serverUrl)
+                'If this is a different server from what we know, reset username/password setting
+                if isValid(serverUrl)
+                    if get_setting("server") <> serverUrl
+                        set_setting("username", "")
+                        set_setting("password", "")
                     end if
-                    ' Display Error Message to user
-                    message = tr("Error: ")
-                    if m.serverInfoResult.ErrorCode <> invalid
-                        message = message + "[" + m.serverInfoResult.ErrorCode.toStr() + "] "
-                    end if
-                    screen.errorMessage = message + tr(m.serverInfoResult.ErrorMessage)
-                    SignOut(false)
-                else
-                    screen.visible = false
-                    if m.serverInfoResult.serverName <> invalid
-                        return m.serverInfoResult.ServerName + " (Saved)"
+                    set_setting("server", serverUrl)
+
+                    m.serverInfoResult = ServerInfo()
+
+                    dialog.close = true
+
+                    if m.serverInfoResult = invalid
+                        ' Maybe don't unset setting, but offer as a prompt
+                        ' Server not found, is it online? New values / Retry
+                        print "Server not found, is it online? New values / Retry"
+                        screen.errorMessage = tr("Server not found, is it online?")
+                        SignOut(false)
+                    else if m.serverInfoResult.Error <> invalid and m.serverInfoResult.Error
+                        ' If server redirected received, update the URL
+                        if m.serverInfoResult.UpdatedUrl <> invalid
+                            serverUrl = m.serverInfoResult.UpdatedUrl
+                            set_setting("server", serverUrl)
+                        end if
+                        ' Display Error Message to user
+                        message = tr("Error: ")
+                        if m.serverInfoResult.ErrorCode <> invalid
+                            message = message + "[" + m.serverInfoResult.ErrorCode.toStr() + "] "
+                        end if
+                        screen.errorMessage = message + tr(m.serverInfoResult.ErrorMessage)
+                        SignOut(false)
                     else
-                        return "Saved"
+                        screen.visible = false
+                        if m.serverInfoResult.serverName <> invalid
+                            return m.serverInfoResult.ServerName + " (Saved)"
+                        else
+                            return "Saved"
+                        end if
                     end if
+                else
+                    dialog.close = true
+                    screen.errorMessage = tr("Server not found, is it online?")
                 end if
             else if node = "delete_saved"
                 serverPicker = screen.findNode("serverPicker")
