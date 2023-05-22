@@ -200,12 +200,10 @@ function determine_server_url(url as string)
 end function
 
 function url_candidates(input as string)
-    urlRegex = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
-    input_url = urlRegex.Match(input)
-    ' proto $1, host $2, port $3, the-rest $4
+    input_url = parseUrl(input)
     if input_url[2] = invalid
         ' a proto wasn't declared
-        input_url = urlRegex.Match("none://" + input)
+        input_url = parseUrl("none://" + input)
     end if
     proto = input_url[1]
     host = input_url[2]
@@ -287,6 +285,18 @@ function isValidAndNotEmpty(input as dynamic) as boolean
         print "Called isValidAndNotEmpty() with invalid type: ", inputType
         return false
     end if
+end function
+
+function parseUrl(url as string) as object
+    ' proto $1, host $2, port $3, the-rest $4
+    rgx = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
+    return rgx.Match(url)
+end function
+
+function isLocalhost(url as string) as boolean
+    ' https://stackoverflow.com/questions/8426171/what-regex-will-match-all-loopback-addresses
+    rgx = CreateObject("roRegex", "^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*\:)*?:?0*1$", "i")
+    return rgx.isMatch(url)
 end function
 
 ' Rounds number to nearest integer
