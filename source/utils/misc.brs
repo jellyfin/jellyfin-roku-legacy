@@ -162,17 +162,20 @@ function option_dialog(options, message = "", defaultSelection = 0) as integer
     return show_dialog(message, options, defaultSelection)
 end function
 
-function determine_server_url(url as string)
+function inferServerUrl(url as string)
     port = CreateObject("roMessagePort")
     hosts = CreateObject("roAssociativeArray")
     reqs = []
-    candidates = url_candidates(url)
+    candidates = urlCandidates(url)
     for each endpoint in candidates
         req = CreateObject("roUrlTransfer")
         reqs.push(req) ' keep in scope outside of loop, else -10001
         req.seturl(endpoint + "/system/info/public")
         req.setMessagePort(port)
         hosts.addreplace(req.getidentity().ToStr(), endpoint)
+        if endpoint.Left(8) = "https://"
+            req.setCertificatesFile("common:/certs/ca-bundle.crt")
+        end if
         req.AsyncGetToString()
     end for
     handled = 0
@@ -199,7 +202,7 @@ function determine_server_url(url as string)
     return invalid
 end function
 
-function url_candidates(input as string)
+function urlCandidates(input as string)
     input_url = parseUrl(input)
     if input_url[2] = invalid
         ' a proto wasn't declared

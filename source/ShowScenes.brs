@@ -189,7 +189,7 @@ function CreateServerGroup()
                 dialog.title = tr("Connecting to Server")
                 m.scene.dialog = dialog
 
-                serverUrl = determine_server_url(screen.serverUrl)
+                serverUrl = inferServerUrl(screen.serverUrl)
                 'If this is a different server from what we know, reset username/password setting
                 if isValid(serverUrl)
                     if get_setting("server") <> serverUrl
