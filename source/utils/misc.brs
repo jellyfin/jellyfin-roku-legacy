@@ -203,14 +203,14 @@ function inferServerUrl(url as string)
 end function
 
 function urlCandidates(input as string)
-    input_url = parseUrl(input)
-    if input_url[2] = invalid
+    url = parseUrl(input)
+    if url[2] = invalid
         ' a proto wasn't declared
-        input_url = parseUrl("none://" + input)
+        url = parseUrl("none://" + input)
     end if
-    proto = input_url[1]
-    host = input_url[2]
-    port = input_url[3]
+    proto = url[1]
+    host = url[2]
+    port = url[3]
     print ""
     print "THE PROTO"
     print proto
