@@ -72,18 +72,6 @@ sub onAllowCaptionsChange()
     end if
 end sub
 
-'
-' Runs Next Episode button animation and sets focus to button
-sub shownextEpisode()
-    if m.nextEpisodeButton.hasFocus() = false
-        m.shownextEpisodeButtonAnimation.control = "start"
-        m.nextEpisodeButton.setFocus(true)
-        m.nextEpisodeButton.visible = true
-    end if
-    m.top.observeField("state", "onState")
-    m.top.observeField("content", "onContentChange")
-end sub
-
 sub loadCaption()
     if m.top.suppressCaptions
         m.captionTask.url = m.top.currentSubtitleTrack
@@ -132,28 +120,7 @@ sub showNextEpisodeButton()
         m.nextEpisodeButton.setFocus(true)
         m.nextEpisodeButton.visible = true
     end if
-end sub
-
-'
-' Runs hide Next Episode button animation and sets focus back to video
-sub hidenextEpisode()
-    'm.top.trickPlayBar.unobserveField("visible")
-    m.hidenextEpisodeButtonAnimation.control = "start"
-    m.nextEpisodeButton.setFocus(false)
-    m.top.setFocus(true)
-end sub
-
-
-sub handleNextEpisode()
-    ' Dialog box is open
-    if int(m.top.position) >= (m.top.runTime - Val(m.nextupbuttonseconds))
-        shownextEpisode()
-        updateCount()
-    else
-        m.nextEpisodeButton.visible = false
-        m.nextEpisodeButton.setFocus(false)
-        m.top.setFocus(true)
-    end if
+    print "show need episode button, is visible?" m.nextEpisodeButton.visible
 end sub
 
 '
@@ -166,13 +133,6 @@ sub updateCount()
     m.nextEpisodeButton.text = tr("Next Episode") + " " + nextEpisodeCountdown.toStr()
 end sub
 
-'
-' Runs hide Next Episode button animation and sets focus back to video
-sub hideNextEpisodeButton()
-    m.hideNextEpisodeButtonAnimation.control = "start"
-    m.nextEpisodeButton.setFocus(false)
-    m.top.setFocus(true)
-end sub
 
 ' Checks if we need to display the Next Episode button
 sub checkTimeToDisplayNextEpisode()
@@ -185,10 +145,6 @@ sub checkTimeToDisplayNextEpisode()
         return
     end if
 
-    if m.nextEpisodeButton.visible or m.nextEpisodeButton.hasFocus()
-        m.nextEpisodeButton.visible = false
-        m.nextEpisodeButton.setFocus(false)
-    end if
 end sub
 
 ' When Video Player state changes
@@ -499,7 +455,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     end if
 
     if key = "down"
-        if press
+        if press and m.nextEpisodeButton.visible = false
             if m.buttonGrp.isinFocusChain()
                 m.buttonGrp.setFocus(false)
                 m.buttonGrp.visible = false
@@ -511,7 +467,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
                 return true
             end if
         else
-            if m.top.state = "playing"
+            if m.top.state = "playing" and m.nextEpisodeButton.visible = false
                 toggleButtonGrpVisible()
                 return true
             end if
