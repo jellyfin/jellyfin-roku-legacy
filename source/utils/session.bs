@@ -139,7 +139,9 @@ namespace session
                 session.user.settings.Save(setting, userSettings[setting])
             end for
 
-            print "m.global.session.user.settings = ", m.global.session.user.settings
+            if m.global.app.isDev
+                print "m.global.session.user.settings = ", m.global.session.user.settings
+            end if
             ' ensure registry is updated
             set_user_setting("username", tmpSession.user.name)
             set_user_setting("token", tmpSession.user.authToken)
