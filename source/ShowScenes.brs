@@ -3,12 +3,12 @@ function LoginFlow(startOver = false as boolean)
     start_login:
 
     serverUrl = get_setting("server")
-    if serverUrl = invalid
-        startOver = true
-        print "No previous server connection saved to registry"
-    else
+    if isValid(serverUrl)
         print "Previous server connection saved to registry"
         session.server.UpdateURL(serverUrl)
+    else
+        startOver = true
+        print "No previous server connection saved to registry"
     end if
 
     invalidServer = true
@@ -46,7 +46,7 @@ function LoginFlow(startOver = false as boolean)
                 user = CreateObject("roSGNode", "PublicUserData")
                 user.id = item.Id
                 user.name = item.Name
-                if item.PrimaryImageTag <> invalid
+                if isValid(item.PrimaryImageTag)
                     user.ImageURL = UserImageURL(user.id, { "tag": item.PrimaryImageTag })
                 end if
                 publicUsersNodes.push(user)
@@ -58,7 +58,7 @@ function LoginFlow(startOver = false as boolean)
             else
                 'Try to login without password. If the token is valid, we're done
                 userData = get_token(userSelected, "")
-                if userData <> invalid
+                if isValid(userData)
                     session.user.Login(userData)
                     LoadUserPreferences()
                     LoadUserAbilities()
@@ -80,7 +80,7 @@ function LoginFlow(startOver = false as boolean)
         session.user.Update("id", activeUser)
 
         myAuthToken = get_user_setting("token")
-        if myAuthToken <> invalid
+        if isValid(myAuthToken)
             print "Auth token found in registry"
             session.user.Update("authToken", myAuthToken)
             print "Attempting to use API with auth token"
@@ -101,7 +101,7 @@ function LoginFlow(startOver = false as boolean)
             myPassword = get_setting("password")
             userData = invalid
 
-            if myUsername <> invalid and myPassword <> invalid
+            if isValid(myUsername) and isValid(myPassword)
                 if myUsername <> ""
                     print "Username and password found in registry. Attempting to login"
                     userData = get_token(myUsername, myPassword)
@@ -110,7 +110,7 @@ function LoginFlow(startOver = false as boolean)
                     unset_setting("username")
                     unset_setting("password")
                 end if
-            else if myUsername <> invalid and myPassword = invalid
+            else if isValid(myUsername) and not isValid(myPassword)
                 print "Username found in registry but no password"
                 if myUsername <> ""
                     print "Attempting to login with no password"
@@ -120,14 +120,14 @@ function LoginFlow(startOver = false as boolean)
                     unset_setting("username")
                 end if
 
-            else if myUsername = invalid and myPassword = invalid
+            else if not isValid(myUsername) and not isValid(myPassword)
                 print "Neither username nor password found in registry - restart login flow"
                 unset_setting("active_user")
                 session.user.Logout()
                 goto start_login
             end if
 
-            if userData <> invalid
+            if isValid(userData)
                 print "login success!"
                 session.user.Login(userData)
             end if
@@ -157,16 +157,16 @@ sub SaveServerList()
     'Save off this server to our list of saved servers for easier navigation between servers
     server = m.global.session.server.url
     saved = get_setting("saved_servers")
-    if server <> invalid
+    if isValid(server)
         server = LCase(server)'Saved server data is always lowercase
     end if
     entryCount = 0
     addNewEntry = true
     savedServers = { serverList: [] }
-    if saved <> invalid
+    if isValid(saved)
         savedServers = ParseJson(saved)
         entryCount = savedServers.serverList.Count()
-        if savedServers.serverList <> invalid and entryCount > 0
+        if isValid(savedServers.serverList) and entryCount > 0
             for each item in savedServers.serverList
                 if item.baseUrl = server
                     addNewEntry = false
@@ -188,10 +188,10 @@ end sub
 
 sub DeleteFromServerList(urlToDelete)
     saved = get_setting("saved_servers")
-    if urlToDelete <> invalid
+    if isValid(urlToDelete)
         urlToDelete = LCase(urlToDelete)
     end if
-    if saved <> invalid
+    if isValid(saved)
         savedServers = ParseJson(saved)
         newServers = { serverList: [] }
         for each item in savedServers.serverList
@@ -217,7 +217,7 @@ function CreateServerGroup()
     port = CreateObject("roMessagePort")
     m.colors = {}
 
-    if m.global.session.server.url <> invalid
+    if isValid(m.global.session.server.url)
         screen.serverUrl = m.global.session.server.url
     end if
     m.viewModel = {}
@@ -273,23 +273,23 @@ function CreateServerGroup()
                     print "Server not found, is it online? New values / Retry"
                     screen.errorMessage = tr("Server not found, is it online?")
                     SignOut(false)
-                else if serverInfoResult.Error <> invalid and serverInfoResult.Error
+                else if isValid(serverInfoResult.Error) and serverInfoResult.Error
                     ' If server redirected received, update the URL
-                    if serverInfoResult.UpdatedUrl <> invalid
+                    if isValid(serverInfoResult.UpdatedUrl)
                         serverUrl = serverInfoResult.UpdatedUrl
                         set_setting("server", serverUrl)
                         session.server.UpdateURL(serverUrl)
                     end if
                     ' Display Error Message to user
                     message = tr("Error: ")
-                    if serverInfoResult.ErrorCode <> invalid
+                    if isValid(serverInfoResult.ErrorCode)
                         message = message + "[" + serverInfoResult.ErrorCode.toStr() + "] "
                     end if
                     screen.errorMessage = message + tr(serverInfoResult.ErrorMessage)
                     SignOut(false)
                 else
                     screen.visible = false
-                    if serverInfoResult.serverName <> invalid
+                    if isValid(serverInfoResult.serverName)
                         return serverInfoResult.ServerName + " (Saved)"
                     else
                         return "Saved"
@@ -299,7 +299,7 @@ function CreateServerGroup()
                 serverPicker = screen.findNode("serverPicker")
                 itemToDelete = serverPicker.content.getChild(serverPicker.itemFocused)
                 urlToDelete = itemToDelete.baseUrl
-                if urlToDelete <> invalid
+                if isValid(urlToDelete)
                     DeleteFromServerList(urlToDelete)
                     serverPicker.content.removeChild(itemToDelete)
                     sidepanel.visible = false
@@ -357,16 +357,16 @@ function CreateSigninGroup(user = "")
 
     'Load in any saved server data and see if we can just log them in...
     server = m.global.session.server.url
-    if server <> invalid
+    if isValid(server)
         server = LCase(server)'Saved server data is always lowercase
     end if
     saved = get_setting("saved_servers")
-    if saved <> invalid
+    if isValid(saved)
         savedServers = ParseJson(saved)
         for each item in savedServers.serverList
-            if item.baseUrl = server and item.username <> invalid and item.password <> invalid
+            if item.baseUrl = server and isValid(item.username) and isValid(item.password)
                 userData = get_token(item.username, item.password)
-                if userData <> invalid
+                if isValid(userData)
                     session.user.Login(userData)
                     return "true"
                 end if
@@ -389,7 +389,7 @@ function CreateSigninGroup(user = "")
     password_field.field = "password"
     password_field.type = "password"
     registryPassword = get_setting("password")
-    if registryPassword <> invalid
+    if isValid(registryPassword)
         password_field.value = registryPassword
     end if
     ' Add checkbox for saving credentials
@@ -438,7 +438,7 @@ function CreateSigninGroup(user = "")
             if node = "submit"
                 ' Validate credentials
                 activeUser = get_token(username.value, password.value)
-                if activeUser <> invalid
+                if isValid(activeUser)
                     session.user.Login(activeUser)
                     set_setting("username", username.value)
                     set_setting("password", password.value)
@@ -867,9 +867,9 @@ sub UpdateSavedServerList()
     server = LCase(server)'Saved server data is always lowercase
 
     saved = get_setting("saved_servers")
-    if saved <> invalid
+    if isValid(saved)
         savedServers = ParseJson(saved)
-        if savedServers.serverList <> invalid and savedServers.serverList.Count() > 0
+        if isValid(savedServers.serverList) and savedServers.serverList.Count() > 0
             newServers = { serverList: [] }
             for each item in savedServers.serverList
                 if item.baseUrl = server
