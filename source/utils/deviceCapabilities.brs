@@ -5,7 +5,8 @@ function getDeviceCapabilities() as object
     return {
         "PlayableMediaTypes": [
             "Audio",
-            "Video"
+            "Video",
+            "Photo"
         ],
         "SupportedCommands": [],
         "SupportsPersistentIdentifier": false,
