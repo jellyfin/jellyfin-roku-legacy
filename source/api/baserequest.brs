@@ -187,6 +187,7 @@ function postString(req, data = "" as string)
     return resp.getString()
 end function
 
+' Takes and returns a roUrlTransfer object after adding a Jellyfin "Authorization" header
 function authRequest(request as object) as object
     QUOTE = Chr(34)
     auth = "MediaBrowser" + " Client=" + QUOTE + "Jellyfin Roku" + QUOTE
