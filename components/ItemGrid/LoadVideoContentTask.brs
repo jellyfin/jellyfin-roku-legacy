@@ -186,7 +186,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     video.SelectedSubtitle = subtitle_idx
 
     if not fully_external
-        video.content = authorize_request(video.content)
+        video.content = authRequest(video.content)
     end if
 
 end sub

@@ -59,7 +59,7 @@ function APIRequest(url as string, params = {} as object) as dynamic
 
     req = createObject("roUrlTransfer")
     req.setUrl(full_url)
-    req = authorize_request(req)
+    req = authRequest(req)
     ' SSL cert
     serverURL = get_setting("server")
     if serverURL <> invalid and serverURL.left(8) = "https://"
@@ -187,7 +187,7 @@ function postString(req, data = "" as string)
     return resp.getString()
 end function
 
-function authorize_request(request)
+function authRequest(request as object) as object
     QUOTE = Chr(34)
     auth = "MediaBrowser" + " Client=" + QUOTE + "Jellyfin Roku" + QUOTE
     auth = auth + ", Device=" + QUOTE + m.global.device.name + " (" + m.global.device.friendlyName + ")" + QUOTE
