@@ -192,12 +192,14 @@ function authRequest(request as object) as object
     QUOTE = Chr(34)
     auth = "MediaBrowser" + " Client=" + QUOTE + "Jellyfin Roku" + QUOTE
     auth = auth + ", Device=" + QUOTE + m.global.device.name + " (" + m.global.device.friendlyName + ")" + QUOTE
-    auth = auth + ", DeviceId=" + QUOTE + m.global.device.id + QUOTE
     auth = auth + ", Version=" + QUOTE + m.global.app.version + QUOTE
 
     user = get_setting("active_user")
     if user <> invalid and user <> ""
         auth = auth + ", UserId=" + QUOTE + user + QUOTE
+        auth = auth + ", DeviceId=" + QUOTE + m.global.device.id + QUOTE
+    else
+        auth = auth + ", DeviceId=" + QUOTE + m.global.device.uuid + QUOTE
     end if
 
     token = get_user_setting("token")
