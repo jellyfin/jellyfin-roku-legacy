@@ -9,7 +9,7 @@ function getDeviceCapabilities() as object
             "Photo"
         ],
         "SupportedCommands": [],
-        "SupportsPersistentIdentifier": true,
+        "SupportsPersistentIdentifier": false,
         "SupportsMediaControl": false,
         "DeviceProfile": getDeviceProfile()
     }
