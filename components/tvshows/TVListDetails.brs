@@ -36,7 +36,7 @@ sub itemContentChanged()
 
     imageUrl = item.posterURL
 
-    if get_user_setting("ui.tvshows.blurunwatched") = "true"
+    if m.global.session.user.settings["ui.tvshows.blurunwatched"] = true
         if itemData.lookup("Type") = "Episode"
             if not itemData.userdata.played
                 imageUrl = imageUrl + "&blur=15"
@@ -54,12 +54,12 @@ sub itemContentChanged()
             m.top.findNode("runtime").text = stri(runTime).trim() + " mins"
         end if
 
-        if get_user_setting("ui.design.hideclock") <> "true"
+        if m.global.session.user.settings["ui.design.hideclock"] <> true
             m.top.findNode("endtime").text = tr("Ends at %1").Replace("%1", getEndTime())
         end if
     end if
 
-    if get_user_setting("ui.tvshows.disableCommunityRating") = "false"
+    if m.global.session.user.settings["ui.tvshows.disableCommunityRating"] = false
         if isValid(itemData.communityRating)
             m.top.findNode("star").visible = true
             m.top.findNode("communityRating").text = str(int(itemData.communityRating * 10) / 10)

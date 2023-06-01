@@ -27,7 +27,7 @@ function defaultSubtitleTrackFromVid(video_id) as integer
         if default_text_subs <> -1
             return default_text_subs
         else
-            if get_user_setting("playback.subs.onlytext") = "false"
+            if m.global.session.user.settings["playback.subs.onlytext"] = false
                 return defaultSubtitleTrack(subtitles["all"]) ' if no appropriate text subs exist, allow non-text
             else
                 return -1
@@ -44,23 +44,23 @@ end function
 '     This allows forcing text subs, since roku requires transcoding of non-text subs
 ' returns the server-side track index for the appriate subtitle
 function defaultSubtitleTrack(sorted_subtitles, require_text = false) as integer
-    if m.user.Configuration.SubtitleMode = "None"
+    if m.global.session.user.configuration.SubtitleMode = "None"
         return -1 ' No subtitles desired: select none
     end if
 
     for each item in sorted_subtitles
         ' Only auto-select subtitle if language matches preference
-        languageMatch = (m.user.Configuration.SubtitleLanguagePreference = item.Track.Language)
+        languageMatch = (m.global.session.user.configuration.SubtitleLanguagePreference = item.Track.Language)
         ' Ensure textuality of subtitle matches preferenced passed as arg
         matchTextReq = ((require_text and item.IsTextSubtitleStream) or not require_text)
         if languageMatch and matchTextReq
-            if m.user.Configuration.SubtitleMode = "Default" and (item.isForced or item.IsDefault or item.IsExternal)
+            if m.global.session.user.configuration.SubtitleMode = "Default" and (item.isForced or item.IsDefault or item.IsExternal)
                 return item.Index ' Finds first forced, or default, or external subs in sorted list
-            else if m.user.Configuration.SubtitleMode = "Always" and not item.IsForced
+            else if m.global.session.user.configuration.SubtitleMode = "Always" and not item.IsForced
                 return item.Index ' Select the first non-forced subtitle option in the sorted list
-            else if m.user.Configuration.SubtitleMode = "OnlyForced" and item.IsForced
+            else if m.global.session.user.configuration.SubtitleMode = "OnlyForced" and item.IsForced
                 return item.Index ' Select the first forced subtitle option in the sorted list
-            else if m.user.Configuration.SubtitlePlaybackMode = "Smart" and (item.isForced or item.IsDefault or item.IsExternal)
+            else if m.global.session.user.configuration.SubtitlePlaybackMode = "Smart" and (item.isForced or item.IsDefault or item.IsExternal)
                 ' Simplified "Smart" logic here mimics Default (as that is fallback behavior normally)
                 ' Avoids detecting preferred audio language (as is utilized in main client)
                 return item.Index
@@ -192,7 +192,7 @@ end sub
 function sortSubtitles(id as string, MediaStreams)
     tracks = { "forced": [], "default": [], "normal": [] }
     'Too many args for using substitute
-    prefered_lang = m.user.Configuration.SubtitleLanguagePreference
+    prefered_lang = m.global.session.user.configuration.SubtitleLanguagePreference
     for each stream in MediaStreams
         if stream.type = "Subtitle"
 

@@ -8,7 +8,7 @@ sub init()
     m.log = log.Logger("ItemGrid")
     m.options = m.top.findNode("options")
 
-    m.showItemCount = get_user_setting("itemgrid.showItemCount") = "true"
+    m.showItemCount = m.global.session.user.settings["itemgrid.showItemCount"]
 
     m.tvGuide = invalid
     m.channelFocused = invalid
@@ -71,7 +71,7 @@ sub init()
     m.AlphaSelected = m.top.findNode("AlphaSelected")
 
     'Get reset folder setting
-    m.resetGrid = get_user_setting("itemgrid.reset") = "true"
+    m.resetGrid = m.global.session.user.settings["itemgrid.reset"]
 
     m.micButton = m.top.findNode("micButton")
     m.micButtonText = m.top.findNode("micButtonText")
@@ -105,7 +105,7 @@ sub loadInitialItems()
     ' Read view/sort/filter settings
     if m.top.parentItem.collectionType = "livetv"
         ' Translate between app and server nomenclature
-        viewSetting = get_user_setting("display.livetv.landing")
+        viewSetting = m.global.session.user.settings["display.livetv.landing"]
         'Move mic to be visiable on TV Guide screen
         if m.global.device.hasVoiceRemote = true
             m.micButton.translation = "[1540, 92]"
@@ -119,19 +119,19 @@ sub loadInitialItems()
         else
             m.view = "livetv"
         end if
-        m.sortField = get_user_setting("display.livetv.sortField")
-        sortAscendingStr = get_user_setting("display.livetv.sortAscending")
-        m.filter = get_user_setting("display.livetv.filter")
+        m.sortField = m.global.session.user.settings["display.livetv.sortField"]
+        sortAscendingStr = m.global.session.user.settings["display.livetv.sortAscending"]
+        m.filter = m.global.session.user.settings["display.livetv.filter"]
     else if m.top.parentItem.collectionType = "music"
-        m.view = get_user_setting("display.music.view")
-        m.sortField = get_user_setting("display." + m.top.parentItem.Id + ".sortField")
-        sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
-        m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
+        m.view = m.global.session.user.settings["display.music.view"]
+        m.sortField = m.global.session.user.settings["display." + m.top.parentItem.Id + ".sortField"]
+        sortAscendingStr = m.global.session.user.settings["display." + m.top.parentItem.Id + ".sortAscending"]
+        m.filter = m.global.session.user.settings["display." + m.top.parentItem.Id + ".filter"]
     else
-        m.sortField = get_user_setting("display." + m.top.parentItem.Id + ".sortField")
-        sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
-        m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
-        m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
+        m.sortField = m.global.session.user.settings["display." + m.top.parentItem.Id + ".sortField"]
+        sortAscendingStr = m.global.session.user.settings["display." + m.top.parentItem.Id + ".sortAscending"]
+        m.filter = m.global.session.user.settings["display." + m.top.parentItem.Id + ".filter"]
+        m.view = m.global.session.user.settings["display." + m.top.parentItem.Id + ".landing"]
     end if
 
     if m.sortField = invalid then m.sortField = "SortName"
@@ -183,7 +183,7 @@ sub loadInitialItems()
         m.loadItemsTask.itemType = "MusicArtist"
         m.loadItemsTask.itemId = m.top.parentItem.Id
 
-        m.view = get_user_setting("display.music.view")
+        m.view = m.global.session.user.settings["display.music.view"]
 
         if m.view = "music-album"
             m.loadItemsTask.itemType = "MusicAlbum"
@@ -194,7 +194,7 @@ sub loadInitialItems()
         ' For LiveTV, we want to "Fit" the item images, not zoom
         m.top.imageDisplayMode = "scaleToFit"
 
-        if get_user_setting("display.livetv.landing") = "guide" and m.options.view <> "livetv"
+        if m.global.session.user.settings["display.livetv.landing"] = "guide" and m.options.view <> "livetv"
             showTvGuide()
         end if
     else if m.top.parentItem.collectionType = "CollectionFolder" or m.top.parentItem.type = "CollectionFolder" or m.top.parentItem.collectionType = "boxsets" or m.top.parentItem.Type = "Boxset" or m.top.parentItem.Type = "Boxsets" or m.top.parentItem.Type = "Folder" or m.top.parentItem.Type = "Channel"
@@ -650,7 +650,7 @@ sub optionsClosed()
             reload = true
         end if
     else
-        m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
+        m.view = m.global.session.user.settings["display." + m.top.parentItem.Id + ".landing"]
         if m.options.view <> m.view
             'reload and store new view setting
             m.view = m.options.view

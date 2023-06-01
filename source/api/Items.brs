@@ -1,6 +1,6 @@
 function ItemGetPlaybackInfo(id as string, startTimeTicks = 0 as longinteger)
     params = {
-        "UserId": get_setting("active_user"),
+        "UserId": m.global.session.user.id,
         "StartTimeTicks": startTimeTicks,
         "IsPlayback": true,
         "AutoOpenLiveStream": true,
@@ -15,7 +15,7 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
         "DeviceProfile": getDeviceProfile()
     }
     params = {
-        "UserId": get_setting("active_user"),
+        "UserId": m.global.session.user.id,
         "StartTimeTicks": startTimeTicks,
         "IsPlayback": true,
         "AutoOpenLiveStream": true,
@@ -39,7 +39,7 @@ function searchMedia(query as string)
     ' For each potential type, a separate query is done:
     ' varying item types, and artists, and people
     if query <> ""
-        resp = APIRequest(Substitute("Search/Hints", get_setting("active_user")), {
+        resp = APIRequest(Substitute("Search/Hints", m.global.session.user.id), {
             "searchTerm": query,
             "IncludePeople": true,
             "IncludeMedia": true,
@@ -70,7 +70,7 @@ end function
 
 ' MetaData about an item
 function ItemMetaData(id as string)
-    url = Substitute("Users/{0}/Items/{1}", get_setting("active_user"), id)
+    url = Substitute("Users/{0}/Items/{1}", m.global.session.user.id, id)
     resp = APIRequest(url)
     data = getJson(resp)
     if data = invalid then return invalid
@@ -178,7 +178,7 @@ end function
 
 ' Get list of albums belonging to an artist
 function MusicAlbumList(id as string)
-    url = Substitute("Users/{0}/Items", get_setting("active_user"))
+    url = Substitute("Users/{0}/Items", m.global.session.user.id)
     resp = APIRequest(url, {
         "AlbumArtistIds": id,
         "includeitemtypes": "MusicAlbum",
@@ -200,7 +200,7 @@ end function
 
 ' Get list of albums an artist appears on
 function AppearsOnList(id as string)
-    url = Substitute("Users/{0}/Items", get_setting("active_user"))
+    url = Substitute("Users/{0}/Items", m.global.session.user.id)
     resp = APIRequest(url, {
         "ContributingArtistIds": id,
         "ExcludeItemIds": id,
@@ -224,7 +224,7 @@ end function
 
 ' Get list of songs belonging to an artist
 function GetSongsByArtist(id as string)
-    url = Substitute("Users/{0}/Items", get_setting("active_user"))
+    url = Substitute("Users/{0}/Items", m.global.session.user.id)
     resp = APIRequest(url, {
         "AlbumArtistIds": id,
         "includeitemtypes": "Audio",
@@ -253,7 +253,7 @@ end function
 function PlaylistItemList(id as string)
     url = Substitute("Playlists/{0}/Items", id)
     resp = APIRequest(url, {
-        "UserId": get_setting("active_user")
+        "UserId": m.global.session.user.id
     })
 
     results = []
@@ -275,9 +275,9 @@ end function
 
 ' Get Songs that are on an Album
 function MusicSongList(id as string)
-    url = Substitute("Users/{0}/Items", get_setting("active_user"), id)
+    url = Substitute("Users/{0}/Items", m.global.session.user.id, id)
     resp = APIRequest(url, {
-        "UserId": get_setting("active_user"),
+        "UserId": m.global.session.user.id,
         "parentId": id,
         "includeitemtypes": "Audio",
         "sortBy": "SortName"
@@ -302,9 +302,9 @@ end function
 
 ' Get Songs that are on an Album
 function AudioItem(id as string)
-    url = Substitute("Users/{0}/Items/{1}", get_setting("active_user"), id)
+    url = Substitute("Users/{0}/Items/{1}", m.global.session.user.id, id)
     resp = APIRequest(url, {
-        "UserId": get_setting("active_user"),
+        "UserId": m.global.session.user.id,
         "includeitemtypes": "Audio",
         "sortBy": "SortName"
     })
@@ -316,7 +316,7 @@ end function
 function CreateInstantMix(id as string)
     url = Substitute("/Items/{0}/InstantMix", id)
     resp = APIRequest(url, {
-        "UserId": get_setting("active_user"),
+        "UserId": m.global.session.user.id,
         "Limit": 201
     })
 
@@ -325,7 +325,7 @@ end function
 
 ' Get Instant Mix based on item
 function CreateArtistMix(id as string)
-    url = Substitute("Users/{0}/Items", get_setting("active_user"))
+    url = Substitute("Users/{0}/Items", m.global.session.user.id)
     resp = APIRequest(url, {
         "ArtistIds": id,
         "Recursive": "true",
@@ -344,9 +344,9 @@ end function
 
 ' Get Intro Videos for an item
 function GetIntroVideos(id as string)
-    url = Substitute("Users/{0}/Items/{1}/Intros", get_setting("active_user"), id)
+    url = Substitute("Users/{0}/Items/{1}/Intros", m.global.session.user.id, id)
     resp = APIRequest(url, {
-        "UserId": get_setting("active_user")
+        "UserId": m.global.session.user.id
     })
 
     return getJson(resp)
@@ -399,7 +399,8 @@ end function
 ' Seasons for a TV Show
 function TVSeasons(id as string) as dynamic
     url = Substitute("Shows/{0}/Seasons", id)
-    resp = APIRequest(url, { "UserId": get_setting("active_user") })
+    resp = APIRequest(url, { "UserId": m.global.session.user.id })
+
     data = getJson(resp)
     ' validate data
     if data = invalid or data.Items = invalid then return invalid
@@ -418,7 +419,7 @@ end function
 
 function TVEpisodes(show_id as string, season_id as string) as dynamic
     url = Substitute("Shows/{0}/Episodes", show_id)
-    resp = APIRequest(url, { "seasonId": season_id, "UserId": get_setting("active_user"), "fields": "MediaStreams" })
+    resp = APIRequest(url, { "seasonId": season_id, "UserId": m.global.session.user.id, "fields": "MediaStreams" })
 
     data = getJson(resp)
     ' validate data
@@ -447,7 +448,7 @@ end function
 function TVEpisodeShuffleList(show_id as string)
     url = Substitute("Shows/{0}/Episodes", show_id)
     resp = APIRequest(url, {
-        "UserId": get_setting("active_user"),
+        "UserId": m.global.session.user.id,
         "Limit": 200,
         "sortBy": "Random"
     })

@@ -13,6 +13,7 @@ sub Main (args as dynamic) as void
     m.global = m.screen.getGlobalNode()
     SaveAppToGlobal()
     SaveDeviceToGlobal()
+    session.Init()
 
     m.scene = m.screen.CreateScene("JFScene")
     m.screen.show() ' vscode_rale_tracker_entry
@@ -34,10 +35,9 @@ sub Main (args as dynamic) as void
     PostDeviceProfile()
     ' remove previous scenes from the stack
     sceneManager.callFunc("clearScenes")
-    ' save user config
-    m.global.addFields({ userConfig: m.user.configuration })
+
     ' load home page
-    sceneManager.currentUser = m.user.Name
+    sceneManager.currentUser = m.global.session.user.name
     group = CreateHomeGroup()
     group.callFunc("loadLibraries")
     sceneManager.callFunc("pushScene", group)
@@ -64,7 +64,7 @@ sub Main (args as dynamic) as void
     ' Only show the Whats New popup the first time a user runs a new client version.
     if m.global.app.version <> get_setting("LastRunVersion")
         ' Ensure the user hasn't disabled Whats New popups
-        if get_user_setting("load.allowwhatsnew") = "true"
+        if m.global.session.user.settings["load.allowwhatsnew"] = true
             set_setting("LastRunVersion", m.global.app.version)
             dialog = createObject("roSGNode", "WhatsNewDialog")
             m.scene.dialog = dialog
@@ -460,7 +460,7 @@ sub Main (args as dynamic) as void
                 dialog.title = tr("Loading trailer")
                 m.scene.dialog = dialog
 
-                trailerData = api.users.GetLocalTrailers(get_setting("active_user"), group.id)
+                trailerData = api.users.GetLocalTrailers(m.global.session.user.id, group.id)
 
                 if isValid(trailerData) and isValid(trailerData[0]) and isValid(trailerData[0].id)
                     m.global.queueManager.callFunc("clear")

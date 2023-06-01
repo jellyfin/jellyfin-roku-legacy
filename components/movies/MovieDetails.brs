@@ -92,7 +92,7 @@ sub itemContentChanged()
 
     if type(itemData.RunTimeTicks) = "LongInteger"
         setFieldText("runtime", stri(getRuntime()) + " mins")
-        if get_user_setting("ui.design.hideclock") <> "true"
+        if m.global.session.user.settings["ui.design.hideclock"] <> true
             setFieldText("ends-at", tr("Ends at %1").Replace("%1", getEndTime()))
         end if
     end if
@@ -120,7 +120,7 @@ sub itemContentChanged()
         m.top.findNode("details").removeChild(m.top.findNode("director"))
     end if
 
-    if get_user_setting("ui.details.hidetagline") = "false"
+    if m.global.session.user.settings["ui.details.hidetagline"] = false
         if itemData.taglines.count() > 0
             setFieldText("tagline", itemData.taglines[0])
         end if

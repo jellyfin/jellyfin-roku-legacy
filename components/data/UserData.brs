@@ -32,7 +32,7 @@ sub saveToRegistry()
         users.push({
             id: m.top.id,
             username: m.top.username,
-            server: get_setting("server")
+            server: m.global.session.server.url
         })
         set_setting("available_users", formatJson(users))
     end if
@@ -48,8 +48,8 @@ sub removeFromRegistry()
     set_setting("available_users", formatJson(new_users))
 end sub
 
-function getPreference(key as string, default as string)
-    return get_user_setting("pref-" + key, default)
+function getPreference(key as string)
+    return get_user_setting("pref-" + key)
 end function
 
 function setPreference(key as string, value as string)

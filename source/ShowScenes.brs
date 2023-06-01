@@ -2,7 +2,14 @@ function LoginFlow(startOver = false as boolean)
     'Collect Jellyfin server and user information
     start_login:
 
-    if get_setting("server") = invalid then startOver = true
+    serverUrl = get_setting("server")
+    if isValid(serverUrl)
+        print "Previous server connection saved to registry"
+        session.server.UpdateURL(serverUrl)
+    else
+        startOver = true
+        print "No previous server connection saved to registry"
+    end if
 
     invalidServer = true
     if not startOver
@@ -28,7 +35,9 @@ function LoginFlow(startOver = false as boolean)
         SaveServerList()
     end if
 
-    if get_setting("active_user") = invalid
+    activeUser = get_setting("active_user")
+    if activeUser = invalid
+        print "No active user found in registry"
         SendPerformanceBeacon("AppDialogInitiate") ' Roku Performance monitoring - Dialog Starting
         publicUsers = GetPublicUsers()
         if publicUsers.count()
@@ -37,7 +46,7 @@ function LoginFlow(startOver = false as boolean)
                 user = CreateObject("roSGNode", "PublicUserData")
                 user.id = item.Id
                 user.name = item.Name
-                if item.PrimaryImageTag <> invalid
+                if isValid(item.PrimaryImageTag)
                     user.ImageURL = UserImageURL(user.id, { "tag": item.PrimaryImageTag })
                 end if
                 publicUsersNodes.push(user)
@@ -48,11 +57,11 @@ function LoginFlow(startOver = false as boolean)
                 return LoginFlow(true)
             else
                 'Try to login without password. If the token is valid, we're done
-                get_token(userSelected, "")
-                if get_setting("active_user") <> invalid
-                    m.user = AboutMe()
+                userData = get_token(userSelected, "")
+                if isValid(userData)
+                    session.user.Login(userData)
                     LoadUserPreferences()
-                    LoadUserAbilities(m.user)
+                    LoadUserAbilities()
                     SendPerformanceBeacon("AppDialogComplete") ' Roku Performance monitoring - Dialog Closed
                     return true
                 end if
@@ -66,17 +75,74 @@ function LoginFlow(startOver = false as boolean)
             m.global.sceneManager.callFunc("clearScenes")
             return LoginFlow(true)
         end if
+    else
+        print "Active user found in registry"
+        session.user.Update("id", activeUser)
+
+        myAuthToken = get_user_setting("token")
+        if isValid(myAuthToken)
+            print "Auth token found in registry"
+            session.user.Update("authToken", myAuthToken)
+            print "Attempting to use API with auth token"
+            currentUser = AboutMe()
+            if currentUser = invalid
+                print "Auth token is no longer valid - restart login flow"
+                unset_user_setting("token")
+                unset_setting("active_user")
+                session.user.Logout()
+                goto start_login
+            else
+                print "Success! Auth token is still valid"
+                session.user.Login(currentUser)
+            end if
+        else
+            print "No auth token found in registry"
+            myUsername = get_setting("username")
+            myPassword = get_setting("password")
+            userData = invalid
+
+            if isValid(myUsername) and isValid(myPassword)
+                if myUsername <> ""
+                    print "Username and password found in registry. Attempting to login"
+                    userData = get_token(myUsername, myPassword)
+                else
+                    print "Username in registry is an empty string"
+                    unset_setting("username")
+                    unset_setting("password")
+                end if
+            else if isValid(myUsername) and not isValid(myPassword)
+                print "Username found in registry but no password"
+                if myUsername <> ""
+                    print "Attempting to login with no password"
+                    userData = get_token(myUsername, "")
+                else
+                    print "Username in registry is an empty string"
+                    unset_setting("username")
+                end if
+
+            else if not isValid(myUsername) and not isValid(myPassword)
+                print "Neither username nor password found in registry - restart login flow"
+                unset_setting("active_user")
+                session.user.Logout()
+                goto start_login
+            end if
+
+            if isValid(userData)
+                print "login success!"
+                session.user.Login(userData)
+            end if
+        end if
     end if
 
-    m.user = AboutMe()
-    if m.user = invalid or m.user.id <> get_setting("active_user")
+    if m.global.session.user.id = invalid or m.global.session.user.authToken = invalid
         print "Login failed, restart flow"
         unset_setting("active_user")
+        session.user.Logout()
         goto start_login
     end if
 
     LoadUserPreferences()
-    LoadUserAbilities(m.user)
+    LoadUserAbilities()
     m.global.sceneManager.callFunc("clearScenes")
 
     return true
@@ -84,18 +150,18 @@ end function
 
 sub SaveServerList()
     'Save off this server to our list of saved servers for easier navigation between servers
-    server = get_setting("server")
+    server = m.global.session.server.url
     saved = get_setting("saved_servers")
-    if server <> invalid
+    if isValid(server)
         server = LCase(server)'Saved server data is always lowercase
     end if
     entryCount = 0
     addNewEntry = true
     savedServers = { serverList: [] }
-    if saved <> invalid
+    if isValid(saved)
         savedServers = ParseJson(saved)
         entryCount = savedServers.serverList.Count()
-        if savedServers.serverList <> invalid and entryCount > 0
+        if isValid(savedServers.serverList) and entryCount > 0
             for each item in savedServers.serverList
                 if item.baseUrl = server
                     addNewEntry = false
@@ -117,10 +183,10 @@ end sub
 
 sub DeleteFromServerList(urlToDelete)
     saved = get_setting("saved_servers")
-    if urlToDelete <> invalid
+    if isValid(urlToDelete)
         urlToDelete = LCase(urlToDelete)
     end if
-    if saved <> invalid
+    if isValid(saved)
         savedServers = ParseJson(saved)
         newServers = { serverList: [] }
         for each item in savedServers.serverList
@@ -146,8 +212,8 @@ function CreateServerGroup()
     port = CreateObject("roMessagePort")
     m.colors = {}
 
-    if get_setting("server") <> invalid
-        screen.serverUrl = get_setting("server")
+    if isValid(m.global.session.server.url)
+        screen.serverUrl = m.global.session.server.url
     end if
     m.viewModel = {}
     button = screen.findNode("submit")
@@ -181,43 +247,45 @@ function CreateServerGroup()
             if node = "submit"
                 serverUrl = standardize_jellyfin_url(screen.serverUrl)
                 'If this is a different server from what we know, reset username/password setting
-                if get_setting("server") <> serverUrl
+                if m.global.session.server.url <> serverUrl
                     set_setting("username", "")
                     set_setting("password", "")
                 end if
                 set_setting("server", serverUrl)
+                session.server.UpdateURL(serverUrl)
                 ' Show Connecting to Server spinner
                 dialog = createObject("roSGNode", "ProgressDialog")
                 dialog.title = tr("Connecting to Server")
                 m.scene.dialog = dialog
 
-                m.serverInfoResult = ServerInfo()
+                serverInfoResult = ServerInfo()
 
                 dialog.close = true
 
-                if m.serverInfoResult = invalid
+                if serverInfoResult = invalid
                     ' Maybe don't unset setting, but offer as a prompt
                     ' Server not found, is it online? New values / Retry
                     print "Server not found, is it online? New values / Retry"
                     screen.errorMessage = tr("Server not found, is it online?")
                     SignOut(false)
-                else if m.serverInfoResult.Error <> invalid and m.serverInfoResult.Error
+                else if isValid(serverInfoResult.Error) and serverInfoResult.Error
                     ' If server redirected received, update the URL
-                    if m.serverInfoResult.UpdatedUrl <> invalid
-                        serverUrl = m.serverInfoResult.UpdatedUrl
+                    if isValid(serverInfoResult.UpdatedUrl)
+                        serverUrl = serverInfoResult.UpdatedUrl
                         set_setting("server", serverUrl)
+                        session.server.UpdateURL(serverUrl)
                     end if
                     ' Display Error Message to user
                     message = tr("Error: ")
-                    if m.serverInfoResult.ErrorCode <> invalid
-                        message = message + "[" + m.serverInfoResult.ErrorCode.toStr() + "] "
+                    if isValid(serverInfoResult.ErrorCode)
+                        message = message + "[" + serverInfoResult.ErrorCode.toStr() + "] "
                     end if
-                    screen.errorMessage = message + tr(m.serverInfoResult.ErrorMessage)
+                    screen.errorMessage = message + tr(serverInfoResult.ErrorMessage)
                     SignOut(false)
                 else
                     screen.visible = false
-                    if m.serverInfoResult.serverName <> invalid
-                        return m.serverInfoResult.ServerName + " (Saved)"
+                    if isValid(serverInfoResult.serverName)
+                        return serverInfoResult.ServerName + " (Saved)"
                     else
                         return "Saved"
                     end if
@@ -226,7 +294,7 @@ function CreateServerGroup()
                 serverPicker = screen.findNode("serverPicker")
                 itemToDelete = serverPicker.content.getChild(serverPicker.itemFocused)
                 urlToDelete = itemToDelete.baseUrl
-                if urlToDelete <> invalid
+                if isValid(urlToDelete)
                     DeleteFromServerList(urlToDelete)
                     serverPicker.content.removeChild(itemToDelete)
                     sidepanel.visible = false
@@ -283,17 +351,18 @@ function CreateSigninGroup(user = "")
     group.findNode("prompt").text = tr("Sign In")
 
     'Load in any saved server data and see if we can just log them in...
-    server = get_setting("server")
-    if server <> invalid
+    server = m.global.session.server.url
+    if isValid(server)
         server = LCase(server)'Saved server data is always lowercase
     end if
     saved = get_setting("saved_servers")
-    if saved <> invalid
+    if isValid(saved)
         savedServers = ParseJson(saved)
         for each item in savedServers.serverList
-            if item.baseUrl = server and item.username <> invalid and item.password <> invalid
-                get_token(item.username, item.password)
-                if get_setting("active_user") <> invalid
+            if item.baseUrl = server and isValid(item.username) and isValid(item.password)
+                userData = get_token(item.username, item.password)
+                if isValid(userData)
+                    session.user.Login(userData)
                     return "true"
                 end if
             end if
@@ -314,8 +383,9 @@ function CreateSigninGroup(user = "")
     password_field.label = tr("Password")
     password_field.field = "password"
     password_field.type = "password"
-    if get_setting("password") <> invalid
-        password_field.value = get_setting("password")
+    registryPassword = get_setting("password")
+    if isValid(registryPassword)
+        password_field.value = registryPassword
     end if
     ' Add checkbox for saving credentials
     checkbox = group.findNode("onOff")
@@ -327,11 +397,8 @@ function CreateSigninGroup(user = "")
     checkbox.content = items
     checkbox.checkedState = [true]
     quickConnect = group.findNode("quickConnect")
-    if m.serverInfoResult = invalid
-        m.serverInfoResult = ServerInfo()
-    end if
     ' Quick Connect only supported for server version 10.8+ right now...
-    if versionChecker(m.serverInfoResult.Version, "10.8.0")
+    if versionChecker(m.global.session.server.version, "10.8.0")
         ' Add option for Quick Connect
         quickConnect.text = tr("Quick Connect")
         quickConnect.observeField("buttonSelected", port)
@@ -365,8 +432,9 @@ function CreateSigninGroup(user = "")
             node = msg.getNode()
             if node = "submit"
                 ' Validate credentials
-                get_token(username.value, password.value)
-                if get_setting("active_user") <> invalid
+                activeUser = get_token(username.value, password.value)
+                if isValid(activeUser)
+                    session.user.Login(activeUser)
                     set_setting("username", username.value)
                     set_setting("password", password.value)
                     if checkbox.checkedState[0] = true
@@ -463,7 +531,7 @@ function CreateHomeGroup()
         user_options.push({ display: user.username + "@" + user.server, value: user.id })
     end for
     user_node.choices = user_options
-    user_node.value = get_setting("active_user")
+    user_node.value = m.global.session.user.id
     new_options.push(user_node)
 
     sidepanel.options = new_options
@@ -492,7 +560,7 @@ function CreateMovieDetailsGroup(movie as object) as dynamic
     m.global.sceneManager.callFunc("pushScene", group)
     group.itemContent = movieMetaData
     ' local trailers
-    trailerData = api.users.GetLocalTrailers(get_setting("active_user"), movie.id)
+    trailerData = api.users.GetLocalTrailers(m.global.session.user.id, movie.id)
     if isValid(trailerData)
         group.trailerAvailable = trailerData.Count() > 0
     end if
@@ -525,7 +593,7 @@ function CreateSeriesDetailsGroup(seriesID as string) as dynamic
     ' Get season data early in the function so we can check number of seasons.
     seasonData = TVSeasons(seriesID)
     ' Divert to season details if user setting goStraightToEpisodeListing is enabled and only one season exists.
-    if get_user_setting("ui.tvshows.goStraightToEpisodeListing") = "true" and seasonData.Items.Count() = 1
+    if m.global.session.user.settings["ui.tvshows.goStraightToEpisodeListing"] = true and seasonData.Items.Count() = 1
         stopLoadingSpinner()
         return CreateSeasonDetailsGroupByID(seriesID, seasonData.Items[0].id)
     end if
@@ -783,7 +851,7 @@ function CreatePersonView(personData as object) as dynamic
 end function
 
 sub UpdateSavedServerList()
-    server = get_setting("server")
+    server = m.global.session.server.url
     username = get_setting("username")
     password = get_setting("password")
 
@@ -794,9 +862,9 @@ sub UpdateSavedServerList()
     server = LCase(server)'Saved server data is always lowercase
 
     saved = get_setting("saved_servers")
-    if saved <> invalid
+    if isValid(saved)
         savedServers = ParseJson(saved)
-        if savedServers.serverList <> invalid and savedServers.serverList.Count() > 0
+        if isValid(savedServers.serverList) and savedServers.serverList.Count() > 0
             newServers = { serverList: [] }
             for each item in savedServers.serverList
                 if item.baseUrl = server

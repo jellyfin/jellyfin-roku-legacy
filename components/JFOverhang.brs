@@ -18,7 +18,7 @@ sub init()
     m.slideDownAnimation = m.top.findNode("slideDown")
     m.slideUpAnimation = m.top.findNode("slideUp")
     ' show clock based on user setting
-    m.hideClock = get_user_setting("ui.design.hideclock") = "true"
+    m.hideClock = m.global.session.user.settings["ui.design.hideclock"]
     if not m.hideClock
         ' save node references
         m.overlayHours = m.top.findNode("overlayHours")

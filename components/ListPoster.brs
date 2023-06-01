@@ -56,7 +56,7 @@ sub itemContentChanged() as void
     itemData = m.top.itemContent
     m.title.text = itemData.title
 
-    if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
+    if m.global.session.user.settings["ui.tvshows.disableUnwatchedEpisodeCount"] = false
         if isValid(itemData.json.UserData) and isValid(itemData.json.UserData.UnplayedItemCount)
             if itemData.json.UserData.UnplayedItemCount > 0
                 m.unplayedCount.visible = true
@@ -80,7 +80,7 @@ sub itemContentChanged() as void
 
     imageUrl = itemData.posterURL
 
-    if get_user_setting("ui.tvshows.blurunwatched") = "true"
+    if m.global.session.user.settings["ui.tvshows.blurunwatched"] = true
         if itemData.json.lookup("Type") = "Episode" and isValid(itemData.json.userdata)
             if not itemData.json.userdata.played
                 imageUrl = imageUrl + "&blur=15"

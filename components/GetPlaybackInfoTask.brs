@@ -16,7 +16,7 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
         "DeviceProfile": getDeviceProfile()
     }
     params = {
-        "UserId": get_setting("active_user"),
+        "UserId": m.global.session.user.id,
         "StartTimeTicks": currentItem.startingPoint,
         "IsPlayback": true,
         "AutoOpenLiveStream": true,
@@ -46,15 +46,15 @@ sub getPlaybackInfoTask()
     end if
 end sub
 
-function GetTranscodingStats(session)
+function GetTranscodingStats(deviceSession)
     sessionStats = { data: [] }
 
-    if isValid(session.TranscodingInfo) and session.TranscodingInfo.Count() > 0
-        transcodingReasons = session.TranscodingInfo.TranscodeReasons
-        videoCodec = session.TranscodingInfo.VideoCodec
-        audioCodec = session.TranscodingInfo.AudioCodec
-        totalBitrate = session.TranscodingInfo.Bitrate
-        audioChannels = session.TranscodingInfo.AudioChannels
+    if isValid(deviceSession.TranscodingInfo) and deviceSession.TranscodingInfo.Count() > 0
+        transcodingReasons = deviceSession.TranscodingInfo.TranscodeReasons
+        videoCodec = deviceSession.TranscodingInfo.VideoCodec
+        audioCodec = deviceSession.TranscodingInfo.AudioCodec
+        totalBitrate = deviceSession.TranscodingInfo.Bitrate
+        audioChannels = deviceSession.TranscodingInfo.AudioChannels
 
         if isValid(transcodingReasons) and transcodingReasons.Count() > 0
             sessionStats.data.push("<header>" + tr("Transcoding Information") + "</header>")
@@ -65,7 +65,7 @@ function GetTranscodingStats(session)
 
         if isValid(videoCodec)
             data = "<b>• " + tr("Video Codec") + ":</b> " + videoCodec
-            if session.TranscodingInfo.IsVideoDirect
+            if deviceSession.TranscodingInfo.IsVideoDirect
                 data = data + " (" + tr("direct") + ")"
             end if
             sessionStats.data.push(data)
@@ -73,7 +73,7 @@ function GetTranscodingStats(session)
 
         if isValid(audioCodec)
             data = "<b>• " + tr("Audio Codec") + ":</b> " + audioCodec
-            if session.TranscodingInfo.IsAudioDirect
+            if deviceSession.TranscodingInfo.IsAudioDirect
                 data = data + " (" + tr("direct") + ")"
             end if
             sessionStats.data.push(data)

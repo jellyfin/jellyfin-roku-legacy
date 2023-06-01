@@ -12,7 +12,7 @@ sub init()
     m.originalQueue = []
     m.queueTypes = []
     ' Preroll videos only play if user has cinema mode setting enabled
-    m.isPrerollActive = (get_user_setting("playback.cinemamode") = "true")
+    m.isPrerollActive = m.global.session.user.settings["playback.cinemamode"]
     m.position = 0
     m.shuffleEnabled = false
 end sub
@@ -21,7 +21,7 @@ end sub
 sub clear()
     m.queue = []
     m.queueTypes = []
-    m.isPrerollActive = (get_user_setting("playback.cinemamode") = "true")
+    m.isPrerollActive = m.global.session.user.settings["playback.cinemamode"]
     setPosition(0)
 end sub
 

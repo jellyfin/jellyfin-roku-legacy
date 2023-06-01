@@ -31,7 +31,7 @@ sub init()
 
     m.overhang.isVisible = false
 
-    m.showItemCount = get_user_setting("itemgrid.showItemCount") = "true"
+    m.showItemCount = m.global.session.user.settings["itemgrid.showItemCount"]
 
     m.swapAnimation.observeField("state", "swapDone")
 
@@ -80,7 +80,7 @@ sub init()
     m.spinner.visible = true
 
     'Get reset folder setting
-    m.resetGrid = get_user_setting("itemgrid.reset") = "true"
+    m.resetGrid = m.global.session.user.settings["itemgrid.reset"]
 
     'Hide voice search if device does not have voice remote
     if m.global.device.hasVoiceRemote = false
@@ -123,22 +123,16 @@ sub loadInitialItems()
         SetBackground("")
     end if
 
-    m.sortField = get_user_setting("display." + m.top.parentItem.Id + ".sortField")
-    sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
-    m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
-    m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
+    m.sortField = m.global.session.user.settings["display." + m.top.parentItem.Id + ".sortField"]
+    m.sortAscending = m.global.session.user.settings["display." + m.top.parentItem.Id + ".sortAscending"]
+    m.filter = m.global.session.user.settings["display." + m.top.parentItem.Id + ".filter"]
+    m.view = m.global.session.user.settings["display." + m.top.parentItem.Id + ".landing"]
 
     if not isValid(m.sortField) then m.sortField = "SortName"
     if not isValid(m.filter) then m.filter = "All"
     if not isValid(m.view) then m.view = "ArtistsPresentation"
 
-    if sortAscendingStr = invalid or LCase(sortAscendingStr) = "true"
-        m.sortAscending = true
-    else
-        m.sortAscending = false
-    end if
-
-    m.top.showItemTitles = get_user_setting("itemgrid.gridTitles")
+    m.top.showItemTitles = m.global.session.user.settings["itemgrid.gridTitles"]
 
     if LCase(m.top.parentItem.json.type) = "musicgenre"
         m.itemGrid.translation = "[96, 60]"
@@ -660,7 +654,7 @@ sub optionsClosed()
         set_user_setting("display." + m.top.parentItem.Id + ".filter", m.options.filter)
     end if
 
-    m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
+    m.view = m.global.session.user.settings["display." + m.top.parentItem.Id + ".landing"]
 
     if m.options.view <> m.view
         m.view = m.options.view

@@ -152,8 +152,8 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     ' transcode is that the Encoding Level is not supported, then try to direct play but silently
     ' fall back to the transcode if that fails.
     if m.playbackInfo.MediaSources[0].MediaStreams.Count() > 0 and meta.live = false
-        tryDirectPlay = get_user_setting("playback.tryDirect.h264ProfileLevel") = "true" and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
-        tryDirectPlay = tryDirectPlay or (get_user_setting("playback.tryDirect.hevcProfileLevel") = "true" and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "hevc")
+        tryDirectPlay = m.global.session.user.settings["playback.tryDirect.h264ProfileLevel"] and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
+        tryDirectPlay = tryDirectPlay or (m.global.session.user.settings["playback.tryDirect.hevcProfileLevel"] and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "hevc")
         if tryDirectPlay and isValid(m.playbackInfo.MediaSources[0].TranscodingUrl) and forceTranscoding = false
             transcodingReasons = getTranscodeReasons(m.playbackInfo.MediaSources[0].TranscodingUrl)
             if transcodingReasons.Count() = 1 and transcodingReasons[0] = "VideoLevelNotSupported"
@@ -231,7 +231,7 @@ sub addSubtitlesToVideo(video, meta)
     safesubs = subtitles["all"]
     subtitleTracks = []
 
-    if get_user_setting("playback.subs.onlytext") = "true"
+    if m.global.session.user.settings["playback.subs.onlytext"] = true
         safesubs = subtitles["text"]
     end if
 
@@ -330,7 +330,7 @@ sub addNextEpisodesToQueue(showID)
     end if
 
     url = Substitute("Shows/{0}/Episodes", showID)
-    urlParams = { "UserId": get_setting("active_user") }
+    urlParams = { "UserId": m.global.session.user.id }
     urlParams.Append({ "StartItemId": videoID })
     urlParams.Append({ "Limit": 50 })
     resp = APIRequest(url, urlParams)
@@ -347,7 +347,7 @@ end sub
 function sortSubtitles(id as string, MediaStreams)
     tracks = { "forced": [], "default": [], "normal": [], "text": [] }
     'Too many args for using substitute
-    prefered_lang = m.user.Configuration.SubtitleLanguagePreference
+    prefered_lang = m.global.session.user.configuration.SubtitleLanguagePreference
     for each stream in MediaStreams
         if stream.type = "Subtitle"
 

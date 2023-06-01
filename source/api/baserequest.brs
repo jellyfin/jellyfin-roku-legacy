@@ -57,12 +57,14 @@ function APIRequest(url as string, params = {} as object) as dynamic
     full_url = buildURL(url, params)
     if full_url = invalid then return invalid
 
+    serverURL = m.global.session.server.url
+    if serverURL = invalid then return invalid
+
     req = createObject("roUrlTransfer")
     req.setUrl(full_url)
     req = authRequest(req)
     ' SSL cert
-    serverURL = get_setting("server")
-    if serverURL <> invalid and serverURL.left(8) = "https://"
+    if serverURL.left(8) = "https://"
         req.setCertificatesFile("common:/certs/ca-bundle.crt")
     end if
 
@@ -156,16 +158,16 @@ function deleteVoid(req)
 end function
 
 function get_url()
-    serverURL = get_setting("server")
-    if serverURL = invalid then return invalid
+    serverURL = m.global.session.server.url
+    if serverURL <> invalid
+        if serverURL.right(1) = "/"
+            serverURL = serverURL.left(serverURL.len() - 1)
+        end if
 
-    if serverURL.right(1) = "/"
-        serverURL = serverURL.left(serverURL.len() - 1)
-    end if
-
-    ' append http:// to the start if not specified
-    if serverURL.left(7) <> "http://" and serverURL.left(8) <> "https://"
-        serverURL = "http://" + serverURL
+        ' append http:// to the start if not specified
+        if serverURL.left(7) <> "http://" and serverURL.left(8) <> "https://"
+            serverURL = "http://" + serverURL
+        end if
     end if
     return serverURL
 end function
@@ -194,17 +196,14 @@ function authRequest(request as object) as object
     auth = auth + ", Device=" + QUOTE + m.global.device.name + " (" + m.global.device.friendlyName + ")" + QUOTE
     auth = auth + ", Version=" + QUOTE + m.global.app.version + QUOTE
 
-    user = get_setting("active_user")
-    if user <> invalid and user <> ""
-        auth = auth + ", UserId=" + QUOTE + user + QUOTE
+    if m.global.session.user.id <> invalid
+        auth = auth + ", UserId=" + QUOTE + m.global.session.user.id + QUOTE
         auth = auth + ", DeviceId=" + QUOTE + m.global.device.id + QUOTE
+        if m.global.session.user.authToken <> invalid
+            auth = auth + ", Token=" + QUOTE + m.global.session.user.authToken + QUOTE
+        end if
     else
         auth = auth + ", DeviceId=" + QUOTE + m.global.device.uuid + QUOTE
-    end if
-
-    token = get_user_setting("token")
-    if token <> invalid and token <> ""
-        auth = auth + ", Token=" + QUOTE + token + QUOTE
     end if
 
     request.AddHeader("Authorization", auth)

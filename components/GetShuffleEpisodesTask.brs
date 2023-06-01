@@ -7,7 +7,7 @@ end sub
 
 sub getShuffleEpisodesTask()
     data = api.shows.GetEpisodes(m.top.showID, {
-        UserId: get_setting("active_user"),
+        UserId: m.global.session.user.id,
         SortBy: "Random",
         Limit: 200
     })

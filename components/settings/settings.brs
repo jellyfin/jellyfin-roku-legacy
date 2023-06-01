@@ -95,20 +95,20 @@ sub settingFocused()
 
         m.boolSetting.visible = true
 
-        if get_user_setting(selectedSetting.settingName) = "true"
+        if m.global.session.user.settings[selectedSetting.settingName] = true
             m.boolSetting.checkedItem = 1
         else
             m.boolSetting.checkedItem = 0
         end if
     else if selectedSetting.type = "integer"
-        integerValue = get_user_setting(selectedSetting.settingName, selectedSetting.default)
+        integerValue = m.global.session.user.settings[selectedSetting.settingName].ToStr()
         if isValid(integerValue)
             m.integerSetting.text = integerValue
         end if
         m.integerSetting.visible = true
     else if LCase(selectedSetting.type) = "radio"
 
-        selectedValue = get_user_setting(selectedSetting.settingName, selectedSetting.default)
+        selectedValue = m.global.session.user.settings[selectedSetting.settingName]
 
         radioContent = CreateObject("roSGNode", "ContentNode")
 

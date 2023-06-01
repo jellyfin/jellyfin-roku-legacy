@@ -19,7 +19,7 @@ sub itemContentChanged()
     item = m.top.itemContent
     itemData = item.json
 
-    if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
+    if m.global.session.user.settings["ui.tvshows.disableUnwatchedEpisodeCount"] = false
         if isValid(itemData.UserData) and isValid(itemData.UserData.UnplayedItemCount)
             if itemData.UserData.UnplayedItemCount > 0
                 m.unplayedCount.visible = true

@@ -6365,5 +6365,18 @@
         <translation>Sélectionnez un serveur disponible sur votre réseau local:</translation>
         <extracomment>Instructions on initial app launch when the user is asked to pick a server from a list</extracomment>
     </message>
+    <message>
+        <source>Cinema Mode</source>
+        <translation>Mode cinéma</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
+    <message>
+        <source>Playback Information</source>
+        <translation>Informations de lecture</translation>
+    </message>
+    <message>
+        <source>Play Trailer</source>
+        <translation>Lire la bande annonce</translation>
+    </message>
 </context>
 </TS>
