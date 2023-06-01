@@ -65,7 +65,7 @@ function APIRequest(url as string, params = {} as object) as dynamic
     req = authRequest(req)
     ' SSL cert
     if serverURL.left(8) = "https://"
-        req.setCertificatesFile("common:/certs/ca-bundle.crt")
+        setCertificateAuthority(req)
     end if
 
     return req
@@ -188,6 +188,11 @@ function postString(req, data = "" as string)
 
     return resp.getString()
 end function
+
+' sets the certificate authority by file path on the passed node
+sub setCertificateAuthority(request as object) as void
+    request.setCertificatesFile("common:/certs/ca-bundle.crt")
+end sub
 
 ' Takes and returns a roUrlTransfer object after adding a Jellyfin "Authorization" header
 function authRequest(request as object) as object

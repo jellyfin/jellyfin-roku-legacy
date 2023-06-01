@@ -180,7 +180,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
         video.isTranscoded = true
     end if
 
-    video.content.setCertificatesFile("common:/certs/ca-bundle.crt")
+    setCertificateAuthority(video.content)
     video.audioTrack = (audio_stream_idx + 1).ToStr() ' Roku's track indexes count from 1. Our index is zero based
 
     video.SelectedSubtitle = subtitle_idx
