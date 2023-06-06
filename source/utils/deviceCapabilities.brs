@@ -23,8 +23,8 @@ sub PostDeviceProfile()
 end sub
 
 function getDeviceProfile() as object
-    playMpeg2 = m.global.session.user.settings["playback.mpeg2"]
-    playAv1 = m.global.session.user.settings["playback.av1"]
+    playMpeg2 = get_user_setting("playback.mpeg2") = "true"
+    playAv1 = get_user_setting("playback.av1") = "true"
 
     'Check if 5.1 Audio Output connected
     maxAudioChannels = 2
@@ -35,9 +35,11 @@ function getDeviceProfile() as object
 
     addHevcProfile = false
     MAIN10 = ""
-    tsVideoCodecs = "h264"
+    videoCodecs = "h264"
+    mkvAudioCodecs = "aac"
+    tsAudioCodecs = "aac"
     if di.CanDecodeVideo({ Codec: "hevc" }).Result = true
-        tsVideoCodecs = "h265,hevc," + tsVideoCodecs
+        videoCodecs = "h265,hevc," + videoCodecs
         addHevcProfile = true
         if di.CanDecodeVideo({ Codec: "hevc", Profile: "main 10" }).Result
             MAIN10 = "|main 10"
@@ -45,24 +47,28 @@ function getDeviceProfile() as object
     end if
 
     if playMpeg2 and di.CanDecodeVideo({ Codec: "mpeg2" }).Result = true
-        tsVideoCodecs = tsVideoCodecs + ",mpeg2video"
+        videoCodecs = videoCodecs + ",mpeg2video"
+    end if
+
+    if di.CanDecodeAudio({ Codec: "eac3" }).result ' Force codec, Jellyfin prefers anything over eac3 for some reason no matter the order, needs investigation.
+        mkvAudioCodecs = "eac3"
+    else if di.CanDecodeAudio({ Codec: "ac3" }).result
+        mkvAudioCodecs = "ac3"
     end if
 
     if di.CanDecodeAudio({ Codec: "ac3" }).result
-        tsAudioCodecs = "aac,ac3"
-    else
-        tsAudioCodecs = "aac"
+        tsAudioCodecs = "ac3," + tsAudioCodecs ' ac3 must be before aac else aac is selected.
     end if
 
     addAv1Profile = false
     if playAv1 and di.CanDecodeVideo({ Codec: "av1" }).result
-        tsVideoCodecs = tsVideoCodecs + ",av1"
+        videoCodecs = videoCodecs + ",av1"
         addAv1Profile = true
     end if
 
     addVp9Profile = false
     if di.CanDecodeVideo({ Codec: "vp9" }).result
-        tsVideoCodecs = tsVideoCodecs + ",vp9"
+        videoCodecs = videoCodecs + ",vp9"
         addVp9Profile = true
     end if
 
@@ -127,11 +133,22 @@ function getDeviceProfile() as object
                 "Protocol": "http",
                 "MaxAudioChannels": StrI(maxAudioChannels) ' Currently Jellyfin server expects this as a string
             },
+            { ' MKV supports more audio formats therefore it should be preferred
+                "Container": "mkv",
+                "Type": "Video",
+                "AudioCodec": mkvAudioCodecs,
+                "VideoCodec": videoCodecs,
+                "Context": "Streaming",
+                "Protocol": "hls",
+                "MaxAudioChannels": StrI(maxAudioChannels), ' Currently Jellyfin server expects this as a string
+                "MinSegments": "1",
+                "BreakOnNonKeyFrames": true
+            }
             {
                 "Container": "ts",
                 "Type": "Video",
                 "AudioCodec": tsAudioCodecs,
-                "VideoCodec": tsVideoCodecs,
+                "VideoCodec": videoCodecs,
                 "Context": "Streaming",
                 "Protocol": "hls",
                 "MaxAudioChannels": StrI(maxAudioChannels), ' Currently Jellyfin server expects this as a string
@@ -270,7 +287,7 @@ function GetDirectPlayProfiles() as object
     mkvAudio = "mp3,pcm,lpcm,wav"
     audio = "mp3,pcm,lpcm,wav"
 
-    playMpeg2 = m.global.session.user.settings["playback.mpeg2"]
+    playMpeg2 = get_user_setting("playback.mpeg2") = "true"
 
     di = CreateObject("roDeviceInfo")
 
@@ -289,7 +306,7 @@ function GetDirectPlayProfiles() as object
         mkvVideo = mkvVideo + ",mpeg2video"
     end if
 
-    if m.global.session.user.settings["playback.mpeg4"] = true
+    if get_user_setting("playback.mpeg4") = "true"
         mp4Video = mp4Video + ",mpeg4"
     end if
 
@@ -366,8 +383,8 @@ function GetDirectPlayProfiles() as object
 end function
 
 function GetBitRateLimit(codec as string)
-    if m.global.session.user.settings["playback.bitrate.maxlimited"] = true
-        userSetLimit = m.global.session.user.settings["playback.bitrate.limit"]
+    if get_user_setting("playback.bitrate.maxlimited") = "true"
+        userSetLimit = get_user_setting("playback.bitrate.limit").ToInt()
         userSetLimit *= 1000000
 
         if userSetLimit > 0
