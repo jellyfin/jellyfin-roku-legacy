@@ -24,6 +24,7 @@ sub init()
     m.nextEpisodeButton = m.top.findNode("nextEpisode")
     m.nextEpisodeButton.text = tr("Next Episode")
     m.nextEpisodeButton.setFocus(false)
+    m.nextEpisodeButton.visible = false
     m.nextupbuttonseconds = get_user_setting("playback.nextupbuttonseconds", "30")
     if isValid(m.nextupbuttonseconds)
         m.nextupbuttonseconds = val(m.nextupbuttonseconds)
@@ -120,7 +121,6 @@ sub showNextEpisodeButton()
         m.nextEpisodeButton.setFocus(true)
         m.nextEpisodeButton.visible = true
     end if
-    print "show need episode button, is visible?" m.nextEpisodeButton.visible
 end sub
 
 '
@@ -447,11 +447,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.top.state = "finished"
         m.nextEpisodeButton.visible = false
         return true
-    else
+    else if key = "OK" and m.top.state = "playing"
         'Hide Next Episode Button
         m.nextEpisodeButton.visible = false
         m.nextEpisodeButton.setFocus(false)
-        m.top.setFocus(true)
     end if
 
     if key = "down"
@@ -498,6 +497,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             if not m.buttonGrp.visible
                 m.top.control = "resume"
                 m.top.setFocus(true)
+                return true
             end if
         end if
     end if
@@ -524,7 +524,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
                 if selectedButton.id = "info"
                     info()
                     m.top.control = "pause"
-                    return true
+                    'return true
                 end if
                 if selectedButton.id = "cast"
                     m.top.control = "pause"
