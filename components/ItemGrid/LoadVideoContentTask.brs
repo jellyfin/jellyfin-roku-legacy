@@ -41,22 +41,25 @@ sub loadItems()
         end if
     end if
 
+    ' Determine selected subtitles before video loads based on user configuration
+    m.top.selectedSubtitleIndex = defaultSubtitleTrackFromVid(m.top.itemId)
+    print m.top.selectedSubtitleIndex
     id = m.top.itemId
     mediaSourceId = invalid
     audio_stream_idx = m.top.selectedAudioStreamIndex
     subtitle_idx = m.top.selectedSubtitleIndex
     forceTranscoding = false
 
-    m.top.content = [LoadItems_VideoPlayer(id, mediaSourceId, audio_stream_idx, subtitle_idx, forceTranscoding)]
+    m.top.content = [LoadItems_VideoPlayer(id, subtitle_idx, mediaSourceId, audio_stream_idx, forceTranscoding)]
 end sub
 
-function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, forceTranscoding = false as boolean) as dynamic
+function LoadItems_VideoPlayer(id as string, subtitle_idx, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, forceTranscoding = false as boolean) as dynamic
 
     video = {}
     video.id = id
     video.content = createObject("RoSGNode", "ContentNode")
 
-    LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, forceTranscoding)
+    LoadItems_AddVideoContent(video, mediaSourceId, subtitle_idx, audio_stream_idx, forceTranscoding)
 
     if video.content = invalid
         return invalid
@@ -65,7 +68,7 @@ function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic,
     return video
 end function
 
-sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, forceTranscoding = false as boolean)
+sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, subtitle_idx, audio_stream_idx = 1 as integer, forceTranscoding = false as boolean)
 
     meta = ItemMetaData(video.id)
 
@@ -129,7 +132,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
         m.playbackInfo = meta.json
     end if
 
-    addSubtitlesToVideo(video, meta)
+    addSubtitlesToVideo(video, meta, subtitle_idx)
 
     if meta.live
         video.transcodeParams = {
@@ -164,7 +167,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     end if
 
     if video.directPlaySupported
-        addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
+        addVideoContentURL(video, mediaSourceId, audio_stream_idx, subtitle_idx, fully_external)
         video.isTranscoded = false
     else
         if m.playbackInfo.MediaSources[0].TranscodingUrl = invalid
@@ -191,7 +194,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
 
 end sub
 
-sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
+sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, subtitle_idx, fully_external)
     protocol = LCase(m.playbackInfo.MediaSources[0].Protocol)
     if protocol <> "file"
         uriRegex = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
@@ -215,7 +218,8 @@ sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
             "Static": "true",
             "Container": video.container,
             "PlaySessionId": video.PlaySessionId,
-            "AudioStreamIndex": audio_stream_idx
+            "AudioStreamIndex": audio_stream_idx,
+            "SelectedSubtitle": subtitle_idx
         })
 
         if mediaSourceId <> ""
@@ -226,7 +230,7 @@ sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
     end if
 end sub
 
-sub addSubtitlesToVideo(video, meta)
+sub addSubtitlesToVideo(video, meta, selectedSubtitle)
     subtitles = sortSubtitles(meta.id, m.playbackInfo.MediaSources[0].MediaStreams)
     safesubs = subtitles["all"]
     subtitleTracks = []
@@ -236,6 +240,10 @@ sub addSubtitlesToVideo(video, meta)
     end if
 
     for each subtitle in safesubs
+        ' Check which subtitle is loaded by default
+        if subtitle.index = selectedSubtitle
+            subtitle.selected = true
+        end if
         subtitleTracks.push(subtitle.track)
     end for
 
@@ -342,6 +350,60 @@ sub addNextEpisodesToQueue(showID)
         end for
     end if
 end sub
+
+' Identify the default subtitle track for a given video id
+' returns the server-side track index for the appriate subtitle
+function defaultSubtitleTrackFromVid(video_id) as integer
+    meta = ItemMetaData(video_id)
+    if isValid(meta) and isValid(meta.json) and isValid(meta.json.mediaSources)
+        subtitles = sortSubtitles(meta.id, meta.json.MediaSources[0].MediaStreams)
+        default_text_subs = defaultSubtitleTrack(subtitles["all"], true) ' Find correct subtitle track (forced text)
+        if default_text_subs <> -1
+            return default_text_subs
+        else
+            if get_user_setting("playback.subs.onlytext") = "false"
+                return defaultSubtitleTrack(subtitles["all"]) ' if no appropriate text subs exist, allow non-text
+            else
+                return -1
+            end if
+        end if
+    end if
+    ' No valid mediaSources (i.e. LiveTV)
+    return -1
+end function
+
+' Identify the default subtitle track
+' if "requires_text" is true, only return a track if it is textual
+'     This allows forcing text subs, since roku requires transcoding of non-text subs
+' returns the server-side track index for the appriate subtitle
+function defaultSubtitleTrack(sorted_subtitles, require_text = false) as integer
+    print m.user.Configuration.SubtitleMode
+    if m.user.Configuration.SubtitleMode = "None"
+        return -1 ' No subtitles desired: select none
+    end if
+
+    for each item in sorted_subtitles
+        print "FORCED?: ", item.isForced
+        ' Only auto-select subtitle if language matches preference
+        languageMatch = (m.user.Configuration.SubtitleLanguagePreference = item.Track.Language) or (m.user.Configuration.SubtitleLanguagePreference = "")
+        ' Ensure textuality of subtitle matches preferenced passed as arg
+        matchTextReq = ((require_text and item.IsTextSubtitleStream) or not require_text)
+        if languageMatch and matchTextReq
+            if m.user.Configuration.SubtitleMode = "Default" and (item.isForced or item.IsDefault or item.IsExternal)
+                return item.Index ' Finds first forced, or default, or external subs in sorted list
+            else if m.user.Configuration.SubtitleMode = "Always" and not item.IsForced
+                return item.Index ' Select the first non-forced subtitle option in the sorted list
+            else if m.user.Configuration.SubtitleMode = "OnlyForced" and item.IsForced
+                return item.Index ' Select the first forced subtitle option in the sorted list
+            else if m.user.Configuration.SubtitleMode = "Smart" and (item.isForced or item.IsDefault or item.IsExternal)
+                ' Simplified "Smart" logic here mimics Default (as that is fallback behavior normally)
+                ' Avoids detecting preferred audio language (as is utilized in main client)
+                return item.Index
+            end if
+        end if
+    end for
+    return -1 ' Keep current default behavior of "None", if no correct subtitle is identified
+end function
 
 'Checks available subtitle tracks and puts subtitles in forced, default, and non-default/forced but preferred language at the top
 function sortSubtitles(id as string, MediaStreams)
