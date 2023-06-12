@@ -43,7 +43,6 @@ sub loadItems()
 
     ' Determine selected subtitles before video loads based on user configuration
     m.top.selectedSubtitleIndex = defaultSubtitleTrackFromVid(m.top.itemId)
-    print m.top.selectedSubtitleIndex
     id = m.top.itemId
     mediaSourceId = invalid
     audio_stream_idx = m.top.selectedAudioStreamIndex
@@ -377,13 +376,11 @@ end function
 '     This allows forcing text subs, since roku requires transcoding of non-text subs
 ' returns the server-side track index for the appriate subtitle
 function defaultSubtitleTrack(sorted_subtitles, require_text = false) as integer
-    print m.user.Configuration.SubtitleMode
     if m.user.Configuration.SubtitleMode = "None"
         return -1 ' No subtitles desired: select none
     end if
 
     for each item in sorted_subtitles
-        print "FORCED?: ", item.isForced
         ' Only auto-select subtitle if language matches preference
         languageMatch = (m.user.Configuration.SubtitleLanguagePreference = item.Track.Language) or (m.user.Configuration.SubtitleLanguagePreference = "")
         ' Ensure textuality of subtitle matches preferenced passed as arg
