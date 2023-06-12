@@ -103,7 +103,6 @@ sub processSubtitleSelection()
         if m.view.selectedSubtitle = m.selectedSubtitle.index then return
     end if
 
-    print
     ' The playbackData is now outdated and must be refreshed
     m.playbackData = invalid
 
