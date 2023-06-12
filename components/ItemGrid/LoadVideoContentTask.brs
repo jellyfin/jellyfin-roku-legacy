@@ -10,6 +10,7 @@ import "pkg:/source/utils/deviceCapabilities.brs"
 sub init()
     m.user = AboutMe()
     m.top.functionName = "loadItems"
+
 end sub
 
 sub loadItems()
@@ -41,8 +42,14 @@ sub loadItems()
         end if
     end if
 
-    ' Determine selected subtitles before video loads based on user configuration
-    m.top.selectedSubtitleIndex = defaultSubtitleTrackFromVid(m.top.itemId)
+    ' Determine selected subtitles before video loads based on user configuration.
+    ' Will only run once on first load, as -2 index does not exist.
+    if m.top.selectedSubtitleIndex = -2
+        currentItem = m.global.queueManager.callFunc("getCurrentItem")
+        if isValid(currentItem) and isValid(currentItem.json)
+            m.top.selectedSubtitleIndex = defaultSubtitleTrackFromVid(m.top.itemId)
+        end if
+    end if
     id = m.top.itemId
     mediaSourceId = invalid
     audio_stream_idx = m.top.selectedAudioStreamIndex
@@ -131,7 +138,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, subtitl
         m.playbackInfo = meta.json
     end if
 
-    addSubtitlesToVideo(video, meta, subtitle_idx)
+    addSubtitlesToVideo(video, meta)
 
     if meta.live
         video.transcodeParams = {
@@ -217,8 +224,7 @@ sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, subtitle_idx, ful
             "Static": "true",
             "Container": video.container,
             "PlaySessionId": video.PlaySessionId,
-            "AudioStreamIndex": audio_stream_idx,
-            "SelectedSubtitle": subtitle_idx
+            "AudioStreamIndex": audio_stream_idx
         })
 
         if mediaSourceId <> ""
@@ -229,7 +235,7 @@ sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, subtitle_idx, ful
     end if
 end sub
 
-sub addSubtitlesToVideo(video, meta, selectedSubtitle)
+sub addSubtitlesToVideo(video, meta)
     subtitles = sortSubtitles(meta.id, m.playbackInfo.MediaSources[0].MediaStreams)
     safesubs = subtitles["all"]
     subtitleTracks = []
@@ -239,10 +245,6 @@ sub addSubtitlesToVideo(video, meta, selectedSubtitle)
     end if
 
     for each subtitle in safesubs
-        ' Check which subtitle is loaded by default
-        if subtitle.index = selectedSubtitle
-            subtitle.selected = true
-        end if
         subtitleTracks.push(subtitle.track)
     end for
 
