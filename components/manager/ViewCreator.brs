@@ -46,6 +46,13 @@ sub onSelectSubtitlePressed()
         }]
     }
 
+    ' Recheck which subtitle is selected, needed for first load
+    for each item in m.view.fullSubtitleData
+        if item.selected = true
+            m.view.selectedSubtitle = item.index
+        end if
+    end for
+
     for each item in m.view.fullSubtitleData
         item.type = "subtitleselection"
 
@@ -96,6 +103,7 @@ sub processSubtitleSelection()
         if m.view.selectedSubtitle = m.selectedSubtitle.index then return
     end if
 
+    print
     ' The playbackData is now outdated and must be refreshed
     m.playbackData = invalid
 
