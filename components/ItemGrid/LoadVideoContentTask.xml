@@ -4,7 +4,7 @@
   <interface>
     <field id="itemId" type="string" />
     <field id="selectedAudioStreamIndex" type="integer" value="0" />
-    <field id="selectedSubtitleIndex" type="integer" value="-2" />
+    <field id="selectedSubtitleIndex" type="integer" value="-1" />
     <field id="isIntro" type="boolean" />
     <field id="startIndex" type="integer" value="0" />
     <field id="itemType" type="string" value="" />
