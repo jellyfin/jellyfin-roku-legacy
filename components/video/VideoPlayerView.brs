@@ -113,6 +113,12 @@ sub onVideoContentLoaded()
     m.top.audioIndex = videoContent[0].audioIndex
     m.top.transcodeParams = videoContent[0].transcodeparams
 
+    for i = 0 to videoContent[0].fullSubtitleData.Count() - 1
+        if videoContent[0].fullSubtitleData[i].selected = true
+            videoContent[0].fullSubtitleData[i].selected = false
+            m.top.selectedSubtitle = videoContent[0].fullSubtitleData[i].index
+        end if
+    end for
     if m.LoadMetaDataTask.isIntro
         m.top.enableTrickPlay = false
     end if

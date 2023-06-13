@@ -46,16 +46,8 @@ sub onSelectSubtitlePressed()
         }]
     }
 
-    ' Recheck which subtitle is selected, needed for first load
-    for each item in m.view.fullSubtitleData
-        if item.selected = true
-            m.view.selectedSubtitle = item.index
-        end if
-    end for
-
     for each item in m.view.fullSubtitleData
         item.type = "subtitleselection"
-
         if m.view.selectedSubtitle <> -1
             ' Subtitle is a track within the file
             if item.index = m.view.selectedSubtitle
