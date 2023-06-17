@@ -385,33 +385,146 @@ end function
 
 ' Identify the default subtitle track
 ' if "requires_text" is true, only return a track if it is textual
-'     This allows forcing text subs, since roku requires transcoding of non-text subs
+' This allows forcing text subs, since roku requires transcoding of non-text subs
 ' returns the server-side track index for the appriate subtitle
 function defaultSubtitleTrack(sorted_subtitles, require_text = false) as integer
-    if m.user.Configuration.SubtitleMode = "None"
+    if m.user.Configuration.SubtitleMode = "None" or sorted_subtitles.Count() = 0
         return -1 ' No subtitles desired: select none
     end if
 
-    for each item in sorted_subtitles
-        ' Only auto-select subtitle if language matches preference
-        languageMatch = (m.user.Configuration.SubtitleLanguagePreference = item.Track.Language) or (m.user.Configuration.SubtitleLanguagePreference = "")
-        ' Ensure textuality of subtitle matches preferenced passed as arg
-        matchTextReq = ((require_text and item.IsTextSubtitleStream) or not require_text)
-        if languageMatch and matchTextReq
-            if m.user.Configuration.SubtitleMode = "Default" and (item.isForced or item.IsDefault or item.IsExternal)
-                return item.Index ' Finds first forced, or default, or external subs in sorted list
-            else if m.user.Configuration.SubtitleMode = "Always" and not item.IsForced
-                return item.Index ' Select the first non-forced subtitle option in the sorted list
-            else if m.user.Configuration.SubtitleMode = "OnlyForced" and item.IsForced
-                return item.Index ' Select the first forced subtitle option in the sorted list
-            else if m.user.Configuration.SubtitleMode = "Smart" and (item.isForced or item.IsDefault or item.IsExternal)
-                ' Simplified "Smart" logic here mimics Default (as that is fallback behavior normally)
-                ' Avoids detecting preferred audio language (as is utilized in main client)
-                return item.Index
+    filtered_subtitles = []
+
+    if require_text 'Filter all non-text subtitles if require_text is true
+        for each subtitle in sorted_subtitles
+            if require_text and subtitle.IsTextSubtitleStream
+                filtered_subtitles.push(subtitle)
+            end if
+        end for
+    else
+        filtered_subtitles = sorted_subtitles
+    end if
+    sub_idx = -1 ' "none"
+
+    ' When set to "Default," the media player will follow the default subtitle track specified.
+    ' If there is no default/forced track, it will choose the first available subtitle track.
+    ' Language preferences are considered only when multiple options are available, as per Jellyfin.
+    if m.user.Configuration.SubtitleMode = "Default"
+        forced_subs = []
+        for each item in filtered_subtitles ' Follow subtitle precedence. Search for Forced subtitles first.
+            if item.isForced
+                forced_subs.push(item)
+                exit for
+            end if
+        end for
+        if forced_subs.Count() >= 0
+            if forced_subs.Count() > 1 or m.user.Configuration.SubtitleLanguagePreference <> ""
+                sub_idx = forced_subs[0].index
+                ' Failsafe for multiple Forced subtitles. Skips this check and uses the first found index
+                ' if preference is set to "Any Language"
+                for each item in forced_subs
+                    if m.user.Configuration.SubtitleLanguagePreference = item.Track.Language
+                        sub_idx = item.index
+                        exit for
+                    end if
+                end for
+            else
+                sub_idx = forced_subs[0].index
             end if
         end if
-    end for
-    return -1 ' Keep current default behavior of "None", if no correct subtitle is identified
+
+        if sub_idx = -1
+            default_subs = []
+            for each item in filtered_subtitles ' Search for Default subtitles if no Forced are found
+                if item.isForced
+                    default_subs.push(item)
+                    exit for
+                end if
+            end for
+            if default_subs.Count() >= 0
+                if default_subs.Count() > 1 or m.user.Configuration.SubtitleLanguagePreference <> ""
+                    sub_idx = default_subs[0].index
+                    ' Failsafe for multiple Forced subtitles. Skips this check and uses the first found index
+                    ' if preference is set to "Any Language"
+                    for each item in default_subs
+                        if m.user.Configuration.SubtitleLanguagePreference = item.Track.Language
+                            sub_idx = item.index
+                            exit for
+                        end if
+                    end for
+                else
+                    sub_idx = default_subs[0].index
+                end if
+            end if
+        end if
+        if sub_idx = -1 ' If no Default or Forced subtitles are found, use first available
+            sub_idx = filtered_subtitles[0].Index
+        end if
+    end if
+
+    'When "Only Forced" is selected, the media player will exclusively display forced subtitles, if available.
+    if m.user.Configuration.SubtitleMode = "OnlyForced"
+        forced_subs = []
+        for each item in filtered_subtitles ' Search for all Forced subtitles
+            if item.isForced
+                forced_subs.push(item)
+                exit for
+            end if
+        end for
+        if forced_subs.Count() >= 0
+            if forced_subs.Count() > 1 or m.user.Configuration.SubtitleLanguagePreference <> ""
+                sub_idx = forced_subs[0].index
+                ' Failsafe for multiple Forced subtitles. Skips this check and uses the first found index
+                ' if preference is set to "Any Language"
+                for each item in forced_subs
+                    if m.user.Configuration.SubtitleLanguagePreference = item.Track.Language
+                        sub_idx = item.index
+                        exit for
+                    end if
+                end for
+            else
+                sub_idx = forced_subs[0].index
+            end if
+        end if
+        ' Unlike Default, Only Forced will only load Forced subtitles, therefore, it will default to None
+        ' if no Forced flags are found.
+    end if
+
+
+    ' "Always Play" means that subtitles matching the language
+    ' preference will be loaded regardless of the audio language, as per Jellyfin.
+    ' However, for our purposes, it is better to find a matching track language and disregard Default/Forced
+    ' flags. If no matching languages are found, use the first track.
+    ' The default logic is very similar to Default.
+    if m.user.Configuration.SubtitleMode = "Always"
+        for each item in filtered_subtitles
+            if m.user.Configuration.SubtitleLanguagePreference = item.Track.Language
+                sub_idx = item.index
+                exit for
+            end if
+        end for
+        if sub_idx = -1
+            sub_idx = filtered_subtitles[0].index
+        end if
+    end if
+
+    ' For "Smart", we will default to using the first available preferred language.
+    ' This is to avoid comparing the audio language to the subtitle language.
+    ' Left this as a TODO in case someone wants to pick this up from here
+    ' If none are found, use the first available.
+    if m.user.Configuration.SubtitleMode = "Smart"
+        for each item in filtered_subtitles
+            if m.user.Configuration.SubtitleLanguagePreference = item.Track.Language
+                sub_idx = item.index
+                exit for
+            end if
+        end for
+        if sub_idx = -1
+            sub_idx = filtered_subtitles[0].index
+        end if
+    end if
+
+
+    return sub_idx
 end function
 
 'Checks available subtitle tracks and puts subtitles in forced, default, and non-default/forced but preferred language at the top
