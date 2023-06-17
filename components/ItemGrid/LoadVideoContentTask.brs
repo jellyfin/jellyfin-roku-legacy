@@ -10,7 +10,9 @@ import "pkg:/source/utils/deviceCapabilities.brs"
 sub init()
     m.user = AboutMe()
     m.top.functionName = "loadItems"
-    m.top.selectedSubtitleIndex = -2
+    currentItem = m.global.queueManager.callFunc("getCurrentItem")
+    m.top.selectedSubtitleIndex = defaultSubtitleTrackFromVid(currentItem.id)
+
 end sub
 
 sub loadItems()
@@ -141,25 +143,8 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, subtitl
     end if
 
 
-    ' 'TODO: allow user selection of subtitle track before playback initiated, for now set to no subtitles
-
-    ' Determine selected subtitles before video loads based on user configuration.
-    ' Will only run once on first load, as -2 index does not exist.
-    if m.top.selectedSubtitleIndex = -2
-        currentItem = m.global.queueManager.callFunc("getCurrentItem")
-        if isValid(currentItem) and isValid(currentItem.json)
-            m.top.selectedSubtitleIndex = defaultSubtitleTrackFromVid(m.top.itemId)
-            subtitle_idx = m.top.selectedSubtitleIndex
-            ' Add initial check for which subtitle has the selected flag
-            for i = 0 to video.fullSubtitleData.Count() - 1
-                if video.fullSubtitleData[i].index = subtitle_idx
-                    video.fullSubtitleData[i].selected = true
-                end if
-            end for
-            ' Reload playback info now that subtitle is loaded
-            m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
-        end if
-    end if
+    ' 'TODO: allow user selection of subtitle track before playback initiated, for manual subtitle selection
+    ' Now uses behavior of JF video players, uses user subtitle settings
 
     video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
     fully_external = false
