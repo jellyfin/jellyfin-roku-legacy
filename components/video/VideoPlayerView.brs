@@ -16,6 +16,7 @@ sub init()
     m.LoadMetaDataTask.selectedAudioStreamIndex = m.currentItem.selectedAudioStreamIndex
     m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
     m.LoadMetaDataTask.control = "RUN"
+    m.top.selectedSubtitle = m.LoadMetaDataTask.selectedSubtitleIndex
 
     m.playbackTimer = m.top.findNode("playbackTimer")
     m.bufferCheckTimer = m.top.findNode("bufferCheckTimer")
@@ -113,12 +114,6 @@ sub onVideoContentLoaded()
     m.top.audioIndex = videoContent[0].audioIndex
     m.top.transcodeParams = videoContent[0].transcodeparams
 
-    for i = 0 to videoContent[0].fullSubtitleData.Count() - 1
-        if videoContent[0].fullSubtitleData[i].selected = true
-            videoContent[0].fullSubtitleData[i].selected = false
-            m.top.selectedSubtitle = videoContent[0].fullSubtitleData[i].index
-        end if
-    end for
     if m.LoadMetaDataTask.isIntro
         m.top.enableTrickPlay = false
     end if
