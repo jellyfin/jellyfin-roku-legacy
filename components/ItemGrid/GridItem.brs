@@ -1,4 +1,9 @@
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/roku_modules/log/LogMixin.brs"
+
 sub init()
+    m.log = log.Logger("GridItem")
     m.posterMask = m.top.findNode("posterMask")
     m.itemPoster = m.top.findNode("itemPoster")
     m.itemIcon = m.top.findNode("itemIcon")
@@ -13,7 +18,7 @@ sub init()
 
     m.itemText.translation = [0, m.itemPoster.height + 7]
 
-    m.gridTitles = get_user_setting("itemgrid.gridTitles")
+    m.gridTitles = m.global.session.user.settings["itemgrid.gridTitles"]
     m.itemText.visible = m.gridTitles = "showalways"
 
     ' Add some padding space when Item Titles are always showing
@@ -43,7 +48,7 @@ sub itemContentChanged()
         m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
     else if itemData.type = "Series"
-        if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
+        if m.global.session.user.settings["ui.tvshows.disableUnwatchedEpisodeCount"] = false
             if isValid(itemData.json) and isValid(itemData.json.UserData) and isValid(itemData.json.UserData.UnplayedItemCount)
                 if itemData.json.UserData.UnplayedItemCount > 0
                     m.unplayedCount.visible = true
@@ -117,7 +122,7 @@ sub itemContentChanged()
         m.posterText.height = 200
         m.posterText.width = 280
     else
-        print "Unhandled Grid Item Type: " + itemData.type
+        m.log.warn("Unhandled Grid Item Type", itemData.type)
     end if
 
     'If Poster not loaded, ensure "blue box" is shown until loaded

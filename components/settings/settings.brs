@@ -1,5 +1,9 @@
-sub init()
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/roku_modules/log/LogMixin.brs"
 
+sub init()
+    m.log = log.Logger("Settings")
     m.top.overhangTitle = tr("Settings")
     m.top.optionsAvailable = false
 
@@ -91,20 +95,20 @@ sub settingFocused()
 
         m.boolSetting.visible = true
 
-        if get_user_setting(selectedSetting.settingName) = "true"
+        if m.global.session.user.settings[selectedSetting.settingName] = true
             m.boolSetting.checkedItem = 1
         else
             m.boolSetting.checkedItem = 0
         end if
     else if selectedSetting.type = "integer"
-        integerValue = get_user_setting(selectedSetting.settingName, selectedSetting.default)
+        integerValue = m.global.session.user.settings[selectedSetting.settingName].ToStr()
         if isValid(integerValue)
             m.integerSetting.text = integerValue
         end if
         m.integerSetting.visible = true
     else if LCase(selectedSetting.type) = "radio"
 
-        selectedValue = get_user_setting(selectedSetting.settingName, selectedSetting.default)
+        selectedValue = m.global.session.user.settings[selectedSetting.settingName]
 
         radioContent = CreateObject("roSGNode", "ContentNode")
 
@@ -123,7 +127,7 @@ sub settingFocused()
 
         m.radioSetting.visible = true
     else
-        print "Unknown setting type " + selectedSetting.type
+        m.log.warn("Unknown setting type", selectedSetting.type)
     end if
 
 end sub

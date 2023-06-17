@@ -7,6 +7,7 @@
       <Rectangle id="unplayedCount" visible="false" width="90" height="60" color="#00a4dcFF" translation="[375, 0]">
         <Label id="unplayedEpisodeCount" width="90" height="60" font="font:SmallestBoldSystemFont" horizAlign="center" vertAlign="center" />
       </Rectangle>
+      <PlayedCheckmark id="playedIndicator" color="#00a4dcFF" width="60" height="46" visible="false" />
     </Poster>
     <Rectangle id="progressBackground" visible="false" color="0x00000098" width="464" height="8" translation="[8,260]">
       <Rectangle id="progress" color="#00a4dcFF" width="0" height="8" />
@@ -22,9 +23,4 @@
     <field id="itemContent" type="node" onChange="itemContentChanged" />
     <field id="itemHasFocus" type="boolean" onChange="focusChanged" />
   </interface>
-  <script type="text/brightscript" uri="HomeItem.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>

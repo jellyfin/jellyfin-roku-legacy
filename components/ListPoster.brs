@@ -1,3 +1,6 @@
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/utils/misc.brs"
+
 sub init()
     m.title = m.top.findNode("title")
     m.staticTitle = m.top.findNode("staticTitle")
@@ -7,8 +10,6 @@ sub init()
     m.unplayedEpisodeCount = m.top.findNode("unplayedEpisodeCount")
 
     m.backdrop = m.top.findNode("backdrop")
-
-    m.deviceInfo = CreateObject("roDeviceInfo")
 
     ' Randmomise the background colors
     posterBackgrounds = m.global.constants.poster_bg_pallet
@@ -55,7 +56,7 @@ sub itemContentChanged() as void
     itemData = m.top.itemContent
     m.title.text = itemData.title
 
-    if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
+    if m.global.session.user.settings["ui.tvshows.disableUnwatchedEpisodeCount"] = false
         if isValid(itemData.json.UserData) and isValid(itemData.json.UserData.UnplayedItemCount)
             if itemData.json.UserData.UnplayedItemCount > 0
                 m.unplayedCount.visible = true
@@ -79,7 +80,7 @@ sub itemContentChanged() as void
 
     imageUrl = itemData.posterURL
 
-    if get_user_setting("ui.tvshows.blurunwatched") = "true"
+    if m.global.session.user.settings["ui.tvshows.blurunwatched"] = true
         if itemData.json.lookup("Type") = "Episode" and isValid(itemData.json.userdata)
             if not itemData.json.userdata.played
                 imageUrl = imageUrl + "&blur=15"
@@ -101,7 +102,7 @@ sub focusChanged()
         m.staticTitle.visible = false
         m.title.visible = true
         ' text to speech for accessibility
-        if m.deviceInfo.IsAudioGuideEnabled() = true
+        if m.global.device.isAudioGuideEnabled = true
             txt2Speech = CreateObject("roTextToSpeech")
             txt2Speech.Flush()
             txt2Speech.Say(m.title.text)

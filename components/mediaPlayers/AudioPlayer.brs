@@ -1,6 +1,7 @@
+import "pkg:/source/utils/misc.brs"
+
 sub init()
     m.playReported = false
-    m.top.disableScreenSaver = true
     m.top.observeField("state", "audioStateChanged")
 end sub
 
@@ -9,6 +10,8 @@ sub audioStateChanged()
     currentState = LCase(m.top.state)
 
     reportedPlaybackState = "update"
+
+    m.top.disableScreenSaver = (currentState = "playing")
 
     if currentState = "playing" and not m.playReported
         reportedPlaybackState = "start"

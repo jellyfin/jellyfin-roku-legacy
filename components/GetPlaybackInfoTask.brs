@@ -1,25 +1,31 @@
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/deviceCapabilities.brs"
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/api/sdk.bs"
+
 sub init()
     m.top.functionName = "getPlaybackInfoTask"
 end sub
 
-function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioTrackIndex = -1 as integer, subtitleTrackIndex = -1 as integer, startTimeTicks = 0 as longinteger)
+function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioTrackIndex = -1 as integer, startTimeTicks = 0 as longinteger)
+    currentView = m.global.sceneManager.callFunc("getActiveScene")
+    currentItem = m.global.queueManager.callFunc("getCurrentItem")
+
     body = {
         "DeviceProfile": getDeviceProfile()
     }
     params = {
-        "UserId": get_setting("active_user"),
-        "StartTimeTicks": startTimeTicks,
+        "UserId": m.global.session.user.id,
+        "StartTimeTicks": currentItem.startingPoint,
         "IsPlayback": true,
         "AutoOpenLiveStream": true,
         "MaxStreamingBitrate": "140000000",
         "MaxStaticBitrate": "140000000",
-        "SubtitleStreamIndex": subtitleTrackIndex
+        "SubtitleStreamIndex": currentView.selectedSubtitle,
+        "MediaSourceId": currentItem.id,
+        "AudioStreamIndex": currentItem.selectedAudioStreamIndex
     }
-
-    mediaSourceId = id
-    if mediaSourceId <> "" then params.MediaSourceId = mediaSourceId
-
-    if audioTrackIndex > -1 then params.AudioStreamIndex = audioTrackIndex
 
     req = APIRequest(Substitute("Items/{0}/PlaybackInfo", id), params)
     req.SetRequest("POST")
@@ -29,7 +35,7 @@ end function
 ' Returns an array of playback info to be displayed during playback.
 ' In the future, with a custom playback info view, we can return an associated array.
 sub getPlaybackInfoTask()
-    sessions = api_API().sessions.get()
+    sessions = api.sessions.Get()
 
     m.playbackInfo = ItemPostPlaybackInfo(m.top.videoID)
 
@@ -40,15 +46,15 @@ sub getPlaybackInfoTask()
     end if
 end sub
 
-function GetTranscodingStats(session)
+function GetTranscodingStats(deviceSession)
     sessionStats = { data: [] }
 
-    if isValid(session.TranscodingInfo) and session.TranscodingInfo.Count() > 0
-        transcodingReasons = session.TranscodingInfo.TranscodeReasons
-        videoCodec = session.TranscodingInfo.VideoCodec
-        audioCodec = session.TranscodingInfo.AudioCodec
-        totalBitrate = session.TranscodingInfo.Bitrate
-        audioChannels = session.TranscodingInfo.AudioChannels
+    if isValid(deviceSession.TranscodingInfo) and deviceSession.TranscodingInfo.Count() > 0
+        transcodingReasons = deviceSession.TranscodingInfo.TranscodeReasons
+        videoCodec = deviceSession.TranscodingInfo.VideoCodec
+        audioCodec = deviceSession.TranscodingInfo.AudioCodec
+        totalBitrate = deviceSession.TranscodingInfo.Bitrate
+        audioChannels = deviceSession.TranscodingInfo.AudioChannels
 
         if isValid(transcodingReasons) and transcodingReasons.Count() > 0
             sessionStats.data.push("<header>" + tr("Transcoding Information") + "</header>")
@@ -59,7 +65,7 @@ function GetTranscodingStats(session)
 
         if isValid(videoCodec)
             data = "<b>• " + tr("Video Codec") + ":</b> " + videoCodec
-            if session.TranscodingInfo.IsVideoDirect
+            if deviceSession.TranscodingInfo.IsVideoDirect
                 data = data + " (" + tr("direct") + ")"
             end if
             sessionStats.data.push(data)
@@ -67,7 +73,7 @@ function GetTranscodingStats(session)
 
         if isValid(audioCodec)
             data = "<b>• " + tr("Audio Codec") + ":</b> " + audioCodec
-            if session.TranscodingInfo.IsAudioDirect
+            if deviceSession.TranscodingInfo.IsAudioDirect
                 data = data + " (" + tr("direct") + ")"
             end if
             sessionStats.data.push(data)

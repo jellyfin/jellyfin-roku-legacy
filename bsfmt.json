@@ -1,6 +1,10 @@
 {
-    "files": [
-        "source/**/*.brs",
-        "components/**/*.brs"
-    ]
+        "files": [
+                "source/**/*.brs",
+                "source/**/*.bs",
+                "components/**/*.brs",
+                "components/**/*.bs",
+                "test-app/**/*.bs",
+                "!**/roku_modules/**/*.*"
+        ]
 }

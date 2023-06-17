@@ -1,5 +1,8 @@
-sub init()
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/roku_modules/log/LogMixin.brs"
 
+sub init()
+    m.log = log.Logger("ItemGridOptions")
     m.buttons = m.top.findNode("buttons")
     m.buttons.buttons = [tr("View"), tr("Sort"), tr("Filter")]
     m.buttons.selectedIndex = 1
@@ -53,6 +56,11 @@ sub hideChecklist()
 end sub
 
 sub onFilterFocusChange()
+    if not isFilterMenuDataValid()
+        hideChecklist()
+        return
+    end if
+
     if m.filterMenu.content.getChild(m.filterMenu.itemFocused).getChildCount() > 0
         showChecklist()
     else
@@ -67,6 +75,18 @@ sub onFilterFocusChange()
     end if
 end sub
 
+' Check if data for Filter Menu is valid
+function isFilterMenuDataValid() as boolean
+    if not isValid(m.filterMenu) or not isValid(m.filterMenu.content) or not isValid(m.filterMenu.itemFocused)
+        return false
+    end if
+
+    if not isValid(m.filterMenu.content.getChild(m.filterMenu.itemFocused))
+        return false
+    end if
+
+    return true
+end function
 
 sub optionsSet()
     '  Views Tab
@@ -203,7 +223,7 @@ sub setHeartColor(color as string)
             end if
         end for
     catch e
-        print e.number, e.message
+        m.log.error("setHeartColor()", e.number, e.message)
     end try
 end sub
 
@@ -227,7 +247,6 @@ sub saveFavoriteItemSelected(msg)
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
-
     if key = "down" or (key = "OK" and m.buttons.hasFocus())
         m.buttons.setFocus(false)
         m.menus[m.selectedItem].setFocus(true)
@@ -242,6 +261,8 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
         return true
     else if key = "right"
+        if not isFilterMenuDataValid() then return false
+
         if m.menus[m.selectedItem].isInFocusChain()
             ' Handle Filter screen
             if m.selectedItem = 2
@@ -267,6 +288,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             return true
         end if
     else if key = "OK"
+
         if m.menus[m.selectedItem].isInFocusChain()
             ' Handle View Screen
             if m.selectedItem = 0
@@ -299,6 +321,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
             ' Handle Filter screen
             if m.selectedItem = 2
+                if not isFilterMenuDataValid() then return false
                 ' If filter has no options, select it
                 if m.filterMenu.content.getChild(m.filterMenu.itemFocused).getChildCount() = 0
                     m.menus[2].checkedItem = m.menus[2].itemSelected
@@ -362,5 +385,4 @@ function onKeyEvent(key as string, press as boolean) as boolean
     end if
 
     return false
-
 end function

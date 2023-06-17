@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="ProgramDetails" extends="JFGroup">
     <children>
 
@@ -11,7 +11,7 @@
 
         <Group id="detailsView" visible="false">
 
-            <Group translation = "[ 96, 160 ]">
+            <Group translation="[ 96, 160 ]">
                 <LayoutGroup itemSpacings="[4,20, 20, 20, 40]">
                     <Label id="programName" font="font:LargeBoldSystemFont" />
 
@@ -36,7 +36,7 @@
 
                     <label id="overview" wrap="true" width="1210" font="font:SmallestSystemFont" />
 
-                    <LayoutGroup layoutDirection="horiz" itemSpacings="[30]"> 
+                    <LayoutGroup layoutDirection="horiz" itemSpacings="[30]">
                         <!-- View Channel button -->
                         <Group id="viewChannelButton" opacity="0">
                             <Poster id="viewChannelButtonBackground" uri="pkg:/images/white.9.png" blendColor="#000000" />
@@ -56,19 +56,19 @@
                             <Poster id="recordSeriesButtonBackground" uri="pkg:/images/white.9.png" blendColor="#000000" />
                             <Poster id="recordSeriesOutline" visible="false" uri="pkg:/images/hd_focus.9.png" />
                             <Label id="recordSeriesButtonLabel" text="Record Series" translation="[20,20]" />
-                        </Group>                        
+                        </Group>
                     </LayoutGroup>
-    
+
                 </LayoutGroup>
 
             </Group>
         </Group>
         <!-- When no schedule information to display  -->
         <LayoutGroup id="noInformation" translation="[96, 300]">
-            <Label id="noInfoChannelName" font="font:LargeBoldSystemFont"  />
+            <Label id="noInfoChannelName" font="font:LargeBoldSystemFont" />
             <Label font="font:SmallSystemFont" text="No schedule information" />
         </LayoutGroup>
-        <Animation id="focusAnimation" duration="0.66" repeat="false" easeFunction="linear" >
+        <Animation id="focusAnimation" duration="0.66" repeat="false" easeFunction="linear">
             <FloatFieldInterpolator id="viewChannelFocusAnimationOpacity" key="[0.0, 1]" fieldToInterp="viewChannelButton.opacity" />
             <FloatFieldInterpolator id="recordFocusAnimationOpacity" key="[0.0, 1]" fieldToInterp="recordButton.opacity" />
             <FloatFieldInterpolator id="recordSeriesFocusAnimationOpacity" key="[0.0, 1]" fieldToInterp="recordSeriesButton.opacity" />
@@ -84,7 +84,4 @@
         <field id="height" type="integer" />
         <field id="hasFocus" type="boolean" onChange="focusChanged" />
     </interface>
-    <script type="text/brightscript" uri="ProgramDetails.brs" />
-    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
-    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

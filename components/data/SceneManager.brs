@@ -1,4 +1,7 @@
+import "pkg:/source/roku_modules/log/LogMixin.brs"
+
 sub init()
+    m.log = log.Logger("SceneManager")
     m.groups = []
     m.scene = m.top.getScene()
     m.content = m.scene.findNode("content")
@@ -186,7 +189,7 @@ sub registerOverhangData(group)
     else if group.isSubType("JFVideo")
         m.overhang.visible = false
     else
-        print "registerOverhangData(): Unexpected group type."
+        m.log.error("registerOverhangData(): Unexpected group type.", group, group.subtype())
     end if
 end sub
 
@@ -241,7 +244,7 @@ sub userMessage(title as string, message as string)
     dialog.title = title
     dialog.message = message
     dialog.buttons = [tr("OK")]
-    dialog.observeField("buttonSelected", "dismiss_dialog")
+    dialog.observeField("buttonSelected", "dismissDialog")
     m.scene.dialog = dialog
 end sub
 
@@ -259,7 +262,7 @@ sub standardDialog(title, message)
         DialogTextColor: "0xeeeeeeFF"
     }
     dialog.palette = dlgPalette
-    dialog.observeField("buttonSelected", "dismiss_dialog")
+    dialog.observeField("buttonSelected", "dismissDialog")
     dialog.title = title
     dialog.contentData = message
     dialog.buttons = [tr("OK")]
@@ -281,7 +284,7 @@ sub radioDialog(title, message)
         DialogTextColor: "0xeeeeeeFF"
     }
     dialog.palette = dlgPalette
-    dialog.observeField("buttonSelected", "dismiss_dialog")
+    dialog.observeField("buttonSelected", "dismissDialog")
     dialog.title = title
     dialog.contentData = message
     dialog.buttons = [tr("OK")]
@@ -292,6 +295,7 @@ end sub
 '
 ' Display dialog to user with an OK button
 sub optionDialog(title, message, buttons)
+    m.top.dataReturned = false
     m.top.returnData = invalid
     m.userselection = false
 
@@ -324,6 +328,7 @@ sub optionClosed()
         indexSelected: -1,
         buttonSelected: ""
     }
+    m.top.dataReturned = true
 end sub
 
 '
@@ -334,12 +339,19 @@ sub optionSelected()
         indexSelected: m.scene.dialog.buttonSelected,
         buttonSelected: m.scene.dialog.buttons[m.scene.dialog.buttonSelected]
     }
+    m.top.dataReturned = true
 
-    dismiss_dialog()
+    dismissDialog()
 end sub
 
 '
 ' Close currently displayed dialog
-sub dismiss_dialog()
+sub dismissDialog()
     m.scene.dialog.close = true
 end sub
+
+'
+' Returns bool indicating if dialog is currently displayed
+function isDialogOpen() as boolean
+    return m.scene.dialog <> invalid
+end function

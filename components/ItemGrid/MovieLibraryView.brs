@@ -1,3 +1,9 @@
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/api/Image.brs"
+import "pkg:/source/utils/deviceCapabilities.brs"
+
 sub setupNodes()
     m.options = m.top.findNode("options")
     m.itemGrid = m.top.findNode("itemGrid")
@@ -30,7 +36,7 @@ sub init()
 
     m.overhang.isVisible = false
 
-    m.showItemCount = get_user_setting("itemgrid.showItemCount") = "true"
+    m.showItemCount = m.global.session.user.settings["itemgrid.showItemCount"]
 
     m.swapAnimation.observeField("state", "swapDone")
 
@@ -80,13 +86,10 @@ sub init()
     m.spinner.visible = true
 
     'Get reset folder setting
-    m.resetGrid = get_user_setting("itemgrid.reset") = "true"
-
-    'Check if device has voice remote
-    devinfo = CreateObject("roDeviceInfo")
+    m.resetGrid = m.global.session.user.settings["itemgrid.reset"]
 
     'Hide voice search if device does not have voice remote
-    if devinfo.HasFeature("voice_remote") = false
+    if m.global.device.hasVoiceRemote = false
         m.micButton.visible = false
         m.micButtonText.visible = false
     end if
@@ -126,15 +129,15 @@ sub loadInitialItems()
         SetBackground("")
     end if
 
-    m.sortField = get_user_setting("display." + m.top.parentItem.Id + ".sortField")
-    m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
-    m.filterOptions = get_user_setting("display." + m.top.parentItem.Id + ".filterOptions")
-    m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
-    sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
+    m.sortField = m.global.session.user.settings["display." + m.top.parentItem.Id + ".sortField"]
+    m.filter = m.global.session.user.settings["display." + m.top.parentItem.Id + ".filter"]
+    m.filterOptions = m.global.session.user.settings["display." + m.top.parentItem.Id + ".filterOptions"]
+    m.view = m.global.session.user.settings["display." + m.top.parentItem.Id + ".landing"]
+    m.sortAscending = m.global.session.user.settings["display." + m.top.parentItem.Id + ".sortAscending"]
 
     ' If user has not set a preferred view for this folder, check if they've set a default view
     if not isValid(m.view)
-        m.view = get_user_setting("itemgrid.movieDefaultView")
+        m.view = m.global.session.user.settings["itemgrid.movieDefaultView"]
     end if
 
     if not isValid(m.sortField) then m.sortField = "SortName"
@@ -143,12 +146,6 @@ sub loadInitialItems()
     if not isValid(m.view) then m.view = "Movies"
 
     m.filterOptions = ParseJson(m.filterOptions)
-
-    if sortAscendingStr = invalid or sortAscendingStr = "true"
-        m.sortAscending = true
-    else
-        m.sortAscending = false
-    end if
 
     if m.top.parentItem.json.type = "Studio"
         m.loadItemsTask.studioIds = m.top.parentItem.id
@@ -203,7 +200,7 @@ sub loadInitialItems()
         m.itemGrid.numRows = "3"
         m.selectedMovieOverview.visible = false
         m.infoGroup.visible = false
-        m.top.showItemTitles = get_user_setting("itemgrid.gridTitles")
+        m.top.showItemTitles = m.global.session.user.settings["itemgrid.gridTitles"]
         if LCase(m.top.showItemTitles) = "hidealways"
             m.itemGrid.itemSize = "[230, 315]"
             m.itemGrid.rowHeights = "[315]"
@@ -226,7 +223,7 @@ sub loadInitialItems()
 
     m.getFiltersTask.observeField("filters", "FilterDataLoaded")
     m.getFiltersTask.params = {
-        userid: get_setting("active_user"),
+        userid: m.global.session.user.id,
         parentid: m.top.parentItem.Id,
         includeitemtypes: "Movie"
     }
@@ -791,7 +788,7 @@ sub optionsClosed()
         set_user_setting("display." + m.top.parentItem.Id + ".filterOptions", FormatJson(m.options.filterOptions))
     end if
 
-    m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
+    m.view = m.global.session.user.settings["display." + m.top.parentItem.Id + ".landing"]
 
     if m.options.view <> m.view
         m.view = m.options.view

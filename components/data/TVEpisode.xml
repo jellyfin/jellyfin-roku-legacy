@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="TVEpisode" extends="JFContentItem">
-  <script type="text/brightscript" uri="TVEpisode.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/Image.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+
 </component>

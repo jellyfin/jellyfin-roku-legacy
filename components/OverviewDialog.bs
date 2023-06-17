@@ -1,0 +1,17 @@
+sub setTitle()
+    m.top.findNode("titleArea").primaryTitle = m.top.title
+end sub
+
+sub setOverview()
+    m.top.findNode("description").text = m.top.overview
+end sub
+
+function onKeyEvent(key as string, press as boolean) as boolean
+    if press = false then return false
+
+    if key = "OK" and m.top.findNode("contentArea").isInFocusChain()
+        m.top.close = true
+    end if
+
+    return false
+end function

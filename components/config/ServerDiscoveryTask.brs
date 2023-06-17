@@ -1,7 +1,10 @@
+import "pkg:/source/roku_modules/log/LogMixin.brs"
+
 '
 ' Task used to discover jellyfin servers on the local network
 '
 sub init()
+    m.log = log.Logger("ServerDiscoveryTask")
     m.top.functionName = "execute"
 end sub
 
@@ -36,7 +39,7 @@ sub execute()
     end while
 
     m.top.content = m.servers
-    print m.servers[0], m.servers[1], m.servers[2]
+    m.log.debug("Jellyfin servers found", m.servers[0], m.servers[1], m.servers[2])
 end sub
 
 sub AddServer(server)
@@ -75,9 +78,9 @@ sub ProcessClientDiscoveryResponse(message)
                 iconWidth: 120,
                 iconHeight: 120
             })
-            print "Found Jellyfin server using client discovery at " + server.Address
+            m.log.info("Found Jellyfin server using client discovery", server.Address)
         catch e
-            print "Error scanning for jellyfin server", message
+            m.log.error("Error scanning for jellyfin server", message)
         end try
     end if
 end sub
@@ -122,7 +125,7 @@ sub ProcessSSDPResponse(message)
     if locationUrl = invalid
         return
     else if m.locationUrlMap[locationUrl] <> invalid
-        print "Already discovered this location " + locationUrl
+        m.log.warn("Already discovered this location", locationUrl)
         return
     end if
 
@@ -162,7 +165,7 @@ sub ProcessSSDPResponse(message)
                 end if
             end for
             AddServer(server)
-            print "Found jellyfin server using SSDP and DLNA at " + server.baseUrl
+            m.log.info("Found jellyfin server using SSDP and DLNA", server.baseUrl)
         end if
     end if
 end sub

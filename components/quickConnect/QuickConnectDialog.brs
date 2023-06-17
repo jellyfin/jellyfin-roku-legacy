@@ -1,3 +1,8 @@
+import "pkg:/source/api/userauth.brs"
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/utils/session.bs"
+
 sub init()
     m.quickConnectTimer = m.top.findNode("quickConnectTimer")
     m.quickConnectTimer.observeField("fire", "quickConnectStatus")
@@ -27,9 +32,10 @@ sub OnAuthenticated()
         ' We've been given the go ahead, try to authenticate via Quick Connect...
         authenticated = AuthenticateViaQuickConnect(m.top.quickConnectJson.secret)
         if authenticated <> invalid and authenticated = true
-            m.user = AboutMe()
+            currentUser = AboutMe()
+            session.user.Login(currentUser)
             LoadUserPreferences()
-            LoadUserAbilities(m.user)
+            LoadUserAbilities()
             m.top.close = true
             m.top.authenticated = true
         else

@@ -1,3 +1,7 @@
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/api/Image.brs"
+
 sub setData()
     ' We keep json around just as a reference,
     ' but ideally everything should be going through one of the interfaces
@@ -28,8 +32,9 @@ sub setData()
         end if
 
     else if datum.type = "Episode"
-        imgParams = { "AddPlayedIndicator": datum.UserData.Played }
+        m.top.isWatched = datum.UserData.Played
 
+        imgParams = {}
         imgParams.Append({ "maxHeight": 261 })
         imgParams.Append({ "maxWidth": 464 })
 
@@ -68,8 +73,9 @@ sub setData()
         end if
 
     else if datum.type = "Movie"
-        imgParams = { AddPlayedIndicator: datum.UserData.Played }
+        m.top.isWatched = datum.UserData.Played
 
+        imgParams = {}
         imgParams.Append({ "maxHeight": 261 })
         imgParams.Append({ "maxWidth": 175 })
 
@@ -92,8 +98,9 @@ sub setData()
         end if
 
     else if datum.type = "Video"
-        imgParams = { AddPlayedIndicator: datum.UserData.Played }
+        m.top.isWatched = datum.UserData.Played
 
+        imgParams = {}
         imgParams.Append({ "maxHeight": 261 })
         imgParams.Append({ "maxWidth": 175 })
 

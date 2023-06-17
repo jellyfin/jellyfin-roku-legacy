@@ -35,8 +35,11 @@ end sub
 '
 'Check if options updated and any reloading required
 sub audioOptionsClosed()
-    if m.currentSelected <> invalid and m.tvListOptions.audioStreamIndex <> m.top.selectedAudioStreamIndex
-        m.top.objects.items[m.currentSelected].selectedAudioStreamIndex = m.tvListOptions.audioStreamIndex
+    if m.currentSelected <> invalid
+        ' If the user opened the audio options, we report back even if they left the selection alone.
+        ' Otherwise, the users' lang peference from the server will take over.
+        ' To do this, we interpret anything other than "0" as the user opened the audio options.
+        m.top.objects.items[m.currentSelected].selectedAudioStreamIndex = m.tvListOptions.audioStreamIndex = 0 ? 1 : m.tvListOptions.audioStreamIndex
     end if
 end sub
 

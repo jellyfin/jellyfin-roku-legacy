@@ -1,3 +1,6 @@
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/utils/config.brs"
+
 sub init()
     m.top.functionName = "loadChannels"
 end sub
@@ -19,7 +22,7 @@ sub loadChannels()
         SortBy: sort_field,
         SortOrder: sort_order,
         recursive: m.top.recursive,
-        UserId: get_setting("active_user")
+        UserId: m.global.session.user.id
     }
 
     ' Handle special case when getting names starting with numeral
@@ -40,7 +43,7 @@ sub loadChannels()
         params.append({ isFavorite: true })
     end if
 
-    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+    url = Substitute("Users/{0}/Items/", m.global.session.user.id)
 
     resp = APIRequest(url, params)
     data = getJson(resp)

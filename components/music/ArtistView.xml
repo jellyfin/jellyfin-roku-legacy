@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="ArtistView" extends="JFScreen">
   <children>
     <Poster id="backdrop" opacity=".4" loadDisplayMode="scaleToZoom" width="1920" height="1200" blendColor="#3f3f3f" />
@@ -55,6 +55,4 @@
     <field id="instantMixSelected" alias="instantMix.selected" />
     <field id="selectedButtonIndex" type="integer" value="-1" />
   </interface>
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
-  <script type="text/brightscript" uri="ArtistView.brs" />
 </component>

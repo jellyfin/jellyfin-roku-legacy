@@ -1,4 +1,4 @@
-function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle_idx = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
+function VideoPlayer(id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, forceTranscoding = false as boolean, showIntro = true as boolean, allowResumeDialog = true as boolean) as dynamic
     ' Get video controls and UI
     video = CreateObject("roSGNode", "JFVideo")
     video.id = id
@@ -21,7 +21,7 @@ function VideoPlayer(id, mediaSourceId = invalid, audio_stream_idx = 1, subtitle
     return video
 end function
 
-sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -1, playbackPosition = -1, forceTranscoding = false, showIntro = true, allowResumeDialog = true)
+sub AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, playbackPosition = -1 as integer, forceTranscoding = false as boolean, showIntro = true as boolean, allowResumeDialog = true as boolean)
     video.content = createObject("RoSGNode", "ContentNode")
     stopLoadingSpinner()
     meta = ItemMetaData(video.id)
@@ -88,7 +88,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     params = {
                         ids: video.Id
                     }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    url = Substitute("Users/{0}/Items/", m.global.session.user.id)
                     resp = APIRequest(url, params)
                     data = getJson(resp)
                     for each item in data.Items
@@ -98,7 +98,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     params = {
                         ids: m.series_id
                     }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    url = Substitute("Users/{0}/Items/", m.global.session.user.id)
                     resp = APIRequest(url, params)
                     data = getJson(resp)
                     for each item in data.Items
@@ -115,7 +115,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     params = {
                         ids: video.Id
                     }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    url = Substitute("Users/{0}/Items/", m.global.session.user.id)
                     resp = APIRequest(url, params)
                     data = getJson(resp)
                     for each item in data.Items
@@ -126,7 +126,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     params = {
                         ids: m.season_id
                     }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    url = Substitute("Users/{0}/Items/", m.global.session.user.id)
                     resp = APIRequest(url, params)
                     data = getJson(resp)
                     for each item in data.Items
@@ -136,7 +136,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     params = {
                         ids: m.series_id
                     }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    url = Substitute("Users/{0}/Items/", m.global.session.user.id)
                     resp = APIRequest(url, params)
                     data = getJson(resp)
                     for each item in data.Items
@@ -153,7 +153,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
                     params = {
                         ids: video.Id
                     }
-                    url = Substitute("Users/{0}/Items/", get_setting("active_user"))
+                    url = Substitute("Users/{0}/Items/", m.global.session.user.id)
                     resp = APIRequest(url, params)
                     data = getJson(resp)
                     for each item in data.Items
@@ -226,7 +226,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     end if
 
     subtitles = sortSubtitles(meta.id, m.playbackInfo.MediaSources[0].MediaStreams)
-    if get_user_setting("playback.subs.onlytext") = "true"
+    if m.global.session.user.settings["playback.subs.onlytext"] = true
         safesubs = []
         for each subtitle in subtitles["all"]
             if subtitle["IsTextSubtitleStream"]
@@ -258,8 +258,8 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
     ' transcode is that the Encoding Level is not supported, then try to direct play but silently
     ' fall back to the transcode if that fails.
     if m.playbackInfo.MediaSources[0].MediaStreams.Count() > 0 and meta.live = false
-        tryDirectPlay = get_user_setting("playback.tryDirect.h264ProfileLevel") = "true" and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
-        tryDirectPlay = tryDirectPlay or (get_user_setting("playback.tryDirect.hevcProfileLevel") = "true" and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "hevc")
+        tryDirectPlay = m.global.session.user.settings["playback.tryDirect.h264ProfileLevel"] = true and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "h264"
+        tryDirectPlay = tryDirectPlay or (m.global.session.user.settings["playback.tryDirect.hevcProfileLevel"] = true and m.playbackInfo.MediaSources[0].MediaStreams[0].codec = "hevc")
         if tryDirectPlay and isValid(m.playbackInfo.MediaSources[0].TranscodingUrl) and forceTranscoding = false
             transcodingReasons = getTranscodeReasons(m.playbackInfo.MediaSources[0].TranscodingUrl)
             if transcodingReasons.Count() = 1 and transcodingReasons[0] = "VideoLevelNotSupported"
@@ -313,7 +313,7 @@ sub AddVideoContent(video, mediaSourceId, audio_stream_idx = 1, subtitle_idx = -
         video.isTranscoded = true
     end if
 
-    video.content.setCertificatesFile("common:/certs/ca-bundle.crt")
+    setCertificateAuthority(video.content)
     video.audioTrack = (audio_stream_idx + 1).ToStr() ' Roku's track indexes count from 1. Our index is zero based
 
     ' Perform relevant setup work for selected subtitle, and return the index of the subtitle
@@ -327,7 +327,7 @@ end sub
 
 function PlayIntroVideo(video_id, audio_stream_idx) as boolean
     ' Intro videos only play if user has cinema mode setting enabled
-    if get_user_setting("playback.cinemamode") = "true"
+    if m.global.session.user.settings["playback.cinemamode"] = true
         ' Check if server has intro videos setup and available
         introVideos = GetIntroVideos(video_id)
 
@@ -450,10 +450,10 @@ end function
 
 sub autoPlayNextEpisode(videoID as string, showID as string)
     ' use web client setting
-    if m.user.Configuration.EnableNextEpisodeAutoPlay
+    if m.global.session.user.configuration.EnableNextEpisodeAutoPlay
         ' query API for next episode ID
         url = Substitute("Shows/{0}/Episodes", showID)
-        urlParams = { "UserId": get_setting("active_user") }
+        urlParams = { "UserId": m.global.session.user.id }
         urlParams.Append({ "StartItemId": videoID })
         urlParams.Append({ "Limit": 2 })
         resp = APIRequest(url, urlParams)
@@ -481,7 +481,7 @@ end sub
 ' Returns an array of playback info to be displayed during playback.
 ' In the future, with a custom playback info view, we can return an associated array.
 function GetPlaybackInfo()
-    sessions = api_API().sessions.get()
+    sessions = api.sessions.Get()
     if isValid(sessions) and sessions.Count() > 0
         return GetTranscodingStats(sessions[0])
     end if
@@ -490,15 +490,15 @@ function GetPlaybackInfo()
     return [errMsg]
 end function
 
-function GetTranscodingStats(session)
+function GetTranscodingStats(deviceSession)
     sessionStats = []
 
-    if isValid(session.TranscodingInfo) and session.TranscodingInfo.Count() > 0
-        transcodingReasons = session.TranscodingInfo.TranscodeReasons
-        videoCodec = session.TranscodingInfo.VideoCodec
-        audioCodec = session.TranscodingInfo.AudioCodec
-        totalBitrate = session.TranscodingInfo.Bitrate
-        audioChannels = session.TranscodingInfo.AudioChannels
+    if isValid(deviceSession.TranscodingInfo) and deviceSession.TranscodingInfo.Count() > 0
+        transcodingReasons = deviceSession.TranscodingInfo.TranscodeReasons
+        videoCodec = deviceSession.TranscodingInfo.VideoCodec
+        audioCodec = deviceSession.TranscodingInfo.AudioCodec
+        totalBitrate = deviceSession.TranscodingInfo.Bitrate
+        audioChannels = deviceSession.TranscodingInfo.AudioChannels
 
         if isValid(transcodingReasons) and transcodingReasons.Count() > 0
             sessionStats.push("** " + tr("Transcoding Information") + " **")
@@ -509,7 +509,7 @@ function GetTranscodingStats(session)
 
         if isValid(videoCodec)
             data = tr("Video Codec") + ": " + videoCodec
-            if session.TranscodingInfo.IsVideoDirect
+            if deviceSession.TranscodingInfo.IsVideoDirect
                 data = data + " (" + tr("direct") + ")"
             end if
             sessionStats.push(data)
@@ -517,7 +517,7 @@ function GetTranscodingStats(session)
 
         if isValid(audioCodec)
             data = tr("Audio Codec") + ": " + audioCodec
-            if session.TranscodingInfo.IsAudioDirect
+            if deviceSession.TranscodingInfo.IsAudioDirect
                 data = data + " (" + tr("direct") + ")"
             end if
             sessionStats.push(data)

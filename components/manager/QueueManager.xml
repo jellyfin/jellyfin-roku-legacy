@@ -1,10 +1,12 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="QueueManager" extends="Group">
   <interface>
     <function name="clear" />
+    <function name="clearHold" />
     <function name="deleteAtIndex" />
     <function name="getCount" />
     <function name="getCurrentItem" />
+    <function name="getHold" />
     <function name="getIsShuffled" />
     <function name="getItemByIndex" />
     <function name="getPosition" />
@@ -12,6 +14,8 @@
     <function name="getQueueTypes" />
     <function name="getQueueUniqueTypes" />
     <function name="getUnshuffledQueue" />
+    <function name="hold" />
+    <function name="isPrerollActive" />
     <function name="moveBack" />
     <function name="moveForward" />
     <function name="peek" />
@@ -20,11 +24,10 @@
     <function name="push" />
     <function name="resetShuffle" />
     <function name="set" />
+    <function name="setTopStartingPoint" />
     <function name="setPosition" />
+    <function name="setPrerollStatus" />
     <function name="toggleShuffle" />
     <function name="top" />
   </interface>
-  <script type="text/brightscript" uri="QueueManager.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
-  <script type="text/brightscript" uri="ViewCreator.brs" />
 </component>

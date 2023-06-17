@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- The "ContentNode" for displaying the actual Extras Item -->
 <component name="ExtrasData" extends="ContentNode">
   <script type="text/brightscript">
@@ -19,6 +19,7 @@
     <field id="Type" type="string" />
     <field id="subTitle" type="string" />
     <field id="labelText" type="string" />
+    <field id="selectedAudioStreamIndex" type="integer" value="0" />
     <field id="posterUrl" type="string" />
     <field id="imageWidth" type="integer" value="234" />
     <field id="json" type="assocarray" />

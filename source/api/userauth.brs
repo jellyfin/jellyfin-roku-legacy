@@ -1,3 +1,6 @@
+' needed for SignOut() and ServerInfo()
+import "pkg:/source/utils/session.bs"
+
 function get_token(user as string, password as string)
     url = "Users/AuthenticateByName?format=json"
     req = APIRequest(url)
@@ -14,22 +17,29 @@ function get_token(user as string, password as string)
     return userdata
 end function
 
-function AboutMe()
-    id = get_setting("active_user")
+function AboutMe(id = "" as string)
+    if id = ""
+        if m.global.session.user.id <> invalid
+            id = m.global.session.user.id
+        else
+            return invalid
+        end if
+    end if
+
     url = Substitute("Users/{0}", id)
     resp = APIRequest(url)
     return getJson(resp)
 end function
 
 sub SignOut(deleteSavedEntry = true as boolean)
-    if get_setting("active_user") <> invalid
+    if m.global.session.user.id <> invalid
         unset_user_setting("token")
         unset_setting("username")
         unset_setting("password")
         if deleteSavedEntry = true
             'Also delete any credentials in the "saved servers" list
             saved = get_setting("saved_servers")
-            server = get_setting("server")
+            server = m.global.session.server.url
             if server <> invalid
                 server = LCase(server)
                 savedServers = ParseJson(saved)
@@ -46,6 +56,7 @@ sub SignOut(deleteSavedEntry = true as boolean)
         end if
     end if
     unset_setting("active_user")
+    session.user.Logout()
     m.global.sceneManager.currentUser = ""
     group = m.global.sceneManager.callFunc("getActiveScene")
     group.optionsAvailable = false
@@ -55,24 +66,6 @@ function AvailableUsers()
     users = parseJson(get_setting("available_users", "[]"))
     return users
 end function
-
-sub PickUser(id as string)
-    this_user = invalid
-    for each user in AvailableUsers()
-        if user.id = id then this_user = user
-    end for
-    if this_user = invalid then return
-    set_setting("active_user", this_user.id)
-    set_setting("server", this_user.server)
-end sub
-
-sub RemoveUser(id as string)
-    user = CreateObject("roSGNode", "UserData")
-    user.id = id
-    user.callFunc("removeFromRegistry")
-
-    if get_setting("active_user") = id then SignOut(false)
-end sub
 
 function ServerInfo()
     url = "System/Info/Public"
@@ -97,6 +90,7 @@ function ServerInfo()
         ' set the server to new location and try again
         if right(headers.location, 19) = "/System/Info/Public"
             set_setting("server", left(headers.location, len(headers.location) - 19))
+            session.server.UpdateURL(left(headers.location, len(headers.location) - 19))
             info = ServerInfo()
             if info.Error
                 info.UpdatedUrl = left(headers.location, len(headers.location) - 19)
@@ -134,7 +128,7 @@ end function
 
 ' Load and parse Display Settings from server
 sub LoadUserPreferences()
-    id = get_setting("active_user")
+    id = m.global.session.user.id
     ' Currently using client "emby", which is what website uses so we get same Display prefs as web.
     ' May want to change to specific Roku display settings
     url = Substitute("DisplayPreferences/usersettings?userId={0}&client=emby", id)
@@ -148,14 +142,13 @@ sub LoadUserPreferences()
     end if
 end sub
 
-sub LoadUserAbilities(user)
-    ' Only have one thing we're checking now, but in the future it could be more...
-    if user.Policy.EnableLiveTvManagement = true
+sub LoadUserAbilities()
+    if m.global.session.user.Policy.EnableLiveTvManagement = true
         set_user_setting("livetv.canrecord", "true")
     else
         set_user_setting("livetv.canrecord", "false")
     end if
-    if user.Policy.EnableContentDeletion = true
+    if m.global.session.user.Policy.EnableContentDeletion = true
         set_user_setting("content.candelete", "true")
     else
         set_user_setting("content.candelete", "false")
@@ -197,9 +190,11 @@ function AuthenticateViaQuickConnect(secret)
     }
     req = APIRequest("Users/AuthenticateWithQuickConnect")
     jsonResponse = postJson(req, FormatJson(params))
-    if jsonResponse <> invalid and jsonResponse.AccessToken <> invalid
+    if jsonResponse <> invalid and jsonResponse.AccessToken <> invalid and jsonResponse.User <> invalid
         userdata = CreateObject("roSGNode", "UserData")
         userdata.json = jsonResponse
+        session.user.Update("id", jsonResponse.User.Id)
+        session.user.Update("authToken", jsonResponse.AccessToken)
         userdata.callFunc("setActive")
         userdata.callFunc("saveToRegistry")
         return true

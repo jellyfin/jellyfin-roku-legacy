@@ -1,3 +1,9 @@
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/api/Image.brs"
+import "pkg:/source/utils/deviceCapabilities.brs"
+
 sub setupNodes()
     m.options = m.top.findNode("options")
     m.itemGrid = m.top.findNode("itemGrid")
@@ -25,7 +31,7 @@ sub init()
 
     m.overhang.isVisible = false
 
-    m.showItemCount = get_user_setting("itemgrid.showItemCount") = "true"
+    m.showItemCount = m.global.session.user.settings["itemgrid.showItemCount"]
 
     m.swapAnimation.observeField("state", "swapDone")
 
@@ -74,13 +80,10 @@ sub init()
     m.spinner.visible = true
 
     'Get reset folder setting
-    m.resetGrid = get_user_setting("itemgrid.reset") = "true"
-
-    'Check if device has voice remote
-    devinfo = CreateObject("roDeviceInfo")
+    m.resetGrid = m.global.session.user.settings["itemgrid.reset"]
 
     'Hide voice search if device does not have voice remote
-    if devinfo.HasFeature("voice_remote") = false
+    if m.global.device.hasVoiceRemote = false
         m.micButton.visible = false
         m.micButtonText.visible = false
     end if
@@ -120,22 +123,16 @@ sub loadInitialItems()
         SetBackground("")
     end if
 
-    m.sortField = get_user_setting("display." + m.top.parentItem.Id + ".sortField")
-    sortAscendingStr = get_user_setting("display." + m.top.parentItem.Id + ".sortAscending")
-    m.filter = get_user_setting("display." + m.top.parentItem.Id + ".filter")
-    m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
+    m.sortField = m.global.session.user.settings["display." + m.top.parentItem.Id + ".sortField"]
+    m.sortAscending = m.global.session.user.settings["display." + m.top.parentItem.Id + ".sortAscending"]
+    m.filter = m.global.session.user.settings["display." + m.top.parentItem.Id + ".filter"]
+    m.view = m.global.session.user.settings["display." + m.top.parentItem.Id + ".landing"]
 
     if not isValid(m.sortField) then m.sortField = "SortName"
     if not isValid(m.filter) then m.filter = "All"
     if not isValid(m.view) then m.view = "ArtistsPresentation"
 
-    if sortAscendingStr = invalid or LCase(sortAscendingStr) = "true"
-        m.sortAscending = true
-    else
-        m.sortAscending = false
-    end if
-
-    m.top.showItemTitles = get_user_setting("itemgrid.gridTitles")
+    m.top.showItemTitles = m.global.session.user.settings["itemgrid.gridTitles"]
 
     if LCase(m.top.parentItem.json.type) = "musicgenre"
         m.itemGrid.translation = "[96, 60]"
@@ -148,6 +145,11 @@ sub loadInitialItems()
         m.top.showItemTitles = "hidealways"
     else if LCase(m.view) = "artistsgrid" or LCase(m.options.view) = "artistsgrid"
         m.loadItemsTask.genreIds = ""
+    else if LCase(m.view) = "albumartistsgrid" or LCase(m.options.view) = "albumartistsgrid"
+        m.loadItemsTask.genreIds = ""
+    else if LCase(m.view) = "albumartistspresentation" or LCase(m.options.view) = "albumartistspresentation"
+        m.loadItemsTask.genreIds = ""
+        m.top.showItemTitles = "hidealways"
     else
         m.loadItemsTask.itemId = m.top.parentItem.Id
     end if
@@ -179,6 +181,12 @@ sub loadInitialItems()
     else if LCase(m.options.view) = "artistsgrid" or LCase(m.view) = "artistsgrid"
         m.itemGrid.translation = "[96, 60]"
         m.itemGrid.numRows = "4"
+    else if LCase(m.options.view) = "albumartistsgrid" or LCase(m.view) = "albumartistsgrid"
+        m.loadItemsTask.itemType = "AlbumArtists"
+        m.itemGrid.translation = "[96, 60]"
+        m.itemGrid.numRows = "4"
+    else if LCase(m.options.view) = "albumartistspresentation" or LCase(m.view) = "albumartistspresentation"
+        m.loadItemsTask.itemType = "AlbumArtists"
     else if LCase(m.options.view) = "genres" or LCase(m.view) = "genres"
         m.loadItemsTask.itemType = ""
         m.loadItemsTask.recursive = true
@@ -206,6 +214,8 @@ sub setMusicOptions(options)
     options.views = [
         { "Title": tr("Artists (Presentation)"), "Name": "ArtistsPresentation" },
         { "Title": tr("Artists (Grid)"), "Name": "ArtistsGrid" },
+        { "Title": tr("Album Artists (Presentation)"), "Name": "AlbumArtistsPresentation" },
+        { "Title": tr("Album Artists (Grid)"), "Name": "AlbumArtistsGrid" },
         { "Title": tr("Albums"), "Name": "Albums" },
         { "Title": tr("Genres"), "Name": "Genres" }
     ]
@@ -449,6 +459,10 @@ sub onItemFocused()
         return
     end if
 
+    if LCase(m.options.view) = "albumartistsgrid" or LCase(m.view) = "albumartistsgrid"
+        return
+    end if
+
     if not m.selectedArtistGenres.visible
         m.selectedArtistGenres.visible = true
     end if
@@ -640,7 +654,7 @@ sub optionsClosed()
         set_user_setting("display." + m.top.parentItem.Id + ".filter", m.options.filter)
     end if
 
-    m.view = get_user_setting("display." + m.top.parentItem.Id + ".landing")
+    m.view = m.global.session.user.settings["display." + m.top.parentItem.Id + ".landing"]
 
     if m.options.view <> m.view
         m.view = m.options.view

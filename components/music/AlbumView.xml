@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="AlbumView" extends="JFScreen">
   <children>
-    <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[-10]" >
-      <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[15]" >
+    <LayoutGroup id="toplevel" layoutDirection="vert" itemSpacings="[-10]">
+      <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[15]">
         <LayoutGroup layoutDirection="vert" itemSpacings="[15]">
           <Poster id="albumCover" width="450" height="450" />
           <Label id="numberofsongs" width="450" height="25" />
@@ -29,6 +29,4 @@
     <field id="playAllSelected" alias="playAlbum.buttonSelected" />
     <field id="instantMixSelected" alias="instantMix.buttonSelected" />
   </interface>
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
-  <script type="text/brightscript" uri="AlbumView.brs" />
 </component>

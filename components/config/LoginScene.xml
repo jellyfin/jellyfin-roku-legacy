@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="LoginScene" extends="JFGroup">
   <children>
     <label text="Enter Configuration"
@@ -30,5 +30,4 @@
       duration="3"
       repeat="true" />
   </children>
-  <script type="text/brightscript" uri="LoginScene.brs"/>
 </component>

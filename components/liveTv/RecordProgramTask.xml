@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <component name="RecordProgramTask" extends="Task">
   <interface>
@@ -6,7 +6,4 @@
     <field id="recordSeries" type="boolean" value="false" />
     <field id="recordOperationDone" type="boolean" value="" />
   </interface>
-  <script type="text/brightscript" uri="RecordProgramTask.brs" />
-  <script type="text/brightscript" uri="pkg:/source/api/baserequest.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

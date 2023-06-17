@@ -1,11 +1,19 @@
-sub init()
-    currentItem = m.global.queueManager.callFunc("getCurrentItem")
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/config.brs"
 
-    m.top.id = currentItem.id
+sub init()
+    ' Hide the overhang on init to prevent showing 2 clocks
+    m.top.getScene().findNode("overhang").visible = false
+
+    m.currentItem = m.global.queueManager.callFunc("getCurrentItem")
+
+    m.top.id = m.currentItem.id
 
     ' Load meta data
     m.LoadMetaDataTask = CreateObject("roSGNode", "LoadVideoContentTask")
-    m.LoadMetaDataTask.itemId = currentItem.id
+    m.LoadMetaDataTask.itemId = m.currentItem.id
+    m.LoadMetaDataTask.itemType = m.currentItem.type
+    m.LoadMetaDataTask.selectedAudioStreamIndex = m.currentItem.selectedAudioStreamIndex
     m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
     m.LoadMetaDataTask.control = "RUN"
 
@@ -13,6 +21,7 @@ sub init()
     m.bufferCheckTimer = m.top.findNode("bufferCheckTimer")
     m.top.observeField("state", "onState")
     m.top.observeField("content", "onContentChange")
+    m.top.observeField("selectedSubtitle", "onSubtitleChange")
 
     m.playbackTimer.observeField("fire", "ReportPlayback")
     m.bufferPercentage = 0 ' Track whether content is being loaded
@@ -20,7 +29,7 @@ sub init()
     m.top.transcodeReasons = []
     m.bufferCheckTimer.duration = 30
 
-    if get_user_setting("ui.design.hideclock") = "true"
+    if m.global.session.user.settings["ui.design.hideclock"] = true
         clockNode = findNodeBySubtype(m.top, "clock")
         if clockNode[0] <> invalid then clockNode[0].parent.removeChild(clockNode[0].node)
     end if
@@ -42,35 +51,80 @@ sub init()
     m.top.trickPlayBar.filledBarBlendColor = m.global.constants.colors.blue
 end sub
 
+sub onSubtitleChange()
+    ' Save the current video position
+    m.global.queueManager.callFunc("setTopStartingPoint", int(m.top.position) * 10000000&)
+
+    m.top.control = "stop"
+
+    m.LoadMetaDataTask.selectedSubtitleIndex = m.top.SelectedSubtitle
+    m.LoadMetaDataTask.itemId = m.currentItem.id
+    m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
+    m.LoadMetaDataTask.control = "RUN"
+end sub
+
+sub onPlaybackErrorDialogClosed(msg)
+    sourceNode = msg.getRoSGNode()
+    sourceNode.unobserveField("buttonSelected")
+    sourceNode.unobserveField("wasClosed")
+
+    m.global.sceneManager.callFunc("popScene")
+end sub
+
+sub onPlaybackErrorButtonSelected(msg)
+    sourceNode = msg.getRoSGNode()
+    sourceNode.close = true
+end sub
+
+sub showPlaybackErrorDialog(errorMessage as string)
+    dialog = createObject("roSGNode", "Dialog")
+    dialog.title = tr("Error During Playback")
+    dialog.buttons = [tr("OK")]
+    dialog.message = errorMessage
+    dialog.observeField("buttonSelected", "onPlaybackErrorButtonSelected")
+    dialog.observeField("wasClosed", "onPlaybackErrorDialogClosed")
+    m.top.getScene().dialog = dialog
+end sub
+
 sub onVideoContentLoaded()
     m.LoadMetaDataTask.unobserveField("content")
+    m.LoadMetaDataTask.control = "STOP"
+
+    videoContent = m.LoadMetaDataTask.content
+    m.LoadMetaDataTask.content = []
 
     ' If we have nothing to play, return to previous screen
-    if not isValid(m.LoadMetaDataTask.content)
-        m.global.sceneManager.callFunc("popScene")
+    if not isValid(videoContent)
+        showPlaybackErrorDialog(tr("There was an error retrieving the data for this item from the server."))
         return
     end if
 
-    if not isValid(m.LoadMetaDataTask.content[0])
-        m.global.sceneManager.callFunc("popScene")
+    if not isValid(videoContent[0])
+        showPlaybackErrorDialog(tr("There was an error retrieving the data for this item from the server."))
         return
     end if
 
-    if m.LoadMetaDataTask.content.count() = 0
-        m.global.sceneManager.callFunc("popScene")
-        return
+    m.top.content = videoContent[0].content
+    m.top.PlaySessionId = videoContent[0].PlaySessionId
+    m.top.videoId = videoContent[0].id
+    m.top.container = videoContent[0].container
+    m.top.mediaSourceId = videoContent[0].mediaSourceId
+    m.top.fullSubtitleData = videoContent[0].fullSubtitleData
+    m.top.audioIndex = videoContent[0].audioIndex
+    m.top.transcodeParams = videoContent[0].transcodeparams
+
+    if m.LoadMetaDataTask.isIntro
+        m.top.enableTrickPlay = false
     end if
 
-    m.top.content = m.LoadMetaDataTask.content[0].content
-    m.top.PlaySessionId = m.LoadMetaDataTask.content[0].PlaySessionId
-    m.top.videoId = m.LoadMetaDataTask.content[0].id
-    m.top.container = m.LoadMetaDataTask.content[0].container
-    m.top.mediaSourceId = m.LoadMetaDataTask.content[0].mediaSourceId
-    m.top.audioIndex = m.LoadMetaDataTask.content[0].audio_stream_idx
+    if isValid(m.top.audioIndex)
+        m.top.audioTrack = (m.top.audioIndex + 1).toStr()
+    else
+        m.top.audioTrack = "2"
+    end if
 
     m.top.setFocus(true)
     m.top.control = "play"
-    m.top.getScene().findNode("overhang").visible = false
 end sub
 
 ' Event handler for when video content field changes
@@ -98,7 +152,7 @@ end sub
 '
 ' Runs Next Episode button animation and sets focus to button
 sub showNextEpisodeButton()
-    if m.global.userConfig.EnableNextEpisodeAutoPlay and not m.nextEpisodeButton.visible
+    if m.global.session.user.configuration.EnableNextEpisodeAutoPlay and not m.nextEpisodeButton.visible
         m.showNextEpisodeButtonAnimation.control = "start"
         m.nextEpisodeButton.setFocus(true)
         m.nextEpisodeButton.visible = true
@@ -156,12 +210,7 @@ sub onState(msg)
             m.top.retryWithTranscoding = true ' If playback was not reported, retry with transcoding
         else
             ' If an error was encountered, Display dialog
-            dialog = createObject("roSGNode", "Dialog")
-            dialog.title = tr("Error During Playback")
-            dialog.buttons = [tr("OK")]
-            dialog.message = tr("An error was encountered while playing this item.")
-            dialog.observeField("buttonSelected", "dialogClosed")
-            m.top.getScene().dialog = dialog
+            showPlaybackErrorDialog(tr("Error During Playback"))
         end if
 
         ' Stop playback and exit player
@@ -241,12 +290,7 @@ sub bufferCheck(msg)
             m.top.callFunc("refresh")
         else
             ' If buffering has stopped Display dialog
-            dialog = createObject("roSGNode", "Dialog")
-            dialog.title = tr("Error Retrieving Content")
-            dialog.buttons = [tr("OK")]
-            dialog.message = tr("There was an error retrieving the data for this item from the server.")
-            dialog.observeField("buttonSelected", "dialogClosed")
-            m.top.getScene().dialog = dialog
+            showPlaybackErrorDialog(tr("There was an error retrieving the data for this item from the server."))
 
             ' Stop playback and exit player
             m.top.control = "stop"
@@ -254,14 +298,6 @@ sub bufferCheck(msg)
         end if
     end if
 
-end sub
-
-'
-' Clean up on Dialog Closed
-sub dialogClosed(msg)
-    sourceNode = msg.getRoSGNode()
-    sourceNode.unobserveField("buttonSelected")
-    sourceNode.close = true
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean

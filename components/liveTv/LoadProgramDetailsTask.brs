@@ -1,3 +1,6 @@
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/utils/config.brs"
+
 sub init()
     m.top.functionName = "loadProgramDetails"
 
@@ -9,7 +12,7 @@ sub loadProgramDetails()
     programIndex = m.top.ProgramIndex
 
     params = {
-        UserId: get_setting("active_user")
+        UserId: m.global.session.user.id
     }
 
     url = Substitute("LiveTv/Programs/{0}", m.top.programId)

@@ -1,10 +1,10 @@
-' "Registry" is where Roku stores config
+' needed for set_user_setting() and unset_user_setting()
+import "pkg:/source/utils/session.bs"
 
 ' Read config tree from json config file and return
 function GetConfigTree()
     return ParseJSON(ReadAsciiFile("pkg:/settings/settings.json"))
 end function
-
 
 ' Generic registry accessors
 function registry_read(key, section = invalid)
@@ -28,6 +28,24 @@ sub registry_delete(key, section = invalid)
     reg.flush()
 end sub
 
+' Return all data found inside a registry section
+function RegistryReadAll(section as string) as dynamic
+    if section = "" then return invalid
+
+    registry = CreateObject("roRegistrySection", section)
+    regKeyList = registry.GetKeyList()
+    registryData = {}
+    for each item in regKeyList
+        ' ignore session related tokens
+        if item <> "token" and item <> "username" and item <> "password"
+            if registry.Exists(item)
+                registryData.AddReplace(item, registry.Read(item))
+            end if
+        end if
+    end for
+
+    return registryData
+end function
 
 ' "Jellyfin" registry accessors for the default global settings
 function get_setting(key, default = invalid)
@@ -44,37 +62,24 @@ sub unset_setting(key)
     registry_delete(key, "Jellyfin")
 end sub
 
-
 ' User registry accessors for the currently active user
-function get_user_setting(key, default = invalid)
-    if get_setting("active_user") = invalid then return default
-    value = registry_read(key, get_setting("active_user"))
-    if value = invalid
-
-        ' Check for default in Config Tree
-        configTree = GetConfigTree()
-        configKey = findConfigTreeKey(key, configTree)
-
-        if configKey <> invalid and configKey.default <> invalid
-            set_user_setting(key, configKey.default) ' Set user setting to default
-            return configKey.default
-        end if
-
-        return default
-    end if
+function get_user_setting(key as string) as dynamic
+    if key = "" or m.global.session.user.id = invalid then return invalid
+    value = registry_read(key, m.global.session.user.id)
     return value
 end function
 
-sub set_user_setting(key, value)
-    if get_setting("active_user") = invalid then return
-    registry_write(key, value, get_setting("active_user"))
+sub set_user_setting(key as string, value as dynamic)
+    if m.global.session.user.id = invalid then return
+    session.user.settings.Save(key, value)
+    registry_write(key, value, m.global.session.user.id)
 end sub
 
-sub unset_user_setting(key)
-    if get_setting("active_user") = invalid then return
-    registry_delete(key, get_setting("active_user"))
+sub unset_user_setting(key as string)
+    if m.global.session.user.id = invalid then return
+    session.user.settings.Delete(key)
+    registry_delete(key, m.global.session.user.id)
 end sub
-
 
 ' Recursivly search the config tree for entry with settingname equal to key
 function findConfigTreeKey(key as string, tree)
@@ -89,5 +94,3 @@ function findConfigTreeKey(key as string, tree)
 
     return invalid
 end function
-
-

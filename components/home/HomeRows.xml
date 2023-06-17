@@ -6,6 +6,4 @@
     <function name="updateHomeRows" />
     <function name="loadLibraries" />
   </interface>
-  <script type="text/brightscript" uri="HomeRows.brs" />
-  <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>

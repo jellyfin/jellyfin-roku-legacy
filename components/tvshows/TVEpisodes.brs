@@ -1,3 +1,8 @@
+import "pkg:/source/api/Image.brs"
+import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/utils/config.brs"
+import "pkg:/source/utils/misc.brs"
+
 sub init()
     m.top.optionsAvailable = false
 
@@ -18,7 +23,7 @@ sub setSeasonLoading()
 end sub
 
 sub updateSeason()
-    if get_user_setting("ui.tvshows.disableUnwatchedEpisodeCount", "false") = "false"
+    if m.global.session.user.settings["ui.tvshows.disableUnwatchedEpisodeCount"] = false
         if isValid(m.top.seasonData) and isValid(m.top.seasonData.UserData) and isValid(m.top.seasonData.UserData.UnplayedItemCount)
             if m.top.seasonData.UserData.UnplayedItemCount > 0
                 m.unplayedCount.visible = true

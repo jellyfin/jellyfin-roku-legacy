@@ -1,3 +1,6 @@
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/config.brs"
+
 sub init()
     m.itemPoster = m.top.findNode("itemPoster")
     m.postTextBackground = m.top.findNode("postTextBackground")
@@ -15,7 +18,7 @@ sub init()
         m.itemPoster.loadDisplayMode = m.topParent.imageDisplayMode
     end if
 
-    m.gridTitles = get_user_setting("itemgrid.gridTitles")
+    m.gridTitles = m.global.session.user.settings["itemgrid.gridTitles"]
     m.posterText.visible = false
     m.postTextBackground.visible = false
 

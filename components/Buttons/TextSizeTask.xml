@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <component name="TextSizeTask" extends="Task">
   <interface>
     <field id="fontName" type="string" />
     <field id="fontSize" type="int" />
-    <field id="text" type="array"  />
+    <field id="text" type="array" />
     <field id="maxWidth" type="int" value="1920" />
     <field id="name" type="string" />
 
@@ -12,5 +12,4 @@
     <field id="width" type="array" />
     <field id="height" type="int" />
   </interface>
-  <script type="text/brightscript" uri="TextSizeTask.brs" />
 </component>

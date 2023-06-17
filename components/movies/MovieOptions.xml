@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component name="MovieOptions" extends="Group">
   <children>
     <Rectangle width="1920" height="1080" color="#000000" opacity="0.75" />
@@ -7,8 +7,8 @@
       <LayoutGroup horizAlignment="center" translation="[860,50]" itemSpacings="[50]">
         <JFButtons id="buttons" />
         <Group>
-          <RadiobuttonList id="videoMenu" itemspacing="[0,10]" opacity="1" vertFocusAnimationStyle="floatingFocus" drawFocusFeedback="false" />
-          <RadiobuttonList id="audioMenu" itemspacing="[0,10]" opacity="0" vertFocusAnimationStyle="floatingFocus" drawFocusFeedback="false" />
+          <RadiobuttonList id="videoMenu" itemspacing="[0,10]" opacity="1" vertFocusAnimationStyle="floatingFocus" drawFocusFeedback="false" itemSize="[1500, 70]" numRows="8" />
+          <RadiobuttonList id="audioMenu" itemspacing="[0,10]" opacity="0" vertFocusAnimationStyle="floatingFocus" drawFocusFeedback="false" itemSize="[1500, 70]" numRows="8" />
         </Group>
       </LayoutGroup>
     </Group>
@@ -26,5 +26,4 @@
     <field id="video_codec" type="string" />
     <field id="audioStreamIndex" type="integer" />
   </interface>
-  <script type="text/brightscript" uri="MovieOptions.brs" />
 </component>

@@ -6,8 +6,6 @@
     <field id="focusPercent" type="float" onchange="onFocusPercentChange" />
   </interface>
 
-  <script type="text/brightscript" uri="JFServer.brs" />
-
   <children>
     <Poster id="poster" translation="[0,5]" width="90" height="90" />
     <Group id="labels" translation="[100,0]">

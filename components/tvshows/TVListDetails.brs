@@ -1,10 +1,12 @@
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/config.brs"
+
 sub init()
     m.title = m.top.findNode("title")
     m.title.text = tr("Loading...")
     m.options = m.top.findNode("tvListOptions")
     m.overview = m.top.findNode("overview")
     m.poster = m.top.findNode("poster")
-    m.deviceInfo = CreateObject("roDeviceInfo")
 
     m.rating = m.top.findnode("rating")
     m.infoBar = m.top.findnode("infoBar")
@@ -34,7 +36,7 @@ sub itemContentChanged()
 
     imageUrl = item.posterURL
 
-    if get_user_setting("ui.tvshows.blurunwatched") = "true"
+    if m.global.session.user.settings["ui.tvshows.blurunwatched"] = true
         if itemData.lookup("Type") = "Episode"
             if not itemData.userdata.played
                 imageUrl = imageUrl + "&blur=15"
@@ -52,12 +54,12 @@ sub itemContentChanged()
             m.top.findNode("runtime").text = stri(runTime).trim() + " mins"
         end if
 
-        if get_user_setting("ui.design.hideclock") <> "true"
+        if m.global.session.user.settings["ui.design.hideclock"] <> true
             m.top.findNode("endtime").text = tr("Ends at %1").Replace("%1", getEndTime())
         end if
     end if
 
-    if get_user_setting("ui.tvshows.disableCommunityRating") = "false"
+    if m.global.session.user.settings["ui.tvshows.disableCommunityRating"] = false
         if isValid(itemData.communityRating)
             m.top.findNode("star").visible = true
             m.top.findNode("communityRating").text = str(int(itemData.communityRating * 10) / 10)
@@ -146,7 +148,7 @@ end function
 sub focusChanged()
     if m.top.itemHasFocus = true
         ' text to speech for accessibility
-        if m.deviceInfo.IsAudioGuideEnabled() = true
+        if m.global.device.isAudioGuideEnabled = true
             txt2Speech = CreateObject("roTextToSpeech")
             txt2Speech.Flush()
             txt2Speech.Say(m.title.text)

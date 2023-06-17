@@ -1,3 +1,6 @@
+import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/config.brs"
+
 sub init()
     m.playbackTimer = m.top.findNode("playbackTimer")
     m.bufferCheckTimer = m.top.findNode("bufferCheckTimer")
@@ -11,7 +14,7 @@ sub init()
     m.top.transcodeReasons = []
     m.bufferCheckTimer.duration = 30
 
-    if get_user_setting("ui.design.hideclock") = "true"
+    if m.global.session.user.settings["ui.design.hideclock"] = true
         clockNode = findNodeBySubtype(m.top, "clock")
         if clockNode[0] <> invalid then clockNode[0].parent.removeChild(clockNode[0].node)
     end if
@@ -25,12 +28,13 @@ sub init()
     m.nextEpisodeButton.text = tr("Next Episode")
     m.nextEpisodeButton.setFocus(false)
     m.nextEpisodeButton.visible = false
-    m.nextupbuttonseconds = get_user_setting("playback.nextupbuttonseconds", "30")
+    m.nextupbuttonseconds = m.global.session.user.settings["playback.nextupbuttonseconds"]
     if isValid(m.nextupbuttonseconds)
         m.nextupbuttonseconds = val(m.nextupbuttonseconds)
     else
         m.nextupbuttonseconds = 30
     end if
+
 
     m.showNextEpisodeButtonAnimation = m.top.findNode("showNextEpisodeButton")
     m.hideNextEpisodeButtonAnimation = m.top.findNode("hideNextEpisodeButton")
@@ -65,7 +69,7 @@ sub onAllowCaptionsChange()
     m.captionTask.observeField("useThis", "checkCaptionMode")
     m.top.observeField("currentSubtitleTrack", "loadCaption")
     m.top.observeField("globalCaptionMode", "toggleCaption")
-    if get_user_setting("playback.subs.custom") = "false"
+    if m.global.session.user.settings["playback.subs.custom"] = false
         m.top.suppressCaptions = false
     else
         m.top.suppressCaptions = true
@@ -116,7 +120,7 @@ end sub
 '
 ' Runs Next Episode button animation and sets focus to button
 sub showNextEpisodeButton()
-    if m.global.userConfig.EnableNextEpisodeAutoPlay and not m.nextEpisodeButton.visible
+    if m.global.session.user.configuration.EnableNextEpisodeAutoPlay and not m.nextEpisodeButton.visible
         m.showNextEpisodeButtonAnimation.control = "start"
         m.nextEpisodeButton.setFocus(true)
         m.nextEpisodeButton.visible = true
