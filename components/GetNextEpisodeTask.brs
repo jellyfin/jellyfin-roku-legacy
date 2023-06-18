@@ -6,7 +6,7 @@ sub init()
 end sub
 
 sub getNextEpisodeTask()
-        m.nextEpisodeData = api_API().shows.getepisodes(m.top.showID, {
+    m.nextEpisodeData = api.shows.getepisodes(m.top.showID, {
         UserId: m.global.session.user.id,
         StartItemId: m.top.videoID,
         limit: 2,

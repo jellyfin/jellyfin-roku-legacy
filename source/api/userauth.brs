@@ -91,12 +91,12 @@ function ServerInfo()
         if right(headers.location, 19) = "/System/Info/Public"
             set_setting("server", left(headers.location, len(headers.location) - 19))
             session.server.UpdateURL(left(headers.location, len(headers.location) - 19))
-            info = ServerInfo()
-            if info.Error
-                info.UpdatedUrl = left(headers.location, len(headers.location) - 19)
-                info.ErrorMessage = info.ErrorMessage + " (Note: Server redirected us to " + info.UpdatedUrl + ")"
+            sInfo = ServerInfo()
+            if sInfo.Error
+                sInfo.UpdatedUrl = left(headers.location, len(headers.location) - 19)
+                sInfo.ErrorMessage = sInfo.ErrorMessage + " (Note: Server redirected us to " + sInfo.UpdatedUrl + ")"
             end if
-            return info
+            return sInfo
         end if
     end if
 
