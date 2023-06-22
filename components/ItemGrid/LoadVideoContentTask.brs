@@ -121,7 +121,18 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     if meta.live
         video.content.live = true
         video.content.StreamFormat = "hls"
+        video.directPlaySupported = true
+        video.RequiresClosing = false
+        video.SupportsDirectStream = true
+        video.transcodeParams = {
+            "MediaSourceId": m.playbackInfo.MediaSources[0].Id,
+            "LiveStreamId": m.playbackInfo.MediaSources[0].LiveStreamId,
+            "PlaySessionId": video.PlaySessionId
+        }
+    else
+        video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
     end if
+
 
     video.container = getContainerType(meta)
 
@@ -131,18 +142,10 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
 
     addSubtitlesToVideo(video, meta)
 
-    if meta.live
-        video.transcodeParams = {
-            "MediaSourceId": m.playbackInfo.MediaSources[0].Id,
-            "LiveStreamId": m.playbackInfo.MediaSources[0].LiveStreamId,
-            "PlaySessionId": video.PlaySessionId
-        }
-    end if
-
 
     ' 'TODO: allow user selection of subtitle track before playback initiated, for now set to no subtitles
 
-    video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
+    'video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
     fully_external = false
 
 
@@ -188,7 +191,6 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     if not fully_external
         video.content = authorize_request(video.content)
     end if
-
 end sub
 
 sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
