@@ -824,6 +824,7 @@ function CreateVideoPlayerGroup(video_id as string, mediaSourceId = invalid as d
     extras = video.findNode("extrasGrid")
     extras.observeField("selectedItem", m.port)
     extras.callFunc("loadParts", ItemMetaData(video_id).json, true)
+    extras.callFunc("loadPeople", ItemMetaData(video_id).json, true)
     stopLoadingSpinner()
     return video
 end function

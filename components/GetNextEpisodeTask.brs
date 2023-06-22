@@ -15,4 +15,5 @@ sub getNextEpisodeTask()
     })
 
     m.top.nextEpisodeData = m.nextEpisodeData
+    print "running NextEpisode Task: " m.top.getItemQueryData
 end sub

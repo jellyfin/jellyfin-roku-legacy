@@ -20,5 +20,6 @@ sub getItemQueryTask()
         })
     end if
     m.top.getItemQueryData = m.getItemQueryTask
+    print "running ItemQuery Task: " m.top.getItemQueryData
 end sub
 
