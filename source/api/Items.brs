@@ -419,7 +419,7 @@ end function
 
 function TVEpisodes(show_id as string, season_id as string) as dynamic
     url = Substitute("Shows/{0}/Episodes", show_id)
-    resp = APIRequest(url, { "seasonId": season_id, "UserId": m.global.session.user.id, "fields": "MediaStreams" })
+    resp = APIRequest(url, { "seasonId": season_id, "UserId": m.global.session.user.id, "fields": "MediaStreams,MediaSources" })
 
     data = getJson(resp)
     ' validate data

@@ -121,6 +121,10 @@ sub Main (args as dynamic) as void
             itemNode = reportingNode.quickPlayNode
             if isValid(itemNode) and isValid(itemNode.id) and itemNode.id <> ""
                 if itemNode.type = "Episode" or itemNode.type = "Movie" or itemNode.type = "Video"
+                    if isValid(itemNode.selectedVideoStreamId)
+                        itemNode.id = itemNode.selectedVideoStreamId
+                    end if
+
                     audio_stream_idx = 0
                     if isValid(itemNode.selectedAudioStreamIndex) and itemNode.selectedAudioStreamIndex > 0
                         audio_stream_idx = itemNode.selectedAudioStreamIndex

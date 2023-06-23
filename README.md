@@ -6,8 +6,8 @@
 [![Build Status](https://img.shields.io/github/actions/workflow/status/jellyfin/jellyfin-roku/build-dev.yml?logo=github&branch=unstable "Build Status")](https://github.com/jellyfin/jellyfin-roku/actions/workflows/build-dev.yml?query=branch%3Aunstable)
 [![Current Release](https://img.shields.io/github/release/jellyfin/jellyfin-roku.svg?logo=github "Current Release")](https://github.com/jellyfin/jellyfin-roku/releases)
 [![Translation Status](https://translate.jellyfin.org/widgets/jellyfin/-/jellyfin-roku/svg-badge.svg "Translation Status")](https://translate.jellyfin.org/projects/jellyfin/jellyfin-roku/?utm_source=widget)
+[![Forum](https://img.shields.io/badge/forum-MyBB-00A4DC "Check out our forum!")](https://forum.jellyfin.org/f-roku-development)
 [![Matrix](https://img.shields.io/matrix/jellyfin:matrix.org.svg?logo=matrix "Chat on Matrix")](https://matrix.to/#/#jellyfin-dev-roku:matrix.org)
-[![Reddit](https://img.shields.io/badge/reddit-r%2Fjellyfin-%23FF5700.svg?logo=reddit "Join our Subreddit")](https://www.reddit.com/r/jellyfin)
 [![License](https://img.shields.io/github/license/jellyfin/jellyfin-roku.svg "GPL 2.0 License")](LICENSE)
 
 Jellyfin Roku is the official Jellyfin client for Roku devices. We welcome all contributions and pull requests! If you have a larger feature in mind please [open an issue](https://github.com/jellyfin/jellyfin-roku/issues/new?assignees=&labels=feature&template=feature_request.md&title=) so we can discuss the implementation before you start.

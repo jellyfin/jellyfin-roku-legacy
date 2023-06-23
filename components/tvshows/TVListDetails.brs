@@ -4,7 +4,6 @@ import "pkg:/source/utils/config.brs"
 sub init()
     m.title = m.top.findNode("title")
     m.title.text = tr("Loading...")
-    m.options = m.top.findNode("tvListOptions")
     m.overview = m.top.findNode("overview")
     m.poster = m.top.findNode("poster")
 
@@ -15,11 +14,19 @@ sub init()
     m.playedIndicator = m.top.findNode("playedIndicator")
     m.checkmark = m.top.findNode("checkmark")
     m.checkmark.font.size = 35
+
+    m.videoCodec = m.top.findNode("video_codec")
 end sub
 
 sub itemContentChanged()
     item = m.top.itemContent
     itemData = item.json
+
+    ' Set default video source if user hasn't selected one yet
+    if item.selectedVideoStreamId = "" and isValid(itemData.MediaSources)
+        item.selectedVideoStreamId = itemData.MediaSources[0].id
+    end if
+
     if isValid(itemData.indexNumber)
         indexNumber = itemData.indexNumber.toStr() + ". "
     else
@@ -85,36 +92,62 @@ sub itemContentChanged()
         m.progressBar.visible = true
     end if
 
-    videoIdx = invalid
-    audioIdx = invalid
+    ' Display current video_codec and check if there is more than one video to choose from...
+    m.videoCodec.visible = false
+    if isValid(itemData.MediaSources)
+        for i = 0 to itemData.MediaSources.Count() - 1
+            if item.selectedVideoStreamId = itemData.MediaSources[i].id
+                m.videoCodec.text = tr("Video") + ": " + itemData.MediaSources[i].MediaStreams[0].DisplayTitle
+                SetupAudioDisplay(itemData.MediaSources[i].MediaStreams, item.selectedAudioStreamIndex)
+                exit for
+            end if
+        end for
+        m.videoCodec.visible = true
+        DisplayVideoAvailable(itemData.MediaSources)
+    end if
+end sub
 
-    if isValid(itemData.MediaStreams)
-        for i = 0 to itemData.MediaStreams.Count() - 1
-            if itemData.MediaStreams[i].Type = "Video" and videoIdx = invalid
-                videoIdx = i
-                m.top.findNode("video_codec").text = tr("Video") + ": " + itemData.mediaStreams[videoIdx].DisplayTitle
-            else if itemData.MediaStreams[i].Type = "Audio" and audioIdx = invalid
-                if item.selectedAudioStreamIndex > 1
-                    audioIdx = item.selectedAudioStreamIndex
+' Display current audio_codec and check if there is more than one audio track to choose from...
+sub SetupAudioDisplay(mediaStreams as object, selectedAudioStreamIndex as integer)
+    audioIdx = invalid
+    if isValid(mediaStreams)
+        for i = 0 to mediaStreams.Count() - 1
+            if LCase(mediaStreams[i].Type) = "audio" and audioIdx = invalid
+                if selectedAudioStreamIndex > 0 and selectedAudioStreamIndex < mediaStreams.Count()
+                    audioIdx = selectedAudioStreamIndex
                 else
                     audioIdx = i
                 end if
-                m.top.findNode("audio_codec").text = tr("Audio") + ": " + itemData.mediaStreams[audioIdx].DisplayTitle
+                m.top.findNode("audio_codec").text = tr("Audio") + ": " + mediaStreams[audioIdx].DisplayTitle
             end if
-            if isValid(videoIdx) and isValid(audioIdx) then exit for
+            if isValid(audioIdx) then exit for
         end for
     end if
 
-    m.top.findNode("video_codec").visible = isValid(videoIdx)
     if isValid(audioIdx)
         m.top.findNode("audio_codec").visible = true
-        DisplayAudioAvailable(itemData.mediaStreams)
+        DisplayAudioAvailable(mediaStreams)
     else
         m.top.findNode("audio_codec").visible = false
     end if
 end sub
 
-sub DisplayAudioAvailable(streams)
+' Adds "+N" (e.g. +1) if there is more than one video version to choose from
+sub DisplayVideoAvailable(streams as object)
+    count = 0
+    for i = 0 to streams.Count() - 1
+        if LCase(streams[i].VideoType) = "videofile"
+            count++
+        end if
+    end for
+
+    if count > 1
+        m.top.findnode("video_codec_count").text = "+" + stri(count - 1).trim()
+    end if
+end sub
+
+' Adds "+N" (e.g. +1) if there is more than one audio track to choose from
+sub DisplayAudioAvailable(streams as object)
     count = 0
     for i = 0 to streams.Count() - 1
         if streams[i].Type = "Audio"
