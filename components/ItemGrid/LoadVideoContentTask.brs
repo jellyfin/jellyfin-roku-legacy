@@ -50,16 +50,15 @@ sub loadItems()
     subtitle_idx = m.top.selectedSubtitleIndex
     forceTranscoding = false
 
-    m.top.content = [LoadItems_VideoPlayer(id, subtitle_idx, mediaSourceId, audio_stream_idx, forceTranscoding)]
+    m.top.content = [LoadItems_VideoPlayer(id, mediaSourceId, audio_stream_idx, subtitle_idx, forceTranscoding)]
 end sub
 
-function LoadItems_VideoPlayer(id as string, subtitle_idx, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, forceTranscoding = false as boolean) as dynamic
-
+function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, forceTranscoding = false as boolean) as dynamic
     video = {}
     video.id = id
     video.content = createObject("RoSGNode", "ContentNode")
 
-    LoadItems_AddVideoContent(video, mediaSourceId, subtitle_idx, audio_stream_idx, forceTranscoding)
+    LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, forceTranscoding)
 
     if video.content = invalid
         return invalid
@@ -68,8 +67,7 @@ function LoadItems_VideoPlayer(id as string, subtitle_idx, mediaSourceId = inval
     return video
 end function
 
-sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, subtitle_idx, audio_stream_idx = 1 as integer, forceTranscoding = false as boolean)
-
+sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, forceTranscoding = false as boolean)
     meta = ItemMetaData(video.id)
 
     if not isValid(meta)
