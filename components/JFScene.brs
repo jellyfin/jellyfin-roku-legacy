@@ -1,8 +1,12 @@
 import "pkg:/source/utils/misc.brs"
+import "pkg:/source/roku_modules/log/LogMixin.brs"
 
 sub init()
     m.top.backgroundColor = "#262626" '"#101010"
     m.top.backgroundURI = ""
+    ' initialize the log manager. second param sets log output:
+    ' 1 error, 2 warn, 3 info, 4 verbose, 5 debug
+    _rLog = log.initializeLogManager(["log_PrintTransport"], 5) 'bs:disable-line
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
