@@ -119,9 +119,10 @@ class App
         while true
             msg = wait(0, m.port)
             if type(msg) = "roSGScreenEvent" and msg.isScreenClosed()
-                print "CLOSING SCREEN"
+                m.log.warn("CLOSING SCREEN")
                 return
             else if isNodeEvent(msg, "exit")
+                m.log.warn("CLOSING SCREEN")
                 return
             else if isNodeEvent(msg, "closeSidePanel")
                 group = m.global.sceneManager.callFunc("getActiveScene")
@@ -596,18 +597,24 @@ class App
                 event = msg.GetInfo()
 
                 if event.exitedScreensaver = true
+                    m.log.info("event.exitedScreensaver", event.exitedScreensaver)
+
                     m.global.sceneManager.callFunc("resetTime")
                     group = m.global.sceneManager.callFunc("getActiveScene")
-                    if isValid(group) and isValid(group.subtype())
+                    groupType = group.subtype()
+                    if isValid(group) and isValid(groupType)
                         ' refresh the current view
-                        if group.subtype() = "Home"
+                        if groupType = "Home"
+                            m.log.info("Refreshing the home page...")
                             currentTime = CreateObject("roDateTime").AsSeconds()
                             group.timeLastRefresh = currentTime
                             group.callFunc("refresh")
+                            m.log.info("Finished refreshing the home page")
                         end if
                         ' todo: add other screens to be refreshed - movie detail, tv series, episode list etc.
                     end if
                 else if isValid(event.audioGuideEnabled)
+                    m.log.info("event.audioGuideEnabled", event.audioGuideEnabled)
                     tmpGlobalDevice = m.global.device
                     tmpGlobalDevice.AddReplace("isaudioguideenabled", event.audioGuideEnabled)
 
@@ -619,40 +626,41 @@ class App
                     ' "Off"
                     ' "Instant replay"
                     ' "When mute" (Only returned for a TV; this option is not available on STBs).
-                    print "event.Mode = ", event.Mode
+                    m.log.info("event.Mode", event.Mode)
                     if isValid(event.Mute)
-                        print "event.Mute = ", event.Mute
+                        m.log.info("event.Mute", event.Mute)
                     end if
                 else if isValid(event.linkStatus)
                     ' True if the device currently seems to have an active network connection.
-                    print "event.linkStatus = ", event.linkStatus
+                    m.log.info("event.linkStatus", event.linkStatus)
                 else if isValid(event.generalMemoryLevel)
                     ' This event will be sent first when the OS transitions from "normal" to "low" state and will continue to be sent while in "low" or "critical" states.
                     '   - "normal" means that the general memory is within acceptable levels
                     '   - "low" means that the general memory is below acceptable levels but not critical
                     '   - "critical" means that general memory are at dangerously low level and that the OS may force terminate the application
-                    print "event.generalMemoryLevel = ", event.generalMemoryLevel
+                    m.log.info("event.generalMemoryLevel", event.generalMemoryLevel)
                 else if isValid(event.audioCodecCapabilityChanged)
                     ' The audio codec capability has changed if true.
-                    print "event.audioCodecCapabilityChanged = ", event.audioCodecCapabilityChanged
+                    m.log.info("event.audioCodecCapabilityChanged", event.audioCodecCapabilityChanged)
 
                     PostDeviceProfile()
                 else if isValid(event.videoCodecCapabilityChanged)
                     ' The video codec capability has changed if true.
-                    print "event.videoCodecCapabilityChanged = ", event.videoCodecCapabilityChanged
+                    m.log.info("event.videoCodecCapabilityChanged", event.videoCodecCapabilityChanged)
 
                     PostDeviceProfile()
                 else if isValid(event.appFocus)
                     ' It is set to False when the System Overlay (such as the confirm partner button HUD or the caption control overlay) takes focus and True when the channel regains focus
-                    print "event.appFocus = ", event.appFocus
+                    m.log.info("event.appFocus", event.appFocus)
                 else
-                    print "Unhandled roDeviceInfoEvent:"
-                    print msg.GetInfo()
+                    m.log.warn("Unhandled roDeviceInfoEvent", msg.GetInfo())
                 end if
             else if type(msg) = "roInputEvent"
                 if msg.IsInput()
                     info = msg.GetInfo()
                     if info.DoesExist("mediatype") and info.DoesExist("contentid")
+                        m.log.info("roInputEvent.mediatype", info.mediatype)
+                        m.log.info("roInputEvent.contentId", info.contentId)
                         inputEventVideo = {
                             id: info.contentId,
                             type: "video"
@@ -703,8 +711,7 @@ class App
                     end if
                 end if
             else
-                print "Unhandled " type(msg)
-                print msg
+                m.log.warn("Unhandled " + type(msg), msg)
             end if
         end while
         m.log.debug("end run()")
