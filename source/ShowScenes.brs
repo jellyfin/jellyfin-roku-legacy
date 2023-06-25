@@ -1,6 +1,11 @@
+import "pkg:/source/roku_modules/log/LogMixin.brs"
+
 function LoginFlow(startOver = false as boolean)
+    m.log = new log.Logger("LoginFlow")
+    m.log.info("start LoginFlow()")
     'Collect Jellyfin server and user information
     start_login:
+    m.log.info("start start_login:")
 
     serverUrl = get_setting("server")
     if isValid(serverUrl)
@@ -145,6 +150,7 @@ function LoginFlow(startOver = false as boolean)
     LoadUserAbilities()
     m.global.sceneManager.callFunc("clearScenes")
 
+    m.log.verbose("end start_login:")
     return true
 end function
 
