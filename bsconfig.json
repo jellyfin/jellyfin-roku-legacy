@@ -13,7 +13,9 @@
         "roku-log-bsc-plugin"
     ],
     "rokuLog": {
-        "insertPkgPath": true
+        "strip": false,
+        "insertPkgPath": true,
+        "removeComments": false
     },
     "diagnosticFilters": [
         "node_modules/**/*",
