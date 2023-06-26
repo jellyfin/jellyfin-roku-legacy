@@ -24,7 +24,9 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
         "MaxStaticBitrate": "140000000",
         "SubtitleStreamIndex": currentView.selectedSubtitle,
         "MediaSourceId": currentItem.id,
-        "AudioStreamIndex": currentItem.selectedAudioStreamIndex
+        "AudioStreamIndex": currentItem.selectedAudioStreamIndex,
+        "enableDirectPlay": true,
+        "enableDirectStream": true
     }
 
     req = APIRequest(Substitute("Items/{0}/PlaybackInfo", id), params)

@@ -117,24 +117,44 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     end if
 
     video.PlaySessionId = m.playbackInfo.PlaySessionId
+    video.container = getContainerType(meta)
+    print "meta info is " meta
+    print "media source is " meta.json.mediaSources[0].container
+
 
     if meta.live
-        video.content.live = true
-        video.content.StreamFormat = "hls"
-        video.directPlaySupported = true
-        video.RequiresClosing = false
-        video.SupportsDirectStream = true
         video.transcodeParams = {
             "MediaSourceId": m.playbackInfo.MediaSources[0].Id,
             "LiveStreamId": m.playbackInfo.MediaSources[0].LiveStreamId,
             "PlaySessionId": video.PlaySessionId
         }
+
+        if m.playbackInfo.MediaSources[0].container = "hls"
+            video.directPlaySupported = true
+            video.content.StreamFormat = "hls"
+            video.SupportsDirectStream = true
+            fully_external = true
+            video.content.live = true
+            print "stream foramt set to hls"
+        else if m.playbackInfo.MediaSources[0].container = "mpegts"
+            video.directPlaySupported = false
+            video.content.StreamFormat = "fMP4"
+            video.SupportsDirectStream = true
+            fully_external = false
+            video.content.live = true
+            print "stream foramt set to ts"
+        else
+            fully_external = true
+            video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
+            video.content.StreamFormat = m.playbackInfo.MediaSources[0].container
+            print "stream is not hls or ts"
+        end if
     else
-        video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
+        fully_external = false
+        video.directPlaySupported = false
+        print "stream is not live!"
     end if
 
-
-    video.container = getContainerType(meta)
 
     if not isValid(m.playbackInfo.MediaSources[0])
         m.playbackInfo = meta.json
@@ -144,9 +164,6 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
 
 
     ' 'TODO: allow user selection of subtitle track before playback initiated, for now set to no subtitles
-
-    'video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
-    fully_external = false
 
 
     ' For h264/hevc video, Roku spec states that it supports specfic encoding levels
@@ -191,6 +208,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     if not fully_external
         video.content = authorize_request(video.content)
     end if
+    print "mediaSource" m.playbackInfo.MediaSources[0]
 end sub
 
 sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
@@ -299,7 +317,6 @@ function getContainerType(meta as object) as string
     else if container = "m4v" or container = "mov"
         container = "mp4"
     end if
-
     return container
 end function
 
