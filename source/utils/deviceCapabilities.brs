@@ -16,14 +16,6 @@ function getDeviceCapabilities() as object
     }
 end function
 
-' Send Device Profile information to server
-sub PostDeviceProfile()
-    body = getDeviceCapabilities()
-    req = APIRequest("/Sessions/Capabilities/Full")
-    req.SetRequest("POST")
-    postJson(req, FormatJson(body))
-end sub
-
 function getDeviceProfile() as object
     playMpeg2 = m.global.session.user.settings["playback.mpeg2"]
     playAv1 = m.global.session.user.settings["playback.av1"]

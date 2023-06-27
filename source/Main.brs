@@ -16,6 +16,7 @@ sub Main (args as dynamic) as void
     session.Init()
 
     m.scene = m.screen.CreateScene("JFScene")
+    m.scene.observeField("exit", m.port)
     m.screen.show() ' vscode_rale_tracker_entry
 
     jellyfin = new App(m.screen, m.port, m.scene, args)

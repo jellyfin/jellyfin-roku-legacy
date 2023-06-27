@@ -8,6 +8,7 @@ class App
     private args as dynamic
     private log = new log.Logger("App")
 
+    ' Constructor
     sub new(screen as object, port as object, scene as object, args as dynamic)
         m.log.verbose("start new()")
         ' save refs
@@ -34,6 +35,13 @@ class App
         m.global.addFields({ app_loaded: false, playstateTask: playstateTask, sceneManager: sceneManager })
         m.global.addFields({ queueManager: CreateObject("roSGNode", "QueueManager") })
         m.global.addFields({ audioPlayer: CreateObject("roSGNode", "AudioPlayer") })
+
+        ' Handle input messages
+        input = CreateObject("roInput")
+        input.SetMessagePort(m.port)
+
+        m.setupDeviceEvents()
+
         m.log.debug("end init()")
     end sub
 
@@ -41,14 +49,16 @@ class App
     sub run()
         m.log.debug("start run()")
         app_start:
-        m.log.info("start app_start:")
+        m.log.verbose("start app_start:")
         ' First thing to do is validate the ability to use the API
         if not LoginFlow() then goto app_start
         m.log.info("end LoginFlow() - user is now authenticated")
         ' tell jellyfin server about device capabilities
-        PostDeviceProfile()
+        m.postDeviceProfile()
         ' remove previous scenes from the stack
         m.global.sceneManager.callFunc("clearScenes")
+
+        m.setupFallbackFonts()
 
         ' load home page
         m.global.sceneManager.currentUser = m.global.session.user.name
@@ -56,62 +66,10 @@ class App
         group.callFunc("loadLibraries")
         m.global.sceneManager.callFunc("pushScene", group)
 
-        m.scene.observeField("exit", m.port)
+        m.showWhatsNew()
+        m.playDeepLink()
+        m.log.verbose("end app_start: - now entering main m.port loop")
 
-        ' Downloads and stores a fallback font to tmp:/
-        configEncoding = api.system.GetConfigurationByName("encoding")
-
-        if isValid(configEncoding) and isValid(configEncoding.EnableFallbackFont)
-            if configEncoding.EnableFallbackFont
-                re = CreateObject("roRegex", "Name.:.(.*?).,.Size", "s")
-                filename = APIRequest("FallbackFont/Fonts").GetToString()
-                if isValid(filename)
-                    filename = re.match(filename)
-                    if isValid(filename) and filename.count() > 0
-                        filename = filename[1]
-                        APIRequest("FallbackFont/Fonts/" + filename).gettofile("tmp:/font")
-                    end if
-                end if
-            end if
-        end if
-
-        ' Only show the Whats New popup the first time a user runs a new client version.
-        if m.global.app.version <> get_setting("LastRunVersion")
-            ' Ensure the user hasn't disabled Whats New popups
-            if m.global.session.user.settings["load.allowwhatsnew"] = true
-                set_setting("LastRunVersion", m.global.app.version)
-                dialog = createObject("roSGNode", "WhatsNewDialog")
-                m.scene.dialog = dialog
-                m.scene.dialog.observeField("buttonSelected", m.port)
-            end if
-        end if
-
-        ' Handle input messages
-        input = CreateObject("roInput")
-        input.SetMessagePort(m.port)
-
-        device = CreateObject("roDeviceInfo")
-        device.setMessagePort(m.port)
-        device.EnableScreensaverExitedEvent(true)
-        device.EnableAppFocusEvent(true)
-        device.EnableLowGeneralMemoryEvent(true)
-        device.EnableLinkStatusEvent(true)
-        device.EnableCodecCapChangedEvent(true)
-        device.EnableAudioGuideChangedEvent(true)
-
-        ' Check if we were sent content to play with the startup command (Deep Link)
-        if isValidAndNotEmpty(m.args.mediaType) and isValidAndNotEmpty(m.args.contentId)
-
-            deepLinkVideo = {
-                id: m.args.contentId,
-                type: "video"
-            }
-
-            m.global.queueManager.callFunc("push", deepLinkVideo)
-            m.global.queueManager.callFunc("playQueue")
-        end if
-
-        m.log.info("end app_start: - now entering main m.port loop")
         ' This is the core logic loop. Mostly for transitioning between scenes
         ' This now only references m. fields so could be placed anywhere, in theory
         ' "group" is always "whats on the screen"
@@ -119,12 +77,15 @@ class App
         while true
             msg = wait(0, m.port)
             if type(msg) = "roSGScreenEvent" and msg.isScreenClosed()
+                m.log.info("roSGScreenEvent", "isScreenClosed()", msg)
                 m.log.warn("CLOSING SCREEN")
                 return
             else if isNodeEvent(msg, "exit")
+                m.log.info("roSGNodeEvent", "exit", msg)
                 m.log.warn("CLOSING SCREEN")
                 return
             else if isNodeEvent(msg, "closeSidePanel")
+                m.log.info("roSGNodeEvent", "closeSidePanel", msg)
                 group = m.global.sceneManager.callFunc("getActiveScene")
                 if group.lastFocus <> invalid
                     group.lastFocus.setFocus(true)
@@ -135,6 +96,7 @@ class App
                 group = m.global.sceneManager.callFunc("getActiveScene")
                 reportingNode = msg.getRoSGNode()
                 itemNode = reportingNode.quickPlayNode
+                m.log.info("roSGNodeEvent", "quickPlayNode", msg, reportingNode, itemNode, itemNode?.type)
                 if isValid(itemNode) and isValid(itemNode.id) and itemNode.id <> ""
                     if itemNode.type = "Episode" or itemNode.type = "Movie" or itemNode.type = "Video"
                         if isValid(itemNode.selectedVideoStreamId)
@@ -177,9 +139,9 @@ class App
             else if isNodeEvent(msg, "selectedItem")
                 ' If you select a library from ANYWHERE, follow this flow
                 selectedItem = msg.getData()
+                m.log.info("roSGNodeEvent", "selectedItem", msg, selectedItem, selectedItem?.type)
                 if isValid(selectedItem)
                     selectedItemType = selectedItem.type
-
 
                     if selectedItemType = "CollectionFolder"
                         if selectedItem.collectionType = "movies"
@@ -288,10 +250,12 @@ class App
                     end if
                 end if
             else if isNodeEvent(msg, "movieSelected")
+                m.log.info("roSGNodeEvent", "movieSelected", msg, msg.getData(), msg.getRoSGNode())
                 ' If you select a movie from ANYWHERE, follow this flow
                 node = getMsgPicker(msg, "picker")
                 group = CreateMovieDetailsGroup(node)
             else if isNodeEvent(msg, "seriesSelected")
+                m.log.info("roSGNodeEvent", "seriesSelected", msg, msg.getData(), msg.getRoSGNode())
                 ' If you select a TV Series from ANYWHERE, follow this flow
                 node = getMsgPicker(msg, "picker")
                 group = CreateSeriesDetailsGroup(node.id)
@@ -300,6 +264,7 @@ class App
                 ptr = msg.getData()
                 ' ptr is for [row, col] of selected item... but we only have 1 row
                 series = msg.getRoSGNode()
+                m.log.info("roSGNodeEvent", "seasonSelected", msg, ptr, series)
                 if isValid(ptr) and ptr.count() >= 2 and isValid(ptr[1]) and isValid(series) and isValid(series.seasonData) and isValid(series.seasonData.items)
                     node = series.seasonData.items[ptr[1]]
                     group = CreateSeasonDetailsGroup(series.itemContent, node)
@@ -309,17 +274,20 @@ class App
                 ptr = msg.getData()
                 albums = msg.getRoSGNode()
                 node = albums.musicArtistAlbumData.items[ptr]
+                m.log.info("roSGNodeEvent", "musicAlbumSelected", msg, ptr, albums, node)
                 group = CreateAlbumView(node)
             else if isNodeEvent(msg, "appearsOnSelected")
                 ' If you select a Music Album from ANYWHERE, follow this flow
                 ptr = msg.getData()
                 albums = msg.getRoSGNode()
                 node = albums.musicArtistAppearsOnData.items[ptr]
+                m.log.info("roSGNodeEvent", "appearsOnSelected", msg, ptr, albums, node)
                 group = CreateAlbumView(node)
             else if isNodeEvent(msg, "playSong")
                 ' User has selected audio they want us to play
                 selectedIndex = msg.getData()
                 screenContent = msg.getRoSGNode()
+                m.log.info("roSGNodeEvent", "playSong", msg, selectedIndex, screenContent)
 
                 m.global.queueManager.callFunc("clear")
                 m.global.queueManager.callFunc("resetShuffle")
@@ -329,14 +297,17 @@ class App
                 ' User has selected audio they want us to play
                 selectedIndex = msg.getData()
                 screenContent = msg.getRoSGNode()
+                m.log.info("roSGNodeEvent", "playItem", msg, selectedIndex, screenContent)
 
                 m.global.queueManager.callFunc("clear")
                 m.global.queueManager.callFunc("resetShuffle")
                 m.global.queueManager.callFunc("push", screenContent.albumData.items[selectedIndex])
                 m.global.queueManager.callFunc("playQueue")
             else if isNodeEvent(msg, "playAllSelected")
-                ' User has selected playlist of of audio they want us to play
+                m.log.info("roSGNodeEvent", "playAllSelected")
+                ' User has selected playlist of audio they want us to play
                 screenContent = msg.getRoSGNode()
+                m.log.info("roSGNodeEvent", "playAllSelected", msg, msg.getData(), screenContent)
                 m.spinner = screenContent.findNode("spinner")
                 m.spinner.visible = true
 
@@ -345,8 +316,9 @@ class App
                 m.global.queueManager.callFunc("set", screenContent.albumData.items)
                 m.global.queueManager.callFunc("playQueue")
             else if isNodeEvent(msg, "playArtistSelected")
-                ' User has selected playlist of of audio they want us to play
+                ' User has selected playlist of audio they want us to play
                 screenContent = msg.getRoSGNode()
+                m.log.info("roSGNodeEvent", "playArtistSelected", msg, msg.getData(), screenContent)
 
                 m.global.queueManager.callFunc("clear")
                 m.global.queueManager.callFunc("resetShuffle")
@@ -355,8 +327,8 @@ class App
 
             else if isNodeEvent(msg, "instantMixSelected")
                 ' User has selected instant mix
-                ' User has selected playlist of of audio they want us to play
                 screenContent = msg.getRoSGNode()
+                m.log.info("roSGNodeEvent", "playArtistSelected", msg, msg.getData(), screenContent)
                 m.spinner = screenContent.findNode("spinner")
                 if isValid(m.spinner)
                     m.spinner.visible = true
@@ -388,6 +360,7 @@ class App
 
             else if isNodeEvent(msg, "search_value")
                 query = msg.getRoSGNode().search_value
+                m.log.info("roSGNodeEvent", "search_value", msg, msg.getData(), msg.getRoSGNode(), query)
                 group.findNode("SearchBox").visible = false
                 options = group.findNode("SearchSelect")
                 options.visible = true
@@ -403,6 +376,7 @@ class App
             else if isNodeEvent(msg, "itemSelected")
                 ' Search item selected
                 node = getMsgPicker(msg)
+                m.log.info("roSGNodeEvent", "itemSelected", msg, msg.getData(), msg.getRoSGNode(), node)
                 ' TODO - swap this based on target.mediatype
                 ' types: [ Series (Show), Episode, Movie, Audio, Person, Studio, MusicArtist ]
                 if node.type = "Series"
@@ -440,6 +414,7 @@ class App
             else if isNodeEvent(msg, "buttonSelected")
                 ' If a button is selected, we have some determining to do
                 btn = getButton(msg)
+                m.log.info("roSGNodeEvent", "buttonSelected", msg, msg.getData(), msg.getRoSGNode(), btn, btn?.id)
                 group = m.global.sceneManager.callFunc("getActiveScene")
                 if isValid(btn) and btn.id = "play-button"
                     ' User chose Play button from movie detail view
@@ -520,6 +495,7 @@ class App
                 end if
             else if isNodeEvent(msg, "optionSelected")
                 button = msg.getRoSGNode()
+                m.log.info("roSGNodeEvent", "optionSelected", msg, msg.getData(), button)
                 group = m.global.sceneManager.callFunc("getActiveScene")
                 if button.id = "goto_search" and isValid(group)
                     ' Exit out of the side panel
@@ -556,6 +532,7 @@ class App
                     m.global.sceneManager.callFunc("settings")
                 end if
             else if isNodeEvent(msg, "selectSubtitlePressed")
+                m.log.info("roSGNodeEvent", "selectSubtitlePressed", msg, msg.getData(), msg.getRoSGNode())
                 node = m.scene.focusedChild
                 if node.focusedChild <> invalid and node.focusedChild.isSubType("JFVideo")
                     trackSelected = selectSubtitleTrack(node.Subtitles, node.SelectedSubtitle)
@@ -564,12 +541,14 @@ class App
                     end if
                 end if
             else if isNodeEvent(msg, "selectPlaybackInfoPressed")
+                m.log.info("roSGNodeEvent", "selectPlaybackInfoPressed", msg, msg.getData(), msg.getRoSGNode())
                 node = m.scene.focusedChild
                 if node.focusedChild <> invalid and node.focusedChild.isSubType("JFVideo")
                     info = GetPlaybackInfo()
                     show_dialog(tr("Playback Information"), info)
                 end if
             else if isNodeEvent(msg, "state")
+                m.log.info("roSGNodeEvent", "state", msg, msg.getData(), msg.getRoSGNode())
                 node = msg.getRoSGNode()
                 if isValid(node) and isValid(node.state)
                     if node.selectedItemType = "TvChannel" and node.state = "finished"
@@ -593,86 +572,9 @@ class App
                         end if
                     end if
                 end if
-            else if type(msg) = "roDeviceInfoEvent"
-                event = msg.GetInfo()
-
-                if event.exitedScreensaver = true
-                    m.log.info("event.exitedScreensaver", event.exitedScreensaver)
-
-                    m.global.sceneManager.callFunc("resetTime")
-                    group = m.global.sceneManager.callFunc("getActiveScene")
-                    groupType = group.subtype()
-                    if isValid(group) and isValid(groupType)
-                        ' refresh the current view
-                        if groupType = "Home"
-                            m.log.info("Refreshing the home page...")
-                            currentTime = CreateObject("roDateTime").AsSeconds()
-                            group.timeLastRefresh = currentTime
-                            group.callFunc("refresh")
-                            m.log.info("Finished refreshing the home page")
-                        end if
-                        ' todo: add other screens to be refreshed - movie detail, tv series, episode list etc.
-                    end if
-                else if isValid(event.audioGuideEnabled)
-                    m.log.info("event.audioGuideEnabled", event.audioGuideEnabled)
-                    tmpGlobalDevice = m.global.device
-                    tmpGlobalDevice.AddReplace("isaudioguideenabled", event.audioGuideEnabled)
-
-                    ' update global device array
-                    m.global.setFields({ device: tmpGlobalDevice })
-                else if isValid(event.Mode)
-                    ' Indicates the current global setting for the Caption Mode property, which may be one of the following values:
-                    ' "On"
-                    ' "Off"
-                    ' "Instant replay"
-                    ' "When mute" (Only returned for a TV; this option is not available on STBs).
-                    m.log.info("event.Mode", event.Mode)
-                    if isValid(event.Mute)
-                        m.log.info("event.Mute", event.Mute)
-                    end if
-                else if isValid(event.linkStatus)
-                    ' True if the device currently seems to have an active network connection.
-                    m.log.info("event.linkStatus", event.linkStatus)
-                else if isValid(event.generalMemoryLevel)
-                    ' This event will be sent first when the OS transitions from "normal" to "low" state and will continue to be sent while in "low" or "critical" states.
-                    '   - "normal" means that the general memory is within acceptable levels
-                    '   - "low" means that the general memory is below acceptable levels but not critical
-                    '   - "critical" means that general memory are at dangerously low level and that the OS may force terminate the application
-                    m.log.info("event.generalMemoryLevel", event.generalMemoryLevel)
-                else if isValid(event.audioCodecCapabilityChanged)
-                    ' The audio codec capability has changed if true.
-                    m.log.info("event.audioCodecCapabilityChanged", event.audioCodecCapabilityChanged)
-
-                    PostDeviceProfile()
-                else if isValid(event.videoCodecCapabilityChanged)
-                    ' The video codec capability has changed if true.
-                    m.log.info("event.videoCodecCapabilityChanged", event.videoCodecCapabilityChanged)
-
-                    PostDeviceProfile()
-                else if isValid(event.appFocus)
-                    ' It is set to False when the System Overlay (such as the confirm partner button HUD or the caption control overlay) takes focus and True when the channel regains focus
-                    m.log.info("event.appFocus", event.appFocus)
-                else
-                    m.log.warn("Unhandled roDeviceInfoEvent", msg.GetInfo())
-                end if
-            else if type(msg) = "roInputEvent"
-                if msg.IsInput()
-                    info = msg.GetInfo()
-                    if info.DoesExist("mediatype") and info.DoesExist("contentid")
-                        m.log.info("roInputEvent.mediatype", info.mediatype)
-                        m.log.info("roInputEvent.contentId", info.contentId)
-                        inputEventVideo = {
-                            id: info.contentId,
-                            type: "video"
-                        }
-
-                        m.global.queueManager.callFunc("clear")
-                        m.global.queueManager.callFunc("push", inputEventVideo)
-                        m.global.queueManager.callFunc("playQueue")
-                    end if
-                end if
             else if isNodeEvent(msg, "dataReturned")
                 popupNode = msg.getRoSGNode()
+                m.log.info("roSGNodeEvent", "dataReturned", msg, msg.getData(), popupNode)
                 if isValid(popupNode) and isValid(popupNode.returnData)
                     selectedItem = m.global.queueManager.callFunc("getHold")
                     m.global.queueManager.callFunc("clearHold")
@@ -710,10 +612,156 @@ class App
                         end if
                     end if
                 end if
+            else if type(msg) = "roDeviceInfoEvent"
+                event = msg.GetInfo()
+
+                if event.exitedScreensaver = true
+                    m.log.info("roDeviceInfoEvent", "exitedScreensaver", event.exitedScreensaver, event)
+
+                    m.global.sceneManager.callFunc("resetTime")
+                    group = m.global.sceneManager.callFunc("getActiveScene")
+                    groupType = group.subtype()
+                    if isValid(group) and isValid(groupType)
+                        ' refresh the current view
+                        if groupType = "Home"
+                            m.log.info("Refreshing the home page...")
+                            currentTime = CreateObject("roDateTime").AsSeconds()
+                            group.timeLastRefresh = currentTime
+                            group.callFunc("refresh")
+                            m.log.info("Finished refreshing the home page")
+                        end if
+                        ' todo: add other screens to be refreshed - movie detail, tv series, episode list etc.
+                    end if
+                else if isValid(event.audioGuideEnabled)
+                    m.log.info("roDeviceInfoEvent", "audioGuideEnabled", event.audioGuideEnabled, event)
+                    tmpGlobalDevice = m.global.device
+                    tmpGlobalDevice.AddReplace("isaudioguideenabled", event.audioGuideEnabled)
+
+                    ' update global device array
+                    m.global.setFields({ device: tmpGlobalDevice })
+                else if isValid(event.Mode)
+                    m.log.info("roDeviceInfoEvent", "Mode", event.Mode, event)
+                    ' Indicates the current global setting for the Caption Mode property, which may be one of the following values:
+                    ' "On"
+                    ' "Off"
+                    ' "Instant replay"
+                    ' "When mute" (Only returned for a TV; this option is not available on STBs).
+                    if isValid(event.Mute)
+                        m.log.info("roDeviceInfoEvent", "Mute", event.Mute, event)
+                    end if
+                else if isValid(event.linkStatus)
+                    m.log.info("roDeviceInfoEvent", "linkStatus", event.linkStatus, event)
+                    ' True if the device currently seems to have an active network connection.
+                else if isValid(event.generalMemoryLevel)
+                    m.log.info("roDeviceInfoEvent", "generalMemoryLevel", event.generalMemoryLevel, event)
+                    ' This event will be sent first when the OS transitions from "normal" to "low" state and will continue to be sent while in "low" or "critical" states.
+                    '   - "normal" means that the general memory is within acceptable levels
+                    '   - "low" means that the general memory is below acceptable levels but not critical
+                    '   - "critical" means that general memory are at dangerously low level and that the OS may force terminate the application
+                else if isValid(event.audioCodecCapabilityChanged)
+                    m.log.info("roDeviceInfoEvent", "audioCodecCapabilityChanged", event.audioCodecCapabilityChanged, event)
+                    ' The audio codec capability has changed if true.
+
+                    m.postDeviceProfile()
+                else if isValid(event.videoCodecCapabilityChanged)
+                    m.log.info("roDeviceInfoEvent", "videoCodecCapabilityChanged", event.videoCodecCapabilityChanged, event)
+                    ' The video codec capability has changed if true.
+
+                    m.postDeviceProfile()
+                else if isValid(event.appFocus)
+                    m.log.info("roDeviceInfoEvent", "appFocus", event.appFocus, event)
+                    ' It is set to False when the System Overlay (such as the confirm partner button HUD or the caption control overlay) takes focus and True when the channel regains focus
+                else
+                    m.log.warn("roDeviceInfoEvent", "Unhandled", event)
+                end if
+            else if type(msg) = "roInputEvent"
+                info = msg.GetInfo()
+                m.log.info("roInputEvent", info)
+                if msg.IsInput()
+
+                    if info.DoesExist("mediatype") and info.DoesExist("contentid")
+                        m.log.info("roInputEvent", "mediatype", info.mediatype)
+                        m.log.info("roInputEvent", "contentId", info.contentId)
+
+                        inputEventVideo = {
+                            id: info.contentId,
+                            type: "video"
+                        }
+
+                        m.global.queueManager.callFunc("clear")
+                        m.global.queueManager.callFunc("push", inputEventVideo)
+                        m.global.queueManager.callFunc("playQueue")
+                    end if
+                end if
             else
                 m.log.warn("Unhandled " + type(msg), msg)
             end if
         end while
         m.log.debug("end run()")
+    end sub
+
+    ' Send Device Profile information to jellyfin server
+    private sub postDeviceProfile()
+        body = getDeviceCapabilities()
+        req = APIRequest("/Sessions/Capabilities/Full")
+        req.SetRequest("POST")
+        postJson(req, FormatJson(body))
+    end sub
+
+    ' Downloads and stores a fallback font to tmp:/
+    private sub setupFallbackFonts()
+        configEncoding = api.system.GetConfigurationByName("encoding")
+
+        if isValid(configEncoding) and isValid(configEncoding.EnableFallbackFont)
+            if configEncoding.EnableFallbackFont
+                re = CreateObject("roRegex", "Name.:.(.*?).,.Size", "s")
+                filename = APIRequest("FallbackFont/Fonts").GetToString()
+                if isValid(filename)
+                    filename = re.match(filename)
+                    if isValid(filename) and filename.count() > 0
+                        filename = filename[1]
+                        APIRequest("FallbackFont/Fonts/" + filename).gettofile("tmp:/font")
+                    end if
+                end if
+            end if
+        end if
+    end sub
+
+    ' Setup roDeviceInfo events. Send them to main loop
+    private sub setupDeviceEvents()
+        device = CreateObject("roDeviceInfo")
+        device.setMessagePort(m.port)
+        device.EnableScreensaverExitedEvent(true)
+        device.EnableAppFocusEvent(true)
+        device.EnableLowGeneralMemoryEvent(true)
+        device.EnableLinkStatusEvent(true)
+        device.EnableCodecCapChangedEvent(true)
+        device.EnableAudioGuideChangedEvent(true)
+    end sub
+
+    ' Show the Whats New popup the first time a user runs a new client version.
+    private sub showWhatsNew()
+        if m.global.app.version <> get_setting("LastRunVersion")
+            ' Ensure the user hasn't disabled Whats New popups
+            if m.global.session.user.settings["load.allowwhatsnew"] = true
+                set_setting("LastRunVersion", m.global.app.version)
+                dialog = createObject("roSGNode", "WhatsNewDialog")
+                m.scene.dialog = dialog
+                m.scene.dialog.observeField("buttonSelected", m.port)
+            end if
+        end if
+    end sub
+
+    ' Check if we were sent content to play with the startup command (Deep Link)
+    private sub playDeepLink()
+        if isValidAndNotEmpty(m.args.mediaType) and isValidAndNotEmpty(m.args.contentId)
+            deepLinkVideo = {
+                id: m.args.contentId,
+                type: "video"
+            }
+
+            m.global.queueManager.callFunc("push", deepLinkVideo)
+            m.global.queueManager.callFunc("playQueue")
+        end if
     end sub
 end class
