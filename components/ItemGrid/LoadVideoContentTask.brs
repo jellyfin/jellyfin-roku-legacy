@@ -117,9 +117,6 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     end if
 
     video.PlaySessionId = m.playbackInfo.PlaySessionId
-    video.container = getContainerType(meta)
-    print "meta info is " meta
-    print "media source is " meta.json.mediaSources[0].container
 
 
     if meta.live
@@ -135,26 +132,23 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
             video.SupportsDirectStream = true
             fully_external = true
             video.content.live = true
-            print "stream foramt set to hls"
         else if m.playbackInfo.MediaSources[0].container = "mpegts"
             video.directPlaySupported = false
             video.content.StreamFormat = "fMP4"
             video.SupportsDirectStream = true
             fully_external = false
             video.content.live = true
-            print "stream foramt set to ts"
         else
             fully_external = true
             video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
             video.content.StreamFormat = m.playbackInfo.MediaSources[0].container
-            print "stream is not hls or ts"
         end if
     else
         fully_external = false
-        video.directPlaySupported = false
-        print "stream is not live!"
+        video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
     end if
 
+    video.container = getContainerType(meta)
 
     if not isValid(m.playbackInfo.MediaSources[0])
         m.playbackInfo = meta.json
@@ -208,7 +202,6 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     if not fully_external
         video.content = authorize_request(video.content)
     end if
-    print "mediaSource" m.playbackInfo.MediaSources[0]
 end sub
 
 sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
