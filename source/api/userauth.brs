@@ -90,13 +90,15 @@ function ServerInfo()
         ' set the server to new location and try again
         if right(headers.location, 19) = "/System/Info/Public"
             set_setting("server", left(headers.location, len(headers.location) - 19))
-            session.server.UpdateURL(left(headers.location, len(headers.location) - 19))
-            info = ServerInfo()
-            if info.Error
-                info.UpdatedUrl = left(headers.location, len(headers.location) - 19)
-                info.ErrorMessage = info.ErrorMessage + " (Note: Server redirected us to " + info.UpdatedUrl + ")"
+            isConnected = session.server.UpdateURL(left(headers.location, len(headers.location) - 19))
+            if isConnected
+                info = ServerInfo()
+                if info.Error
+                    info.UpdatedUrl = left(headers.location, len(headers.location) - 19)
+                    info.ErrorMessage = info.ErrorMessage + " (Note: Server redirected us to " + info.UpdatedUrl + ")"
+                end if
+                return info
             end if
-            return info
         end if
     end if
 

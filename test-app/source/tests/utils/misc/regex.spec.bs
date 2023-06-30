@@ -1,0 +1,54 @@
+namespace tests
+    @suite("regex functions")
+    class regexTests extends tests.BaseTestSuite
+
+        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        @describe("parseUrl()")
+        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        ' Proto must be declared or array members will be empty
+        @it("Returns an array of data from a url - proto, host, port, subdir/params")
+        function _()
+            demoNoPort = "https://demo.jellyfin.org/stable"
+            m.assertEqual(parseUrl(demoNoPort), [demoNoPort, "https:", "demo.jellyfin.org", "", "/stable"])
+            localNoSubdir = "http://192.168.0.2:8097"
+            m.assertEqual(parseUrl(localNoSubdir), [localNoSubdir, "http:", "192.168.0.2", ":8097", ""])
+            localWithSubdir = "http://192.168.0.2:80/jellyfin"
+            m.assertEqual(parseUrl(localWithSubdir), [localWithSubdir, "http:", "192.168.0.2", ":80", "/jellyfin"])
+            badIP = "http://192.168.2"
+            m.assertEqual(parseUrl(badIP), [badIP, "http:", "192.168.2", "", ""])
+            noProto = "192.168.0.2"
+            m.assertEqual(parseUrl(noProto), [])
+        end function
+
+        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        @describe("isLocalhost()")
+        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        @it("only returns true for a valid loopback address")
+        @params("", false)
+        @params("             ", false)
+        @params("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Augue neque gravida in fermentum et. Eget lorem dolor sed viverra ipsum nunc. At quis risus sed vulputate odio ut enim. Ultricies integer quis auctor elit sed. Egestas congue quisque egestas diam in. Aliquam sem fringilla ut morbi tincidunt. Malesuada bibendum arcu vitae elementum curabitur. Aliquet sagittis id consectetur purus ut faucibus pulvinar. Eget gravida cum sociis natoque. Sollicitudin aliquam ultrices sagittis orci. Ut etiam sit amet nisl purus. Luctus venenatis lectus magna fringilla urna porttitor rhoncus dolor purus. Vitae ultricies leo integer malesuada nunc. Vitae ultricies leo integer malesuada nunc vel risus commodo. Luctus accumsan tortor posuere ac ut. Urna cursus eget nunc scelerisque viverra mauris in. Accumsan sit amet nulla facilisi morbi tempus iaculis urna id. Mauris vitae ultricies leo integer malesuada nunc vel risus commodo. Morbi tincidunt augue interdum velit euismod in pellentesque.", false)
+        @params("~!@#$%^&*()_-+=`\|]}';:.,/?", false)
+        @params("true", false)
+        @params("false", false)
+        @params("invalid", false)
+        @params("localhost", true)
+        @params("google.com", false)
+        @params("127.0.0.1", true)
+        @params("127.1.1.1", true)
+        @params("127.0.0.127", true)
+        @params("1.0.0.127", false)
+        @params("126.0.0.1", false)
+        @params("0:0:0:0:0:0:0:1", true)
+        @params("::1", true)
+        @params("::2", false)
+        @params("2001:4860:4860::8888", false)
+        @params("2001:4860:4860:0:0:0:0:8888", false)
+        @params("2001:4860:4860:0000:0000:0000:0000:8888", false)
+        function _(value, expectedassertResult)
+            m.assertEqual(isLocalhost(value), expectedassertResult)
+        end function
+
+    end class
+end namespace
