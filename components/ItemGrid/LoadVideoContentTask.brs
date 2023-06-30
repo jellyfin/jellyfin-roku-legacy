@@ -139,9 +139,9 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
             fully_external = false
             video.content.live = true
         else
-            fully_external = true
+            fully_external = false
             video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
-            video.content.StreamFormat = m.playbackInfo.MediaSources[0].container
+            video.content.StreamFormat = "hls"
         end if
     else
         fully_external = false
