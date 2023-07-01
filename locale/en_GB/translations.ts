@@ -3802,5 +3802,97 @@
         <translation>Codec Support</translation>
         <extracomment>Settings Menu - Title for settings group related to codec support</extracomment>
     </message>
+    <message>
+        <source>Enable or disable Direct Play for optional codecs</source>
+        <translation>Enable or disable Direct Play for optional codecs</translation>
+        <extracomment>Settings Menu - Title for settings group related to codec support</extracomment>
+    </message>
+    <message>
+        <source>Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.</source>
+        <translation>Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>MPEG-4</source>
+        <translation>MPEG-4</translation>
+        <extracomment>Name of codec used in settings menu</extracomment>
+    </message>
+    <message>
+        <source>** EXPERIMENTAL** Support Direct Play of AV1 content if this Roku device supports it.</source>
+        <translation>** EXPERIMENTAL** Support Direct Play of AV1 content if this Roku device supports it.</translation>
+        <extracomment>Description of a setting - should we try to direct play experimental av1 codec</extracomment>
+    </message>
+    <message>
+        <source>Show item count in the library and index of selected item.</source>
+        <translation>Show item count in the library and index of the selected item.</translation>
+        <extracomment>Description for option in Setting Screen</extracomment>
+    </message>
+    <message>
+        <source>Set Watched</source>
+        <translation>Set Watched</translation>
+        <extracomment>Button Text - When pressed, marks item as Warched</extracomment>
+    </message>
+    <message>
+        <source>AV1</source>
+        <translation>AV1</translation>
+        <extracomment>Name of a setting - should we try to direct play experimental av1 codec</extracomment>
+    </message>
+    <message>
+        <source>Media Grid options.</source>
+        <translation>Media Grid options.</translation>
+    </message>
+    <message>
+        <source>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</source>
+        <translation>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>Media Grid</source>
+        <translation>Media Grid</translation>
+        <extracomment>UI -&gt; Media Grid section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>User Interface</source>
+        <translation>User Interface</translation>
+        <extracomment>Title for User Interface section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Item Count</source>
+        <translation>Item Count</translation>
+        <extracomment>UI -&gt; Media Grid -&gt; Item Count in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>MPEG-2</source>
+        <translation>MPEG-2</translation>
+        <extracomment>Name of codec used in settings menu</extracomment>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation>Disabled</translation>
+    </message>
+    <message>
+        <source>Set Favorite</source>
+        <translation>Set Favourite</translation>
+        <extracomment>Button Text - When pressed, sets item as Favorite</extracomment>
+    </message>
+    <message>
+        <source>Go to series</source>
+        <translation>Go to series</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Series Detail Page</extracomment>
+    </message>
+    <message>
+        <source>Go to season</source>
+        <translation>Go to season</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Season Page</extracomment>
+    </message>
+    <message>
+        <source>Go to episode</source>
+        <translation>Go to episode</translation>
+        <extracomment>Continue Watching Popup Menu - Navigate to the Episode Detail Page</extracomment>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation>Enabled</translation>
+    </message>
 </context>
 </TS>

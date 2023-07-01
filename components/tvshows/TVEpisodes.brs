@@ -42,7 +42,7 @@ end sub
 function onKeyEvent(key as string, press as boolean) as boolean
     handled = false
 
-    if key = "left" and not m.Shuffle.hasFocus()
+    if key = "left" and m.tvEpisodeRow.hasFocus()
         m.Shuffle.setFocus(true)
         return true
     end if
@@ -57,7 +57,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         return true
     end if
 
-    if key = "right" and not m.tvEpisodeRow.hasFocus()
+    if key = "right" and (m.Random.hasFocus() or m.Shuffle.hasFocus())
         m.tvEpisodeRow.setFocus(true)
         return true
     end if

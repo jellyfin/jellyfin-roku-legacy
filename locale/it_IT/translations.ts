@@ -6,7 +6,7 @@
     <name>default</name>
     <message>
         <source>192.168.1.100:8096 or https://example.com/jellyfin</source>
-        <translation>default192.168.1.100:8096 o https://example.com/jellyfin</translation>
+        <translation>192.168.1.100:8096 o https://example.com/jellyfin</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -114,7 +114,7 @@
     </message>
     <message>
         <source>Enter a username</source>
-        <translation>Inserisci il tuo cognome</translation>
+        <translation>Inserisci il tuo nome utente</translation>
     </message>
     <message>
         <source>Enter a password</source>
@@ -142,7 +142,7 @@
     </message>
     <message>
         <source>Sort Order</source>
-        <translation>Ordinamento</translation>
+        <translation>Tiipo di ordinamento</translation>
     </message>
     <message>
         <source>Descending</source>
@@ -1963,6 +1963,232 @@
     <message>
         <source>Change Server</source>
         <translation>Cambia Server</translation>
+    </message>
+    <message>
+        <source>Always Show</source>
+        <translation>Sempre visibile</translation>
+    </message>
+    <message>
+        <source>Age</source>
+        <translation>Età</translation>
+    </message>
+    <message>
+        <source>Special Features</source>
+        <translation>Caratteristiche particolari</translation>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Errore durante la riproduzione</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>More Like This</source>
+        <translation>Altro simile a questo</translation>
+    </message>
+    <message>
+        <source>Album Artists (Grid)</source>
+        <translation>Artista album (griglia)</translation>
+    </message>
+    <message>
+        <source>Albums</source>
+        <translation>Tutti gli album</translation>
+    </message>
+    <message>
+        <source>Always Hide</source>
+        <translation>Sempre nascosto</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>Valutazione di IMDb</translation>
+    </message>
+    <message>
+        <source>Biographical information for this person is not currently available.</source>
+        <translation>La biografia per questa persona non è al momento disponibile.</translation>
+    </message>
+    <message>
+        <source>Bitrate Limit</source>
+        <translation>Limite Bitrare</translation>
+    </message>
+    <message>
+        <source>Attempt Direct Play for HEVC media with unsupported profile levels before falling back to transcoding if it fails.</source>
+        <translation>Provare la riproduzione diretta per i media con codifica HEVC e profili non supportati, prima di transcodificarli nel caso in cui non vi si riesca.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Scollegamento</translation>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>In onda ora</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Cancellazione salvata</translation>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Errore nel recupero dei dati</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>C&apos;è stato un errore nel recupero dei dati per questo elemento dal server.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>È stato riscontrato un errore durante la riproduzione.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Caricamento dati del canale</translation>
+    </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Errore nel caricamento dei dati del canale</translation>
+    </message>
+    <message>
+        <source>Unable to load Channel Data from the server</source>
+        <translation>Impossibile recuperare i dati del canale dal server</translation>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>Non ci sono elementi da visualizzare</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Nome</translation>
+    </message>
+    <message>
+        <source>DATE_ADDED</source>
+        <translation>Aggiunto il</translation>
+    </message>
+    <message>
+        <source>DATE_PLAYED</source>
+        <translation>Visto il</translation>
+    </message>
+    <message>
+        <source>OFFICIAL_RATING</source>
+        <translation>Controllo Parentale</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Valutazione della critica</translation>
+    </message>
+    <message>
+        <source>PLAY_COUNT</source>
+        <translation>Riproduzioni</translation>
+    </message>
+    <message>
+        <source>RELEASE_DATE</source>
+        <translation>Data di uscita</translation>
+    </message>
+    <message>
+        <source>RUNTIME</source>
+        <translation>Durata</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for switching &quot;views&quot; when looking at a library</comment>
+        <source>TAB_VIEW</source>
+        <translation>Visualizzazione</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to sort library content</comment>
+        <source>TAB_SORT</source>
+        <translation>Ordinamento</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to filter library content</comment>
+        <source>TAB_FILTER</source>
+        <translation>Filtro</translation>
+    </message>
+    <message>
+        <source>Born</source>
+        <translation>Nato</translation>
+    </message>
+    <message>
+        <source>Died</source>
+        <translation>Morto</translation>
+    </message>
+    <message>
+        <source>Blur images of unwatched episodes.</source>
+        <translation>Immagini sfocate per gli episodi non visti.</translation>
+    </message>
+    <message>
+        <source>Attempt Direct Play for H.264 media with unsupported profile levels before falling back to transcoding if it fails.</source>
+        <translation>Provare la riproduzione diretta per i media con codifica H.264 e profili non supportati, prima di transcodificarli nel caso in cui non vi si riesca.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>Artists (Presentation)</source>
+        <translation>Artisti (presentazione)</translation>
+    </message>
+    <message>
+        <source>Album</source>
+        <translation>Album</translation>
+    </message>
+    <message>
+        <source>Artists (Grid)</source>
+        <translation>Artisti (griglia)</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Salvataggio credenziali?</translation>
+    </message>
+    <message>
+        <source>Press &apos;OK&apos; to Close</source>
+        <translation>Premi &apos;0K&apos; per chiudere</translation>
+    </message>
+    <message>
+        <source>Additional Parts</source>
+        <translation>Parti addizionali</translation>
+        <extracomment>Additional parts of a video</extracomment>
+    </message>
+    <message>
+        <source>Movies</source>
+        <translation>Film</translation>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item. Server did not provide required transcoding data.</source>
+        <translation>È stato riscontrato un errore durante la riproduzione. Il server non ha restituito i dati transcodificati attesi.</translation>
+        <extracomment>Content of message box when trying to play an item which requires transcoding, and the server did not provide transcode url</extracomment>
+    </message>
+    <message>
+        <source>all</source>
+        <translation>tutti</translation>
+        <extracomment>all will reset the searchTerm so all data will be availible</extracomment>
+    </message>
+    <message>
+        <source>Bit Rate</source>
+        <translation>Bit Rate</translation>
+        <extracomment>Video streaming bit rate</extracomment>
+    </message>
+    <message>
+        <source>AV1</source>
+        <translation>AV1</translation>
+        <extracomment>Name of a setting - should we try to direct play experimental av1 codec</extracomment>
+    </message>
+    <message>
+        <source>%1 of %2</source>
+        <translation>%1 di %2</translation>
+        <extracomment>Item position and count. %1 = current item. %2 = total number of items</extracomment>
+    </message>
+    <message>
+        <source>Audio Channels</source>
+        <translation>Canali audio</translation>
+    </message>
+    <message>
+        <source>Audio Codec</source>
+        <translation>Codec audio</translation>
+    </message>
+    <message>
+        <source>Aired</source>
+        <translation>In onda</translation>
+        <extracomment>Aired date label</extracomment>
     </message>
 </context>
 </TS>
