@@ -93,12 +93,12 @@ function ServerInfo()
 
             isConnected = session.server.UpdateURL(left(headers.location, len(headers.location) - 19))
             if isConnected
-                info = ServerInfo()
-                if info.Error
-                    info.UpdatedUrl = left(headers.location, len(headers.location) - 19)
-                    info.ErrorMessage = info.ErrorMessage + " (Note: Server redirected us to " + info.UpdatedUrl + ")"
+                sinfo = ServerInfo()
+                if sinfo.Error
+                    sinfo.UpdatedUrl = left(headers.location, len(headers.location) - 19)
+                    sinfo.ErrorMessage = sinfo.ErrorMessage + " (Note: Server redirected us to " + sinfo.UpdatedUrl + ")"
                 end if
-                return info
+                return sinfo
             end if
         end if
     end if
