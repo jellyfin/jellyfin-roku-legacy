@@ -2,6 +2,7 @@ import "pkg:/source/api/Image.brs"
 import "pkg:/source/api/baserequest.brs"
 import "pkg:/source/utils/config.brs"
 import "pkg:/source/utils/misc.brs"
+import "pkg:/source/api/sdk.bs"
 
 sub init()
     m.top.optionsAvailable = false
@@ -32,8 +33,17 @@ sub updateSeason()
         end if
     end if
 
-    imgParams = { "maxHeight": 450, "maxWidth": 300 }
-    m.poster.uri = ImageURL(m.top.seasonData.Id, "Primary", imgParams)
+    'check for season poster, if invalid then set season poster to show poster
+    m.posterValid = PosterImage(m.top.seasonData.ID)
+    if isValid(m.posterValid)
+        imgParams = { "maxHeight": 450, "maxWidth": 300 }
+        m.poster.uri = ImageURL(m.top.seasonData.Id, "Primary", imgParams)
+    else
+        m.poster.uri = api.items.GetImageURL(m.top.seasonData.ParentBackdropItemId)
+    end if
+
+
+
     m.Random.visible = true
     m.Shuffle.visible = true
     m.top.overhangTitle = m.top.seasonData.SeriesName + " - " + m.top.seasonData.name
