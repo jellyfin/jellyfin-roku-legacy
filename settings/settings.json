@@ -9,7 +9,7 @@
                 "children": [
                     {
                         "title": "Enable Limit",
-                        "description": "Enable or disable  the 'Maximum Bitrate' setting.",
+                        "description": "Enable or disable the 'Maximum Bitrate' setting.",
                         "settingName": "playback.bitrate.maxlimited",
                         "type": "bool",
                         "default": "true"
@@ -133,13 +133,6 @@
                         "title": "Use Splashscreen as Home Background",
                         "description": "Use generated splashscreen image as Jellyfin's home background. Jellyfin will need to be closed and reopened for change to take effect.",
                         "settingName": "ui.home.splashBackground",
-                        "type": "bool",
-                        "default": "false"
-                    },
-                    {
-                        "title": "Disable Community Rating for Episodes",
-                        "description": "If enabled, the star and community rating for episodes of a TV show will be removed. This is to prevent spoilers of an upcoming good/bad episode.",
-                        "settingName": "ui.tvshows.disableCommunityRating",
                         "type": "bool",
                         "default": "false"
                     }

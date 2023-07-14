@@ -3894,5 +3894,17 @@
         <source>Enabled</source>
         <translation>Enabled</translation>
     </message>
+    <message>
+        <source>On Now</source>
+        <translation>On Now</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Delete Saved</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Save Credentials?</translation>
+    </message>
 </context>
 </TS>

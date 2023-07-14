@@ -1031,8 +1031,8 @@
             <translation>Enable Limit</translation>
         </message>
         <message>
-            <source>Enable or disable  the 'Maximum Bitrate' setting.</source>
-            <translation>Enable or disable  the 'Maximum Bitrate' setting.</translation>
+            <source>Enable or disable the 'Maximum Bitrate' setting.</source>
+            <translation>Enable or disable the 'Maximum Bitrate' setting.</translation>
         </message>
         <message>
             <source>Bitrate Limit</source>

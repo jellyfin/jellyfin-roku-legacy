@@ -6961,5 +6961,68 @@
         <translation>Chargement de la bande-annonce</translation>
         <extracomment>Dialog title in Main.brs</extracomment>
     </message>
+    <message>
+        <source>Next Episode Button Time</source>
+        <translation>Temps pour le bouton « Prochain épisode »</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
+    <message>
+        <source>Enable Limit</source>
+        <translation>Activer la limitation</translation>
+    </message>
+    <message>
+        <source>Album Artists (Presentation)</source>
+        <translation>Artistes de l&apos;album (diaporama)</translation>
+    </message>
+    <message>
+        <source>Disable Unwatched Episode Count</source>
+        <translation>Désactiver le décompte des épisodes non regardés</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
+    <message>
+        <source>Select when to show titles.</source>
+        <translation>Sélectionnez quand les titres doivent s&apos;afficher.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>Artists (Grid)</source>
+        <translation>Artistes (grille)</translation>
+    </message>
+    <message>
+        <source>Set how many seconds before the end of an episode the Next Episode button should appear. Set to 0 to disable.</source>
+        <translation>Définis combien de secondes avant la fin d&apos;un épisode le bouton « Prochain épisode » doit apparaître. La valeur 0 permet de le désactiver.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Une erreur s&apos;est produite lors de la récupération des données de cet élément à partir du serveur.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Unable to load Channel Data from the server</source>
+        <translation>Impossible de charger les données de la chaîne à partir du serveur</translation>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>Une erreur s&apos;est produite lors de la lecture de cet élément.</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Chargement des données de la chaîne</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>Note IMDb</translation>
+    </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Erreur lors du chargement des données de la chaîne</translation>
+    </message>
 </context>
 </TS>
