@@ -475,5 +475,13 @@
         <source>CRITIC_RATING</source>
         <translation>Kritiķu Vērtējums</translation>
     </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Saglabāt Piekļuves Datus?</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Izdzēst Saglabātos</translation>
+    </message>
 </context>
 </TS>

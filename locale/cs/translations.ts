@@ -4477,5 +4477,31 @@
         <source>Song</source>
         <translation>Skladba</translation>
     </message>
+    <message>
+        <source>Parental Ratings</source>
+        <translation>Rodičovské hodnocení</translation>
+        <extracomment>Used in Filter menu</extracomment>
+    </message>
+    <message>
+        <source>Libraries</source>
+        <translation>Knihovny</translation>
+    </message>
+    <message>
+        <source>Bitrate Limit</source>
+        <translation>Omezení datového toku</translation>
+    </message>
+    <message>
+        <source>Maximum Bitrate</source>
+        <translation>Maximální datový tok</translation>
+    </message>
+    <message>
+        <source>MPEG-4 Support</source>
+        <translation>Podpora MPEG-4</translation>
+        <extracomment>Settings Menu - Title for option</extracomment>
+    </message>
+    <message>
+        <source>Played</source>
+        <translation>Přehráno</translation>
+    </message>
 </context>
 </TS>
