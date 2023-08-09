@@ -11145,5 +11145,105 @@
         <source>PLAY_COUNT</source>
         <translation>Wiedergabezähler</translation>
     </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Sonntag</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Samstag</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>today</source>
+        <translation>heute</translation>
+        <extracomment>Current day</extracomment>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Dienstag</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>More Like This</source>
+        <translation>Ähnliches</translation>
+    </message>
+    <message>
+        <source>Cancel Recording</source>
+        <translation>Aufnahme abbrechen</translation>
+    </message>
+    <message>
+        <source>Not found</source>
+        <translation>Nicht gefunden</translation>
+        <extracomment>Title of message box when the requested content is not found on the server</extracomment>
+    </message>
+    <message>
+        <source>yesterday</source>
+        <translation>gestern</translation>
+        <extracomment>Previous day</extracomment>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation>morgen</translation>
+        <extracomment>Next day</extracomment>
+    </message>
+    <message>
+        <source>Cast &amp; Crew</source>
+        <translation>Besetzung &amp; Mitwirkende</translation>
+    </message>
+    <message>
+        <source>Press &apos;OK&apos; to Close</source>
+        <translation>Klicke &apos;OK&apos; zum Schließen</translation>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation>Montag</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Donnerstag</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Record Series</source>
+        <translation>Serie aufnehmen</translation>
+    </message>
+    <message>
+        <source>Cancel Series Recording</source>
+        <translation>Serienaufnahme abbrechen</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>Freitag</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Movies</source>
+        <translation>Filme</translation>
+    </message>
+    <message>
+        <source>TV Shows</source>
+        <translation>Serien</translation>
+    </message>
+    <message>
+        <source>Connecting to Server</source>
+        <translation>Verbinde zum Server</translation>
+        <extracomment>Message to display to user while client is attempting to connect to the server</extracomment>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation>Aufnehmen</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Mittwoch</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Schließen</translation>
+    </message>
 </context>
 </TS>

@@ -4378,5 +4378,17 @@
         <translation>Contenedor</translation>
         <extracomment>Video streaming container</extracomment>
     </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>¿Guardar Credenciales?</translation>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Cambiar de Servidor</translation>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Cerrar Sesión</translation>
+    </message>
 </context>
 </TS>
