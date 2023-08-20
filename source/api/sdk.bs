@@ -1374,7 +1374,7 @@ namespace api
         end function
 
         ' Gets a list of sessions.
-        function Get(params = {} as object)
+        function Get(params = { "deviceId": m.global.device.id } as object)
             req = APIRequest("/sessions", params)
             return getJson(req)
         end function

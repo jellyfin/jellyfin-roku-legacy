@@ -1,3 +1,5 @@
+import "pkg:/source/utils/misc.brs"
+
 'Device Capabilities for Roku.
 'This will likely need further tweaking
 function getDeviceCapabilities() as object
@@ -369,9 +371,8 @@ end function
 function GetBitRateLimit(codec as string)
     if m.global.session.user.settings["playback.bitrate.maxlimited"] = true
         userSetLimit = m.global.session.user.settings["playback.bitrate.limit"]
-        userSetLimit *= 1000000
-
-        if userSetLimit > 0
+        if isValid(userSetLimit) and type(userSetLimit) = "Integer" and userSetLimit > 0
+            userSetLimit *= 1000000
             return {
                 "Condition": "LessThanEqual",
                 "Property": "VideoBitrate",

@@ -1,22 +1,23 @@
-' You may be wondering what's with all the array stuff (m.menus, m.buttons, m.selectedItem etc)?
-' This was copied from Movie Options which has both Video and Audio options.
-' At the moment we only have Audio Options for TV Episodes, but the code here
-' is ready to be expanded easily in the future to add in additional options.
+import "pkg:/source/utils/misc.brs"
+
 sub init()
 
     m.buttons = m.top.findNode("buttons")
-    m.buttons.buttons = [tr("Audio")]
+    m.buttons.buttons = [tr("Video"), tr("Audio")]
     m.buttons.selectedIndex = 0
     m.buttons.setFocus(true)
 
     m.selectedItem = 0
     m.selectedAudioIndex = 0
+    m.selectedVideoIndex = 0
 
-    m.menus = [m.top.findNode("audioMenu")]
+    m.menus = [m.top.findNode("videoMenu"), m.top.findNode("audioMenu")]
 
+    m.videoNames = []
     m.audioNames = []
 
     ' Set button colors to global
+    m.top.findNode("videoMenu").focusBitmapBlendColor = m.global.constants.colors.button
     m.top.findNode("audioMenu").focusBitmapBlendColor = m.global.constants.colors.button
 
     ' Animation
@@ -30,8 +31,35 @@ sub init()
 end sub
 
 sub optionsSet()
+    '  Videos Tab
+    if isValid(m.top.options.videos)
+        viewContent = CreateObject("roSGNode", "ContentNode")
+        index = 0
+        selectedViewIndex = 0
+
+        for each view in m.top.options.videos
+            entry = viewContent.CreateChild("VideoTrackListData")
+            entry.title = view.Title
+            entry.description = view.Description
+            entry.streamId = view.streamId
+            entry.video_codec = view.video_codec
+            m.videoNames.push(view.Name)
+            if isValid(view.Selected) and view.Selected
+                selectedViewIndex = index
+                entry.selected = true
+                m.top.videoStreamId = view.streamId
+            end if
+            index = index + 1
+        end for
+
+        m.menus[0].content = viewContent
+        m.menus[0].jumpToItem = selectedViewIndex
+        m.menus[0].checkedItem = selectedViewIndex
+        m.selectedVideoIndex = selectedViewIndex
+    end if
+
     '  audio Tab
-    if m.top.Options.audios <> invalid
+    if isValid(m.top.options.audios)
         audioContent = CreateObject("roSGNode", "ContentNode")
         index = 0
         selectedAudioIndex = 0
@@ -42,7 +70,7 @@ sub optionsSet()
             entry.description = audio.Description
             entry.streamIndex = audio.StreamIndex
             m.audioNames.push(audio.Name)
-            if audio.Selected <> invalid and audio.Selected = true
+            if isValid(audio.Selected) and audio.Selected
                 selectedAudioIndex = index
                 entry.selected = true
                 m.top.audioStreamIndex = audio.streamIndex
@@ -50,9 +78,9 @@ sub optionsSet()
             index = index + 1
         end for
 
-        m.menus[0].content = audioContent
-        m.menus[0].jumpToItem = selectedAudioIndex
-        m.menus[0].checkedItem = selectedAudioIndex
+        m.menus[1].content = audioContent
+        m.menus[1].jumpToItem = selectedAudioIndex
+        m.menus[1].checkedItem = selectedAudioIndex
         m.selectedAudioIndex = selectedAudioIndex
     end if
 
@@ -88,17 +116,25 @@ function onKeyEvent(key as string, press as boolean) as boolean
             selMenu = m.menus[m.selectedItem]
             selIndex = selMenu.itemSelected
 
-            ' Audio options
-            'if m.selectedItem = 0
-            if m.selectedAudioIndex = selIndex
-            else
-                selMenu.content.GetChild(m.selectedAudioIndex).selected = false
-                newSelection = selMenu.content.GetChild(selIndex)
-                newSelection.selected = true
-                m.selectedAudioIndex = selIndex
-                m.top.audioStreamIndex = newSelection.streamIndex
+            'Handle Videos menu
+            if m.selectedItem = 0
+                if m.selectedVideoIndex <> selIndex
+                    selMenu.content.GetChild(m.selectedVideoIndex).selected = false
+                    newSelection = selMenu.content.GetChild(selIndex)
+                    newSelection.selected = true
+                    m.selectedVideoIndex = selIndex
+                    m.top.videoStreamId = newSelection.streamId
+                end if
+                ' Then it is Audio options
+            else if m.selectedItem = 1
+                if m.selectedAudioIndex <> selIndex
+                    selMenu.content.GetChild(m.selectedAudioIndex).selected = false
+                    newSelection = selMenu.content.GetChild(selIndex)
+                    newSelection.selected = true
+                    m.selectedAudioIndex = selIndex
+                    m.top.audioStreamIndex = newSelection.streamIndex
+                end if
             end if
-            'end if
 
         end if
         return true

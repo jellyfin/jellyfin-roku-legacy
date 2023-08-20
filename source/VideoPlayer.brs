@@ -263,13 +263,9 @@ sub AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx 
     if video.directPlaySupported
         protocol = LCase(m.playbackInfo.MediaSources[0].Protocol)
         if protocol <> "file"
-            uriRegex = CreateObject("roRegex", "^(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)$", "")
-            uri = uriRegex.Match(m.playbackInfo.MediaSources[0].Path)
-            ' proto $1, host $2, port $3, the-rest $4
-            localhost = CreateObject("roRegex", "^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*\:)*?:?0*1$", "i")
-            ' https://stackoverflow.com/questions/8426171/what-regex-will-match-all-loopback-addresses
-            if localhost.isMatch(uri[2])
-                ' if the domain of the URI is local to the server,
+            uri = parseUrl(m.playbackInfo.MediaSources[0].Path)
+            if isLocalhost(uri[2])
+                ' the domain of the URI is local to the server.
                 ' create a new URI by appending the received path to the server URL
                 ' later we will substitute the users provided URL for this case
                 video.content.url = buildURL(uri[4])

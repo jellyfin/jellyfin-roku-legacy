@@ -137,7 +137,7 @@ sub loadInitialItems()
     if m.sortField = invalid then m.sortField = "SortName"
     if m.filter = invalid then m.filter = "All"
 
-    if sortAscendingStr = invalid or sortAscendingStr = "true"
+    if sortAscendingStr = invalid or sortAscendingStr = true
         m.sortAscending = true
     else
         m.sortAscending = false

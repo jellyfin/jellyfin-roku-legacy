@@ -1031,8 +1031,8 @@
             <translation>Enable Limit</translation>
         </message>
         <message>
-            <source>Enable or disable  the 'Maximum Bitrate' setting.</source>
-            <translation>Enable or disable  the 'Maximum Bitrate' setting.</translation>
+            <source>Enable or disable the 'Maximum Bitrate' setting.</source>
+            <translation>Enable or disable the 'Maximum Bitrate' setting.</translation>
         </message>
         <message>
             <source>Bitrate Limit</source>
@@ -1113,6 +1113,15 @@
             <source>Set how many seconds before the end of an episode the Next Episode button should appear. Set to 0 to disable.</source>
             <translation>Set how many seconds before the end of an episode the Next Episode button should appear. Set to 0 to disable.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
+        </message>
+		<message>
+			<source>Direct playing</source>
+			<translation>Direct playing</translation>
+		</message>
+        <message>
+            <source>The source file is entirely compatible with this client and the session is receiving the file without modifications.</source>
+            <translation>The source file is entirely compatible with this client and the session is receiving the file without modifications.</translation>
+            <extracomment>Direct play info box text in GetPlaybackInfoTask.brs</extracomment>
         </message>
     </context>
 </TS>

@@ -7,7 +7,6 @@
       </Rectangle>
     </Poster>
     <JFButton id="Shuffle" minChars="10" text="Shuffle" translation="[90, 640]" visible="false"></JFButton>
-    <JFButton id="Random" minChars="12" text="Play Random" translation="[90, 740]" visible="false"></JFButton>
     <TVEpisodeRowWithOptions id="picker" visible="true" />
   </children>
   <interface>

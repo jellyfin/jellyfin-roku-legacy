@@ -9,8 +9,6 @@ sub init()
     m.options = m.top.findNode("movieOptions")
     m.infoGroup = m.top.findNode("infoGroup")
 
-    m.main_group = m.top.findNode("main_group")
-
     main = m.top.findNode("main_group")
     main.translation = [96, 175]
     overview = m.top.findNode("overview")
@@ -25,9 +23,6 @@ sub init()
 
     m.spinner = m.top.findNode("spinner")
 
-    m.trailerButton = m.top.findNode("trailer-button")
-    m.trailerButton.text = tr("Play Trailer")
-
     m.top.observeField("itemContent", "itemContentChanged")
 end sub
 
@@ -41,7 +36,18 @@ sub OnScreenShown()
 end sub
 
 sub trailerAvailableChanged()
-    m.trailerButton.visible = m.top.trailerAvailable
+    if m.top.trailerAvailable
+        ' add trailor button to button group
+        trailerButton = CreateObject("roSGNode", "JFButton")
+        trailerButton.id = "trailer-button"
+        trailerButton.text = tr("Play Trailer")
+        trailerButton.maxWidth = "300"
+        trailerButton.minWidth = "300"
+        m.buttonGrp.appendChild(trailerButton)
+    else
+        ' remove trailor button from button group
+        m.buttonGrp.removeChild(m.top.findNode("trailer-button"))
+    end if
 end sub
 
 sub itemContentChanged()

@@ -34,7 +34,6 @@
           <Button text="Options" id="options-button" iconUri="" focusedIconUri="" maxWidth="250" minWidth="250" />
           <Button text="Watched" id="watched-button" iconUri="" focusedIconUri="" maxWidth="350" minWidth="300" />
           <Button text="Favorite" id="favorite-button" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
-          <Button id="trailer-button" visible="false" iconUri="" focusedIconUri="" maxWidth="300" minWidth="300" />
         </ButtonGroupHoriz>
         <Label id="tagline" />
         <Label id="overview" wrap="true" maxLines="8" />

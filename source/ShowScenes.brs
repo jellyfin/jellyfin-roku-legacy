@@ -5,7 +5,10 @@ function LoginFlow(startOver = false as boolean)
     serverUrl = get_setting("server")
     if isValid(serverUrl)
         print "Previous server connection saved to registry"
-        session.server.UpdateURL(serverUrl)
+        startOver = not session.server.UpdateURL(serverUrl)
+        if startOver
+            print "Could not connect to previously saved server."
+        end if
     else
         startOver = true
         print "No previous server connection saved to registry"
@@ -245,6 +248,11 @@ function CreateServerGroup()
         else if type(msg) = "roSGNodeEvent"
             node = msg.getNode()
             if node = "submit"
+                ' Show Connecting to Server spinner
+                dialog = createObject("roSGNode", "ProgressDialog")
+                dialog.title = tr("Connecting to Server")
+                m.scene.dialog = dialog
+
                 serverUrl = standardize_jellyfin_url(screen.serverUrl)
                 'If this is a different server from what we know, reset username/password setting
                 if m.global.session.server.url <> serverUrl
@@ -252,42 +260,46 @@ function CreateServerGroup()
                     set_setting("password", "")
                 end if
                 set_setting("server", serverUrl)
-                session.server.UpdateURL(serverUrl)
-                ' Show Connecting to Server spinner
-                dialog = createObject("roSGNode", "ProgressDialog")
-                dialog.title = tr("Connecting to Server")
-                m.scene.dialog = dialog
 
-                serverInfoResult = ServerInfo()
-
+                isConnected = session.server.UpdateURL(serverUrl)
+                serverInfoResult = invalid
+                if isConnected
+                    serverInfoResult = ServerInfo()
+                end if
                 dialog.close = true
 
-                if serverInfoResult = invalid
+                if isConnected = false or serverInfoResult = invalid
                     ' Maybe don't unset setting, but offer as a prompt
                     ' Server not found, is it online? New values / Retry
                     print "Server not found, is it online? New values / Retry"
                     screen.errorMessage = tr("Server not found, is it online?")
                     SignOut(false)
-                else if isValid(serverInfoResult.Error) and serverInfoResult.Error
-                    ' If server redirected received, update the URL
-                    if isValid(serverInfoResult.UpdatedUrl)
-                        serverUrl = serverInfoResult.UpdatedUrl
-                        set_setting("server", serverUrl)
-                        session.server.UpdateURL(serverUrl)
-                    end if
-                    ' Display Error Message to user
-                    message = tr("Error: ")
-                    if isValid(serverInfoResult.ErrorCode)
-                        message = message + "[" + serverInfoResult.ErrorCode.toStr() + "] "
-                    end if
-                    screen.errorMessage = message + tr(serverInfoResult.ErrorMessage)
-                    SignOut(false)
                 else
-                    screen.visible = false
-                    if isValid(serverInfoResult.serverName)
-                        return serverInfoResult.ServerName + " (Saved)"
+                    if isValid(serverInfoResult.Error) and serverInfoResult.Error
+                        ' If server redirected received, update the URL
+                        if isValid(serverInfoResult.UpdatedUrl)
+                            serverUrl = serverInfoResult.UpdatedUrl
+                            set_setting("server", serverUrl)
+                            isConnected = session.server.UpdateURL(serverUrl)
+                            if isConnected
+                                screen.visible = false
+                                return ""
+                            end if
+                        end if
+                        ' Display Error Message to user
+                        message = tr("Error: ")
+                        if isValid(serverInfoResult.ErrorCode)
+                            message = message + "[" + serverInfoResult.ErrorCode.toStr() + "] "
+                        end if
+                        screen.errorMessage = message + tr(serverInfoResult.ErrorMessage)
+                        SignOut(false)
                     else
-                        return "Saved"
+                        screen.visible = false
+                        if isValid(serverInfoResult.serverName)
+                            return serverInfoResult.ServerName + " (Saved)"
+                        else
+                            return "Saved"
+                        end if
                     end if
                 end if
             else if node = "delete_saved"
