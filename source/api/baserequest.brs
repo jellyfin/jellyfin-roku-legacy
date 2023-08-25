@@ -62,7 +62,7 @@ function APIRequest(url as string, params = {} as object) as dynamic
 
     req = createObject("roUrlTransfer")
     req.setUrl(full_url)
-    req = authorize_request(req)
+    req = authRequest(req)
     ' SSL cert
     if serverURL.left(8) = "https://"
         setCertificateAuthority(req)
@@ -194,19 +194,21 @@ sub setCertificateAuthority(request as object) as void
     request.setCertificatesFile("common:/certs/ca-bundle.crt")
 end sub
 
-function authorize_request(request)
-    auth = "MediaBrowser" + " Client=" + Chr(34) + "Jellyfin Roku" + Chr(34)
-    auth = auth + ", Device=" + Chr(34) + m.global.device.name + " (" + m.global.device.friendlyName + ")" + Chr(34)
-    auth = auth + ", Version=" + Chr(34) + m.global.app.version + Chr(34)
+' Takes and returns a roUrlTransfer object after adding a Jellyfin "Authorization" header
+function authRequest(request as object) as object
+    QUOTE = Chr(34)
+    auth = "MediaBrowser" + " Client=" + QUOTE + "Jellyfin Roku" + QUOTE
+    auth = auth + ", Device=" + QUOTE + m.global.device.name + " (" + m.global.device.friendlyName + ")" + QUOTE
+    auth = auth + ", Version=" + QUOTE + m.global.app.version + QUOTE
 
     if m.global.session.user.id <> invalid
-        auth = auth + ", DeviceId=" + Chr(34) + m.global.device.id + Chr(34)
-        auth = auth + ", UserId=" + Chr(34) + m.global.session.user.id + Chr(34)
+        auth = auth + ", UserId=" + QUOTE + m.global.session.user.id + QUOTE
+        auth = auth + ", DeviceId=" + QUOTE + m.global.device.id + QUOTE
         if m.global.session.user.authToken <> invalid
-            auth = auth + ", Token=" + Chr(34) + m.global.session.user.authToken + Chr(34)
+            auth = auth + ", Token=" + QUOTE + m.global.session.user.authToken + QUOTE
         end if
     else
-        auth = auth + ", DeviceId=" + Chr(34) + m.global.device.uuid + Chr(34)
+        auth = auth + ", DeviceId=" + QUOTE + m.global.device.uuid + QUOTE
     end if
 
     request.AddHeader("Authorization", auth)

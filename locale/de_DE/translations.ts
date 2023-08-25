@@ -11245,5 +11245,97 @@
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
+    <message>
+        <source>Always Hide</source>
+        <translation>Immer verstecken</translation>
+    </message>
+    <message>
+        <source>Starts</source>
+        <translation>Beginnt</translation>
+        <extracomment>(Future Tense) For defining a day and time when a program will start (e.g. Starts Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation>Wiederholung</translation>
+        <extracomment>If TV Shows has previously been broadcasted</extracomment>
+    </message>
+    <message>
+        <source>TV Guide</source>
+        <translation>TV-Programm</translation>
+        <extracomment>Menu option for showing Live TV Guide / Schedule</extracomment>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Unbekannt</translation>
+        <extracomment>Title for a cast member for which we have no information for</extracomment>
+    </message>
+    <message>
+        <source>Played</source>
+        <translation>Abgespielt</translation>
+    </message>
+    <message>
+        <source>Live</source>
+        <translation>Live</translation>
+        <extracomment>If TV Show is being broadcast live (not pre-recorded)</extracomment>
+    </message>
+    <message>
+        <source>Unable to find any albums or songs belonging to this artist</source>
+        <translation>Es konnten keine Alben oder Songs von diesem Künstler gefunden werden.</translation>
+        <extracomment>Popup message when we find no audio data for an artist</extracomment>
+    </message>
+    <message>
+        <source>WxH</source>
+        <translation>BxH</translation>
+        <extracomment>Video width x height</extracomment>
+    </message>
+    <message>
+        <source>all</source>
+        <translation>Alle</translation>
+        <extracomment>all will reset the searchTerm so all data will be availible</extracomment>
+    </message>
+    <message>
+        <source>Aired</source>
+        <translation>Gesendet</translation>
+        <extracomment>Aired date label</extracomment>
+    </message>
+    <message>
+        <source>Artists (Presentation)</source>
+        <translation>Künstler (Präsentation)</translation>
+    </message>
+    <message>
+        <source>Ends at</source>
+        <translation>Endet um</translation>
+        <extracomment>(Past Tense) For defining a day and time when a program ended (e.g. Ended Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Größe</translation>
+        <extracomment>Video size</extracomment>
+    </message>
+    <message>
+        <source>Starts at</source>
+        <translation>Beginnt um</translation>
+        <extracomment>(Future Tense) For defining time when a program will start today (e.g. Starts at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Ended at</source>
+        <translation>Endete um</translation>
+        <extracomment>(Past Tense) For defining time when a program will ended (e.g. Ended at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Pixel format</source>
+        <translation>Pixelformat</translation>
+        <extracomment>Video pixel format</extracomment>
+    </message>
+    <message>
+        <source>Years</source>
+        <translation>Jahre</translation>
+        <extracomment>Used in Filter menu</extracomment>
+    </message>
+    <message>
+        <source>Select when to show titles.</source>
+        <translation>Auswählen, wann Titel angezeigt werden sollen</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
 </context>
 </TS>

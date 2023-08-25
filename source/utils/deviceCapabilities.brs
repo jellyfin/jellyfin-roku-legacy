@@ -7,7 +7,8 @@ function getDeviceCapabilities() as object
     return {
         "PlayableMediaTypes": [
             "Audio",
-            "Video"
+            "Video",
+            "Photo"
         ],
         "SupportedCommands": [],
         "SupportsPersistentIdentifier": false,
@@ -376,7 +377,7 @@ function GetBitRateLimit(codec as string)
                 "Condition": "LessThanEqual",
                 "Property": "VideoBitrate",
                 "Value": userSetLimit.ToStr(),
-                IsRequired: true
+                "IsRequired": true
             }
         else
             ' Some repeated values (e.g. same "40mbps" for several codecs)
@@ -387,7 +388,7 @@ function GetBitRateLimit(codec as string)
                     "Condition": "LessThanEqual",
                     "Property": "VideoBitrate",
                     "Value": "10000000",
-                    IsRequired: true
+                    "IsRequired": true
                 }
             else if codec = "AV1"
                 ' Roku only supports AV1 up to 40Mpbs
@@ -395,7 +396,7 @@ function GetBitRateLimit(codec as string)
                     "Condition": "LessThanEqual",
                     "Property": "VideoBitrate",
                     "Value": "40000000",
-                    IsRequired: true
+                    "IsRequired": true
                 }
             else if codec = "H265"
                 ' Roku only supports h265 up to 40Mpbs
@@ -403,7 +404,7 @@ function GetBitRateLimit(codec as string)
                     "Condition": "LessThanEqual",
                     "Property": "VideoBitrate",
                     "Value": "40000000",
-                    IsRequired: true
+                    "IsRequired": true
                 }
             else if codec = "VP9"
                 ' Roku only supports VP9 up to 40Mpbs
@@ -411,7 +412,7 @@ function GetBitRateLimit(codec as string)
                     "Condition": "LessThanEqual",
                     "Property": "VideoBitrate",
                     "Value": "40000000",
-                    IsRequired: true
+                    "IsRequired": true
                 }
             end if
         end if
