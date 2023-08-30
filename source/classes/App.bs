@@ -2,11 +2,11 @@ import "pkg:/source/roku_modules/log/LogMixin.brs"
 
 ' Main class for jellyfin client
 class App
-    private screen as dynamic
-    private port as dynamic
-    private scene as dynamic
-    private args as dynamic
     private log = new log.Logger("App")
+    private screen
+    private port
+    private scene
+    private args
 
     ' Constructor
     sub new(screen as object, port as object, scene as object, args as dynamic)
@@ -250,14 +250,14 @@ class App
                     end if
                 end if
             else if isNodeEvent(msg, "movieSelected")
-                m.log.info("roSGNodeEvent", "movieSelected", msg, msg.getData(), msg.getRoSGNode())
                 ' If you select a movie from ANYWHERE, follow this flow
                 node = getMsgPicker(msg, "picker")
+                m.log.info("roSGNodeEvent", "movieSelected", msg, node, msg.getData(), msg.getRoSGNode())
                 group = CreateMovieDetailsGroup(node)
             else if isNodeEvent(msg, "seriesSelected")
-                m.log.info("roSGNodeEvent", "seriesSelected", msg, msg.getData(), msg.getRoSGNode())
                 ' If you select a TV Series from ANYWHERE, follow this flow
                 node = getMsgPicker(msg, "picker")
+                m.log.info("roSGNodeEvent", "seriesSelected", msg, node, msg.getData(), msg.getRoSGNode())
                 group = CreateSeriesDetailsGroup(node.id)
             else if isNodeEvent(msg, "seasonSelected")
                 ' If you select a TV Season from ANYWHERE, follow this flow
