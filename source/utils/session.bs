@@ -59,21 +59,29 @@ namespace session
         end sub
 
         ' Add or update the jellyfin server URL from the global server session array (m.global.session.server)
-        sub UpdateURL(value as string)
+        ' Returns a boolean based on if a connection to the Jellyfin server was made
+        function UpdateURL(value as string) as boolean
             ' validate parameters
-            if value = "" then return
+            if value = "" then return false
             session.server.Update("url", value)
-            session.server.Populate()
-        end sub
+
+            success = session.server.Populate()
+            if not success
+                session.server.Delete()
+            end if
+
+            return success
+        end function
 
         ' Use the saved server url to populate the global server session array (m.global.session.server)
-        sub Populate()
+        ' Returns a boolean based on if a connection to the Jellyfin server was made
+        function Populate() as boolean
             ' validate server url
-            if m.global.session.server.url = invalid or m.global.session.server.url = "" then return
+            if m.global.session.server.url = invalid or m.global.session.server.url = "" then return false
             ' get server info using API
             myServerInfo = ServerInfo()
             ' validate data returned from API
-            if myServerInfo.id = invalid then return
+            if myServerInfo.id = invalid then return false
             ' make copy of global server session
             tmpSessionServer = m.global.session.server
             ' update the temp array
@@ -93,7 +101,8 @@ namespace session
             tmpSessionServer.AddReplace("isLocalHTTPS", isLocalServerHTTPS)
             ' update global server session using the temp array
             session.Update("server", tmpSessionServer)
-        end sub
+            return true
+        end function
     end namespace
 
     namespace user
