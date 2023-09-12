@@ -306,19 +306,7 @@ function getDeviceProfile() as object
         "DirectPlayProfiles": DirectPlayProfile,
         "TranscodingProfiles": [],
         "ContainerProfiles": [],
-        "CodecProfiles": [
-            {
-                "Type": "VideoAudio",
-                "Conditions": [
-                    {
-                        "Condition": "LessThanEqual",
-                        "Property": "AudioChannels",
-                        "Value": maxAudioChannels,
-                        "IsRequired": false
-                    }
-                ]
-            }
-        ],
+        "CodecProfiles": [],
         "SubtitleProfiles": [
             {
                 "Format": "vtt",
@@ -481,7 +469,51 @@ function getDeviceProfile() as object
     deviceProfile.TranscodingProfiles.push(mp4Array)
 
     ' Build CodecProfiles
+    '
+    ' AUDIO
+    if maxAudioChannels = "2"
+        ' limit all codecs to 2 channels
+        deviceProfile.CodecProfiles.push({
+            "Type": "VideoAudio",
+            "Conditions": [
+                {
+                    "Condition": "LessThanEqual",
+                    "Property": "AudioChannels",
+                    "Value": maxAudioChannels,
+                    "IsRequired": false
+                }
+            ]
+        })
+    else
+        ' test each codec to see how many channels are supported
+        audioCodecs = ["mp3", "mp2", "pcm", "lpcm", "wav", "ac3", "ac4", "aiff", "wma", "flac", "alac", "aac", "opus", "dts", "wmapro", "vorbis", "eac3", "mpg123"]
+        audioChannels = [8, 6, 2] ' highest first
+        for each audioCodec in audioCodecs
+            for each audioChannel in audioChannels
+                if di.CanDecodeAudio({ Codec: audioCodec, ChCnt: audioChannel }).Result
+                    deviceProfile.CodecProfiles.push({
+                        "Type": "Audio",
+                        "Codec": audioCodec,
+                        "Conditions": [
+                            {
+                                "Condition": "LessThanEqual",
+                                "Property": "AudioChannels",
+                                "Value": audioChannel,
+                                "IsRequired": false
+                            }
+                        ]
+                    })
+                    ' if 8 channels are supported we don't need to test for 6 or 2
+                    ' if 6 channels are supported we don't need to test 2
+                    exit for
+                end if
+            end for
+        end for
 
+    end if
+
+    ' VIDEO
+    '
     ' H264
     h264Mp4LevelSupported = 0.0
     h264TsLevelSupported = 0.0
