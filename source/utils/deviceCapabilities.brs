@@ -490,7 +490,7 @@ function getDeviceProfile() as object
         audioChannels = [8, 6, 2] ' highest first
         for each audioCodec in audioCodecs
             for each audioChannel in audioChannels
-                if di.CanDecodeAudio({ Codec: audioCodec, ChCnt: audioChannel }).Result
+                if di.CanDecodeAudio({ Codec: audioCodec, ChCnt: audioChannel, Container: audioCodec }).Result
                     deviceProfile.CodecProfiles.push({
                         "Type": "Audio",
                         "Codec": audioCodec,
