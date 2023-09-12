@@ -511,7 +511,7 @@ function getDeviceProfile() as object
         ]
     })
     ' test each codec to see how many channels are supported
-    audioCodecs = ["mp3", "mp2", "pcm", "lpcm", "wav", "ac3", "ac4", "aiff", "wma", "flac", "alac", "aac", "dts", "wmapro", "vorbis", "eac3", "mpg123"]
+    audioCodecs = ["mp3", "mp2", "pcm", "lpcm", "wav", "ac3", "ac4", "aiff", "wma", "flac", "alac", "dts", "wmapro", "vorbis", "eac3", "mpg123"]
     audioChannels = [8, 6, 2] ' highest first
     for each audioCodec in audioCodecs
         for each audioChannel in audioChannels
