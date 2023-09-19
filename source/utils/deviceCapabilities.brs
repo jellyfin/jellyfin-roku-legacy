@@ -797,6 +797,11 @@ function getDeviceProfile() as object
         deviceProfile.CodecProfiles.push(codecProfileArray)
     end if
 
+    enableTranscoding = m.global.session.user.policy.EnableVideoPlaybackTranscoding
+    if enableTranscoding <> invalid and enableTranscoding = false
+        deviceProfile.TranscodingProfiles = []
+    end if
+
     return deviceProfile
 end function
 
