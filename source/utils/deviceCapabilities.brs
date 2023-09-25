@@ -798,8 +798,8 @@ function getDeviceProfile() as object
     end if
 
     ' respect user policy in regards to transcoding permission
-    enableVideoTranscoding = Lcase(m.global.session.user.policy.EnableVideoPlaybackTranscoding)
-    enableAudioTranscoding = Lcase(m.global.session.user.policy.EnableAudioPlaybackTranscoding)
+    enableVideoTranscoding = m.global.session.user.policy.EnableVideoPlaybackTranscoding
+    enableAudioTranscoding = m.global.session.user.policy.EnableAudioPlaybackTranscoding
 
     if isValid(enableVideoTranscoding) and isValid(enableAudioTranscoding)
         if not enableVideoTranscoding and not enableAudioTranscoding
@@ -809,7 +809,7 @@ function getDeviceProfile() as object
             ' no video transcoding allowed
             newProfile = []
             for i = 0 to deviceProfile.TranscodingProfiles.count() - 1
-                if deviceProfile.TranscodingProfiles[i].Type <> "video"
+                if Lcase(deviceProfile.TranscodingProfiles[i].Type) <> "video"
                     newProfile.push(deviceProfile.TranscodingProfiles[i])
                 end if
             end for
@@ -818,7 +818,7 @@ function getDeviceProfile() as object
             ' no audio transcoding allowed
             newProfile = []
             for i = 0 to deviceProfile.TranscodingProfiles.count() - 1
-                if deviceProfile.TranscodingProfiles[i].Type <> "audio"
+                if Lcase(deviceProfile.TranscodingProfiles[i].Type) <> "audio"
                     newProfile.push(deviceProfile.TranscodingProfiles[i])
                 end if
             end for
