@@ -798,27 +798,27 @@ function getDeviceProfile() as object
     end if
 
     ' respect user policy in regards to transcoding permission
-    enableVideoTranscoding = m.global.session.user.policy.EnableVideoPlaybackTranscoding
-    enableAudioTranscoding = m.global.session.user.policy.EnableAudioPlaybackTranscoding
+    enableVideoTranscoding = Lcase(m.global.session.user.policy.EnableVideoPlaybackTranscoding)
+    enableAudioTranscoding = Lcase(m.global.session.user.policy.EnableAudioPlaybackTranscoding)
 
-    if enableVideoTranscoding <> invalid and enableAudioTranscoding <> invalid
-        if enableVideoTranscoding = false and enableAudioTranscoding = false
+    if isValid(enableVideoTranscoding) and isValid(enableAudioTranscoding)
+        if not enableVideoTranscoding and not enableAudioTranscoding
             ' no transcoding allowed
             deviceProfile.TranscodingProfiles = []
-        else if enableVideoTranscoding = false and enableAudioTranscoding = true
+        else if not enableVideoTranscoding and enableAudioTranscoding
             ' no video transcoding allowed
             newProfile = []
             for i = 0 to deviceProfile.TranscodingProfiles.count() - 1
-                if deviceProfile.TranscodingProfiles[i].Type <> "Video"
+                if deviceProfile.TranscodingProfiles[i].Type <> "video"
                     newProfile.push(deviceProfile.TranscodingProfiles[i])
                 end if
             end for
             deviceProfile.TranscodingProfiles = newProfile
-        else if enableVideoTranscoding = true and enableAudioTranscoding = false
+        else if enableVideoTranscoding and not enableAudioTranscoding
             ' no audio transcoding allowed
             newProfile = []
             for i = 0 to deviceProfile.TranscodingProfiles.count() - 1
-                if deviceProfile.TranscodingProfiles[i].Type <> "Audio"
+                if deviceProfile.TranscodingProfiles[i].Type <> "audio"
                     newProfile.push(deviceProfile.TranscodingProfiles[i])
                 end if
             end for
