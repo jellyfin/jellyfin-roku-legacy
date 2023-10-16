@@ -1,7 +1,9 @@
 name: build-docs
 
 on:
-  pull_request:
+  push:
+    branches:
+      - unstable
 
 jobs:
   docs:
@@ -14,16 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
         with:
-          fetch-depth: 0
-          ref: ${{github.event.pull_request.head.ref}}
-          repository: ${{github.event.pull_request.head.repo.full_name}}
+          ref: ${{ github.head_ref }}
           token: ${{ secrets.JF_BOT_TOKEN }}
       - name: Install NPM dependencies
         run: npm ci
       - name: Build API docs
         # TODO: fix jsdoc build errors then remove '|| true' from run command below
         run: npm run docs || true
-      - name: Commit any changes back to the PR
+      - name: Commit any changes back to the unstable branch
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Update API docs
