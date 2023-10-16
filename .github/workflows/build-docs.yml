@@ -23,4 +23,3 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Update API docs
-          file_pattern: "docs/api/**/*"
