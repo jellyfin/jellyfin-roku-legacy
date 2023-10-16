@@ -12,12 +12,13 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
         with:
           ref: ${{ github.head_ref }}
       - name: Install NPM dependencies
         run: npm ci
       - name: Build API docs
+        # TODO: fix jsdoc build errors then remove '|| true' from run command below
         run: npm run docs || true
       - name: Commit any changes back to the PR
         uses: stefanzweifel/git-auto-commit-action@v5
