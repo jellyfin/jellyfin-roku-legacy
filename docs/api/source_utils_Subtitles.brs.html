@@ -91,7 +91,7 @@ end function
 
 ' Identify the default subtitle track for a given video id
 ' returns the server-side track index for the appriate subtitle
-function defaultSubtitleTrackFromVid(video_id as string) as integer
+function defaultSubtitleTrackFromVid(video_id) as integer
     meta = ItemMetaData(video_id)
     if isValid(meta) and isValid(meta.json) and isValid(meta.json.mediaSources)
         subtitles = sortSubtitles(meta.id, meta.json.MediaSources[0].MediaStreams)
