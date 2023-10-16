@@ -16,7 +16,7 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
       - name: Install NPM dependencies
-        run: npm install
+        run: npm ci
       - name: Build API docs
         run: npm run docs
       - name: Commit any changes back to the PR
