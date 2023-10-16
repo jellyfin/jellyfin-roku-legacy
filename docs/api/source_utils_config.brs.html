@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>jellyfin-roku api docs Source: components/ItemGrid/GridItemSmall.brs</title>
+	<title>jellyfin-roku api docs Source: source/utils/config.brs</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -65,82 +65,107 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: components/ItemGrid/GridItemSmall.brs</h1>
+		<h1 class="page-title">Source: source/utils/config.brs</h1>
     
 <section>
     <article>
         <pre
-            class="sunlight-highlight-javascript linenums">import "pkg:/source/utils/misc.brs"
-import "pkg:/source/utils/config.brs"
+            class="sunlight-highlight-javascript linenums">' needed for set_user_setting() and unset_user_setting()
+import "pkg:/source/utils/session.bs"
 
-sub init()
-    m.itemPoster = m.top.findNode("itemPoster")
-    m.posterText = m.top.findNode("posterText")
-    m.title = m.top.findNode("title")
-    m.posterText.font.size = 30
-    m.title.font.size = 25
-    m.backdrop = m.top.findNode("backdrop")
+' Read config tree from json config file and return
+function GetConfigTree()
+    return ParseJSON(ReadAsciiFile("pkg:/settings/settings.json"))
+end function
 
-    m.itemPoster.observeField("loadStatus", "onPosterLoadStatusChanged")
+' Generic registry accessors
+function registry_read(key, section = invalid)
+    if section = invalid then return invalid
+    reg = CreateObject("roRegistrySection", section)
+    if reg.exists(key) then return reg.read(key)
+    return invalid
+end function
 
-    'Parent is MarkupGrid and it's parent is the ItemGrid
-    m.topParent = m.top.GetParent().GetParent()
-
-    m.title.visible = false
-
-    'Get the imageDisplayMode for these grid items
-    if m.topParent.imageDisplayMode &lt;> invalid
-        m.itemPoster.loadDisplayMode = m.topParent.imageDisplayMode
-    end if
+sub registry_write(key, value, section = invalid)
+    if section = invalid then return
+    reg = CreateObject("roRegistrySection", section)
+    reg.write(key, value)
+    reg.flush()
 end sub
 
-sub itemContentChanged()
-    m.backdrop.blendColor = "#101010"
+sub registry_delete(key, section = invalid)
+    if section = invalid then return
+    reg = CreateObject("roRegistrySection", section)
+    reg.delete(key)
+    reg.flush()
+end sub
 
-    m.title.visible = false
+' Return all data found inside a registry section
+function RegistryReadAll(section as string) as dynamic
+    if section = "" then return invalid
 
-    if isValid(m.topParent.showItemTitles)
-        if LCase(m.topParent.showItemTitles) = "showalways"
-            m.title.visible = true
+    registry = CreateObject("roRegistrySection", section)
+    regKeyList = registry.GetKeyList()
+    registryData = {}
+    for each item in regKeyList
+        ' ignore session related tokens
+        if item &lt;> "token" and item &lt;> "username" and item &lt;> "password"
+            if registry.Exists(item)
+                registryData.AddReplace(item, registry.Read(item))
+            end if
         end if
-    end if
+    end for
 
-    itemData = m.top.itemContent
+    return registryData
+end function
 
-    if not isValid(itemData) then return
+' "Jellyfin" registry accessors for the default global settings
+function get_setting(key, defaultValue = invalid)
+    value = registry_read(key, "Jellyfin")
+    if value = invalid then return defaultValue
+    return value
+end function
 
-    m.itemPoster.uri = itemData.PosterUrl
-    m.posterText.text = itemData.title
-    m.title.text = itemData.title
-
-    'If Poster not loaded, ensure "blue box" is shown until loaded
-    if m.itemPoster.loadStatus &lt;> "ready"
-        m.backdrop.visible = true
-        m.posterText.visible = true
-    end if
+sub set_setting(key, value)
+    registry_write(key, value, "Jellyfin")
 end sub
 
-sub focusChanged()
-    if m.top.itemHasFocus = true
-        m.title.repeatCount = -1
-    else
-        m.title.repeatCount = 0
-    end if
+sub unset_setting(key)
+    registry_delete(key, "Jellyfin")
+end sub
 
-    if isValid(m.topParent.showItemTitles)
-        if LCase(m.topParent.showItemTitles) = "showonhover"
-            m.title.visible = m.top.itemHasFocus
+' User registry accessors for the currently active user
+function get_user_setting(key as string) as dynamic
+    if key = "" or m.global.session.user.id = invalid then return invalid
+    value = registry_read(key, m.global.session.user.id)
+    return value
+end function
+
+sub set_user_setting(key as string, value as dynamic)
+    if m.global.session.user.id = invalid then return
+    session.user.settings.Save(key, value)
+    registry_write(key, value, m.global.session.user.id)
+end sub
+
+sub unset_user_setting(key as string)
+    if m.global.session.user.id = invalid then return
+    session.user.settings.Delete(key)
+    registry_delete(key, m.global.session.user.id)
+end sub
+
+' Recursivly search the config tree for entry with settingname equal to key
+function findConfigTreeKey(key as string, tree)
+    for each item in tree
+        if item.settingName &lt;> invalid and item.settingName = key then return item
+
+        if item.children &lt;> invalid and item.children.Count() > 0
+            result = findConfigTreeKey(key, item.children)
+            if result &lt;> invalid then return result
         end if
-    end if
-end sub
+    end for
 
-'Hide backdrop and text when poster loaded
-sub onPosterLoadStatusChanged()
-    if m.itemPoster.loadStatus = "ready"
-        m.backdrop.visible = false
-        m.posterText.visible = false
-    end if
-end sub
+    return invalid
+end function
 </pre>
     </article>
 </section>
