@@ -11,14 +11,30 @@
   "extendedConfig": {},
   "opts": {
     "recurse": true,
-    "template": "node_modules/clean-jsdoc-theme",
+    "template": "node_modules/ink-docstrap/template",
     "brighterscript-jsdocs-plugin": {
       "addModule": true,
       "escapeHTMLCharacters": false
-    },
-    "markdown": {
-      "hardwrap": false,
-      "idInHeadings": true
     }
+  },
+  "templates": {
+    "monospaceLinks": false,
+    "dateFormat": "MMM Do YYYY",
+    "outputSourceFiles": true,
+    "outputSourcePath": true,
+    "systemName": "jellyfin-roku api docs",
+    "footer": "<span class=\"jsdoc-message\">View source code @ <a href=\"https://github.com/jellyfin/jellyfin-roku\">https://github.com/jellyfin/jellyfin-roku</a></span>",
+    "navType": "vertical",
+    "theme": "darkly",
+    "syntaxTheme": "dark",
+    "linenums": true,
+    "collapseSymbols": false,
+    "inverseNav": false,
+    "protocol": "html://",
+    "methodHeadingReturns": false
+  },
+  "markdown": {
+    "parser": "gfm",
+    "hardwrap": true
   }
 }
