@@ -48,9 +48,9 @@ function RegistryReadAll(section as string) as dynamic
 end function
 
 ' "Jellyfin" registry accessors for the default global settings
-function get_setting(key, default = invalid)
+function get_setting(key, defaultValue = invalid)
     value = registry_read(key, "Jellyfin")
-    if value = invalid then return default
+    if value = invalid then return defaultValue
     return value
 end function
 
