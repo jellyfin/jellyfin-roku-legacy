@@ -1,5 +1,6 @@
 Jellyfin
 VSCode
+BrighterScript
 BrightScript
 sideload
 Sideload
@@ -16,3 +17,7 @@ dev
 Dev
 assignees
 HTTPS
+dropdown
+JSDoc
+JavaScript
+namespaces
