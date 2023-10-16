@@ -23,7 +23,7 @@
     "outputSourceFiles": true,
     "outputSourcePath": true,
     "systemName": "jellyfin-roku api docs",
-    "footer": "<span class=\"jsdoc-message\">View source code @ <a href=\"https://github.com/jellyfin/jellyfin-roku\">https://github.com/jellyfin/jellyfin-roku</a></span>",
+    "footer": "<span class=\"jsdoc-message\">Source code: <a href=\"https://github.com/jellyfin/jellyfin-roku\">https://github.com/jellyfin/jellyfin-roku</a></span><span class=\"jsdoc-message\">Jellyfin Roku Development Forum: <a href=\"https://forum.jellyfin.org/f-roku-development\">https://forum.jellyfin.org/f-roku-development</a></span>",
     "navType": "vertical",
     "theme": "darkly",
     "syntaxTheme": "dark",
