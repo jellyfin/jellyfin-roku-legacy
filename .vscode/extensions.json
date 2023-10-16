@@ -4,6 +4,7 @@
   // List of extensions which should be recommended for users of this workspace.
   "recommendations": [
     "RokuCommunity.brightscript",
+    "AliceBeckett.brightscriptcomment",
     "redhat.vscode-xml",
     "davidanson.vscode-markdownlint"
   ],
