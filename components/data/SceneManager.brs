@@ -87,7 +87,7 @@ sub popScene()
 
         group.visible = false
 
-        if groupType = "JFScreen"
+        if groupType = "JFScreen" or LCase(groupType) = "movielibraryview"
             group.callFunc("OnScreenHidden")
         end if
     else
