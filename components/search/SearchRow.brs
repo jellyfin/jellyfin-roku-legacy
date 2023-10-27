@@ -65,7 +65,7 @@ function getData()
         "PlaylistsFolder": { "label": "Playlist", "count": 0 }
     }
 
-    for each item in itemData.searchHints
+    for each item in itemData.Items
         if content_types[item.type] <> invalid
             content_types[item.type].count += 1
         end if
@@ -86,10 +86,9 @@ sub addRow(data, title, type_filter)
     itemData = m.top.itemData
     row = data.CreateChild("ContentNode")
     row.title = title
-    for each item in itemData.SearchHints
+    for each item in itemData.Items
         if item.type = type_filter
             row.appendChild(item)
         end if
     end for
 end sub
-

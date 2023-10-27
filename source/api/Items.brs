@@ -41,7 +41,7 @@ function searchMedia(query as string)
     ' For each potential type, a separate query is done:
     ' varying item types, and artists, and people
     if query <> ""
-        resp = APIRequest(Substitute("Search/Hints", m.global.session.user.id), {
+        resp = APIRequest(Substitute("Users/{0}/Items", m.global.session.user.id), {
             "searchTerm": query,
             "IncludePeople": true,
             "IncludeMedia": true,
@@ -58,13 +58,13 @@ function searchMedia(query as string)
 
         data = getJson(resp)
         results = []
-        for each item in data.SearchHints
+        for each item in data.Items
             tmp = CreateObject("roSGNode", "SearchData")
             tmp.image = PosterImage(item.id)
             tmp.json = item
             results.push(tmp)
         end for
-        data.SearchHints = results
+        data.Items = results
         return data
     end if
     return []
