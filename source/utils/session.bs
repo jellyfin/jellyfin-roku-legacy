@@ -12,9 +12,10 @@ namespace session
                 server: {},
                 user: {
                     Configuration: {},
+                    lastRunVersion: invalid,
+                    playback: {},
                     Policy: {},
-                    settings: {},
-                    lastRunVersion: invalid
+                    settings: {}
                 }
             }
         })
@@ -113,6 +114,22 @@ namespace session
 
     namespace user
 
+        sub SavePlaybackSettings()
+            playbackArray = {}
+            di = CreateObject("roDeviceInfo")
+
+            ' Preferred Audio Codecs
+            playbackArray.preferredAudioCodec = "aac" ' AAC for stereo
+            if di.GetAudioOutputChannel() <> "Stereo"
+                playbackArray.preferredAudioCodec = "ac3" ' Dolby Digital for surround sound
+                if m.global.session.user.settings["playback.forceDTS"]
+                    playbackArray.preferredAudioCodec = "dts" ' DTS for surround sound when asked
+                end if
+            end if
+
+            session.user.Update("playback", playbackArray)
+        end sub
+
         ' Add or update one value from the global user session array (m.global.session.user)
         sub Update(key as string, value as dynamic)
             ' validate parameters
@@ -164,6 +181,9 @@ namespace session
                 session.user.settings.Save(setting, userSettings[setting])
             end for
 
+            session.user.SavePlaybackSettings()
+
+            ' debugging
             if m.global.app.isDev
                 print "m.global.session.user.settings = ", m.global.session.user.settings
             end if

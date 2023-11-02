@@ -62,6 +62,8 @@ function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic,
         return invalid
     end if
 
+    print "video=", video
+    print "video.content=", video.content
     return video
 end function
 
@@ -139,12 +141,17 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
         }
     end if
 
-
     ' 'TODO: allow user selection of subtitle track before playback initiated, for now set to no subtitles
+    print "m.playbackInfo.MediaSources[0]", m.playbackInfo.MediaSources[0]
+    print "m.playbackInfo.MediaSources[0].Formats", m.playbackInfo.MediaSources[0].Formats
+    print "m.playbackInfo.MediaSources[0].MediaStreams", m.playbackInfo.MediaSources[0].MediaStreams
+    for each stream in m.playbackInfo.MediaSources[0].MediaStreams
+        print "stream=", stream
+    end for
+    print "video.audioIndex=", video.audioIndex
 
     video.directPlaySupported = m.playbackInfo.MediaSources[0].SupportsDirectPlay
     fully_external = false
-
 
     ' For h264/hevc video, Roku spec states that it supports specfic encoding levels
     ' The device can decode content with a Higher Encoding level but may play it back with certain
@@ -203,15 +210,43 @@ sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
             fully_external = true
             video.content.url = m.playbackInfo.MediaSources[0].Path
         end if
-    else:
-        params = {}
-
-        params.append({
+    else
+        params = {
             "Static": "true",
             "Container": video.container,
             "PlaySessionId": video.PlaySessionId,
             "AudioStreamIndex": audio_stream_idx
-        })
+        }
+
+        selectedAudioStream = m.playbackInfo.MediaSources[0].MediaStreams[audio_stream_idx]
+        if selectedAudioStream.Channels > 2 and Lcase(selectedAudioStream.Codec) = "aac" or Lcase(selectedAudioStream.Codec) = "opus"
+            ' does the user have an HDMI device attached that can decode this multichannel audio stream?
+            di = CreateObject("roDeviceInfo")
+            if not di.CanDecodeAudio({ Codec: selectedAudioStream.Codec, ChCnt: selectedAudioStream.Channels, PassThru: 1 }).Result
+                print "Attached HDMI device can not decode the selected multichannel audio codec"
+                ' check to see if the attached HDMI device can decode our preferred audio codec
+                preferredAudioCodec = m.global.session.user.playback.preferredAudioCodec
+
+                if di.CanDecodeAudio({ Codec: preferredAudioCodec, Container: selectedAudioStream.Container, ChCnt: selectedAudioStream.Channels, PassThru: 1 }).Result
+                    print "Attached HDMI device can decode our preferred multichannel audio codec"
+                    print "Attempting to transcode audio to the users preferred multichannel audio codec"
+                    ' transcode the audio to keep multichannel support
+                    ' otherwise the roku device will downmix aac/opus to stereo
+                    params.Static = false
+                    params.context = "Streaming"
+                    params.audioCodec = preferredAudioCodec
+                    ' force all multichannel aac files to use mkv container
+                    if selectedAudioStream.Codec = "aac"
+                        params.container = "mkv"
+                    end if
+
+                    video.isTranscoded = true
+                    video.directplaysupported = false
+                    params.transcodeReasons = "Switching audio codecs to preserve multichannel audio support"
+                    video.transcodeReasons = params.transcodeReasons
+                end if
+            end if
+        end if
 
         if mediaSourceId <> ""
             params.MediaSourceId = mediaSourceId
