@@ -452,6 +452,9 @@ function toString(input) as string
 end function
 
 sub startLoadingSpinner()
+    if not isValid(m.scene)
+        m.scene = m.top.getScene()
+    end if
     m.spinner = createObject("roSGNode", "Spinner")
     m.spinner.translation = "[900, 450]"
     m.spinner.visible = true
@@ -467,6 +470,9 @@ sub startMediaLoadingSpinner()
 end sub
 
 sub stopLoadingSpinner()
+    if not isValid(m.scene)
+        m.scene = m.top.getScene()
+    end if
     if isValid(m.spinner)
         m.spinner.visible = false
     end if

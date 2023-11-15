@@ -2,6 +2,7 @@
 sub CreateAudioPlayerView()
     m.view = CreateObject("roSGNode", "AudioPlayerView")
     m.view.observeField("state", "onStateChange")
+    stopLoadingSpinner()
     m.global.sceneManager.callFunc("pushScene", m.view)
 end sub
 
@@ -25,6 +26,7 @@ sub CreateVideoPlayerView()
     m.getPlaybackInfoTask.videoID = mediaSourceId
     m.getPlaybackInfoTask.observeField("data", "onPlaybackInfoLoaded")
 
+    stopLoadingSpinner()
     m.global.sceneManager.callFunc("pushScene", m.view)
 end sub
 

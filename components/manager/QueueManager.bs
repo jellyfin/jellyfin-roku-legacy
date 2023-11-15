@@ -120,6 +120,8 @@ sub playQueue()
     nextItemMediaType = getItemType(nextItem)
     if nextItemMediaType = "" then return
 
+    startLoadingSpinner()
+
     if nextItemMediaType = "audio"
         CreateAudioPlayerView()
         return
@@ -149,6 +151,8 @@ sub playQueue()
         CreateVideoPlayerView()
         return
     end if
+
+    stopLoadingSpinner()
 end sub
 
 ' Remove item at end of play queue
