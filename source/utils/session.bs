@@ -9,7 +9,9 @@ namespace session
         m.global.addFields({
             session: {
                 "memoryLevel": "normal",
-                server: {},
+                server: {
+                    id: ""
+                },
                 user: {
                     Configuration: {},
                     Policy: {},
