@@ -188,7 +188,6 @@ sub createLatestInRows(content as dynamic, sizeArray as dynamic)
 
             m.homeSectionIndexes.AddReplace("latestin" + LCase(lib.name).Replace(" ", ""), m.homeSectionIndexes.count)
             m.homeSectionIndexes.count++
-            sizeArray.Push([464, 331])
 
             loadLatest = createObject("roSGNode", "LoadItemsTask")
             loadLatest.itemsToLoad = "latest"
