@@ -12,9 +12,9 @@
             // set "brightscript.debug.raleTrackerTaskFileLocation": "/absolute/path/to/rale/TrackerTask.xml" in your vscode user settings
             // set the below field to true
             "injectRaleTrackerTask": false,
-            //WARNING: don't edit this value. Instead, set "brightscript.debug.host": "YOUR_HOST_HERE" in your vscode user settings
+            //WARNING: don't edit this value. Instead, set "host" in "bsconfig.json"
             //"host": "${promptForHost}",
-            //WARNING: don't edit this value. Instead, set "brightscript.debug.password": "YOUR_PASSWORD_HERE" in your vscode user settings
+            //WARNING: don't edit this value. Instead, set "password" in "bsconfig.json"
             //"password": "${promptForPassword}",
         },
         {
