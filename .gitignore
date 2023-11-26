@@ -15,3 +15,4 @@ node_modules/
 .buildpath
 .project
 .settings
+bsconfig.json
