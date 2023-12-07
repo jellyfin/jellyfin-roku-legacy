@@ -711,6 +711,9 @@ sub Main (args as dynamic) as void
                 ' The audio codec capability has changed if true.
                 print "event.audioCodecCapabilityChanged = ", event.audioCodecCapabilityChanged
 
+                ' update global device state
+                SaveDeviceToGlobal()
+                ' update the server
                 postTask = createObject("roSGNode", "PostTask")
                 postTask.arrayData = getDeviceCapabilities()
                 postTask.apiUrl = "/Sessions/Capabilities/Full"
@@ -719,6 +722,9 @@ sub Main (args as dynamic) as void
                 ' The video codec capability has changed if true.
                 print "event.videoCodecCapabilityChanged = ", event.videoCodecCapabilityChanged
 
+                ' update global device state
+                SaveDeviceToGlobal()
+                ' update the server
                 postTask = createObject("roSGNode", "PostTask")
                 postTask.arrayData = getDeviceCapabilities()
                 postTask.apiUrl = "/Sessions/Capabilities/Full"
