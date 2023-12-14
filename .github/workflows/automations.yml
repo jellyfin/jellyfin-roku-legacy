@@ -6,8 +6,6 @@ concurrency:
 
 on:
   push:
-    branches:
-      - unstable
   pull_request_target:
 
 jobs:

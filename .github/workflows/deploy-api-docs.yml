@@ -3,7 +3,7 @@ name: deploy-api-docs
 
 on:
   push:
-    branches: ["unstable"]
+    branches: ["master"]
     paths: ["docs/**"] # only run if the docs are updated
 
   # Allows you to run this workflow manually from the Actions tab

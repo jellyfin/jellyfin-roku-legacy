@@ -2,11 +2,9 @@ name: build-dev
 
 on:
   pull_request:
-    branches-ignore:
-      - master
   push:
     branches:
-      - unstable
+      - master
 
 jobs:
   dev:
