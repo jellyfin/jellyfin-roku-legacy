@@ -58,7 +58,7 @@ jobs:
       - name: All new versions must match
         if: (env.newManVersion != env.newPackVersion) || (env.newManVersion != env.newMakeVersion)
         run: exit 1
-    build-prod:
+  build-prod:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'release-prep') }}
     runs-on: ubuntu-latest
     steps:
