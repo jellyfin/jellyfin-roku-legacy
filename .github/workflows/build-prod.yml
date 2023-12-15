@@ -13,8 +13,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'release-prep')
     runs-on: ubuntu-latest
     steps:
-      # checkout the branch that triggered the workflow
-      - name: Checkout master (the latest release)
+      - name: Checkout the branch that triggered the workflow
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           ref: ${GITHUB_REF##*/} # this only works with branches that don't include /
