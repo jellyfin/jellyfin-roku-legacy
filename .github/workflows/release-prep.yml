@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: DEBUG ${{ github.event.pull_request.base.ref }}
-        run: echo ${{ ${{ github.event.pull_request.base.ref }}
+        run: echo ${{ github.event.pull_request.base.ref }}
       - name: Checkout the branch this PR wants to update
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
-          ref: ${{ ${{ github.event.pull_request.base.ref }}
+          ref: ${{ github.event.pull_request.base.ref }}
       - name: Install jq to parse json
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
