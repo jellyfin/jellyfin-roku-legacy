@@ -10,7 +10,7 @@ on:
 
 jobs:
   version-check:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'release-prep')
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'release-prep') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the branch that triggered the workflow
