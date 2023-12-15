@@ -10,6 +10,14 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'release-prep') }}
     runs-on: ubuntu-latest
     steps:
+      - name: DEBUG github.GITHUB_BASE_REF
+        run: echo ${{ github.GITHUB_BASE_REF }}
+      - name: DEBUG github.event.pull_request.head.sha
+        run: echo ${{ github.event.pull_request.head.sha }}
+      - name: DEBUG github.sha
+        run: echo ${{ github.sha }}
+      - name: DEBUG github.event.pull_request.base.sha
+        run: echo ${{ github.event.pull_request.base.sha }}
       - name: Checkout the branch this PR wants to update
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
