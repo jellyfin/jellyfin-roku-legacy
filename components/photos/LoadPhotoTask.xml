@@ -2,7 +2,8 @@
 
 <component name="LoadPhotoTask" extends="Task">
   <interface>
-    <field id="itemContent" type="node" />
+    <field id="itemNodeContent" type="node" />
+    <field id="itemArrayContent" type="assocarray" />
     <field id="results" type="string" />
   </interface>
 </component>

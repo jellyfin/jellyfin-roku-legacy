@@ -19,7 +19,6 @@
         </LayoutGroup>
       </LayoutGroup>
     </LayoutGroup>
-    <Spinner id="spinner" translation="[920, 540]" visible="false" />
   </children>
   <interface>
     <field id="pageContent" type="node" onChange="pageContentChanged" />

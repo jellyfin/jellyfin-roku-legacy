@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component name="PhotoDetails" extends="JFGroup">
+<component name="PhotoDetails" extends="JFScreen">
   <children>
     <Poster id="photo" width="1920" height="1080" loadDisplayMode="scaleToFit" />
     <Rectangle id="background" color="0x101010EE" height="120" width="500" Translation="[700, -150]" opacity="0">
@@ -19,7 +19,10 @@
 
   </children>
   <interface>
-    <field id="items" type="node" />
+    <field id="itemsNode" type="node" />
+    <field id="itemsArray" type="roArray" />
+    <field id="isSlideshow" type="bool" onChange="isSlideshowChanged" />
+    <field id="isRandom" type="bool" onChange="isRandomChanged" />
     <field id="itemIndex" type="integer" value="-1" onChange="itemContentChanged" />
   </interface>
 </component>

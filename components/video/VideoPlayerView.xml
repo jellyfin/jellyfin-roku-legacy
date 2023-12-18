@@ -30,6 +30,13 @@
     <Group id="captionGroup" translation="[960,1020]" />
     <timer id="playbackTimer" repeat="true" duration="30" />
     <timer id="bufferCheckTimer" repeat="true" />
+    <OSD id="osd" visible="false" inactiveTimeout="5" />
+
+    <Rectangle id="chapterList" visible="false" color="0x00000098" width="400" height="380" translation="[103,210]">
+      <LabelList id="chaptermenu" itemSpacing="[0,20]" numRows="5" font="font:SmallSystemFont" itemSize="[315,40]" translation="[40,20]">
+        <ContentNode id="chapterContent" role="content" />
+      </LabelList>
+    </Rectangle>
 
     <JFButton id="nextEpisode" opacity="0" textColor="#f0f0f0" focusedTextColor="#202020" focusFootprintBitmapUri="pkg:/images/option-menu-bg.9.png" focusBitmapUri="pkg:/images/white.9.png" translation="[1500, 900]" />
     <!--animation for the play next episode button-->

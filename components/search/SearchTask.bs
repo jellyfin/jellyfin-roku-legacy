@@ -1,0 +1,15 @@
+import "pkg:/source/api/Items.bs"
+import "pkg:/source/api/baserequest.bs"
+import "pkg:/source/utils/config.bs"
+import "pkg:/source/api/Image.bs"
+import "pkg:/source/utils/deviceCapabilities.bs"
+
+sub init()
+    m.top.functionName = "search"
+end sub
+
+sub search()
+    if m.top.query <> invalid and m.top.query <> ""
+        m.top.results = searchMedia(m.top.query)
+    end if
+end sub

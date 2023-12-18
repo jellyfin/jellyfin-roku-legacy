@@ -1,0 +1,7 @@
+' @fileoverview Constants for rowItemSize on the home view
+
+namespace homeRowItemSizes
+    const WIDE_POSTER = [464, 331]
+    const MOVIE_POSTER = [180, 331]
+    const MUSIC_ALBUM = [261, 331]
+end namespace

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<component name="PostTask" extends="Task">
+    <interface>
+        <field id="apiUrl" type="string" />
+        <field id="timeoutSeconds" type="integer" value="30" />
+
+        <field id="arrayData" type="assocarray" value="{}" />
+        <field id="stringData" type="string" value="" />
+
+        <field id="responseCode" type="integer" />
+        <field id="responseBody" type="assocarray" value="{}" />
+        <field id="responseHeaders" type="assocarray" value="{}" />
+        <field id="failureReason" type="string" value="" />
+
+        <function name="empty" />
+    </interface>
+</component>

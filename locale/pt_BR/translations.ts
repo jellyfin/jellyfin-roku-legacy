@@ -142,7 +142,7 @@
     </message>
     <message>
         <source>Sort Order</source>
-        <translation>Ordem</translation>
+        <translation>Ordenar</translation>
     </message>
     <message>
         <source>Descending</source>

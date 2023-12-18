@@ -1,9 +1,9 @@
 ## Channel Details
 
 title=Jellyfin
-major_version=1
-minor_version=6
-build_version=6
+major_version=2
+minor_version=0
+build_version=0
 
 ### Main Menu Icons / Channel Poster Artwork
 
@@ -24,3 +24,5 @@ ui_resolutions=fhd
 confirm_partner_button=1
 
 supports_input_launch=1
+
+bs_const=printReg=false

@@ -231,6 +231,13 @@
                         "settingName": "ui.home.splashBackground",
                         "type": "bool",
                         "default": "false"
+                    },
+                    {
+                        "title": "Use Web Client's Home Section Arrangement",
+                        "description": "Make the arrangement of the Roku home view sections match the web client's home screen. Jellyfin will need to be closed and reopened for change to take effect.",
+                        "settingName": "ui.home.useWebSectionArrangement",
+                        "type": "bool",
+                        "default": "true"
                     }
                 ]
             },

@@ -24,7 +24,6 @@
     <Button id="micButton" maxWidth="20" translation="[20, 120]" iconUri="pkg:/images/icons/mic_icon.png" />
     <Label translation="[0,540]" id="emptyText" font="font:LargeSystemFont" width="1910" horizAlign="center" vertAlign="center" height="64" visible="false" />
     <ItemGridOptions id="options" visible="false" />
-    <Spinner id="spinner" translation="[900, 450]" />
     <Animation id="backroundSwapAnimation" duration="1" repeat="false" easeFunction="linear">
       <FloatFieldInterpolator id="fadeinLoading" key="[0.0, 1.0]" keyValue="[ 0.00, 1.00 ]" fieldToInterp="backdropTransition.opacity" />
       <FloatFieldInterpolator id="fadeoutLoaded" key="[0.0, 1.0]" keyValue="[ 1.00, 0.00 ]" fieldToInterp="backdrop.opacity" />

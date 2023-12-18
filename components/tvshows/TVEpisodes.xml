@@ -3,7 +3,7 @@
   <children>
     <Poster id="seasonPoster" width="300" height="450" translation="[95,175]">
       <Rectangle id="unplayedCount" visible="false" width="90" height="60" color="#00a4dcFF" translation="[210, 0]">
-        <Label id="unplayedEpisodeCount" width="90" height="60" font="font:SmallestBoldSystemFont" horizAlign="center" vertAlign="center" />
+        <Label id="unplayedEpisodeCount" width="90" height="60" font="font:MediumBoldSystemFont" horizAlign="center" vertAlign="center" />
       </Rectangle>
     </Poster>
     <JFButton id="shuffle" minChars="10" text="Shuffle" translation="[90, 640]" visible="false"></JFButton>
@@ -12,6 +12,7 @@
   </children>
   <interface>
     <field id="episodeSelected" alias="picker.itemSelected" />
+    <field id="selectedItem" type="node" alwaysNotify="true" />
     <field id="quickPlayNode" type="node" />
     <field id="seasonData" type="assocarray" onChange="setSeasonLoading" />
     <field id="objects" alias="picker.objects" />

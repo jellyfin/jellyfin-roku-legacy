@@ -1,25 +1,26 @@
 {
   "name": "jellyfin-roku",
-  "version": "1.6.6",
+  "type": "module",
+  "version": "2.0.0",
   "description": "Roku app for Jellyfin media server",
   "dependencies": {
     "@rokucommunity/bslib": "0.1.1",
-    "brighterscript-formatter": "1.6.34",
+    "brighterscript-formatter": "1.6.36",
     "log": "npm:roku-log@0.11.1"
   },
   "devDependencies": {
-    "@rokucommunity/bslint": "0.8.11",
-    "brighterscript": "0.65.8",
+    "@rokucommunity/bslint": "0.8.13",
+    "brighterscript": "0.65.13",
     "brighterscript-jsdocs-plugin": "0.6.0",
-    "ink-docstrap": "1.3.2",
+    "clean-jsdoc-theme": "4.2.17",
     "jsdoc": "4.0.2",
     "jshint": "2.13.6",
-    "markdownlint-cli2": "0.10.0",
+    "markdownlint-cli2": "0.11.0",
     "rimraf": "5.0.5",
-    "roku-deploy": "3.10.3",
+    "roku-deploy": "3.11.1",
     "roku-log-bsc-plugin": "0.8.1",
     "rooibos-roku": "5.8.0",
-    "ropm": "0.10.18",
+    "ropm": "0.10.21",
     "spellchecker-cli": "6.1.1",
     "undent": "0.1.0"
   },
@@ -37,7 +38,7 @@
     "lint-markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
     "lint-spelling": "spellchecker -d dictionary.txt --files \"**/*.md\" \"**/.*/**/*.md\" \"!node_modules/**/*.md\"",
     "postinstall": "npm run ropm",
-    "ropm": "ropm copy && node scripts/ropm-hook.js",
+    "ropm": "ropm copy && node scripts/ropm-hook.cjs",
     "validate": "npx bsc --copy-to-staging=false --create-package=false"
   },
   "repository": {

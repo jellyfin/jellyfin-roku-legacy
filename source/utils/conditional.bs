@@ -1,0 +1,16 @@
+' @fileoverview Conditional functions that depend on 'bs_const' values specified in the manifest file
+
+' Print out all of the registry contents to the debug log
+sub printRegistry()
+    #if printReg
+        ' get a list of every registry section
+        regSections = getRegistrySections()
+        for each section in regSections
+            ' read all the data from the section
+            sectionData = RegistryReadAll(section)
+            ' print the assocArray with all the data
+            print "Registry section: " + section
+            print sectionData
+        end for
+    #end if
+end sub

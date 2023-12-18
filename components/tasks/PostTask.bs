@@ -1,0 +1,79 @@
+import "pkg:/source/api/baserequest.bs"
+import "pkg:/source/utils/misc.bs"
+
+sub init()
+    m.top.functionName = "postItems"
+end sub
+
+' Main function for PostTask.
+' Posts either an array of data
+' or a string of data to an API endpoint.
+' Saves the response information
+sub postItems()
+    if m.top.apiUrl = ""
+        print "ERROR in PostTask. Invalid API URL provided"
+        return
+    end if
+    if m.top.arrayData.count() > 0 and m.top.stringData = ""
+        print "PostTask Started - Posting array to " + m.top.apiUrl
+        req = APIRequest(m.top.apiUrl)
+        req.SetRequest("POST")
+        httpResponse = asyncPost(req, FormatJson(m.top.arrayData))
+        m.top.responseCode = httpResponse
+        print "PostTask Finished. " + m.top.apiUrl + " Response = " + httpResponse.toStr()
+    else if m.top.arrayData.count() = 0 and m.top.stringData <> ""
+        print "PostTask Started - Posting string(" + m.top.stringData + ") to " + m.top.apiUrl
+        req = APIRequest(m.top.apiUrl)
+        req.SetRequest("POST")
+        httpResponse = asyncPost(req, m.top.stringData)
+        m.top.responseCode = httpResponse
+        print "PostTask Finished. " + m.top.apiUrl + " Response = " + httpResponse.toStr()
+    else
+        print "ERROR processing data for PostTask"
+    end if
+end sub
+
+' Post data and wait for response code
+function asyncPost(req, data = "" as string) as integer
+    ' response code 0 means there was an error
+    respCode = 0
+
+    req.setMessagePort(CreateObject("roMessagePort"))
+    req.AddHeader("Content-Type", "application/json")
+    req.AsyncPostFromString(data)
+    ' wait up to m.top.timeoutSeconds for a response
+    ' NOTE: wait() uses milliseconds - multiply by 1000 to convert
+    resp = wait(m.top.timeoutSeconds * 1000, req.GetMessagePort())
+
+    respString = resp.GetString()
+    if isValidAndNotEmpty(respString)
+        m.top.responseBody = ParseJson(respString)
+        print "m.top.responseBody=", m.top.responseBody
+    end if
+
+    respCode = resp.GetResponseCode()
+    if respCode < 0
+        ' there was an unexpected error
+        m.top.failureReason = resp.GetFailureReason()
+    else if respCode >= 200 and respCode < 300
+        ' save response headers if they're available
+        m.top.responseHeaders = resp.GetResponseHeaders()
+    end if
+
+    return respCode
+end function
+
+' Revert PostTask to default state
+sub empty()
+    ' These should match the defaults set in PostTask.xml
+    m.top.apiUrl = ""
+    m.top.timeoutSeconds = 30
+
+    m.top.arrayData = {}
+    m.top.stringData = ""
+
+    m.top.responseCode = invalid
+    m.top.responseBody = {}
+    m.top.responseHeaders = {}
+    m.top.failureReason = ""
+end sub

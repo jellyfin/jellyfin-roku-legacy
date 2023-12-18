@@ -40,7 +40,6 @@
       </LayoutGroup>
     </LayoutGroup>
     <MovieOptions id="movieOptions" visible="false" />
-    <Spinner id="spinner" translation="[900, 450]" visible="true" />
 
     <!-- "Cast and Crew" row -->
     <extrasSlider id="movieExtras" />

@@ -1,0 +1,80 @@
+# All of the jobs in this workflow will only run if the PR that triggered it has a 'release-prep' label
+name: release-prep
+
+on:
+  pull_request:
+    types: [labeled, opened, reopened, synchronize]
+
+jobs:
+  version-check:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'release-prep') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: DEBUG ${{ github.event.pull_request.base.ref }}
+        run: echo ${{ github.event.pull_request.base.ref }}
+      - name: Checkout the branch this PR wants to update
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+      - name: Install jq to parse json
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: jq
+      - name: Save old package.json version
+        run: echo "oldPackVersion=$(jq -r ".version" package.json)" >> $GITHUB_ENV
+      - name: Find and save old major_version from manifest
+        run: awk 'BEGIN { FS="=" } /^major_version/ { print "oldMajor="$2; }' manifest >> $GITHUB_ENV
+      - name: Find and save old minor_version from manifest
+        run: awk 'BEGIN { FS="=" } /^minor_version/ { print "oldMinor="$2; }' manifest >> $GITHUB_ENV
+      - name: Find and save old build_version from manifest
+        run: awk 'BEGIN { FS="=" } /^build_version/ { print "oldBuild="$2; }' manifest >> $GITHUB_ENV
+      - name: Save old manifest version
+        run: echo "oldManVersion=${{ env.oldMajor }}.${{ env.oldMinor }}.${{ env.oldBuild }}" >> $GITHUB_ENV
+      - name: Save old Makefile version
+        run: awk 'BEGIN { FS=" := " } /^VERSION/ { print "oldMakeVersion="$2; }' Makefile >> $GITHUB_ENV
+      - name: Checkout PR branch
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - name: Save new package.json version
+        run: echo "newPackVersion=$(jq -r ".version" package.json)" >> $GITHUB_ENV
+      - name: package.json version must be updated
+        if: env.oldPackVersion == env.newPackVersion
+        run: exit 1
+      - name: Find and save new major_version from manifest
+        run: awk 'BEGIN { FS="=" } /^major_version/ { print "newMajor="$2; }' manifest >> $GITHUB_ENV
+      - name: Find and save new minor_version from manifest
+        run: awk 'BEGIN { FS="=" } /^minor_version/ { print "newMinor="$2; }' manifest >> $GITHUB_ENV
+      - name: Find and save new build_version from manifest
+        run: awk 'BEGIN { FS="=" } /^build_version/ { print "newBuild="$2; }' manifest >> $GITHUB_ENV
+      - name: Save new manifest version
+        run: echo "newManVersion=${{ env.newMajor }}.${{ env.newMinor }}.${{ env.newBuild }}" >> $GITHUB_ENV
+      - name: Manifest version must be updated
+        if: env.oldManVersion == env.newManVersion
+        run: exit 1
+      - name: Save new Makefile version
+        run: awk 'BEGIN { FS=" := " } /^VERSION/ { print "newMakeVersion="$2; }' Makefile >> $GITHUB_ENV
+      - name: Makefile version must be updated
+        if: env.oldMakeVersion == env.newMakeVersion
+        run: exit 1
+      - name: All new versions must match
+        if: (env.newManVersion != env.newPackVersion) || (env.newManVersion != env.newMakeVersion)
+        run: exit 1
+  build-prod:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'release-prep') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4
+        with:
+          node-version: "lts/*"
+          cache: "npm"
+      - name: NPM install
+        run: npm ci
+      - name: Install roku module dependencies
+        run: npm run ropm
+      - name: Build app for production
+        run: npm run build-prod
+      - uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4
+        with:
+          name: Jellyfin-Roku-v${{ env.newManVersion }}-${{ github.sha }}
+          path: ${{ github.workspace }}/build/staging
+          if-no-files-found: error

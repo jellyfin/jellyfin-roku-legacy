@@ -1,20 +1,31 @@
-import "pkg:/source/utils/misc.brs"
+import "pkg:/source/utils/misc.bs"
+import "pkg:/source/utils/conditional.bs"
 
-' Functions that update the registry based on the last run version and the currently running version
+' @fileoverview Functions that update the registry based on the last run version and the currently running version
+
+const CLIENT_VERSION_REQUIRING_BASE_MIGRATION = "2.0.0"
 
 ' Run all necessary registry mirations on the "global" Jellyfin registry section
 sub runGlobalMigrations()
+    appLastRunVersion = m.global.app.lastRunVersion
     ' Global registry migrations
-    if isValid(m.global.app.lastRunVersion) and not versionChecker(m.global.app.lastRunVersion, "1.7.0")
-        ' last app version used was less than 1.7.0
-        print "Running 1.7.0 global registry migrations"
+    if isValid(appLastRunVersion) and not versionChecker(appLastRunVersion, CLIENT_VERSION_REQUIRING_BASE_MIGRATION)
+        ' last app version used < CLIENT_VERSION_REQUIRING_BASE_MIGRATION
+        m.wasMigrated = true
+        print `Running ${CLIENT_VERSION_REQUIRING_BASE_MIGRATION} global registry migrations`
         ' no longer saving raw password to registry
         ' auth token and username are now stored in user settings and not global settings
 
+        ' enable remember me global setting for all devices whos last run version is < 2.0.0
+        ' NOTE: remember me will be disabled for new installs
+        rememberMe = registry_read("global.rememberme", "Jellyfin")
+        if not isValid(rememberMe)
+            ' don't overwrite users current setting (dev installs)
+            set_setting("global.rememberme", "true")
+        end if
+        ' migrate saved credentials for "active_user" if found
         savedUserId = get_setting("active_user")
         if isValid(savedUserId)
-            registry_write("serverId", m.global.session.server.id, savedUserId)
-            ' copy saved credentials to user block
             savedUsername = get_setting("username")
             if isValid(savedUsername)
                 registry_write("username", savedUsername, savedUserId)
@@ -25,11 +36,12 @@ sub runGlobalMigrations()
                 registry_write("token", savedToken, savedUserId)
             end if
         end if
+        ' remove settings from global "jellyfin" registry block
         unset_setting("port")
         unset_setting("token")
         unset_setting("username")
         unset_setting("password")
-        ' remove saved credentials from saved_servers
+        ' remove any saved credentials found in saved_servers assocArray
         saved = get_setting("saved_servers")
         if isValid(saved)
             savedServers = ParseJson(saved)
@@ -44,22 +56,36 @@ sub runGlobalMigrations()
             end if
         end if
     end if
-    if m.global.app.lastRunVersion <> invalid
-        runRegistryUserMigrations(m.global.app.lastRunVersion)
-    end if
 end sub
 
-sub runRegistryUserMigrations(version as string)
+sub runRegistryUserMigrations()
     regSections = getRegistrySections()
     for each section in regSections
         if LCase(section) <> "jellyfin"
-            if version = "1.7.0"
-                print "Running User Registry Migration for 1.7.0"
-                ' now saving LastRunVersion globally and per user so that we can run user specific registry migrations
-                ' duplicate LastRunVersion to all user settings in the registry so that we can run user specific migrations
-                '
-                ' now saving LastRunVersion per user in addition to globally
-                registry_write("LastRunVersion", m.global.app.version, section)
+            reg = CreateObject("roRegistrySection", section)
+            if reg.exists("LastRunVersion")
+                hasUserVersion = true
+                lastRunVersion = reg.read("LastRunVersion")
+            else
+                hasUserVersion = false
+                ' app versions < 2.0.0 didn't save LastRunVersion at the user level
+                ' fall back to using the apps lastRunVersion
+                lastRunVersion = m.global.app.lastRunVersion
+                registry_write("LastRunVersion", lastRunVersion, section)
+            end if
+
+            ' BASE_MIGRATION
+            if not versionChecker(lastRunVersion, CLIENT_VERSION_REQUIRING_BASE_MIGRATION)
+                m.wasMigrated = true
+                print `Running Registry Migration for ${CLIENT_VERSION_REQUIRING_BASE_MIGRATION} for userid: ${section}`
+
+                ' If this is an existing user, set the useWebSectionArrangement setting to false
+                ' This way the home view for upgrading users is not changed without them opting in
+                if not hasUserVersion
+                    print "useWebSectionArrangement set to false"
+                    registry_write("ui.home.useWebSectionArrangement", "false", section)
+                end if
+
                 ' no longer saving password to registry
                 registry_delete("password", section)
                 ' av1 playback no longer hidden behind user setting

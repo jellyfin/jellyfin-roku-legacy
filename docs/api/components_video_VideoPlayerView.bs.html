@@ -1,0 +1,699 @@
+<!DOCTYPE html><html lang="en" style="font-size:16px"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Source: components/video/VideoPlayerView.bs</title><!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--><script src="scripts/third-party/hljs.js" defer="defer"></script><script src="scripts/third-party/hljs-line-num.js" defer="defer"></script><script src="scripts/third-party/popper.js" defer="defer"></script><script src="scripts/third-party/tippy.js" defer="defer"></script><script src="scripts/third-party/tocbot.min.js"></script><script>var baseURL="/",locationPathname="";baseURL=(baseURL=(baseURL="https://jellyfin.github.io/jellyfin-roku/").replace(/https?:\/\//i,"")).substr(baseURL.indexOf("/"))</script><link rel="stylesheet" href="styles/clean-jsdoc-theme.min.css"><svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none"><defs><symbol id="copy-icon" viewbox="0 0 488.3 488.3"><g><path d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z"/><path d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z"/></g></symbol><symbol id="search-icon" viewBox="0 0 512 512"><g><g><path d="M225.474,0C101.151,0,0,101.151,0,225.474c0,124.33,101.151,225.474,225.474,225.474    c124.33,0,225.474-101.144,225.474-225.474C450.948,101.151,349.804,0,225.474,0z M225.474,409.323    c-101.373,0-183.848-82.475-183.848-183.848S124.101,41.626,225.474,41.626s183.848,82.475,183.848,183.848    S326.847,409.323,225.474,409.323z"/></g></g><g><g><path d="M505.902,476.472L386.574,357.144c-8.131-8.131-21.299-8.131-29.43,0c-8.131,8.124-8.131,21.306,0,29.43l119.328,119.328    c4.065,4.065,9.387,6.098,14.715,6.098c5.321,0,10.649-2.033,14.715-6.098C514.033,497.778,514.033,484.596,505.902,476.472z"/></g></g></symbol><symbol id="font-size-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11.246 15H4.754l-2 5H.6L7 4h2l6.4 16h-2.154l-2-5zm-.8-2L8 6.885 5.554 13h4.892zM21 12.535V12h2v8h-2v-.535a4 4 0 1 1 0-6.93zM19 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></symbol><symbol id="add-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></symbol><symbol id="minus-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M5 11h14v2H5z"/></symbol><symbol id="dark-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/></symbol><symbol id="light-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/></symbol><symbol id="reset-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M18.537 19.567A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10c0 2.136-.67 4.116-1.81 5.74L17 12h3a8 8 0 1 0-2.46 5.772l.997 1.795z"/></symbol><symbol id="down-icon" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z"></path></symbol><symbol id="codepen-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M16.5 13.202L13 15.535v3.596L19.197 15 16.5 13.202zM14.697 12L12 10.202 9.303 12 12 13.798 14.697 12zM20 10.869L18.303 12 20 13.131V10.87zM19.197 9L13 4.869v3.596l3.5 2.333L19.197 9zM7.5 10.798L11 8.465V4.869L4.803 9 7.5 10.798zM4.803 15L11 19.131v-3.596l-3.5-2.333L4.803 15zM4 13.131L5.697 12 4 10.869v2.262zM2 9a1 1 0 0 1 .445-.832l9-6a1 1 0 0 1 1.11 0l9 6A1 1 0 0 1 22 9v6a1 1 0 0 1-.445.832l-9 6a1 1 0 0 1-1.11 0l-9-6A1 1 0 0 1 2 15V9z"/></symbol><symbol id="close-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></symbol><symbol id="menu-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></symbol></defs></svg></head><body data-theme="fallback-dark"><div class="sidebar-container"><div class="sidebar" id="sidebar"><a href="/" class="sidebar-title sidebar-title-anchor">jellyfin-roku Code Documentation</a><div class="sidebar-items-container"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="module-AlbumData.html">AlbumData</a></div><div class="sidebar-section-children"><a href="module-AlbumGrid.html">AlbumGrid</a></div><div class="sidebar-section-children"><a href="module-AlbumTrackList.html">AlbumTrackList</a></div><div class="sidebar-section-children"><a href="module-AlbumView.html">AlbumView</a></div><div class="sidebar-section-children"><a href="module-Alpha.html">Alpha</a></div><div class="sidebar-section-children"><a href="module-ArtistView.html">ArtistView</a></div><div class="sidebar-section-children"><a href="module-AudioPlayer.html">AudioPlayer</a></div><div class="sidebar-section-children"><a href="module-AudioPlayerView.html">AudioPlayerView</a></div><div class="sidebar-section-children"><a href="module-AudioTrackListItem.html">AudioTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupHoriz.html">ButtonGroupHoriz</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupVert.html">ButtonGroupVert</a></div><div class="sidebar-section-children"><a href="module-ChannelData.html">ChannelData</a></div><div class="sidebar-section-children"><a href="module-Clock.html">Clock</a></div><div class="sidebar-section-children"><a href="module-CollectionData.html">CollectionData</a></div><div class="sidebar-section-children"><a href="module-ConfigData.html">ConfigData</a></div><div class="sidebar-section-children"><a href="module-ConfigItem.html">ConfigItem</a></div><div class="sidebar-section-children"><a href="module-ConfigList.html">ConfigList</a></div><div class="sidebar-section-children"><a href="module-ExtrasItem.html">ExtrasItem</a></div><div class="sidebar-section-children"><a href="module-ExtrasRowList.html">ExtrasRowList</a></div><div class="sidebar-section-children"><a href="module-FavoriteItemsTask.html">FavoriteItemsTask</a></div><div class="sidebar-section-children"><a href="module-FolderData.html">FolderData</a></div><div class="sidebar-section-children"><a href="module-GetFiltersTask.html">GetFiltersTask</a></div><div class="sidebar-section-children"><a href="module-GetNextEpisodeTask.html">GetNextEpisodeTask</a></div><div class="sidebar-section-children"><a href="module-GetPlaybackInfoTask.html">GetPlaybackInfoTask</a></div><div class="sidebar-section-children"><a href="module-GetShuffleEpisodesTask.html">GetShuffleEpisodesTask</a></div><div class="sidebar-section-children"><a href="module-GridItem.html">GridItem</a></div><div class="sidebar-section-children"><a href="module-GridItemSmall.html">GridItemSmall</a></div><div class="sidebar-section-children"><a href="module-Home.html">Home</a></div><div class="sidebar-section-children"><a href="module-HomeData.html">HomeData</a></div><div class="sidebar-section-children"><a href="module-HomeItem.html">HomeItem</a></div><div class="sidebar-section-children"><a href="module-HomeRowItemSizes.html">HomeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-HomeRows.html">HomeRows</a></div><div class="sidebar-section-children"><a href="module-IconButton.html">IconButton</a></div><div class="sidebar-section-children"><a href="module-Image.html">Image</a></div><div class="sidebar-section-children"><a href="module-ImageData.html">ImageData</a></div><div class="sidebar-section-children"><a href="module-IntegerKeyboard.html">IntegerKeyboard</a></div><div class="sidebar-section-children"><a href="module-ItemGrid.html">ItemGrid</a></div><div class="sidebar-section-children"><a href="module-ItemGridOptions.html">ItemGridOptions</a></div><div class="sidebar-section-children"><a href="module-Items.html">Items</a></div><div class="sidebar-section-children"><a href="module-JFButton.html">JFButton</a></div><div class="sidebar-section-children"><a href="module-JFButtons.html">JFButtons</a></div><div class="sidebar-section-children"><a href="module-JFGroup.html">JFGroup</a></div><div class="sidebar-section-children"><a href="module-JFMessageDialog.html">JFMessageDialog</a></div><div class="sidebar-section-children"><a href="module-JFOverhang.html">JFOverhang</a></div><div class="sidebar-section-children"><a href="module-JFScene.html">JFScene</a></div><div class="sidebar-section-children"><a href="module-JFScreen.html">JFScreen</a></div><div class="sidebar-section-children"><a href="module-JFServer.html">JFServer</a></div><div class="sidebar-section-children"><a href="module-JFVideo.html">JFVideo</a></div><div class="sidebar-section-children"><a href="module-ListPoster.html">ListPoster</a></div><div class="sidebar-section-children"><a href="module-LoadChannelsTask.html">LoadChannelsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask.html">LoadItemsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask2.html">LoadItemsTask2</a></div><div class="sidebar-section-children"><a href="module-LoadPhotoTask.html">LoadPhotoTask</a></div><div class="sidebar-section-children"><a href="module-LoadProgramDetailsTask.html">LoadProgramDetailsTask</a></div><div class="sidebar-section-children"><a href="module-LoadScreenSaverTimeoutTask.html">LoadScreenSaverTimeoutTask</a></div><div class="sidebar-section-children"><a href="module-LoadSheduleTask.html">LoadSheduleTask</a></div><div class="sidebar-section-children"><a href="module-LoadVideoContentTask.html">LoadVideoContentTask</a></div><div class="sidebar-section-children"><a href="module-LoginScene.html">LoginScene</a></div><div class="sidebar-section-children"><a href="module-Main.html">Main</a></div><div class="sidebar-section-children"><a href="module-MovieData.html">MovieData</a></div><div class="sidebar-section-children"><a href="module-MovieDetails.html">MovieDetails</a></div><div class="sidebar-section-children"><a href="module-MovieLibraryView.html">MovieLibraryView</a></div><div class="sidebar-section-children"><a href="module-MovieOptions.html">MovieOptions</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumData.html">MusicAlbumData</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumSongListData.html">MusicAlbumSongListData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistData.html">MusicArtistData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistGridItem.html">MusicArtistGridItem</a></div><div class="sidebar-section-children"><a href="module-MusicLibraryView.html">MusicLibraryView</a></div><div class="sidebar-section-children"><a href="module-MusicSongData.html">MusicSongData</a></div><div class="sidebar-section-children"><a href="module-OSD.html">OSD</a></div><div class="sidebar-section-children"><a href="module-OptionNode.html">OptionNode</a></div><div class="sidebar-section-children"><a href="module-OptionsButton.html">OptionsButton</a></div><div class="sidebar-section-children"><a href="module-OptionsData.html">OptionsData</a></div><div class="sidebar-section-children"><a href="module-OptionsSlider.html">OptionsSlider</a></div><div class="sidebar-section-children"><a href="module-OverviewDialog.html">OverviewDialog</a></div><div class="sidebar-section-children"><a href="module-PersonData.html">PersonData</a></div><div class="sidebar-section-children"><a href="module-PersonDetails.html">PersonDetails</a></div><div class="sidebar-section-children"><a href="module-PhotoData.html">PhotoData</a></div><div class="sidebar-section-children"><a href="module-PhotoDetails.html">PhotoDetails</a></div><div class="sidebar-section-children"><a href="module-PlaybackDialog.html">PlaybackDialog</a></div><div class="sidebar-section-children"><a href="module-PlayedCheckmark.html">PlayedCheckmark</a></div><div class="sidebar-section-children"><a href="module-PlaylistData.html">PlaylistData</a></div><div class="sidebar-section-children"><a href="module-PlaylistView.html">PlaylistView</a></div><div class="sidebar-section-children"><a href="module-PlaystateTask.html">PlaystateTask</a></div><div class="sidebar-section-children"><a href="module-PostTask.html">PostTask</a></div><div class="sidebar-section-children"><a href="module-ProgramDetails.html">ProgramDetails</a></div><div class="sidebar-section-children"><a href="module-PublicUserData.html">PublicUserData</a></div><div class="sidebar-section-children"><a href="module-QueueManager.html">QueueManager</a></div><div class="sidebar-section-children"><a href="module-QuickConnect.html">QuickConnect</a></div><div class="sidebar-section-children"><a href="module-QuickConnectDialog.html">QuickConnectDialog</a></div><div class="sidebar-section-children"><a href="module-RadioDialog.html">RadioDialog</a></div><div class="sidebar-section-children"><a href="module-RecordProgramTask.html">RecordProgramTask</a></div><div class="sidebar-section-children"><a href="module-SceneManager.html">SceneManager</a></div><div class="sidebar-section-children"><a href="module-ScheduleProgramData.html">ScheduleProgramData</a></div><div class="sidebar-section-children"><a href="module-SearchBox.html">SearchBox</a></div><div class="sidebar-section-children"><a href="module-SearchData.html">SearchData</a></div><div class="sidebar-section-children"><a href="module-SearchResults.html">SearchResults</a></div><div class="sidebar-section-children"><a href="module-SearchRow.html">SearchRow</a></div><div class="sidebar-section-children"><a href="module-SearchTask.html">SearchTask</a></div><div class="sidebar-section-children"><a href="module-SeriesData.html">SeriesData</a></div><div class="sidebar-section-children"><a href="module-ServerDiscoveryTask.html">ServerDiscoveryTask</a></div><div class="sidebar-section-children"><a href="module-SetServerScreen.html">SetServerScreen</a></div><div class="sidebar-section-children"><a href="module-ShowScenes.html">ShowScenes</a></div><div class="sidebar-section-children"><a href="module-SlideOutButton.html">SlideOutButton</a></div><div class="sidebar-section-children"><a href="module-SongItem.html">SongItem</a></div><div class="sidebar-section-children"><a href="module-Spinner.html">Spinner</a></div><div class="sidebar-section-children"><a href="module-StandardDialog.html">StandardDialog</a></div><div class="sidebar-section-children"><a href="module-Subtitles.html">Subtitles</a></div><div class="sidebar-section-children"><a href="module-TVEpisode.html">TVEpisode</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeData.html">TVEpisodeData</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRow.html">TVEpisodeRow</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRowWithOptions.html">TVEpisodeRowWithOptions</a></div><div class="sidebar-section-children"><a href="module-TVEpisodes.html">TVEpisodes</a></div><div class="sidebar-section-children"><a href="module-TVListDetails.html">TVListDetails</a></div><div class="sidebar-section-children"><a href="module-TVListOptions.html">TVListOptions</a></div><div class="sidebar-section-children"><a href="module-TVSeasonData.html">TVSeasonData</a></div><div class="sidebar-section-children"><a href="module-TVSeasonRow.html">TVSeasonRow</a></div><div class="sidebar-section-children"><a href="module-TVShowDescription.html">TVShowDescription</a></div><div class="sidebar-section-children"><a href="module-TVShowDetails.html">TVShowDetails</a></div><div class="sidebar-section-children"><a href="module-TextSizeTask.html">TextSizeTask</a></div><div class="sidebar-section-children"><a href="module-UserData.html">UserData</a></div><div class="sidebar-section-children"><a href="module-UserItem.html">UserItem</a></div><div class="sidebar-section-children"><a href="module-UserLibrary.html">UserLibrary</a></div><div class="sidebar-section-children"><a href="module-UserRow.html">UserRow</a></div><div class="sidebar-section-children"><a href="module-UserSelect.html">UserSelect</a></div><div class="sidebar-section-children"><a href="module-VideoData.html">VideoData</a></div><div class="sidebar-section-children"><a href="module-VideoPlayer.html">VideoPlayer</a></div><div class="sidebar-section-children"><a href="module-VideoPlayerView.html">VideoPlayerView</a></div><div class="sidebar-section-children"><a href="module-VideoTrackListItem.html">VideoTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ViewCreator.html">ViewCreator</a></div><div class="sidebar-section-children"><a href="module-WhatsNewDialog.html">WhatsNewDialog</a></div><div class="sidebar-section-children"><a href="module-baserequest.html">baserequest</a></div><div class="sidebar-section-children"><a href="module-captionTask.html">captionTask</a></div><div class="sidebar-section-children"><a href="module-conditional.html">conditional</a></div><div class="sidebar-section-children"><a href="module-config.html">config</a></div><div class="sidebar-section-children"><a href="module-deviceCapabilities.html">deviceCapabilities</a></div><div class="sidebar-section-children"><a href="module-globals.html">globals</a></div><div class="sidebar-section-children"><a href="module-homeRowItemSizes_.html">homeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-migrations.html">migrations</a></div><div class="sidebar-section-children"><a href="module-misc.html">misc</a></div><div class="sidebar-section-children"><a href="module-quickplay.html">quickplay</a></div><div class="sidebar-section-children"><a href="module-schedule.html">schedule</a></div><div class="sidebar-section-children"><a href="module-section.html">section</a></div><div class="sidebar-section-children"><a href="module-sectionScroller.html">sectionScroller</a></div><div class="sidebar-section-children"><a href="module-settings.html">settings</a></div><div class="sidebar-section-children"><a href="module-userauth.html">userauth</a></div></div></div></div></div><div class="navbar-container" id="VuAckcnZhf"><nav class="navbar"><div class="navbar-left-items"><div class="external-link navbar-item"><a id="jellyfin-link" href="https://jellyfin.org/" target="_blank">Jellyfin</a></div><div class="external-link navbar-item"><a id="github-link" href="https://github.com/jellyfin/jellyfin-roku" target="_blank">GitHub</a></div><div class="external-link navbar-item"><a id="forum-link" href="https://forum.jellyfin.org/f-roku-development" target="_blank">Forum</a></div><div class="external-link navbar-item"><a id="matrix-link" href="https://matrix.to/#/#jellyfin-dev-roku:matrix.org" target="_blank">Matrix</a></div></div><div class="navbar-right-items"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div><nav></nav></nav></div><div class="toc-container"><div class="toc-content"><span class="bold">On this page</span><div id="eed4d2a0bfd64539bb9df78095dec881"></div></div></div><div class="body-wrapper"><div class="main-content"><div class="main-wrapper"><section id="source-page" class="source-page"><header><h1 id="title" class="has-anchor">components_video_VideoPlayerView.bs</h1></header><article><pre class="prettyprint source lang-js"><code>import "pkg:/source/utils/misc.bs"
+import "pkg:/source/utils/config.bs"
+
+sub init()
+    ' Hide the overhang on init to prevent showing 2 clocks
+    m.top.getScene().findNode("overhang").visible = false
+    m.currentItem = m.global.queueManager.callFunc("getCurrentItem")
+
+    m.top.id = m.currentItem.id
+    m.top.seekMode = "accurate"
+
+    m.playbackEnum = {
+        null: -10
+    }
+
+    ' Load meta data
+    m.LoadMetaDataTask = CreateObject("roSGNode", "LoadVideoContentTask")
+    m.LoadMetaDataTask.itemId = m.currentItem.id
+    m.LoadMetaDataTask.itemType = m.currentItem.type
+    m.LoadMetaDataTask.selectedAudioStreamIndex = m.currentItem.selectedAudioStreamIndex
+    m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
+    m.LoadMetaDataTask.control = "RUN"
+
+    m.chapterList = m.top.findNode("chapterList")
+    m.chapterMenu = m.top.findNode("chapterMenu")
+    m.chapterContent = m.top.findNode("chapterContent")
+    m.osd = m.top.findNode("osd")
+    m.osd.observeField("action", "onOSDAction")
+
+    m.playbackTimer = m.top.findNode("playbackTimer")
+    m.bufferCheckTimer = m.top.findNode("bufferCheckTimer")
+    m.top.observeField("state", "onState")
+    m.top.observeField("content", "onContentChange")
+    m.top.observeField("selectedSubtitle", "onSubtitleChange")
+
+    ' Custom Caption Function
+    m.top.observeField("allowCaptions", "onAllowCaptionsChange")
+
+    m.playbackTimer.observeField("fire", "ReportPlayback")
+    m.bufferPercentage = 0 ' Track whether content is being loaded
+    m.playReported = false
+    m.top.transcodeReasons = []
+    m.bufferCheckTimer.duration = 30
+
+    if m.global.session.user.settings["ui.design.hideclock"] = true
+        clockNode = findNodeBySubtype(m.top, "clock")
+        if clockNode[0] &lt;> invalid then clockNode[0].parent.removeChild(clockNode[0].node)
+    end if
+
+    'Play Next Episode button
+    m.nextEpisodeButton = m.top.findNode("nextEpisode")
+    m.nextEpisodeButton.text = tr("Next Episode")
+    m.nextEpisodeButton.setFocus(false)
+    m.nextupbuttonseconds = m.global.session.user.settings["playback.nextupbuttonseconds"].ToInt()
+
+    m.showNextEpisodeButtonAnimation = m.top.findNode("showNextEpisodeButton")
+    m.hideNextEpisodeButtonAnimation = m.top.findNode("hideNextEpisodeButton")
+
+    m.checkedForNextEpisode = false
+    m.getNextEpisodeTask = createObject("roSGNode", "GetNextEpisodeTask")
+    m.getNextEpisodeTask.observeField("nextEpisodeData", "onNextEpisodeDataLoaded")
+
+    m.top.retrievingBar.filledBarBlendColor = m.global.constants.colors.blue
+    m.top.bufferingBar.filledBarBlendColor = m.global.constants.colors.blue
+    m.top.trickPlayBar.filledBarBlendColor = m.global.constants.colors.blue
+end sub
+
+' handleChapterSkipAction: Handles user command to skip chapters in playing video
+'
+sub handleChapterSkipAction(action as string)
+    if not isValidAndNotEmpty(m.chapters) then return
+
+    currentChapter = getCurrentChapterIndex()
+
+    if action = "chapternext"
+        gotoChapter = currentChapter + 1
+        ' If there is no next chapter, exit
+        if gotoChapter > m.chapters.count() - 1 then return
+
+        m.top.seek = m.chapters[gotoChapter].StartPositionTicks / 10000000#
+        return
+    end if
+
+    if action = "chapterback"
+        gotoChapter = currentChapter - 1
+        ' If there is no previous chapter, restart current chapter
+        if gotoChapter &lt; 0 then gotoChapter = 0
+
+        m.top.seek = m.chapters[gotoChapter].StartPositionTicks / 10000000#
+        return
+    end if
+end sub
+
+' handleHideAction: Handles action to hide OSD menu
+'
+' @param {boolean} resume - controls whether or not to resume video playback when sub is called
+'
+sub handleHideAction(resume as boolean)
+    m.osd.visible = false
+    m.chapterList.visible = false
+    m.osd.showChapterList = false
+    m.chapterList.setFocus(false)
+    m.osd.hasFocus = false
+    m.osd.setFocus(false)
+    m.top.setFocus(true)
+    if resume
+        m.top.control = "resume"
+    end if
+end sub
+
+' handleChapterListAction: Handles action to show chapter list
+'
+sub handleChapterListAction()
+    m.chapterList.visible = m.osd.showChapterList
+
+    if not m.chapterList.visible then return
+
+    m.chapterMenu.jumpToItem = getCurrentChapterIndex()
+
+    m.osd.hasFocus = false
+    m.osd.setFocus(false)
+    m.chapterMenu.setFocus(true)
+end sub
+
+' getCurrentChapterIndex: Finds current chapter index
+'
+' @return {integer} indicating index of current chapter within chapter data or 0 if chapter lookup fails
+'
+function getCurrentChapterIndex() as integer
+    if not isValidAndNotEmpty(m.chapters) then return 0
+
+    ' Give a 15 second buffer to compensate for user expectation and roku video position inaccuracy
+    ' Web client uses 10 seconds, but this wasn't enough for Roku in testing
+    currentPosition = m.top.position + 15
+    currentChapter = 0
+
+    for i = m.chapters.count() - 1 to 0 step -1
+        if currentPosition >= (m.chapters[i].StartPositionTicks / 10000000#)
+            currentChapter = i
+            exit for
+        end if
+    end for
+
+    return currentChapter
+end function
+
+' handleVideoPlayPauseAction: Handles action to either play or pause the video content
+'
+sub handleVideoPlayPauseAction()
+    ' If video is paused, resume it
+    if m.top.state = "paused"
+        handleHideAction(true)
+        return
+    end if
+
+    ' Pause video
+    m.top.control = "pause"
+end sub
+
+' handleShowSubtitleMenuAction: Handles action to show subtitle selection menu
+'
+sub handleShowSubtitleMenuAction()
+    m.top.selectSubtitlePressed = true
+end sub
+
+' handleShowVideoInfoPopupAction: Handles action to show video info popup
+'
+sub handleShowVideoInfoPopupAction()
+    m.top.selectPlaybackInfoPressed = true
+end sub
+
+' onOSDAction: Process action events from OSD to their respective handlers
+'
+sub onOSDAction()
+    action = LCase(m.osd.action)
+
+    if action = "hide"
+        handleHideAction(false)
+        return
+    end if
+
+    if action = "play"
+        handleHideAction(true)
+        return
+    end if
+
+    if action = "chapterback" or action = "chapternext"
+        handleChapterSkipAction(action)
+        return
+    end if
+
+    if action = "chapterlist"
+        handleChapterListAction()
+        return
+    end if
+
+    if action = "videoplaypause"
+        handleVideoPlayPauseAction()
+        return
+    end if
+
+    if action = "showsubtitlemenu"
+        handleShowSubtitleMenuAction()
+        return
+    end if
+
+    if action = "showvideoinfopopup"
+        handleShowVideoInfoPopupAction()
+        return
+    end if
+end sub
+
+' Only setup caption items if captions are allowed
+sub onAllowCaptionsChange()
+    if not m.top.allowCaptions then return
+
+    m.captionGroup = m.top.findNode("captionGroup")
+    m.captionGroup.createchildren(9, "LayoutGroup")
+    m.captionTask = createObject("roSGNode", "captionTask")
+    m.captionTask.observeField("currentCaption", "updateCaption")
+    m.captionTask.observeField("useThis", "checkCaptionMode")
+    m.top.observeField("subtitleTrack", "loadCaption")
+    m.top.observeField("globalCaptionMode", "toggleCaption")
+
+    if m.global.session.user.settings["playback.subs.custom"]
+        m.top.suppressCaptions = true
+        toggleCaption()
+    else
+        m.top.suppressCaptions = false
+    end if
+end sub
+
+' Set caption url to server subtitle track
+sub loadCaption()
+    if m.top.suppressCaptions
+        m.captionTask.url = m.top.subtitleTrack
+    end if
+end sub
+
+' Toggles visibility of custom subtitles and sets captionTask's player state
+sub toggleCaption()
+    m.captionTask.playerState = m.top.state + m.top.globalCaptionMode
+    if LCase(m.top.globalCaptionMode) = "on"
+        m.captionTask.playerState = m.top.state + m.top.globalCaptionMode + "w"
+        m.captionGroup.visible = true
+    else
+        m.captionGroup.visible = false
+    end if
+end sub
+
+' Removes old subtitle lines and adds new subtitle lines
+sub updateCaption()
+    m.captionGroup.removeChildrenIndex(m.captionGroup.getChildCount(), 0)
+    m.captionGroup.appendChildren(m.captionTask.currentCaption)
+end sub
+
+' Event handler for when selectedSubtitle changes
+sub onSubtitleChange()
+    ' Save the current video position
+    m.global.queueManager.callFunc("setTopStartingPoint", int(m.top.position) * 10000000&amp;)
+
+    m.top.control = "stop"
+
+    m.LoadMetaDataTask.selectedSubtitleIndex = m.top.SelectedSubtitle
+    m.LoadMetaDataTask.itemId = m.currentItem.id
+    m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
+    m.LoadMetaDataTask.control = "RUN"
+end sub
+
+sub onPlaybackErrorDialogClosed(msg)
+    sourceNode = msg.getRoSGNode()
+    sourceNode.unobserveField("buttonSelected")
+    sourceNode.unobserveField("wasClosed")
+
+    m.global.sceneManager.callFunc("popScene")
+end sub
+
+sub onPlaybackErrorButtonSelected(msg)
+    sourceNode = msg.getRoSGNode()
+    sourceNode.close = true
+end sub
+
+sub showPlaybackErrorDialog(errorMessage as string)
+    dialog = createObject("roSGNode", "Dialog")
+    dialog.title = tr("Error During Playback")
+    dialog.buttons = [tr("OK")]
+    dialog.message = errorMessage
+    dialog.observeField("buttonSelected", "onPlaybackErrorButtonSelected")
+    dialog.observeField("wasClosed", "onPlaybackErrorDialogClosed")
+    m.top.getScene().dialog = dialog
+end sub
+
+sub onVideoContentLoaded()
+    m.LoadMetaDataTask.unobserveField("content")
+    m.LoadMetaDataTask.control = "STOP"
+
+    videoContent = m.LoadMetaDataTask.content
+    m.LoadMetaDataTask.content = []
+
+    stopLoadingSpinner()
+
+    ' If we have nothing to play, return to previous screen
+    if not isValid(videoContent)
+        showPlaybackErrorDialog(tr("There was an error retrieving the data for this item from the server."))
+        return
+    end if
+
+    if not isValid(videoContent[0])
+        showPlaybackErrorDialog(tr("There was an error retrieving the data for this item from the server."))
+        return
+    end if
+
+    m.top.content = videoContent[0].content
+    m.top.PlaySessionId = videoContent[0].PlaySessionId
+    m.top.videoId = videoContent[0].id
+    m.top.container = videoContent[0].container
+    m.top.mediaSourceId = videoContent[0].mediaSourceId
+    m.top.fullSubtitleData = videoContent[0].fullSubtitleData
+    m.top.audioIndex = videoContent[0].audioIndex
+    m.top.transcodeParams = videoContent[0].transcodeparams
+    m.chapters = videoContent[0].chapters
+
+    m.osd.itemTitleText = m.top.content.title
+
+    populateChapterMenu()
+
+    if m.LoadMetaDataTask.isIntro
+        ' Disable trackplay bar for intro videos
+        m.top.enableTrickPlay = false
+    else
+        ' Allow custom captions for non intro videos
+        m.top.allowCaptions = true
+    end if
+
+    if isValid(m.top.audioIndex)
+        m.top.audioTrack = (m.top.audioIndex + 1).toStr()
+    else
+        m.top.audioTrack = "2"
+    end if
+
+    m.top.setFocus(true)
+    m.top.control = "play"
+end sub
+
+' populateChapterMenu: ' Parse chapter data from API and appeand to chapter list menu
+'
+sub populateChapterMenu()
+    ' Clear any existing chapter list data
+    m.chapterContent.clear()
+
+    if not isValidAndNotEmpty(m.chapters)
+        chapterItem = CreateObject("roSGNode", "ContentNode")
+        chapterItem.title = tr("No Chapter Data Found")
+        chapterItem.playstart = m.playbackEnum.null
+        m.chapterContent.appendChild(chapterItem)
+        return
+    end if
+
+    for each chapter in m.chapters
+        chapterItem = CreateObject("roSGNode", "ContentNode")
+        chapterItem.title = chapter.Name
+        chapterItem.playstart = chapter.StartPositionTicks / 10000000#
+        m.chapterContent.appendChild(chapterItem)
+    end for
+end sub
+
+' Event handler for when video content field changes
+sub onContentChange()
+    if not isValid(m.top.content) then return
+
+    m.top.observeField("position", "onPositionChanged")
+end sub
+
+sub onNextEpisodeDataLoaded()
+    m.checkedForNextEpisode = true
+
+    m.top.observeField("position", "onPositionChanged")
+end sub
+
+'
+' Runs Next Episode button animation and sets focus to button
+sub showNextEpisodeButton()
+    if m.osd.visible then return
+    if m.top.content.contenttype &lt;> 4 then return ' only display when content is type "Episode"
+    if m.nextupbuttonseconds = 0 then return ' is the button disabled?
+
+    if m.nextEpisodeButton.opacity = 0 and m.global.session.user.configuration.EnableNextEpisodeAutoPlay
+        m.nextEpisodeButton.visible = true
+        m.showNextEpisodeButtonAnimation.control = "start"
+        m.nextEpisodeButton.setFocus(true)
+    end if
+end sub
+
+'
+'Update count down text
+sub updateCount()
+    nextEpisodeCountdown = Int(m.top.duration - m.top.position)
+    if nextEpisodeCountdown &lt; 0
+        nextEpisodeCountdown = 0
+    end if
+    m.nextEpisodeButton.text = tr("Next Episode") + " " + nextEpisodeCountdown.toStr()
+end sub
+
+'
+' Runs hide Next Episode button animation and sets focus back to video
+sub hideNextEpisodeButton()
+    m.hideNextEpisodeButtonAnimation.control = "start"
+    m.nextEpisodeButton.setFocus(false)
+    m.top.setFocus(true)
+end sub
+
+' Checks if we need to display the Next Episode button
+sub checkTimeToDisplayNextEpisode()
+    if m.top.content.contenttype &lt;> 4 then return ' only display when content is type "Episode"
+    if m.nextupbuttonseconds = 0 then return ' is the button disabled?
+
+    ' Don't show Next Episode button if trickPlayBar is visible
+    if m.top.trickPlayBar.visible then return
+
+    if isValid(m.top.duration) and isValid(m.top.position)
+        nextEpisodeCountdown = Int(m.top.duration - m.top.position)
+
+        if nextEpisodeCountdown &lt; 0 and m.nextEpisodeButton.opacity = 0.9
+            hideNextEpisodeButton()
+            return
+        else if nextEpisodeCountdown > 1 and int(m.top.position) >= (m.top.duration - m.nextupbuttonseconds - 1)
+            updateCount()
+            if m.nextEpisodeButton.opacity = 0
+                showNextEpisodeButton()
+            end if
+            return
+        end if
+    end if
+
+    if m.nextEpisodeButton.visible or m.nextEpisodeButton.hasFocus()
+        m.nextEpisodeButton.visible = false
+        m.nextEpisodeButton.setFocus(false)
+    end if
+end sub
+
+' When Video Player state changes
+sub onPositionChanged()
+
+    ' Pass video position data into OSD
+    m.osd.progressPercentage = m.top.position / m.top.duration
+    m.osd.positionTime = m.top.position
+    m.osd.remainingPositionTime = m.top.duration - m.top.position
+
+    if isValid(m.captionTask)
+        m.captionTask.currentPos = Int(m.top.position * 1000)
+    end if
+
+    ' Check if dialog is open
+    m.dialog = m.top.getScene().findNode("dialogBackground")
+    if not isValid(m.dialog)
+        ' Do not show Next Episode button for intro videos
+        if not m.LoadMetaDataTask.isIntro
+            checkTimeToDisplayNextEpisode()
+        end if
+    end if
+end sub
+
+'
+' When Video Player state changes
+sub onState(msg)
+    if isValid(m.captionTask)
+        m.captionTask.playerState = m.top.state + m.top.globalCaptionMode
+    end if
+
+    ' Pass video state into OSD
+    m.osd.playbackState = m.top.state
+
+    ' When buffering, start timer to monitor buffering process
+    if m.top.state = "buffering" and m.bufferCheckTimer &lt;> invalid
+
+        ' start timer
+        m.bufferCheckTimer.control = "start"
+        m.bufferCheckTimer.ObserveField("fire", "bufferCheck")
+    else if m.top.state = "error"
+        if not m.playReported and m.top.transcodeAvailable
+            m.top.retryWithTranscoding = true ' If playback was not reported, retry with transcoding
+        else
+            ' If an error was encountered, Display dialog
+            showPlaybackErrorDialog(tr("Error During Playback"))
+        end if
+
+        ' Stop playback and exit player
+        m.top.control = "stop"
+        m.top.backPressed = true
+    else if m.top.state = "playing"
+
+        ' Check if next episde is available
+        if isValid(m.top.showID)
+            if m.top.showID &lt;> "" and not m.checkedForNextEpisode and m.top.content.contenttype = 4
+                m.getNextEpisodeTask.showID = m.top.showID
+                m.getNextEpisodeTask.videoID = m.top.id
+                m.getNextEpisodeTask.control = "RUN"
+            end if
+        end if
+
+        if m.playReported = false
+            ReportPlayback("start")
+            m.playReported = true
+        else
+            ReportPlayback()
+        end if
+        m.playbackTimer.control = "start"
+    else if m.top.state = "paused"
+        m.playbackTimer.control = "stop"
+        ReportPlayback()
+    else if m.top.state = "stopped"
+        m.playbackTimer.control = "stop"
+        ReportPlayback("stop")
+        m.playReported = false
+    end if
+
+end sub
+
+'
+' Report playback to server
+sub ReportPlayback(state = "update" as string)
+
+    if m.top.position = invalid then return
+
+    params = {
+        "ItemId": m.top.id,
+        "PlaySessionId": m.top.PlaySessionId,
+        "PositionTicks": int(m.top.position) * 10000000&amp;, 'Ensure a LongInteger is used
+        "IsPaused": (m.top.state = "paused")
+    }
+    if m.top.content.live
+        params.append({
+            "MediaSourceId": m.top.transcodeParams.MediaSourceId,
+            "LiveStreamId": m.top.transcodeParams.LiveStreamId
+        })
+        m.bufferCheckTimer.duration = 30
+    end if
+
+    ' Report playstate via worker task
+    playstateTask = m.global.playstateTask
+    playstateTask.setFields({ status: state, params: params })
+    playstateTask.control = "RUN"
+end sub
+
+'
+' Check the the buffering has not hung
+sub bufferCheck(msg)
+
+    if m.top.state &lt;> "buffering"
+        ' If video is not buffering, stop timer
+        m.bufferCheckTimer.control = "stop"
+        m.bufferCheckTimer.unobserveField("fire")
+        return
+    end if
+    if m.top.bufferingStatus &lt;> invalid
+
+        ' Check that the buffering percentage is increasing
+        if m.top.bufferingStatus["percentage"] > m.bufferPercentage
+            m.bufferPercentage = m.top.bufferingStatus["percentage"]
+        else if m.top.content.live = true
+            m.top.callFunc("refresh")
+        else
+            ' If buffering has stopped Display dialog
+            showPlaybackErrorDialog(tr("There was an error retrieving the data for this item from the server."))
+
+            ' Stop playback and exit player
+            m.top.control = "stop"
+            m.top.backPressed = true
+        end if
+    end if
+
+end sub
+
+' stateAllowsOSD: Check if current video state allows showing the OSD
+'
+' @return {boolean} indicating if video state allows the OSD to show
+function stateAllowsOSD() as boolean
+    validStates = ["playing", "paused", "stopped"]
+    return inArray(validStates, m.top.state)
+end function
+
+function onKeyEvent(key as string, press as boolean) as boolean
+
+    ' Keypress handler while user is inside the chapter menu
+    if m.chapterMenu.hasFocus()
+        if not press then return false
+
+        if key = "OK"
+            focusedChapter = m.chapterMenu.itemFocused
+            selectedChapter = m.chapterMenu.content.getChild(focusedChapter)
+            seekTime = selectedChapter.playstart
+
+            ' Don't seek if user clicked on No Chapter Data
+            if seekTime = m.playbackEnum.null then return true
+
+            m.top.seek = seekTime
+            return true
+        end if
+
+        if key = "back" or key = "replay"
+            m.chapterList.visible = false
+            m.osd.showChapterList = false
+            m.chapterMenu.setFocus(false)
+            m.osd.hasFocus = true
+            m.osd.setFocus(true)
+            return true
+        end if
+
+        if key = "play"
+            handleVideoPlayPauseAction()
+        end if
+
+        return true
+    end if
+
+    if key = "OK" and m.nextEpisodeButton.hasfocus() and not m.top.trickPlayBar.visible
+        m.top.control = "stop"
+        m.top.state = "finished"
+        hideNextEpisodeButton()
+        return true
+    else
+        'Hide Next Episode Button
+        if m.nextEpisodeButton.opacity > 0 or m.nextEpisodeButton.hasFocus()
+            m.nextEpisodeButton.opacity = 0
+            m.nextEpisodeButton.setFocus(false)
+            m.top.setFocus(true)
+        end if
+    end if
+
+    if not press then return false
+
+    if key = "down" and not m.top.trickPlayBar.visible
+        if not m.LoadMetaDataTask.isIntro
+            ' Don't allow user to open menu prior to video loading
+            if not stateAllowsOSD() then return true
+
+            m.osd.visible = true
+            m.osd.hasFocus = true
+            m.osd.setFocus(true)
+            return true
+        end if
+
+    else if key = "up" and not m.top.trickPlayBar.visible
+        if not m.LoadMetaDataTask.isIntro
+            ' Don't allow user to open menu prior to video loading
+            if not stateAllowsOSD() then return true
+
+            m.osd.visible = true
+            m.osd.hasFocus = true
+            m.osd.setFocus(true)
+            return true
+        end if
+
+    else if key = "OK" and not m.top.trickPlayBar.visible
+        if not m.LoadMetaDataTask.isIntro
+            ' Don't allow user to open menu prior to video loading
+            if not stateAllowsOSD() then return true
+
+            ' Show OSD, but don't pause video
+            m.osd.visible = true
+            m.osd.hasFocus = true
+            m.osd.setFocus(true)
+            return true
+        end if
+
+        return false
+    end if
+
+    ' Disable OSD for intro videos
+    if not m.LoadMetaDataTask.isIntro
+        if key = "play" and not m.top.trickPlayBar.visible
+
+            ' Don't allow user to open menu prior to video loading
+            if not stateAllowsOSD() then return true
+
+            ' If video is paused, resume it and don't show OSD
+            if m.top.state = "paused"
+                m.top.control = "resume"
+                return true
+            end if
+
+            ' Pause video and show OSD
+            m.top.control = "pause"
+            m.osd.visible = true
+            m.osd.hasFocus = true
+            m.osd.setFocus(true)
+            return true
+        end if
+    end if
+
+    if key = "back"
+        m.top.control = "stop"
+    end if
+
+    return false
+end function
+</code></pre></article></section><footer class="footer" id="PeOAagUepe"><div class="wrapper"><span class="jsdoc-message">Automatically generated using <a href="https://github.com/jsdoc/jsdoc" target="_blank">JSDoc</a> and the <a href="https://github.com/ankitskvmdam/clean-jsdoc-theme" target="_blank">clean-jsdoc-theme</a>.</span></div></footer></div></div></div><div class="search-container" id="PkfLWpAbet" style="display:none"><div class="wrapper" id="iCxFxjkHbP"><button class="icon-button search-close-button" id="VjLlGakifb" aria-label="close search"><svg><use xlink:href="#close-icon"></use></svg></button><div class="search-box-c"><svg><use xlink:href="#search-icon"></use></svg> <input type="text" id="vpcKVYIppa" class="search-input" placeholder="Search..." autofocus></div><div class="search-result-c" id="fWwVHRuDuN"><span class="search-result-c-text">Type anything to view search result</span></div></div></div><div class="mobile-menu-icon-container"><button class="icon-button" id="mobile-menu" data-isopen="false" aria-label="menu"><svg><use xlink:href="#menu-icon"></use></svg></button></div><div id="mobile-sidebar" class="mobile-sidebar-container"><div class="mobile-sidebar-wrapper"><a href="/" class="sidebar-title sidebar-title-anchor">jellyfin-roku Code Documentation</a><div class="mobile-nav-links"><div class="external-link navbar-item"><a id="jellyfin-link-mobile" href="https://jellyfin.org/" target="_blank">Jellyfin</a></div><div class="external-link navbar-item"><a id="github-link-mobile" href="https://github.com/jellyfin/jellyfin-roku" target="_blank">GitHub</a></div><div class="external-link navbar-item"><a id="forum-link-mobile" href="https://forum.jellyfin.org/f-roku-development" target="_blank">Forum</a></div><div class="external-link navbar-item"><a id="matrix-link-mobile" href="https://matrix.to/#/#jellyfin-dev-roku:matrix.org" target="_blank">Matrix</a></div></div><div class="mobile-sidebar-items-c"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="module-AlbumData.html">AlbumData</a></div><div class="sidebar-section-children"><a href="module-AlbumGrid.html">AlbumGrid</a></div><div class="sidebar-section-children"><a href="module-AlbumTrackList.html">AlbumTrackList</a></div><div class="sidebar-section-children"><a href="module-AlbumView.html">AlbumView</a></div><div class="sidebar-section-children"><a href="module-Alpha.html">Alpha</a></div><div class="sidebar-section-children"><a href="module-ArtistView.html">ArtistView</a></div><div class="sidebar-section-children"><a href="module-AudioPlayer.html">AudioPlayer</a></div><div class="sidebar-section-children"><a href="module-AudioPlayerView.html">AudioPlayerView</a></div><div class="sidebar-section-children"><a href="module-AudioTrackListItem.html">AudioTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupHoriz.html">ButtonGroupHoriz</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupVert.html">ButtonGroupVert</a></div><div class="sidebar-section-children"><a href="module-ChannelData.html">ChannelData</a></div><div class="sidebar-section-children"><a href="module-Clock.html">Clock</a></div><div class="sidebar-section-children"><a href="module-CollectionData.html">CollectionData</a></div><div class="sidebar-section-children"><a href="module-ConfigData.html">ConfigData</a></div><div class="sidebar-section-children"><a href="module-ConfigItem.html">ConfigItem</a></div><div class="sidebar-section-children"><a href="module-ConfigList.html">ConfigList</a></div><div class="sidebar-section-children"><a href="module-ExtrasItem.html">ExtrasItem</a></div><div class="sidebar-section-children"><a href="module-ExtrasRowList.html">ExtrasRowList</a></div><div class="sidebar-section-children"><a href="module-FavoriteItemsTask.html">FavoriteItemsTask</a></div><div class="sidebar-section-children"><a href="module-FolderData.html">FolderData</a></div><div class="sidebar-section-children"><a href="module-GetFiltersTask.html">GetFiltersTask</a></div><div class="sidebar-section-children"><a href="module-GetNextEpisodeTask.html">GetNextEpisodeTask</a></div><div class="sidebar-section-children"><a href="module-GetPlaybackInfoTask.html">GetPlaybackInfoTask</a></div><div class="sidebar-section-children"><a href="module-GetShuffleEpisodesTask.html">GetShuffleEpisodesTask</a></div><div class="sidebar-section-children"><a href="module-GridItem.html">GridItem</a></div><div class="sidebar-section-children"><a href="module-GridItemSmall.html">GridItemSmall</a></div><div class="sidebar-section-children"><a href="module-Home.html">Home</a></div><div class="sidebar-section-children"><a href="module-HomeData.html">HomeData</a></div><div class="sidebar-section-children"><a href="module-HomeItem.html">HomeItem</a></div><div class="sidebar-section-children"><a href="module-HomeRowItemSizes.html">HomeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-HomeRows.html">HomeRows</a></div><div class="sidebar-section-children"><a href="module-IconButton.html">IconButton</a></div><div class="sidebar-section-children"><a href="module-Image.html">Image</a></div><div class="sidebar-section-children"><a href="module-ImageData.html">ImageData</a></div><div class="sidebar-section-children"><a href="module-IntegerKeyboard.html">IntegerKeyboard</a></div><div class="sidebar-section-children"><a href="module-ItemGrid.html">ItemGrid</a></div><div class="sidebar-section-children"><a href="module-ItemGridOptions.html">ItemGridOptions</a></div><div class="sidebar-section-children"><a href="module-Items.html">Items</a></div><div class="sidebar-section-children"><a href="module-JFButton.html">JFButton</a></div><div class="sidebar-section-children"><a href="module-JFButtons.html">JFButtons</a></div><div class="sidebar-section-children"><a href="module-JFGroup.html">JFGroup</a></div><div class="sidebar-section-children"><a href="module-JFMessageDialog.html">JFMessageDialog</a></div><div class="sidebar-section-children"><a href="module-JFOverhang.html">JFOverhang</a></div><div class="sidebar-section-children"><a href="module-JFScene.html">JFScene</a></div><div class="sidebar-section-children"><a href="module-JFScreen.html">JFScreen</a></div><div class="sidebar-section-children"><a href="module-JFServer.html">JFServer</a></div><div class="sidebar-section-children"><a href="module-JFVideo.html">JFVideo</a></div><div class="sidebar-section-children"><a href="module-ListPoster.html">ListPoster</a></div><div class="sidebar-section-children"><a href="module-LoadChannelsTask.html">LoadChannelsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask.html">LoadItemsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask2.html">LoadItemsTask2</a></div><div class="sidebar-section-children"><a href="module-LoadPhotoTask.html">LoadPhotoTask</a></div><div class="sidebar-section-children"><a href="module-LoadProgramDetailsTask.html">LoadProgramDetailsTask</a></div><div class="sidebar-section-children"><a href="module-LoadScreenSaverTimeoutTask.html">LoadScreenSaverTimeoutTask</a></div><div class="sidebar-section-children"><a href="module-LoadSheduleTask.html">LoadSheduleTask</a></div><div class="sidebar-section-children"><a href="module-LoadVideoContentTask.html">LoadVideoContentTask</a></div><div class="sidebar-section-children"><a href="module-LoginScene.html">LoginScene</a></div><div class="sidebar-section-children"><a href="module-Main.html">Main</a></div><div class="sidebar-section-children"><a href="module-MovieData.html">MovieData</a></div><div class="sidebar-section-children"><a href="module-MovieDetails.html">MovieDetails</a></div><div class="sidebar-section-children"><a href="module-MovieLibraryView.html">MovieLibraryView</a></div><div class="sidebar-section-children"><a href="module-MovieOptions.html">MovieOptions</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumData.html">MusicAlbumData</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumSongListData.html">MusicAlbumSongListData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistData.html">MusicArtistData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistGridItem.html">MusicArtistGridItem</a></div><div class="sidebar-section-children"><a href="module-MusicLibraryView.html">MusicLibraryView</a></div><div class="sidebar-section-children"><a href="module-MusicSongData.html">MusicSongData</a></div><div class="sidebar-section-children"><a href="module-OSD.html">OSD</a></div><div class="sidebar-section-children"><a href="module-OptionNode.html">OptionNode</a></div><div class="sidebar-section-children"><a href="module-OptionsButton.html">OptionsButton</a></div><div class="sidebar-section-children"><a href="module-OptionsData.html">OptionsData</a></div><div class="sidebar-section-children"><a href="module-OptionsSlider.html">OptionsSlider</a></div><div class="sidebar-section-children"><a href="module-OverviewDialog.html">OverviewDialog</a></div><div class="sidebar-section-children"><a href="module-PersonData.html">PersonData</a></div><div class="sidebar-section-children"><a href="module-PersonDetails.html">PersonDetails</a></div><div class="sidebar-section-children"><a href="module-PhotoData.html">PhotoData</a></div><div class="sidebar-section-children"><a href="module-PhotoDetails.html">PhotoDetails</a></div><div class="sidebar-section-children"><a href="module-PlaybackDialog.html">PlaybackDialog</a></div><div class="sidebar-section-children"><a href="module-PlayedCheckmark.html">PlayedCheckmark</a></div><div class="sidebar-section-children"><a href="module-PlaylistData.html">PlaylistData</a></div><div class="sidebar-section-children"><a href="module-PlaylistView.html">PlaylistView</a></div><div class="sidebar-section-children"><a href="module-PlaystateTask.html">PlaystateTask</a></div><div class="sidebar-section-children"><a href="module-PostTask.html">PostTask</a></div><div class="sidebar-section-children"><a href="module-ProgramDetails.html">ProgramDetails</a></div><div class="sidebar-section-children"><a href="module-PublicUserData.html">PublicUserData</a></div><div class="sidebar-section-children"><a href="module-QueueManager.html">QueueManager</a></div><div class="sidebar-section-children"><a href="module-QuickConnect.html">QuickConnect</a></div><div class="sidebar-section-children"><a href="module-QuickConnectDialog.html">QuickConnectDialog</a></div><div class="sidebar-section-children"><a href="module-RadioDialog.html">RadioDialog</a></div><div class="sidebar-section-children"><a href="module-RecordProgramTask.html">RecordProgramTask</a></div><div class="sidebar-section-children"><a href="module-SceneManager.html">SceneManager</a></div><div class="sidebar-section-children"><a href="module-ScheduleProgramData.html">ScheduleProgramData</a></div><div class="sidebar-section-children"><a href="module-SearchBox.html">SearchBox</a></div><div class="sidebar-section-children"><a href="module-SearchData.html">SearchData</a></div><div class="sidebar-section-children"><a href="module-SearchResults.html">SearchResults</a></div><div class="sidebar-section-children"><a href="module-SearchRow.html">SearchRow</a></div><div class="sidebar-section-children"><a href="module-SearchTask.html">SearchTask</a></div><div class="sidebar-section-children"><a href="module-SeriesData.html">SeriesData</a></div><div class="sidebar-section-children"><a href="module-ServerDiscoveryTask.html">ServerDiscoveryTask</a></div><div class="sidebar-section-children"><a href="module-SetServerScreen.html">SetServerScreen</a></div><div class="sidebar-section-children"><a href="module-ShowScenes.html">ShowScenes</a></div><div class="sidebar-section-children"><a href="module-SlideOutButton.html">SlideOutButton</a></div><div class="sidebar-section-children"><a href="module-SongItem.html">SongItem</a></div><div class="sidebar-section-children"><a href="module-Spinner.html">Spinner</a></div><div class="sidebar-section-children"><a href="module-StandardDialog.html">StandardDialog</a></div><div class="sidebar-section-children"><a href="module-Subtitles.html">Subtitles</a></div><div class="sidebar-section-children"><a href="module-TVEpisode.html">TVEpisode</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeData.html">TVEpisodeData</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRow.html">TVEpisodeRow</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRowWithOptions.html">TVEpisodeRowWithOptions</a></div><div class="sidebar-section-children"><a href="module-TVEpisodes.html">TVEpisodes</a></div><div class="sidebar-section-children"><a href="module-TVListDetails.html">TVListDetails</a></div><div class="sidebar-section-children"><a href="module-TVListOptions.html">TVListOptions</a></div><div class="sidebar-section-children"><a href="module-TVSeasonData.html">TVSeasonData</a></div><div class="sidebar-section-children"><a href="module-TVSeasonRow.html">TVSeasonRow</a></div><div class="sidebar-section-children"><a href="module-TVShowDescription.html">TVShowDescription</a></div><div class="sidebar-section-children"><a href="module-TVShowDetails.html">TVShowDetails</a></div><div class="sidebar-section-children"><a href="module-TextSizeTask.html">TextSizeTask</a></div><div class="sidebar-section-children"><a href="module-UserData.html">UserData</a></div><div class="sidebar-section-children"><a href="module-UserItem.html">UserItem</a></div><div class="sidebar-section-children"><a href="module-UserLibrary.html">UserLibrary</a></div><div class="sidebar-section-children"><a href="module-UserRow.html">UserRow</a></div><div class="sidebar-section-children"><a href="module-UserSelect.html">UserSelect</a></div><div class="sidebar-section-children"><a href="module-VideoData.html">VideoData</a></div><div class="sidebar-section-children"><a href="module-VideoPlayer.html">VideoPlayer</a></div><div class="sidebar-section-children"><a href="module-VideoPlayerView.html">VideoPlayerView</a></div><div class="sidebar-section-children"><a href="module-VideoTrackListItem.html">VideoTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ViewCreator.html">ViewCreator</a></div><div class="sidebar-section-children"><a href="module-WhatsNewDialog.html">WhatsNewDialog</a></div><div class="sidebar-section-children"><a href="module-baserequest.html">baserequest</a></div><div class="sidebar-section-children"><a href="module-captionTask.html">captionTask</a></div><div class="sidebar-section-children"><a href="module-conditional.html">conditional</a></div><div class="sidebar-section-children"><a href="module-config.html">config</a></div><div class="sidebar-section-children"><a href="module-deviceCapabilities.html">deviceCapabilities</a></div><div class="sidebar-section-children"><a href="module-globals.html">globals</a></div><div class="sidebar-section-children"><a href="module-homeRowItemSizes_.html">homeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-migrations.html">migrations</a></div><div class="sidebar-section-children"><a href="module-misc.html">misc</a></div><div class="sidebar-section-children"><a href="module-quickplay.html">quickplay</a></div><div class="sidebar-section-children"><a href="module-schedule.html">schedule</a></div><div class="sidebar-section-children"><a href="module-section.html">section</a></div><div class="sidebar-section-children"><a href="module-sectionScroller.html">sectionScroller</a></div><div class="sidebar-section-children"><a href="module-settings.html">settings</a></div><div class="sidebar-section-children"><a href="module-userauth.html">userauth</a></div></div></div><div class="mobile-navbar-actions"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div></div></div><script type="text/javascript" src="scripts/core.min.js"></script><script src="scripts/search.min.js" defer="defer"></script><script src="scripts/third-party/fuse.js" defer="defer"></script><script type="text/javascript">var tocbotInstance=tocbot.init({tocSelector:"#eed4d2a0bfd64539bb9df78095dec881",contentSelector:".main-content",headingSelector:"h1, h2, h3",hasInnerContainers:!0,scrollContainer:".main-content",headingsOffset:130,onClick:bringLinkToView})</script></body></html>

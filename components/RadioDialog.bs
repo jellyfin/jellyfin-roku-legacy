@@ -1,0 +1,138 @@
+import "pkg:/source/utils/misc.bs"
+
+sub init()
+    m.contentArea = m.top.findNode("contentArea")
+    m.radioOptions = m.top.findNode("radioOptions")
+    m.scrollBarColumn = []
+
+    m.top.observeField("contentData", "onContentDataChanged")
+    m.top.observeFieldScoped("buttonSelected", "onButtonSelected")
+
+    m.radioOptions.observeField("focusedChild", "onItemFocused")
+
+    m.top.id = "OKDialog"
+    m.top.height = 900
+end sub
+
+' Event handler for when user selected a button
+sub onButtonSelected()
+    if m.top.buttonSelected = 0
+        m.global.sceneManager.returnData = m.top.contentData.data[m.radioOptions.selectedIndex]
+    end if
+end sub
+
+' Event handler for when user's cursor highlights an option in the option list
+sub onItemFocused()
+    focusedChild = m.radioOptions.focusedChild
+    if not isValid(focusedChild) then return
+
+    moveScrollBar()
+
+    ' If the option list is scrollable, move the option list to the user's section
+    if m.scrollBarColumn.count() <> 0
+        hightedButtonTranslation = m.radioOptions.focusedChild.translation
+        m.radioOptions.translation = [m.radioOptions.translation[0], -1 * hightedButtonTranslation[1]]
+    end if
+
+end sub
+
+' Move the popup's scroll bar
+sub moveScrollBar()
+    ' If we haven't found the scrollbar column node yet, try to find it now
+    if m.scrollBarColumn.count() = 0
+        scrollBar = findNodeBySubtype(m.contentArea, "StdDlgScrollbar")
+        if scrollBar.count() = 0 or not isValid(scrollBar[0]) or not isValid(scrollBar[0].node)
+            return
+        end if
+
+        m.scrollBarColumn = findNodeBySubtype(scrollBar[0].node, "Poster")
+        if m.scrollBarColumn.count() = 0 or not isValid(m.scrollBarColumn[0]) or not isValid(m.scrollBarColumn[0].node)
+            return
+        end if
+
+        m.scrollBarThumb = findNodeBySubtype(m.scrollBarColumn[0].node, "Poster")
+        if m.scrollBarThumb.count() = 0 or not isValid(m.scrollBarThumb[0]) or not isValid(m.scrollBarThumb[0].node)
+            return
+        end if
+
+        m.scrollBarThumb[0].node.blendColor = "#444444"
+        ' If the user presses left then right, it's possible for us to lose focus. Ensure focus stays on the option list.
+        scrollBar[0].node.observeField("focusedChild", "onScrollBarFocus")
+
+        ' Hide the default scrollbar background
+        m.scrollBarColumn[0].node.uri = ""
+
+        ' Create a new scrollbar background so we can move the original nodes freely
+        scrollbarBackground = createObject("roSGNode", "Rectangle")
+        scrollbarBackground.color = "#101010"
+        scrollbarBackground.opacity = "0.3"
+        scrollbarBackground.width = "30"
+        scrollbarBackground.height = m.contentArea.clippingRect.height
+        scrollbarBackground.translation = [0, 0]
+        scrollBar[0].node.insertChild(scrollbarBackground, 0)
+
+        ' Determine the proper scroll amount for the scrollbar
+        m.scrollAmount = (m.contentArea.clippingRect.height - int(m.scrollBarThumb[0].node.height)) / m.radioOptions.getChildCount()
+        m.scrollAmount += m.scrollAmount / m.radioOptions.getChildCount()
+    end if
+
+    if not isvalid(m.radioOptions.focusedChild.id) then return
+
+    m.scrollBarColumn[0].node.translation = [0, val(m.radioOptions.focusedChild.id) * m.scrollAmount]
+end sub
+
+' If somehow the scrollbar gains focus, set focus back to the option list
+sub onScrollBarFocus()
+    m.radioOptions.setFocus(true)
+
+    ' Ensure scrollbar styles remain in an unfocused state
+    m.scrollBarThumb[0].node.blendColor = "#353535"
+end sub
+
+' Once user selected an item, move cursor down to OK button
+sub onItemSelected()
+    buttonArea = findNodeBySubtype(m.top, "StdDlgButtonArea")
+
+    if buttonArea.count() <> 0 and isValid(buttonArea[0]) and isValid(buttonArea[0].node)
+        buttonArea[0].node.setFocus(true)
+    end if
+end sub
+
+sub onContentDataChanged()
+    i = 0
+    for each item in m.top.contentData.data
+        cardItem = m.radioOptions.CreateChild("StdDlgActionCardItem")
+        cardItem.iconType = "radiobutton"
+        cardItem.id = i
+
+        if isValid(item.selected)
+            m.radioOptions.selectedIndex = i
+        end if
+
+        textLine = cardItem.CreateChild("SimpleLabel")
+        textLine.text = item.track.description
+        cardItem.observeField("selected", "onItemSelected")
+        i++
+    end for
+end sub
+
+function onKeyEvent(key as string, press as boolean) as boolean
+    if key = "right"
+        ' By default RIGHT from the option list selects the OK button
+        ' Instead, keep the user on the option list
+        return true
+    end if
+
+    if not press then return false
+
+    if key = "up"
+        ' By default UP from the OK button is the scrollbar
+        ' Instead, move the user to the option list
+        if not m.radioOptions.isinFocusChain()
+            m.radioOptions.setFocus(true)
+            return true
+        end if
+    end if
+
+    return false
+end function

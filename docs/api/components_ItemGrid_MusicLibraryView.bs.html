@@ -1,0 +1,799 @@
+<!DOCTYPE html><html lang="en" style="font-size:16px"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Source: components/ItemGrid/MusicLibraryView.bs</title><!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--><script src="scripts/third-party/hljs.js" defer="defer"></script><script src="scripts/third-party/hljs-line-num.js" defer="defer"></script><script src="scripts/third-party/popper.js" defer="defer"></script><script src="scripts/third-party/tippy.js" defer="defer"></script><script src="scripts/third-party/tocbot.min.js"></script><script>var baseURL="/",locationPathname="";baseURL=(baseURL=(baseURL="https://jellyfin.github.io/jellyfin-roku/").replace(/https?:\/\//i,"")).substr(baseURL.indexOf("/"))</script><link rel="stylesheet" href="styles/clean-jsdoc-theme.min.css"><svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none"><defs><symbol id="copy-icon" viewbox="0 0 488.3 488.3"><g><path d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z"/><path d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z"/></g></symbol><symbol id="search-icon" viewBox="0 0 512 512"><g><g><path d="M225.474,0C101.151,0,0,101.151,0,225.474c0,124.33,101.151,225.474,225.474,225.474    c124.33,0,225.474-101.144,225.474-225.474C450.948,101.151,349.804,0,225.474,0z M225.474,409.323    c-101.373,0-183.848-82.475-183.848-183.848S124.101,41.626,225.474,41.626s183.848,82.475,183.848,183.848    S326.847,409.323,225.474,409.323z"/></g></g><g><g><path d="M505.902,476.472L386.574,357.144c-8.131-8.131-21.299-8.131-29.43,0c-8.131,8.124-8.131,21.306,0,29.43l119.328,119.328    c4.065,4.065,9.387,6.098,14.715,6.098c5.321,0,10.649-2.033,14.715-6.098C514.033,497.778,514.033,484.596,505.902,476.472z"/></g></g></symbol><symbol id="font-size-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11.246 15H4.754l-2 5H.6L7 4h2l6.4 16h-2.154l-2-5zm-.8-2L8 6.885 5.554 13h4.892zM21 12.535V12h2v8h-2v-.535a4 4 0 1 1 0-6.93zM19 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></symbol><symbol id="add-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></symbol><symbol id="minus-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M5 11h14v2H5z"/></symbol><symbol id="dark-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/></symbol><symbol id="light-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/></symbol><symbol id="reset-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M18.537 19.567A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10c0 2.136-.67 4.116-1.81 5.74L17 12h3a8 8 0 1 0-2.46 5.772l.997 1.795z"/></symbol><symbol id="down-icon" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z"></path></symbol><symbol id="codepen-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M16.5 13.202L13 15.535v3.596L19.197 15 16.5 13.202zM14.697 12L12 10.202 9.303 12 12 13.798 14.697 12zM20 10.869L18.303 12 20 13.131V10.87zM19.197 9L13 4.869v3.596l3.5 2.333L19.197 9zM7.5 10.798L11 8.465V4.869L4.803 9 7.5 10.798zM4.803 15L11 19.131v-3.596l-3.5-2.333L4.803 15zM4 13.131L5.697 12 4 10.869v2.262zM2 9a1 1 0 0 1 .445-.832l9-6a1 1 0 0 1 1.11 0l9 6A1 1 0 0 1 22 9v6a1 1 0 0 1-.445.832l-9 6a1 1 0 0 1-1.11 0l-9-6A1 1 0 0 1 2 15V9z"/></symbol><symbol id="close-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></symbol><symbol id="menu-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></symbol></defs></svg></head><body data-theme="fallback-dark"><div class="sidebar-container"><div class="sidebar" id="sidebar"><a href="/" class="sidebar-title sidebar-title-anchor">jellyfin-roku Code Documentation</a><div class="sidebar-items-container"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="module-AlbumData.html">AlbumData</a></div><div class="sidebar-section-children"><a href="module-AlbumGrid.html">AlbumGrid</a></div><div class="sidebar-section-children"><a href="module-AlbumTrackList.html">AlbumTrackList</a></div><div class="sidebar-section-children"><a href="module-AlbumView.html">AlbumView</a></div><div class="sidebar-section-children"><a href="module-Alpha.html">Alpha</a></div><div class="sidebar-section-children"><a href="module-ArtistView.html">ArtistView</a></div><div class="sidebar-section-children"><a href="module-AudioPlayer.html">AudioPlayer</a></div><div class="sidebar-section-children"><a href="module-AudioPlayerView.html">AudioPlayerView</a></div><div class="sidebar-section-children"><a href="module-AudioTrackListItem.html">AudioTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupHoriz.html">ButtonGroupHoriz</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupVert.html">ButtonGroupVert</a></div><div class="sidebar-section-children"><a href="module-ChannelData.html">ChannelData</a></div><div class="sidebar-section-children"><a href="module-Clock.html">Clock</a></div><div class="sidebar-section-children"><a href="module-CollectionData.html">CollectionData</a></div><div class="sidebar-section-children"><a href="module-ConfigData.html">ConfigData</a></div><div class="sidebar-section-children"><a href="module-ConfigItem.html">ConfigItem</a></div><div class="sidebar-section-children"><a href="module-ConfigList.html">ConfigList</a></div><div class="sidebar-section-children"><a href="module-ExtrasItem.html">ExtrasItem</a></div><div class="sidebar-section-children"><a href="module-ExtrasRowList.html">ExtrasRowList</a></div><div class="sidebar-section-children"><a href="module-FavoriteItemsTask.html">FavoriteItemsTask</a></div><div class="sidebar-section-children"><a href="module-FolderData.html">FolderData</a></div><div class="sidebar-section-children"><a href="module-GetFiltersTask.html">GetFiltersTask</a></div><div class="sidebar-section-children"><a href="module-GetNextEpisodeTask.html">GetNextEpisodeTask</a></div><div class="sidebar-section-children"><a href="module-GetPlaybackInfoTask.html">GetPlaybackInfoTask</a></div><div class="sidebar-section-children"><a href="module-GetShuffleEpisodesTask.html">GetShuffleEpisodesTask</a></div><div class="sidebar-section-children"><a href="module-GridItem.html">GridItem</a></div><div class="sidebar-section-children"><a href="module-GridItemSmall.html">GridItemSmall</a></div><div class="sidebar-section-children"><a href="module-Home.html">Home</a></div><div class="sidebar-section-children"><a href="module-HomeData.html">HomeData</a></div><div class="sidebar-section-children"><a href="module-HomeItem.html">HomeItem</a></div><div class="sidebar-section-children"><a href="module-HomeRowItemSizes.html">HomeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-HomeRows.html">HomeRows</a></div><div class="sidebar-section-children"><a href="module-IconButton.html">IconButton</a></div><div class="sidebar-section-children"><a href="module-Image.html">Image</a></div><div class="sidebar-section-children"><a href="module-ImageData.html">ImageData</a></div><div class="sidebar-section-children"><a href="module-IntegerKeyboard.html">IntegerKeyboard</a></div><div class="sidebar-section-children"><a href="module-ItemGrid.html">ItemGrid</a></div><div class="sidebar-section-children"><a href="module-ItemGridOptions.html">ItemGridOptions</a></div><div class="sidebar-section-children"><a href="module-Items.html">Items</a></div><div class="sidebar-section-children"><a href="module-JFButton.html">JFButton</a></div><div class="sidebar-section-children"><a href="module-JFButtons.html">JFButtons</a></div><div class="sidebar-section-children"><a href="module-JFGroup.html">JFGroup</a></div><div class="sidebar-section-children"><a href="module-JFMessageDialog.html">JFMessageDialog</a></div><div class="sidebar-section-children"><a href="module-JFOverhang.html">JFOverhang</a></div><div class="sidebar-section-children"><a href="module-JFScene.html">JFScene</a></div><div class="sidebar-section-children"><a href="module-JFScreen.html">JFScreen</a></div><div class="sidebar-section-children"><a href="module-JFServer.html">JFServer</a></div><div class="sidebar-section-children"><a href="module-JFVideo.html">JFVideo</a></div><div class="sidebar-section-children"><a href="module-ListPoster.html">ListPoster</a></div><div class="sidebar-section-children"><a href="module-LoadChannelsTask.html">LoadChannelsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask.html">LoadItemsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask2.html">LoadItemsTask2</a></div><div class="sidebar-section-children"><a href="module-LoadPhotoTask.html">LoadPhotoTask</a></div><div class="sidebar-section-children"><a href="module-LoadProgramDetailsTask.html">LoadProgramDetailsTask</a></div><div class="sidebar-section-children"><a href="module-LoadScreenSaverTimeoutTask.html">LoadScreenSaverTimeoutTask</a></div><div class="sidebar-section-children"><a href="module-LoadSheduleTask.html">LoadSheduleTask</a></div><div class="sidebar-section-children"><a href="module-LoadVideoContentTask.html">LoadVideoContentTask</a></div><div class="sidebar-section-children"><a href="module-LoginScene.html">LoginScene</a></div><div class="sidebar-section-children"><a href="module-Main.html">Main</a></div><div class="sidebar-section-children"><a href="module-MovieData.html">MovieData</a></div><div class="sidebar-section-children"><a href="module-MovieDetails.html">MovieDetails</a></div><div class="sidebar-section-children"><a href="module-MovieLibraryView.html">MovieLibraryView</a></div><div class="sidebar-section-children"><a href="module-MovieOptions.html">MovieOptions</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumData.html">MusicAlbumData</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumSongListData.html">MusicAlbumSongListData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistData.html">MusicArtistData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistGridItem.html">MusicArtistGridItem</a></div><div class="sidebar-section-children"><a href="module-MusicLibraryView.html">MusicLibraryView</a></div><div class="sidebar-section-children"><a href="module-MusicSongData.html">MusicSongData</a></div><div class="sidebar-section-children"><a href="module-OSD.html">OSD</a></div><div class="sidebar-section-children"><a href="module-OptionNode.html">OptionNode</a></div><div class="sidebar-section-children"><a href="module-OptionsButton.html">OptionsButton</a></div><div class="sidebar-section-children"><a href="module-OptionsData.html">OptionsData</a></div><div class="sidebar-section-children"><a href="module-OptionsSlider.html">OptionsSlider</a></div><div class="sidebar-section-children"><a href="module-OverviewDialog.html">OverviewDialog</a></div><div class="sidebar-section-children"><a href="module-PersonData.html">PersonData</a></div><div class="sidebar-section-children"><a href="module-PersonDetails.html">PersonDetails</a></div><div class="sidebar-section-children"><a href="module-PhotoData.html">PhotoData</a></div><div class="sidebar-section-children"><a href="module-PhotoDetails.html">PhotoDetails</a></div><div class="sidebar-section-children"><a href="module-PlaybackDialog.html">PlaybackDialog</a></div><div class="sidebar-section-children"><a href="module-PlayedCheckmark.html">PlayedCheckmark</a></div><div class="sidebar-section-children"><a href="module-PlaylistData.html">PlaylistData</a></div><div class="sidebar-section-children"><a href="module-PlaylistView.html">PlaylistView</a></div><div class="sidebar-section-children"><a href="module-PlaystateTask.html">PlaystateTask</a></div><div class="sidebar-section-children"><a href="module-PostTask.html">PostTask</a></div><div class="sidebar-section-children"><a href="module-ProgramDetails.html">ProgramDetails</a></div><div class="sidebar-section-children"><a href="module-PublicUserData.html">PublicUserData</a></div><div class="sidebar-section-children"><a href="module-QueueManager.html">QueueManager</a></div><div class="sidebar-section-children"><a href="module-QuickConnect.html">QuickConnect</a></div><div class="sidebar-section-children"><a href="module-QuickConnectDialog.html">QuickConnectDialog</a></div><div class="sidebar-section-children"><a href="module-RadioDialog.html">RadioDialog</a></div><div class="sidebar-section-children"><a href="module-RecordProgramTask.html">RecordProgramTask</a></div><div class="sidebar-section-children"><a href="module-SceneManager.html">SceneManager</a></div><div class="sidebar-section-children"><a href="module-ScheduleProgramData.html">ScheduleProgramData</a></div><div class="sidebar-section-children"><a href="module-SearchBox.html">SearchBox</a></div><div class="sidebar-section-children"><a href="module-SearchData.html">SearchData</a></div><div class="sidebar-section-children"><a href="module-SearchResults.html">SearchResults</a></div><div class="sidebar-section-children"><a href="module-SearchRow.html">SearchRow</a></div><div class="sidebar-section-children"><a href="module-SearchTask.html">SearchTask</a></div><div class="sidebar-section-children"><a href="module-SeriesData.html">SeriesData</a></div><div class="sidebar-section-children"><a href="module-ServerDiscoveryTask.html">ServerDiscoveryTask</a></div><div class="sidebar-section-children"><a href="module-SetServerScreen.html">SetServerScreen</a></div><div class="sidebar-section-children"><a href="module-ShowScenes.html">ShowScenes</a></div><div class="sidebar-section-children"><a href="module-SlideOutButton.html">SlideOutButton</a></div><div class="sidebar-section-children"><a href="module-SongItem.html">SongItem</a></div><div class="sidebar-section-children"><a href="module-Spinner.html">Spinner</a></div><div class="sidebar-section-children"><a href="module-StandardDialog.html">StandardDialog</a></div><div class="sidebar-section-children"><a href="module-Subtitles.html">Subtitles</a></div><div class="sidebar-section-children"><a href="module-TVEpisode.html">TVEpisode</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeData.html">TVEpisodeData</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRow.html">TVEpisodeRow</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRowWithOptions.html">TVEpisodeRowWithOptions</a></div><div class="sidebar-section-children"><a href="module-TVEpisodes.html">TVEpisodes</a></div><div class="sidebar-section-children"><a href="module-TVListDetails.html">TVListDetails</a></div><div class="sidebar-section-children"><a href="module-TVListOptions.html">TVListOptions</a></div><div class="sidebar-section-children"><a href="module-TVSeasonData.html">TVSeasonData</a></div><div class="sidebar-section-children"><a href="module-TVSeasonRow.html">TVSeasonRow</a></div><div class="sidebar-section-children"><a href="module-TVShowDescription.html">TVShowDescription</a></div><div class="sidebar-section-children"><a href="module-TVShowDetails.html">TVShowDetails</a></div><div class="sidebar-section-children"><a href="module-TextSizeTask.html">TextSizeTask</a></div><div class="sidebar-section-children"><a href="module-UserData.html">UserData</a></div><div class="sidebar-section-children"><a href="module-UserItem.html">UserItem</a></div><div class="sidebar-section-children"><a href="module-UserLibrary.html">UserLibrary</a></div><div class="sidebar-section-children"><a href="module-UserRow.html">UserRow</a></div><div class="sidebar-section-children"><a href="module-UserSelect.html">UserSelect</a></div><div class="sidebar-section-children"><a href="module-VideoData.html">VideoData</a></div><div class="sidebar-section-children"><a href="module-VideoPlayer.html">VideoPlayer</a></div><div class="sidebar-section-children"><a href="module-VideoPlayerView.html">VideoPlayerView</a></div><div class="sidebar-section-children"><a href="module-VideoTrackListItem.html">VideoTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ViewCreator.html">ViewCreator</a></div><div class="sidebar-section-children"><a href="module-WhatsNewDialog.html">WhatsNewDialog</a></div><div class="sidebar-section-children"><a href="module-baserequest.html">baserequest</a></div><div class="sidebar-section-children"><a href="module-captionTask.html">captionTask</a></div><div class="sidebar-section-children"><a href="module-conditional.html">conditional</a></div><div class="sidebar-section-children"><a href="module-config.html">config</a></div><div class="sidebar-section-children"><a href="module-deviceCapabilities.html">deviceCapabilities</a></div><div class="sidebar-section-children"><a href="module-globals.html">globals</a></div><div class="sidebar-section-children"><a href="module-homeRowItemSizes_.html">homeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-migrations.html">migrations</a></div><div class="sidebar-section-children"><a href="module-misc.html">misc</a></div><div class="sidebar-section-children"><a href="module-quickplay.html">quickplay</a></div><div class="sidebar-section-children"><a href="module-schedule.html">schedule</a></div><div class="sidebar-section-children"><a href="module-section.html">section</a></div><div class="sidebar-section-children"><a href="module-sectionScroller.html">sectionScroller</a></div><div class="sidebar-section-children"><a href="module-settings.html">settings</a></div><div class="sidebar-section-children"><a href="module-userauth.html">userauth</a></div></div></div></div></div><div class="navbar-container" id="VuAckcnZhf"><nav class="navbar"><div class="navbar-left-items"><div class="external-link navbar-item"><a id="jellyfin-link" href="https://jellyfin.org/" target="_blank">Jellyfin</a></div><div class="external-link navbar-item"><a id="github-link" href="https://github.com/jellyfin/jellyfin-roku" target="_blank">GitHub</a></div><div class="external-link navbar-item"><a id="forum-link" href="https://forum.jellyfin.org/f-roku-development" target="_blank">Forum</a></div><div class="external-link navbar-item"><a id="matrix-link" href="https://matrix.to/#/#jellyfin-dev-roku:matrix.org" target="_blank">Matrix</a></div></div><div class="navbar-right-items"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div><nav></nav></nav></div><div class="toc-container"><div class="toc-content"><span class="bold">On this page</span><div id="eed4d2a0bfd64539bb9df78095dec881"></div></div></div><div class="body-wrapper"><div class="main-content"><div class="main-wrapper"><section id="source-page" class="source-page"><header><h1 id="title" class="has-anchor">components_ItemGrid_MusicLibraryView.bs</h1></header><article><pre class="prettyprint source lang-js"><code>import "pkg:/source/utils/misc.bs"
+import "pkg:/source/utils/config.bs"
+import "pkg:/source/api/baserequest.bs"
+import "pkg:/source/api/Image.bs"
+import "pkg:/source/utils/deviceCapabilities.bs"
+
+sub setupNodes()
+    m.options = m.top.findNode("options")
+    m.itemGrid = m.top.findNode("itemGrid")
+    m.voiceBox = m.top.findNode("voiceBox")
+    m.backdrop = m.top.findNode("backdrop")
+    m.newBackdrop = m.top.findNode("backdropTransition")
+    m.emptyText = m.top.findNode("emptyText")
+    m.selectedArtistName = m.top.findNode("selectedArtistName")
+    m.selectedArtistSongCount = m.top.findNode("selectedArtistSongCount")
+    m.selectedArtistAlbumCount = m.top.findNode("selectedArtistAlbumCount")
+    m.selectedArtistGenres = m.top.findNode("selectedArtistGenres")
+    m.artistLogo = m.top.findNode("artistLogo")
+    m.swapAnimation = m.top.findNode("backroundSwapAnimation")
+    m.Alpha = m.top.findNode("AlphaMenu")
+    m.AlphaSelected = m.top.findNode("AlphaSelected")
+    m.micButton = m.top.findNode("micButton")
+    m.micButtonText = m.top.findNode("micButtonText")
+    m.overhang = m.top.getScene().findNode("overhang")
+    m.genreList = m.top.findNode("genrelist")
+end sub
+
+sub init()
+    setupNodes()
+
+    m.overhang.isVisible = false
+
+    m.showItemCount = m.global.session.user.settings["itemgrid.showItemCount"]
+
+    m.swapAnimation.observeField("state", "swapDone")
+
+    m.loadedRows = 0
+    m.loadedItems = 0
+
+    m.data = CreateObject("roSGNode", "ContentNode")
+
+    m.itemGrid.content = m.data
+
+    m.genreData = CreateObject("roSGNode", "ContentNode")
+    m.genreList.observeField("itemSelected", "onGenreItemSelected")
+    m.genreList.observeField("itemFocused", "onGenreItemFocused")
+    m.genreList.content = m.genreData
+
+    m.itemGrid.observeField("itemFocused", "onItemFocused")
+    m.itemGrid.observeField("itemSelected", "onItemSelected")
+    m.itemGrid.observeField("alphaSelected", "onItemalphaSelected")
+
+    'Voice filter setup
+    m.voiceBox.voiceEnabled = true
+    m.voiceBox.active = true
+    m.voiceBox.observeField("text", "onvoiceFilter")
+    'set voice help text
+    m.voiceBox.hintText = tr("Use voice remote to search")
+
+    'backdrop
+    m.newBackdrop.observeField("loadStatus", "newBGLoaded")
+
+    'Background Image Queued for loading
+    m.queuedBGUri = ""
+
+    'Item sort - maybe load defaults from user prefs?
+    m.sortField = "SortName"
+    m.sortAscending = true
+
+    m.filter = "All"
+    m.favorite = "Favorite"
+
+    m.loadItemsTask = createObject("roSGNode", "LoadItemsTask2")
+    m.loadLogoTask = createObject("roSGNode", "LoadItemsTask2")
+
+    'set inital counts for overhang before content is loaded.
+    m.loadItemsTask.totalRecordCount = 0
+
+    'Get reset folder setting
+    m.resetGrid = m.global.session.user.settings["itemgrid.reset"]
+
+    'Hide voice search if device does not have voice remote
+    if m.global.device.hasVoiceRemote = false
+        m.micButton.visible = false
+        m.micButtonText.visible = false
+    end if
+end sub
+
+sub OnScreenHidden()
+    if not m.overhang.isVisible
+        m.overhang.disableMoveAnimation = true
+        m.overhang.isVisible = true
+        m.overhang.disableMoveAnimation = false
+    end if
+end sub
+
+sub OnScreenShown()
+    m.overhang.isVisible = false
+
+    if m.top.lastFocus &lt;> invalid
+        m.top.lastFocus.setFocus(true)
+    else
+        m.top.setFocus(true)
+    end if
+end sub
+
+'
+'Load initial set of Data
+sub loadInitialItems()
+    m.loadItemsTask.control = "stop"
+    startLoadingSpinner(false)
+
+    if LCase(m.top.parentItem.json.Type) = "collectionfolder"
+        m.top.HomeLibraryItem = m.top.parentItem.Id
+    end if
+
+    if m.top.parentItem.backdropUrl &lt;> invalid
+        SetBackground(m.top.parentItem.backdropUrl)
+    else
+        SetBackground("")
+    end if
+
+    m.sortField = m.global.session.user.settings["display." + m.top.parentItem.Id + ".sortField"]
+    m.sortAscending = m.global.session.user.settings["display." + m.top.parentItem.Id + ".sortAscending"]
+    m.filter = m.global.session.user.settings["display." + m.top.parentItem.Id + ".filter"]
+    m.view = m.global.session.user.settings["display." + m.top.parentItem.Id + ".landing"]
+
+    if not isValid(m.sortField) then m.sortField = "SortName"
+    if not isValid(m.filter) then m.filter = "All"
+    if not isValid(m.view) then m.view = "ArtistsPresentation"
+    if not isValid(m.sortAscending) then m.sortAscending = true
+
+    m.top.showItemTitles = m.global.session.user.settings["itemgrid.gridTitles"]
+
+    if LCase(m.top.parentItem.json.type) = "musicgenre"
+        m.itemGrid.translation = "[96, 60]"
+        m.loadItemsTask.itemType = "MusicAlbum"
+        m.loadItemsTask.recursive = true
+        m.loadItemsTask.genreIds = m.top.parentItem.id
+        m.loadItemsTask.itemId = m.top.parentItem.parentFolder
+    else if LCase(m.view) = "artistspresentation" or LCase(m.options.view) = "artistspresentation"
+        m.loadItemsTask.genreIds = ""
+        m.top.showItemTitles = "hidealways"
+    else if LCase(m.view) = "artistsgrid" or LCase(m.options.view) = "artistsgrid"
+        m.loadItemsTask.genreIds = ""
+    else if LCase(m.view) = "albumartistsgrid" or LCase(m.options.view) = "albumartistsgrid"
+        m.loadItemsTask.genreIds = ""
+    else if LCase(m.view) = "albumartistspresentation" or LCase(m.options.view) = "albumartistspresentation"
+        m.loadItemsTask.genreIds = ""
+        m.top.showItemTitles = "hidealways"
+    else
+        m.loadItemsTask.itemId = m.top.parentItem.Id
+    end if
+
+    m.loadItemsTask.nameStartsWith = m.top.alphaSelected
+    m.loadItemsTask.searchTerm = m.voiceBox.text
+    m.emptyText.visible = false
+    m.loadItemsTask.sortField = m.sortField
+    m.loadItemsTask.sortAscending = m.sortAscending
+    m.loadItemsTask.filter = m.filter
+    m.loadItemsTask.startIndex = 0
+
+    ' Load Item Types
+    if getCollectionType() = "music"
+        m.loadItemsTask.itemType = "MusicArtist"
+        m.loadItemsTask.itemId = m.top.parentItem.Id
+    end if
+
+    ' By default we load Artists
+    m.loadItemsTask.view = "Artists"
+    m.itemGrid.translation = "[96, 420]"
+    m.itemGrid.numRows = "3"
+
+    if LCase(m.options.view) = "albums" or LCase(m.view) = "albums"
+        m.itemGrid.translation = "[96, 60]"
+        m.itemGrid.numRows = "4"
+        m.loadItemsTask.itemType = "MusicAlbum"
+        m.top.imageDisplayMode = "scaleToFit"
+    else if LCase(m.options.view) = "artistsgrid" or LCase(m.view) = "artistsgrid"
+        m.itemGrid.translation = "[96, 60]"
+        m.itemGrid.numRows = "4"
+    else if LCase(m.options.view) = "albumartistsgrid" or LCase(m.view) = "albumartistsgrid"
+        m.loadItemsTask.itemType = "AlbumArtists"
+        m.itemGrid.translation = "[96, 60]"
+        m.itemGrid.numRows = "4"
+    else if LCase(m.options.view) = "albumartistspresentation" or LCase(m.view) = "albumartistspresentation"
+        m.loadItemsTask.itemType = "AlbumArtists"
+    else if LCase(m.options.view) = "genres" or LCase(m.view) = "genres"
+        m.loadItemsTask.itemType = ""
+        m.loadItemsTask.recursive = true
+        m.loadItemsTask.view = "Genres"
+        m.artistLogo.visible = false
+        m.selectedArtistName.visible = false
+    end if
+
+    if LCase(m.top.parentItem.json.type) = "musicgenre"
+        m.itemGrid.translation = "[96, 60]"
+        m.itemGrid.numRows = "4"
+        m.artistLogo.visible = false
+        m.selectedArtistName.visible = false
+    end if
+
+    m.loadItemsTask.observeField("content", "ItemDataLoaded")
+    m.loadItemsTask.control = "RUN"
+    SetUpOptions()
+end sub
+
+' Set Music view, sort, and filter options
+sub setMusicOptions(options)
+
+    options.views = [
+        { "Title": tr("Artists (Presentation)"), "Name": "ArtistsPresentation" },
+        { "Title": tr("Artists (Grid)"), "Name": "ArtistsGrid" },
+        { "Title": tr("Album Artists (Presentation)"), "Name": "AlbumArtistsPresentation" },
+        { "Title": tr("Album Artists (Grid)"), "Name": "AlbumArtistsGrid" },
+        { "Title": tr("Albums"), "Name": "Albums" },
+        { "Title": tr("Genres"), "Name": "Genres" }
+    ]
+
+    if LCase(m.top.parentItem.json.type) = "musicgenre"
+        options.views = [
+            { "Title": tr("Albums"), "Name": "Albums" }
+        ]
+    end if
+
+    options.sort = [
+        { "Title": tr("TITLE"), "Name": "SortName" },
+        { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
+        { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+    ]
+
+    options.filter = [
+        { "Title": tr("All"), "Name": "All" },
+        { "Title": tr("Favorites"), "Name": "Favorites" }
+    ]
+
+    if LCase(m.options.view) = "genres" or LCase(m.view) = "genres"
+        options.sort = [
+            { "Title": tr("TITLE"), "Name": "SortName" },
+        ]
+        options.filter = []
+    end if
+
+    if LCase(m.options.view) = "albums" or LCase(m.view) = "albums"
+        options.sort = [
+            { "Title": tr("TITLE"), "Name": "SortName" },
+            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+        ]
+    end if
+end sub
+
+' Return parent collection type
+function getCollectionType() as string
+    if m.top.parentItem.collectionType = invalid
+        return LCase(m.top.parentItem.Type)
+    else
+        return LCase(m.top.parentItem.CollectionType)
+    end if
+end function
+
+' Search string array for search value. Return if it's found
+function inStringArray(array, searchValue) as boolean
+    for each item in array
+        if lcase(item) = lcase(searchValue) then return true
+    end for
+    return false
+end function
+
+' Data to display when options button selected
+sub SetUpOptions()
+    options = {}
+    options.filter = []
+    options.favorite = []
+
+    setMusicOptions(options)
+
+    ' Set selected view option
+    for each o in options.views
+        if LCase(o.Name) = LCase(m.view)
+            o.Selected = true
+            o.Ascending = m.sortAscending
+            m.options.view = o.Name
+        end if
+    end for
+
+    ' Set selected sort option
+    for each o in options.sort
+        if LCase(o.Name) = LCase(m.sortField)
+            o.Selected = true
+            o.Ascending = m.sortAscending
+            m.options.sortField = o.Name
+        end if
+    end for
+
+    ' Set selected filter option
+    for each o in options.filter
+        if LCase(o.Name) = LCase(m.filter)
+            o.Selected = true
+            m.options.filter = o.Name
+        end if
+    end for
+
+    m.options.options = options
+end sub
+
+'
+' Logo Image Loaded Event Handler
+sub LogoImageLoaded(msg)
+    data = msg.GetData()
+    m.loadLogoTask.unobserveField("content")
+    m.loadLogoTask.content = []
+
+    if data.Count() > 0
+        m.artistLogo.uri = data[0]
+        m.artistLogo.visible = true
+    else
+        m.selectedArtistName.visible = true
+    end if
+end sub
+
+'
+'Handle loaded data, and add to Grid
+sub ItemDataLoaded(msg)
+    stopLoadingSpinner()
+    m.top.alphaActive = false
+    itemData = msg.GetData()
+    m.loadItemsTask.unobserveField("content")
+    m.loadItemsTask.content = []
+
+    if itemData = invalid
+        m.Loading = false
+        return
+    end if
+
+    if LCase(m.loadItemsTask.view) = "genres"
+        for each item in itemData
+            m.genreData.appendChild(item)
+        end for
+
+        m.itemGrid.opacity = "0"
+        m.genreList.opacity = "1"
+
+        m.itemGrid.setFocus(false)
+        m.genreList.setFocus(true)
+
+        m.loadedItems = m.genreList.content.getChildCount()
+        m.loadedRows = m.loadedItems / m.genreList.numColumns
+
+        m.loading = false
+        return
+    end if
+
+    m.itemGrid.opacity = "1"
+    m.genreList.opacity = "0"
+
+    m.itemGrid.setFocus(true)
+    m.genreList.setFocus(false)
+
+    for each item in itemData
+        m.data.appendChild(item)
+    end for
+
+    'Update the stored counts
+    m.loadedItems = m.itemGrid.content.getChildCount()
+    m.loadedRows = m.loadedItems / m.itemGrid.numColumns
+    m.Loading = false
+    'If there are no items to display, show message
+    if m.loadedItems = 0
+        m.emptyText.text = tr("NO_ITEMS").Replace("%1", m.top.parentItem.Type)
+        m.emptyText.visible = true
+    end if
+end sub
+
+'
+'Set Selected Artist Name
+sub SetName(artistName as string)
+    m.selectedArtistName.text = artistName
+end sub
+
+'
+'Set Selected Artist Song Count
+sub SetSongCount(totalCount)
+    appendText = " " + tr("Songs")
+    if totalCount = 1
+        appendText = " " + tr("Song")
+    end if
+
+    m.selectedArtistSongCount.text = totalCount.tostr() + appendText
+end sub
+'
+'Set Selected Artist Album Count
+sub SetAlbumCount(totalCount)
+    appendText = " " + tr("Albums")
+    if totalCount = 1
+        appendText = " " + tr("Album")
+    end if
+
+    m.selectedArtistAlbumCount.text = totalCount.tostr() + appendText
+end sub
+
+'
+'Set Selected Artist Genres
+sub SetGenres(artistGenres)
+    m.selectedArtistGenres.text = artistGenres.join(", ")
+end sub
+
+'
+'Set Background Image
+sub SetBackground(backgroundUri as string)
+    if backgroundUri = ""
+        m.backdrop.opacity = 0
+    end if
+
+    'If a new image is being loaded, or transitioned to, store URL to load next
+    if LCase(m.swapAnimation.state) &lt;> "stopped" or LCase(m.newBackdrop.loadStatus) = "loading"
+        m.queuedBGUri = backgroundUri
+        return
+    end if
+
+    m.newBackdrop.uri = backgroundUri
+end sub
+
+'
+'Handle new item being focused
+sub onItemFocused()
+    focusedRow = m.itemGrid.currFocusRow
+
+    itemInt = m.itemGrid.itemFocused
+
+    ' If no selected item, set background to parent backdrop
+    if itemInt = -1
+        return
+    end if
+
+    m.artistLogo.visible = false
+    m.selectedArtistName.visible = false
+    m.selectedArtistGenres.visible = false
+    m.selectedArtistSongCount.visible = false
+    m.selectedArtistAlbumCount.visible = false
+
+    ' Load more data if focus is within last 5 rows, and there are more items to load
+    if focusedRow >= m.loadedRows - 5 and m.loadeditems &lt; m.loadItemsTask.totalRecordCount
+        loadMoreData()
+    end if
+
+    m.selectedFavoriteItem = getItemFocused()
+
+    if LCase(m.options.view) = "albums" or LCase(m.view) = "albums" or LCase(m.top.parentItem.json.type) = "musicgenre"
+        return
+    end if
+
+    if LCase(m.options.view) = "artistsgrid" or LCase(m.view) = "artistsgrid"
+        return
+    end if
+
+    if LCase(m.options.view) = "albumartistsgrid" or LCase(m.view) = "albumartistsgrid"
+        return
+    end if
+
+    if not m.selectedArtistGenres.visible
+        m.selectedArtistGenres.visible = true
+    end if
+
+    if not m.selectedArtistSongCount.visible
+        m.selectedArtistSongCount.visible = true
+    end if
+
+    if not m.selectedArtistAlbumCount.visible
+        m.selectedArtistAlbumCount.visible = true
+    end if
+
+    itemData = m.selectedFavoriteItem.json
+
+    if isValid(itemData.SongCount)
+        SetSongCount(itemData.SongCount)
+    else
+        SetSongCount("")
+    end if
+
+    if isValid(itemData.AlbumCount)
+        SetAlbumCount(itemData.AlbumCount)
+    else
+        SetAlbumCount("")
+    end if
+
+    if isValid(itemData.Genres)
+        SetGenres(itemData.Genres)
+    else
+        SetGenres([])
+    end if
+
+    if isValid(itemData.Name)
+        SetName(itemData.Name)
+    else
+        SetName("")
+    end if
+
+    m.loadLogoTask.itemId = itemData.id
+    m.loadLogoTask.itemType = "LogoImage"
+    m.loadLogoTask.observeField("content", "LogoImageLoaded")
+    m.loadLogoTask.control = "RUN"
+
+    ' Set Background to item backdrop
+    SetBackground(m.selectedFavoriteItem.backdropUrl)
+end sub
+
+sub setFieldText(field, value)
+    node = m.top.findNode(field)
+    if node = invalid or value = invalid then return
+
+    ' Handle non strings... Which _shouldn't_ happen, but hey
+    if type(value) = "roInt" or type(value) = "Integer"
+        value = str(value)
+    else if type(value) = "roFloat" or type(value) = "Float"
+        value = str(value)
+    else if type(value) &lt;> "roString" and type(value) &lt;> "String"
+        value = ""
+    end if
+
+    node.text = value
+end sub
+
+'
+'When Image Loading Status changes
+sub newBGLoaded()
+    'If image load was sucessful, start the fade swap
+    if LCase(m.newBackdrop.loadStatus) = "ready"
+        m.swapAnimation.control = "start"
+    end if
+end sub
+
+'
+'Swap Complete
+sub swapDone()
+    if LCase(m.swapAnimation.state) = "stopped"
+        'Set main BG node image and hide transitioning node
+        m.backdrop.uri = m.newBackdrop.uri
+        m.backdrop.opacity = 1
+        m.newBackdrop.opacity = 0
+
+        'If there is another one to load
+        if m.newBackdrop.uri &lt;> m.queuedBGUri and m.queuedBGUri &lt;> ""
+            SetBackground(m.queuedBGUri)
+            m.queuedBGUri = ""
+        end if
+    end if
+end sub
+
+'
+'Load next set of items
+sub loadMoreData()
+    if m.Loading = true then return
+
+    startLoadingSpinner(false)
+    m.Loading = true
+    m.loadItemsTask.startIndex = m.loadedItems
+    m.loadItemsTask.observeField("content", "ItemDataLoaded")
+    m.loadItemsTask.control = "RUN"
+end sub
+
+'
+'Item Selected
+sub onItemSelected()
+    m.top.selectedItem = m.itemGrid.content.getChild(m.itemGrid.itemSelected)
+end sub
+
+'
+'Returns Focused Item
+function getItemFocused()
+    if m.itemGrid.isinFocusChain() and isValid(m.itemGrid.itemFocused)
+        return m.itemGrid.content.getChild(m.itemGrid.itemFocused)
+    else if m.genreList.isinFocusChain() and isValid(m.genreList.itemFocused)
+        return m.genreList.content.getChild(m.genreList.itemFocused)
+    end if
+    return invalid
+end function
+
+'
+'Genre Item Selected
+sub onGenreItemSelected()
+    m.top.selectedItem = m.genreList.content.getChild(m.genreList.itemSelected)
+end sub
+
+'
+'Genre Item Focused
+sub onGenreItemFocused()
+    focusedRow = m.genreList.currFocusRow
+
+    ' Load more data if focus is within last 5 rows, and there are more items to load
+    if focusedRow >= m.loadedRows - 5 and m.loadeditems &lt; m.loadItemsTask.totalRecordCount
+        loadMoreData()
+    end if
+end sub
+
+sub onItemalphaSelected()
+    if m.top.alphaSelected &lt;> ""
+        m.loadedRows = 0
+        m.loadedItems = 0
+
+        m.data = CreateObject("roSGNode", "ContentNode")
+        m.itemGrid.content = m.data
+
+        m.genreData = CreateObject("roSGNode", "ContentNode")
+        m.genreList.content = m.genreData
+
+        m.loadItemsTask.searchTerm = ""
+        m.VoiceBox.text = ""
+        m.loadItemsTask.nameStartsWith = m.alpha.itemAlphaSelected
+        loadInitialItems()
+    end if
+end sub
+
+sub onvoiceFilter()
+    if m.VoiceBox.text &lt;> ""
+        m.loadedRows = 0
+        m.loadedItems = 0
+        m.data = CreateObject("roSGNode", "ContentNode")
+        m.itemGrid.content = m.data
+        m.top.alphaSelected = ""
+        m.loadItemsTask.NameStartsWith = " "
+        m.loadItemsTask.searchTerm = m.voiceBox.text
+        m.loadItemsTask.recursive = true
+        loadInitialItems()
+    end if
+end sub
+
+
+'
+'Check if options updated and any reloading required
+sub optionsClosed()
+    reload = false
+
+    if m.options.sortField &lt;> m.sortField or m.options.sortAscending &lt;> m.sortAscending
+        m.sortField = m.options.sortField
+        m.sortAscending = m.options.sortAscending
+        reload = true
+
+        sortAscendingStr = "true"
+
+        'Store sort settings
+        if not m.sortAscending
+            sortAscendingStr = "false"
+        end if
+
+        set_user_setting("display." + m.top.parentItem.Id + ".sortField", m.sortField)
+        set_user_setting("display." + m.top.parentItem.Id + ".sortAscending", sortAscendingStr)
+    end if
+
+    if m.options.filter &lt;> m.filter
+        m.filter = m.options.filter
+        reload = true
+        set_user_setting("display." + m.top.parentItem.Id + ".filter", m.options.filter)
+    end if
+
+    m.view = m.global.session.user.settings["display." + m.top.parentItem.Id + ".landing"]
+
+    if m.options.view &lt;> m.view
+        m.view = m.options.view
+        m.top.view = m.view
+        set_user_setting("display." + m.top.parentItem.Id + ".landing", m.view)
+
+        ' Reset any filtering or search terms
+        m.top.alphaSelected = ""
+        m.loadItemsTask.NameStartsWith = " "
+        m.loadItemsTask.searchTerm = ""
+        m.filter = "All"
+        m.sortField = "SortName"
+        m.sortAscending = true
+
+        ' Reset view to defaults
+        set_user_setting("display." + m.top.parentItem.Id + ".sortField", m.sortField)
+        set_user_setting("display." + m.top.parentItem.Id + ".sortAscending", "true")
+        set_user_setting("display." + m.top.parentItem.Id + ".filter", m.filter)
+
+        reload = true
+    end if
+
+    if reload
+        m.loadedRows = 0
+        m.loadedItems = 0
+        m.data = CreateObject("roSGNode", "ContentNode")
+        m.genreData = CreateObject("roSGNode", "ContentNode")
+        m.itemGrid.content = m.data
+        m.genreList.content = m.genreData
+        loadInitialItems()
+    end if
+
+    m.itemGrid.setFocus(m.itemGrid.opacity = 1)
+    m.genreList.setFocus(m.genreList.opacity = 1)
+end sub
+
+sub onChannelSelected(msg)
+    node = msg.getRoSGNode()
+    m.top.lastFocus = lastFocusedChild(node)
+    if node.watchChannel &lt;> invalid
+        ' Clone the node when it's reused/update in the TimeGrid it doesn't automatically start playing
+        m.top.selectedItem = node.watchChannel.clone(false)
+    end if
+end sub
+
+function onKeyEvent(key as string, press as boolean) as boolean
+    if not press then return false
+
+    if key = "left" and m.voiceBox.isinFocusChain()
+        m.itemGrid.setFocus(m.itemGrid.opacity = 1)
+        m.genreList.setFocus(m.genreList.opacity = 1)
+        m.voiceBox.setFocus(false)
+    end if
+
+    if key = "options"
+        if m.options.visible = true
+            m.options.visible = false
+            m.top.removeChild(m.options)
+            optionsClosed()
+        else
+
+            itemSelected = m.selectedFavoriteItem
+            if itemSelected &lt;> invalid
+                m.options.selectedFavoriteItem = itemSelected
+            end if
+
+            m.options.visible = true
+            m.top.appendChild(m.options)
+            m.options.setFocus(true)
+        end if
+        return true
+    else if key = "back"
+        if m.options.visible = true
+            m.options.visible = false
+            optionsClosed()
+            return true
+        else
+            m.global.sceneManager.callfunc("popScene")
+            m.loadItemsTask.control = "stop"
+            return true
+        end if
+    else if key = "left"
+        if m.itemGrid.isinFocusChain()
+            m.top.alphaActive = true
+            m.itemGrid.setFocus(false)
+            alpha = m.alpha.getChild(0).findNode("Alphamenu")
+            alpha.setFocus(true)
+            return true
+        else if m.genreList.isinFocusChain()
+            m.top.alphaActive = true
+            m.genreList.setFocus(false)
+            alpha = m.alpha.getChild(0).findNode("Alphamenu")
+            alpha.setFocus(true)
+            return true
+        end if
+    else if key = "right" and m.Alpha.isinFocusChain()
+        m.top.alphaActive = false
+        m.Alpha.setFocus(false)
+        m.Alpha.visible = true
+
+        m.itemGrid.setFocus(m.itemGrid.opacity = 1)
+        m.genreList.setFocus(m.genreList.opacity = 1)
+
+        return true
+    else if key = "replay" and m.itemGrid.isinFocusChain()
+        if m.resetGrid = true
+            m.itemGrid.animateToItem = 0
+        else
+            m.itemGrid.jumpToItem = 0
+        end if
+    else if key = "replay" and m.genreList.isinFocusChain()
+        if m.resetGrid = true
+            m.genreList.animateToItem = 0
+        else
+            m.genreList.jumpToItem = 0
+        end if
+        return true
+    else if key = "play"
+        itemToPlay = getItemFocused()
+        if itemToPlay &lt;> invalid
+            m.top.quickPlayNode = itemToPlay
+            return true
+        end if
+    end if
+
+    if key = "replay"
+        m.loadItemsTask.searchTerm = ""
+        m.loadItemsTask.nameStartsWith = ""
+        m.voiceBox.text = ""
+        m.top.alphaSelected = ""
+        m.loadItemsTask.filter = "All"
+        m.filter = "All"
+        m.data = CreateObject("roSGNode", "ContentNode")
+        m.itemGrid.content = m.data
+        loadInitialItems()
+        return true
+    end if
+
+    return false
+end function
+</code></pre></article></section><footer class="footer" id="PeOAagUepe"><div class="wrapper"><span class="jsdoc-message">Automatically generated using <a href="https://github.com/jsdoc/jsdoc" target="_blank">JSDoc</a> and the <a href="https://github.com/ankitskvmdam/clean-jsdoc-theme" target="_blank">clean-jsdoc-theme</a>.</span></div></footer></div></div></div><div class="search-container" id="PkfLWpAbet" style="display:none"><div class="wrapper" id="iCxFxjkHbP"><button class="icon-button search-close-button" id="VjLlGakifb" aria-label="close search"><svg><use xlink:href="#close-icon"></use></svg></button><div class="search-box-c"><svg><use xlink:href="#search-icon"></use></svg> <input type="text" id="vpcKVYIppa" class="search-input" placeholder="Search..." autofocus></div><div class="search-result-c" id="fWwVHRuDuN"><span class="search-result-c-text">Type anything to view search result</span></div></div></div><div class="mobile-menu-icon-container"><button class="icon-button" id="mobile-menu" data-isopen="false" aria-label="menu"><svg><use xlink:href="#menu-icon"></use></svg></button></div><div id="mobile-sidebar" class="mobile-sidebar-container"><div class="mobile-sidebar-wrapper"><a href="/" class="sidebar-title sidebar-title-anchor">jellyfin-roku Code Documentation</a><div class="mobile-nav-links"><div class="external-link navbar-item"><a id="jellyfin-link-mobile" href="https://jellyfin.org/" target="_blank">Jellyfin</a></div><div class="external-link navbar-item"><a id="github-link-mobile" href="https://github.com/jellyfin/jellyfin-roku" target="_blank">GitHub</a></div><div class="external-link navbar-item"><a id="forum-link-mobile" href="https://forum.jellyfin.org/f-roku-development" target="_blank">Forum</a></div><div class="external-link navbar-item"><a id="matrix-link-mobile" href="https://matrix.to/#/#jellyfin-dev-roku:matrix.org" target="_blank">Matrix</a></div></div><div class="mobile-sidebar-items-c"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="module-AlbumData.html">AlbumData</a></div><div class="sidebar-section-children"><a href="module-AlbumGrid.html">AlbumGrid</a></div><div class="sidebar-section-children"><a href="module-AlbumTrackList.html">AlbumTrackList</a></div><div class="sidebar-section-children"><a href="module-AlbumView.html">AlbumView</a></div><div class="sidebar-section-children"><a href="module-Alpha.html">Alpha</a></div><div class="sidebar-section-children"><a href="module-ArtistView.html">ArtistView</a></div><div class="sidebar-section-children"><a href="module-AudioPlayer.html">AudioPlayer</a></div><div class="sidebar-section-children"><a href="module-AudioPlayerView.html">AudioPlayerView</a></div><div class="sidebar-section-children"><a href="module-AudioTrackListItem.html">AudioTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupHoriz.html">ButtonGroupHoriz</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupVert.html">ButtonGroupVert</a></div><div class="sidebar-section-children"><a href="module-ChannelData.html">ChannelData</a></div><div class="sidebar-section-children"><a href="module-Clock.html">Clock</a></div><div class="sidebar-section-children"><a href="module-CollectionData.html">CollectionData</a></div><div class="sidebar-section-children"><a href="module-ConfigData.html">ConfigData</a></div><div class="sidebar-section-children"><a href="module-ConfigItem.html">ConfigItem</a></div><div class="sidebar-section-children"><a href="module-ConfigList.html">ConfigList</a></div><div class="sidebar-section-children"><a href="module-ExtrasItem.html">ExtrasItem</a></div><div class="sidebar-section-children"><a href="module-ExtrasRowList.html">ExtrasRowList</a></div><div class="sidebar-section-children"><a href="module-FavoriteItemsTask.html">FavoriteItemsTask</a></div><div class="sidebar-section-children"><a href="module-FolderData.html">FolderData</a></div><div class="sidebar-section-children"><a href="module-GetFiltersTask.html">GetFiltersTask</a></div><div class="sidebar-section-children"><a href="module-GetNextEpisodeTask.html">GetNextEpisodeTask</a></div><div class="sidebar-section-children"><a href="module-GetPlaybackInfoTask.html">GetPlaybackInfoTask</a></div><div class="sidebar-section-children"><a href="module-GetShuffleEpisodesTask.html">GetShuffleEpisodesTask</a></div><div class="sidebar-section-children"><a href="module-GridItem.html">GridItem</a></div><div class="sidebar-section-children"><a href="module-GridItemSmall.html">GridItemSmall</a></div><div class="sidebar-section-children"><a href="module-Home.html">Home</a></div><div class="sidebar-section-children"><a href="module-HomeData.html">HomeData</a></div><div class="sidebar-section-children"><a href="module-HomeItem.html">HomeItem</a></div><div class="sidebar-section-children"><a href="module-HomeRowItemSizes.html">HomeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-HomeRows.html">HomeRows</a></div><div class="sidebar-section-children"><a href="module-IconButton.html">IconButton</a></div><div class="sidebar-section-children"><a href="module-Image.html">Image</a></div><div class="sidebar-section-children"><a href="module-ImageData.html">ImageData</a></div><div class="sidebar-section-children"><a href="module-IntegerKeyboard.html">IntegerKeyboard</a></div><div class="sidebar-section-children"><a href="module-ItemGrid.html">ItemGrid</a></div><div class="sidebar-section-children"><a href="module-ItemGridOptions.html">ItemGridOptions</a></div><div class="sidebar-section-children"><a href="module-Items.html">Items</a></div><div class="sidebar-section-children"><a href="module-JFButton.html">JFButton</a></div><div class="sidebar-section-children"><a href="module-JFButtons.html">JFButtons</a></div><div class="sidebar-section-children"><a href="module-JFGroup.html">JFGroup</a></div><div class="sidebar-section-children"><a href="module-JFMessageDialog.html">JFMessageDialog</a></div><div class="sidebar-section-children"><a href="module-JFOverhang.html">JFOverhang</a></div><div class="sidebar-section-children"><a href="module-JFScene.html">JFScene</a></div><div class="sidebar-section-children"><a href="module-JFScreen.html">JFScreen</a></div><div class="sidebar-section-children"><a href="module-JFServer.html">JFServer</a></div><div class="sidebar-section-children"><a href="module-JFVideo.html">JFVideo</a></div><div class="sidebar-section-children"><a href="module-ListPoster.html">ListPoster</a></div><div class="sidebar-section-children"><a href="module-LoadChannelsTask.html">LoadChannelsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask.html">LoadItemsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask2.html">LoadItemsTask2</a></div><div class="sidebar-section-children"><a href="module-LoadPhotoTask.html">LoadPhotoTask</a></div><div class="sidebar-section-children"><a href="module-LoadProgramDetailsTask.html">LoadProgramDetailsTask</a></div><div class="sidebar-section-children"><a href="module-LoadScreenSaverTimeoutTask.html">LoadScreenSaverTimeoutTask</a></div><div class="sidebar-section-children"><a href="module-LoadSheduleTask.html">LoadSheduleTask</a></div><div class="sidebar-section-children"><a href="module-LoadVideoContentTask.html">LoadVideoContentTask</a></div><div class="sidebar-section-children"><a href="module-LoginScene.html">LoginScene</a></div><div class="sidebar-section-children"><a href="module-Main.html">Main</a></div><div class="sidebar-section-children"><a href="module-MovieData.html">MovieData</a></div><div class="sidebar-section-children"><a href="module-MovieDetails.html">MovieDetails</a></div><div class="sidebar-section-children"><a href="module-MovieLibraryView.html">MovieLibraryView</a></div><div class="sidebar-section-children"><a href="module-MovieOptions.html">MovieOptions</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumData.html">MusicAlbumData</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumSongListData.html">MusicAlbumSongListData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistData.html">MusicArtistData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistGridItem.html">MusicArtistGridItem</a></div><div class="sidebar-section-children"><a href="module-MusicLibraryView.html">MusicLibraryView</a></div><div class="sidebar-section-children"><a href="module-MusicSongData.html">MusicSongData</a></div><div class="sidebar-section-children"><a href="module-OSD.html">OSD</a></div><div class="sidebar-section-children"><a href="module-OptionNode.html">OptionNode</a></div><div class="sidebar-section-children"><a href="module-OptionsButton.html">OptionsButton</a></div><div class="sidebar-section-children"><a href="module-OptionsData.html">OptionsData</a></div><div class="sidebar-section-children"><a href="module-OptionsSlider.html">OptionsSlider</a></div><div class="sidebar-section-children"><a href="module-OverviewDialog.html">OverviewDialog</a></div><div class="sidebar-section-children"><a href="module-PersonData.html">PersonData</a></div><div class="sidebar-section-children"><a href="module-PersonDetails.html">PersonDetails</a></div><div class="sidebar-section-children"><a href="module-PhotoData.html">PhotoData</a></div><div class="sidebar-section-children"><a href="module-PhotoDetails.html">PhotoDetails</a></div><div class="sidebar-section-children"><a href="module-PlaybackDialog.html">PlaybackDialog</a></div><div class="sidebar-section-children"><a href="module-PlayedCheckmark.html">PlayedCheckmark</a></div><div class="sidebar-section-children"><a href="module-PlaylistData.html">PlaylistData</a></div><div class="sidebar-section-children"><a href="module-PlaylistView.html">PlaylistView</a></div><div class="sidebar-section-children"><a href="module-PlaystateTask.html">PlaystateTask</a></div><div class="sidebar-section-children"><a href="module-PostTask.html">PostTask</a></div><div class="sidebar-section-children"><a href="module-ProgramDetails.html">ProgramDetails</a></div><div class="sidebar-section-children"><a href="module-PublicUserData.html">PublicUserData</a></div><div class="sidebar-section-children"><a href="module-QueueManager.html">QueueManager</a></div><div class="sidebar-section-children"><a href="module-QuickConnect.html">QuickConnect</a></div><div class="sidebar-section-children"><a href="module-QuickConnectDialog.html">QuickConnectDialog</a></div><div class="sidebar-section-children"><a href="module-RadioDialog.html">RadioDialog</a></div><div class="sidebar-section-children"><a href="module-RecordProgramTask.html">RecordProgramTask</a></div><div class="sidebar-section-children"><a href="module-SceneManager.html">SceneManager</a></div><div class="sidebar-section-children"><a href="module-ScheduleProgramData.html">ScheduleProgramData</a></div><div class="sidebar-section-children"><a href="module-SearchBox.html">SearchBox</a></div><div class="sidebar-section-children"><a href="module-SearchData.html">SearchData</a></div><div class="sidebar-section-children"><a href="module-SearchResults.html">SearchResults</a></div><div class="sidebar-section-children"><a href="module-SearchRow.html">SearchRow</a></div><div class="sidebar-section-children"><a href="module-SearchTask.html">SearchTask</a></div><div class="sidebar-section-children"><a href="module-SeriesData.html">SeriesData</a></div><div class="sidebar-section-children"><a href="module-ServerDiscoveryTask.html">ServerDiscoveryTask</a></div><div class="sidebar-section-children"><a href="module-SetServerScreen.html">SetServerScreen</a></div><div class="sidebar-section-children"><a href="module-ShowScenes.html">ShowScenes</a></div><div class="sidebar-section-children"><a href="module-SlideOutButton.html">SlideOutButton</a></div><div class="sidebar-section-children"><a href="module-SongItem.html">SongItem</a></div><div class="sidebar-section-children"><a href="module-Spinner.html">Spinner</a></div><div class="sidebar-section-children"><a href="module-StandardDialog.html">StandardDialog</a></div><div class="sidebar-section-children"><a href="module-Subtitles.html">Subtitles</a></div><div class="sidebar-section-children"><a href="module-TVEpisode.html">TVEpisode</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeData.html">TVEpisodeData</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRow.html">TVEpisodeRow</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRowWithOptions.html">TVEpisodeRowWithOptions</a></div><div class="sidebar-section-children"><a href="module-TVEpisodes.html">TVEpisodes</a></div><div class="sidebar-section-children"><a href="module-TVListDetails.html">TVListDetails</a></div><div class="sidebar-section-children"><a href="module-TVListOptions.html">TVListOptions</a></div><div class="sidebar-section-children"><a href="module-TVSeasonData.html">TVSeasonData</a></div><div class="sidebar-section-children"><a href="module-TVSeasonRow.html">TVSeasonRow</a></div><div class="sidebar-section-children"><a href="module-TVShowDescription.html">TVShowDescription</a></div><div class="sidebar-section-children"><a href="module-TVShowDetails.html">TVShowDetails</a></div><div class="sidebar-section-children"><a href="module-TextSizeTask.html">TextSizeTask</a></div><div class="sidebar-section-children"><a href="module-UserData.html">UserData</a></div><div class="sidebar-section-children"><a href="module-UserItem.html">UserItem</a></div><div class="sidebar-section-children"><a href="module-UserLibrary.html">UserLibrary</a></div><div class="sidebar-section-children"><a href="module-UserRow.html">UserRow</a></div><div class="sidebar-section-children"><a href="module-UserSelect.html">UserSelect</a></div><div class="sidebar-section-children"><a href="module-VideoData.html">VideoData</a></div><div class="sidebar-section-children"><a href="module-VideoPlayer.html">VideoPlayer</a></div><div class="sidebar-section-children"><a href="module-VideoPlayerView.html">VideoPlayerView</a></div><div class="sidebar-section-children"><a href="module-VideoTrackListItem.html">VideoTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ViewCreator.html">ViewCreator</a></div><div class="sidebar-section-children"><a href="module-WhatsNewDialog.html">WhatsNewDialog</a></div><div class="sidebar-section-children"><a href="module-baserequest.html">baserequest</a></div><div class="sidebar-section-children"><a href="module-captionTask.html">captionTask</a></div><div class="sidebar-section-children"><a href="module-conditional.html">conditional</a></div><div class="sidebar-section-children"><a href="module-config.html">config</a></div><div class="sidebar-section-children"><a href="module-deviceCapabilities.html">deviceCapabilities</a></div><div class="sidebar-section-children"><a href="module-globals.html">globals</a></div><div class="sidebar-section-children"><a href="module-homeRowItemSizes_.html">homeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-migrations.html">migrations</a></div><div class="sidebar-section-children"><a href="module-misc.html">misc</a></div><div class="sidebar-section-children"><a href="module-quickplay.html">quickplay</a></div><div class="sidebar-section-children"><a href="module-schedule.html">schedule</a></div><div class="sidebar-section-children"><a href="module-section.html">section</a></div><div class="sidebar-section-children"><a href="module-sectionScroller.html">sectionScroller</a></div><div class="sidebar-section-children"><a href="module-settings.html">settings</a></div><div class="sidebar-section-children"><a href="module-userauth.html">userauth</a></div></div></div><div class="mobile-navbar-actions"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div></div></div><script type="text/javascript" src="scripts/core.min.js"></script><script src="scripts/search.min.js" defer="defer"></script><script src="scripts/third-party/fuse.js" defer="defer"></script><script type="text/javascript">var tocbotInstance=tocbot.init({tocSelector:"#eed4d2a0bfd64539bb9df78095dec881",contentSelector:".main-content",headingSelector:"h1, h2, h3",hasInnerContainers:!0,scrollContainer:".main-content",headingsOffset:130,onClick:bringLinkToView})</script></body></html>

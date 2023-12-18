@@ -12,7 +12,6 @@
       programTitleFocusedColor="#ffffff" iconFocusedColor="#ff0000"
       showPastTimeScreen="true" pastTimeScreenBlendColor="#555555"
     />
-    <Spinner id="spinner" translation="[900, 450]" />
     <Animation id="gridMoveAnimation" duration="1" repeat="false" easeFunction="outQuad">
       <Vector2DFieldInterpolator id="gridMoveAnimationPosition" key="[0.0, 0.5]" fieldToInterp="scheduleGrid.translation" />
     </Animation>

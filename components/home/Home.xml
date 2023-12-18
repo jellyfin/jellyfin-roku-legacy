@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component name="Home" extends="JFGroup">
+<component name="Home" extends="JFScreen">
   <children>
     <Poster id="backdrop" loadDisplayMode="scaleToZoom" width="1920" height="1200" />
-    <HomeRows id="homeRows" />
+    <HomeRows id="homeRows" focusBitmapBlendColor="0xFFFFFF00" />
     <OptionsSlider id="options" />
+
+    <Animation id="fadeInFocusBitmap" delay="1" duration=".2" repeat="false" easeFunction="inQuad">
+      <ColorFieldInterpolator id="fadeInFocusBitmapInterpolator" key="[0.0, 1.0]" keyValue="[0xFFFFFF00, 0xFFFFFFFF]" fieldToInterp="homeRows.focusBitmapBlendColor" />
+    </Animation>
   </children>
   <interface>
     <field id="selectedItem" alias="homeRows.selectedItem" />
     <field id="quickPlayNode" alias="homeRows.quickPlayNode" />
-    <field id="timeLastRefresh" type="integer" />
     <function name="refresh" />
     <function name="loadLibraries" />
   </interface>

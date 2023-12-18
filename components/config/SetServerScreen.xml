@@ -15,7 +15,6 @@
       </LayoutGroup>
       <!--background for server picker-->
       <Rectangle color="0x00000020" width="1620" height="400">
-        <Spinner id="spinner" translation="[717, 136]" />
         <MarkupList id="serverPicker" translation="[50, 20]" itemComponentName="JFServer" itemSpacing="[0, 10]" itemSize="[1520, 100]" numRows="3" vertFocusAnimationStyle="floatingFocus" />
       </Rectangle>
 

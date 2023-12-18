@@ -6,8 +6,6 @@ concurrency:
 
 on:
   push:
-    branches:
-      - unstable
   pull_request_target:
 
 jobs:
@@ -31,6 +29,6 @@ jobs:
       - name: Check all PRs for merge conflicts ⛔
         uses: eps1lon/actions-label-merge-conflict@releases/2.x
         with:
-          dirtyLabel: "merge conflict"
+          dirtyLabel: "merge-conflict"
           commentOnDirty: "This pull request has merge conflicts. Please resolve the conflicts so the PR can be reviewed. Thanks!"
           repoToken: ${{ secrets.JF_BOT_TOKEN }}

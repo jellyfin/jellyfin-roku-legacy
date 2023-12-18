@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="OSD" extends="Group" initialFocus="chapterNext">
+  <children>
+    <ScrollingLabel id="itemTitle" font="font:LargeBoldSystemFont" translation="[103,61]" maxWidth="1400" />
+    <Clock id="clock" translation="[1618, 46]" />
+
+    <ButtonGroup id="optionControls" itemSpacings="[20]" layoutDirection="horiz" horizAlignment="left" translation="[103,120]">
+      <IconButton id="showVideoInfoPopup" background="#070707" focusBackground="#00a4dc" padding="16" icon="pkg:/images/icons/videoInfo.png" height="65" width="100" />
+      <IconButton id="chapterList" background="#070707" focusBackground="#00a4dc" padding="16" icon="pkg:/images/icons/numberList.png" height="65" width="100" />
+      <IconButton id="showSubtitleMenu" background="#070707" focusBackground="#00a4dc" padding="0" icon="pkg:/images/icons/subtitle.png" height="65" width="100" />
+    </ButtonGroup>
+
+    <ButtonGroup id="videoControls" itemSpacings="[20]" layoutDirection="horiz" horizAlignment="center" translation="[960,875]">
+      <IconButton id="chapterBack" background="#070707" focusBackground="#00a4dc" padding="16" icon="pkg:/images/icons/previousChapter.png" height="65" width="100" />
+      <IconButton id="videoPlayPause" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/play.png" height="65" width="100" />
+      <IconButton id="chapterNext" background="#070707" focusBackground="#00a4dc" padding="16" icon="pkg:/images/icons/nextChapter.png" height="65" width="100" />
+    </ButtonGroup>
+
+    <Rectangle id="progressBarBackground" color="0x00000098" width="1714" height="8" translation="[103,970]">
+      <Rectangle id="progressBar" color="#e5e4e2FF" width="0" height="8" />
+    </Rectangle>
+
+    <Label id="videoPositionTime" font="font:MediumSystemFont" color="0xffffffFF" translation="[103,985]" />
+    <Label id="videoRemainingTime" font="font:MediumSystemFont" color="0xffffffFF" horizAlign="right" width="200" translation="[1617,985]" />
+
+    <Timer id="inactivityTimer" duration="1" repeat="true" />
+  </children>
+  <interface>
+    <field id="itemTitleText" type="string" />
+    <field id="inactiveTimeout" type="integer" />
+    <field id="progressPercentage" type="float" />
+    <field id="positionTime" type="float" />
+    <field id="remainingPositionTime" type="float" />
+    <field id="playbackState" type="string" alwaysNotify="true" />
+    <field id="action" type="string" alwaysNotify="true" />
+    <field id="showChapterList" type="boolean" alwaysNotify="true" />
+    <field id="hasFocus" type="boolean" alwaysNotify="true" />
+  </interface>
+</component>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="Clock" extends="Group">
+  <children>
+    <Label id="clockTime" font="font:SmallSystemFont" horizAlign="right" vertAlign="center" height="64" width="200" />
+    <Timer id="currentTimeTimer" repeat="true" duration="1" />
+  </children>
+  <interface>
+  </interface>
+</component>

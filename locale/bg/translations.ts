@@ -829,5 +829,337 @@
         <source>Enabled</source>
         <translation>Активиран</translation>
     </message>
+    <message>
+        <source>Movies</source>
+        <translation>Филми</translation>
+    </message>
+    <message>
+        <source>Extras</source>
+        <translation>Екстри</translation>
+    </message>
+    <message>
+        <source>Episodes</source>
+        <translation>Епизоди</translation>
+    </message>
+    <message>
+        <source>OFFICIAL_RATING</source>
+        <translation>Родителски контрол</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to sort library content</comment>
+        <source>TAB_SORT</source>
+        <translation>Сортирай</translation>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Включено в момента</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Име</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>IMDb Рейтинг</translation>
+    </message>
+    <message>
+        <source>DATE_ADDED</source>
+        <translation>Дата на добавяне</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to filter library content</comment>
+        <source>TAB_FILTER</source>
+        <translation>Филтър</translation>
+    </message>
+    <message>
+        <source>Died</source>
+        <translation>Починал</translation>
+    </message>
+    <message>
+        <source>Age</source>
+        <translation>Възраст</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Запази идентификация?</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Изтрий запазените</translation>
+    </message>
+    <message>
+        <source>Cast &amp; Crew</source>
+        <translation>Актьорски състав</translation>
+    </message>
+    <message>
+        <source>Special Features</source>
+        <translation>Допълнителни материали</translation>
+    </message>
+    <message>
+        <source>Movies (Grid)</source>
+        <translation>Филми (Грид)</translation>
+        <extracomment>Movie library view option</extracomment>
+    </message>
+    <message>
+        <source>today</source>
+        <translation>днес</translation>
+        <extracomment>Current day</extracomment>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation>утре</translation>
+        <extracomment>Next day</extracomment>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Неделя</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation>Понеделник</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <comment>Title of Tab for switching &quot;views&quot; when looking at a library</comment>
+        <source>TAB_VIEW</source>
+        <translation>Изглед</translation>
+    </message>
+    <message>
+        <source>RUNTIME</source>
+        <translation>Времетраене</translation>
+    </message>
+    <message>
+        <source>yesterday</source>
+        <translation>вчера</translation>
+        <extracomment>Previous day</extracomment>
+    </message>
+    <message>
+        <source>Born</source>
+        <translation>Роден</translation>
+    </message>
+    <message>
+        <source>RELEASE_DATE</source>
+        <translation>Дата на издаване</translation>
+    </message>
+    <message>
+        <source>PLAY_COUNT</source>
+        <translation>Брой пускания</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Оценка</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Четвъртък</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>Петък</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Starts at</source>
+        <translation>Започва в</translation>
+        <extracomment>(Future Tense) For defining time when a program will start today (e.g. Starts at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Ended at</source>
+        <translation>Приключило  в</translation>
+        <extracomment>(Past Tense) For defining time when a program will ended (e.g. Ended at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation>Повтори</translation>
+        <extracomment>If TV Shows has previously been broadcasted</extracomment>
+    </message>
+    <message>
+        <source>Cancel Series Recording</source>
+        <translation>Спри записа на сериал</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Затвори</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Сряда</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Версия</translation>
+    </message>
+    <message>
+        <source>Show item count in the library and index of selected item.</source>
+        <translation>Показване на броя на елементите в библиотеката и индекса на избрания елемент.</translation>
+        <extracomment>Description for option in Setting Screen</extracomment>
+    </message>
+    <message>
+        <source>Quick Connect</source>
+        <translation>Бърза Връзка</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Събота</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Started at</source>
+        <translation>Пуснато на</translation>
+        <extracomment>(Past Tense) For defining time when a program started today (e.g. Started at 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation>Пуснато</translation>
+        <extracomment>(Past Tense) For defining a day and time when a program started (e.g. Started Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Starts</source>
+        <translation>Започва</translation>
+        <extracomment>(Future Tense) For defining a day and time when a program will start (e.g. Starts Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Ends at</source>
+        <translation>Приключва в</translation>
+        <extracomment>(Past Tense) For defining a day and time when a program ended (e.g. Ended Wednesday, 08:00) </extracomment>
+    </message>
+    <message>
+        <source>Live</source>
+        <translation>На живо</translation>
+        <extracomment>If TV Show is being broadcast live (not pre-recorded)</extracomment>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation>Канали</translation>
+        <extracomment>Menu option for showing Live TV Channel List</extracomment>
+    </message>
+    <message>
+        <source>TV Guide</source>
+        <translation>Тв Справочник</translation>
+        <extracomment>Menu option for showing Live TV Guide / Schedule</extracomment>
+    </message>
+    <message>
+        <source>View Channel</source>
+        <translation>Виж канал</translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation>Запиши</translation>
+    </message>
+    <message>
+        <source>Record Series</source>
+        <translation>Запиши сериал</translation>
+    </message>
+    <message>
+        <source>Cancel Recording</source>
+        <translation>Спри записа</translation>
+    </message>
+    <message>
+        <source>Connecting to Server</source>
+        <translation>Свързване към сървър</translation>
+        <extracomment>Message to display to user while client is attempting to connect to the server</extracomment>
+    </message>
+    <message>
+        <source>Not found</source>
+        <translation>Не е намерен</translation>
+        <extracomment>Title of message box when the requested content is not found on the server</extracomment>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Непознато</translation>
+        <extracomment>Title for a cast member for which we have no information for</extracomment>
+    </message>
+    <message>
+        <source>The requested content does not exist on the server</source>
+        <translation>Търсеното съдържание не е намерено на  сървъра</translation>
+        <extracomment>Content of message box when the requested content is not found on the server</extracomment>
+    </message>
+    <message>
+        <source>Enter the server name or IP address</source>
+        <translation>Въведете името на сървъра или IP адрес</translation>
+        <extracomment>Title of KeyboardDialog when manually entering a server URL</extracomment>
+    </message>
+    <message>
+        <source>Pick a Jellyfin server from the local network</source>
+        <translation>Изберете Jellyfin сървър от локалната мрежа</translation>
+        <extracomment>Instructions on initial app launch when the user is asked to pick a server from a list</extracomment>
+    </message>
+    <message>
+        <source>Error Getting Playback Information</source>
+        <translation>Грешка при извличането на информация за възпроизвеждането</translation>
+        <extracomment>Dialog Title: Received error from server when trying to get information about the selected item for playback</extracomment>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item. Server did not provide required transcoding data.</source>
+        <translation>Възникна грешка при възпроизвеждането на този елемент. Сървърът не предостави необходимите данни за транскодиране.</translation>
+        <extracomment>Content of message box when trying to play an item which requires transcoding, and the server did not provide transcode url</extracomment>
+    </message>
+    <message>
+        <source>Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.</source>
+        <translation>Поддържа директно възпроизвеждане на MPEG-2 съдържание (напр. телевизия на живо). Това ще предотврати прекодирането на MPEG-2 съдържание, но използва значително повече честотна лента.</translation>
+        <extracomment>Settings Menu - Description for option</extracomment>
+    </message>
+    <message>
+        <source>User Interface</source>
+        <translation>Потребителски Интерфейс</translation>
+        <extracomment>Title for User Interface section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>You can search for Titles, People, Live TV Channels and more</source>
+        <translation>Можете да търсите заглавия, хора, TV канали на живо и други</translation>
+        <extracomment>Help text in search results</extracomment>
+    </message>
+    <message>
+        <source>Codec Support</source>
+        <translation>Поддръжка на кодеци</translation>
+        <extracomment>Settings Menu - Title for settings group related to codec support</extracomment>
+    </message>
+    <message>
+        <source>MPEG-2</source>
+        <translation>MPEG-2</translation>
+        <extracomment>Name of codec used in settings menu</extracomment>
+    </message>
+    <message>
+        <source>MPEG-4</source>
+        <translation>MPEG-4</translation>
+        <extracomment>Name of codec used in settings menu</extracomment>
+    </message>
+    <message>
+        <source>Item Count</source>
+        <translation>Преброени елементи</translation>
+        <extracomment>UI -&gt; Media Grid -&gt; Item Count in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Set Favorite</source>
+        <translation>Задаване на любими</translation>
+        <extracomment>Button Text - When pressed, sets item as Favorite</extracomment>
+    </message>
+    <message>
+        <source>Search now</source>
+        <translation>Търси</translation>
+        <extracomment>Help text in search Box</extracomment>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Вторник</translation>
+        <extracomment>Day of Week</extracomment>
+    </message>
+    <message>
+        <source>Playback</source>
+        <translation>Възпроизвеждане</translation>
+        <extracomment>Title for Playback section in user setting screen.</extracomment>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation>Активиран</translation>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation>Изключено</translation>
+    </message>
 </context>
 </TS>

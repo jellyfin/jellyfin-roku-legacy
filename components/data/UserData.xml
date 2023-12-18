@@ -11,6 +11,5 @@
     <function name="setPreference" />
     <function name="loadFromRegistry" />
     <function name="saveToRegistry" />
-    <function name="setActive" />
   </interface>
 </component>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component name="Settings" extends="JFGroup">
+<component name="Settings" extends="JFScreen">
   <children>
 
     <Label id="path" translation="[95,175]" font="font:SmallestBoldSystemFont" />

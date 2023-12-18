@@ -1,0 +1,39 @@
+import "pkg:/source/utils/misc.bs"
+
+sub init()
+
+    ' If hideclick setting is checked, exit without setting any variables
+    if m.global.session.user.settings["ui.design.hideclock"]
+        return
+    end if
+
+    m.clockTime = m.top.findNode("clockTime")
+
+    m.currentTimeTimer = m.top.findNode("currentTimeTimer")
+    m.dateTimeObject = CreateObject("roDateTime")
+
+    m.currentTimeTimer.observeField("fire", "onCurrentTimeTimerFire")
+    m.currentTimeTimer.control = "start"
+
+    ' Default to 12 hour clock
+    m.format = "short-h12"
+
+    ' If user has selected a 24 hour clock, update date display format
+    if LCase(m.global.device.clockFormat) = "24h"
+        m.format = "short-h24"
+    end if
+end sub
+
+
+' onCurrentTimeTimerFire: Code that runs every time the currentTimeTimer fires
+'
+sub onCurrentTimeTimerFire()
+    ' Refresh time variable
+    m.dateTimeObject.Mark()
+
+    ' Convert to local time zone
+    m.dateTimeObject.ToLocalTime()
+
+    ' Format time as requested
+    m.clockTime.text = m.dateTimeObject.asTimeStringLoc(m.format)
+end sub

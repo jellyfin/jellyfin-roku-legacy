@@ -54,6 +54,41 @@ namespace quickplay
         m.global.queueManager.callFunc("push", itemNode)
     end sub
 
+    ' A single photo.
+    sub photo(itemNode as object)
+        if not isValid(itemNode) or not isValid(itemNode.id) then return
+
+        photoPlayer = CreateObject("roSgNode", "PhotoDetails")
+        photoPlayer.itemsNode = itemNode
+        photoPlayer.itemIndex = 0
+        m.global.sceneManager.callfunc("pushScene", photoPlayer)
+    end sub
+
+    ' A photo album.
+    sub photoAlbum(itemNode as object)
+        if not isValid(itemNode) or not isValid(itemNode.id) then return
+
+        ' grab all photos inside photo album
+        photoAlbumData = api.users.GetItemsByQuery(m.global.session.user.id, {
+            "parentId": itemNode.id,
+            "includeItemTypes": "Photo",
+            "sortBy": "Random",
+            "Recursive": true
+        })
+        print "photoAlbumData=", photoAlbumData
+
+        if isValid(photoAlbumData) and isValidAndNotEmpty(photoAlbumData.items)
+            photoPlayer = CreateObject("roSgNode", "PhotoDetails")
+            photoPlayer.isSlideshow = true
+            photoPlayer.isRandom = false
+            photoPlayer.itemsArray = photoAlbumData.items
+            photoPlayer.itemIndex = 0
+            m.global.sceneManager.callfunc("pushScene", photoPlayer)
+        else
+            stopLoadingSpinner()
+        end if
+    end sub
+
     ' A music album.
     ' Play the entire album starting with track 1.
     sub album(itemNode as object)
@@ -70,6 +105,8 @@ namespace quickplay
         })
         if isValid(albumSongs) and isValidAndNotEmpty(albumSongs.items)
             quickplay.pushToQueue(albumSongs.items)
+        else
+            stopLoadingSpinner()
         end if
     end sub
 
@@ -93,6 +130,8 @@ namespace quickplay
 
         if isValid(artistSongs) and isValidAndNotEmpty(artistSongs.items)
             quickplay.pushToQueue(artistSongs.items, true)
+        else
+            stopLoadingSpinner()
         end if
     end sub
 
@@ -109,6 +148,8 @@ namespace quickplay
         })
         if isValid(data) and isValidAndNotEmpty(data.Items)
             quickplay.pushToQueue(data.items)
+        else
+            stopLoadingSpinner()
         end if
     end sub
 
@@ -164,6 +205,8 @@ namespace quickplay
                 if isValid(data) and isValidAndNotEmpty(data.Items)
                     ' add all episodes found to a playlist
                     quickplay.pushToQueue(data.Items)
+                else
+                    stopLoadingSpinner()
                 end if
             end if
         end if
@@ -207,7 +250,73 @@ namespace quickplay
             end for
             if m.global.queueManager.callFunc("getCount") > 1
                 m.global.queueManager.callFunc("toggleShuffle")
+            else
+                stopLoadingSpinner()
             end if
+        end if
+    end sub
+
+    ' A container with some kind of videos inside of it
+    sub videoContainer(itemNode as object)
+        print "itemNode=", itemNode
+        collectionType = Lcase(itemNode.collectionType)
+        if collectionType = "movies"
+            ' get randomized list of videos inside
+            data = api.users.GetItemsByQuery(m.global.session.user.id, {
+                "parentId": itemNode.id,
+                "sortBy": "Random",
+                "recursive": true,
+                "includeItemTypes": "Movie,Video",
+                "limit": 2000
+            })
+            print "data=", data
+            if isValid(data) and isValidAndNotEmpty(data.items)
+                videoList = []
+                ' add each item to the queue
+                for each item in data.Items
+                    print "data.Item=", item
+                    ' only add videos we're not currently watching
+                    if isValid(item.userdata) and isValid(item.userdata.PlaybackPositionTicks)
+                        if item.userdata.PlaybackPositionTicks = 0
+                            videoList.push(item)
+                        end if
+                    end if
+                end for
+                quickplay.pushToQueue(videoList)
+            else
+                stopLoadingSpinner()
+            end if
+            return
+        else if collectionType = "tvshows" or collectionType = "collectionfolder"
+            ' get list of tv shows inside
+
+            tvshowsData = api.users.GetItemsByQuery(m.global.session.user.id, {
+                "parentId": itemNode.id,
+                "sortBy": "Random",
+                "recursive": true,
+                "excludeItemTypes": "Season",
+                "imageTypeLimit": 0,
+                "enableUserData": false,
+                "EnableTotalRecordCount": false,
+                "enableImages": false
+            })
+
+            print "tvshowsData=", tvshowsData
+
+            if isValid(tvshowsData) and isValidAndNotEmpty(tvshowsData.items)
+                ' the type of media returned from api may change.
+                if tvshowsData.items[0].Type = "Series"
+                    quickplay.multipleSeries(tvshowsData.items)
+                else
+                    ' if first item is not a series, then assume they are all videos and/or episodes
+                    quickplay.pushToQueue(tvshowsData.items)
+                end if
+            else
+                stopLoadingSpinner()
+            end if
+        else
+            stopLoadingSpinner()
+            print "Quick Play videoContainer WARNING: Unknown collection type"
         end if
     end sub
 
@@ -230,7 +339,7 @@ namespace quickplay
             for each item in unwatchedData.Items
                 if isValid(item.UserData)
                     if isValid(item.UserData.Played) and item.UserData.Played = false
-                        firstUnwatchedEpisodeIndex = item.IndexNumber - 1
+                        firstUnwatchedEpisodeIndex = isValid(item.IndexNumber) ? item.IndexNumber - 1 : 0
                         if isValid(item.UserData.PlaybackPositionTicks)
                             item.startingPoint = item.UserData.PlaybackPositionTicks
                         end if
@@ -272,6 +381,8 @@ namespace quickplay
                     end if
                 end if
             end if
+        else
+            stopLoadingSpinner()
         end if
     end sub
 
@@ -312,6 +423,8 @@ namespace quickplay
 
         if m.global.queueManager.callFunc("getCount") > 1
             m.global.queueManager.callFunc("toggleShuffle")
+        else
+            stopLoadingSpinner()
         end if
     end sub
 
@@ -319,8 +432,8 @@ namespace quickplay
     sub tvChannel(itemNode as object)
         if not isValid(itemNode) or not isValid(itemNode.id) then return
 
-        stopLoadingSpinner()
         group = CreateVideoPlayerGroup(itemNode.id)
+        stopLoadingSpinner()
         m.global.sceneManager.callFunc("pushScene", group)
     end sub
 
@@ -328,8 +441,8 @@ namespace quickplay
     sub program(itemNode as object)
         if not isValid(itemNode) or not isValid(itemNode.json) or not isValid(itemNode.json.ChannelId) then return
 
-        stopLoadingSpinner()
         group = CreateVideoPlayerGroup(itemNode.json.ChannelId)
+        stopLoadingSpinner()
         m.global.sceneManager.callFunc("pushScene", group)
     end sub
 
@@ -350,6 +463,8 @@ namespace quickplay
             if m.global.queueManager.callFunc("getCount") > 1
                 m.global.queueManager.callFunc("toggleShuffle")
             end if
+        else
+            stopLoadingSpinner()
         end if
     end sub
 
@@ -370,6 +485,7 @@ namespace quickplay
         }
         ' modify api query based on folder type
         folderType = Lcase(itemNode.json.type)
+        print "folderType=", folderType
         if folderType = "studio"
             paramArray["studioIds"] = itemNode.id
         else if folderType = "genre"
@@ -381,6 +497,11 @@ namespace quickplay
             paramArray["genreIds"] = itemNode.id
             paramArray.delete("videoTypes")
             paramArray["includeItemTypes"] = "Audio"
+        else if folderType = "photoalbum"
+            paramArray["parentId"] = itemNode.id
+            paramArray["includeItemTypes"] = "Photo"
+            paramArray.delete("videoTypes")
+            paramArray.delete("Recursive")
         else
             paramArray["parentId"] = itemNode.id
         end if
@@ -401,8 +522,19 @@ namespace quickplay
                     quickplay.multipleSeries(folderData.items)
                 end if
             else
-                quickplay.pushToQueue(folderData.items, true)
+                if folderType = "photoalbum"
+                    photoPlayer = CreateObject("roSgNode", "PhotoDetails")
+                    photoPlayer.isSlideshow = true
+                    photoPlayer.isRandom = false
+                    photoPlayer.itemsArray = folderData.items
+                    photoPlayer.itemIndex = 0
+                    m.global.sceneManager.callfunc("pushScene", photoPlayer)
+                else
+                    quickplay.pushToQueue(folderData.items, true)
+                end if
             end if
+        else
+            stopLoadingSpinner()
         end if
     end sub
 
@@ -417,26 +549,7 @@ namespace quickplay
         print "collectionType=", collectionType
 
         if collectionType = "movies"
-            ' get randomized list of movies inside
-            data = api.users.GetItemsByQuery(m.global.session.user.id, {
-                "parentId": itemNode.id,
-                "sortBy": "Random",
-                "limit": 2000
-            })
-
-            if isValid(data) and isValidAndNotEmpty(data.items)
-                movieList = []
-                ' add each item to the queue
-                for each item in data.Items
-                    ' only add movies we're not currently watching
-                    if isValid(item.userdata) and isValid(item.userdata.PlaybackPositionTicks)
-                        if item.userdata.PlaybackPositionTicks = 0
-                            movieList.push(item)
-                        end if
-                    end if
-                end for
-                quickplay.pushToQueue(movieList)
-            end if
+            quickplay.videoContainer(itemNode)
         else if collectionType = "music"
             ' get audio files from under this collection
             ' sort songs by album then artist
@@ -453,6 +566,8 @@ namespace quickplay
             print "songsData=", songsData
             if isValid(songsData) and isValidAndNotEmpty(songsData.items)
                 quickplay.pushToQueue(songsData.Items, true)
+            else
+                stopLoadingSpinner()
             end if
         else if collectionType = "boxsets"
             ' get list of all boxsets inside
@@ -481,24 +596,12 @@ namespace quickplay
                 if isValid(boxsetData) and isValidAndNotEmpty(boxsetData.items)
                     ' add all boxset items to queue
                     quickplay.pushToQueue(boxsetData.Items)
+                else
+                    stopLoadingSpinner()
                 end if
             end if
         else if collectionType = "tvshows" or collectionType = "collectionfolder"
-            ' get list of tv shows inside
-            tvshowsData = api.users.GetItemsByQuery(m.global.session.user.id, {
-                "parentId": itemNode.id,
-                "sortBy": "Random",
-                "imageTypeLimit": 0,
-                "enableUserData": false,
-                "EnableTotalRecordCount": false,
-                "enableImages": false
-            })
-
-            print "tvshowsData=", tvshowsData
-
-            if isValid(tvshowsData) and isValidAndNotEmpty(tvshowsData.items)
-                quickplay.multipleSeries(tvshowsData.items)
-            end if
+            quickplay.videoContainer(itemNode)
         else if collectionType = "musicvideos"
             ' get randomized list of videos inside
             data = api.users.GetItemsByQuery(m.global.session.user.id, {
@@ -514,9 +617,33 @@ namespace quickplay
             print "data=", data
             if isValid(data) and isValidAndNotEmpty(data.items)
                 quickplay.pushToQueue(data.Items)
+            else
+                stopLoadingSpinner()
             end if
-            ' else if collectionType = "homevideos" ' also used for a "Photo" library
+        else if collectionType = "homevideos"
+            ' Photo library - items can be type video, photo, or photoAlbum
+
+            ' grab all photos inside library
+            folderData = api.users.GetItemsByQuery(m.global.session.user.id, {
+                "parentId": itemNode.id,
+                "includeItemTypes": "Photo",
+                "sortBy": "Random",
+                "Recursive": true
+            })
+            print "folderData=", folderData
+
+            if isValid(folderData) and isValidAndNotEmpty(folderData.items)
+                photoPlayer = CreateObject("roSgNode", "PhotoDetails")
+                photoPlayer.isSlideshow = true
+                photoPlayer.isRandom = false
+                photoPlayer.itemsArray = folderData.items
+                photoPlayer.itemIndex = 0
+                m.global.sceneManager.callfunc("pushScene", photoPlayer)
+            else
+                stopLoadingSpinner()
+            end if
         else
+            stopLoadingSpinner()
             print "Quick Play WARNING: Unknown collection type"
         end if
     end sub
@@ -554,6 +681,8 @@ namespace quickplay
                 ' validate api results
                 if isValid(playlistItems) and isValidAndNotEmpty(playlistItems.items)
                     quickplay.pushToQueue(playlistItems.items, true)
+                else
+                    stopLoadingSpinner()
                 end if
             end if
         else if collectionType = "livetv"
@@ -576,8 +705,15 @@ namespace quickplay
                 print "myChannel=", myChannel
                 ' play channel
                 quickplay.tvChannel(myChannel)
+            else
+                stopLoadingSpinner()
             end if
+        else if collectionType = "movies"
+            quickplay.videoContainer(itemNode)
+        else if collectionType = "tvshows"
+            quickplay.videoContainer(itemNode)
         else
+            stopLoadingSpinner()
             print "Quick Play CollectionFolder WARNING: Unknown collection type"
         end if
     end sub

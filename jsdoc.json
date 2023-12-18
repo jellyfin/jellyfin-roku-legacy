@@ -10,31 +10,54 @@
   },
   "extendedConfig": {},
   "opts": {
+    "encoding": "utf8",
     "recurse": true,
-    "template": "node_modules/ink-docstrap/template",
+    "template": "node_modules/clean-jsdoc-theme",
     "brighterscript-jsdocs-plugin": {
       "addModule": true,
       "escapeHTMLCharacters": false
+    },
+    "theme_opts": {
+      "default_theme": "fallback-dark",
+      "base_url": "https://jellyfin.github.io/jellyfin-roku/",
+      "title": "jellyfin-roku Code Documentation",
+      "homepageTitle": "jellyfin-roku Code Documentation",
+      "displayModuleHeader": true,
+      "menu": [
+        {
+          "title": "Jellyfin",
+          "link": "https://jellyfin.org/",
+          "target": "_blank",
+          "class": "external-link",
+          "id": "jellyfin-link"
+        },
+        {
+          "title": "GitHub",
+          "link": "https://github.com/jellyfin/jellyfin-roku",
+          "target": "_blank",
+          "class": "external-link",
+          "id": "github-link"
+        },
+        {
+          "title": "Forum",
+          "link": "https://forum.jellyfin.org/f-roku-development",
+          "target": "_blank",
+          "class": "external-link",
+          "id": "forum-link"
+        },
+        {
+          "title": "Matrix",
+          "link": "https://matrix.to/#/#jellyfin-dev-roku:matrix.org",
+          "target": "_blank",
+          "class": "external-link",
+          "id": "matrix-link"
+        }
+      ],
+      "footer": "<span class=\"jsdoc-message\">Automatically generated using <a href=\"https://github.com/jsdoc/jsdoc\" target=\"_blank\">JSDoc</a> and the <a href=\"https://github.com/ankitskvmdam/clean-jsdoc-theme\" target=\"_blank\">clean-jsdoc-theme</a>.</span>"
     }
   },
-  "templates": {
-    "monospaceLinks": false,
-    "dateFormat": "MMM Do YYYY",
-    "outputSourceFiles": true,
-    "outputSourcePath": true,
-    "systemName": "jellyfin-roku api docs",
-    "footer": "<span class=\"jsdoc-message\">Source code: <a href=\"https://github.com/jellyfin/jellyfin-roku\">https://github.com/jellyfin/jellyfin-roku</a></span><span class=\"jsdoc-message\">Jellyfin Roku Development Forum: <a href=\"https://forum.jellyfin.org/f-roku-development\">https://forum.jellyfin.org/f-roku-development</a></span>",
-    "navType": "vertical",
-    "theme": "darkly",
-    "syntaxTheme": "dark",
-    "linenums": true,
-    "collapseSymbols": false,
-    "inverseNav": false,
-    "protocol": "html://",
-    "methodHeadingReturns": false
-  },
   "markdown": {
-    "parser": "gfm",
-    "hardwrap": true
+    "hardwrap": false,
+    "idInHeadings": true
   }
 }

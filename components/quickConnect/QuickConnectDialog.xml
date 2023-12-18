@@ -7,5 +7,6 @@
     <interface>
         <field id="quickConnectJson" type="assocarray" />
         <field id="authenticated" type="boolean" alwaysNotify="true" />
+        <field id="saveCredentials" type="boolean" />
     </interface>
 </component>

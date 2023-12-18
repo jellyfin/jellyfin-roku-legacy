@@ -1,6 +1,6 @@
 ' these are needed for ServerInfo() inside session.server.Populate()
-import "pkg:/source/api/userauth.brs"
-import "pkg:/source/api/baserequest.brs"
+import "pkg:/source/api/userauth.bs"
+import "pkg:/source/api/baserequest.bs"
 import "pkg:/source/migrations.bs"
 
 namespace session
@@ -74,9 +74,6 @@ namespace session
                 session.server.Delete()
             end if
 
-            ' migrate registry if needed
-            runGlobalMigrations()
-
             return success
         end function
 
@@ -108,6 +105,11 @@ namespace session
             tmpSessionServer.AddReplace("isLocalHTTPS", isLocalServerHTTPS)
             ' update global server session using the temp array
             session.Update("server", tmpSessionServer)
+
+            if m.global.app.isDev
+                print "m.global.session.server = ", m.global.session.server
+            end if
+
             return true
         end function
     end namespace
@@ -171,20 +173,26 @@ namespace session
 
             ' grab lastRunVersion for this user
             lastRunVersion = get_user_setting("LastRunVersion")
-            if lastRunVersion <> invalid
+            if isValid(lastRunVersion)
                 session.user.Update("LastRunVersion", lastRunVersion)
             end if
 
             ' update user session settings with values from registry
             userSettings = RegistryReadAll(tmpSession.user.id)
             for each setting in userSettings
-                session.user.settings.Save(setting, userSettings[setting])
+                ' don't add auth token to user session
+                if setting <> "token"
+                    session.user.settings.Save(setting, userSettings[setting])
+                end if
             end for
 
             session.user.SavePlaybackSettings()
 
             ' debugging
             if m.global.app.isDev
+                print "m.global.session.user = ", m.global.session.user
+                print "m.global.session.user.Configuration = ", m.global.session.user.Configuration
+                print "m.global.session.user.Policy = ", m.global.session.user.Policy
                 print "m.global.session.user.settings = ", m.global.session.user.settings
             end if
 
@@ -193,6 +201,10 @@ namespace session
             if saveCredentials
                 set_user_setting("token", tmpSession.user.authToken)
                 set_user_setting("username", tmpSession.user.name)
+            end if
+
+            if m.global.session.user.settings["global.rememberme"]
+                set_setting("active_user", tmpSession.user.id)
             end if
 
             session.user.LoadUserPreferences()
@@ -228,6 +240,17 @@ namespace session
                     unset_user_setting("display.livetv.landing")
                 end if
             else
+                ' User has no custom prefs. Save default home section values.
+                session.user.SaveUserHomeSections({
+                    homesection0: "smalllibrarytiles",
+                    homesection1: "resume",
+                    homesection2: "nextup",
+                    homesection3: "latestmedia",
+                    homesection4: "livetv",
+                    homesection5: "none",
+                    homesection6: "none"
+                })
+
                 unset_user_setting("display.livetv.landing")
             end if
         end sub
@@ -237,6 +260,14 @@ namespace session
         sub SaveUserHomeSections(customPrefs as object)
             userPreferences = customPrefs
             rowTypes = []
+
+            useWebSectionArrangement = m.global.session.user.settings["ui.home.useWebSectionArrangement"]
+
+            if isValid(useWebSectionArrangement)
+                if not useWebSectionArrangement
+                    userPreferences.delete("homesection0")
+                end if
+            end if
 
             ' If user has no section preferences, use default settings
             if not userPreferences.doesExist("homesection0")

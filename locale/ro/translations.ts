@@ -2710,5 +2710,26 @@
         <source>Save Credentials?</source>
         <translation>Ține minte?</translation>
     </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Salvați datele de conectare?</translation>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Eroare în timpul redării</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Extras</source>
+        <translation>Extra</translation>
+    </message>
+    <message>
+        <source>Episodes</source>
+        <translation>Episoade</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Şterge salvările</translation>
+    </message>
 </context>
 </TS>

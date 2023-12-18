@@ -1,0 +1,1110 @@
+<!DOCTYPE html><html lang="en" style="font-size:16px"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Source: source/utils/deviceCapabilities.bs</title><!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--><script src="scripts/third-party/hljs.js" defer="defer"></script><script src="scripts/third-party/hljs-line-num.js" defer="defer"></script><script src="scripts/third-party/popper.js" defer="defer"></script><script src="scripts/third-party/tippy.js" defer="defer"></script><script src="scripts/third-party/tocbot.min.js"></script><script>var baseURL="/",locationPathname="";baseURL=(baseURL=(baseURL="https://jellyfin.github.io/jellyfin-roku/").replace(/https?:\/\//i,"")).substr(baseURL.indexOf("/"))</script><link rel="stylesheet" href="styles/clean-jsdoc-theme.min.css"><svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none"><defs><symbol id="copy-icon" viewbox="0 0 488.3 488.3"><g><path d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z"/><path d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z"/></g></symbol><symbol id="search-icon" viewBox="0 0 512 512"><g><g><path d="M225.474,0C101.151,0,0,101.151,0,225.474c0,124.33,101.151,225.474,225.474,225.474    c124.33,0,225.474-101.144,225.474-225.474C450.948,101.151,349.804,0,225.474,0z M225.474,409.323    c-101.373,0-183.848-82.475-183.848-183.848S124.101,41.626,225.474,41.626s183.848,82.475,183.848,183.848    S326.847,409.323,225.474,409.323z"/></g></g><g><g><path d="M505.902,476.472L386.574,357.144c-8.131-8.131-21.299-8.131-29.43,0c-8.131,8.124-8.131,21.306,0,29.43l119.328,119.328    c4.065,4.065,9.387,6.098,14.715,6.098c5.321,0,10.649-2.033,14.715-6.098C514.033,497.778,514.033,484.596,505.902,476.472z"/></g></g></symbol><symbol id="font-size-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11.246 15H4.754l-2 5H.6L7 4h2l6.4 16h-2.154l-2-5zm-.8-2L8 6.885 5.554 13h4.892zM21 12.535V12h2v8h-2v-.535a4 4 0 1 1 0-6.93zM19 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></symbol><symbol id="add-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></symbol><symbol id="minus-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M5 11h14v2H5z"/></symbol><symbol id="dark-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/></symbol><symbol id="light-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/></symbol><symbol id="reset-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M18.537 19.567A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10c0 2.136-.67 4.116-1.81 5.74L17 12h3a8 8 0 1 0-2.46 5.772l.997 1.795z"/></symbol><symbol id="down-icon" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z"></path></symbol><symbol id="codepen-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M16.5 13.202L13 15.535v3.596L19.197 15 16.5 13.202zM14.697 12L12 10.202 9.303 12 12 13.798 14.697 12zM20 10.869L18.303 12 20 13.131V10.87zM19.197 9L13 4.869v3.596l3.5 2.333L19.197 9zM7.5 10.798L11 8.465V4.869L4.803 9 7.5 10.798zM4.803 15L11 19.131v-3.596l-3.5-2.333L4.803 15zM4 13.131L5.697 12 4 10.869v2.262zM2 9a1 1 0 0 1 .445-.832l9-6a1 1 0 0 1 1.11 0l9 6A1 1 0 0 1 22 9v6a1 1 0 0 1-.445.832l-9 6a1 1 0 0 1-1.11 0l-9-6A1 1 0 0 1 2 15V9z"/></symbol><symbol id="close-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></symbol><symbol id="menu-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></symbol></defs></svg></head><body data-theme="fallback-dark"><div class="sidebar-container"><div class="sidebar" id="sidebar"><a href="/" class="sidebar-title sidebar-title-anchor">jellyfin-roku Code Documentation</a><div class="sidebar-items-container"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="module-AlbumData.html">AlbumData</a></div><div class="sidebar-section-children"><a href="module-AlbumGrid.html">AlbumGrid</a></div><div class="sidebar-section-children"><a href="module-AlbumTrackList.html">AlbumTrackList</a></div><div class="sidebar-section-children"><a href="module-AlbumView.html">AlbumView</a></div><div class="sidebar-section-children"><a href="module-Alpha.html">Alpha</a></div><div class="sidebar-section-children"><a href="module-ArtistView.html">ArtistView</a></div><div class="sidebar-section-children"><a href="module-AudioPlayer.html">AudioPlayer</a></div><div class="sidebar-section-children"><a href="module-AudioPlayerView.html">AudioPlayerView</a></div><div class="sidebar-section-children"><a href="module-AudioTrackListItem.html">AudioTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupHoriz.html">ButtonGroupHoriz</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupVert.html">ButtonGroupVert</a></div><div class="sidebar-section-children"><a href="module-ChannelData.html">ChannelData</a></div><div class="sidebar-section-children"><a href="module-Clock.html">Clock</a></div><div class="sidebar-section-children"><a href="module-CollectionData.html">CollectionData</a></div><div class="sidebar-section-children"><a href="module-ConfigData.html">ConfigData</a></div><div class="sidebar-section-children"><a href="module-ConfigItem.html">ConfigItem</a></div><div class="sidebar-section-children"><a href="module-ConfigList.html">ConfigList</a></div><div class="sidebar-section-children"><a href="module-ExtrasItem.html">ExtrasItem</a></div><div class="sidebar-section-children"><a href="module-ExtrasRowList.html">ExtrasRowList</a></div><div class="sidebar-section-children"><a href="module-FavoriteItemsTask.html">FavoriteItemsTask</a></div><div class="sidebar-section-children"><a href="module-FolderData.html">FolderData</a></div><div class="sidebar-section-children"><a href="module-GetFiltersTask.html">GetFiltersTask</a></div><div class="sidebar-section-children"><a href="module-GetNextEpisodeTask.html">GetNextEpisodeTask</a></div><div class="sidebar-section-children"><a href="module-GetPlaybackInfoTask.html">GetPlaybackInfoTask</a></div><div class="sidebar-section-children"><a href="module-GetShuffleEpisodesTask.html">GetShuffleEpisodesTask</a></div><div class="sidebar-section-children"><a href="module-GridItem.html">GridItem</a></div><div class="sidebar-section-children"><a href="module-GridItemSmall.html">GridItemSmall</a></div><div class="sidebar-section-children"><a href="module-Home.html">Home</a></div><div class="sidebar-section-children"><a href="module-HomeData.html">HomeData</a></div><div class="sidebar-section-children"><a href="module-HomeItem.html">HomeItem</a></div><div class="sidebar-section-children"><a href="module-HomeRowItemSizes.html">HomeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-HomeRows.html">HomeRows</a></div><div class="sidebar-section-children"><a href="module-IconButton.html">IconButton</a></div><div class="sidebar-section-children"><a href="module-Image.html">Image</a></div><div class="sidebar-section-children"><a href="module-ImageData.html">ImageData</a></div><div class="sidebar-section-children"><a href="module-IntegerKeyboard.html">IntegerKeyboard</a></div><div class="sidebar-section-children"><a href="module-ItemGrid.html">ItemGrid</a></div><div class="sidebar-section-children"><a href="module-ItemGridOptions.html">ItemGridOptions</a></div><div class="sidebar-section-children"><a href="module-Items.html">Items</a></div><div class="sidebar-section-children"><a href="module-JFButton.html">JFButton</a></div><div class="sidebar-section-children"><a href="module-JFButtons.html">JFButtons</a></div><div class="sidebar-section-children"><a href="module-JFGroup.html">JFGroup</a></div><div class="sidebar-section-children"><a href="module-JFMessageDialog.html">JFMessageDialog</a></div><div class="sidebar-section-children"><a href="module-JFOverhang.html">JFOverhang</a></div><div class="sidebar-section-children"><a href="module-JFScene.html">JFScene</a></div><div class="sidebar-section-children"><a href="module-JFScreen.html">JFScreen</a></div><div class="sidebar-section-children"><a href="module-JFServer.html">JFServer</a></div><div class="sidebar-section-children"><a href="module-JFVideo.html">JFVideo</a></div><div class="sidebar-section-children"><a href="module-ListPoster.html">ListPoster</a></div><div class="sidebar-section-children"><a href="module-LoadChannelsTask.html">LoadChannelsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask.html">LoadItemsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask2.html">LoadItemsTask2</a></div><div class="sidebar-section-children"><a href="module-LoadPhotoTask.html">LoadPhotoTask</a></div><div class="sidebar-section-children"><a href="module-LoadProgramDetailsTask.html">LoadProgramDetailsTask</a></div><div class="sidebar-section-children"><a href="module-LoadScreenSaverTimeoutTask.html">LoadScreenSaverTimeoutTask</a></div><div class="sidebar-section-children"><a href="module-LoadSheduleTask.html">LoadSheduleTask</a></div><div class="sidebar-section-children"><a href="module-LoadVideoContentTask.html">LoadVideoContentTask</a></div><div class="sidebar-section-children"><a href="module-LoginScene.html">LoginScene</a></div><div class="sidebar-section-children"><a href="module-Main.html">Main</a></div><div class="sidebar-section-children"><a href="module-MovieData.html">MovieData</a></div><div class="sidebar-section-children"><a href="module-MovieDetails.html">MovieDetails</a></div><div class="sidebar-section-children"><a href="module-MovieLibraryView.html">MovieLibraryView</a></div><div class="sidebar-section-children"><a href="module-MovieOptions.html">MovieOptions</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumData.html">MusicAlbumData</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumSongListData.html">MusicAlbumSongListData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistData.html">MusicArtistData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistGridItem.html">MusicArtistGridItem</a></div><div class="sidebar-section-children"><a href="module-MusicLibraryView.html">MusicLibraryView</a></div><div class="sidebar-section-children"><a href="module-MusicSongData.html">MusicSongData</a></div><div class="sidebar-section-children"><a href="module-OSD.html">OSD</a></div><div class="sidebar-section-children"><a href="module-OptionNode.html">OptionNode</a></div><div class="sidebar-section-children"><a href="module-OptionsButton.html">OptionsButton</a></div><div class="sidebar-section-children"><a href="module-OptionsData.html">OptionsData</a></div><div class="sidebar-section-children"><a href="module-OptionsSlider.html">OptionsSlider</a></div><div class="sidebar-section-children"><a href="module-OverviewDialog.html">OverviewDialog</a></div><div class="sidebar-section-children"><a href="module-PersonData.html">PersonData</a></div><div class="sidebar-section-children"><a href="module-PersonDetails.html">PersonDetails</a></div><div class="sidebar-section-children"><a href="module-PhotoData.html">PhotoData</a></div><div class="sidebar-section-children"><a href="module-PhotoDetails.html">PhotoDetails</a></div><div class="sidebar-section-children"><a href="module-PlaybackDialog.html">PlaybackDialog</a></div><div class="sidebar-section-children"><a href="module-PlayedCheckmark.html">PlayedCheckmark</a></div><div class="sidebar-section-children"><a href="module-PlaylistData.html">PlaylistData</a></div><div class="sidebar-section-children"><a href="module-PlaylistView.html">PlaylistView</a></div><div class="sidebar-section-children"><a href="module-PlaystateTask.html">PlaystateTask</a></div><div class="sidebar-section-children"><a href="module-PostTask.html">PostTask</a></div><div class="sidebar-section-children"><a href="module-ProgramDetails.html">ProgramDetails</a></div><div class="sidebar-section-children"><a href="module-PublicUserData.html">PublicUserData</a></div><div class="sidebar-section-children"><a href="module-QueueManager.html">QueueManager</a></div><div class="sidebar-section-children"><a href="module-QuickConnect.html">QuickConnect</a></div><div class="sidebar-section-children"><a href="module-QuickConnectDialog.html">QuickConnectDialog</a></div><div class="sidebar-section-children"><a href="module-RadioDialog.html">RadioDialog</a></div><div class="sidebar-section-children"><a href="module-RecordProgramTask.html">RecordProgramTask</a></div><div class="sidebar-section-children"><a href="module-SceneManager.html">SceneManager</a></div><div class="sidebar-section-children"><a href="module-ScheduleProgramData.html">ScheduleProgramData</a></div><div class="sidebar-section-children"><a href="module-SearchBox.html">SearchBox</a></div><div class="sidebar-section-children"><a href="module-SearchData.html">SearchData</a></div><div class="sidebar-section-children"><a href="module-SearchResults.html">SearchResults</a></div><div class="sidebar-section-children"><a href="module-SearchRow.html">SearchRow</a></div><div class="sidebar-section-children"><a href="module-SearchTask.html">SearchTask</a></div><div class="sidebar-section-children"><a href="module-SeriesData.html">SeriesData</a></div><div class="sidebar-section-children"><a href="module-ServerDiscoveryTask.html">ServerDiscoveryTask</a></div><div class="sidebar-section-children"><a href="module-SetServerScreen.html">SetServerScreen</a></div><div class="sidebar-section-children"><a href="module-ShowScenes.html">ShowScenes</a></div><div class="sidebar-section-children"><a href="module-SlideOutButton.html">SlideOutButton</a></div><div class="sidebar-section-children"><a href="module-SongItem.html">SongItem</a></div><div class="sidebar-section-children"><a href="module-Spinner.html">Spinner</a></div><div class="sidebar-section-children"><a href="module-StandardDialog.html">StandardDialog</a></div><div class="sidebar-section-children"><a href="module-Subtitles.html">Subtitles</a></div><div class="sidebar-section-children"><a href="module-TVEpisode.html">TVEpisode</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeData.html">TVEpisodeData</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRow.html">TVEpisodeRow</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRowWithOptions.html">TVEpisodeRowWithOptions</a></div><div class="sidebar-section-children"><a href="module-TVEpisodes.html">TVEpisodes</a></div><div class="sidebar-section-children"><a href="module-TVListDetails.html">TVListDetails</a></div><div class="sidebar-section-children"><a href="module-TVListOptions.html">TVListOptions</a></div><div class="sidebar-section-children"><a href="module-TVSeasonData.html">TVSeasonData</a></div><div class="sidebar-section-children"><a href="module-TVSeasonRow.html">TVSeasonRow</a></div><div class="sidebar-section-children"><a href="module-TVShowDescription.html">TVShowDescription</a></div><div class="sidebar-section-children"><a href="module-TVShowDetails.html">TVShowDetails</a></div><div class="sidebar-section-children"><a href="module-TextSizeTask.html">TextSizeTask</a></div><div class="sidebar-section-children"><a href="module-UserData.html">UserData</a></div><div class="sidebar-section-children"><a href="module-UserItem.html">UserItem</a></div><div class="sidebar-section-children"><a href="module-UserLibrary.html">UserLibrary</a></div><div class="sidebar-section-children"><a href="module-UserRow.html">UserRow</a></div><div class="sidebar-section-children"><a href="module-UserSelect.html">UserSelect</a></div><div class="sidebar-section-children"><a href="module-VideoData.html">VideoData</a></div><div class="sidebar-section-children"><a href="module-VideoPlayer.html">VideoPlayer</a></div><div class="sidebar-section-children"><a href="module-VideoPlayerView.html">VideoPlayerView</a></div><div class="sidebar-section-children"><a href="module-VideoTrackListItem.html">VideoTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ViewCreator.html">ViewCreator</a></div><div class="sidebar-section-children"><a href="module-WhatsNewDialog.html">WhatsNewDialog</a></div><div class="sidebar-section-children"><a href="module-baserequest.html">baserequest</a></div><div class="sidebar-section-children"><a href="module-captionTask.html">captionTask</a></div><div class="sidebar-section-children"><a href="module-conditional.html">conditional</a></div><div class="sidebar-section-children"><a href="module-config.html">config</a></div><div class="sidebar-section-children"><a href="module-deviceCapabilities.html">deviceCapabilities</a></div><div class="sidebar-section-children"><a href="module-globals.html">globals</a></div><div class="sidebar-section-children"><a href="module-homeRowItemSizes_.html">homeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-migrations.html">migrations</a></div><div class="sidebar-section-children"><a href="module-misc.html">misc</a></div><div class="sidebar-section-children"><a href="module-quickplay.html">quickplay</a></div><div class="sidebar-section-children"><a href="module-schedule.html">schedule</a></div><div class="sidebar-section-children"><a href="module-section.html">section</a></div><div class="sidebar-section-children"><a href="module-sectionScroller.html">sectionScroller</a></div><div class="sidebar-section-children"><a href="module-settings.html">settings</a></div><div class="sidebar-section-children"><a href="module-userauth.html">userauth</a></div></div></div></div></div><div class="navbar-container" id="VuAckcnZhf"><nav class="navbar"><div class="navbar-left-items"><div class="external-link navbar-item"><a id="jellyfin-link" href="https://jellyfin.org/" target="_blank">Jellyfin</a></div><div class="external-link navbar-item"><a id="github-link" href="https://github.com/jellyfin/jellyfin-roku" target="_blank">GitHub</a></div><div class="external-link navbar-item"><a id="forum-link" href="https://forum.jellyfin.org/f-roku-development" target="_blank">Forum</a></div><div class="external-link navbar-item"><a id="matrix-link" href="https://matrix.to/#/#jellyfin-dev-roku:matrix.org" target="_blank">Matrix</a></div></div><div class="navbar-right-items"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div><nav></nav></nav></div><div class="toc-container"><div class="toc-content"><span class="bold">On this page</span><div id="eed4d2a0bfd64539bb9df78095dec881"></div></div></div><div class="body-wrapper"><div class="main-content"><div class="main-wrapper"><section id="source-page" class="source-page"><header><h1 id="title" class="has-anchor">source_utils_deviceCapabilities.bs</h1></header><article><pre class="prettyprint source lang-js"><code>import "pkg:/source/utils/misc.bs"
+import "pkg:/source/api/baserequest.bs"
+
+' Returns the Device Capabilities for Roku.
+' Also prints out the device profile for debugging
+function getDeviceCapabilities() as object
+    deviceProfile = {
+        "PlayableMediaTypes": [
+            "Audio",
+            "Video",
+            "Photo"
+        ],
+        "SupportedCommands": [],
+        "SupportsPersistentIdentifier": true,
+        "SupportsMediaControl": false,
+        "SupportsContentUploading": false,
+        "SupportsSync": false,
+        "DeviceProfile": getDeviceProfile(),
+        "AppStoreUrl": "https://channelstore.roku.com/details/cc5e559d08d9ec87c5f30dcebdeebc12/jellyfin"
+    }
+
+    printDeviceProfile(deviceProfile)
+
+    return deviceProfile
+end function
+
+function getDeviceProfile() as object
+    globalDevice = m.global.device
+    return {
+        "Name": "Official Roku Client",
+        "Id": globalDevice.id,
+        "Identification": {
+            "FriendlyName": globalDevice.friendlyName,
+            "ModelNumber": globalDevice.model,
+            "SerialNumber": "string",
+            "ModelName": globalDevice.name,
+            "ModelDescription": "Type: " + globalDevice.modelType,
+            "Manufacturer": globalDevice.modelDetails.VendorName
+        },
+        "FriendlyName": globalDevice.friendlyName,
+        "Manufacturer": globalDevice.modelDetails.VendorName,
+        "ModelName": globalDevice.name,
+        "ModelDescription": "Type: " + globalDevice.modelType,
+        "ModelNumber": globalDevice.model,
+        "SerialNumber": globalDevice.serial,
+        "MaxStreamingBitrate": 120000000,
+        "MaxStaticBitrate": 100000000,
+        "MusicStreamingTranscodingBitrate": 192000,
+        "DirectPlayProfiles": GetDirectPlayProfiles(),
+        "TranscodingProfiles": getTranscodingProfiles(),
+        "ContainerProfiles": getContainerProfiles(),
+        "CodecProfiles": getCodecProfiles(),
+        "SubtitleProfiles": getSubtitleProfiles()
+    }
+end function
+
+function GetDirectPlayProfiles() as object
+    globalUserSettings = m.global.session.user.settings
+    directPlayProfiles = []
+    di = CreateObject("roDeviceInfo")
+    ' all possible containers
+    supportedCodecs = {
+        mp4: {
+            audio: [],
+            video: []
+        },
+        hls: {
+            audio: [],
+            video: []
+        },
+        mkv: {
+            audio: [],
+            video: []
+        },
+        ism: {
+            audio: [],
+            video: []
+        },
+        dash: {
+            audio: [],
+            video: []
+        },
+        ts: {
+            audio: [],
+            video: []
+        }
+    }
+    ' all possible codecs (besides those restricted by user settings)
+    videoCodecs = ["h264", "mpeg4 avc", "vp8", "vp9", "h263", "mpeg1"]
+    audioCodecs = ["mp3", "mp2", "pcm", "lpcm", "wav", "ac3", "ac4", "aiff", "wma", "flac", "alac", "aac", "opus", "dts", "wmapro", "vorbis", "eac3", "mpg123"]
+
+    ' check if hevc is disabled
+    if globalUserSettings["playback.compatibility.disablehevc"] = false
+        videoCodecs.push("hevc")
+    end if
+
+    ' check video codecs for each container
+    for each container in supportedCodecs
+        for each videoCodec in videoCodecs
+            if di.CanDecodeVideo({ Codec: videoCodec, Container: container }).Result
+                if videoCodec = "hevc"
+                    supportedCodecs[container]["video"].push("hevc")
+                    supportedCodecs[container]["video"].push("h265")
+                else
+                    ' device profile string matches codec string
+                    supportedCodecs[container]["video"].push(videoCodec)
+                end if
+            end if
+        end for
+    end for
+
+    ' user setting overrides
+    if globalUserSettings["playback.mpeg4"]
+        for each container in supportedCodecs
+            supportedCodecs[container]["video"].push("mpeg4")
+        end for
+    end if
+    if globalUserSettings["playback.mpeg2"]
+        for each container in supportedCodecs
+            supportedCodecs[container]["video"].push("mpeg2video")
+        end for
+    end if
+
+    ' video codec overrides
+    ' these codecs play fine but are not correctly detected using CanDecodeVideo()
+    if di.CanDecodeVideo({ Codec: "av1" }).Result
+        ' codec must be checked by itself or the result will always be false
+        for each container in supportedCodecs
+            supportedCodecs[container]["video"].push("av1")
+        end for
+    end if
+
+    ' check audio codecs for each container
+    for each container in supportedCodecs
+        for each audioCodec in audioCodecs
+            if di.CanDecodeAudio({ Codec: audioCodec, Container: container }).Result
+                supportedCodecs[container]["audio"].push(audioCodec)
+            end if
+        end for
+    end for
+
+    ' remove audio codecs not supported as standalone audio files (opus)
+    ' also add aac back to the list so it gets added to the direct play profile
+    audioCodecs = ["aac", "mp3", "mp2", "pcm", "lpcm", "wav", "ac3", "ac4", "aiff", "wma", "flac", "alac", "aac", "dts", "wmapro", "vorbis", "eac3", "mpg123"]
+
+    ' check audio codecs with no container
+    supportedAudio = []
+    for each audioCodec in audioCodecs
+        if di.CanDecodeAudio({ Codec: audioCodec }).Result
+            supportedAudio.push(audioCodec)
+        end if
+    end for
+
+    ' build return array
+    for each container in supportedCodecs
+        videoCodecString = supportedCodecs[container]["video"].Join(",")
+        if videoCodecString &lt;> ""
+            containerString = container
+
+            if container = "mp4"
+                containerString = "mp4,mov,m4v"
+            else if container = "mkv"
+                containerString = "mkv,webm"
+            end if
+
+            directPlayProfiles.push({
+                "Container": containerString,
+                "Type": "Video",
+                "VideoCodec": videoCodecString,
+                "AudioCodec": supportedCodecs[container]["audio"].Join(",")
+            })
+        end if
+    end for
+
+    directPlayProfiles.push({
+        "Container": supportedAudio.Join(","),
+        "Type": "Audio"
+    })
+    return directPlayProfiles
+end function
+
+function getTranscodingProfiles() as object
+    globalUserSettings = m.global.session.user.settings
+    transcodingProfiles = []
+
+    di = CreateObject("roDeviceInfo")
+
+    transcodingContainers = ["mp4", "ts"]
+    ' use strings to preserve order
+    mp4AudioCodecs = "aac"
+    mp4VideoCodecs = "h264"
+    tsAudioCodecs = "aac"
+    tsVideoCodecs = "h264"
+
+    ' does the users setup support surround sound?
+    maxAudioChannels = "2" ' jellyfin expects this as a string
+    ' in order of preference from left to right
+    audioCodecs = ["mp3", "vorbis", "opus", "flac", "alac", "ac4", "pcm", "wma", "wmapro"]
+    surroundSoundCodecs = ["eac3", "ac3", "dts"]
+    if globalUserSettings["playback.forceDTS"] = true
+        surroundSoundCodecs = ["dts", "eac3", "ac3"]
+    end if
+
+    surroundSoundCodec = invalid
+    if di.GetAudioOutputChannel() = "5.1 surround"
+        maxAudioChannels = "6"
+        for each codec in surroundSoundCodecs
+            if di.CanDecodeAudio({ Codec: codec, ChCnt: 6 }).Result
+                surroundSoundCodec = codec
+                if di.CanDecodeAudio({ Codec: codec, ChCnt: 8 }).Result
+                    maxAudioChannels = "8"
+                end if
+                exit for
+            end if
+        end for
+    end if
+
+    ' VIDEO CODECS
+    '
+    ' AVC / h264 / MPEG4 AVC
+    for each container in transcodingContainers
+        if di.CanDecodeVideo({ Codec: "h264", Container: container }).Result
+            if container = "mp4"
+                ' check for codec string before adding it
+                if mp4VideoCodecs.Instr(0, ",h264") = -1
+                    mp4VideoCodecs = mp4VideoCodecs + ",h264"
+                end if
+            else if container = "ts"
+                ' check for codec string before adding it
+                if tsVideoCodecs.Instr(0, ",h264") = -1
+                    tsVideoCodecs = tsVideoCodecs + ",h264"
+                end if
+            end if
+        end if
+        if di.CanDecodeVideo({ Codec: "mpeg4 avc", Container: container }).Result
+            if container = "mp4"
+                ' check for codec string before adding it
+                if mp4VideoCodecs.Instr(0, ",mpeg4 avc") = -1
+                    mp4VideoCodecs = mp4VideoCodecs + ",mpeg4 avc"
+                end if
+            else if container = "ts"
+                ' check for codec string before adding it
+                if tsVideoCodecs.Instr(0, ",mpeg4 avc") = -1
+                    tsVideoCodecs = tsVideoCodecs + ",mpeg4 avc"
+                end if
+            end if
+        end if
+    end for
+
+    ' HEVC / h265
+    if globalUserSettings["playback.compatibility.disablehevc"] = false
+        for each container in transcodingContainers
+            if di.CanDecodeVideo({ Codec: "hevc", Container: container }).Result
+                if container = "mp4"
+                    ' check for codec string before adding it
+                    if mp4VideoCodecs.Instr(0, "h265,") = -1
+                        mp4VideoCodecs = "h265," + mp4VideoCodecs
+                    end if
+                    if mp4VideoCodecs.Instr(0, "hevc,") = -1
+                        mp4VideoCodecs = "hevc," + mp4VideoCodecs
+                    end if
+                else if container = "ts"
+                    ' check for codec string before adding it
+                    if tsVideoCodecs.Instr(0, "h265,") = -1
+                        tsVideoCodecs = "h265," + tsVideoCodecs
+                    end if
+                    if tsVideoCodecs.Instr(0, "hevc,") = -1
+                        tsVideoCodecs = "hevc," + tsVideoCodecs
+                    end if
+                end if
+            end if
+        end for
+    end if
+
+    ' VP9
+    for each container in transcodingContainers
+        if di.CanDecodeAudio({ Codec: "vp9", Container: container }).Result
+            if container = "mp4"
+                ' check for codec string before adding it
+                if mp4VideoCodecs.Instr(0, ",vp9") = -1
+                    mp4VideoCodecs = mp4VideoCodecs + ",vp9"
+                end if
+            else if container = "ts"
+                ' check for codec string before adding it
+                if tsVideoCodecs.Instr(0, ",vp9") = -1
+                    tsVideoCodecs = tsVideoCodecs + ",vp9"
+                end if
+            end if
+        end if
+    end for
+
+    ' MPEG2
+    if globalUserSettings["playback.mpeg2"]
+        for each container in transcodingContainers
+            if di.CanDecodeVideo({ Codec: "mpeg2", Container: container }).Result
+                if container = "mp4"
+                    ' check for codec string before adding it
+                    if mp4VideoCodecs.Instr(0, ",mpeg2video") = -1
+                        mp4VideoCodecs = mp4VideoCodecs + ",mpeg2video"
+                    end if
+                else if container = "ts"
+                    ' check for codec string before adding it
+                    if tsVideoCodecs.Instr(0, ",mpeg2video") = -1
+                        tsVideoCodecs = tsVideoCodecs + ",mpeg2video"
+                    end if
+                end if
+            end if
+        end for
+    end if
+
+    ' AV1
+    for each container in transcodingContainers
+        if di.CanDecodeVideo({ Codec: "av1", Container: container }).Result
+            if container = "mp4"
+                ' check for codec string before adding it
+                if mp4VideoCodecs.Instr(0, ",av1") = -1
+                    mp4VideoCodecs = mp4VideoCodecs + ",av1"
+                end if
+            else if container = "ts"
+                ' check for codec string before adding it
+                if tsVideoCodecs.Instr(0, ",av1") = -1
+                    tsVideoCodecs = tsVideoCodecs + ",av1"
+                end if
+            end if
+        end if
+    end for
+
+    ' AUDIO CODECS
+    for each container in transcodingContainers
+        for each codec in audioCodecs
+            if di.CanDecodeAudio({ Codec: codec, Container: container }).result
+                if container = "mp4"
+                    mp4AudioCodecs = mp4AudioCodecs + "," + codec
+                else if container = "ts"
+                    tsAudioCodecs = tsAudioCodecs + "," + codec
+                end if
+            end if
+        end for
+    end for
+
+    ' add aac to TranscodingProfile for stereo audio
+    ' NOTE: multichannel aac is not supported. only decode to stereo on some devices
+    transcodingProfiles.push({
+        "Container": "aac",
+        "Type": "Audio",
+        "AudioCodec": "aac",
+        "Context": "Streaming",
+        "Protocol": "http",
+        "MaxAudioChannels": "2"
+    })
+    transcodingProfiles.push({
+        "Container": "aac",
+        "Type": "Audio",
+        "AudioCodec": "aac",
+        "Context": "Static",
+        "Protocol": "http",
+        "MaxAudioChannels": "2"
+    })
+    ' add mp3 to TranscodingProfile for multichannel music
+    transcodingProfiles.push({
+        "Container": "mp3",
+        "Type": "Audio",
+        "AudioCodec": "mp3",
+        "Context": "Streaming",
+        "Protocol": "http",
+        "MaxAudioChannels": maxAudioChannels
+    })
+    transcodingProfiles.push({
+        "Container": "mp3",
+        "Type": "Audio",
+        "AudioCodec": "mp3",
+        "Context": "Static",
+        "Protocol": "http",
+        "MaxAudioChannels": maxAudioChannels
+    })
+
+    tsArray = {
+        "Container": "ts",
+        "Context": "Streaming",
+        "Protocol": "hls",
+        "Type": "Video",
+        "AudioCodec": tsAudioCodecs,
+        "VideoCodec": tsVideoCodecs,
+        "MaxAudioChannels": maxAudioChannels,
+        "MinSegments": 1,
+        "BreakOnNonKeyFrames": false
+    }
+    mp4Array = {
+        "Container": "mp4",
+        "Context": "Streaming",
+        "Protocol": "hls",
+        "Type": "Video",
+        "AudioCodec": mp4AudioCodecs,
+        "VideoCodec": mp4VideoCodecs,
+        "MaxAudioChannels": maxAudioChannels,
+        "MinSegments": 1,
+        "BreakOnNonKeyFrames": false
+    }
+
+    ' apply max res to transcoding profile
+    if globalUserSettings["playback.resolution.max"] &lt;> "off"
+        tsArray.Conditions = [getMaxHeightArray(), getMaxWidthArray()]
+        mp4Array.Conditions = [getMaxHeightArray(), getMaxWidthArray()]
+    end if
+
+    ' surround sound
+    if surroundSoundCodec &lt;> invalid
+        ' add preferred surround sound codec to TranscodingProfile
+        transcodingProfiles.push({
+            "Container": surroundSoundCodec,
+            "Type": "Audio",
+            "AudioCodec": surroundSoundCodec,
+            "Context": "Streaming",
+            "Protocol": "http",
+            "MaxAudioChannels": maxAudioChannels
+        })
+        transcodingProfiles.push({
+            "Container": surroundSoundCodec,
+            "Type": "Audio",
+            "AudioCodec": surroundSoundCodec,
+            "Context": "Static",
+            "Protocol": "http",
+            "MaxAudioChannels": maxAudioChannels
+        })
+
+        ' put codec in front of AudioCodec string
+        if tsArray.AudioCodec = ""
+            tsArray.AudioCodec = surroundSoundCodec
+        else
+            tsArray.AudioCodec = surroundSoundCodec + "," + tsArray.AudioCodec
+        end if
+
+        if mp4Array.AudioCodec = ""
+            mp4Array.AudioCodec = surroundSoundCodec
+        else
+            mp4Array.AudioCodec = surroundSoundCodec + "," + mp4Array.AudioCodec
+        end if
+    end if
+
+    transcodingProfiles.push(tsArray)
+    transcodingProfiles.push(mp4Array)
+
+    return transcodingProfiles
+end function
+
+function getContainerProfiles() as object
+    containerProfiles = []
+
+    return containerProfiles
+end function
+
+function getCodecProfiles() as object
+    globalUserSettings = m.global.session.user.settings
+    codecProfiles = []
+    profileSupport = {
+        "h264": {},
+        "mpeg4 avc": {},
+        "h265": {},
+        "hevc": {},
+        "vp9": {},
+        "mpeg2": {},
+        "av1": {}
+    }
+    maxResSetting = globalUserSettings["playback.resolution.max"]
+    di = CreateObject("roDeviceInfo")
+    maxHeightArray = getMaxHeightArray()
+    maxWidthArray = getMaxWidthArray()
+
+    ' AUDIO
+    ' test each codec to see how many channels are supported
+    audioCodecs = ["aac", "mp3", "mp2", "opus", "pcm", "lpcm", "wav", "flac", "alac", "ac3", "ac4", "aiff", "dts", "wmapro", "vorbis", "eac3", "mpg123"]
+    audioChannels = [8, 6, 2] ' highest first
+    for each audioCodec in audioCodecs
+        for each audioChannel in audioChannels
+            channelSupportFound = false
+            if di.CanDecodeAudio({ Codec: audioCodec, ChCnt: audioChannel }).Result
+                channelSupportFound = true
+                for each codecType in ["VideoAudio", "Audio"]
+                    if audioCodec = "opus" and codecType = "Audio"
+                        ' opus audio files not supported by roku
+                    else
+                        codecProfiles.push({
+                            "Type": codecType,
+                            "Codec": audioCodec,
+                            "Conditions": [
+                                {
+                                    "Condition": "LessThanEqual",
+                                    "Property": "AudioChannels",
+                                    "Value": audioChannel,
+                                    "IsRequired": true
+                                }
+                            ]
+                        })
+                    end if
+                end for
+            end if
+            if channelSupportFound
+                ' if 8 channels are supported we don't need to test for 6 or 2
+                ' if 6 channels are supported we don't need to test 2
+                exit for
+            end if
+        end for
+    end for
+
+    ' check device for codec profile and level support
+    ' AVC / h264 / MPEG4 AVC
+    h264Profiles = ["main", "high"]
+    h264Levels = ["4.1", "4.2"]
+    for each profile in h264Profiles
+        for each level in h264Levels
+            if di.CanDecodeVideo({ Codec: "h264", Profile: profile, Level: level }).Result
+                profileSupport = updateProfileArray(profileSupport, "h264", profile, level)
+            end if
+            if di.CanDecodeVideo({ Codec: "mpeg4 avc", Profile: profile, Level: level }).Result
+                profileSupport = updateProfileArray(profileSupport, "mpeg4 avc", profile, level)
+            end if
+        end for
+    end for
+
+    ' HEVC / h265
+    hevcProfiles = ["main", "main 10"]
+    hevcLevels = ["4.1", "5.0", "5.1"]
+    for each profile in hevcProfiles
+        for each level in hevcLevels
+            if di.CanDecodeVideo({ Codec: "hevc", Profile: profile, Level: level }).Result
+                profileSupport = updateProfileArray(profileSupport, "h265", profile, level)
+                profileSupport = updateProfileArray(profileSupport, "hevc", profile, level)
+            end if
+        end for
+    end for
+
+    ' VP9
+    vp9Profiles = ["profile 0", "profile 2"]
+    vp9Levels = ["4.1", "5.0", "5.1"]
+    for each profile in vp9Profiles
+        for each level in vp9Levels
+            if di.CanDecodeVideo({ Codec: "vp9", Profile: profile, Level: level }).Result
+                profileSupport = updateProfileArray(profileSupport, "vp9", profile, level)
+            end if
+        end for
+    end for
+
+    ' MPEG2
+    ' mpeg2 uses levels with no profiles. see https://developer.roku.com/en-ca/docs/references/brightscript/interfaces/ifdeviceinfo.md#candecodevideovideo_format-as-object-as-object
+    ' NOTE: the mpeg2 levels are being saved in the profileSupport array as if they were profiles
+    mpeg2Levels = ["main", "high"]
+    for each level in mpeg2Levels
+        if di.CanDecodeVideo({ Codec: "mpeg2", Level: level }).Result
+            profileSupport = updateProfileArray(profileSupport, "mpeg2", level)
+        end if
+    end for
+
+    ' AV1
+    av1Profiles = ["main", "main 10"]
+    av1Levels = ["4.1", "5.0", "5.1"]
+    for each profile in av1Profiles
+        for each level in av1Levels
+            if di.CanDecodeVideo({ Codec: "av1", Profile: profile, Level: level }).Result
+                profileSupport = updateProfileArray(profileSupport, "av1", profile, level)
+            end if
+        end for
+    end for
+
+    ' HDR SUPPORT
+    h264VideoRangeTypes = "SDR"
+    hevcVideoRangeTypes = "SDR"
+    vp9VideoRangeTypes = "SDR"
+    av1VideoRangeTypes = "SDR"
+
+    dp = di.GetDisplayProperties()
+    if dp.Hdr10
+        hevcVideoRangeTypes = hevcVideoRangeTypes + "|HDR10"
+        vp9VideoRangeTypes = vp9VideoRangeTypes + "|HDR10"
+        av1VideoRangeTypes = av1VideoRangeTypes + "|HDR10"
+    end if
+    if dp.Hdr10Plus
+        av1VideoRangeTypes = av1VideoRangeTypes + "|HDR10+"
+    end if
+    if dp.HLG
+        hevcVideoRangeTypes = hevcVideoRangeTypes + "|HLG"
+        vp9VideoRangeTypes = vp9VideoRangeTypes + "|HLG"
+        av1VideoRangeTypes = av1VideoRangeTypes + "|HLG"
+    end if
+    if dp.DolbyVision
+        h264VideoRangeTypes = h264VideoRangeTypes + "|DOVI"
+        hevcVideoRangeTypes = hevcVideoRangeTypes + "|DOVI"
+        'vp9VideoRangeTypes = vp9VideoRangeTypes + ",DOVI" no evidence that vp9 can hold DOVI
+        av1VideoRangeTypes = av1VideoRangeTypes + "|DOVI"
+    end if
+
+    ' H264
+    h264LevelSupported = 0.0
+    h264AssProfiles = {}
+    for each profile in profileSupport["h264"]
+        h264AssProfiles.AddReplace(profile, true)
+        for each level in profileSupport["h264"][profile]
+            levelFloat = level.ToFloat()
+            if levelFloat > h264LevelSupported
+                h264LevelSupported = levelFloat
+            end if
+        end for
+    end for
+
+    ' convert to string
+    h264LevelString = h264LevelSupported.ToStr()
+    ' remove decimals
+    h264LevelString = removeDecimals(h264LevelString)
+
+    h264ProfileArray = {
+        "Type": "Video",
+        "Codec": "h264",
+        "Conditions": [
+            {
+                "Condition": "NotEquals",
+                "Property": "IsAnamorphic",
+                "Value": "true",
+                "IsRequired": false
+            },
+            {
+                "Condition": "LessThanEqual",
+                "Property": "VideoBitDepth",
+                "Value": "8",
+                "IsRequired": false
+            },
+            {
+                "Condition": "EqualsAny",
+                "Property": "VideoProfile",
+                "Value": h264AssProfiles.Keys().join("|"),
+                "IsRequired": false
+            },
+            {
+                "Condition": "EqualsAny",
+                "Property": "VideoRangeType",
+                "Value": h264VideoRangeTypes,
+                "IsRequired": false
+            }
+
+        ]
+    }
+
+    ' check user setting before adding video level restrictions
+    if not globalUserSettings["playback.tryDirect.h264ProfileLevel"]
+        h264ProfileArray.Conditions.push({
+            "Condition": "LessThanEqual",
+            "Property": "VideoLevel",
+            "Value": h264LevelString,
+            "IsRequired": false
+        })
+    end if
+
+    ' set max resolution
+    if globalUserSettings["playback.resolution.mode"] = "everything" and maxResSetting &lt;> "off"
+        h264ProfileArray.Conditions.push(maxHeightArray)
+        h264ProfileArray.Conditions.push(maxWidthArray)
+    end if
+
+    ' set bitrate restrictions based on user settings
+    bitRateArray = GetBitRateLimit("h264")
+    if bitRateArray.count() > 0
+        h264ProfileArray.Conditions.push(bitRateArray)
+    end if
+
+    codecProfiles.push(h264ProfileArray)
+
+    ' MPEG2
+    ' NOTE: the mpeg2 levels are being saved in the profileSupport array as if they were profiles
+    if globalUserSettings["playback.mpeg2"]
+        mpeg2Levels = []
+        for each level in profileSupport["mpeg2"]
+            if not arrayHasValue(mpeg2Levels, level)
+                mpeg2Levels.push(level)
+            end if
+        end for
+
+        mpeg2ProfileArray = {
+            "Type": "Video",
+            "Codec": "mpeg2",
+            "Conditions": [
+                {
+                    "Condition": "EqualsAny",
+                    "Property": "VideoLevel",
+                    "Value": mpeg2Levels.join("|"),
+                    "IsRequired": false
+                }
+            ]
+        }
+
+        ' set max resolution
+        if globalUserSettings["playback.resolution.mode"] = "everything" and maxResSetting &lt;> "off"
+            mpeg2ProfileArray.Conditions.push(maxHeightArray)
+            mpeg2ProfileArray.Conditions.push(maxWidthArray)
+        end if
+
+        ' set bitrate restrictions based on user settings
+        bitRateArray = GetBitRateLimit("mpeg2")
+        if bitRateArray.count() > 0
+            mpeg2ProfileArray.Conditions.push(bitRateArray)
+        end if
+
+        codecProfiles.push(mpeg2ProfileArray)
+    end if
+
+    if di.CanDecodeVideo({ Codec: "av1" }).Result
+        av1LevelSupported = 0.0
+        av1AssProfiles = {}
+        for each profile in profileSupport["av1"]
+            av1AssProfiles.AddReplace(profile, true)
+            for each level in profileSupport["av1"][profile]
+                levelFloat = level.ToFloat()
+                if levelFloat > av1LevelSupported
+                    av1LevelSupported = levelFloat
+                end if
+            end for
+        end for
+
+        av1ProfileArray = {
+            "Type": "Video",
+            "Codec": "av1",
+            "Conditions": [
+                {
+                    "Condition": "EqualsAny",
+                    "Property": "VideoProfile",
+                    "Value": av1AssProfiles.Keys().join("|"),
+                    "IsRequired": false
+                },
+                {
+                    "Condition": "EqualsAny",
+                    "Property": "VideoRangeType",
+                    "Value": av1VideoRangeTypes,
+                    "IsRequired": false
+                },
+                {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoLevel",
+                    "Value": (120 * av1LevelSupported).ToStr(),
+                    "IsRequired": false
+                }
+            ]
+        }
+
+        ' set max resolution
+        if globalUserSettings["playback.resolution.mode"] = "everything" and maxResSetting &lt;> "off"
+            av1ProfileArray.Conditions.push(maxHeightArray)
+            av1ProfileArray.Conditions.push(maxWidthArray)
+        end if
+
+        ' set bitrate restrictions based on user settings
+        bitRateArray = GetBitRateLimit("av1")
+        if bitRateArray.count() > 0
+            av1ProfileArray.Conditions.push(bitRateArray)
+        end if
+
+        codecProfiles.push(av1ProfileArray)
+    end if
+
+    if not globalUserSettings["playback.compatibility.disablehevc"] and di.CanDecodeVideo({ Codec: "hevc" }).Result
+        hevcLevelSupported = 0.0
+        hevcAssProfiles = {}
+
+        for each profile in profileSupport["hevc"]
+            hevcAssProfiles.AddReplace(profile, true)
+            for each level in profileSupport["hevc"][profile]
+                levelFloat = level.ToFloat()
+                if levelFloat > hevcLevelSupported
+                    hevcLevelSupported = levelFloat
+                end if
+            end for
+        end for
+
+        hevcLevelString = "120"
+        if hevcLevelSupported = 5.1
+            hevcLevelString = "153"
+        end if
+
+        hevcProfileArray = {
+            "Type": "Video",
+            "Codec": "hevc",
+            "Conditions": [
+                {
+                    "Condition": "NotEquals",
+                    "Property": "IsAnamorphic",
+                    "Value": "true",
+                    "IsRequired": false
+                },
+                {
+                    "Condition": "EqualsAny",
+                    "Property": "VideoProfile",
+                    "Value": profileSupport["hevc"].Keys().join("|"),
+                    "IsRequired": false
+                },
+                {
+                    "Condition": "EqualsAny",
+                    "Property": "VideoRangeType",
+                    "Value": hevcVideoRangeTypes,
+                    "IsRequired": false
+                }
+            ]
+        }
+
+        ' check user setting before adding VideoLevel restrictions
+        if not globalUserSettings["playback.tryDirect.hevcProfileLevel"]
+            hevcProfileArray.Conditions.push({
+                "Condition": "LessThanEqual",
+                "Property": "VideoLevel",
+                "Value": hevcLevelString,
+                "IsRequired": false
+            })
+        end if
+
+        ' set max resolution
+        if globalUserSettings["playback.resolution.mode"] = "everything" and maxResSetting &lt;> "off"
+            hevcProfileArray.Conditions.push(maxHeightArray)
+            hevcProfileArray.Conditions.push(maxWidthArray)
+        end if
+
+        ' set bitrate restrictions based on user settings
+        bitRateArray = GetBitRateLimit("h265")
+        if bitRateArray.count() > 0
+            hevcProfileArray.Conditions.push(bitRateArray)
+        end if
+
+        codecProfiles.push(hevcProfileArray)
+    end if
+
+    if di.CanDecodeVideo({ Codec: "vp9" }).Result
+        vp9Profiles = []
+        vp9LevelSupported = 0.0
+
+        for each profile in profileSupport["vp9"]
+            vp9Profiles.push(profile)
+            for each level in profileSupport["vp9"][profile]
+                levelFloat = level.ToFloat()
+                if levelFloat > vp9LevelSupported
+                    vp9LevelSupported = levelFloat
+                end if
+            end for
+        end for
+
+        vp9LevelString = "120"
+        if vp9LevelSupported = 5.1
+            vp9LevelString = "153"
+        end if
+
+        vp9ProfileArray = {
+            "Type": "Video",
+            "Codec": "vp9",
+            "Conditions": [
+                {
+                    "Condition": "EqualsAny",
+                    "Property": "VideoProfile",
+                    "Value": vp9Profiles.join("|"),
+                    "IsRequired": false
+                },
+                {
+                    "Condition": "EqualsAny",
+                    "Property": "VideoRangeType",
+                    "Value": vp9VideoRangeTypes,
+                    "IsRequired": false
+                },
+                {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoLevel",
+                    "Value": vp9LevelString,
+                    "IsRequired": false
+                }
+            ]
+        }
+
+        ' set max resolution
+        if globalUserSettings["playback.resolution.mode"] = "everything" and maxResSetting &lt;> "off"
+            vp9ProfileArray.Conditions.push(maxHeightArray)
+            vp9ProfileArray.Conditions.push(maxWidthArray)
+        end if
+
+        ' set bitrate restrictions based on user settings
+        bitRateArray = GetBitRateLimit("vp9")
+        if bitRateArray.count() > 0
+            vp9ProfileArray.Conditions.push(bitRateArray)
+        end if
+
+        codecProfiles.push(vp9ProfileArray)
+    end if
+
+    return codecProfiles
+end function
+
+function getSubtitleProfiles() as object
+    subtitleProfiles = []
+
+    subtitleProfiles.push({
+        "Format": "vtt",
+        "Method": "External"
+    })
+    subtitleProfiles.push({
+        "Format": "srt",
+        "Method": "External"
+    })
+    subtitleProfiles.push({
+        "Format": "ttml",
+        "Method": "External"
+    })
+    subtitleProfiles.push({
+        "Format": "sub",
+        "Method": "External"
+    })
+
+    return subtitleProfiles
+end function
+
+function GetBitRateLimit(codec as string) as object
+    globalUserSettings = m.global.session.user.settings
+    if globalUserSettings["playback.bitrate.maxlimited"]
+        userSetLimit = globalUserSettings["playback.bitrate.limit"].ToInt()
+        if isValid(userSetLimit) and type(userSetLimit) = "Integer" and userSetLimit > 0
+            userSetLimit *= 1000000
+            return {
+                "Condition": "LessThanEqual",
+                "Property": "VideoBitrate",
+                "Value": userSetLimit.ToStr(),
+                "IsRequired": true
+            }
+        else
+            codec = Lcase(codec)
+            ' Some repeated values (e.g. same "40mbps" for several codecs)
+            ' but this makes it easy to update in the future if the bitrates start to deviate.
+            if codec = "h264"
+                ' Roku only supports h264 up to 10Mpbs
+                return {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "10000000",
+                    "IsRequired": true
+                }
+            else if codec = "av1"
+                ' Roku only supports AV1 up to 40Mpbs
+                return {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "40000000",
+                    "IsRequired": true
+                }
+            else if codec = "h265"
+                ' Roku only supports h265 up to 40Mpbs
+                return {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "40000000",
+                    "IsRequired": true
+                }
+            else if codec = "vp9"
+                ' Roku only supports VP9 up to 40Mpbs
+                return {
+                    "Condition": "LessThanEqual",
+                    "Property": "VideoBitrate",
+                    "Value": "40000000",
+                    "IsRequired": true
+                }
+            end if
+        end if
+    end if
+    return {}
+end function
+
+function getMaxHeightArray() as object
+    myGlobal = m.global
+
+    maxResSetting = myGlobal.session.user.settings["playback.resolution.max"]
+    if maxResSetting = "off" then return {}
+
+    maxVideoHeight = maxResSetting
+
+    if maxResSetting = "auto"
+        maxVideoHeight = myGlobal.device.videoHeight
+    end if
+
+    return {
+        "Condition": "LessThanEqual",
+        "Property": "Height",
+        "Value": maxVideoHeight,
+        "IsRequired": true
+    }
+end function
+
+function getMaxWidthArray() as object
+    myGlobal = m.global
+
+    maxResSetting = myGlobal.session.user.settings["playback.resolution.max"]
+    if maxResSetting = "off" then return {}
+
+    maxVideoWidth = invalid
+
+    if maxResSetting = "auto"
+        maxVideoWidth = myGlobal.device.videoWidth
+    else if maxResSetting = "360"
+        maxVideoWidth = "480"
+    else if maxResSetting = "480"
+        maxVideoWidth = "640"
+    else if maxResSetting = "720"
+        maxVideoWidth = "1280"
+    else if maxResSetting = "1080"
+        maxVideoWidth = "1920"
+    else if maxResSetting = "2160"
+        maxVideoWidth = "3840"
+    else if maxResSetting = "4320"
+        maxVideoWidth = "7680"
+    end if
+
+    return {
+        "Condition": "LessThanEqual",
+        "Property": "Width",
+        "Value": maxVideoWidth,
+        "IsRequired": true
+    }
+end function
+
+' Recieves and returns an assArray of supported profiles and levels for each video codec
+function updateProfileArray(profileArray as object, videoCodec as string, videoProfile as string, profileLevel = "" as string) as object
+    ' validate params
+    if profileArray = invalid then return {}
+    if videoCodec = "" or videoProfile = "" then return profileArray
+
+    if profileArray[videoCodec] = invalid
+        profileArray[videoCodec] = {}
+    end if
+
+    if profileArray[videoCodec][videoProfile] = invalid
+        profileArray[videoCodec][videoProfile] = {}
+    end if
+
+    ' add profileLevel if a value was provided
+    if profileLevel &lt;> ""
+        if profileArray[videoCodec][videoProfile][profileLevel] = invalid
+            profileArray[videoCodec][videoProfile].AddReplace(profileLevel, true)
+        end if
+    end if
+
+    return profileArray
+end function
+
+' Remove all decimals from a string
+function removeDecimals(value as string) as string
+    r = CreateObject("roRegex", "\.", "")
+    value = r.ReplaceAll(value, "")
+    return value
+end function
+
+' Print out the deviceProfile for debugging
+sub printDeviceProfile(profile as object)
+    print "profile =", profile
+    print "profile.DeviceProfile =", profile.DeviceProfile
+    print "profile.DeviceProfile.CodecProfiles ="
+    for each prof in profile.DeviceProfile.CodecProfiles
+        print prof
+        for each cond in prof.Conditions
+            print cond
+        end for
+    end for
+    print "profile.DeviceProfile.ContainerProfiles =", profile.DeviceProfile.ContainerProfiles
+    print "profile.DeviceProfile.DirectPlayProfiles ="
+    for each prof in profile.DeviceProfile.DirectPlayProfiles
+        print prof
+    end for
+    print "profile.DeviceProfile.SubtitleProfiles ="
+    for each prof in profile.DeviceProfile.SubtitleProfiles
+        print prof
+    end for
+    print "profile.DeviceProfile.TranscodingProfiles ="
+    for each prof in profile.DeviceProfile.TranscodingProfiles
+        print prof
+        if isValid(prof.Conditions)
+            for each condition in prof.Conditions
+                print condition
+            end for
+        end if
+    end for
+    print "profile.PlayableMediaTypes =", profile.PlayableMediaTypes
+    print "profile.SupportedCommands =", profile.SupportedCommands
+end sub
+' Takes and returns a comma delimited string of codecs.
+' Moves the preferred codec to the front of the string
+function setPreferredCodec(codecString as string, preferredCodec as string) as string
+    if preferredCodec = "" then return ""
+    if codecString = "" then return preferredCodec
+
+    preferredCodecSize = Len(preferredCodec)
+
+    ' is the codec already in front?
+    if Left(codecString, preferredCodecSize) = preferredCodec
+        return codecString
+    else
+        ' convert string to array
+        codecArray = codecString.Split(",")
+        ' remove preferred codec from array
+        newArray = []
+        for each codec in codecArray
+            if codec &lt;> preferredCodec
+                newArray.push(codec)
+            end if
+        end for
+        ' convert newArray to string
+        newCodecString = newArray.Join(",")
+        ' add preferred codec to front of newCodecString
+        newCodecString = preferredCodec + "," + newCodecString
+
+        return newCodecString
+    end if
+end function
+</code></pre></article></section><footer class="footer" id="PeOAagUepe"><div class="wrapper"><span class="jsdoc-message">Automatically generated using <a href="https://github.com/jsdoc/jsdoc" target="_blank">JSDoc</a> and the <a href="https://github.com/ankitskvmdam/clean-jsdoc-theme" target="_blank">clean-jsdoc-theme</a>.</span></div></footer></div></div></div><div class="search-container" id="PkfLWpAbet" style="display:none"><div class="wrapper" id="iCxFxjkHbP"><button class="icon-button search-close-button" id="VjLlGakifb" aria-label="close search"><svg><use xlink:href="#close-icon"></use></svg></button><div class="search-box-c"><svg><use xlink:href="#search-icon"></use></svg> <input type="text" id="vpcKVYIppa" class="search-input" placeholder="Search..." autofocus></div><div class="search-result-c" id="fWwVHRuDuN"><span class="search-result-c-text">Type anything to view search result</span></div></div></div><div class="mobile-menu-icon-container"><button class="icon-button" id="mobile-menu" data-isopen="false" aria-label="menu"><svg><use xlink:href="#menu-icon"></use></svg></button></div><div id="mobile-sidebar" class="mobile-sidebar-container"><div class="mobile-sidebar-wrapper"><a href="/" class="sidebar-title sidebar-title-anchor">jellyfin-roku Code Documentation</a><div class="mobile-nav-links"><div class="external-link navbar-item"><a id="jellyfin-link-mobile" href="https://jellyfin.org/" target="_blank">Jellyfin</a></div><div class="external-link navbar-item"><a id="github-link-mobile" href="https://github.com/jellyfin/jellyfin-roku" target="_blank">GitHub</a></div><div class="external-link navbar-item"><a id="forum-link-mobile" href="https://forum.jellyfin.org/f-roku-development" target="_blank">Forum</a></div><div class="external-link navbar-item"><a id="matrix-link-mobile" href="https://matrix.to/#/#jellyfin-dev-roku:matrix.org" target="_blank">Matrix</a></div></div><div class="mobile-sidebar-items-c"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="module-AlbumData.html">AlbumData</a></div><div class="sidebar-section-children"><a href="module-AlbumGrid.html">AlbumGrid</a></div><div class="sidebar-section-children"><a href="module-AlbumTrackList.html">AlbumTrackList</a></div><div class="sidebar-section-children"><a href="module-AlbumView.html">AlbumView</a></div><div class="sidebar-section-children"><a href="module-Alpha.html">Alpha</a></div><div class="sidebar-section-children"><a href="module-ArtistView.html">ArtistView</a></div><div class="sidebar-section-children"><a href="module-AudioPlayer.html">AudioPlayer</a></div><div class="sidebar-section-children"><a href="module-AudioPlayerView.html">AudioPlayerView</a></div><div class="sidebar-section-children"><a href="module-AudioTrackListItem.html">AudioTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupHoriz.html">ButtonGroupHoriz</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupVert.html">ButtonGroupVert</a></div><div class="sidebar-section-children"><a href="module-ChannelData.html">ChannelData</a></div><div class="sidebar-section-children"><a href="module-Clock.html">Clock</a></div><div class="sidebar-section-children"><a href="module-CollectionData.html">CollectionData</a></div><div class="sidebar-section-children"><a href="module-ConfigData.html">ConfigData</a></div><div class="sidebar-section-children"><a href="module-ConfigItem.html">ConfigItem</a></div><div class="sidebar-section-children"><a href="module-ConfigList.html">ConfigList</a></div><div class="sidebar-section-children"><a href="module-ExtrasItem.html">ExtrasItem</a></div><div class="sidebar-section-children"><a href="module-ExtrasRowList.html">ExtrasRowList</a></div><div class="sidebar-section-children"><a href="module-FavoriteItemsTask.html">FavoriteItemsTask</a></div><div class="sidebar-section-children"><a href="module-FolderData.html">FolderData</a></div><div class="sidebar-section-children"><a href="module-GetFiltersTask.html">GetFiltersTask</a></div><div class="sidebar-section-children"><a href="module-GetNextEpisodeTask.html">GetNextEpisodeTask</a></div><div class="sidebar-section-children"><a href="module-GetPlaybackInfoTask.html">GetPlaybackInfoTask</a></div><div class="sidebar-section-children"><a href="module-GetShuffleEpisodesTask.html">GetShuffleEpisodesTask</a></div><div class="sidebar-section-children"><a href="module-GridItem.html">GridItem</a></div><div class="sidebar-section-children"><a href="module-GridItemSmall.html">GridItemSmall</a></div><div class="sidebar-section-children"><a href="module-Home.html">Home</a></div><div class="sidebar-section-children"><a href="module-HomeData.html">HomeData</a></div><div class="sidebar-section-children"><a href="module-HomeItem.html">HomeItem</a></div><div class="sidebar-section-children"><a href="module-HomeRowItemSizes.html">HomeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-HomeRows.html">HomeRows</a></div><div class="sidebar-section-children"><a href="module-IconButton.html">IconButton</a></div><div class="sidebar-section-children"><a href="module-Image.html">Image</a></div><div class="sidebar-section-children"><a href="module-ImageData.html">ImageData</a></div><div class="sidebar-section-children"><a href="module-IntegerKeyboard.html">IntegerKeyboard</a></div><div class="sidebar-section-children"><a href="module-ItemGrid.html">ItemGrid</a></div><div class="sidebar-section-children"><a href="module-ItemGridOptions.html">ItemGridOptions</a></div><div class="sidebar-section-children"><a href="module-Items.html">Items</a></div><div class="sidebar-section-children"><a href="module-JFButton.html">JFButton</a></div><div class="sidebar-section-children"><a href="module-JFButtons.html">JFButtons</a></div><div class="sidebar-section-children"><a href="module-JFGroup.html">JFGroup</a></div><div class="sidebar-section-children"><a href="module-JFMessageDialog.html">JFMessageDialog</a></div><div class="sidebar-section-children"><a href="module-JFOverhang.html">JFOverhang</a></div><div class="sidebar-section-children"><a href="module-JFScene.html">JFScene</a></div><div class="sidebar-section-children"><a href="module-JFScreen.html">JFScreen</a></div><div class="sidebar-section-children"><a href="module-JFServer.html">JFServer</a></div><div class="sidebar-section-children"><a href="module-JFVideo.html">JFVideo</a></div><div class="sidebar-section-children"><a href="module-ListPoster.html">ListPoster</a></div><div class="sidebar-section-children"><a href="module-LoadChannelsTask.html">LoadChannelsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask.html">LoadItemsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask2.html">LoadItemsTask2</a></div><div class="sidebar-section-children"><a href="module-LoadPhotoTask.html">LoadPhotoTask</a></div><div class="sidebar-section-children"><a href="module-LoadProgramDetailsTask.html">LoadProgramDetailsTask</a></div><div class="sidebar-section-children"><a href="module-LoadScreenSaverTimeoutTask.html">LoadScreenSaverTimeoutTask</a></div><div class="sidebar-section-children"><a href="module-LoadSheduleTask.html">LoadSheduleTask</a></div><div class="sidebar-section-children"><a href="module-LoadVideoContentTask.html">LoadVideoContentTask</a></div><div class="sidebar-section-children"><a href="module-LoginScene.html">LoginScene</a></div><div class="sidebar-section-children"><a href="module-Main.html">Main</a></div><div class="sidebar-section-children"><a href="module-MovieData.html">MovieData</a></div><div class="sidebar-section-children"><a href="module-MovieDetails.html">MovieDetails</a></div><div class="sidebar-section-children"><a href="module-MovieLibraryView.html">MovieLibraryView</a></div><div class="sidebar-section-children"><a href="module-MovieOptions.html">MovieOptions</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumData.html">MusicAlbumData</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumSongListData.html">MusicAlbumSongListData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistData.html">MusicArtistData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistGridItem.html">MusicArtistGridItem</a></div><div class="sidebar-section-children"><a href="module-MusicLibraryView.html">MusicLibraryView</a></div><div class="sidebar-section-children"><a href="module-MusicSongData.html">MusicSongData</a></div><div class="sidebar-section-children"><a href="module-OSD.html">OSD</a></div><div class="sidebar-section-children"><a href="module-OptionNode.html">OptionNode</a></div><div class="sidebar-section-children"><a href="module-OptionsButton.html">OptionsButton</a></div><div class="sidebar-section-children"><a href="module-OptionsData.html">OptionsData</a></div><div class="sidebar-section-children"><a href="module-OptionsSlider.html">OptionsSlider</a></div><div class="sidebar-section-children"><a href="module-OverviewDialog.html">OverviewDialog</a></div><div class="sidebar-section-children"><a href="module-PersonData.html">PersonData</a></div><div class="sidebar-section-children"><a href="module-PersonDetails.html">PersonDetails</a></div><div class="sidebar-section-children"><a href="module-PhotoData.html">PhotoData</a></div><div class="sidebar-section-children"><a href="module-PhotoDetails.html">PhotoDetails</a></div><div class="sidebar-section-children"><a href="module-PlaybackDialog.html">PlaybackDialog</a></div><div class="sidebar-section-children"><a href="module-PlayedCheckmark.html">PlayedCheckmark</a></div><div class="sidebar-section-children"><a href="module-PlaylistData.html">PlaylistData</a></div><div class="sidebar-section-children"><a href="module-PlaylistView.html">PlaylistView</a></div><div class="sidebar-section-children"><a href="module-PlaystateTask.html">PlaystateTask</a></div><div class="sidebar-section-children"><a href="module-PostTask.html">PostTask</a></div><div class="sidebar-section-children"><a href="module-ProgramDetails.html">ProgramDetails</a></div><div class="sidebar-section-children"><a href="module-PublicUserData.html">PublicUserData</a></div><div class="sidebar-section-children"><a href="module-QueueManager.html">QueueManager</a></div><div class="sidebar-section-children"><a href="module-QuickConnect.html">QuickConnect</a></div><div class="sidebar-section-children"><a href="module-QuickConnectDialog.html">QuickConnectDialog</a></div><div class="sidebar-section-children"><a href="module-RadioDialog.html">RadioDialog</a></div><div class="sidebar-section-children"><a href="module-RecordProgramTask.html">RecordProgramTask</a></div><div class="sidebar-section-children"><a href="module-SceneManager.html">SceneManager</a></div><div class="sidebar-section-children"><a href="module-ScheduleProgramData.html">ScheduleProgramData</a></div><div class="sidebar-section-children"><a href="module-SearchBox.html">SearchBox</a></div><div class="sidebar-section-children"><a href="module-SearchData.html">SearchData</a></div><div class="sidebar-section-children"><a href="module-SearchResults.html">SearchResults</a></div><div class="sidebar-section-children"><a href="module-SearchRow.html">SearchRow</a></div><div class="sidebar-section-children"><a href="module-SearchTask.html">SearchTask</a></div><div class="sidebar-section-children"><a href="module-SeriesData.html">SeriesData</a></div><div class="sidebar-section-children"><a href="module-ServerDiscoveryTask.html">ServerDiscoveryTask</a></div><div class="sidebar-section-children"><a href="module-SetServerScreen.html">SetServerScreen</a></div><div class="sidebar-section-children"><a href="module-ShowScenes.html">ShowScenes</a></div><div class="sidebar-section-children"><a href="module-SlideOutButton.html">SlideOutButton</a></div><div class="sidebar-section-children"><a href="module-SongItem.html">SongItem</a></div><div class="sidebar-section-children"><a href="module-Spinner.html">Spinner</a></div><div class="sidebar-section-children"><a href="module-StandardDialog.html">StandardDialog</a></div><div class="sidebar-section-children"><a href="module-Subtitles.html">Subtitles</a></div><div class="sidebar-section-children"><a href="module-TVEpisode.html">TVEpisode</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeData.html">TVEpisodeData</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRow.html">TVEpisodeRow</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRowWithOptions.html">TVEpisodeRowWithOptions</a></div><div class="sidebar-section-children"><a href="module-TVEpisodes.html">TVEpisodes</a></div><div class="sidebar-section-children"><a href="module-TVListDetails.html">TVListDetails</a></div><div class="sidebar-section-children"><a href="module-TVListOptions.html">TVListOptions</a></div><div class="sidebar-section-children"><a href="module-TVSeasonData.html">TVSeasonData</a></div><div class="sidebar-section-children"><a href="module-TVSeasonRow.html">TVSeasonRow</a></div><div class="sidebar-section-children"><a href="module-TVShowDescription.html">TVShowDescription</a></div><div class="sidebar-section-children"><a href="module-TVShowDetails.html">TVShowDetails</a></div><div class="sidebar-section-children"><a href="module-TextSizeTask.html">TextSizeTask</a></div><div class="sidebar-section-children"><a href="module-UserData.html">UserData</a></div><div class="sidebar-section-children"><a href="module-UserItem.html">UserItem</a></div><div class="sidebar-section-children"><a href="module-UserLibrary.html">UserLibrary</a></div><div class="sidebar-section-children"><a href="module-UserRow.html">UserRow</a></div><div class="sidebar-section-children"><a href="module-UserSelect.html">UserSelect</a></div><div class="sidebar-section-children"><a href="module-VideoData.html">VideoData</a></div><div class="sidebar-section-children"><a href="module-VideoPlayer.html">VideoPlayer</a></div><div class="sidebar-section-children"><a href="module-VideoPlayerView.html">VideoPlayerView</a></div><div class="sidebar-section-children"><a href="module-VideoTrackListItem.html">VideoTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ViewCreator.html">ViewCreator</a></div><div class="sidebar-section-children"><a href="module-WhatsNewDialog.html">WhatsNewDialog</a></div><div class="sidebar-section-children"><a href="module-baserequest.html">baserequest</a></div><div class="sidebar-section-children"><a href="module-captionTask.html">captionTask</a></div><div class="sidebar-section-children"><a href="module-conditional.html">conditional</a></div><div class="sidebar-section-children"><a href="module-config.html">config</a></div><div class="sidebar-section-children"><a href="module-deviceCapabilities.html">deviceCapabilities</a></div><div class="sidebar-section-children"><a href="module-globals.html">globals</a></div><div class="sidebar-section-children"><a href="module-homeRowItemSizes_.html">homeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-migrations.html">migrations</a></div><div class="sidebar-section-children"><a href="module-misc.html">misc</a></div><div class="sidebar-section-children"><a href="module-quickplay.html">quickplay</a></div><div class="sidebar-section-children"><a href="module-schedule.html">schedule</a></div><div class="sidebar-section-children"><a href="module-section.html">section</a></div><div class="sidebar-section-children"><a href="module-sectionScroller.html">sectionScroller</a></div><div class="sidebar-section-children"><a href="module-settings.html">settings</a></div><div class="sidebar-section-children"><a href="module-userauth.html">userauth</a></div></div></div><div class="mobile-navbar-actions"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div></div></div><script type="text/javascript" src="scripts/core.min.js"></script><script src="scripts/search.min.js" defer="defer"></script><script src="scripts/third-party/fuse.js" defer="defer"></script><script type="text/javascript">var tocbotInstance=tocbot.init({tocSelector:"#eed4d2a0bfd64539bb9df78095dec881",contentSelector:".main-content",headingSelector:"h1, h2, h3",hasInnerContainers:!0,scrollContainer:".main-content",headingsOffset:130,onClick:bringLinkToView})</script></body></html>

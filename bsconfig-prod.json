@@ -1,37 +1,30 @@
 {
-    "files": [
-        "manifest",
-        "source/**/*.*",
-        "components/**/*.*",
-        "images/**/*.*",
-        "locale/en_US/translations.ts",
-        "locale/en_GB/translations.ts",
-        "locale/fr_CA/translations.ts",
-        "locale/es_ES/translations.ts",
-        "locale/de_DE/translations.ts",
-        "locale/it_IT/translations.ts",
-        "locale/pt_BR/translations.ts",
-        "settings/**/*.*",
-        {
-            "src": "resources/branding/release/*.*",
-            "dest": "images"
-        }
-    ],
-    "plugins": [
-        "@rokucommunity/bslint",
-        "roku-log-bsc-plugin"
-    ],
-    "rokuLog": {
-        "strip": true,
-        "insertPkgPath": false,
-        "removeComments": true
-    },
-    "diagnosticFilters": [
-        "node_modules/**/*",
-        "**/roku_modules/**/*"
-    ],
-    "allowBrighterScriptInBrightScript": true,
-    "autoImportComponentScript": true,
-    "stagingDir": "build/staging",
-    "retainStagingDir": true
+  "files": [
+    "manifest",
+    "source/**/*.*",
+    "components/**/*.*",
+    "images/**/*.*",
+    "locale/en_US/translations.ts",
+    "locale/en_GB/translations.ts",
+    "locale/fr_CA/translations.ts",
+    "locale/es_ES/translations.ts",
+    "locale/de_DE/translations.ts",
+    "locale/it_IT/translations.ts",
+    "locale/pt_BR/translations.ts",
+    "settings/**/*.*",
+    {
+      "src": "resources/branding/release/*.*",
+      "dest": "images"
+    }
+  ],
+  "plugins": ["@rokucommunity/bslint", "roku-log-bsc-plugin"],
+  "rokuLog": {
+    "strip": true,
+    "insertPkgPath": false,
+    "removeComments": true
+  },
+  "diagnosticFilters": ["node_modules/**/*", "**/roku_modules/**/*"],
+  "autoImportComponentScript": true,
+  "stagingDir": "build/staging",
+  "retainStagingDir": true
 }

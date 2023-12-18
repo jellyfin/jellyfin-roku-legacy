@@ -10,7 +10,6 @@
       <SearchRow id="searchSelect" visible="true" focusable="true" />
     </LayoutGroup>
     <OptionsSlider id="options" />
-    <Spinner id="searchSpinner" visible="false" translation="[1050, 500]" />
   </children>
   <interface>
     <field id="query" type="string" alwaysNotify="true" />
