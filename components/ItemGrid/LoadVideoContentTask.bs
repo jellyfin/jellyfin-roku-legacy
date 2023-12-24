@@ -77,6 +77,22 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
 
     videotype = LCase(meta.type)
 
+    ' Special handling for Live TV channels that are not part of a "TV Guide"
+    if isValid(meta.json) and isValid(meta.json.ChannelId)
+        if isValid(meta.json.EpisodeTitle)
+            meta.title = meta.json.EpisodeTitle
+        else if isValid(meta.json.Name)
+            meta.title = meta.json.Name
+        end if
+        meta.showID = meta.json.id
+        meta.live = true
+        if LCase(meta.json.type) = "program"
+            video.id = meta.json.ChannelId
+        else
+            video.id = meta.json.id
+        end if
+    end if
+
     if videotype = "episode" or videotype = "series"
         video.content.contenttype = "episode"
     end if
