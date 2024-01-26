@@ -102,8 +102,33 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     end if
 
     video.chapters = meta.json.Chapters
-    video.content.title = meta.title
+
+    ' Show Series and Title
+    extraPrefix = ""
+    if m.global.session.user.settings["playback.showseriestitle"] = true
+        if videotype = "episode" or videotype = "series"
+
+            if isValid(meta.json.ParentIndexNumber)
+                extraPrefix = "S" + StrI(meta.json.ParentIndexNumber).trim()
+            end if
+
+            if isValid(meta.json.IndexNumber)
+                extraPrefix = extraPrefix + "E" + StrI(meta.json.IndexNumber).trim()
+            end if
+
+            if extraPrefix.len() > 0
+                extraPrefix = extraPrefix + " - "
+            end if
+        end if
+    end if
+
+    video.content.title = extraPrefix + meta.title
+
     video.showID = meta.showID
+
+
+
+
 
     user = AboutMe()
     if user.Configuration.EnableNextEpisodeAutoPlay
