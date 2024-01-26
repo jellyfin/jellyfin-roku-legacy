@@ -188,13 +188,6 @@
                 "default": "30"
             },
             {
-                "title": "Include Season/Episode In Title",
-                "description": "Show Series and Episode in Title.",
-                "settingName": "playback.showseriestitle",
-                "type": "bool",
-                "default": "false"
-            },
-            {
                 "title": "Text Subtitles Only",
                 "description": "Only display text subtitles to minimize transcoding.",
                 "settingName": "playback.subs.onlytext",

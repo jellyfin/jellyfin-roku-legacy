@@ -105,20 +105,22 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
 
     ' Show Series and Title
     extraPrefix = ""
-    if m.global.session.user.settings["playback.showseriestitle"] = true
-        if videotype = "episode" or videotype = "series"
+    if videotype = "episode" or videotype = "series"
 
-            if isValid(meta.json.ParentIndexNumber)
-                extraPrefix = "S" + StrI(meta.json.ParentIndexNumber).trim()
-            end if
+        if isValid(meta.json.ParentIndexNumber)
+            extraPrefix = "S" + StrI(meta.json.ParentIndexNumber).trim()
+        end if
 
-            if isValid(meta.json.IndexNumber)
-                extraPrefix = extraPrefix + "E" + StrI(meta.json.IndexNumber).trim()
-            end if
+        if isValid(meta.json.IndexNumber)
+            extraPrefix = extraPrefix + "E" + StrI(meta.json.IndexNumber).trim()
+        end if
 
-            if extraPrefix.len() > 0
-                extraPrefix = extraPrefix + " - "
-            end if
+        if isValid(meta.json.IndexNumberEnd)
+            extraPrefix = extraPrefix + "-" + StrI(meta.json.IndexNumberEnd).trim()
+        end if
+
+        if extraPrefix.len() > 0
+            extraPrefix = extraPrefix + " - "
         end if
     end if
 

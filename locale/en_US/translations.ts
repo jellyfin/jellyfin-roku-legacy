@@ -1113,16 +1113,6 @@
             <extracomment>Settings Menu - Description for option</extracomment>
         </message>
         <message>
-            <source>Include Season/Episode In Title</source>
-            <translation>Include Season/Episode In Title</translation>
-            <extracomment>Settings Menu - Title for option</extracomment>
-        </message>   
-        <message>
-            <source>Show Series and Episode in Title.</source>
-            <translation>Show Series and Episode in Title.</translation>
-            <extracomment>Settings Menu - Description for option</extracomment>
-        </message>    
-        <message>
             <source>Choose your preferred audio codec when transcoding multichannel audio.</source>
             <translation>Choose your preferred audio codec when transcoding multichannel audio.</translation>
             <extracomment>Settings Menu - Description for option</extracomment>
