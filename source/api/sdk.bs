@@ -657,8 +657,9 @@ namespace api
         end function
 
         ' Downloads a remote subtitle.
-        sub DownloadRemoteSubtitles()
-            throw "System.NotImplementedException: The function is not implemented."
+        sub DownloadRemoteSubtitles(id as string, subtitleId as string)
+            req = APIRequest(Substitute("/items/{0}/remotesearch/subtitles/{1}", id, subtitleId))
+            postVoid(req)
         end sub
     end namespace
 
@@ -2108,9 +2109,10 @@ namespace api
         end sub
 
         ' Deletes an external subtitle file.
-        sub DeleteSubtitle()
-            throw "System.NotImplementedException: The function is not implemented."
-        end sub
+        function DeleteSubtitle(itemid as string, index as integer)
+            req = APIRequest(Substitute("/videos/{0}/subtitles/{1}", itemid, index.toStr()))
+            return deleteVoid(req)
+        end function
 
         ' Gets subtitles in a specified format.
         function GetSubtitlesWithStartPosition(routeitemid as string, routemediasourceid as string, routeindex as integer, routestartpositionticks as integer, routeformat as string, params = {} as object)

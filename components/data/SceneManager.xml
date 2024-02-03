@@ -10,6 +10,7 @@
     <function name="resetTime" />
     <function name="userMessage" />
     <function name="standardDialog" />
+    <function name="remoteSubtitleDialog" />
     <function name="radioDialog" />
     <function name="dismissDialog" />
     <function name="isDialogOpen" />

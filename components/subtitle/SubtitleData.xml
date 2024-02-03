@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="SubtitleData" extends="ContentNode">
+  <interface>
+    <field id="path" type="string" />
+    <field id="displayTitle" type="string" />
+    <field id="index" type="integer" />
+    <field id="canDelete" type="boolean" />
+  </interface>
+</component>

@@ -1,0 +1,38 @@
+import "pkg:/source/utils/misc.bs"
+
+sub init()
+    m.displayTitle = m.top.findNode("displayTitle")
+    m.path = m.top.findNode("path")
+    m.delete = m.top.findNode("delete")
+
+    m.displayTitle.font.size = 30
+    m.path.font.size = 28
+
+    m.defaultTextColor = m.displayTitle.color
+end sub
+
+sub itemContentChanged()
+    itemData = m.top.itemContent
+    if itemData = invalid then return
+    m.displayTitle.text = itemData.displayTitle
+    m.path.text = itemData.path
+end sub
+
+sub focusChanged()
+    color = m.defaultTextColor
+    repeatcount = 0
+    showDeleteIcon = false
+
+    if m.top.itemHasFocus
+        color = "#101010FF"
+        repeatcount = -1
+        showDeleteIcon = m.top.itemContent.canDelete
+    end if
+
+    m.displayTitle.color = color
+    m.displayTitle.repeatCount = repeatcount
+    m.delete.visible = showDeleteIcon
+
+    m.path.color = color
+    m.path.repeatCount = repeatcount
+end sub

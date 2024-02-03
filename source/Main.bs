@@ -404,6 +404,122 @@ sub Main (args as dynamic) as void
             m.global.queueManager.callFunc("resetShuffle")
             m.global.queueManager.callFunc("push", screenContent.albumData.items[selectedIndex])
             m.global.queueManager.callFunc("playQueue")
+        else if isNodeEvent(msg, "subtitleToDelete")
+            subtitleData = msg.getData()
+            screenContent = msg.getRoSGNode()
+
+            mySubtitleList = screenContent.findNode("mySubtitleList")
+
+            if isAllValid([subtitleData, screenContent, mySubtitleList])
+                if isAllValid([screenContent.itemContent.id, subtitleData.index, mySubtitleList.content])
+                    ' Ask the user for confirmation before deleting subtitle file
+                    returnValue = show_dialog("Are you sure you want to delete this subtitle?", ["Yes", "No, Cancel"], 1)
+
+                    ' User chose Yes from confirmation dialog
+                    if returnValue = 0
+                        ' Call delete subtitle API
+                        api.videos.DeleteSubtitle(screenContent.itemContent.id, subtitleData.index)
+
+                        ' We now need to remove the deleted subtitle from the My Subtitles list
+                        ' and subtract 1 from all indexs higher than the one we deleted
+                        subtitleListContent = mySubtitleList.content.getChildren(-1, 0)
+
+                        i = 0
+                        for each subtitle in subtitleListContent
+                            ' Remove subtitle from My Subtitles list
+                            if subtitle.index = subtitleData.index
+                                mySubtitleList.content.removeChild(subtitle)
+                            end if
+
+                            ' Subtract 1 from indexes higher than deleted subtitle's index
+                            if subtitle.index > subtitleData.index
+                                subtitle.index--
+                                mySubtitleList.content.replaceChild(subtitle, i)
+                            end if
+
+                            i++
+                        end for
+                    end if
+
+                    ' If there remain subtitles in My Subtitles list, set focus back to list
+                    ' Otherwise, set focus back to Search button
+                    if mySubtitleList.content.getChildCount() > 0
+                        mySubtitleList.setFocus(true)
+                    else
+                        searchButton = screenContent.findNode("searchButton")
+                        if isValid(searchButton) then searchButton.setFocus(true)
+                    end if
+                end if
+            end if
+        else if isNodeEvent(msg, "subtitleSearchButtonSelected")
+            group = sceneManager.callFunc("getActiveScene")
+
+            if isValid(group)
+                if isAllValid([group.itemContent, group.selectedCulture])
+                    if isAllValid([group.itemContent.id, group.selectedCulture.ThreeLetterISOLanguageName])
+
+                        ' Get remote subtitles from API
+                        remoteSubtitles = api.items.SearchRemoteSubtitles(group.itemContent.id, group.selectedCulture.ThreeLetterISOLanguageName)
+
+                        if isValid(remoteSubtitles)
+                            remoteSubtitleData = {
+                                data: []
+                            }
+
+                            ' Populate data for remote subtitle dialog
+                            for each remoteSubtitle in remoteSubtitles
+                                remoteSubtitle.type = "remotesubtitleselect"
+                                remoteSubtitle.track = {}
+                                remoteSubtitle.track.description = remoteSubtitle.Name
+                                remoteSubtitleData.data.push(remoteSubtitle)
+                            end for
+
+                            m.global.sceneManager.callFunc("remoteSubtitleDialog", tr("Download Subtitle"), remoteSubtitleData)
+                            m.global.sceneManager.observeField("returnData", m.port)
+                        end if
+                    end if
+                end if
+            end if
+
+        else if isNodeEvent(msg, "subtitleLanguageButtonSelected")
+
+            languageData = {
+                data: []
+            }
+
+            ' Default to user's default subtitle language
+            selectedCulture = "eng"
+
+            group = sceneManager.callFunc("getActiveScene")
+            if isValid(group)
+                if isValid(group.selectedCulture)
+                    if isValidAndNotEmpty(group.selectedCulture.ThreeLetterISOLanguageName)
+                        selectedCulture = LCase(group.selectedCulture.ThreeLetterISOLanguageName)
+                    end if
+                end if
+            end if
+
+            for each culture in group.cultures
+                culture.type = "cultureselect"
+                culture.Track = {}
+                culture.Track.description = culture.displayname
+
+                ' Put preferred subtitle language at the top of the language list
+                if isValidAndNotEmpty(culture.ThreeLetterISOLanguageName)
+                    if LCase(culture.ThreeLetterISOLanguageName) = selectedCulture
+                        culture.selected = true
+                        languageData.data.unshift(culture)
+                    else
+                        languageData.data.push(culture)
+                    end if
+                else
+                    languageData.data.push(culture)
+                end if
+            end for
+
+            m.global.sceneManager.callFunc("radioDialog", tr("Select Language"), languageData)
+            m.global.sceneManager.observeField("returnData", m.port)
+
         else if isNodeEvent(msg, "playItem")
             ' User has selected audio they want us to play
             startLoadingSpinner()
@@ -594,6 +710,29 @@ sub Main (args as dynamic) as void
                     MarkItemFavorite(movie.id)
                 end if
                 movie.favorite = not movie.favorite
+            else if isValid(btn) and LCase(btn.id) = "editsubtitlesbutton"
+                subtitleSearchView = createObject("roSGNode", "SubtitleSearchView")
+                subtitleSearchView.observeField("subtitleLanguageButtonSelected", m.port)
+                subtitleSearchView.observeField("subtitleSearchButtonSelected", m.port)
+                subtitleSearchView.observeField("subtitleToDelete", m.port)
+
+                ' Set preferredSubtitleLanguage data so we can default the dropdown and popup correctly
+                subtitleSearchView.cultures = api.localization.GetCultures()
+                preferredSubtitleLanguage = m.global.session.user.configuration.SubtitleLanguagePreference
+                if not isValidAndNotEmpty(preferredSubtitleLanguage)
+                    preferredSubtitleLanguage = "eng"
+                end if
+
+                subtitleSearchView.preferredSubtitleLanguage = preferredSubtitleLanguage
+
+                ' Load the My Subtitles data now so it's up to date if user adds/deletes something it's updated
+                ' If the data is bad, don't load the view
+                metaData = ItemMetaData(group.itemContent.id)
+                if isValidAndNotEmpty(metaData)
+                    subtitleSearchView.itemContent = metaData
+                    sceneManager.callFunc("pushScene", subtitleSearchView)
+                end if
+
             else
                 ' If there are no other button matches, check if this is a simple "OK" Dialog & Close if so
                 dialog = msg.getRoSGNode()
@@ -754,6 +893,69 @@ sub Main (args as dynamic) as void
                     m.global.queueManager.callFunc("clear")
                     m.global.queueManager.callFunc("push", inputEventVideo)
                     m.global.queueManager.callFunc("playQueue")
+                end if
+            end if
+        else if isNodeEvent(msg, "returnData")
+            ' User has chosen an option in a radio dialog
+            popupNode = msg.getData()
+            if isValid(popupNode)
+                if isValid(popupNode.type)
+                    if LCase(popupNode.type) = "cultureselect"
+                        activeScene = sceneManager.callFunc("getActiveScene")
+                        if isValid(activeScene)
+                            activeScene.selectedCulture = popupNode
+                        end if
+
+                        ' Close any open dialogs
+                        if m.global.sceneManager.callFunc("isDialogOpen")
+                            m.global.sceneManager.callFunc("dismissDialog")
+                        end if
+                    end if
+
+                    if LCase(popupNode.type) = "remotesubtitleselect"
+                        activeScene = sceneManager.callFunc("getActiveScene")
+                        if isAllValid([activeScene, popupNode.id])
+
+                            mySubtitleList = activeScene.findNode("mySubtitleList")
+
+                            ' Add downloading message to My Subtitles so users know we're processing their input
+                            if isValid(mySubtitleList)
+                                subtitleListContent = mySubtitleList.content
+
+                                canAddSubtitle = true
+
+                                ' Search list of subtitles to see if we already have a downloading message for this item
+                                for each subtitle in subtitleListContent.getChildren(-1, 0)
+                                    if subtitle.index = -1
+                                        if isAllValid([subtitle.displaytitle, popupNode.Name])
+                                            if LCase(subtitle.displaytitle) = LCase(popupNode.Name)
+                                                canAddSubtitle = false
+                                            end if
+                                        end if
+                                    end if
+                                end for
+
+                                ' Don't add multiple downloading message for the same subtitle name
+                                if canAddSubtitle
+                                    mySubtitle = CreateObject("roSGNode", "SubtitleData")
+                                    mySubtitle.path = tr("Downloading - Refresh for updated status")
+                                    mySubtitle.index = -1
+                                    mySubtitle.displaytitle = popupNode.Name
+                                    mySubtitle.canDelete = false
+
+                                    subtitleListContent.insertChild(mySubtitle, 0)
+
+                                    mySubtitleList.content = subtitleListContent
+
+                                    api.items.DownloadRemoteSubtitles(activeScene.itemContent.id, popupNode.id)
+                                end if
+                            end if
+
+                            ' Prevent double fires
+                            popupNode.id = invalid
+                        end if
+
+                    end if
                 end if
             end if
         else if isNodeEvent(msg, "dataReturned")

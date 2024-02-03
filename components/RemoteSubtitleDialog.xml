@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="RemoteSubtitleDialog" extends="StandardMessageDialog" initialFocus="radioOptions">
+  <children>
+    <StdDlgContentArea id="contentArea">
+      <StdDlgItemGroup id="radioOptions" />
+    </StdDlgContentArea>
+  </children>
+  <interface>
+    <field id="contentData" type="assocarray" />
+  </interface>
+</component>

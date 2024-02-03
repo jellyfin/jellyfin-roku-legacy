@@ -1,0 +1,120 @@
+import "pkg:/source/api/sdk.bs"
+import "pkg:/source/utils/misc.bs"
+
+sub init()
+    m.top.optionsAvailable = false
+
+    m.languageButton = m.top.findNode("languageButton")
+    m.searchButton = m.top.findNode("searchButton")
+    m.mySubtitleList = m.top.findNode("mySubtitleList")
+
+    headerText = m.top.findNode("headerText")
+    headerText.font.size = "45"
+end sub
+
+sub onItemContentChanged()
+    if not isValid(m.top.itemContent) then return
+
+    itemContent = m.top.itemContent
+
+    mySubtitles = CreateObject("roSGNode", "ContentNode")
+
+    for each stream in itemContent.json.mediastreams
+        if LCase(stream.type) = "subtitle"
+            mySubtitle = mySubtitles.createChild("SubtitleData")
+            mySubtitle.index = stream.index
+            mySubtitle.path = stream.path
+            mySubtitle.displaytitle = stream.displaytitle
+            mySubtitle.canDelete = stream.isExternal
+        end if
+    end for
+
+    m.mySubtitleList.content = mySubtitles
+
+    m.top.overhangTitle = itemContent.json.name
+    m.top.findNode("moviePoster").uri = itemContent.posterURL
+
+    path = CreateObject("roPath", itemContent.json.path)
+    m.top.findNode("fileName").text = path.Split().filename
+end sub
+
+sub setDefaultSubtitleLanguage()
+    if not isValidAndNotEmpty(m.top.preferredSubtitleLanguage) then return
+    if not isValidAndNotEmpty(m.top.cultures) then return
+
+    preferredSubtitleLanguage = LCase(m.top.preferredSubtitleLanguage)
+
+    for each culture in m.top.cultures
+        if LCase(culture.ThreeLetterISOLanguageName) = preferredSubtitleLanguage
+            m.top.selectedCulture = culture
+            exit for
+        end if
+    end for
+end sub
+
+sub onSelectedCultureChanged()
+    if not isValid(m.top.selectedCulture) then return
+
+    selectedCulture = m.top.selectedCulture
+    m.languageButton.text = selectedCulture.DisplayName
+
+    ' Once language is selected, move focus to search button
+    m.languageButton.focus = false
+    m.searchButton.setFocus(true)
+end sub
+
+' Handle navigation input from the remote and act on it
+function onKeyEvent(key as string, press as boolean) as boolean
+    if not press then return false
+
+    if key = "OK" and m.mySubtitleList.isinFocusChain()
+        subtitleToDelete = m.mySubtitleList.content.getChild(m.mySubtitleList.itemSelected)
+        if not subtitleToDelete.canDelete then return false
+
+        m.top.subtitleToDelete = subtitleToDelete
+        m.top.subtitleToDelete = invalid
+        return true
+    end if
+
+    if key = "OK" and m.languageButton.hasFocus()
+        startLoadingSpinner()
+        m.languageButton.selected = not m.languageButton.selected
+        return true
+    end if
+
+    if key = "up" and m.searchButton.hasFocus()
+        m.languageButton.setFocus(true)
+        m.languageButton.focus = true
+        return true
+    end if
+
+    if key = "down" and m.languageButton.hasFocus()
+        m.languageButton.focus = false
+        m.searchButton.setFocus(true)
+        return true
+    end if
+
+    if key = "right"
+        if m.mySubtitleList.content.getChildCount() = 0
+            return false
+        end if
+
+        if m.languageButton.hasFocus()
+            m.languageButton.focus = false
+        end if
+
+        if m.mySubtitleList.hasFocus()
+            return false
+        end if
+
+        m.mySubtitleList.setFocus(true)
+        return true
+    end if
+
+    if key = "left" and m.mySubtitleList.isinFocusChain()
+        m.searchButton.setFocus(true)
+        return true
+    end if
+
+    return false
+end function

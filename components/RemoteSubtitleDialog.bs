@@ -5,6 +5,9 @@ sub init()
     m.radioOptions = m.top.findNode("radioOptions")
     m.scrollBarColumn = []
 
+    m.focusedNameLine = invalid
+    m.focusedCommentLine = invalid
+
     m.top.observeField("contentData", "onContentDataChanged")
     m.top.observeFieldScoped("buttonSelected", "onButtonSelected")
 
@@ -12,19 +15,44 @@ sub init()
 
     m.top.id = "OKDialog"
     m.top.height = 900
+    m.canProcessButton = true
 end sub
 
 ' Event handler for when user selected a button
 sub onButtonSelected()
+    if not m.canProcessButton then return
+
     if m.top.buttonSelected = 0
         m.global.sceneManager.returnData = m.top.contentData.data[m.radioOptions.selectedIndex]
     end if
+
+    m.canProcessButton = false
 end sub
 
 ' Event handler for when user's cursor highlights an option in the option list
 sub onItemFocused()
     focusedChild = m.radioOptions.focusedChild
     if not isValid(focusedChild) then return
+
+    if isValid(m.focusedNameLine)
+        m.focusedNameLine.repeatCount = 0
+    end if
+
+    if isValid(m.focusedCommentLine)
+        m.focusedCommentLine.repeatCount = 0
+    end if
+
+    focusedNameLine = focusedChild.focusedChild.findNode(`name${focusedChild.id}`)
+    if isValid(focusedNameLine)
+        focusedNameLine.repeatCount = -1
+        m.focusedNameLine = focusedNameLine
+    end if
+
+    focusedCommentLine = focusedChild.focusedChild.findNode(`comment${focusedChild.id}`)
+    if isValid(focusedCommentLine)
+        focusedCommentLine.repeatCount = -1
+        m.focusedCommentLine = focusedCommentLine
+    end if
 
     moveScrollBar()
 
@@ -33,7 +61,6 @@ sub onItemFocused()
         hightedButtonTranslation = m.radioOptions.focusedChild.translation
         m.radioOptions.translation = [m.radioOptions.translation[0], -1 * hightedButtonTranslation[1]]
     end if
-
 end sub
 
 ' Move the popup's scroll bar
@@ -100,23 +127,49 @@ end sub
 
 sub onContentDataChanged()
     i = 0
+
+    if not isValidAndNotEmpty(m.top.contentData.data)
+        noResultsLabel = m.radioOptions.CreateChild("label")
+        noResultsLabel.text = "No Results Found"
+        return
+    end if
+
     for each item in m.top.contentData.data
         cardItem = m.radioOptions.CreateChild("StdDlgActionCardItem")
         cardItem.iconType = "radiobutton"
         cardItem.id = i
 
+        cardGroup = cardItem.CreateChild("LayoutGroup")
+        cardGroup.itemSpacings = "[20,10]"
+        cardGroup.layoutDirection = "vert"
+
         if isValid(item.selected)
             m.radioOptions.selectedIndex = i
         end if
 
-        textLine = cardItem.CreateChild("ScrollingLabel")
+        textLine = cardGroup.CreateChild("ScrollingLabel")
+        textLine.id = `name${i}`
         textLine.maxWidth = "690"
         textLine.text = item.track.description
+        textLine.repeatCount = 0
+
+        textLine = cardGroup.CreateChild("Label")
+        textLine.Width = "690"
+        textLine.text = `Format: ${item.format}   ${item.downloadcount} downloads`
+        textLine.font.size = 30
+
+        if item.comment <> ""
+            textLine = cardGroup.CreateChild("ScrollingLabel")
+            textLine.id = `comment${i}`
+            textLine.maxWidth = "690"
+            textLine.text = item.Comment
+            textLine.font.size = 30
+            textLine.repeatCount = 0
+        end if
+
         cardItem.observeField("selected", "onItemSelected")
         i++
     end for
-
-    stopLoadingSpinner()
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean

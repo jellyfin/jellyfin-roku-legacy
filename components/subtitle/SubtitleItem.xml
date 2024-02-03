@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="SubtitleItem" extends="Group">
+  <children>
+    <LayoutGroup layoutDirection="horiz" horizAlignment="left" itemSpacings="[10]" translation="[0, 15]">
+      <LayoutGroup layoutDirection="vert" horizAlignment="left" itemSpacings="[5]">
+        <ScrollingLabel id="displayTitle" horizAlign="left" vertAlign="center" font="font:SmallBoldSystemFont" maxWidth="425" repeatCount="0" />
+        <ScrollingLabel id="path" horizAlign="left" vertAlign="center" font="font:SmallSystemFont" maxWidth="425" repeatCount="0" />
+      </LayoutGroup>
+    </LayoutGroup>
+
+    <Poster id="delete" uri="pkg:/images/icons/trash-red.png" height="50" width="50" translation="[435, 25]" visible="false" />
+  </children>
+  <interface>
+    <field id="itemContent" type="node" onChange="itemContentChanged" />
+    <field id="itemHasFocus" type="boolean" onChange="focusChanged" />
+  </interface>
+</component>
