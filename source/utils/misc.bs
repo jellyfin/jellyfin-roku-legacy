@@ -299,6 +299,14 @@ function isValid(input as dynamic) as boolean
     return input <> invalid
 end function
 
+' Returns whether or not all items in passed array are valid
+function isAllValid(input as object) as boolean
+    for each item in input
+        if not isValid(item) then return false
+    end for
+    return true
+end function
+
 ' Returns whether or not passed value is valid and not empty
 ' Accepts a string, or any countable type (arrays and lists)
 function isValidAndNotEmpty(input as dynamic) as boolean

@@ -226,6 +226,7 @@ sub setMusicOptions(options)
         { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
         { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
         { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+        { "Title": tr("Random"), "Name": "Random" },
     ]
 
     options.filter = [
@@ -236,6 +237,7 @@ sub setMusicOptions(options)
     if LCase(m.options.view) = "genres" or LCase(m.view) = "genres"
         options.sort = [
             { "Title": tr("TITLE"), "Name": "SortName" },
+            { "Title": tr("Random"), "Name": "Random" },
         ]
         options.filter = []
     end if
@@ -244,6 +246,7 @@ sub setMusicOptions(options)
         options.sort = [
             { "Title": tr("TITLE"), "Name": "SortName" },
             { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+            { "Title": tr("Random"), "Name": "Random" },
         ]
     end if
 end sub

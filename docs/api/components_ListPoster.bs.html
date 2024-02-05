@@ -10,6 +10,10 @@ sub init()
     m.poster = m.top.findNode("poster")
     m.unplayedCount = m.top.findNode("unplayedCount")
     m.unplayedEpisodeCount = m.top.findNode("unplayedEpisodeCount")
+    m.playedIndicator = m.top.findNode("playedIndicator")
+    m.checkmark = m.top.findNode("checkmark")
+    m.checkmark.width = 90
+    m.checkmark.height = 60
 
     m.backdrop = m.top.findNode("backdrop")
 
@@ -65,6 +69,10 @@ sub itemContentChanged() as void
                 m.unplayedEpisodeCount.text = itemData.json.UserData.UnplayedItemCount
             end if
         end if
+    end if
+
+    if isValid(itemData.json) and isValid(itemData.json.UserData) and isValid(itemData.json.UserData.Played) and itemData.json.UserData.Played
+        m.playedIndicator.visible = true
     end if
 
     if itemData.json.lookup("Type") = "Episode" and isValid(itemData.json.IndexNumber)

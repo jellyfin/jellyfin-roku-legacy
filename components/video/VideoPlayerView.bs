@@ -32,6 +32,7 @@ sub init()
     m.top.observeField("state", "onState")
     m.top.observeField("content", "onContentChange")
     m.top.observeField("selectedSubtitle", "onSubtitleChange")
+    m.top.observeField("audioIndex", "onAudioIndexChange")
 
     ' Custom Caption Function
     m.top.observeField("allowCaptions", "onAllowCaptionsChange")
@@ -163,6 +164,12 @@ sub handleShowSubtitleMenuAction()
     m.top.selectSubtitlePressed = true
 end sub
 
+' handleShowAudioMenuAction: Handles action to show audio selection menu
+'
+sub handleShowAudioMenuAction()
+    m.top.selectAudioPressed = true
+end sub
+
 ' handleShowVideoInfoPopupAction: Handles action to show video info popup
 '
 sub handleShowVideoInfoPopupAction()
@@ -201,6 +208,11 @@ sub onOSDAction()
 
     if action = "showsubtitlemenu"
         handleShowSubtitleMenuAction()
+        return
+    end if
+
+    if action = "showaudiomenu"
+        handleShowAudioMenuAction()
         return
     end if
 
@@ -274,6 +286,24 @@ sub onSubtitleChange()
     m.top.control = "stop"
 
     m.LoadMetaDataTask.selectedSubtitleIndex = m.top.SelectedSubtitle
+    m.LoadMetaDataTask.selectedAudioStreamIndex = m.top.audioIndex
+    m.LoadMetaDataTask.itemId = m.currentItem.id
+    m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
+    m.LoadMetaDataTask.control = "RUN"
+end sub
+
+' Event handler for when audioIndex changes
+sub onAudioIndexChange()
+    ' Skip initial audio index setting
+    if m.top.position = 0 then return
+
+    ' Save the current video position
+    m.global.queueManager.callFunc("setTopStartingPoint", int(m.top.position) * 10000000&)
+
+    m.top.control = "stop"
+
+    m.LoadMetaDataTask.selectedSubtitleIndex = m.top.SelectedSubtitle
+    m.LoadMetaDataTask.selectedAudioStreamIndex = m.top.audioIndex
     m.LoadMetaDataTask.itemId = m.currentItem.id
     m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
     m.LoadMetaDataTask.control = "RUN"
@@ -328,6 +358,7 @@ sub onVideoContentLoaded()
     m.top.container = videoContent[0].container
     m.top.mediaSourceId = videoContent[0].mediaSourceId
     m.top.fullSubtitleData = videoContent[0].fullSubtitleData
+    m.top.fullAudioData = videoContent[0].fullAudioData
     m.top.audioIndex = videoContent[0].audioIndex
     m.top.transcodeParams = videoContent[0].transcodeparams
     m.chapters = videoContent[0].chapters

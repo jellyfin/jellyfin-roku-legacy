@@ -109,7 +109,8 @@ sub onContentDataChanged()
             m.radioOptions.selectedIndex = i
         end if
 
-        textLine = cardItem.CreateChild("SimpleLabel")
+        textLine = cardItem.CreateChild("ScrollingLabel")
+        textLine.maxWidth = "750"
         textLine.text = item.track.description
         cardItem.observeField("selected", "onItemSelected")
         i++

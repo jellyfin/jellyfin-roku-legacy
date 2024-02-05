@@ -8,6 +8,7 @@ sub init()
     m.posterText.font.size = 30
     m.title.font.size = 25
     m.backdrop = m.top.findNode("backdrop")
+    m.playedIndicator = m.top.findNode("playedIndicator")
 
     m.itemPoster.observeField("loadStatus", "onPosterLoadStatusChanged")
 
@@ -36,6 +37,10 @@ sub itemContentChanged()
     itemData = m.top.itemContent
 
     if not isValid(itemData) then return
+
+    if isValid(itemData.json) and isValid(itemData.json.UserData) and isValid(itemData.json.UserData.Played) and itemData.json.UserData.Played
+        m.playedIndicator.visible = true
+    end if
 
     m.itemPoster.uri = itemData.PosterUrl
     m.posterText.text = itemData.title

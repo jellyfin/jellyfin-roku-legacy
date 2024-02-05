@@ -6,6 +6,7 @@
     <ScrollingLabel translation="[0,340]" id="title" horizAlign="center" font="font:SmallSystemFont" repeatCount="0" maxWidth="230" />
     <Poster id="itemIcon" width="50" height="50" translation="[230,10]" />
     <Label id="posterText" width="230" height="320" translation="[5,5]" horizAlign="center" vertAlign="center" ellipsizeOnBoundary="true" wrap="true" />
+    <PlayedCheckmark id="playedIndicator" color="#00a4dcFF" width="60" height="46" translation="[170, 15]" visible="false" />
   </children>
   <interface>
     <field id="itemContent" type="node" onChange="itemContentChanged" />

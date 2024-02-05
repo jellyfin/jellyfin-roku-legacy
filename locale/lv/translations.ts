@@ -483,5 +483,9 @@
         <source>Delete Saved</source>
         <translation>Izdzēst Saglabātos</translation>
     </message>
+    <message>
+        <source>Video range type</source>
+        <translation>Video diapazona veids</translation>
+    </message>
 </context>
 </TS>

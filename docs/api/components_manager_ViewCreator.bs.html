@@ -16,6 +16,7 @@ sub CreateVideoPlayerView()
     m.view.observeField("state", "onStateChange")
     m.view.observeField("selectPlaybackInfoPressed", "onSelectPlaybackInfoPressed")
     m.view.observeField("selectSubtitlePressed", "onSelectSubtitlePressed")
+    m.view.observeField("selectAudioPressed", "onSelectAudioPressed")
 
     mediaSourceId = m.global.queueManager.callFunc("getCurrentItem").mediaSourceId
 
@@ -33,6 +34,36 @@ end sub
 ' -----------------
 ' Event Handlers
 ' -----------------
+
+
+' onSelectAudioPressed: Display audio selection dialog
+'
+sub onSelectAudioPressed()
+    audioData = {
+        data: []
+    }
+
+    for each item in m.view.fullAudioData
+
+        audioStreamItem = {
+            "Index": item.Index,
+            "IsExternal": item.IsExternal,
+            "Track": {
+                "description": item.DisplayTitle
+            },
+            "Type": "audioselection"
+        }
+
+        if m.view.audioIndex = item.Index
+            audioStreamItem.selected = true
+        end if
+
+        audioData.data.push(audioStreamItem)
+    end for
+
+    m.global.sceneManager.callFunc("radioDialog", tr("Select Audio"), audioData)
+    m.global.sceneManager.observeField("returnData", "onSelectionMade")
+end sub
 
 ' User requested subtitle selection popup
 sub onSelectSubtitlePressed()
@@ -87,6 +118,25 @@ sub onSelectionMade()
 
     if LCase(m.global.sceneManager.returnData.type) = "subtitleselection"
         processSubtitleSelection()
+        return
+    end if
+
+    if LCase(m.global.sceneManager.returnData.type) = "audioselection"
+        processAudioSelection()
+        return
+    end if
+end sub
+
+
+' processAudioSelection: Audio track selection handler
+'
+sub processAudioSelection()
+    selectedAudioTrack = m.global.sceneManager.returnData
+
+    if isValid(selectedAudioTrack)
+        if isValid(selectedAudioTrack.index)
+            m.view.audioIndex = selectedAudioTrack.index
+        end if
     end if
 end sub
 
@@ -101,6 +151,14 @@ sub processSubtitleSelection()
     ' The playbackData is now outdated and must be refreshed
     m.playbackData = invalid
 
+    ' Find previously selected subtitle and identify if it was encoded
+    for each item in m.view.fullSubtitleData
+        if item.index = m.view.selectedSubtitle
+            m.view.previousSubtitleWasEncoded = item.IsEncoded
+            exit for
+        end if
+    end for
+
     if LCase(m.selectedSubtitle.track.description) = "none"
         m.view.globalCaptionMode = "Off"
         m.view.subtitleTrack = ""
@@ -113,19 +171,20 @@ sub processSubtitleSelection()
     end if
 
     if m.selectedSubtitle.IsEncoded
+        ' Roku can not natively display these subtitles, so turn off the caption mode on the device
         m.view.globalCaptionMode = "Off"
     else
+        ' Roku can natively display these subtitles, ensure the caption mode on the device is on
         m.view.globalCaptionMode = "On"
-    end if
 
-    if m.selectedSubtitle.IsExternal
+        ' Roku may rearrange subtitle tracks. Look up track based on name to ensure we get the correct index
         availableSubtitleTrackIndex = availSubtitleTrackIdx(m.selectedSubtitle.Track.TrackName)
         if availableSubtitleTrackIndex = -1 then return
 
         m.view.subtitleTrack = m.view.availableSubtitleTracks[availableSubtitleTrackIndex].TrackName
-    else
-        m.view.selectedSubtitle = m.selectedSubtitle.Index
     end if
+
+    m.view.selectedSubtitle = m.selectedSubtitle.Index
 end sub
 
 ' User requested playback info

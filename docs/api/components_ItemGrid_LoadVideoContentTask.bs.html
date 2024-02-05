@@ -9,6 +9,11 @@ import "pkg:/source/api/Image.bs"
 import "pkg:/source/api/userauth.bs"
 import "pkg:/source/utils/deviceCapabilities.bs"
 
+enum SubtitleSelection
+    notset = -2
+    none = -1
+end enum
+
 sub init()
     m.user = AboutMe()
     m.top.functionName = "loadItems"
@@ -46,19 +51,18 @@ sub loadItems()
     id = m.top.itemId
     mediaSourceId = invalid
     audio_stream_idx = m.top.selectedAudioStreamIndex
-    subtitle_idx = m.top.selectedSubtitleIndex
     forceTranscoding = false
 
-    m.top.content = [LoadItems_VideoPlayer(id, mediaSourceId, audio_stream_idx, subtitle_idx, forceTranscoding)]
+    m.top.content = [LoadItems_VideoPlayer(id, mediaSourceId, audio_stream_idx, forceTranscoding)]
 end sub
 
-function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, forceTranscoding = false as boolean) as dynamic
+function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, forceTranscoding = false as boolean) as dynamic
 
     video = {}
     video.id = id
     video.content = createObject("RoSGNode", "ContentNode")
 
-    LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx, subtitle_idx, forceTranscoding)
+    LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx, forceTranscoding)
 
     if video.content = invalid
         return invalid
@@ -67,9 +71,10 @@ function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic,
     return video
 end function
 
-sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx = 1 as integer, subtitle_idx = -1 as integer, forceTranscoding = false as boolean)
+sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx = 1 as integer, forceTranscoding = false as boolean)
 
     meta = ItemMetaData(video.id)
+    subtitle_idx = m.top.selectedSubtitleIndex
 
     if not isValid(meta)
         video.errorMsg = "Error loading metadata"
@@ -78,6 +83,21 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     end if
 
     videotype = LCase(meta.type)
+
+    ' Check for any Live TV streams coming from other places other than the TV Guide
+    if isValid(meta.json) and isValid(meta.json.ChannelId)
+        if isValid(meta.json.EpisodeTitle)
+            meta.title = meta.json.EpisodeTitle
+        else if isValid(meta.json.Name)
+            meta.title = meta.json.Name
+        end if
+        meta.live = true
+        if LCase(meta.json.type) = "program"
+            video.id = meta.json.ChannelId
+        else
+            video.id = meta.json.id
+        end if
+    end if
 
     if videotype = "episode" or videotype = "series"
         video.content.contenttype = "episode"
@@ -109,15 +129,40 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     if meta.live then mediaSourceId = ""
 
     m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
-    video.videoId = video.id
-    video.mediaSourceId = mediaSourceId
-    video.audioIndex = audio_stream_idx
-
     if not isValid(m.playbackInfo)
         video.errorMsg = "Error loading playback info"
         video.content = invalid
         return
     end if
+
+    addSubtitlesToVideo(video, meta)
+
+    ' Enable default subtitle track
+    if subtitle_idx = SubtitleSelection.notset
+        defaultSubtitleIndex = defaultSubtitleTrackFromVid(video.id)
+
+        if defaultSubtitleIndex &lt;> SubtitleSelection.none
+            video.SelectedSubtitle = defaultSubtitleIndex
+            subtitle_idx = defaultSubtitleIndex
+
+            m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
+            if not isValid(m.playbackInfo)
+                video.errorMsg = "Error loading playback info"
+                video.content = invalid
+                return
+            end if
+
+            addSubtitlesToVideo(video, meta)
+        else
+            video.SelectedSubtitle = subtitle_idx
+        end if
+    else
+        video.SelectedSubtitle = subtitle_idx
+    end if
+
+    video.videoId = video.id
+    video.mediaSourceId = mediaSourceId
+    video.audioIndex = audio_stream_idx
 
     video.PlaySessionId = m.playbackInfo.PlaySessionId
 
@@ -132,8 +177,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
         m.playbackInfo = meta.json
     end if
 
-    addSubtitlesToVideo(video, meta)
-
+    addAudioStreamsToVideo(video)
     if meta.live
         video.transcodeParams = {
             "MediaSourceId": m.playbackInfo.MediaSources[0].Id,
@@ -185,12 +229,105 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     setCertificateAuthority(video.content)
     video.audioTrack = (audio_stream_idx + 1).ToStr() ' Roku's track indexes count from 1. Our index is zero based
 
-    video.SelectedSubtitle = subtitle_idx
-
     if not fully_external
         video.content = authRequest(video.content)
     end if
 end sub
+
+' defaultSubtitleTrackFromVid: Identifies the default subtitle track given video id
+'
+' @param {dynamic} videoID - id of video user is playing
+' @return {integer} indicating the default track's server-side index. Defaults to {SubtitleSelection.none} is one is not found
+function defaultSubtitleTrackFromVid(videoID) as integer
+    if m.global.session.user.configuration.SubtitleMode = "None"
+        return SubtitleSelection.none ' No subtitles desired: return none
+    end if
+
+    meta = ItemMetaData(videoID)
+
+    if not isValid(meta) then return SubtitleSelection.none
+    if not isValid(meta.json) then return SubtitleSelection.none
+    if not isValidAndNotEmpty(meta.json.mediaSources) then return SubtitleSelection.none
+    if not isValidAndNotEmpty(meta.json.MediaSources[0].MediaStreams) then return SubtitleSelection.none
+
+    subtitles = sortSubtitles(meta.id, meta.json.MediaSources[0].MediaStreams)
+    selectedAudioLanguage = meta.json.MediaSources[0].MediaStreams[m.top.selectedAudioStreamIndex].Language ?? ""
+
+    defaultTextSubs = defaultSubtitleTrack(subtitles["text"], selectedAudioLanguage, true) ' Find correct subtitle track (forced text)
+    if defaultTextSubs &lt;> SubtitleSelection.none
+        return defaultTextSubs
+    end if
+
+    if not m.global.session.user.settings["playback.subs.onlytext"]
+        return defaultSubtitleTrack(subtitles["all"], selectedAudioLanguage) ' if no appropriate text subs exist, allow non-text
+    end if
+
+    return SubtitleSelection.none
+end function
+
+' defaultSubtitleTrack:
+'
+' @param {dynamic} sortedSubtitles - array of subtitles sorted by type and language
+' @param {string} selectedAudioLanguage - language for selected audio track
+' @param {boolean} [requireText=false] - indicates if only text subtitles should be considered
+' @return {integer} indicating the default track's server-side index. Defaults to {SubtitleSelection.none} is one is not found
+function defaultSubtitleTrack(sortedSubtitles, selectedAudioLanguage as string, requireText = false as boolean) as integer
+    userConfig = m.global.session.user.configuration
+
+    subtitleMode = isValid(userConfig.SubtitleMode) ? LCase(userConfig.SubtitleMode) : ""
+
+    allowSmartMode = false
+
+    ' Only evaluate selected audio language if we have a value
+    if selectedAudioLanguage &lt;> ""
+        allowSmartMode = selectedAudioLanguage &lt;> userConfig.SubtitleLanguagePreference
+    end if
+
+    for each item in sortedSubtitles
+        ' Only auto-select subtitle if language matches SubtitleLanguagePreference
+        languageMatch = true
+        if userConfig.SubtitleLanguagePreference &lt;> ""
+            languageMatch = (userConfig.SubtitleLanguagePreference = item.Track.Language)
+        end if
+
+        ' Ensure textuality of subtitle matches preferenced passed as arg
+        matchTextReq = ((requireText and item.IsTextSubtitleStream) or not requireText)
+
+        if languageMatch and matchTextReq
+            if subtitleMode = "default" and (item.isForced or item.IsDefault)
+                ' Return first forced or default subtitle track
+                return item.Index
+            else if subtitleMode = "always"
+                ' Return the first found subtitle track
+                return item.Index
+            else if subtitleMode = "onlyforced" and item.IsForced
+                ' Return first forced subtitle track
+                return item.Index
+            else if subtitleMode = "smart" and allowSmartMode
+                ' Return the first found subtitle track
+                return item.Index
+            end if
+        end if
+    end for
+
+    ' User has chosed smart subtitle mode
+    ' We already attempted to load subtitles in preferred language, but none were found.
+    ' Fall back to default behaviour while ignoring preferredlanguage
+    if subtitleMode = "smart" and allowSmartMode
+        for each item in sortedSubtitles
+            ' Ensure textuality of subtitle matches preferenced passed as arg
+            matchTextReq = ((requireText and item.IsTextSubtitleStream) or not requireText)
+            if matchTextReq
+                if item.isForced or item.IsDefault
+                    ' Return first forced or default subtitle track
+                    return item.Index
+                end if
+            end if
+        end for
+    end if
+
+    return SubtitleSelection.none ' Keep current default behavior of "None", if no correct subtitle is identified
+end function
 
 sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
     protocol = LCase(m.playbackInfo.MediaSources[0].Protocol)
@@ -219,6 +356,23 @@ sub addVideoContentURL(video, mediaSourceId, audio_stream_idx, fully_external)
 
         video.content.url = buildURL(Substitute("Videos/{0}/stream", video.id), params)
     end if
+end sub
+
+
+' addAudioStreamsToVideo: Add audio stream data to video
+'
+' @param {dynamic} video component to add fullAudioData to
+sub addAudioStreamsToVideo(video)
+    audioStreams = []
+    mediaStreams = m.playbackInfo.MediaSources[0].MediaStreams
+
+    for i = 0 to mediaStreams.Count() - 1
+        if LCase(mediaStreams[i].Type) = "audio"
+            audioStreams.push(mediaStreams[i])
+        end if
+    end for
+
+    video.fullAudioData = audioStreams
 end sub
 
 sub addSubtitlesToVideo(video, meta)
@@ -360,26 +514,33 @@ function sortSubtitles(id as string, MediaStreams)
                 "IsExternal": stream.IsExternal,
                 "IsEncoded": stream.DeliveryMethod = "Encode"
             }
+
             if stream.isForced
                 trackType = "forced"
             else if stream.IsDefault
                 trackType = "default"
-            else if stream.IsTextSubtitleStream
-                trackType = "text"
             else
                 trackType = "normal"
             end if
+
             if prefered_lang &lt;> "" and prefered_lang = stream.Track.Language
                 tracks[trackType].unshift(stream)
+
+                if stream.IsTextSubtitleStream
+                    tracks["text"].unshift(stream)
+                end if
             else
                 tracks[trackType].push(stream)
+
+                if stream.IsTextSubtitleStream
+                    tracks["text"].push(stream)
+                end if
             end if
         end if
     end for
 
     tracks["default"].append(tracks["normal"])
     tracks["forced"].append(tracks["default"])
-    tracks["forced"].append(tracks["text"])
 
     return { "all": tracks["forced"], "text": tracks["text"] }
 end function
@@ -414,499 +575,5 @@ function FindPreferredAudioStream(streams as dynamic) as integer
     end if
 
     return 1
-end function
-
-function getSubtitleLanguages()
-    return {
-        "aar": "Afar",
-        "abk": "Abkhazian",
-        "ace": "Achinese",
-        "ach": "Acoli",
-        "ada": "Adangme",
-        "ady": "Adyghe; Adygei",
-        "afa": "Afro-Asiatic languages",
-        "afh": "Afrihili",
-        "afr": "Afrikaans",
-        "ain": "Ainu",
-        "aka": "Akan",
-        "akk": "Akkadian",
-        "alb": "Albanian",
-        "ale": "Aleut",
-        "alg": "Algonquian languages",
-        "alt": "Southern Altai",
-        "amh": "Amharic",
-        "ang": "English, Old (ca.450-1100)",
-        "anp": "Angika",
-        "apa": "Apache languages",
-        "ara": "Arabic",
-        "arc": "Official Aramaic (700-300 BCE); Imperial Aramaic (700-300 BCE)",
-        "arg": "Aragonese",
-        "arm": "Armenian",
-        "arn": "Mapudungun; Mapuche",
-        "arp": "Arapaho",
-        "art": "Artificial languages",
-        "arw": "Arawak",
-        "asm": "Assamese",
-        "ast": "Asturian; Bable; Leonese; Asturleonese",
-        "ath": "Athapascan languages",
-        "aus": "Australian languages",
-        "ava": "Avaric",
-        "ave": "Avestan",
-        "awa": "Awadhi",
-        "aym": "Aymara",
-        "aze": "Azerbaijani",
-        "bad": "Banda languages",
-        "bai": "Bamileke languages",
-        "bak": "Bashkir",
-        "bal": "Baluchi",
-        "bam": "Bambara",
-        "ban": "Balinese",
-        "baq": "Basque",
-        "bas": "Basa",
-        "bat": "Baltic languages",
-        "bej": "Beja; Bedawiyet",
-        "bel": "Belarusian",
-        "bem": "Bemba",
-        "ben": "Bengali",
-        "ber": "Berber languages",
-        "bho": "Bhojpuri",
-        "bih": "Bihari languages",
-        "bik": "Bikol",
-        "bin": "Bini; Edo",
-        "bis": "Bislama",
-        "bla": "Siksika",
-        "bnt": "Bantu (Other)",
-        "bos": "Bosnian",
-        "bra": "Braj",
-        "bre": "Breton",
-        "btk": "Batak languages",
-        "bua": "Buriat",
-        "bug": "Buginese",
-        "bul": "Bulgarian",
-        "bur": "Burmese",
-        "byn": "Blin; Bilin",
-        "cad": "Caddo",
-        "cai": "Central American Indian languages",
-        "car": "Galibi Carib",
-        "cat": "Catalan; Valencian",
-        "cau": "Caucasian languages",
-        "ceb": "Cebuano",
-        "cel": "Celtic languages",
-        "cha": "Chamorro",
-        "chb": "Chibcha",
-        "che": "Chechen",
-        "chg": "Chagatai",
-        "chi": "Chinese",
-        "chk": "Chuukese",
-        "chm": "Mari",
-        "chn": "Chinook jargon",
-        "cho": "Choctaw",
-        "chp": "Chipewyan; Dene Suline",
-        "chr": "Cherokee",
-        "chu": "Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic",
-        "chv": "Chuvash",
-        "chy": "Cheyenne",
-        "cmc": "Chamic languages",
-        "cop": "Coptic",
-        "cor": "Cornish",
-        "cos": "Corsican",
-        "cpe": "Creoles and pidgins, English based",
-        "cpf": "Creoles and pidgins, French-based ",
-        "cpp": "Creoles and pidgins, Portuguese-based ",
-        "cre": "Cree",
-        "crh": "Crimean Tatar; Crimean Turkish",
-        "crp": "Creoles and pidgins ",
-        "csb": "Kashubian",
-        "cus": "Cushitic languages",
-        "cze": "Czech",
-        "dak": "Dakota",
-        "dan": "Danish",
-        "dar": "Dargwa",
-        "day": "Land Dayak languages",
-        "del": "Delaware",
-        "den": "Slave (Athapascan)",
-        "dgr": "Dogrib",
-        "din": "Dinka",
-        "div": "Divehi; Dhivehi; Maldivian",
-        "doi": "Dogri",
-        "dra": "Dravidian languages",
-        "dsb": "Lower Sorbian",
-        "dua": "Duala",
-        "dum": "Dutch, Middle (ca.1050-1350)",
-        "dut": "Dutch; Flemish",
-        "dyu": "Dyula",
-        "dzo": "Dzongkha",
-        "efi": "Efik",
-        "egy": "Egyptian (Ancient)",
-        "eka": "Ekajuk",
-        "elx": "Elamite",
-        "eng": "English",
-        "enm": "English, Middle (1100-1500)",
-        "epo": "Esperanto",
-        "est": "Estonian",
-        "ewe": "Ewe",
-        "ewo": "Ewondo",
-        "fan": "Fang",
-        "fao": "Faroese",
-        "fat": "Fanti",
-        "fij": "Fijian",
-        "fil": "Filipino; Pilipino",
-        "fin": "Finnish",
-        "fiu": "Finno-Ugrian languages",
-        "fon": "Fon",
-        "fre": "French",
-        "frm": "French, Middle (ca.1400-1600)",
-        "fro": "French, Old (842-ca.1400)",
-        "frc": "French (Canada)",
-        "frr": "Northern Frisian",
-        "frs": "Eastern Frisian",
-        "fry": "Western Frisian",
-        "ful": "Fulah",
-        "fur": "Friulian",
-        "gaa": "Ga",
-        "gay": "Gayo",
-        "gba": "Gbaya",
-        "gem": "Germanic languages",
-        "geo": "Georgian",
-        "ger": "German",
-        "gez": "Geez",
-        "gil": "Gilbertese",
-        "gla": "Gaelic; Scottish Gaelic",
-        "gle": "Irish",
-        "glg": "Galician",
-        "glv": "Manx",
-        "gmh": "German, Middle High (ca.1050-1500)",
-        "goh": "German, Old High (ca.750-1050)",
-        "gon": "Gondi",
-        "gor": "Gorontalo",
-        "got": "Gothic",
-        "grb": "Grebo",
-        "grc": "Greek, Ancient (to 1453)",
-        "gre": "Greek, Modern (1453-)",
-        "grn": "Guarani",
-        "gsw": "Swiss German; Alemannic; Alsatian",
-        "guj": "Gujarati",
-        "gwi": "Gwich'in",
-        "hai": "Haida",
-        "hat": "Haitian; Haitian Creole",
-        "hau": "Hausa",
-        "haw": "Hawaiian",
-        "heb": "Hebrew",
-        "her": "Herero",
-        "hil": "Hiligaynon",
-        "him": "Himachali languages; Western Pahari languages",
-        "hin": "Hindi",
-        "hit": "Hittite",
-        "hmn": "Hmong; Mong",
-        "hmo": "Hiri Motu",
-        "hrv": "Croatian",
-        "hsb": "Upper Sorbian",
-        "hun": "Hungarian",
-        "hup": "Hupa",
-        "iba": "Iban",
-        "ibo": "Igbo",
-        "ice": "Icelandic",
-        "ido": "Ido",
-        "iii": "Sichuan Yi; Nuosu",
-        "ijo": "Ijo languages",
-        "iku": "Inuktitut",
-        "ile": "Interlingue; Occidental",
-        "ilo": "Iloko",
-        "ina": "Interlingua (International Auxiliary Language Association)",
-        "inc": "Indic languages",
-        "ind": "Indonesian",
-        "ine": "Indo-European languages",
-        "inh": "Ingush",
-        "ipk": "Inupiaq",
-        "ira": "Iranian languages",
-        "iro": "Iroquoian languages",
-        "ita": "Italian",
-        "jav": "Javanese",
-        "jbo": "Lojban",
-        "jpn": "Japanese",
-        "jpr": "Judeo-Persian",
-        "jrb": "Judeo-Arabic",
-        "kaa": "Kara-Kalpak",
-        "kab": "Kabyle",
-        "kac": "Kachin; Jingpho",
-        "kal": "Kalaallisut; Greenlandic",
-        "kam": "Kamba",
-        "kan": "Kannada",
-        "kar": "Karen languages",
-        "kas": "Kashmiri",
-        "kau": "Kanuri",
-        "kaw": "Kawi",
-        "kaz": "Kazakh",
-        "kbd": "Kabardian",
-        "kha": "Khasi",
-        "khi": "Khoisan languages",
-        "khm": "Central Khmer",
-        "kho": "Khotanese; Sakan",
-        "kik": "Kikuyu; Gikuyu",
-        "kin": "Kinyarwanda",
-        "kir": "Kirghiz; Kyrgyz",
-        "kmb": "Kimbundu",
-        "kok": "Konkani",
-        "kom": "Komi",
-        "kon": "Kongo",
-        "kor": "Korean",
-        "kos": "Kosraean",
-        "kpe": "Kpelle",
-        "krc": "Karachay-Balkar",
-        "krl": "Karelian",
-        "kro": "Kru languages",
-        "kru": "Kurukh",
-        "kua": "Kuanyama; Kwanyama",
-        "kum": "Kumyk",
-        "kur": "Kurdish",
-        "kut": "Kutenai",
-        "lad": "Ladino",
-        "lah": "Lahnda",
-        "lam": "Lamba",
-        "lao": "Lao",
-        "lat": "Latin",
-        "lav": "Latvian",
-        "lez": "Lezghian",
-        "lim": "Limburgan; Limburger; Limburgish",
-        "lin": "Lingala",
-        "lit": "Lithuanian",
-        "lol": "Mongo",
-        "loz": "Lozi",
-        "ltz": "Luxembourgish; Letzeburgesch",
-        "lua": "Luba-Lulua",
-        "lub": "Luba-Katanga",
-        "lug": "Ganda",
-        "lui": "Luiseno",
-        "lun": "Lunda",
-        "luo": "Luo (Kenya and Tanzania)",
-        "lus": "Lushai",
-        "mac": "Macedonian",
-        "mad": "Madurese",
-        "mag": "Magahi",
-        "mah": "Marshallese",
-        "mai": "Maithili",
-        "mak": "Makasar",
-        "mal": "Malayalam",
-        "man": "Mandingo",
-        "mao": "Maori",
-        "map": "Austronesian languages",
-        "mar": "Marathi",
-        "mas": "Masai",
-        "may": "Malay",
-        "mdf": "Moksha",
-        "mdr": "Mandar",
-        "men": "Mende",
-        "mga": "Irish, Middle (900-1200)",
-        "mic": "Mi'kmaq; Micmac",
-        "min": "Minangkabau",
-        "mis": "Uncoded languages",
-        "mkh": "Mon-Khmer languages",
-        "mlg": "Malagasy",
-        "mlt": "Maltese",
-        "mnc": "Manchu",
-        "mni": "Manipuri",
-        "mno": "Manobo languages",
-        "moh": "Mohawk",
-        "mon": "Mongolian",
-        "mos": "Mossi",
-        "mul": "Multiple languages",
-        "mun": "Munda languages",
-        "mus": "Creek",
-        "mwl": "Mirandese",
-        "mwr": "Marwari",
-        "myn": "Mayan languages",
-        "myv": "Erzya",
-        "nah": "Nahuatl languages",
-        "nai": "North American Indian languages",
-        "nap": "Neapolitan",
-        "nau": "Nauru",
-        "nav": "Navajo; Navaho",
-        "nbl": "Ndebele, South; South Ndebele",
-        "nde": "Ndebele, North; North Ndebele",
-        "ndo": "Ndonga",
-        "nds": "Low German; Low Saxon; German, Low; Saxon, Low",
-        "nep": "Nepali",
-        "new": "Nepal Bhasa; Newari",
-        "nia": "Nias",
-        "nic": "Niger-Kordofanian languages",
-        "niu": "Niuean",
-        "nno": "Norwegian Nynorsk; Nynorsk, Norwegian",
-        "nob": "Bokmål, Norwegian; Norwegian Bokmål",
-        "nog": "Nogai",
-        "non": "Norse, Old",
-        "nor": "Norwegian",
-        "nqo": "N'Ko",
-        "nso": "Pedi; Sepedi; Northern Sotho",
-        "nub": "Nubian languages",
-        "nwc": "Classical Newari; Old Newari; Classical Nepal Bhasa",
-        "nya": "Chichewa; Chewa; Nyanja",
-        "nym": "Nyamwezi",
-        "nyn": "Nyankole",
-        "nyo": "Nyoro",
-        "nzi": "Nzima",
-        "oci": "Occitan (post 1500); Provençal",
-        "oji": "Ojibwa",
-        "ori": "Oriya",
-        "orm": "Oromo",
-        "osa": "Osage",
-        "oss": "Ossetian; Ossetic",
-        "ota": "Turkish, Ottoman (1500-1928)",
-        "oto": "Otomian languages",
-        "paa": "Papuan languages",
-        "pag": "Pangasinan",
-        "pal": "Pahlavi",
-        "pam": "Pampanga; Kapampangan",
-        "pan": "Panjabi; Punjabi",
-        "pap": "Papiamento",
-        "pau": "Palauan",
-        "peo": "Persian, Old (ca.600-400 B.C.)",
-        "per": "Persian",
-        "phi": "Philippine languages",
-        "phn": "Phoenician",
-        "pli": "Pali",
-        "pol": "Polish",
-        "pon": "Pohnpeian",
-        "por": "Portuguese",
-        "pob": "Portuguese (Brazil)",
-        "pra": "Prakrit languages",
-        "pro": "Provençal, Old (to 1500)",
-        "pus": "Pushto; Pashto",
-        "qaa-qtz": "Reserved for local use",
-        "que": "Quechua",
-        "raj": "Rajasthani",
-        "rap": "Rapanui",
-        "rar": "Rarotongan; Cook Islands Maori",
-        "roa": "Romance languages",
-        "roh": "Romansh",
-        "rom": "Romany",
-        "rum": "Romanian; Moldavian; Moldovan",
-        "run": "Rundi",
-        "rup": "Aromanian; Arumanian; Macedo-Romanian",
-        "rus": "Russian",
-        "sad": "Sandawe",
-        "sag": "Sango",
-        "sah": "Yakut",
-        "sai": "South American Indian (Other)",
-        "sal": "Salishan languages",
-        "sam": "Samaritan Aramaic",
-        "san": "Sanskrit",
-        "sas": "Sasak",
-        "sat": "Santali",
-        "scn": "Sicilian",
-        "sco": "Scots",
-        "sel": "Selkup",
-        "sem": "Semitic languages",
-        "sga": "Irish, Old (to 900)",
-        "sgn": "Sign Languages",
-        "shn": "Shan",
-        "sid": "Sidamo",
-        "sin": "Sinhala; Sinhalese",
-        "sio": "Siouan languages",
-        "sit": "Sino-Tibetan languages",
-        "sla": "Slavic languages",
-        "slo": "Slovak",
-        "slv": "Slovenian",
-        "sma": "Southern Sami",
-        "sme": "Northern Sami",
-        "smi": "Sami languages",
-        "smj": "Lule Sami",
-        "smn": "Inari Sami",
-        "smo": "Samoan",
-        "sms": "Skolt Sami",
-        "sna": "Shona",
-        "snd": "Sindhi",
-        "snk": "Soninke",
-        "sog": "Sogdian",
-        "som": "Somali",
-        "son": "Songhai languages",
-        "sot": "Sotho, Southern",
-        "spa": "Spanish; Latin",
-        "spa": "Spanish; Castilian",
-        "srd": "Sardinian",
-        "srn": "Sranan Tongo",
-        "srp": "Serbian",
-        "srr": "Serer",
-        "ssa": "Nilo-Saharan languages",
-        "ssw": "Swati",
-        "suk": "Sukuma",
-        "sun": "Sundanese",
-        "sus": "Susu",
-        "sux": "Sumerian",
-        "swa": "Swahili",
-        "swe": "Swedish",
-        "syc": "Classical Syriac",
-        "syr": "Syriac",
-        "tah": "Tahitian",
-        "tai": "Tai languages",
-        "tam": "Tamil",
-        "tat": "Tatar",
-        "tel": "Telugu",
-        "tem": "Timne",
-        "ter": "Tereno",
-        "tet": "Tetum",
-        "tgk": "Tajik",
-        "tgl": "Tagalog",
-        "tha": "Thai",
-        "tib": "Tibetan",
-        "tig": "Tigre",
-        "tir": "Tigrinya",
-        "tiv": "Tiv",
-        "tkl": "Tokelau",
-        "tlh": "Klingon; tlhIngan-Hol",
-        "tli": "Tlingit",
-        "tmh": "Tamashek",
-        "tog": "Tonga (Nyasa)",
-        "ton": "Tonga (Tonga Islands)",
-        "tpi": "Tok Pisin",
-        "tsi": "Tsimshian",
-        "tsn": "Tswana",
-        "tso": "Tsonga",
-        "tuk": "Turkmen",
-        "tum": "Tumbuka",
-        "tup": "Tupi languages",
-        "tur": "Turkish",
-        "tut": "Altaic languages",
-        "tvl": "Tuvalu",
-        "twi": "Twi",
-        "tyv": "Tuvinian",
-        "udm": "Udmurt",
-        "uga": "Ugaritic",
-        "uig": "Uighur; Uyghur",
-        "ukr": "Ukrainian",
-        "umb": "Umbundu",
-        "und": "Undetermined",
-        "urd": "Urdu",
-        "uzb": "Uzbek",
-        "vai": "Vai",
-        "ven": "Venda",
-        "vie": "Vietnamese",
-        "vol": "Volapük",
-        "vot": "Votic",
-        "wak": "Wakashan languages",
-        "wal": "Walamo",
-        "war": "Waray",
-        "was": "Washo",
-        "wel": "Welsh",
-        "wen": "Sorbian languages",
-        "wln": "Walloon",
-        "wol": "Wolof",
-        "xal": "Kalmyk; Oirat",
-        "xho": "Xhosa",
-        "yao": "Yao",
-        "yap": "Yapese",
-        "yid": "Yiddish",
-        "yor": "Yoruba",
-        "ypk": "Yupik languages",
-        "zap": "Zapotec",
-        "zbl": "Blissymbols; Blissymbolics; Bliss",
-        "zen": "Zenaga",
-        "zgh": "Standard Moroccan Tamazight",
-        "zha": "Zhuang; Chuang",
-        "znd": "Zande languages",
-        "zul": "Zulu",
-        "zun": "Zuni",
-        "zxx": "No linguistic content; Not applicable",
-        "zza": "Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki"
-    }
 end function
 </code></pre></article></section><footer class="footer" id="PeOAagUepe"><div class="wrapper"><span class="jsdoc-message">Automatically generated using <a href="https://github.com/jsdoc/jsdoc" target="_blank">JSDoc</a> and the <a href="https://github.com/ankitskvmdam/clean-jsdoc-theme" target="_blank">clean-jsdoc-theme</a>.</span></div></footer></div></div></div><div class="search-container" id="PkfLWpAbet" style="display:none"><div class="wrapper" id="iCxFxjkHbP"><button class="icon-button search-close-button" id="VjLlGakifb" aria-label="close search"><svg><use xlink:href="#close-icon"></use></svg></button><div class="search-box-c"><svg><use xlink:href="#search-icon"></use></svg> <input type="text" id="vpcKVYIppa" class="search-input" placeholder="Search..." autofocus></div><div class="search-result-c" id="fWwVHRuDuN"><span class="search-result-c-text">Type anything to view search result</span></div></div></div><div class="mobile-menu-icon-container"><button class="icon-button" id="mobile-menu" data-isopen="false" aria-label="menu"><svg><use xlink:href="#menu-icon"></use></svg></button></div><div id="mobile-sidebar" class="mobile-sidebar-container"><div class="mobile-sidebar-wrapper"><a href="/" class="sidebar-title sidebar-title-anchor">jellyfin-roku Code Documentation</a><div class="mobile-nav-links"><div class="external-link navbar-item"><a id="jellyfin-link-mobile" href="https://jellyfin.org/" target="_blank">Jellyfin</a></div><div class="external-link navbar-item"><a id="github-link-mobile" href="https://github.com/jellyfin/jellyfin-roku" target="_blank">GitHub</a></div><div class="external-link navbar-item"><a id="forum-link-mobile" href="https://forum.jellyfin.org/f-roku-development" target="_blank">Forum</a></div><div class="external-link navbar-item"><a id="matrix-link-mobile" href="https://matrix.to/#/#jellyfin-dev-roku:matrix.org" target="_blank">Matrix</a></div></div><div class="mobile-sidebar-items-c"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="module-AlbumData.html">AlbumData</a></div><div class="sidebar-section-children"><a href="module-AlbumGrid.html">AlbumGrid</a></div><div class="sidebar-section-children"><a href="module-AlbumTrackList.html">AlbumTrackList</a></div><div class="sidebar-section-children"><a href="module-AlbumView.html">AlbumView</a></div><div class="sidebar-section-children"><a href="module-Alpha.html">Alpha</a></div><div class="sidebar-section-children"><a href="module-ArtistView.html">ArtistView</a></div><div class="sidebar-section-children"><a href="module-AudioPlayer.html">AudioPlayer</a></div><div class="sidebar-section-children"><a href="module-AudioPlayerView.html">AudioPlayerView</a></div><div class="sidebar-section-children"><a href="module-AudioTrackListItem.html">AudioTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupHoriz.html">ButtonGroupHoriz</a></div><div class="sidebar-section-children"><a href="module-ButtonGroupVert.html">ButtonGroupVert</a></div><div class="sidebar-section-children"><a href="module-ChannelData.html">ChannelData</a></div><div class="sidebar-section-children"><a href="module-Clock.html">Clock</a></div><div class="sidebar-section-children"><a href="module-CollectionData.html">CollectionData</a></div><div class="sidebar-section-children"><a href="module-ConfigData.html">ConfigData</a></div><div class="sidebar-section-children"><a href="module-ConfigItem.html">ConfigItem</a></div><div class="sidebar-section-children"><a href="module-ConfigList.html">ConfigList</a></div><div class="sidebar-section-children"><a href="module-ExtrasItem.html">ExtrasItem</a></div><div class="sidebar-section-children"><a href="module-ExtrasRowList.html">ExtrasRowList</a></div><div class="sidebar-section-children"><a href="module-FavoriteItemsTask.html">FavoriteItemsTask</a></div><div class="sidebar-section-children"><a href="module-FolderData.html">FolderData</a></div><div class="sidebar-section-children"><a href="module-GetFiltersTask.html">GetFiltersTask</a></div><div class="sidebar-section-children"><a href="module-GetNextEpisodeTask.html">GetNextEpisodeTask</a></div><div class="sidebar-section-children"><a href="module-GetPlaybackInfoTask.html">GetPlaybackInfoTask</a></div><div class="sidebar-section-children"><a href="module-GetShuffleEpisodesTask.html">GetShuffleEpisodesTask</a></div><div class="sidebar-section-children"><a href="module-GridItem.html">GridItem</a></div><div class="sidebar-section-children"><a href="module-GridItemSmall.html">GridItemSmall</a></div><div class="sidebar-section-children"><a href="module-Home.html">Home</a></div><div class="sidebar-section-children"><a href="module-HomeData.html">HomeData</a></div><div class="sidebar-section-children"><a href="module-HomeItem.html">HomeItem</a></div><div class="sidebar-section-children"><a href="module-HomeRowItemSizes.html">HomeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-HomeRows.html">HomeRows</a></div><div class="sidebar-section-children"><a href="module-IconButton.html">IconButton</a></div><div class="sidebar-section-children"><a href="module-Image.html">Image</a></div><div class="sidebar-section-children"><a href="module-ImageData.html">ImageData</a></div><div class="sidebar-section-children"><a href="module-IntegerKeyboard.html">IntegerKeyboard</a></div><div class="sidebar-section-children"><a href="module-ItemGrid.html">ItemGrid</a></div><div class="sidebar-section-children"><a href="module-ItemGridOptions.html">ItemGridOptions</a></div><div class="sidebar-section-children"><a href="module-Items.html">Items</a></div><div class="sidebar-section-children"><a href="module-JFButton.html">JFButton</a></div><div class="sidebar-section-children"><a href="module-JFButtons.html">JFButtons</a></div><div class="sidebar-section-children"><a href="module-JFGroup.html">JFGroup</a></div><div class="sidebar-section-children"><a href="module-JFMessageDialog.html">JFMessageDialog</a></div><div class="sidebar-section-children"><a href="module-JFOverhang.html">JFOverhang</a></div><div class="sidebar-section-children"><a href="module-JFScene.html">JFScene</a></div><div class="sidebar-section-children"><a href="module-JFScreen.html">JFScreen</a></div><div class="sidebar-section-children"><a href="module-JFServer.html">JFServer</a></div><div class="sidebar-section-children"><a href="module-JFVideo.html">JFVideo</a></div><div class="sidebar-section-children"><a href="module-ListPoster.html">ListPoster</a></div><div class="sidebar-section-children"><a href="module-LoadChannelsTask.html">LoadChannelsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask.html">LoadItemsTask</a></div><div class="sidebar-section-children"><a href="module-LoadItemsTask2.html">LoadItemsTask2</a></div><div class="sidebar-section-children"><a href="module-LoadPhotoTask.html">LoadPhotoTask</a></div><div class="sidebar-section-children"><a href="module-LoadProgramDetailsTask.html">LoadProgramDetailsTask</a></div><div class="sidebar-section-children"><a href="module-LoadScreenSaverTimeoutTask.html">LoadScreenSaverTimeoutTask</a></div><div class="sidebar-section-children"><a href="module-LoadSheduleTask.html">LoadSheduleTask</a></div><div class="sidebar-section-children"><a href="module-LoadVideoContentTask.html">LoadVideoContentTask</a></div><div class="sidebar-section-children"><a href="module-LoginScene.html">LoginScene</a></div><div class="sidebar-section-children"><a href="module-Main.html">Main</a></div><div class="sidebar-section-children"><a href="module-MovieData.html">MovieData</a></div><div class="sidebar-section-children"><a href="module-MovieDetails.html">MovieDetails</a></div><div class="sidebar-section-children"><a href="module-MovieLibraryView.html">MovieLibraryView</a></div><div class="sidebar-section-children"><a href="module-MovieOptions.html">MovieOptions</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumData.html">MusicAlbumData</a></div><div class="sidebar-section-children"><a href="module-MusicAlbumSongListData.html">MusicAlbumSongListData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistData.html">MusicArtistData</a></div><div class="sidebar-section-children"><a href="module-MusicArtistGridItem.html">MusicArtistGridItem</a></div><div class="sidebar-section-children"><a href="module-MusicLibraryView.html">MusicLibraryView</a></div><div class="sidebar-section-children"><a href="module-MusicSongData.html">MusicSongData</a></div><div class="sidebar-section-children"><a href="module-OSD.html">OSD</a></div><div class="sidebar-section-children"><a href="module-OptionNode.html">OptionNode</a></div><div class="sidebar-section-children"><a href="module-OptionsButton.html">OptionsButton</a></div><div class="sidebar-section-children"><a href="module-OptionsData.html">OptionsData</a></div><div class="sidebar-section-children"><a href="module-OptionsSlider.html">OptionsSlider</a></div><div class="sidebar-section-children"><a href="module-OverviewDialog.html">OverviewDialog</a></div><div class="sidebar-section-children"><a href="module-PersonData.html">PersonData</a></div><div class="sidebar-section-children"><a href="module-PersonDetails.html">PersonDetails</a></div><div class="sidebar-section-children"><a href="module-PhotoData.html">PhotoData</a></div><div class="sidebar-section-children"><a href="module-PhotoDetails.html">PhotoDetails</a></div><div class="sidebar-section-children"><a href="module-PlaybackDialog.html">PlaybackDialog</a></div><div class="sidebar-section-children"><a href="module-PlayedCheckmark.html">PlayedCheckmark</a></div><div class="sidebar-section-children"><a href="module-PlaylistData.html">PlaylistData</a></div><div class="sidebar-section-children"><a href="module-PlaylistView.html">PlaylistView</a></div><div class="sidebar-section-children"><a href="module-PlaystateTask.html">PlaystateTask</a></div><div class="sidebar-section-children"><a href="module-PostTask.html">PostTask</a></div><div class="sidebar-section-children"><a href="module-ProgramDetails.html">ProgramDetails</a></div><div class="sidebar-section-children"><a href="module-PublicUserData.html">PublicUserData</a></div><div class="sidebar-section-children"><a href="module-QueueManager.html">QueueManager</a></div><div class="sidebar-section-children"><a href="module-QuickConnect.html">QuickConnect</a></div><div class="sidebar-section-children"><a href="module-QuickConnectDialog.html">QuickConnectDialog</a></div><div class="sidebar-section-children"><a href="module-RadioDialog.html">RadioDialog</a></div><div class="sidebar-section-children"><a href="module-RecordProgramTask.html">RecordProgramTask</a></div><div class="sidebar-section-children"><a href="module-SceneManager.html">SceneManager</a></div><div class="sidebar-section-children"><a href="module-ScheduleProgramData.html">ScheduleProgramData</a></div><div class="sidebar-section-children"><a href="module-SearchBox.html">SearchBox</a></div><div class="sidebar-section-children"><a href="module-SearchData.html">SearchData</a></div><div class="sidebar-section-children"><a href="module-SearchResults.html">SearchResults</a></div><div class="sidebar-section-children"><a href="module-SearchRow.html">SearchRow</a></div><div class="sidebar-section-children"><a href="module-SearchTask.html">SearchTask</a></div><div class="sidebar-section-children"><a href="module-SeriesData.html">SeriesData</a></div><div class="sidebar-section-children"><a href="module-ServerDiscoveryTask.html">ServerDiscoveryTask</a></div><div class="sidebar-section-children"><a href="module-SetServerScreen.html">SetServerScreen</a></div><div class="sidebar-section-children"><a href="module-ShowScenes.html">ShowScenes</a></div><div class="sidebar-section-children"><a href="module-SlideOutButton.html">SlideOutButton</a></div><div class="sidebar-section-children"><a href="module-SongItem.html">SongItem</a></div><div class="sidebar-section-children"><a href="module-Spinner.html">Spinner</a></div><div class="sidebar-section-children"><a href="module-StandardDialog.html">StandardDialog</a></div><div class="sidebar-section-children"><a href="module-Subtitles.html">Subtitles</a></div><div class="sidebar-section-children"><a href="module-TVEpisode.html">TVEpisode</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeData.html">TVEpisodeData</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRow.html">TVEpisodeRow</a></div><div class="sidebar-section-children"><a href="module-TVEpisodeRowWithOptions.html">TVEpisodeRowWithOptions</a></div><div class="sidebar-section-children"><a href="module-TVEpisodes.html">TVEpisodes</a></div><div class="sidebar-section-children"><a href="module-TVListDetails.html">TVListDetails</a></div><div class="sidebar-section-children"><a href="module-TVListOptions.html">TVListOptions</a></div><div class="sidebar-section-children"><a href="module-TVSeasonData.html">TVSeasonData</a></div><div class="sidebar-section-children"><a href="module-TVSeasonRow.html">TVSeasonRow</a></div><div class="sidebar-section-children"><a href="module-TVShowDescription.html">TVShowDescription</a></div><div class="sidebar-section-children"><a href="module-TVShowDetails.html">TVShowDetails</a></div><div class="sidebar-section-children"><a href="module-TextSizeTask.html">TextSizeTask</a></div><div class="sidebar-section-children"><a href="module-UserData.html">UserData</a></div><div class="sidebar-section-children"><a href="module-UserItem.html">UserItem</a></div><div class="sidebar-section-children"><a href="module-UserLibrary.html">UserLibrary</a></div><div class="sidebar-section-children"><a href="module-UserRow.html">UserRow</a></div><div class="sidebar-section-children"><a href="module-UserSelect.html">UserSelect</a></div><div class="sidebar-section-children"><a href="module-VideoData.html">VideoData</a></div><div class="sidebar-section-children"><a href="module-VideoPlayer.html">VideoPlayer</a></div><div class="sidebar-section-children"><a href="module-VideoPlayerView.html">VideoPlayerView</a></div><div class="sidebar-section-children"><a href="module-VideoTrackListItem.html">VideoTrackListItem</a></div><div class="sidebar-section-children"><a href="module-ViewCreator.html">ViewCreator</a></div><div class="sidebar-section-children"><a href="module-WhatsNewDialog.html">WhatsNewDialog</a></div><div class="sidebar-section-children"><a href="module-baserequest.html">baserequest</a></div><div class="sidebar-section-children"><a href="module-captionTask.html">captionTask</a></div><div class="sidebar-section-children"><a href="module-conditional.html">conditional</a></div><div class="sidebar-section-children"><a href="module-config.html">config</a></div><div class="sidebar-section-children"><a href="module-deviceCapabilities.html">deviceCapabilities</a></div><div class="sidebar-section-children"><a href="module-globals.html">globals</a></div><div class="sidebar-section-children"><a href="module-homeRowItemSizes_.html">homeRowItemSizes</a></div><div class="sidebar-section-children"><a href="module-migrations.html">migrations</a></div><div class="sidebar-section-children"><a href="module-misc.html">misc</a></div><div class="sidebar-section-children"><a href="module-quickplay.html">quickplay</a></div><div class="sidebar-section-children"><a href="module-schedule.html">schedule</a></div><div class="sidebar-section-children"><a href="module-section.html">section</a></div><div class="sidebar-section-children"><a href="module-sectionScroller.html">sectionScroller</a></div><div class="sidebar-section-children"><a href="module-settings.html">settings</a></div><div class="sidebar-section-children"><a href="module-userauth.html">userauth</a></div></div></div><div class="mobile-navbar-actions"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div></div></div><script type="text/javascript" src="scripts/core.min.js"></script><script src="scripts/search.min.js" defer="defer"></script><script src="scripts/third-party/fuse.js" defer="defer"></script><script type="text/javascript">var tocbotInstance=tocbot.init({tocSelector:"#eed4d2a0bfd64539bb9df78095dec881",contentSelector:".main-content",headingSelector:"h1, h2, h3",hasInnerContainers:!0,scrollContainer:".main-content",headingsOffset:130,onClick:bringLinkToView})</script></body></html>

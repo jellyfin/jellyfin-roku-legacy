@@ -14,6 +14,7 @@ sub CreateVideoPlayerView()
     m.view.observeField("state", "onStateChange")
     m.view.observeField("selectPlaybackInfoPressed", "onSelectPlaybackInfoPressed")
     m.view.observeField("selectSubtitlePressed", "onSelectSubtitlePressed")
+    m.view.observeField("selectAudioPressed", "onSelectAudioPressed")
 
     mediaSourceId = m.global.queueManager.callFunc("getCurrentItem").mediaSourceId
 
@@ -31,6 +32,36 @@ end sub
 ' -----------------
 ' Event Handlers
 ' -----------------
+
+
+' onSelectAudioPressed: Display audio selection dialog
+'
+sub onSelectAudioPressed()
+    audioData = {
+        data: []
+    }
+
+    for each item in m.view.fullAudioData
+
+        audioStreamItem = {
+            "Index": item.Index,
+            "IsExternal": item.IsExternal,
+            "Track": {
+                "description": item.DisplayTitle
+            },
+            "Type": "audioselection"
+        }
+
+        if m.view.audioIndex = item.Index
+            audioStreamItem.selected = true
+        end if
+
+        audioData.data.push(audioStreamItem)
+    end for
+
+    m.global.sceneManager.callFunc("radioDialog", tr("Select Audio"), audioData)
+    m.global.sceneManager.observeField("returnData", "onSelectionMade")
+end sub
 
 ' User requested subtitle selection popup
 sub onSelectSubtitlePressed()
@@ -85,6 +116,25 @@ sub onSelectionMade()
 
     if LCase(m.global.sceneManager.returnData.type) = "subtitleselection"
         processSubtitleSelection()
+        return
+    end if
+
+    if LCase(m.global.sceneManager.returnData.type) = "audioselection"
+        processAudioSelection()
+        return
+    end if
+end sub
+
+
+' processAudioSelection: Audio track selection handler
+'
+sub processAudioSelection()
+    selectedAudioTrack = m.global.sceneManager.returnData
+
+    if isValid(selectedAudioTrack)
+        if isValid(selectedAudioTrack.index)
+            m.view.audioIndex = selectedAudioTrack.index
+        end if
     end if
 end sub
 

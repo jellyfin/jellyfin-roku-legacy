@@ -1,3 +1,5 @@
+import "pkg:/source/utils/misc.bs"
+
 sub init()
     m.top.visible = true
     updateSize()
@@ -183,9 +185,20 @@ function buildRow(rowTitle as string, items, imgWdth = 0)
     row = CreateObject("roSGNode", "ContentNode")
     row.Title = tr(rowTitle)
     for each mov in items
+        if LCase(mov.json.type) = "episode"
+            if isAllValid([mov.json.SeriesName, mov.json.ParentIndexNumber, mov.json.IndexNumber, mov.json.Name])
+                mov.labelText = mov.json.SeriesName
+                mov.subTitle = `S${mov.json.ParentIndexNumber}:E${mov.json.IndexNumber} - ${mov.json.Name}`
+            else
+                mov.labelText = mov.json.Name
+                mov.subTitle = mov.json.ProductionYear
+            end if
+        else
+            mov.labelText = mov.json.Name
+            mov.subTitle = mov.json.ProductionYear
+        end if
+
         mov.Id = mov.json.Id
-        mov.labelText = mov.json.Name
-        mov.subTitle = mov.json.ProductionYear
         mov.Type = mov.json.Type
         if imgWdth > 0
             mov.imageWidth = imgWdth

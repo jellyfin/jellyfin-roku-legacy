@@ -16,11 +16,13 @@ sub quickConnectStatus()
     m.quickConnectTimer.control = "stop"
     m.checkTask = CreateObject("roSGNode", "QuickConnect")
     m.checkTask.secret = m.top.quickConnectJson.secret
+    m.checkTask.saveCredentials = m.top.saveCredentials
     m.checkTask.observeField("authenticated", "OnAuthenticated")
     m.checkTask.control = "run"
 end sub
 
 sub OnAuthenticated()
+    m.checkTask.control = "stop"
     m.checkTask.unobserveField("authenticated")
 
     ' Did we get the A-OK to authenticate?
@@ -28,28 +30,18 @@ sub OnAuthenticated()
     if authenticated &lt; 0
         ' Still waiting, check again in 3 seconds...
         authenticated = 0
-        m.checkTask.observeField("authenticated", "OnAuthenticated")
         m.quickConnectTimer.control = "start"
     else if authenticated > 0
-        ' We've been given the go ahead, try to authenticate via Quick Connect...
-        authenticated = AuthenticateViaQuickConnect(m.top.quickConnectJson.secret)
-        if authenticated &lt;> invalid and authenticated = true
-            currentUser = AboutMe()
-            session.user.Login(currentUser, m.top.saveCredentials)
-            session.user.LoadUserPreferences()
-            LoadUserAbilities()
-            m.top.close = true
-            m.top.authenticated = true
-        else
-            m.top.close = true
-            m.top.authenticated = false
-        end if
+        ' We've been logged in via Quick Connect...
+        m.top.close = true
+        m.top.authenticated = true
     end if
 end sub
 
 sub quickConnectClosed()
     m.quickConnectTimer.control = "stop"
     if m.checkTask &lt;> invalid
+        m.checkTask.control = "stop"
         m.checkTask.unobserveField("authenticated")
     end if
     m.top.close = true

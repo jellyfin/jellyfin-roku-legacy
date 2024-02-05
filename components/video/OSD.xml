@@ -8,6 +8,7 @@
       <IconButton id="showVideoInfoPopup" background="#070707" focusBackground="#00a4dc" padding="16" icon="pkg:/images/icons/videoInfo.png" height="65" width="100" />
       <IconButton id="chapterList" background="#070707" focusBackground="#00a4dc" padding="16" icon="pkg:/images/icons/numberList.png" height="65" width="100" />
       <IconButton id="showSubtitleMenu" background="#070707" focusBackground="#00a4dc" padding="0" icon="pkg:/images/icons/subtitle.png" height="65" width="100" />
+      <IconButton id="showAudioMenu" background="#070707" focusBackground="#00a4dc" padding="27" icon="pkg:/images/icons/musicNote.png" height="65" width="100" />
     </ButtonGroup>
 
     <ButtonGroup id="videoControls" itemSpacings="[20]" layoutDirection="horiz" horizAlignment="center" translation="[960,875]">

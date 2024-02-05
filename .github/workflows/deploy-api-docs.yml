@@ -34,10 +34,10 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@1f0c5cde4bc74cd7e1254d0cb4de8d49e9068c7d # v4
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@a753861a5debcf57bf8b404356158c8e1e33150c # v2
+        uses: actions/upload-pages-artifact@0252fc4ba7626f0298f0cf00902a25c6afc77fa8 # v3
         with:
           # Only upload the api docs folder
           path: "docs/api"
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@77d7344265e1f960dab5c00dbff52287a70b0d4f # v3
+        uses: actions/deploy-pages@87c3283f01cd6fe19a0ab93a23b2f6fcba5a8e42 # v4

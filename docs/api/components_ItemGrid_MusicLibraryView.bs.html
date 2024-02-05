@@ -142,14 +142,12 @@ sub loadInitialItems()
         m.loadItemsTask.itemId = m.top.parentItem.parentFolder
     else if LCase(m.view) = "artistspresentation" or LCase(m.options.view) = "artistspresentation"
         m.loadItemsTask.genreIds = ""
-        m.top.showItemTitles = "hidealways"
     else if LCase(m.view) = "artistsgrid" or LCase(m.options.view) = "artistsgrid"
         m.loadItemsTask.genreIds = ""
     else if LCase(m.view) = "albumartistsgrid" or LCase(m.options.view) = "albumartistsgrid"
         m.loadItemsTask.genreIds = ""
     else if LCase(m.view) = "albumartistspresentation" or LCase(m.options.view) = "albumartistspresentation"
         m.loadItemsTask.genreIds = ""
-        m.top.showItemTitles = "hidealways"
     else
         m.loadItemsTask.itemId = m.top.parentItem.Id
     end if
@@ -230,6 +228,7 @@ sub setMusicOptions(options)
         { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
         { "Title": tr("DATE_PLAYED"), "Name": "DatePlayed" },
         { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
+        { "Title": tr("Random"), "Name": "Random" },
     ]
 
     options.filter = [
@@ -240,6 +239,7 @@ sub setMusicOptions(options)
     if LCase(m.options.view) = "genres" or LCase(m.view) = "genres"
         options.sort = [
             { "Title": tr("TITLE"), "Name": "SortName" },
+            { "Title": tr("Random"), "Name": "Random" },
         ]
         options.filter = []
     end if
@@ -248,6 +248,7 @@ sub setMusicOptions(options)
         options.sort = [
             { "Title": tr("TITLE"), "Name": "SortName" },
             { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+            { "Title": tr("Random"), "Name": "Random" },
         ]
     end if
 end sub

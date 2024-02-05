@@ -93,8 +93,6 @@ function ItemMetaData(id as string)
         tmp.json = data
         return tmp
     else if data.type = "Episode"
-        ' param = { "AddPlayedIndicator": data.UserData.Played }
-        ' imgParams.Append(param)
         tmp = CreateObject("roSGNode", "TVEpisodeData")
         tmp.image = PosterImage(data.id, imgParams)
         tmp.json = data
@@ -412,9 +410,8 @@ function TVSeasons(id as string) as dynamic
 
     results = []
     for each item in data.Items
-        imgParams = { "AddPlayedIndicator": item.UserData.Played }
         tmp = CreateObject("roSGNode", "TVSeasonData")
-        tmp.image = PosterImage(item.id, imgParams)
+        tmp.image = PosterImage(item.id)
         tmp.json = item
         results.push(tmp)
     end for

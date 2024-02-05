@@ -95,6 +95,8 @@ function onKeyEvent(key as string, press as boolean) as boolean
             focusedItem = getFocusedItem()
             if isValid(focusedItem)
                 m.top.selectedItem = focusedItem
+                'Prevent the selected item event from double firing
+                m.top.selectedItem = invalid
             end if
             return true
         end if

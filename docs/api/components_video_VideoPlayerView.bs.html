@@ -34,6 +34,7 @@ sub init()
     m.top.observeField("state", "onState")
     m.top.observeField("content", "onContentChange")
     m.top.observeField("selectedSubtitle", "onSubtitleChange")
+    m.top.observeField("audioIndex", "onAudioIndexChange")
 
     ' Custom Caption Function
     m.top.observeField("allowCaptions", "onAllowCaptionsChange")
@@ -165,6 +166,12 @@ sub handleShowSubtitleMenuAction()
     m.top.selectSubtitlePressed = true
 end sub
 
+' handleShowAudioMenuAction: Handles action to show audio selection menu
+'
+sub handleShowAudioMenuAction()
+    m.top.selectAudioPressed = true
+end sub
+
 ' handleShowVideoInfoPopupAction: Handles action to show video info popup
 '
 sub handleShowVideoInfoPopupAction()
@@ -203,6 +210,11 @@ sub onOSDAction()
 
     if action = "showsubtitlemenu"
         handleShowSubtitleMenuAction()
+        return
+    end if
+
+    if action = "showaudiomenu"
+        handleShowAudioMenuAction()
         return
     end if
 
@@ -258,12 +270,42 @@ end sub
 
 ' Event handler for when selectedSubtitle changes
 sub onSubtitleChange()
+    switchWithoutRefresh = true
+
+    if m.top.SelectedSubtitle &lt;> -1
+        ' If the global caption mode is off, then Roku can't display the subtitles natively and needs a video stop/start
+        if LCase(m.top.globalCaptionMode) &lt;> "on" then switchWithoutRefresh = false
+    end if
+
+    ' If previous sustitle was encoded, then we need to a video stop/start to change subtitle content
+    if m.top.previousSubtitleWasEncoded then switchWithoutRefresh = false
+
+    if switchWithoutRefresh then return
+
     ' Save the current video position
     m.global.queueManager.callFunc("setTopStartingPoint", int(m.top.position) * 10000000&amp;)
 
     m.top.control = "stop"
 
     m.LoadMetaDataTask.selectedSubtitleIndex = m.top.SelectedSubtitle
+    m.LoadMetaDataTask.selectedAudioStreamIndex = m.top.audioIndex
+    m.LoadMetaDataTask.itemId = m.currentItem.id
+    m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
+    m.LoadMetaDataTask.control = "RUN"
+end sub
+
+' Event handler for when audioIndex changes
+sub onAudioIndexChange()
+    ' Skip initial audio index setting
+    if m.top.position = 0 then return
+
+    ' Save the current video position
+    m.global.queueManager.callFunc("setTopStartingPoint", int(m.top.position) * 10000000&amp;)
+
+    m.top.control = "stop"
+
+    m.LoadMetaDataTask.selectedSubtitleIndex = m.top.SelectedSubtitle
+    m.LoadMetaDataTask.selectedAudioStreamIndex = m.top.audioIndex
     m.LoadMetaDataTask.itemId = m.currentItem.id
     m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
     m.LoadMetaDataTask.control = "RUN"
@@ -318,6 +360,7 @@ sub onVideoContentLoaded()
     m.top.container = videoContent[0].container
     m.top.mediaSourceId = videoContent[0].mediaSourceId
     m.top.fullSubtitleData = videoContent[0].fullSubtitleData
+    m.top.fullAudioData = videoContent[0].fullAudioData
     m.top.audioIndex = videoContent[0].audioIndex
     m.top.transcodeParams = videoContent[0].transcodeparams
     m.chapters = videoContent[0].chapters
@@ -333,6 +376,32 @@ sub onVideoContentLoaded()
         ' Allow custom captions for non intro videos
         m.top.allowCaptions = true
     end if
+
+    ' Allow default subtitles
+    m.top.unobserveField("selectedSubtitle")
+
+    ' Set subtitleTrack property if subs are natively supported by Roku
+    selectedSubtitle = invalid
+    for each subtitle in m.top.fullSubtitleData
+        if subtitle.Index = videoContent[0].selectedSubtitle
+            selectedSubtitle = subtitle
+            exit for
+        end if
+    end for
+
+    if isValid(selectedSubtitle)
+        availableSubtitleTrackIndex = availSubtitleTrackIdx(selectedSubtitle.Track.TrackName)
+        if availableSubtitleTrackIndex &lt;> -1
+            if not selectedSubtitle.IsEncoded
+                m.top.globalCaptionMode = "On"
+                m.top.subtitleTrack = m.top.availableSubtitleTracks[availableSubtitleTrackIndex].TrackName
+            end if
+        end if
+    end if
+
+    m.top.selectedSubtitle = videoContent[0].selectedSubtitle
+
+    m.top.observeField("selectedSubtitle", "onSubtitleChange")
 
     if isValid(m.top.audioIndex)
         m.top.audioTrack = (m.top.audioIndex + 1).toStr()
@@ -579,6 +648,25 @@ end sub
 function stateAllowsOSD() as boolean
     validStates = ["playing", "paused", "stopped"]
     return inArray(validStates, m.top.state)
+end function
+
+
+' availSubtitleTrackIdx: Returns Roku's index for requested subtitle track
+'
+' @param {string} tracknameToFind - TrackName for subtitle we're looking to match
+' @return {integer} indicating Roku's index for requested subtitle track. Returns -1 if not found
+function availSubtitleTrackIdx(tracknameToFind as string) as integer
+    idx = 0
+    for each availTrack in m.top.availableSubtitleTracks
+        ' The TrackName must contain the URL we supplied originally, though
+        ' Roku mangles the name a bit, so we check if the URL is a substring, rather
+        ' than strict equality
+        if Instr(1, availTrack.TrackName, tracknameToFind)
+            return idx
+        end if
+        idx = idx + 1
+    end for
+    return -1
 end function
 
 function onKeyEvent(key as string, press as boolean) as boolean

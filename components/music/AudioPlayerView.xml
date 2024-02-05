@@ -4,8 +4,9 @@
     <Poster id="backdrop" opacity=".5" loadDisplayMode="scaleToZoom" width="1920" height="1200" blendColor="#3f3f3f" />
     <Poster id="shuffleIndicator" width="64" height="64" uri="pkg:/images/icons/shuffleIndicator-off.png" translation="[1150,775]" opacity="0" />
     <Poster id="loopIndicator" width="64" height="64" uri="pkg:/images/icons/loopIndicator-off.png" translation="[700,775]" opacity="0" />
-    <Label id="positionTimestamp" width="100" height="25" horizAlign="right" font="font:SmallestSystemFont" translation="[590,825]" color="#999999" text="0:00" />
-    <Label id="totalLengthTimestamp" width="100" height="25" horizAlign="left" font="font:SmallestSystemFont" translation="[1230,825]" color="#999999" />
+    <Label id="positionTimestamp" width="100" height="25" horizAlign="right" font="font:SmallestSystemFont" translation="[590,838]" color="#999999" text="0:00" />
+    <Label id="totalLengthTimestamp" width="100" height="25" horizAlign="left" font="font:SmallestSystemFont" translation="[1230,838]" color="#999999" />
+
     <LayoutGroup id="toplevel" layoutDirection="vert" horizAlignment="center" translation="[960,175]" itemSpacings="[40]">
       <LayoutGroup id="main_group" layoutDirection="vert" horizAlignment="center" itemSpacings="[15]">
         <Poster id="albumCover" width="500" height="500" />
@@ -16,6 +17,7 @@
       <Rectangle id="seekBar" color="0x00000099" width="500" height="10">
         <Rectangle id="bufferPosition" color="0xFFFFFF44" height="10"></Rectangle>
         <Rectangle id="playPosition" color="#00a4dcFF" height="10"></Rectangle>
+        <Poster id="thumb" width="25" height="25" uri="pkg:/images/icons/circle.png" visible="false" translation="[0, -10]" />
       </Rectangle>
       <LayoutGroup id="buttons" layoutDirection="horiz" horizAlignment="center" itemSpacings="[45]">
         <Poster id="loop" width="64" height="64" uri="pkg:/images/icons/loop-default.png" opacity="0" />
@@ -37,6 +39,9 @@
         <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0.0, 1.0]" fieldToInterp="loop.opacity" />
       </Animation>
     </LayoutGroup>
+    <Rectangle id="seekPosition" visible="false" color="0x00000090" height="40" width="110" translation="[720, 790]">
+      <Label text="0:00" id="seekTimestamp" width="110" height="40" horizAlign="center" vertAlign="center" font="font:SmallestSystemFont" />
+    </Rectangle>
     <Rectangle id="screenSaverBackground" width="1920" height="1080" color="#000000" visible="false" />
     <Poster id="screenSaverAlbumCover" width="500" height="500" translation="[960,575]" opacity="0" />
     <Poster id="PosterOne" width="389" height="104" translation="[960,540]" opacity="0" />

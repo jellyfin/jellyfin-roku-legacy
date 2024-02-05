@@ -3,6 +3,7 @@
   <interface>
     <field id="backPressed" type="boolean" alwaysNotify="true" />
     <field id="selectSubtitlePressed" type="boolean" alwaysNotify="true" />
+    <field id="selectAudioPressed" type="boolean" alwaysNotify="true" />
     <field id="selectPlaybackInfoPressed" type="boolean" alwaysNotify="true" />
     <field id="PlaySessionId" type="string" />
     <field id="Subtitles" type="array" />
@@ -23,6 +24,7 @@
     <field id="videoId" type="string" />
     <field id="mediaSourceId" type="string" />
     <field id="fullSubtitleData" type="array" />
+    <field id="fullAudioData" type="array" />
     <field id="audioIndex" type="integer" />
     <field id="allowCaptions" type="boolean" value="false" />
   </interface>

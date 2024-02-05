@@ -15,6 +15,10 @@ sub init()
 
     m.unplayedCount = m.top.findNode("unplayedCount")
     m.unplayedEpisodeCount = m.top.findNode("unplayedEpisodeCount")
+    m.playedIndicator = m.top.findNode("playedIndicator")
+    m.checkmark = m.top.findNode("checkmark")
+    m.checkmark.width = 90
+    m.checkmark.height = 60
 
     m.itemText.translation = [0, m.itemPoster.height + 7]
 
@@ -44,6 +48,10 @@ sub itemContentChanged()
     if itemData = invalid then return
 
     if itemData.type = "Movie"
+        if isValid(itemData.json) and isValid(itemData.json.UserData) and isValid(itemData.json.UserData.Played) and itemData.json.UserData.Played
+            m.playedIndicator.visible = true
+        end if
+
         m.itemPoster.uri = itemData.PosterUrl
         m.itemIcon.uri = itemData.iconUrl
         m.itemText.text = itemData.Title
@@ -58,6 +66,9 @@ sub itemContentChanged()
                     m.unplayedEpisodeCount.text = ""
                 end if
             end if
+        end if
+        if isValid(itemData.json) and isValid(itemData.json.UserData) and isValid(itemData.json.UserData.Played) and itemData.json.UserData.Played = true
+            m.playedIndicator.visible = true
         end if
 
         m.itemPoster.uri = itemData.PosterUrl

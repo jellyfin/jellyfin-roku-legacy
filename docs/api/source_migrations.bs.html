@@ -73,11 +73,13 @@ sub runRegistryUserMigrations()
                 ' app versions &lt; 2.0.0 didn't save LastRunVersion at the user level
                 ' fall back to using the apps lastRunVersion
                 lastRunVersion = m.global.app.lastRunVersion
-                registry_write("LastRunVersion", lastRunVersion, section)
+                if isValid(lastRunVersion)
+                    registry_write("LastRunVersion", lastRunVersion, section)
+                end if
             end if
 
             ' BASE_MIGRATION
-            if not versionChecker(lastRunVersion, CLIENT_VERSION_REQUIRING_BASE_MIGRATION)
+            if isValid(lastRunVersion) and not versionChecker(lastRunVersion, CLIENT_VERSION_REQUIRING_BASE_MIGRATION)
                 m.wasMigrated = true
                 print `Running Registry Migration for ${CLIENT_VERSION_REQUIRING_BASE_MIGRATION} for userid: ${section}`
 

@@ -7173,5 +7173,164 @@
         <source>Delete Saved</source>
         <translation>Eliminar guardado</translation>
     </message>
+    <message>
+        <source>Episodes</source>
+        <translation>Episodios</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>¿Guardar credenciales?</translation>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item.</source>
+        <translation>Se ha producido un error reproduciendo este ítem</translation>
+        <extracomment>Dialog detail when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Change Server</source>
+        <translation>Cambiar servidor</translation>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Error recuperando contenido</translation>
+        <extracomment>Dialog title when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Error al reproducir</translation>
+        <extracomment>Dialog title when error occurs during playback</extracomment>
+    </message>
+    <message>
+        <source>Sign Out</source>
+        <translation>Cerrar sesión</translation>
+    </message>
+    <message>
+        <source>Loading Channel Data</source>
+        <translation>Cargando Datos del Canal</translation>
+    </message>
+    <message>
+        <source>RUNTIME</source>
+        <translation>Duración</translation>
+    </message>
+    <message>
+        <source>Born</source>
+        <translation>Nacido en</translation>
+    </message>
+    <message>
+        <source>Extras</source>
+        <translation>Extras</translation>
+    </message>
+    <message>
+        <source>DATE_ADDED</source>
+        <translation>Añadido en</translation>
+    </message>
+    <message>
+        <source>Age</source>
+        <translation>Edad</translation>
+    </message>
+    <message>
+        <source>Cast &amp; Crew</source>
+        <translation>Elenco y Equipo</translation>
+    </message>
+    <message>
+        <source>Additional Parts</source>
+        <translation>Partes Adicionales</translation>
+        <extracomment>Additional parts of a video</extracomment>
+    </message>
+    <message>
+        <comment>Title of Tab for switching &quot;views&quot; when looking at a library</comment>
+        <source>TAB_VIEW</source>
+        <translation>Visualizaciones</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to sort library content</comment>
+        <source>TAB_SORT</source>
+        <translation>Ordenar</translation>
+    </message>
+    <message>
+        <source>More Like This</source>
+        <translation>Más como esto</translation>
+    </message>
+    <message>
+        <source>Press &apos;OK&apos; to Close</source>
+        <translation>Presiona &apos;OK&apos; para Cerrar</translation>
+    </message>
+    <message>
+        <source>Special Features</source>
+        <translation>Características Especiales</translation>
+    </message>
+    <message>
+        <source>Movies</source>
+        <translation>Peliculas</translation>
+    </message>
+    <message>
+        <source>Error loading Channel Data</source>
+        <translation>Error cargando datos del canal</translation>
+    </message>
+    <message>
+        <source>PLAY_COUNT</source>
+        <translation>Número de reproducciones</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Calificación de los críticos</translation>
+    </message>
+    <message>
+        <source>DATE_PLAYED</source>
+        <translation>Reproducido en</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to filter library content</comment>
+        <source>TAB_FILTER</source>
+        <translation>Filtrar</translation>
+    </message>
+    <message>
+        <source>RELEASE_DATE</source>
+        <translation>Fecha de lanzamiento</translation>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>Este 1% no contiene ítems</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Nombre</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>Valoración IMDB</translation>
+    </message>
+    <message>
+        <source>OFFICIAL_RATING</source>
+        <translation>Clasificación parental</translation>
+    </message>
+    <message>
+        <source>Died</source>
+        <translation>Fallecimiento</translation>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Ahora</translation>
+    </message>
+    <message>
+        <source>There was an error retrieving the data for this item from the server.</source>
+        <translation>Ha habido un error obteniendo los datos de este ítem del servidor.</translation>
+        <extracomment>Dialog detail when unable to load Content from Server</extracomment>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Eliminar guardado</translation>
+    </message>
+    <message>
+        <source>Unable to load Channel Data from the server</source>
+        <translation>No se pudieron cargar los datos del canal del servidor</translation>
+    </message>
+    <message>
+        <source>Movies (Presentation)</source>
+        <translation>Películas (Presentación)</translation>
+        <extracomment>Movie library view option</extracomment>
+    </message>
 </context>
 </TS>

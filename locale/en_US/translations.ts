@@ -1246,5 +1246,10 @@
             <translation>What's New?</translation>
             <extracomment>Popup title - Popup displays all the major changes to the app since the last version</extracomment>
         </message>
+        <message>
+            <source>Random</source>
+            <translation>Random</translation>
+            <extracomment>General use word when we want to randomize data</extracomment>
+        </message>
     </context>
 </TS>

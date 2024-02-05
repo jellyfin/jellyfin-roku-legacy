@@ -253,7 +253,8 @@ sub setMoviesOptions(options)
         { "Title": tr("OFFICIAL_RATING"), "Name": "OfficialRating" },
         { "Title": tr("PLAY_COUNT"), "Name": "PlayCount" },
         { "Title": tr("RELEASE_DATE"), "Name": "PremiereDate" },
-        { "Title": tr("RUNTIME"), "Name": "Runtime" }
+        { "Title": tr("RUNTIME"), "Name": "Runtime" },
+        { "Title": tr("Random"), "Name": "Random" },
     ]
 
     options.filter = [
@@ -272,7 +273,7 @@ sub setMoviesOptions(options)
     if m.options.view = "Studios" or m.view = "Studios"
         options.sort = [
             { "Title": tr("TITLE"), "Name": "SortName" },
-            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" },
+            { "Title": tr("DATE_ADDED"), "Name": "DateCreated" }
         ]
         options.filter = [
             { "Title": tr("All"), "Name": "All" },
