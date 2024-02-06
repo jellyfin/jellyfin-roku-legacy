@@ -31,7 +31,7 @@ sub setData()
             m.top.iconUrl = "pkg:/images/media_type_icons/folder_white.png"
         end if
 
-    else if datum.type = "Episode" or datum.type = "MusicVideo"
+    else if datum.type = "Episode" or datum.type = "Recording" or datum.type = "MusicVideo"
         m.top.isWatched = datum.UserData.Played
 
         imgParams = {}

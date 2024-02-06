@@ -164,6 +164,8 @@ sub loadItems()
                 tmp.image = PosterImage(item.id, { "maxHeight": 425, "maxWidth": 290, "quality": "90" })
             else if item.type = "Episode"
                 tmp = CreateObject("roSGNode", "TVEpisode")
+            else if item.Type = "Recording"
+                tmp = CreateObject("roSGNode", "RecordingData")
             else if item.Type = "Genre"
                 tmp = CreateObject("roSGNode", "ContentNode")
                 tmp.title = item.name

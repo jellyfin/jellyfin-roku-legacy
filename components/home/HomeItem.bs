@@ -121,7 +121,7 @@ sub itemContentChanged()
         return
     end if
 
-    if itemData.type = "Episode"
+    if itemData.type = "Episode" or itemData.type = "Recording"
         m.itemText.text = itemData.json.SeriesName
 
         if itemData.PlayedPercentage > 0

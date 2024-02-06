@@ -408,7 +408,7 @@ namespace quickplay
         ' get watched episodes by the person
         personEpisodes = api.users.GetItemsByQuery(m.global.session.user.id, {
             "personIds": itemNode.id,
-            "includeItemTypes": "Episode",
+            "includeItemTypes": ["Episode", "Recording"],
             "isPlayed": true,
             "excludeItemTypes": "Season,Series",
             "recursive": true,
@@ -474,7 +474,7 @@ namespace quickplay
         if not isValid(itemNode) or not isValid(itemNode.id) then return
 
         paramArray = {
-            "includeItemTypes": ["Episode", "Movie", "Video"],
+            "includeItemTypes": ["Episode", "Recording", "Movie", "Video"],
             "videoTypes": "VideoFile",
             "sortBy": "Random",
             "limit": 2000,

@@ -166,7 +166,7 @@ sub Main (args as dynamic) as void
                     m.global.queueManager.callFunc("clear") ' empty queue/playlist
                     m.global.queueManager.callFunc("resetShuffle") ' turn shuffle off
 
-                    if itemType = "episode" or itemType = "movie" or itemType = "video"
+                    if itemType = "episode" or itemType = "recording" or itemType = "movie" or itemType = "video"
                         quickplay.video(itemNode)
                         ' restore focus
                         if LCase(group.subtype()) = "tvepisodes"
@@ -242,8 +242,8 @@ sub Main (args as dynamic) as void
                 else if selectedItemType = "UserView" or selectedItemType = "Folder" or selectedItemType = "Channel" or selectedItemType = "Boxset"
                     group = CreateItemGrid(selectedItem)
                     sceneManager.callFunc("pushScene", group)
-                else if selectedItemType = "Episode"
-                    ' User has selected a TV episode they want us to play
+                else if selectedItemType = "Episode" or selectedItemType = "Recording"
+                    ' User has selected a TV episode or Recording they want us to play
                     audio_stream_idx = 0
                     if isValid(selectedItem.selectedAudioStreamIndex) and selectedItem.selectedAudioStreamIndex > 0
                         audio_stream_idx = selectedItem.selectedAudioStreamIndex
@@ -482,7 +482,7 @@ sub Main (args as dynamic) as void
             startLoadingSpinner()
             node = getMsgPicker(msg)
             ' TODO - swap this based on target.mediatype
-            ' types: [ Series (Show), Episode, Movie, Audio, Person, Studio, MusicArtist ]
+            ' types: [ Series (Show), Episode, Movie, Audio, Person, Studio, MusicArtist, Recording ]
             if node.type = "Series"
                 group = CreateSeriesDetailsGroup(node.id)
             else if node.type = "Movie"
@@ -504,6 +504,9 @@ sub Main (args as dynamic) as void
                 group = CreateVideoPlayerGroup(node.id)
                 sceneManager.callFunc("pushScene", group)
             else if node.type = "Episode"
+                group = CreateVideoPlayerGroup(node.id)
+                sceneManager.callFunc("pushScene", group)
+            else if node.type = "Recording"
                 group = CreateVideoPlayerGroup(node.id)
                 sceneManager.callFunc("pushScene", group)
             else if node.type = "Audio"

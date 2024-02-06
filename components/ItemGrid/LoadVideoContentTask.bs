@@ -82,8 +82,8 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
 
     videotype = LCase(meta.type)
 
-    ' Check for any Live TV streams coming from other places other than the TV Guide
-    if isValid(meta.json) and isValid(meta.json.ChannelId)
+    ' Check for any Live TV streams or Recordings coming from other places other than the TV Guide
+    if videotype = "recording" or (isValid(meta.json) and isValid(meta.json.ChannelId))
         if isValid(meta.json.EpisodeTitle)
             meta.title = meta.json.EpisodeTitle
         else if isValid(meta.json.Name)
