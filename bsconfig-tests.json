@@ -18,12 +18,13 @@
     {
       "src": "settings/**/*",
       "dest": "settings"
-    }
+    },
+    "manifest"
   ],
   "diagnosticFilters": ["node_modules/**/*", "**/roku_modules/**/*"],
   "autoImportComponentScript": true,
-  "allowBrighterScriptInBrightScript": true,
   "stagingFolderPath": "build",
+  "retainStagingDir": true,
   "plugins": ["rooibos-roku"],
   "rooibos": {
     "isRecordingCodeCoverage": false,

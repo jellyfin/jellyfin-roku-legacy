@@ -19,7 +19,7 @@
     "rimraf": "5.0.5",
     "roku-deploy": "3.11.1",
     "roku-log-bsc-plugin": "0.8.1",
-    "rooibos-roku": "5.10.0",
+    "rooibos-roku": "5.11.0",
     "ropm": "0.10.21",
     "spellchecker-cli": "6.1.1",
     "undent": "0.1.0"
