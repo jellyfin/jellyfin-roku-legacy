@@ -42,6 +42,41 @@
     <Rectangle id="seekPosition" visible="false" color="0x00000090" height="40" width="110" translation="[720, 790]">
       <Label text="0:00" id="seekTimestamp" width="110" height="40" horizAlign="center" vertAlign="center" font="font:SmallestSystemFont" />
     </Rectangle>
+
+    <ExpandingLabel
+      translation="[820, 825]"
+      id="previousItem"
+      visible="false"
+      icon=""
+      iconHeight="32"
+      iconWidth="32"
+      iconAlign="left"
+      text=""
+      backgroundColor="0x00000095"
+      maxWidth="500"
+      horizAlign="left"
+      horizOffset="64"
+      alignmentSide="right"
+      fontSize="27"
+      padding="[20, 10]"
+    />
+
+    <ExpandingLabel
+      translation="[1035, 825]"
+      id="nextItem"
+      visible="false"
+      icon=""
+      iconHeight="32"
+      iconWidth="32"
+      iconAlign="left"
+      text=""
+      backgroundColor="0x00000095"
+      maxWidth="500"
+      horizAlign="left"
+      fontSize="27"
+      padding="[20, 10]"
+    />
+
     <Rectangle id="screenSaverBackground" width="1920" height="1080" color="#000000" visible="false" />
     <Poster id="screenSaverAlbumCover" width="500" height="500" translation="[960,575]" opacity="0" />
     <Poster id="PosterOne" width="389" height="104" translation="[960,540]" opacity="0" />

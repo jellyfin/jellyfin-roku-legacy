@@ -83,6 +83,65 @@ sub moveForward()
     m.position++
 end sub
 
+' getPreviousItemTitleAndIcon: Return the title and icon of the previous item in the queue
+'
+' @return {object} - an array with an icon url and title text
+function getPreviousItemTitleAndIcon() as object
+    if getPosition() = 0 then return []
+
+    previousItem = getItemByIndex(getPosition() - 1)
+    return getItemTitleAndIcon(previousItem)
+end function
+
+' getNextItemTitleAndIcon: Return the title and icon of the next item in the queue
+'
+' @return {object} - an array with an icon url and title text
+function getNextItemTitleAndIcon() as object
+    if getPosition() + 1 >= getCount() then return []
+
+    nextItem = getItemByIndex(getPosition() + 1)
+    return getItemTitleAndIcon(nextItem)
+end function
+
+' getItemTitle: Determine title text and icon for passed item
+'
+' @param {dynamic} item - the item to get the title of
+' @return {object} - an array with an icon url and title text
+function getItemTitleAndIcon(item as dynamic) as object
+    itemMediaType = getItemType(item)
+
+    itemData = item.json ?? item
+
+    if inArray(["audio", "audiobook"], itemMediaType)
+        return [`pkg:/images/icons/musicNote.png`, `${itemData.artists[0]} - ${itemData.name}`]
+    end if
+
+    if inArray(["movie", "video", "recording", "musicvideo"], itemMediaType)
+        ' Some tv episodes are identified as video, so we must check itemdata
+        if isAllValid([itemData.seriesname, itemData.SeasonName])
+            seasonName = ""
+            if isValidAndNotEmpty(itemData.SeasonName) and LCase(itemData.SeasonName) <> "season unknown"
+                seasonName = ` - ${itemData.SeasonName}`
+            end if
+
+            return [`pkg:/images/media_type_icons/tv.png`, `${itemData.seriesname}${seasonName} - ${itemData.name}`]
+        end if
+
+        return [`pkg:/images/media_type_icons/movie.png`, `${itemData.name}`]
+    end if
+
+    if itemMediaType = "episode"
+        seasonName = ""
+        if isValidAndNotEmpty(itemData.SeasonName) and LCase(itemData.SeasonName) <> "season unknown"
+            seasonName = ` - ${itemData.SeasonName}`
+        end if
+
+        return [`pkg:/images/media_type_icons/tv.png`, `${itemData.seriesname}${seasonName} - ${itemData.name}`]
+    end if
+
+    return []
+end function
+
 ' Return the current play queue
 function getQueue()
     return m.queue

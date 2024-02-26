@@ -144,6 +144,8 @@ sub setupInfoNodes()
     m.seekPosition = m.top.findNode("seekPosition")
     m.seekTimestamp = m.top.findNode("seekTimestamp")
     m.totalLengthTimestamp = m.top.findNode("totalLengthTimestamp")
+    m.nextItem = m.top.FindNode("nextItem")
+    m.previousItem = m.top.FindNode("previousItem")
 end sub
 
 sub bufferPositionChanged()
@@ -425,6 +427,8 @@ function shuffleClicked() as boolean
 
     toggleShuffleEnabled()
 
+    setSiblingData()
+
     if not m.global.queueManager.callFunc("getIsShuffled")
         m.shuffleIndicator.opacity = ".4"
         m.shuffleIndicator.uri = m.shuffleIndicator.uri.Replace("-on", "-off")
@@ -474,6 +478,32 @@ sub pageContentChanged()
     m.LoadAudioStreamTask.itemId = currentItem.id
     m.LoadAudioStreamTask.observeField("content", "onAudioStreamLoaded")
     m.LoadAudioStreamTask.control = "RUN"
+
+    setSiblingData()
+end sub
+
+' setSiblingData: Set the icon and title text for the previous and next items
+'
+sub setSiblingData()
+    previousItemTitleText = m.global.queueManager.callFunc("getPreviousItemTitleAndIcon")
+    if isValidAndNotEmpty(previousItemTitleText)
+        m.previousItem.icon = previousItemTitleText[0]
+        m.previousItem.text = previousItemTitleText[1]
+    else
+        m.previousItem.icon = ""
+        m.previousItem.text = ""
+    end if
+
+    nextItemTitleText = m.global.queueManager.callFunc("getNextItemTitleAndIcon")
+    if isValidAndNotEmpty(nextItemTitleText)
+        m.nextItem.icon = nextItemTitleText[0]
+        m.nextItem.text = nextItemTitleText[1]
+    else
+        m.nextItem.icon = ""
+        m.nextItem.text = ""
+    end if
+
+    checkDisplaySiblingItem()
 end sub
 
 ' If we have more and 1 song to play, fade in the next and previous controls
@@ -710,6 +740,50 @@ sub exitScrubMode()
     setSelectedButtonState("-default", "-selected")
 end sub
 
+' checkDisplaySiblingItem: Determine visible state for both previous and next item popups
+'
+sub checkDisplaySiblingItem()
+    if not m.buttons.hasFocus()
+        m.previousItem.visible = false
+        m.nextItem.visible = false
+        return
+    end if
+
+    selectedButtonID = LCase(m.buttons.getChild(m.top.selectedButtonIndex).id)
+
+    showNextItem = false
+
+    if selectedButtonID = "next"
+        showNextItem = true
+    end if
+
+    if m.global.queueManager.callFunc("getPosition") = m.global.queueManager.callFunc("getCount") - 1
+        showNextItem = false
+    end if
+
+    if not isValidAndNotEmpty(m.nextItem.text)
+        showNextItem = false
+    end if
+
+    m.nextItem.visible = showNextItem
+
+    showPreviousItem = false
+
+    if selectedButtonID = "previous"
+        showPreviousItem = true
+    end if
+
+    if m.global.queueManager.callFunc("getPosition") = 0
+        showPreviousItem = false
+    end if
+
+    if not isValidAndNotEmpty(m.previousItem.text)
+        showPreviousItem = false
+    end if
+
+    m.previousItem.visible = showPreviousItem
+end sub
+
 ' Process key press events
 function onKeyEvent(key as string, press as boolean) as boolean
 
@@ -762,6 +836,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
             m.thumb.setFocus(true)
             m.buttons.setFocus(false)
+            checkDisplaySiblingItem()
             return true
         end if
 
@@ -769,6 +844,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             if m.thumb.visible
                 exitScrubMode()
             end if
+            checkDisplaySiblingItem()
             return true
         end if
 
@@ -786,6 +862,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
                 if m.top.selectedButtonIndex > 0
                     m.previouslySelectedButtonIndex = m.top.selectedButtonIndex
                     m.top.selectedButtonIndex = m.top.selectedButtonIndex - 1
+                    checkDisplaySiblingItem()
                 end if
                 return true
             end if
@@ -795,6 +872,8 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
                 m.previouslySelectedButtonIndex = m.top.selectedButtonIndex
                 if m.top.selectedButtonIndex < m.buttonCount - 1 then m.top.selectedButtonIndex = m.top.selectedButtonIndex + 1
+
+                checkDisplaySiblingItem()
                 return true
             end if
         else if key = "OK"

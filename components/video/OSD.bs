@@ -15,6 +15,8 @@ sub init()
     m.videoRemainingTime = m.top.findNode("videoRemainingTime")
     m.progressBar = m.top.findNode("progressBar")
     m.progressBarBackground = m.top.findNode("progressBarBackground")
+    m.nextItem = m.top.FindNode("nextItem")
+    m.previousItem = m.top.FindNode("previousItem")
 
     m.top.observeField("visible", "onVisibleChanged")
     m.top.observeField("hasFocus", "onFocusChanged")
@@ -26,6 +28,11 @@ sub init()
     m.top.observeField("episodeNumber", "onEpisodeNumberChanged")
     m.top.observeField("episodeNumberEnd", "onEpisodeNumberEndChanged")
     m.top.observeField("logoImage", "onLogoImageChanged")
+
+    m.top.observeField("previousItemIcon", "onPreviousItemIconChanged")
+    m.top.observeField("previousItemTitleText", "onPreviousItemTitleTextChanged")
+    m.top.observeField("nextItemIcon", "onNextItemIconChanged")
+    m.top.observeField("nextItemTitleText", "onNextItemTitleTextChanged")
 
     m.defaultButtonIndex = 2
     m.focusedButtonIndex = 2
@@ -149,6 +156,30 @@ sub onLogoImageChanged()
     end if
 end sub
 
+' onPreviousItemIconChanged: Handler for changes to m.top.previousItemIcon param.
+'
+sub onPreviousItemIconChanged()
+    m.previousItem.icon = m.top.previousItemIcon
+end sub
+
+' onPreviousItemTitleTextChanged: Handler for changes to m.top.previousItemTitleText param.
+'
+sub onPreviousItemTitleTextChanged()
+    m.previousItem.text = m.top.previousItemTitleText
+end sub
+
+' onNextItemIconChanged: Handler for changes to m.top.nextItemIcon param.
+'
+sub onNextItemIconChanged()
+    m.nextItem.icon = m.top.nextItemIcon
+end sub
+
+' onNextItemTitleTextChanged: Handler for changes to m.top.nextItemTitleText param.
+'
+sub onNextItemTitleTextChanged()
+    m.nextItem.text = m.top.nextItemTitleText
+end sub
+
 ' resetFocusToDefaultButton: Reset focus back to the default button
 '
 sub resetFocusToDefaultButton()
@@ -212,6 +243,7 @@ sub inactiveCheck()
     end if
 
     if m.deviceInfo.timeSinceLastKeypress() >= m.top.inactiveTimeout
+        checkDisplaySiblingItem("")
         m.top.action = "hide"
     end if
 end sub
@@ -231,7 +263,42 @@ sub onButtonSelected()
         m.top.showChapterList = not m.top.showChapterList
     end if
 
+    checkDisplaySiblingItem("")
+
     m.top.action = selectedButton.id
+end sub
+
+' checkDisplaySiblingItem: Determine visible state for both previous and next item popups
+'
+sub checkDisplaySiblingItem(selectedButtonID)
+    if not isValidAndNotEmpty(selectedButtonID) then selectedButtonID = ""
+
+    selectedButtonID = LCase(selectedButtonID)
+
+    showNextItem = false
+
+    if selectedButtonID = "itemnext"
+        showNextItem = true
+    end if
+
+    if not isValidAndNotEmpty(m.nextItem.text)
+        showNextItem = false
+    end if
+
+    m.nextItem.visible = showNextItem
+
+    showPreviousItem = false
+
+    if selectedButtonID = "itemback"
+        showPreviousItem = true
+    end if
+
+    if not isValidAndNotEmpty(m.previousItem.text)
+        showPreviousItem = false
+    end if
+
+    m.previousItem.visible = showPreviousItem
+
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
@@ -243,6 +310,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     end if
 
     if key = "play"
+        checkDisplaySiblingItem("")
         m.top.action = "videoplaypause"
         return true
     end if
@@ -269,6 +337,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
             if isValid(focusedButton.focus)
                 buttonGroup.buttonFocused = m.focusedButtonIndex
                 focusedButton.focus = true
+
+                focusedButtonID = m.videoControls.isInFocusChain() ? focusedButton.id : ""
+                checkDisplaySiblingItem(focusedButtonID)
                 exit for
             end if
         end for
@@ -298,6 +369,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
             if isValid(focusedButton.focus)
                 buttonGroup.buttonFocused = m.focusedButtonIndex
                 focusedButton.focus = true
+
+                focusedButtonID = m.videoControls.isInFocusChain() ? focusedButton.id : ""
+                checkDisplaySiblingItem(focusedButtonID)
                 exit for
             end if
         end for
@@ -315,6 +389,8 @@ function onKeyEvent(key as string, press as boolean) as boolean
             focusedButton = m.optionControls.getChild(m.focusedButtonIndex)
             focusedButton.focus = true
             m.optionControls.setFocus(true)
+
+            checkDisplaySiblingItem("")
         end if
 
         return true
@@ -330,12 +406,15 @@ function onKeyEvent(key as string, press as boolean) as boolean
             focusedButton = m.videoControls.getChild(m.focusedButtonIndex)
             focusedButton.focus = true
             m.videoControls.setFocus(true)
+
+            checkDisplaySiblingItem(focusedButton.id)
         end if
 
         return true
     end if
 
     ' All other keys hide the menu
+    checkDisplaySiblingItem("")
     m.top.action = "hide"
     return true
 end function

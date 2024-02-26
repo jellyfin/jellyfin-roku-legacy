@@ -29,6 +29,40 @@
       <IconButton id="itemNext" background="#070707" focusBackground="#00a4dc" padding="35" icon="pkg:/images/icons/itemNext.png" height="65" width="100" />
     </ButtonGroup>
 
+    <ExpandingLabel
+      translation="[705, 805]"
+      id="previousItem"
+      visible="false"
+      icon=""
+      iconHeight="32"
+      iconWidth="32"
+      iconAlign="left"
+      text=""
+      backgroundColor="0x00000095"
+      maxWidth="500"
+      horizAlign="left"
+      horizOffset="64"
+      alignmentSide="right"
+      fontSize="27"
+      padding="[20, 10]"
+    />
+
+    <ExpandingLabel
+      translation="[1150, 805]"
+      id="nextItem"
+      visible="false"
+      icon=""
+      iconHeight="32"
+      iconWidth="32"
+      iconAlign="left"
+      text=""
+      backgroundColor="0x00000095"
+      maxWidth="500"
+      horizAlign="left"
+      fontSize="27"
+      padding="[20, 10]"
+    />
+
     <Rectangle id="progressBarBackground" color="0x00000098" width="1714" height="8" translation="[103,970]">
       <Rectangle id="progressBar" color="#e5e4e2FF" width="0" height="8" />
     </Rectangle>
@@ -44,6 +78,10 @@
     <field id="episodeNumber" type="integer" />
     <field id="episodeNumberEnd" type="integer" />
     <field id="logoImage" type="string" />
+    <field id="previousItemIcon" type="string" />
+    <field id="previousItemTitleText" type="string" />
+    <field id="nextItemIcon" type="string" />
+    <field id="nextItemTitleText" type="string" />
     <field id="inactiveTimeout" type="integer" />
     <field id="progressPercentage" type="float" />
     <field id="positionTime" type="float" />

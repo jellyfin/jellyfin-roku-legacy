@@ -10,7 +10,9 @@
     <function name="getIsShuffled" />
     <function name="getItemByIndex" />
     <function name="getItemType" />
+    <function name="getNextItemTitleAndIcon" />
     <function name="getPosition" />
+    <function name="getPreviousItemTitleAndIcon" />
     <function name="getQueue" />
     <function name="getQueueTypes" />
     <function name="getQueueUniqueTypes" />

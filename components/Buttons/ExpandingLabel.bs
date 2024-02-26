@@ -1,0 +1,143 @@
+import "pkg:/source/utils/misc.bs"
+
+sub init()
+    m.textLabelContainer = m.top.FindNode("textLabelContainer")
+    m.background = m.top.FindNode("background")
+
+    m.top.observeField("fontSize", "onDataChange")
+    m.top.observeField("padding", "onDataChange")
+    m.top.observeField("maxWidth", "onDataChange")
+
+    m.textSizeTask = createObject("roSGNode", "TextSizeTask")
+    m.textSizeTask.observeField("width", "getTextSize")
+end sub
+
+' onIconAlignChange: Handler for when m.top.iconAlign is changed
+'
+sub onIconAlignChange()
+    if LCase(m.top.iconAlign) = "left"
+        m.textLabelContainer.insertChild(m.iconImage, 0)
+    end if
+end sub
+
+' onIconChange: Handler for when m.top.icon is changed
+'
+sub onIconChange()
+    iconExists = isValid(m.iconImage)
+
+    if not iconExists
+        m.iconImage = createObject("roSGNode", "Poster")
+    end if
+
+    m.iconImage.uri = m.top.icon
+    m.iconImage.id = "iconImage"
+
+    m.iconImage.height = m.top.iconHeight
+    m.iconImage.width = m.top.iconWidth
+
+    if not iconExists
+        m.textLabelContainer.insertChild(m.iconImage, 0)
+    end if
+end sub
+
+' onIconHeightChange: Handler for when m.top.iconHeight is changed
+'
+sub onIconHeightChange()
+    if isValid(m.iconImage)
+        if m.iconImage.height <> m.top.iconHeight
+            m.iconImage.height = m.top.iconHeight
+        end if
+    end if
+end sub
+
+' onIconWidthChange: Handler for when m.top.iconWidth is changed
+'
+sub onIconWidthChange()
+    if isValid(m.iconImage)
+        if m.iconImage.width <> m.top.iconWidth
+            m.iconImage.width = m.top.iconWidth
+        end if
+    end if
+end sub
+
+' onTextChange: Handler for when m.top.text is changed
+'
+sub onTextChange()
+    onDataChange()
+end sub
+
+' onBackgroundColorChange: Handler for when m.top.backgroundColor is changed
+'
+sub onBackgroundColorChange()
+    m.background.color = m.top.backgroundColor
+end sub
+
+' onDataChange: Handler for when top properties needed to determine text size are changed
+'
+sub onDataChange()
+    if m.top.fontsize = 0 then return
+    if m.top.text = "" then return
+    if m.top.padding[1] = -1 or m.top.padding[0] = -1 then return
+    if m.top.maxWidth = 0 then return
+
+    m.top.unobserveField("fontSize")
+    m.top.unobserveField("padding")
+    m.top.unobserveField("maxWidth")
+
+    m.textLabelContainer.translation = m.top.padding
+
+    m.textSizeTask.fontsize = m.top.fontsize
+    m.textSizeTask.text = [m.top.text]
+
+    m.textSizeTask.control = "RUN"
+end sub
+
+' getTextSize: Use returned m.textSizeTask data to background dimension and translation values
+'
+sub getTextSize()
+    textWidth = m.textSizeTask.width[0]
+    textHeight = m.textSizeTask.height
+
+    calculatedBackgroundWidth = textWidth + (m.top.padding[0] * 2.5)
+    if isValidAndNotEmpty(m.iconImage)
+        calculatedBackgroundWidth += m.top.iconWidth + 20
+    end if
+
+    m.background.width = calculatedBackgroundWidth > m.top.maxWidth ? m.top.maxWidth : calculatedBackgroundWidth
+    m.background.height = textHeight + (m.top.padding[1] * 2)
+
+    labelExists = isValid(m.textLine)
+
+    if not labelExists
+        m.textLine = m.textLabelContainer.CreateChild("ScrollingLabel")
+    end if
+
+    m.textLine.horizAlign = m.top.horizAlign
+    m.textLine.height = textHeight
+    m.textLine.maxWidth = m.top.maxWidth - (m.top.padding[0] * 2.5)
+    m.textLine.vertAlign = "center"
+    m.textLine.text = m.top.text
+    m.textLine.font.size = m.top.fontsize
+
+    if LCase(m.top.alignmentSide) = "right"
+        m.background.translation = [-m.background.width + m.top.horizOffset, m.background.translation[1]]
+    end if
+
+    if isValidAndNotEmpty(m.iconImage)
+        m.background.width += m.top.iconWidth + 20
+
+        if LCase(m.top.alignmentSide) = "right"
+            m.background.translation = [-m.background.width + m.top.horizOffset, m.background.translation[1]]
+        end if
+
+        if m.top.iconHeight > m.textLine.height
+            m.textLine.height = m.top.iconHeight + 10
+        end if
+
+        if labelExists then return
+
+        if LCase(m.top.iconAlign) = "right"
+            m.textLabelContainer.appendChild(m.iconImage)
+        end if
+    end if
+end sub

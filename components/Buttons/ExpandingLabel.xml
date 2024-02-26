@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<component name="ExpandingLabel" extends="Group">
+  <children>
+    <Rectangle id="background">
+      <LayoutGroup id="textLabelContainer" layoutDirection="horiz" horizAlignment="left" itemSpacings="[20]" />
+    </Rectangle>
+  </children>
+  <interface>
+    <field id="fontSize" type="int" value="0" />
+    <field id="padding" type="array" value="[-1, -1]" />
+    <field id="text" type="string" onChange="onTextChange" />
+    <field id="backgroundColor" type="color" value="" onChange="onBackgroundColorChange" />
+    <field id="horizAlign" type="string" />
+    <field id="alignmentSide" type="string" value="left" />
+    <field id="maxWidth" type="int" value="0" />
+    <field id="horizOffset" type="int" value="0" />
+
+    <field id="icon" type="string" onChange="onIconChange" />
+    <field id="iconAlign" type="string" onChange="onIconAlignChange" />
+    <field id="iconWidth" type="int" value="0" onChange="onIconWidthChange" />
+    <field id="iconHeight" type="int" value="0" onChange="onIconHeightChange" />
+  </interface>
+</component>

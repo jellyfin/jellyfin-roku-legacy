@@ -34,6 +34,9 @@ sub init()
     m.top.observeField("selectedSubtitle", "onSubtitleChange")
     m.top.observeField("audioIndex", "onAudioIndexChange")
 
+    ' Get sibling data and pass to OSD
+    setSiblingData()
+
     ' Custom Caption Function
     m.top.observeField("allowCaptions", "onAllowCaptionsChange")
 
@@ -64,6 +67,28 @@ sub init()
     m.top.retrievingBar.filledBarBlendColor = m.global.constants.colors.blue
     m.top.bufferingBar.filledBarBlendColor = m.global.constants.colors.blue
     m.top.trickPlayBar.filledBarBlendColor = m.global.constants.colors.blue
+end sub
+
+' setSiblingData: Set the icon and title text for the previous and next items
+'
+sub setSiblingData()
+    previousItemTitleText = m.global.queueManager.callFunc("getPreviousItemTitleAndIcon")
+    if isValidAndNotEmpty(previousItemTitleText)
+        m.osd.previousItemIcon = previousItemTitleText[0]
+        m.osd.previousItemTitleText = previousItemTitleText[1]
+    else
+        m.osd.previousItemIcon = ""
+        m.osd.previousItemTitleText = ""
+    end if
+
+    nextItemTitleText = m.global.queueManager.callFunc("getNextItemTitleAndIcon")
+    if isValidAndNotEmpty(nextItemTitleText)
+        m.osd.nextItemIcon = nextItemTitleText[0]
+        m.osd.nextItemTitleText = nextItemTitleText[1]
+    else
+        m.osd.nextItemIcon = ""
+        m.osd.nextItemTitleText = ""
+    end if
 end sub
 
 ' handleChapterSkipAction: Handles user command to skip chapters in playing video
