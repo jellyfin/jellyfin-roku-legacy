@@ -13,7 +13,7 @@ jobs:
       - name: DEBUG ${{ github.event.pull_request.base.ref }}
         run: echo ${{ github.event.pull_request.base.ref }}
       - name: Checkout the branch this PR wants to update
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4
         with:
           ref: ${{ github.event.pull_request.base.ref }}
       - name: Install jq to parse json
@@ -33,7 +33,7 @@ jobs:
       - name: Save old Makefile version
         run: awk 'BEGIN { FS=" := " } /^VERSION/ { print "oldMakeVersion="$2; }' Makefile >> $GITHUB_ENV
       - name: Checkout PR branch
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4
       - name: Save new package.json version
         run: echo "newPackVersion=$(jq -r ".version" package.json)" >> $GITHUB_ENV
       - name: package.json version must be updated
@@ -62,7 +62,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'release-prep') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
         with:
           node-version: "lts/*"
