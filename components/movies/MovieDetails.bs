@@ -1,6 +1,13 @@
 import "pkg:/source/utils/misc.bs"
 import "pkg:/source/utils/config.bs"
 
+' Valid lost status values for view
+enum LoadStatus
+    init = 0
+    firstLoad = 1
+    reload = 2
+end enum
+
 sub init()
     m.extrasGrp = m.top.findnode("extrasGrp")
     m.extrasGrid = m.top.findNode("extrasGrid")
@@ -21,9 +28,45 @@ sub init()
     m.buttonGrp.setFocus(true)
     m.top.lastFocus = m.buttonGrp
 
+    m.loadStatus = LoadStatus.init
     m.top.observeField("itemContent", "itemContentChanged")
+
+    ' Animation used to swap out posters on reloads
+    m.moviePosterSwapAnimation = m.top.findNode("moviePosterSwapAnimation")
+    m.moviePosterSwapAnimation.observeField("state", "onMoviePosterSwapAnimationStateChange")
+
+    m.top.observeField("newPosterImageURI", "onNewPosterImageURIChange")
+
+    m.moviePoster = m.top.findNode("moviePoster")
+    m.moviePosterSwap = m.top.findNode("moviePosterSwap")
+    m.moviePosterSwap.observeField("loadStatus", "onPosterLoadStatusChanged")
 end sub
 
+' onNewPosterImageURIChange: Handler for newPosterImageURI param change
+'
+sub onNewPosterImageURIChange()
+    m.moviePosterSwap.uri = m.top.newPosterImageURI
+end sub
+
+' onPosterLoadStatusChanged: Handler for changes to m.moviePosterSwap.loadStatus
+'
+sub onPosterLoadStatusChanged()
+    if LCase(m.moviePosterSwap.loadStatus) <> "ready" then return
+    m.moviePosterSwapAnimation.control = "start"
+end sub
+
+' onMoviePosterSwapAnimationStateChange: Handler for changes to m.moviePosterSwapAnimation.state
+'
+sub onMoviePosterSwapAnimationStateChange()
+    if LCase(m.moviePosterSwapAnimation.state) <> "stopped" then return
+    m.moviePoster.uri = m.moviePosterSwap.uri
+    m.moviePoster.opacity = 1
+    m.moviePosterSwap.opacity = 0
+    m.moviePosterSwap.uri = ""
+end sub
+
+' OnScreenShown: Callback function when view is presented on screen
+'
 sub OnScreenShown()
     ' set focus to button group
     if m.extrasGrp.opacity = 1
@@ -31,6 +74,15 @@ sub OnScreenShown()
     else
         m.buttonGrp.setFocus(true)
     end if
+
+    if m.loadStatus = LoadStatus.init
+        m.loadStatus = LoadStatus.firstLoad
+        return
+    end if
+
+    m.loadStatus = LoadStatus.reload
+
+    m.top.refreshMovieDetailsData = not m.top.refreshMovieDetailsData
 end sub
 
 sub trailerAvailableChanged()
@@ -56,6 +108,10 @@ sub itemContentChanged()
     itemData = item.json
     m.top.id = itemData.id
     m.top.findNode("moviePoster").uri = m.top.itemContent.posterURL
+    setWatchedColor()
+
+    ' We dont' need to update everything if this is a reload
+    if m.loadStatus = LoadStatus.reload then return
 
     ' Set default video source if user hasn't selected one yet
     if m.top.selectedVideoStreamId = "" and isValid(itemData.MediaSources)
@@ -144,7 +200,6 @@ sub itemContentChanged()
     end if
 
     setFavoriteColor()
-    setWatchedColor()
     SetUpVideoOptions(itemData.mediaSources)
     SetUpAudioOptions(itemData.mediaStreams)
     m.buttonGrp.visible = true

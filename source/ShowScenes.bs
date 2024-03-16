@@ -608,6 +608,9 @@ function CreateMovieDetailsGroup(movie as object) as dynamic
     ' push scene asap (to prevent extra button presses when retriving series/movie info)
     m.global.sceneManager.callFunc("pushScene", group)
     group.itemContent = movieMetaData
+
+    group.observeField("refreshMovieDetailsData", m.port)
+
     ' local trailers
     trailerData = api.users.GetLocalTrailers(m.global.session.user.id, movie.id)
     if isValid(trailerData)

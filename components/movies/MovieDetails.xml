@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component name="MovieDetails" extends="JFScreen">
   <children>
+    <Poster id="moviePosterSwap" translation="[96,175]" width="300" height="450" />
+
     <LayoutGroup id="main_group" layoutDirection="horiz" itemSpacings="[30]">
       <Poster id="moviePoster" translation="[250,150]" width="300" height="450" />
       <LayoutGroup layoutDirection="vert" translation="[455, 150]" itemSpacings="[25]" id="details">
@@ -43,12 +45,19 @@
 
     <!-- "Cast and Crew" row -->
     <extrasSlider id="movieExtras" />
+
+    <Animation id="moviePosterSwapAnimation" duration="1" repeat="false" easeFunction="linear">
+      <FloatFieldInterpolator id="fadeinLoading" key="[0.0, 1.0]" keyValue="[ 0.00, 1.00 ]" fieldToInterp="moviePosterSwap.opacity" />
+      <FloatFieldInterpolator id="fadeoutLoaded" key="[0.0, 1.0]" keyValue="[ 1.00, 0.00 ]" fieldToInterp="moviePoster.opacity" />
+    </Animation>
   </children>
   <interface>
     <field id="itemContent" type="node" />
     <field id="trailerAvailable" type="bool" onChange="trailerAvailableChanged" value="false" />
     <field id="selectedAudioStreamIndex" type="integer" />
     <field id="selectedVideoStreamId" type="string" />
+    <field id="newPosterImageURI" type="string" />
     <field id="quickPlayNode" type="node" alwaysNotify="true" />
+    <field id="refreshMovieDetailsData" type="bool" alwaysNotify="true" />
   </interface>
 </component>

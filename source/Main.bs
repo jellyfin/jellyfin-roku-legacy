@@ -212,6 +212,23 @@ sub Main (args as dynamic) as void
             end if
             elapsed = timeSpan.TotalMilliseconds() / 1000
             print "Quick Play finished loading in " + elapsed.toStr() + " seconds."
+        else if isNodeEvent(msg, "refreshMovieDetailsData")
+            startLoadingSpinner()
+
+            currentScene = m.global.sceneManager.callFunc("getActiveScene")
+
+            ' Refresh movie detail data
+            currentScene.itemContent.json = api.users.GetItem(m.global.session.user.id, currentScene.itemContent.id)
+            movieMetaData = ItemMetaData(currentScene.itemContent.id)
+
+            ' Redraw movie poster
+            currentScene.newPosterImageURI = movieMetaData.posterURL
+
+            ' Set updated starting point for the queue item
+            m.global.queueManager.callFunc("setTopStartingPoint", currentScene.itemContent.json.UserData.PlaybackPositionTicks)
+
+            stopLoadingSpinner()
+
         else if isNodeEvent(msg, "selectedItem")
             ' If you select a library from ANYWHERE, follow this flow
             selectedItem = msg.getData()
