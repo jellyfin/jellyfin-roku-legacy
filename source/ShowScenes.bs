@@ -784,6 +784,8 @@ function CreateSeasonDetailsGroup(series as object, season as object) as dynamic
     group.episodeObjects = group.objects
     group.extrasObjects = TVSeasonExtras(season.id)
 
+    group.observeField("refreshSeasonDetailsData", m.port)
+
     ' watch for button presses
     group.observeField("selectedItem", m.port)
     group.observeField("quickPlayNode", m.port)

@@ -17,6 +17,8 @@ sub init()
     m.unplayedEpisodeCount = m.top.findNode("unplayedEpisodeCount")
 
     m.rows.observeField("doneLoading", "updateSeason")
+
+    m.isFirstRun = true
 end sub
 
 sub setSeasonLoading()
@@ -36,6 +38,8 @@ sub updateSeason()
             if m.top.seasonData.UserData.UnplayedItemCount > 0
                 m.unplayedCount.visible = true
                 m.unplayedEpisodeCount.text = m.top.seasonData.UserData.UnplayedItemCount
+            else
+                m.unplayedCount.visible = false
             end if
         end if
     end if
@@ -65,6 +69,18 @@ function getFocusedItem() as dynamic
 
     return invalid
 end function
+
+' OnScreenShown: Callback function when view is presented on screen
+'
+sub OnScreenShown()
+    if m.isFirstRun
+        m.isFirstRun = false
+        return
+    end if
+
+    m.tvEpisodeRow.setFocus(true)
+    m.top.refreshSeasonDetailsData = not m.top.refreshSeasonDetailsData
+end sub
 
 ' Handle navigation input from the remote and act on it
 function onKeyEvent(key as string, press as boolean) as boolean

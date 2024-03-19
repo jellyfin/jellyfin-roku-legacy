@@ -81,6 +81,8 @@ sub itemContentChanged()
     ' Add checkmark in corner (if applicable)
     if isValid(itemData.UserData) and isValid(itemData.UserData.Played) and itemData.UserData.Played = true
         m.playedIndicator.visible = true
+    else
+        m.playedIndicator.visible = false
     end if
 
     ' Add progress bar on bottom (if applicable)
@@ -90,6 +92,9 @@ sub itemContentChanged()
         progressWidthInPixels = int(m.progressBackground.width * itemData.UserData.PlayedPercentage / 100)
         m.progressBar.width = progressWidthInPixels
         m.progressBar.visible = true
+    else
+        m.progressBackground.visible = false
+        m.progressBar.visible = false
     end if
 
     ' Display current video_codec and check if there is more than one video to choose from...
