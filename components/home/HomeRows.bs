@@ -309,6 +309,25 @@ sub createLatestInRows()
     ' create a "Latest In" row for each library
     for each lib in m.filteredLatest
         if lib.collectionType <> "boxsets" and lib.collectionType <> "livetv" and lib.json.CollectionType <> "Program"
+            sectionName = `${tr("Latest in")} ${lib.name} >`
+
+            imagesize = homeRowItemSizes.WIDE_POSTER
+
+            if isValid(lib.json.CollectionType)
+                if LCase(lib.json.CollectionType) = "movies"
+                    imagesize = homeRowItemSizes.MOVIE_POSTER
+                else if LCase(lib.json.CollectionType) = "music"
+                    imagesize = homeRowItemSizes.MUSIC_ALBUM
+                end if
+            end if
+
+            if not sectionExists(sectionName)
+                nextUpRow = m.top.content.CreateChild("HomeRow")
+                nextUpRow.title = sectionName
+                nextUpRow.imageWidth = imagesize[0]
+                nextUpRow.cursorSize = imagesize
+            end if
+
             loadLatest = createObject("roSGNode", "LoadItemsTask")
             loadLatest.itemsToLoad = "latest"
             loadLatest.itemId = lib.id
@@ -375,6 +394,15 @@ end function
 ' createLiveTVRow: Creates a row displaying the live tv now on section
 '
 sub createLiveTVRow()
+    sectionName = tr("On Now")
+
+    if not sectionExists(sectionName)
+        nextUpRow = m.top.content.CreateChild("HomeRow")
+        nextUpRow.title = sectionName
+        nextUpRow.imageWidth = homeRowItemSizes.WIDE_POSTER[0]
+        nextUpRow.cursorSize = homeRowItemSizes.WIDE_POSTER
+    end if
+
     m.LoadOnNowTask.observeField("content", "updateOnNowItems")
     m.LoadOnNowTask.control = "RUN"
 end sub
@@ -382,6 +410,15 @@ end sub
 ' createContinueWatchingRow: Creates a row displaying items the user can continue watching
 '
 sub createContinueWatchingRow()
+    sectionName = tr("Continue Watching")
+
+    if not sectionExists(sectionName)
+        nextUpRow = m.top.content.CreateChild("HomeRow")
+        nextUpRow.title = sectionName
+        nextUpRow.imageWidth = homeRowItemSizes.WIDE_POSTER[0]
+        nextUpRow.cursorSize = homeRowItemSizes.WIDE_POSTER
+    end if
+
     ' Load the Continue Watching Data
     m.LoadContinueWatchingTask.observeField("content", "updateContinueWatchingItems")
     m.LoadContinueWatchingTask.control = "RUN"
@@ -477,8 +514,6 @@ sub updateContinueWatchingItems()
         removeHomeSection(sectionName)
         return
     end if
-
-    sectionName = tr("Continue Watching")
 
     ' remake row using the new data
     row = CreateObject("roSGNode", "HomeRow")

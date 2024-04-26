@@ -26,11 +26,11 @@ jobs:
       - name: Build app for production
         if: env.BRANCH_NAME == 'master'
         run: npm run build-prod
-      - name: Use Java 17
-        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4
+      - name: Setup Java
+        uses: actions/setup-java@387ac29b308b003ca37ba93a6cab5eb57c8f5f93 # v4
         with:
           distribution: "temurin"
-          java-version: "17"
+          java-version: "21"
       - name: Download the Static Channel Analysis CLI
         run: |
           curl -sSL "https://devtools.web.roku.com/static-channel-analysis/sca-cmd.zip" -o sca-cmd.zip

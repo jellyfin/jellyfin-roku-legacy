@@ -1,0 +1,56 @@
+namespace tests
+    @suite("isChainValid functions")
+    class isChainValidTests extends tests.BaseTestSuite
+
+        protected override function setup()
+            super.setup()
+            m.myAssArray = {
+                one: invalid,
+                boolTrue: true,
+                boolFalse: false,
+                two: "invalid",
+                three: 123.456,
+                four: {
+                    five: {
+                        six: {
+                            name: "rooibos",
+                            noname: invalid
+                        }
+                    }
+                },
+                array: ["test", "test 2"]
+            }
+        end function
+
+        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        @describe("isChainValid()")
+        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        @it("true tests")
+        function _()
+            m.assertEqual(isChainValid(m.myAssArray, "boolTrue"), true)
+            m.assertEqual(isChainValid(m.myAssArray, "boolFalse"), true)
+            m.assertEqual(isChainValid(m.myAssArray, "two"), true)
+            m.assertEqual(isChainValid(m.myAssArray, "three"), true)
+            m.assertEqual(isChainValid(m.myAssArray, "four"), true)
+            m.assertEqual(isChainValid(m.myAssArray, "four.five"), true)
+            m.assertEqual(isChainValid(m.myAssArray, "four.five.six"), true)
+            m.assertEqual(isChainValid(m.myAssArray, "four.five.six.name"), true)
+            m.assertEqual(isChainValid(m.myAssArray.four, "five.six.name"), true)
+            m.assertEqual(isChainValid(m.myAssArray.four.five, "six.name"), true)
+            m.assertEqual(isChainValid(m.myAssArray.four.five.six, "name"), true)
+            m.assertEqual(isChainValid(m.myAssArray.four.five.six, ""), true)
+            m.assertEqual(isChainValid(m.myAssArray, "array"), true)
+        end function
+
+        @it("false tests")
+        function _()
+            m.assertEqual(isChainValid(m.myAssArray, "one"), false)
+            m.assertEqual(isChainValid(m.myAssArray, "none"), false)
+            m.assertEqual(isChainValid(m.myAssArray, "four.five.none"), false)
+            m.assertEqual(isChainValid(m.myAssArray.four.five.six, "noname"), false)
+            m.assertEqual(isChainValid(invalid, "one"), false)
+        end function
+
+    end class
+end namespace

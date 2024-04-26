@@ -602,6 +602,7 @@ function CreateMovieDetailsGroup(movie as object) as dynamic
     ' start building MovieDetails view
     group = CreateObject("roSGNode", "MovieDetails")
     group.observeField("quickPlayNode", m.port)
+    group.observeField("refreshMovieDetailsData", m.port)
     group.overhangTitle = movie.title
     group.optionsAvailable = false
     group.trailerAvailable = false
@@ -780,6 +781,8 @@ function CreateSeasonDetailsGroup(series as object, season as object) as dynamic
     group.objects = TVEpisodes(series.id, season.id)
     group.episodeObjects = group.objects
     group.extrasObjects = TVSeasonExtras(season.id)
+
+    group.observeField("refreshSeasonDetailsData", m.port)
 
     ' watch for button presses
     group.observeField("selectedItem", m.port)

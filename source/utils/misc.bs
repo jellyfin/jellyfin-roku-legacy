@@ -307,6 +307,36 @@ function isAllValid(input as object) as boolean
     return true
 end function
 
+' isChainValid: Returns whether or not all the properties in the passed property chain are valid.
+' Stops evaluating at first found false value
+'
+' @param {dynamic} root - high-level object to test property chain against
+' @param {string} propertyPath - chain of properties under root object to test
+' @return {boolean} indicating if all properties in chain are valid
+function isChainValid(root as dynamic, propertyPath as string) as boolean
+    rootPath = root
+    properties = propertyPath.Split(".")
+
+    if not isValid(rootPath) then return false
+
+    ' Root path is valid, and no properties were passed. Return state of root
+    if properties.count() = 0 then return true
+    if properties[0] = "" then return true
+
+    if not isValid(rootPath.lookup(properties[0])) then return false
+
+    rootPath = rootPath.lookup(properties[0])
+
+    properties.shift()
+
+    if properties.count() <> 0
+        nextPath = properties.join(".")
+        return isChainValid(rootPath, nextPath)
+    end if
+
+    return true
+end function
+
 ' Returns whether or not passed value is valid and not empty
 ' Accepts a string, or any countable type (arrays and lists)
 function isValidAndNotEmpty(input as dynamic) as boolean

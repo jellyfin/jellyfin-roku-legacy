@@ -1,0 +1,143 @@
+namespace tests
+    @suite("isAllValid functions")
+    class isAllValidTests extends tests.BaseTestSuite
+
+        protected override function setup()
+            super.setup()
+            m.myArray = CreateObject("roArray", 3, true)
+            m.myAssArray = { one: invalid, two: "invalid", three: 123.456 }
+            m.myEmptyArray = CreateObject("roArray", 0, false)
+            m.myEmptyList = CreateObject("roList")
+            m.myList = CreateObject("roList")
+            m.myList.AddTail("string")
+        end function
+
+        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        @describe("isAllValid()")
+        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        @it("works with booleans")
+        @params([true, true], true)
+        @params([false, false, false, false], true)
+        @params([true, false, true, false], true)
+        @params([true, false, invalid, false], false)
+        function _(value, expectedassertResult)
+            m.assertEqual(isAllValid(value), expectedassertResult)
+        end function
+
+        @it("works with integers")
+        @params([-1234567890, -423, 123, 0987654], true)
+        @params([0, 0, 0, 0, 0, 0], true)
+        @params([1234567890, -1, 0, 1, 0, -999999999999], true)
+        @params([1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890, 5, 9, 3], true)
+        @params([1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890, 5, invalid, 3], false)
+        function _(value, expectedassertResult)
+            m.assertEqual(isAllValid(value), expectedassertResult)
+        end function
+
+        @it("works with floats")
+        @params([-12.3456789, 12.3456789, 1.23456E+30, 12.3456789!, 123456789012345678901234567890123456789012345678901234567890.123456789012345678901234567890123456789012345678901234567890], true)
+        @params([-12.3456789, 12.3456789, invalid, 1.23456E+30, 12.3456789!, 123456789012345678901234567890123456789012345678901234567890.123456789012345678901234567890123456789012345678901234567890], false)
+        function _(value, expectedassertResult)
+            m.assertEqual(isAllValid(value), expectedassertResult)
+        end function
+
+        @it("works with strings")
+        @params(["", "             ", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Augue neque gravida in fermentum et. Eget lorem dolor sed viverra ipsum nunc. At quis risus sed vulputate odio ut enim. Ultricies integer quis auctor elit sed. Egestas congue quisque egestas diam in. Aliquam sem fringilla ut morbi tincidunt. Malesuada bibendum arcu vitae elementum curabitur. Aliquet sagittis id consectetur purus ut faucibus pulvinar. Eget gravida cum sociis natoque. Sollicitudin aliquam ultrices sagittis orci. Ut etiam sit amet nisl purus. Luctus venenatis lectus magna fringilla urna porttitor rhoncus dolor purus. Vitae ultricies leo integer malesuada nunc. Vitae ultricies leo integer malesuada nunc vel risus commodo. Luctus accumsan tortor posuere ac ut. Urna cursus eget nunc scelerisque viverra mauris in. Accumsan sit amet nulla facilisi morbi tempus iaculis urna id. Mauris vitae ultricies leo integer malesuada nunc vel risus commodo. Morbi tincidunt augue interdum velit euismod in pellentesque."], true)
+        @params(["~!@#$%^&*()_-+=`\|]}';:.,/?", "true", "false", "invalid"], true)
+        @params(["~!@#$%^&*()_-+=`\|]}';:.,/?", "true", "false", invalid], false)
+        function _(value, expectedassertResult)
+            m.assertEqual(isAllValid(value), expectedassertResult)
+        end function
+
+        @it("works with arrays")
+        @params([0, 1, 2, 3, 4, 5], true)
+        @params(["invalid", "one", "two", "three", "four", "five"], true)
+        @params([invalid, invalid, invalid], false)
+        @params([[invalid, invalid, invalid], [], [0, 1, 2, 3, 4, 5]], true)
+        function _(value, expectedassertResult)
+            m.assertEqual(isAllValid(value), expectedassertResult)
+        end function
+
+        @it("works with an array of associative arrays")
+        @params(
+        [
+            {
+                Title: "The Notebook",
+                releaseDate: "2000"
+            },
+            {
+                Title: "Caddyshack",
+                releaseDate: "1976"
+            }
+        ], true)
+        @params(
+        [
+            {
+                Title: "The Notebook",
+                releaseDate: "2000"
+            },
+            {
+                Title: "Caddyshack",
+                releaseDate: "1976"
+            },
+            invalid
+        ], false)
+        function _(value, expectedassertResult)
+            m.assertEqual(isAllValid(value), expectedassertResult)
+        end function
+
+        @it("works when accessing arrays")
+        function _()
+            m.assertEqual(isAllValid([m.myAssArray.one, m.myAssArray.two]), false)
+            m.assertEqual(isAllValid([m.myAssArray.three, m.myAssArray.two]), true)
+        end function
+
+        @it("works when accessing an invalid array index")
+        function _()
+            m.assertEqual(isAllValid([m.myAssArray.zero]), false)
+        end function
+
+        @it("works with invalid")
+        @params([invalid], false)
+        function _(value, expectedassertResult)
+            m.assertEqual(isAllValid(value), expectedassertResult)
+        end function
+
+        @it("works with nodes")
+        @params(["#RBSNode", "#RBSNode|Group"], true)
+        @params(["#RBSNode|Label", "#RBSNode|ScrollingLabel"], true)
+        @params(["#RBSNode|Poster", "#RBSNode|Rectangle"], true)
+        @params(["#RBSNode|Font", "#RBSNode|Button"], true)
+        @params(["#RBSNode|Rectangle", "#RBSNode|Overhang"], true)
+        @params(["#RBSNode|Audio", "#RBSNode|Video"], true)
+        function _(value, expectedassertResult)
+            m.assertEqual(isAllValid([value]), expectedassertResult)
+        end function
+
+        @it("works with objects")
+        function _()
+            myList = CreateObject("roList")
+            myLongInteger = CreateObject("roLongInteger")
+            myDouble = CreateObject("roDouble")
+            myFloat = CreateObject("roFloat")
+            myInvalid = CreateObject("roInvalid")
+            m.assertEqual(isAllValid([myList, myLongInteger]), true)
+            m.assertEqual(isAllValid([myDouble, myFloat]), true)
+            m.assertEqual(isAllValid([myInvalid]), false)
+        end function
+
+        @it("works with functions")
+        function _()
+            myfunc = function(a, b)
+                return a + b
+            end function
+            myInvalidfunc = function()
+                return invalid
+            end function
+            m.assertEqual(isAllValid([myfunc(0, 1), myfunc(1, 0)]), true)
+            m.assertEqual(isAllValid([myfunc(0, 1), myInvalidfunc()]), false)
+        end function
+
+    end class
+end namespace

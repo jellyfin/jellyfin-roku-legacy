@@ -1242,9 +1242,14 @@
             <extracomment>User Setting - Setting description</extracomment>
         </message>
         <message>
-            <source>What's New?</source>
-            <translation>What's New?</translation>
-            <extracomment>Popup title - Popup displays all the major changes to the app since the last version</extracomment>
+            <source>Welcome to version</source>
+            <translation>Welcome to version</translation>
+            <extracomment>WhatsNewDialog title - Welcome to version 2.0.0</extracomment>
+        </message>
+        <message>
+            <source>To view a complete list of changes visit</source>
+            <translation>To view a complete list of changes visit</translation>
+            <extracomment>WhatsNewDialog body text preceding the changelog URL</extracomment>
         </message>
         <message>
             <source>Random</source>

@@ -212,6 +212,42 @@ sub Main (args as dynamic) as void
             end if
             elapsed = timeSpan.TotalMilliseconds() / 1000
             print "Quick Play finished loading in " + elapsed.toStr() + " seconds."
+        else if isNodeEvent(msg, "refreshSeasonDetailsData")
+            startLoadingSpinner()
+
+            currentEpisode = m.global.queueManager.callFunc("getCurrentItem")
+            currentScene = m.global.sceneManager.callFunc("getActiveScene")
+
+            ' Find the object in the scene's data and update its json data
+            for i = 0 to currentScene.objects.Items.count() - 1
+                if LCase(currentScene.objects.Items[i].id) = LCase(currentEpisode.id)
+                    currentScene.objects.Items[i].json = api.users.GetItem(m.global.session.user.id, currentEpisode.id)
+                    m.global.queueManager.callFunc("setTopStartingPoint", currentScene.objects.Items[i].json.UserData.PlaybackPositionTicks)
+                    exit for
+                end if
+            end for
+
+            seasonMetaData = ItemMetaData(currentScene.seasonData.id)
+            currentScene.seasonData = seasonMetaData.json
+            currentScene.episodeObjects = currentScene.objects
+            currentScene.callFunc("updateSeason")
+            stopLoadingSpinner()
+        else if isNodeEvent(msg, "refreshMovieDetailsData")
+            startLoadingSpinner()
+
+            currentScene = m.global.sceneManager.callFunc("getActiveScene")
+
+            ' Refresh movie detail data
+            currentScene.itemContent.json = api.users.GetItem(m.global.session.user.id, currentScene.itemContent.id)
+            movieMetaData = ItemMetaData(currentScene.itemContent.id)
+
+            ' Redraw movie poster
+            currentScene.newPosterImageURI = movieMetaData.posterURL
+
+            ' Set updated starting point for the queue item
+            m.global.queueManager.callFunc("setTopStartingPoint", currentScene.itemContent.json.UserData.PlaybackPositionTicks)
+
+            stopLoadingSpinner()
         else if isNodeEvent(msg, "selectedItem")
             ' If you select a library from ANYWHERE, follow this flow
             selectedItem = msg.getData()
