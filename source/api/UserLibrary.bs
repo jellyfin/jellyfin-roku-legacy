@@ -16,7 +16,7 @@ sub MarkItemWatched(id as string)
     dateStr = date.ToISOString()
     url = Substitute("Users/{0}/PlayedItems/{1}", m.global.session.user.id, id)
     req = APIRequest(url)
-    postVoid(req, FormatJson({ "DatePlayed": dateStr }))
+    postVoid(req, FormatJson({ "DatePlayed": dateStr, "PlaybackPositionTicks": 0 }))
 end sub
 
 function UnmarkItemWatched(id as string)
