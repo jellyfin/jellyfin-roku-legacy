@@ -13,7 +13,7 @@ jobs:
       - name: DEBUG ${{ github.event.pull_request.base.ref }}
         run: echo ${{ github.event.pull_request.base.ref }}
       - name: Checkout the branch this PR wants to update
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
         with:
           ref: ${{ github.event.pull_request.base.ref }}
       - name: Install jq to parse json
@@ -33,7 +33,7 @@ jobs:
       - name: Save old Makefile version
         run: awk 'BEGIN { FS=" := " } /^VERSION/ { print "oldMakeVersion="$2; }' Makefile >> $GITHUB_ENV
       - name: Checkout PR branch
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Save new package.json version
         run: echo "newPackVersion=$(jq -r ".version" package.json)" >> $GITHUB_ENV
       - name: package.json version must be updated
@@ -62,8 +62,8 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'release-prep') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
         with:
           node-version: "lts/*"
           cache: "npm"
@@ -73,7 +73,7 @@ jobs:
         run: npm run ropm
       - name: Build app for production
         run: npm run build-prod
-      - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4
+      - uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4
         with:
           name: Jellyfin-Roku-v${{ env.newManVersion }}-${{ github.sha }}
           path: ${{ github.workspace }}/build/staging

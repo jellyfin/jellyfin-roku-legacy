@@ -26,7 +26,7 @@ jobs:
     steps:
       # Setup
       - name: Checkout code
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Install required packages
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
@@ -50,7 +50,7 @@ jobs:
         run: echo "targetBranch=${{ env.bugfixBranch }}" >> $GITHUB_ENV
       - name: Checkout bugfix branch
         if: github.event.inputs.targetBranch == 'bugfix'
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
         with:
           ref: ${{ env.targetBranch }}
       # Save old version again if needed
@@ -101,7 +101,7 @@ jobs:
     steps:
       # Setup
       - name: Checkout code
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Install jq to update json
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
@@ -125,7 +125,7 @@ jobs:
         run: echo "targetBranch=${{ env.bugfixBranch }}" >> $GITHUB_ENV
       - name: Checkout bugfix branch
         if: github.event.inputs.targetBranch == 'bugfix'
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
         with:
           ref: ${{ env.targetBranch }}
       # Calculate new version
@@ -169,7 +169,7 @@ jobs:
     steps:
       # Setup
       - name: Checkout code
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Install jq to update json
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
@@ -193,7 +193,7 @@ jobs:
         run: echo "targetBranch=${{ env.bugfixBranch }}" >> $GITHUB_ENV
       - name: Checkout bugfix branch
         if: github.event.inputs.targetBranch == 'bugfix'
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
         with:
           ref: ${{ env.targetBranch }}
       # Calculate new version
