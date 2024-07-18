@@ -12,7 +12,7 @@
     "@rokucommunity/bslint": "0.8.20",
     "brighterscript": "0.67.3",
     "brighterscript-jsdocs-plugin": "0.6.0",
-    "clean-jsdoc-theme": "4.2.18",
+    "clean-jsdoc-theme": "4.3.0",
     "jsdoc": "4.0.3",
     "jshint": "2.13.6",
     "markdownlint-cli2": "0.13.0",
