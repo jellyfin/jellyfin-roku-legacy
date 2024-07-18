@@ -5,7 +5,7 @@
   "description": "Roku app for Jellyfin media server",
   "dependencies": {
     "@rokucommunity/bslib": "0.1.1",
-    "brighterscript-formatter": "1.7.1",
+    "brighterscript-formatter": "1.7.3",
     "log": "npm:roku-log@0.11.1"
   },
   "devDependencies": {
