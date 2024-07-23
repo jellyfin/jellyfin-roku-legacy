@@ -27,6 +27,7 @@ sub Main (args as dynamic) as void
     if m.wasMigrated then printRegistry()
 
     m.scene = m.screen.CreateScene("JFScene")
+    m.scene.observeField("exit", m.port)
     m.screen.show() ' vscode_rale_tracker_entry
     ' vscode_rdb_on_device_component_entry
 

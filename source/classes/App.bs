@@ -7,6 +7,7 @@ class App
     private port as dynamic
     private scene as dynamic
     private args as dynamic
+    private postTask as dynamic
 
     sub new(screen as object, port as object, scene as object, args as dynamic)
         m.log.debug("start new()")
@@ -24,6 +25,9 @@ class App
 
     sub init()
         m.log.debug("start init()")
+        ' setup PostTask
+        m.postTask = createObject("roSGNode", "PostTask")
+
         ' finish setting up m.global
         playstateTask = CreateObject("roSGNode", "PlaystateTask")
         playstateTask.id = "playstateTask"
@@ -34,29 +38,27 @@ class App
         m.global.addFields({ app_loaded: false, playstateTask: playstateTask, sceneManager: sceneManager })
         m.global.addFields({ queueManager: CreateObject("roSGNode", "QueueManager") })
         m.global.addFields({ audioPlayer: CreateObject("roSGNode", "AudioPlayer") })
+
+        ' Handle input messages
+        input = CreateObject("roInput")
+        input.SetMessagePort(m.port)
+
+        m.setupDeviceEvents()
+
         m.log.debug("end init()")
     end sub
 
-    ' login flow and main port loop
-    sub run()
-        m.log.debug("start run()")
-        app_start:
-        m.log.info("start app_start:")
-        ' First thing to do is validate the ability to use the API
-        if not LoginFlow() then return
-        m.log.info("end LoginFlow() - user is now authenticated")
-        ' remove login scenes from the stack
-        m.global.sceneManager.callFunc("clearScenes")
+    ' Send Device Profile information to jellyfin server
+    private sub postDeviceProfile()
+        m.postTask.control = "STOP"
+        m.postTask.empty()
+        m.postTask.arrayData = getDeviceCapabilities()
+        m.postTask.apiUrl = "/Sessions/Capabilities/Full"
+        m.postTask.control = "RUN"
+    end sub
 
-        ' load home page
-        group = CreateHomeGroup()
-        group.callFunc("loadLibraries")
-        stopLoadingSpinner()
-        m.global.sceneManager.callFunc("pushScene", group)
-
-        m.scene.observeField("exit", m.port)
-
-        ' Downloads and stores a fallback font to tmp:/
+    ' Downloads and stores a fallback font to tmp:/
+    private sub setupFallbackFonts()
         configEncoding = api.system.GetConfigurationByName("encoding")
 
         if isValid(configEncoding) and isValid(configEncoding.EnableFallbackFont)
@@ -72,7 +74,22 @@ class App
                 end if
             end if
         end if
+    end sub
 
+    ' Setup roDeviceInfo events. Send them to main loop
+    private sub setupDeviceEvents()
+        device = CreateObject("roDeviceInfo")
+        device.setMessagePort(m.port)
+        device.EnableScreensaverExitedEvent(true)
+        device.EnableAppFocusEvent(true)
+        device.EnableLowGeneralMemoryEvent(true)
+        device.EnableLinkStatusEvent(true)
+        device.EnableCodecCapChangedEvent(true)
+        device.EnableAudioGuideChangedEvent(true)
+    end sub
+
+    ' Show the Whats New popup the first time a user runs a new client version.
+    private sub showWhatsNew()
         ' has the current user ran this version before?
         usersLastRunVersion = m.global.session.user.settings.lastRunVersion
         if not isValid(usersLastRunVersion) or not versionChecker(m.global.session.user.settings.lastRunVersion, m.global.app.version)
@@ -84,21 +101,10 @@ class App
                 m.scene.dialog.observeField("buttonSelected", m.port)
             end if
         end if
+    end sub
 
-        ' Handle input messages
-        input = CreateObject("roInput")
-        input.SetMessagePort(m.port)
-
-        device = CreateObject("roDeviceInfo")
-        device.setMessagePort(m.port)
-        device.EnableScreensaverExitedEvent(true)
-        device.EnableAppFocusEvent(true)
-        device.EnableLowGeneralMemoryEvent(true)
-        device.EnableLinkStatusEvent(true)
-        device.EnableCodecCapChangedEvent(true)
-        device.EnableAudioGuideChangedEvent(true)
-
-        ' Check if we were sent content to play with the startup command (Deep Link)
+    ' Check if we were sent content to play with the startup command (Deep Link)
+    private sub playDeepLink()
         if isValidAndNotEmpty(m.args.mediaType) and isValidAndNotEmpty(m.args.contentId)
 
             deepLinkVideo = {
@@ -109,18 +115,43 @@ class App
             m.global.queueManager.callFunc("push", deepLinkVideo)
             m.global.queueManager.callFunc("playQueue")
         end if
-        m.log.info("end app_start: - now entering main m.port loop")
+    end sub
+
+    ' login flow and main port loop
+    sub run()
+        m.log.verbose("start run()")
+        app_start:
+        m.log.verbose("start app_start:")
+        ' First thing to do is validate the ability to use the API
+        if not LoginFlow() then return
+        m.log.verbose("end LoginFlow() - user is now authenticated")
+        ' remove login scenes from the stack
+        m.global.sceneManager.callFunc("clearScenes")
+
+        ' load home page
+        group = CreateHomeGroup()
+        group.callFunc("loadLibraries")
+        stopLoadingSpinner()
+        m.global.sceneManager.callFunc("pushScene", group)
+
+        m.setupFallbackFonts()
+        m.showWhatsNew()
+        m.playDeepLink()
+
+        m.log.verbose("end app_start: - now entering main m.port loop")
         ' This is the core logic loop. Mostly for transitioning between scenes
         ' "group" is always "whats on the screen"
         ' m.scene's children is the "previous view" stack
         while true
             msg = wait(0, m.port)
             if type(msg) = "roSGScreenEvent" and msg.isScreenClosed()
-                print "CLOSING SCREEN"
+                m.log.warn("CLOSING SCREEN")
                 return
             else if isNodeEvent(msg, "exit")
+                m.log.warn("EXITING")
                 return
             else if isNodeEvent(msg, "closeSidePanel")
+                m.log.verbose("roSGNodeEvent", "closeSidePanel", msg)
                 group = m.global.sceneManager.callFunc("getActiveScene")
                 if group.lastFocus <> invalid
                     group.lastFocus.setFocus(true)
@@ -137,16 +168,16 @@ class App
                 if isValid(reportingNode)
                     itemNode = reportingNode.quickPlayNode
                     reportingNodeType = reportingNode.subtype()
-                    print "Quick Play reporting node type=", reportingNodeType
+                    m.log.verbose("Quick Play reporting node type=", reportingNodeType)
                     ' prevent double fire bug
                     if isValid(reportingNodeType) and (reportingNodeType = "Home" or reportingNodeType = "TVEpisodes")
                         reportingNode.quickPlayNode = invalid
                     end if
                 end if
-                print "Quick Play started. itemNode=", itemNode
-                ' if itemNode.json <> invalid
-                '     print "itemNode.json=", itemNode.json
-                ' end if
+                m.log.verbose("Quick Play started. itemNode=", itemNode)
+                if isValid(itemNode) and isValid(itemNode.json)
+                    m.log.debug("Quick Play itemNode.json=", itemNode.json)
+                end if
                 if isValid(itemNode) and isValid(itemNode.id) and itemNode.id <> ""
                     ' make sure there is a type and convert type to lowercase
                     itemType = invalid
@@ -158,7 +189,7 @@ class App
                             itemType = Lcase(itemNode.json.type)
                         end if
                     end if
-                    print "Quick Play itemNode type=", itemType
+                    m.log.verbose("Quick Play itemNode type=", itemType)
 
                     ' can't play the item without knowing what type it is
                     if isValid(itemType)
@@ -211,7 +242,7 @@ class App
                     end if
                 end if
                 elapsed = timeSpan.TotalMilliseconds() / 1000
-                print "Quick Play finished loading in " + elapsed.toStr() + " seconds."
+                m.log.info("Quick Play finished loading in " + elapsed.toStr() + " seconds.")
             else if isNodeEvent(msg, "refreshSeasonDetailsData")
                 startLoadingSpinner()
 
@@ -260,6 +291,7 @@ class App
                 ' If you select a library from ANYWHERE, follow this flow
                 selectedItem = msg.getData()
                 if isValid(selectedItem)
+                    m.log.debug("selectedItem=", selectedItem)
                     startLoadingSpinner()
                     selectedItemType = selectedItem.type
 
@@ -350,16 +382,13 @@ class App
                         end if
 
                     else if selectedItemType = "Photo"
+                        m.log.verbose("a photo was selected")
                         ' only handle selection if it's from the home screen
                         if selectedItem.isSubType("HomeData")
-                            print "a photo was selected from the home screen"
-                            print "selectedItem=", selectedItem
-
                             quickplay.photo(selectedItem)
                         end if
                     else if selectedItemType = "PhotoAlbum"
-                        print "a photo album was selected"
-                        print "selectedItem=", selectedItem
+                        m.log.verbose("a photo album was selected")
 
                         ' grab all photos inside photo album
                         photoAlbumData = api.users.GetItemsByQuery(m.global.session.user.id, {
@@ -367,7 +396,7 @@ class App
                             "includeItemTypes": "Photo",
                             "Recursive": true
                         })
-                        print "photoAlbumData=", photoAlbumData
+                        m.log.debug("photoAlbumData=", photoAlbumData)
 
                         if isValid(photoAlbumData) and isValidAndNotEmpty(photoAlbumData.items)
                             photoPlayer = CreateObject("roSgNode", "PhotoDetails")
@@ -752,42 +781,35 @@ class App
                     ' "Off"
                     ' "Instant replay"
                     ' "When mute" (Only returned for a TV; this option is not available on STBs).
-                    print "event.Mode = ", event.Mode
+                    m.log.info("event.Mode = ", event.Mode)
                     if isValid(event.Mute)
-                        print "event.Mute = ", event.Mute
+                        m.log.info("event.Mute = ", event.Mute)
                     end if
                 else if isValid(event.linkStatus)
                     ' True if the device currently seems to have an active network connection.
-                    print "event.linkStatus = ", event.linkStatus
+                    m.log.info("event.linkStatus = ", event.linkStatus)
                 else if isValid(event.generalMemoryLevel)
                     ' This event will be sent first when the OS transitions from "normal" to "low" state and will continue to be sent while in "low" or "critical" states.
                     '   - "normal" means that the general memory is within acceptable levels
                     '   - "low" means that the general memory is below acceptable levels but not critical
                     '   - "critical" means that general memory are at dangerously low level and that the OS may force terminate the application
-                    print "event.generalMemoryLevel = ", event.generalMemoryLevel
+                    m.log.info("event.generalMemoryLevel = ", event.generalMemoryLevel)
                     session.Update("memoreyLevel", event.generalMemoryLevel)
                 else if isValid(event.audioCodecCapabilityChanged)
                     ' The audio codec capability has changed if true.
-                    print "event.audioCodecCapabilityChanged = ", event.audioCodecCapabilityChanged
+                    m.log.info("event.audioCodecCapabilityChanged = ", event.audioCodecCapabilityChanged)
 
-                    postTask = createObject("roSGNode", "PostTask")
-                    postTask.arrayData = getDeviceCapabilities()
-                    postTask.apiUrl = "/Sessions/Capabilities/Full"
-                    postTask.control = "RUN"
+                    m.postDeviceProfile()
                 else if isValid(event.videoCodecCapabilityChanged)
                     ' The video codec capability has changed if true.
-                    print "event.videoCodecCapabilityChanged = ", event.videoCodecCapabilityChanged
+                    m.log.info("event.videoCodecCapabilityChanged = ", event.videoCodecCapabilityChanged)
 
-                    postTask = createObject("roSGNode", "PostTask")
-                    postTask.arrayData = getDeviceCapabilities()
-                    postTask.apiUrl = "/Sessions/Capabilities/Full"
-                    postTask.control = "RUN"
+                    m.postDeviceProfile()
                 else if isValid(event.appFocus)
                     ' It is set to False when the System Overlay (such as the confirm partner button HUD or the caption control overlay) takes focus and True when the channel regains focus
-                    print "event.appFocus = ", event.appFocus
+                    m.log.info("event.appFocus = ", event.appFocus)
                 else
-                    print "Unhandled roDeviceInfoEvent:"
-                    print msg.GetInfo()
+                    m.log.warn("Unhandled roDeviceInfoEvent:", msg.GetInfo())
                 end if
             else if type(msg) = "roInputEvent"
                 if msg.IsInput()
@@ -846,10 +868,9 @@ class App
                     end if
                 end if
             else
-                print "Unhandled " type(msg)
-                print msg
+                m.log.warn("Unhandled " + type(msg), msg)
             end if
         end while
-        m.log.debug("end run()")
+        m.log.verbose("end run()")
     end sub
 end class
