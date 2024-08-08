@@ -116,7 +116,7 @@ sub itemContentChanged()
             m.itemText.text = itemData.Title
         end if
         ' Adjust to wide posters for "View All Next Up"
-        if m.topParent.overhangTitle = tr("View All Next Up")
+        if m.itemGrid.overhangTitle = tr("View All Next Up")
             m.posterMask.maskUri = ""
 
             m.itemPoster.height = 300
