@@ -11,7 +11,7 @@
   "devDependencies": {
     "@rokucommunity/bslint": "0.8.22",
     "brighterscript": "0.67.5",
-    "brighterscript-jsdocs-plugin": "0.6.0",
+    "brighterscript-jsdocs-plugin": "0.7.3",
     "clean-jsdoc-theme": "4.3.0",
     "jsdoc": "4.0.3",
     "jshint": "2.13.6",
