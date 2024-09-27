@@ -26,7 +26,17 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
         "SubtitleStreamIndex": subtitleTrackIndex
     }
 
-    if mediaSourceId <> "" then params.MediaSourceId = mediaSourceId
+    ' Note: Jellyfin v10.9+ now remuxs LiveTV and does not allow DirectPlay anymore.
+    ' Because of this, we need to tell the server "EnableDirectPlay = false" so that we receive the
+    ' transcoding URL (which is just a remux and not a transcode; unless it is)
+    ' The web handles this by disabling EnableDirectPlay on a Retry, but we don't currently Retry a Live
+    ' TV stream, thus we just turn it off on the first try here.
+    if mediaSourceId <> ""
+        params.MediaSourceId = mediaSourceId
+    else
+        ' No mediaSourceId? Must be LiveTV...
+        params.EnableDirectPlay = false
+    end if
 
     if audioTrackIndex > -1 then params.AudioStreamIndex = audioTrackIndex
 
