@@ -892,53 +892,54 @@ end function
 
 function GetBitRateLimit(codec as string) as object
     globalUserSettings = m.global.session.user.settings
-    if globalUserSettings["playback.bitrate.maxlimited"]
-        userSetLimit = globalUserSettings["playback.bitrate.limit"].ToInt()
-        if isValid(userSetLimit) and type(userSetLimit) = "Integer" and userSetLimit > 0
-            userSetLimit *= 1000000
+    if m.global.session.server.localURL = m.global.session.server.url then return {} ' don't enforce bitrate limits when server is local
+    if not globalUserSettings["playback.bitrate.maxlimited"] then return {}
+
+    userSetLimit = globalUserSettings["playback.bitrate.limit"].ToInt()
+    if isValid(userSetLimit) and type(userSetLimit) = "Integer" and userSetLimit > 0
+        userSetLimit *= 1000000
+        return {
+            "Condition": "LessThanEqual",
+            "Property": "VideoBitrate",
+            "Value": userSetLimit.ToStr(),
+            "IsRequired": true
+        }
+    else
+        codec = Lcase(codec)
+        ' Some repeated values (e.g. same "40mbps" for several codecs)
+        ' but this makes it easy to update in the future if the bitrates start to deviate.
+        if codec = "h264"
+            ' Roku only supports h264 up to 10Mpbs
             return {
                 "Condition": "LessThanEqual",
                 "Property": "VideoBitrate",
-                "Value": userSetLimit.ToStr(),
+                "Value": "10000000",
                 "IsRequired": true
             }
-        else
-            codec = Lcase(codec)
-            ' Some repeated values (e.g. same "40mbps" for several codecs)
-            ' but this makes it easy to update in the future if the bitrates start to deviate.
-            if codec = "h264"
-                ' Roku only supports h264 up to 10Mpbs
-                return {
-                    "Condition": "LessThanEqual",
-                    "Property": "VideoBitrate",
-                    "Value": "10000000",
-                    "IsRequired": true
-                }
-            else if codec = "av1"
-                ' Roku only supports AV1 up to 40Mpbs
-                return {
-                    "Condition": "LessThanEqual",
-                    "Property": "VideoBitrate",
-                    "Value": "40000000",
-                    "IsRequired": true
-                }
-            else if codec = "h265"
-                ' Roku only supports h265 up to 40Mpbs
-                return {
-                    "Condition": "LessThanEqual",
-                    "Property": "VideoBitrate",
-                    "Value": "40000000",
-                    "IsRequired": true
-                }
-            else if codec = "vp9"
-                ' Roku only supports VP9 up to 40Mpbs
-                return {
-                    "Condition": "LessThanEqual",
-                    "Property": "VideoBitrate",
-                    "Value": "40000000",
-                    "IsRequired": true
-                }
-            end if
+        else if codec = "av1"
+            ' Roku only supports AV1 up to 40Mpbs
+            return {
+                "Condition": "LessThanEqual",
+                "Property": "VideoBitrate",
+                "Value": "40000000",
+                "IsRequired": true
+            }
+        else if codec = "h265"
+            ' Roku only supports h265 up to 40Mpbs
+            return {
+                "Condition": "LessThanEqual",
+                "Property": "VideoBitrate",
+                "Value": "40000000",
+                "IsRequired": true
+            }
+        else if codec = "vp9"
+            ' Roku only supports VP9 up to 40Mpbs
+            return {
+                "Condition": "LessThanEqual",
+                "Property": "VideoBitrate",
+                "Value": "40000000",
+                "IsRequired": true
+            }
         end if
     end if
     return {}
