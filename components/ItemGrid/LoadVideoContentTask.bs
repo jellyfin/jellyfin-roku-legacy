@@ -195,11 +195,6 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     end if
 
     video.container = getContainerType(meta)
-    if video.container = "mp4"
-        video.content.StreamFormat = "mp4"
-    else if video.container = "mkv"
-        video.content.StreamFormat = "mkv"
-    end if
 
     if not isValid(m.playbackInfo.MediaSources[0])
         m.playbackInfo = meta.json
