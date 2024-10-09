@@ -37,8 +37,10 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
         params.EnableDirectPlay = false
     end if
 
-    if audioTrackIndex > -1
-        selectedAudioStream = m.global.session.video.json.MediaStreams[audioTrackIndex]
+    myGLobal = m.global
+
+    if audioTrackIndex > -1 and myGLobal.session.video.json.MediaStreams <> invalid
+        selectedAudioStream = myGLobal.session.video.json.MediaStreams[audioTrackIndex]
 
         if selectedAudioStream <> invalid
             params.AudioStreamIndex = audioTrackIndex
@@ -62,7 +64,6 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
                     end for
                 end if
             end if
-
         end if
     end if
 
