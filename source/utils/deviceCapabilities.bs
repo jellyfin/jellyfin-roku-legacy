@@ -1141,7 +1141,7 @@ function canPlay4k() as boolean
     end if
 
     ' Check if HDCP 2.2 is enabled, skip check for TVs
-    if deviceInfo.GetModelType = "STB" and hdmiStatus.IsHdcpActive("2.2") <> true
+    if deviceInfo.GetModelType() = "STB" and hdmiStatus.IsHdcpActive("2.2") <> true
         return false
     end if
 
