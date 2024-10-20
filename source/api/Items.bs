@@ -81,6 +81,19 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
                             end if
                         end if
                     end for
+
+                    ' don't direct play multi-channel AAC
+                    if selectedAudioStream.Codec <> invalid and LCase(selectedAudioStream.Codec) = "aac"
+                        for each rule in deviceProfile.DirectPlayProfiles
+                            if rule.audioCodec <> invalid
+                                if rule.AudioCodec = "aac"
+                                    rule.AudioCodec = ""
+                                else if rule.AudioCodec.Left(4) = "aac,"
+                                    rule.AudioCodec = mid(rule.AudioCodec, 5)
+                                end if
+                            end if
+                        end for
+                    end if
                 end if
 
             end if

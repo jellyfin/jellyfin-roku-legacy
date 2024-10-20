@@ -87,7 +87,7 @@ function GetDirectPlayProfiles() as object
     }
     ' all possible codecs (besides those restricted by user settings)
     videoCodecs = ["h264", "mpeg4 avc", "vp8", "vp9", "h263", "mpeg1"]
-    audioCodecs = ["mp3", "mp2", "pcm", "lpcm", "wav", "ac3", "ac4", "aiff", "wma", "flac", "alac", "aac", "opus", "dts", "wmapro", "vorbis", "eac3", "mpg123"]
+    audioCodecs = ["aac", "mp3", "mp2", "pcm", "lpcm", "wav", "ac3", "ac4", "aiff", "wma", "flac", "alac", "opus", "dts", "wmapro", "vorbis", "eac3", "mpg123"]
 
     ' check if hevc is disabled
     if globalUserSettings["playback.compatibility.disablehevc"] = false
