@@ -45,7 +45,7 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
         if selectedAudioStream <> invalid
             params.AudioStreamIndex = audioTrackIndex
 
-            ' force the server to transcode AAC profiles we don't support to MP3 instead of the usual AAC
+            ' force the server to transcode AAC profiles we don't support to MP3 instead of the usual AAC.
             ' TODO: Remove this after server adds support for transcoding AAC from one profile to another
             if selectedAudioStream.Codec <> invalid and LCase(selectedAudioStream.Codec) = "aac"
                 if selectedAudioStream.Profile <> invalid and LCase(selectedAudioStream.Profile) = "main" or LCase(selectedAudioStream.Profile) = "he-aac"
@@ -63,6 +63,26 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
                         end if
                     end for
                 end if
+            end if
+
+            preferredAudioCodec = GetPreferredAudioCodec()
+            if preferredAudioCodec <> "aac"
+                ' device supports multi-channel audio output
+
+                ' is this a multi-channel audio stream?
+                if selectedAudioStream.Channels <> invalid and selectedAudioStream.Channels > 2
+                    ' tell the server to transcode this file to the preferred multi channel audio codec instead of the default AAC for stereo
+                    for each rule in deviceProfile.TranscodingProfiles
+                        if rule.Container = "ts" or rule.Container = "mp4"
+                            if rule.AudioCodec = "aac"
+                                rule.AudioCodec = preferredAudioCodec
+                            else
+                                rule.AudioCodec = preferredAudioCodec + "," + rule.AudioCodec
+                            end if
+                        end if
+                    end for
+                end if
+
             end if
         end if
     end if
@@ -537,4 +557,19 @@ function TVEpisodeShuffleList(show_id as string)
     data.Items = results
 
     return data
+end function
+
+' Returns the users preferred audio codec in string format
+' Defaults to AAC for stereo and AC3 for surround sound
+' with a user setting to use DTS for surround sound
+function GetPreferredAudioCodec() as string
+    deviceInfo = CreateObject("roDeviceInfo")
+    preferredAudioCodec = "aac" ' AAC for stereo
+    if deviceInfo.GetAudioOutputChannel() <> "Stereo"
+        preferredAudioCodec = "ac3" ' Dolby Digital for surround sound
+        if m.global.session.user.settings["playback.forceDTS"]
+            preferredAudioCodec = "dts" ' DTS for surround sound when asked
+        end if
+    end if
+    return preferredAudioCodec
 end function
