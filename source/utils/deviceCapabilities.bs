@@ -211,19 +211,6 @@ function getTranscodingProfiles() as object
     '
     ' AVC / h264 / MPEG4 AVC
     for each container in transcodingContainers
-        if di.CanDecodeVideo({ Codec: "h264", Container: container }).Result
-            if container = "mp4"
-                ' check for codec string before adding it
-                if mp4VideoCodecs.Instr(0, ",h264") = -1
-                    mp4VideoCodecs = mp4VideoCodecs + ",h264"
-                end if
-            else if container = "ts"
-                ' check for codec string before adding it
-                if tsVideoCodecs.Instr(0, ",h264") = -1
-                    tsVideoCodecs = tsVideoCodecs + ",h264"
-                end if
-            end if
-        end if
         if di.CanDecodeVideo({ Codec: "mpeg4 avc", Container: container }).Result
             if container = "mp4"
                 ' check for codec string before adding it
