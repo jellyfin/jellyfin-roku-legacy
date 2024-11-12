@@ -438,13 +438,9 @@ sub onVideoContentLoaded()
 
     populateChapterMenu()
 
-    if m.LoadMetaDataTask.isIntro
-        ' Disable trackplay bar for intro videos
-        m.top.enableTrickPlay = false
-    else
-        ' Allow custom captions for non intro videos
-        m.top.allowCaptions = true
-    end if
+
+    ' Allow custom captions for all videos including intro videos
+    m.top.allowCaptions = true
 
     ' Allow default subtitles
     m.top.unobserveField("selectedSubtitle")
@@ -847,40 +843,34 @@ function onKeyEvent(key as string, press as boolean) as boolean
         end if
 
     else if key = "OK" and not m.top.trickPlayBar.visible
-        if not m.LoadMetaDataTask.isIntro
-            ' Don't allow user to open menu prior to video loading
-            if not stateAllowsOSD() then return true
+        ' Don't allow user to open menu prior to video loading
+        if not stateAllowsOSD() then return true
 
-            ' Show OSD, but don't pause video
-            m.osd.visible = true
-            m.osd.hasFocus = true
-            m.osd.setFocus(true)
-            return true
-        end if
-
-        return false
+        ' Show OSD, but don't pause video
+        m.osd.visible = true
+        m.osd.hasFocus = true
+        m.osd.setFocus(true)
+        return true
     end if
 
     ' Disable OSD for intro videos
-    if not m.LoadMetaDataTask.isIntro
-        if key = "play" and not m.top.trickPlayBar.visible
+    if key = "play" and not m.top.trickPlayBar.visible
 
-            ' Don't allow user to open menu prior to video loading
-            if not stateAllowsOSD() then return true
+        ' Don't allow user to open menu prior to video loading
+        if not stateAllowsOSD() then return true
 
-            ' If video is paused, resume it and don't show OSD
-            if m.top.state = "paused"
-                m.top.control = "resume"
-                return true
-            end if
-
-            ' Pause video and show OSD
-            m.top.control = "pause"
-            m.osd.visible = true
-            m.osd.hasFocus = true
-            m.osd.setFocus(true)
+        ' If video is paused, resume it and don't show OSD
+        if m.top.state = "paused"
+            m.top.control = "resume"
             return true
         end if
+
+        ' Pause video and show OSD
+        m.top.control = "pause"
+        m.osd.visible = true
+        m.osd.hasFocus = true
+        m.osd.setFocus(true)
+        return true
     end if
 
     if key = "back"
