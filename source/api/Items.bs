@@ -25,6 +25,8 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
     }
     deviceProfile = getDeviceProfile()
 
+    isLiveTV = false
+
     ' Note: Jellyfin v10.9+ now remuxs LiveTV and does not allow DirectPlay anymore.
     ' Because of this, we need to tell the server "EnableDirectPlay = false" so that we receive the
     ' transcoding URL (which is just a remux and not a transcode; unless it is)
@@ -35,6 +37,7 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
     else
         ' No mediaSourceId? Must be LiveTV...
         params.EnableDirectPlay = false
+        isLiveTV = true
     end if
 
     myGLobal = m.global
@@ -47,7 +50,7 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
 
             ' force the server to transcode AAC profiles we don't support to MP3 instead of the usual AAC
             ' TODO: Remove this after server adds support for transcoding AAC from one profile to another
-            if selectedAudioStream.Codec <> invalid and LCase(selectedAudioStream.Codec) = "aac"
+            if not isLiveTV and selectedAudioStream.Codec <> invalid and LCase(selectedAudioStream.Codec) = "aac"
                 if selectedAudioStream.Profile <> invalid and LCase(selectedAudioStream.Profile) = "main" or LCase(selectedAudioStream.Profile) = "he-aac"
                     for each rule in deviceProfile.TranscodingProfiles
                         if rule.Container = "ts" or rule.Container = "mp4"
