@@ -211,19 +211,6 @@ function getTranscodingProfiles() as object
     '
     ' AVC / h264 / MPEG4 AVC
     for each container in transcodingContainers
-        if di.CanDecodeVideo({ Codec: "h264", Container: container }).Result
-            if container = "mp4"
-                ' check for codec string before adding it
-                if mp4VideoCodecs.Instr(0, ",h264") = -1
-                    mp4VideoCodecs = mp4VideoCodecs + ",h264"
-                end if
-            else if container = "ts"
-                ' check for codec string before adding it
-                if tsVideoCodecs.Instr(0, ",h264") = -1
-                    tsVideoCodecs = tsVideoCodecs + ",h264"
-                end if
-            end if
-        end if
         if di.CanDecodeVideo({ Codec: "mpeg4 avc", Container: container }).Result
             if container = "mp4"
                 ' check for codec string before adding it
@@ -301,11 +288,9 @@ function getTranscodingProfiles() as object
     end if
 
     ' AV1
-    ' CanDecodeVideo() returns false for AV1 when the container is provided
-    ' Manually add AV1 to the mp4VideoCodecs list if support is detected
-    if di.CanDecodeVideo({ Codec: "av1" }).Result
-        mp4VideoCodecs = mp4VideoCodecs + ",av1"
-    end if
+    ' direct streaming av1 is not supported on roku
+    ' force a full transcode by omitting av1 from the transcoding profile
+    ' https://community.roku.com/t5/Roku-Developer-Program/HLS-fMP4-No-Audio/td-p/607399
 
     ' AUDIO CODECS
     for each container in transcodingContainers
