@@ -21,5 +21,6 @@
     <!-- Total records available from server-->
     <field id="totalRecordCount" type="int" value="-1" />
     <field id="content" type="array" />
+    <field id="transcodeLiveTV" type="boolean" value="false" />
   </interface>
 </component>

@@ -51,7 +51,12 @@ sub loadItems()
     id = m.top.itemId
     mediaSourceId = invalid
     audio_stream_idx = m.top.selectedAudioStreamIndex
-    forceTranscoding = false
+    if m.top.transcodeLiveTV = true
+        print "forcing retry of Live TV with transcoding..."
+        forceTranscoding = true
+    else
+        forceTranscoding = false
+    end if
 
     m.top.content = [LoadItems_VideoPlayer(id, mediaSourceId, audio_stream_idx, forceTranscoding)]
 end sub
@@ -115,6 +120,11 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
         end if
     end if
 
+    ' when a retry live TV is happening...
+    if videotype = "tvchannel"
+        meta.live = true
+    end if
+
     video.chapters = meta.json.Chapters
     video.content.title = meta.title
     video.showID = meta.showID
@@ -147,7 +157,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
 
     currentItem = queueManager.callFunc("getCurrentItem")
 
-    if isValid(currentItem) and isValid(currentItem.startingPoint)
+    if isValid(currentItem) and isValid(currentItem.startingPoint) and not meta.live
         playbackPosition = currentItem.startingPoint
     end if
 
@@ -157,7 +167,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     if not isValid(mediaSourceId) then mediaSourceId = video.id
     if meta.live then mediaSourceId = ""
 
-    m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
+    m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition, forceTranscoding)
     if not isValid(m.playbackInfo)
         video.errorMsg = "Error loading playback info"
         video.content = invalid
@@ -174,7 +184,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
             video.SelectedSubtitle = defaultSubtitleIndex
             subtitle_idx = defaultSubtitleIndex
 
-            m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
+            m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition, forceTranscoding)
             if not isValid(m.playbackInfo)
                 video.errorMsg = "Error loading playback info"
                 video.content = invalid

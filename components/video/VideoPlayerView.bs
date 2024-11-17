@@ -34,7 +34,6 @@ sub init()
 
     m.playbackTimer = m.top.findNode("playbackTimer")
     m.bufferCheckTimer = m.top.findNode("bufferCheckTimer")
-    m.top.observeField("state", "onState")
     m.top.observeField("content", "onContentChange")
     m.top.observeField("selectedSubtitle", "onSubtitleChange")
     m.top.observeField("audioIndex", "onAudioIndexChange")
@@ -354,6 +353,15 @@ sub onAudioIndexChange()
     m.LoadMetaDataTask.control = "RUN"
 end sub
 
+sub RetryLiveTV()
+    m.LoadMetaDataTask.transcodeLiveTV = true
+    m.LoadMetaDataTask.selectedSubtitleIndex = m.top.SelectedSubtitle
+    m.LoadMetaDataTask.selectedAudioStreamIndex = m.top.audioIndex
+    m.LoadMetaDataTask.itemId = m.currentItem.id
+    m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
+    m.LoadMetaDataTask.control = "RUN"
+end sub
+
 sub onPlaybackErrorDialogClosed(msg)
     sourceNode = msg.getRoSGNode()
     sourceNode.unobserveField("buttonSelected")
@@ -380,6 +388,7 @@ end sub
 sub onVideoContentLoaded()
     m.LoadMetaDataTask.unobserveField("content")
     m.LoadMetaDataTask.control = "STOP"
+    m.top.observeField("state", "onState")
 
     videoContent = m.LoadMetaDataTask.content
     m.LoadMetaDataTask.content = []
@@ -639,6 +648,12 @@ sub onState(msg)
 
         if not m.playReported and m.top.transcodeAvailable
             m.top.retryWithTranscoding = true ' If playback was not reported, retry with transcoding
+        else if Instr(1, m.top.errorStr, "Unsupported AAC stream") > 0
+            ' Some Live TV streams use HE-AAC which Roku doesn't support
+            m.top.unobserveField("state")
+            m.playbackTimer.control = "stop"
+            RetryLiveTV()
+            return
         else
             ' If an error was encountered, Display dialog
             showPlaybackErrorDialog(tr("Error During Playback"))
