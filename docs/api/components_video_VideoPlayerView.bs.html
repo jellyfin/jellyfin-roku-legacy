@@ -468,8 +468,8 @@ sub onVideoContentLoaded()
                     ' If IsForced, make sure to remember the Roku global setting so we
                     ' can set it back when the video is done playing.
                     m.originalClosedCaptionState = m.top.globalCaptionMode
-                    m.top.globalCaptionMode = "On"
                 end if
+                m.top.globalCaptionMode = "On"
                 m.top.subtitleTrack = m.top.availableSubtitleTracks[availableSubtitleTrackIndex].TrackName
             end if
         end if

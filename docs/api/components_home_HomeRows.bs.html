@@ -423,15 +423,6 @@ end sub
 ' createContinueWatchingRow: Creates a row displaying items the user can continue watching
 '
 sub createContinueWatchingRow()
-    sectionName = tr("Continue Watching")
-
-    if not sectionExists(sectionName)
-        nextUpRow = m.top.content.CreateChild("HomeRow")
-        nextUpRow.title = sectionName
-        nextUpRow.imageWidth = homeRowItemSizes.WIDE_POSTER[0]
-        nextUpRow.cursorSize = homeRowItemSizes.WIDE_POSTER
-    end if
-
     ' Load the Continue Watching Data
     m.LoadContinueWatchingTask.observeField("content", "updateContinueWatchingItems")
     m.LoadContinueWatchingTask.control = "RUN"
