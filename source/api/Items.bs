@@ -13,7 +13,7 @@ function ItemGetPlaybackInfo(id as string, startTimeTicks = 0 as longinteger)
     return getJson(resp)
 end function
 
-function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioTrackIndex = -1 as integer, subtitleTrackIndex = -1 as integer, startTimeTicks = 0 as longinteger, forceLiveTVTranscode = false)
+function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioTrackIndex = -1 as integer, subtitleTrackIndex = -1 as integer, startTimeTicks = 0 as longinteger, forceMP3 = false)
     params = {
         "UserId": m.global.session.user.id,
         "StartTimeTicks": startTimeTicks,
@@ -39,16 +39,16 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
 
     myGLobal = m.global
 
-    if audioTrackIndex > -1 and myGLobal.session.video.json.MediaStreams <> invalid or forceLiveTVTranscode
+    if audioTrackIndex > -1 and myGLobal.session.video.json.MediaStreams <> invalid or forceMP3
         selectedAudioStream = myGLobal.session.video.json.MediaStreams[audioTrackIndex]
 
-        if selectedAudioStream <> invalid or forceLiveTVTranscode
+        if selectedAudioStream <> invalid or forceMP3
             params.AudioStreamIndex = audioTrackIndex
 
             ' force the server to transcode AAC profiles we don't support to MP3 instead of the usual AAC
             ' TODO: Remove this after server adds support for transcoding AAC from one profile to another
-            if forceLiveTVTranscode or selectedAudioStream.Codec <> invalid and LCase(selectedAudioStream.Codec) = "aac"
-                if forceLiveTVTranscode or selectedAudioStream.Profile <> invalid and LCase(selectedAudioStream.Profile) = "main" or LCase(selectedAudioStream.Profile) = "he-aac"
+            if forceMP3 or selectedAudioStream.Codec <> invalid and LCase(selectedAudioStream.Codec) = "aac"
+                if forceMP3 or selectedAudioStream.Profile <> invalid and LCase(selectedAudioStream.Profile) = "main" or LCase(selectedAudioStream.Profile) = "he-aac"
                     for each rule in deviceProfile.TranscodingProfiles
                         if rule.Container = "ts" or rule.Container = "mp4"
                             if rule.AudioCodec = "aac"

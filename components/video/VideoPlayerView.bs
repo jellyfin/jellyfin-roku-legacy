@@ -354,7 +354,7 @@ sub onAudioIndexChange()
 end sub
 
 sub RetryLiveTV()
-    m.LoadMetaDataTask.transcodeLiveTV = true
+    m.LoadMetaDataTask.forceTranscodeMP3Audio = true
     m.LoadMetaDataTask.selectedSubtitleIndex = m.top.SelectedSubtitle
     m.LoadMetaDataTask.selectedAudioStreamIndex = m.top.audioIndex
     m.LoadMetaDataTask.itemId = m.currentItem.id

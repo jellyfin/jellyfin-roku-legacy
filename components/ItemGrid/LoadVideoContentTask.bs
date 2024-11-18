@@ -51,23 +51,23 @@ sub loadItems()
     id = m.top.itemId
     mediaSourceId = invalid
     audio_stream_idx = m.top.selectedAudioStreamIndex
-    if m.top.transcodeLiveTV = true
+    forceTranscoding = false
+    forceMP3Audio = false
+    if m.top.forceTranscodeMP3Audio = true
         print "forcing retry of Live TV with transcoding..."
-        forceTranscoding = true
-    else
-        forceTranscoding = false
+        forceMP3Audio = true
     end if
 
-    m.top.content = [LoadItems_VideoPlayer(id, mediaSourceId, audio_stream_idx, forceTranscoding)]
+    m.top.content = [LoadItems_VideoPlayer(id, mediaSourceId, audio_stream_idx, forceTranscoding, forceMP3Audio)]
 end sub
 
-function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, forceTranscoding = false as boolean) as dynamic
+function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, forceTranscoding = false as boolean, forceMP3Audio = false as boolean) as dynamic
 
     video = {}
     video.id = id
     video.content = createObject("RoSGNode", "ContentNode")
 
-    LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx, forceTranscoding)
+    LoadItems_AddVideoContent(video, mediaSourceId, audio_stream_idx, forceTranscoding, forceMP3Audio)
 
     if video.content = invalid
         return invalid
@@ -76,7 +76,7 @@ function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic,
     return video
 end function
 
-sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx = 1 as integer, forceTranscoding = false as boolean)
+sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_stream_idx = 1 as integer, forceTranscoding = false as boolean, forceMP3Audio = false as boolean)
 
     meta = ItemMetaData(video.id)
     if not isValid(meta)
@@ -167,7 +167,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     if not isValid(mediaSourceId) then mediaSourceId = video.id
     if meta.live then mediaSourceId = ""
 
-    m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition, forceTranscoding)
+    m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition, forceMP3Audio)
     if not isValid(m.playbackInfo)
         video.errorMsg = "Error loading playback info"
         video.content = invalid
@@ -184,7 +184,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
             video.SelectedSubtitle = defaultSubtitleIndex
             subtitle_idx = defaultSubtitleIndex
 
-            m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition, forceTranscoding)
+            m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition, forceMP3Audio)
             if not isValid(m.playbackInfo)
                 video.errorMsg = "Error loading playback info"
                 video.content = invalid
