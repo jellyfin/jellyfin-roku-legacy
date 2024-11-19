@@ -20,6 +20,7 @@
     <field id="retryWithTranscoding" type="boolean" value="false" />
     <field id="isTranscoded" type="boolean" />
     <field id="transcodeReasons" type="array" />
+    <field id="forceMp3" type="boolean" value="false" />
 
     <field id="videoId" type="string" />
     <field id="mediaSourceId" type="string" />
