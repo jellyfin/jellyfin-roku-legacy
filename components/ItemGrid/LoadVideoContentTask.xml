@@ -18,6 +18,7 @@
     <field id="studioIds" type="string" value="" />
     <field id="genreIds" type="string" value="" />
     <field id="view" type="string" value="" />
+    <field id="forceMp3" type="boolean" value="false" />
     <!-- Total records available from server-->
     <field id="totalRecordCount" type="int" value="-1" />
     <field id="content" type="array" />
