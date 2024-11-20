@@ -13,7 +13,7 @@ function ItemGetPlaybackInfo(id as string, startTimeTicks = 0 as longinteger)
     return getJson(resp)
 end function
 
-function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioTrackIndex = -1 as integer, subtitleTrackIndex = -1 as integer, startTimeTicks = 0 as longinteger)
+function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioTrackIndex = -1 as integer, subtitleTrackIndex = -1 as integer, startTimeTicks = 0 as longinteger, forceMp3 = false as boolean)
     params = {
         "UserId": m.global.session.user.id,
         "StartTimeTicks": startTimeTicks,
@@ -49,23 +49,13 @@ function ItemPostPlaybackInfo(id as string, mediaSourceId = "" as string, audioT
             ' TODO: Remove this after server adds support for transcoding AAC from one profile to another
             if selectedAudioStream.Codec <> invalid and LCase(selectedAudioStream.Codec) = "aac"
                 if selectedAudioStream.Profile <> invalid and LCase(selectedAudioStream.Profile) = "main" or LCase(selectedAudioStream.Profile) = "he-aac"
-                    for each rule in deviceProfile.TranscodingProfiles
-                        if rule.Container = "ts" or rule.Container = "mp4"
-                            if rule.AudioCodec = "aac"
-                                rule.AudioCodec = "mp3"
-                            else if rule.AudioCodec.Left(4) = "aac,"
-                                rule.AudioCodec = mid(rule.AudioCodec, 5)
-
-                                if rule.AudioCodec.Left(3) <> "mp3"
-                                    rule.AudioCodec = "mp3," + rule.AudioCodec
-                                end if
-                            end if
-                        end if
-                    end for
+                    forceMp3 = true
                 end if
             end if
         end if
     end if
+
+    if forceMp3 then forceMp3Audio(deviceProfile)
 
     req = APIRequest(Substitute("Items/{0}/PlaybackInfo", id), params)
     req.SetRequest("POST")
@@ -538,3 +528,20 @@ function TVEpisodeShuffleList(show_id as string)
 
     return data
 end function
+
+' updates the device profile we send the server to force mp3 audio transcoding instead of the default aac
+sub forceMp3Audio(deviceProfile as object)
+    for each rule in deviceProfile.TranscodingProfiles
+        if rule.Container = "ts" or rule.Container = "mp4"
+            if rule.AudioCodec = "aac"
+                rule.AudioCodec = "mp3"
+            else if rule.AudioCodec.Left(4) = "aac,"
+                rule.AudioCodec = mid(rule.AudioCodec, 5)
+
+                if rule.AudioCodec.Left(3) <> "mp3"
+                    rule.AudioCodec = "mp3," + rule.AudioCodec
+                end if
+            end if
+        end if
+    end for
+end sub
