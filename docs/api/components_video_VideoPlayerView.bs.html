@@ -36,7 +36,6 @@ sub init()
 
     m.playbackTimer = m.top.findNode("playbackTimer")
     m.bufferCheckTimer = m.top.findNode("bufferCheckTimer")
-    m.top.observeField("state", "onState")
     m.top.observeField("content", "onContentChange")
     m.top.observeField("selectedSubtitle", "onSubtitleChange")
     m.top.observeField("audioIndex", "onAudioIndexChange")
@@ -399,6 +398,8 @@ sub onVideoContentLoaded()
         return
     end if
 
+    m.top.observeField("state", "onState")
+
     m.top.content = videoContent[0].content
     m.top.PlaySessionId = videoContent[0].PlaySessionId
     m.top.videoId = videoContent[0].id
@@ -641,6 +642,17 @@ sub onState(msg)
 
         if not m.playReported and m.top.transcodeAvailable
             m.top.retryWithTranscoding = true ' If playback was not reported, retry with transcoding
+        else if m.top.errorStr = "decoder:pump:Unsupported AAC stream."
+            m.log.info("retrying video with mp3 audio stream", m.currentItem.id, m.top.SelectedSubtitle, m.top.audioIndex)
+
+            m.top.unobserveField("state")
+            m.LoadMetaDataTask.forceMp3 = true
+            m.LoadMetaDataTask.selectedSubtitleIndex = m.top.SelectedSubtitle
+            m.LoadMetaDataTask.selectedAudioStreamIndex = m.top.audioIndex
+            m.LoadMetaDataTask.itemId = m.currentItem.id
+            m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
+
+            m.LoadMetaDataTask.control = "RUN"
         else
             ' If an error was encountered, Display dialog
             showPlaybackErrorDialog(tr("Error During Playback"))
