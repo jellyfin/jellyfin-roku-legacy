@@ -251,5 +251,19 @@ function onKeyEvent(key as string, press as boolean) as boolean
         settingSelected()
     end if
 
+    if key = "up" and m.settingsMenu.focusedChild <> invalid and m.settingsMenu.itemFocused = 0
+        m.settingsMenu.jumpToItem = m.settingsMenu.content.getChildCount() - 1
+
+        return true
+    end if
+
+    if key = "down" and m.settingsMenu.focusedChild <> invalid
+        if m.settingsMenu.itemFocused = m.settingsMenu.content.getChildCount() - 1
+            m.settingsMenu.jumpToItem = 0
+
+            return true
+        end if
+    end if
+
     return false
 end function

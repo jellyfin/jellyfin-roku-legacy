@@ -37,6 +37,13 @@
                 ]
             },
             {
+                "title": "Cinema Mode",
+                "description": "Bring the theater experience straight to your living room with the ability to play custom intros before the main feature.",
+                "settingName": "playback.cinemamode",
+                "type": "bool",
+                "default": "false"
+            },
+            {
                 "title": "Compatibility",
                 "description": "Attempt to prevent playback failures.",
                 "children": [
@@ -48,6 +55,13 @@
                         "default": "false"
                     }
                 ]
+            },
+            {
+                "title": "Custom Subtitles",
+                "description": "Replace Roku's default subtitle functions with custom functions that support CJK fonts. Fallback fonts must be configured and enabled on the server for CJK rendering to work.",
+                "settingName": "playback.subs.custom",
+                "type": "bool",
+                "default": "false"
             },
             {
                 "title": "Maximum Resolution",
@@ -114,60 +128,6 @@
                 ]
             },
             {
-                "title": "Video Codec Support",
-                "description": "Enable or disable Direct Play support for certain codecs.",
-                "children": [
-                    {
-                        "title": "MPEG-2",
-                        "description": "Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.",
-                        "settingName": "playback.mpeg2",
-                        "type": "bool",
-                        "default": "false"
-                    },
-                    {
-                        "title": "MPEG-4",
-                        "description": "Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.",
-                        "settingName": "playback.mpeg4",
-                        "type": "bool",
-                        "default": "true"
-                    }
-                ]
-            },
-            {
-                "title": "Video Profile Level Support",
-                "description": "Attempt Direct Play of potentially unsupported profile levels",
-                "children": [
-                    {
-                        "title": "H.264",
-                        "description": "Attempt Direct Play for H.264 media with unsupported profile levels before falling back to transcoding if it fails.",
-                        "settingName": "playback.tryDirect.h264ProfileLevel",
-                        "type": "bool",
-                        "default": "false"
-                    },
-                    {
-                        "title": "HEVC",
-                        "description": "Attempt Direct Play for HEVC media with unsupported profile levels before falling back to transcoding if it fails.",
-                        "settingName": "playback.tryDirect.hevcProfileLevel",
-                        "type": "bool",
-                        "default": "false"
-                    }
-                ]
-            },
-            {
-                "title": "Cinema Mode",
-                "description": "Bring the theater experience straight to your living room with the ability to play custom intros before the main feature.",
-                "settingName": "playback.cinemamode",
-                "type": "bool",
-                "default": "false"
-            },
-            {
-                "title": "Custom Subtitles",
-                "description": "Replace Roku's default subtitle functions with custom functions that support CJK fonts. Fallback fonts must be configured and enabled on the server for CJK rendering to work.",
-                "settingName": "playback.subs.custom",
-                "type": "bool",
-                "default": "false"
-            },
-            {
                 "title": "Next Episode Button Time",
                 "description": "Set how many seconds before the end of an episode the Next Episode button should appear. Set to 0 to disable.",
                 "settingName": "playback.nextupbuttonseconds",
@@ -230,6 +190,46 @@
                 "settingName": "playback.subs.onlytext",
                 "type": "bool",
                 "default": "false"
+            },
+            {
+                "title": "Video Codec Support",
+                "description": "Enable or disable Direct Play support for certain codecs.",
+                "children": [
+                    {
+                        "title": "MPEG-2",
+                        "description": "Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.",
+                        "settingName": "playback.mpeg2",
+                        "type": "bool",
+                        "default": "false"
+                    },
+                    {
+                        "title": "MPEG-4",
+                        "description": "Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.",
+                        "settingName": "playback.mpeg4",
+                        "type": "bool",
+                        "default": "true"
+                    }
+                ]
+            },
+            {
+                "title": "Video Profile Level Support",
+                "description": "Attempt Direct Play of potentially unsupported profile levels",
+                "children": [
+                    {
+                        "title": "H.264",
+                        "description": "Attempt Direct Play for H.264 media with unsupported profile levels before falling back to transcoding if it fails.",
+                        "settingName": "playback.tryDirect.h264ProfileLevel",
+                        "type": "bool",
+                        "default": "false"
+                    },
+                    {
+                        "title": "HEVC",
+                        "description": "Attempt Direct Play for HEVC media with unsupported profile levels before falling back to transcoding if it fails.",
+                        "settingName": "playback.tryDirect.hevcProfileLevel",
+                        "type": "bool",
+                        "default": "false"
+                    }
+                ]
             }
         ]
     },
@@ -322,6 +322,23 @@
                         "default": "false"
                     },
                     {
+                        "title": "Row Layout",
+                        "description": "Choose how rows are displayed on the home screen.",
+                        "settingName": "ui.row.layout",
+                        "type": "radio",
+                        "default": "fullwidth",
+                        "options": [
+                            {
+                                "title": "Original",
+                                "id": "original"
+                            },
+                            {
+                                "title": "Full Width",
+                                "id": "fullwidth"
+                            }
+                        ]
+                    },
+                    {
                         "title": "Show What's New Popup",
                         "description": "Show What's New popup when Jellyfin is updated to a new version.",
                         "settingName": "load.allowwhatsnew",
@@ -407,6 +424,13 @@
                         "description": "Settings relating to the appearance of pages in Movie Libraries.",
                         "children": [
                             {
+                                "title": "Community and Critical Ratings",
+                                "description": "Ratings for how good a movie is.",
+                                "settingName": "ui.movies.showRatings",
+                                "type": "bool",
+                                "default": "true"
+                            },
+                            {
                                 "title": "Default View",
                                 "description": "Default view for Movie Libraries.",
                                 "settingName": "itemgrid.movieDefaultView",
@@ -422,13 +446,6 @@
                                         "id": "MoviesGrid"
                                     }
                                 ]
-                            },
-                            {
-                                "title": "Community and Critical Ratings",
-                                "description": "Ratings for how good a movie is.",
-                                "settingName": "ui.movies.showRatings",
-                                "type": "bool",
-                                "default": "true"
                             }
                         ]
                     },

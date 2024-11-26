@@ -56,6 +56,7 @@ sub loadItems()
     forceTranscoding = false
 
     m.top.content = [LoadItems_VideoPlayer(id, mediaSourceId, audio_stream_idx, forceTranscoding)]
+    m.top.forceMp3 = false
 end sub
 
 function LoadItems_VideoPlayer(id as string, mediaSourceId = invalid as dynamic, audio_stream_idx = 1 as integer, forceTranscoding = false as boolean) as dynamic
@@ -117,6 +118,21 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
         end if
     end if
 
+    if videotype = "tvchannel" and isValid(meta.json) and isValid(meta.json.CurrentProgram)
+        if isValid(meta.json.CurrentProgram.Name)
+            meta.title = `${meta.title}: ${meta.json.CurrentProgram.Name}`
+        end if
+        if isValid(meta.json.CurrentProgram.ParentIndexNumber)
+            video.seasonNumber = meta.json.CurrentProgram.ParentIndexNumber
+        end if
+        if isValid(meta.json.CurrentProgram.IndexNumber)
+            video.episodeNumber = meta.json.CurrentProgram.IndexNumber
+        end if
+        if isValid(meta.json.CurrentProgram.IndexNumberEnd)
+            video.episodeNumberEnd = meta.json.CurrentProgram.IndexNumberEnd
+        end if
+    end if
+
     video.chapters = meta.json.Chapters
     video.content.title = meta.title
     video.showID = meta.showID
@@ -159,7 +175,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
     if not isValid(mediaSourceId) then mediaSourceId = video.id
     if meta.live then mediaSourceId = ""
 
-    m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
+    m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition, m.top.forceMp3)
     if not isValid(m.playbackInfo)
         video.errorMsg = "Error loading playback info"
         video.content = invalid
@@ -176,7 +192,7 @@ sub LoadItems_AddVideoContent(video as object, mediaSourceId as dynamic, audio_s
             video.SelectedSubtitle = defaultSubtitleIndex
             subtitle_idx = defaultSubtitleIndex
 
-            m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition)
+            m.playbackInfo = ItemPostPlaybackInfo(video.id, mediaSourceId, audio_stream_idx, subtitle_idx, playbackPosition, m.top.forceMp3)
             if not isValid(m.playbackInfo)
                 video.errorMsg = "Error loading playback info"
                 video.content = invalid

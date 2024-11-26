@@ -64,9 +64,14 @@ sub itemContentChanged()
     if isValid(m.unplayedCount) then m.unplayedCount.visible = false
     itemData = m.top.itemContent
     if itemData = invalid then return
-    userSettings = m.global.session.user.settings
 
     itemData.Title = itemData.name ' Temporarily required while we move from "HomeItem" to "JFContentItem"
+
+    ' validate to prevent crash
+    userSettings = invalid
+    if isValid(m.global) and isValid(m.global.session) and isValid(m.global.session.user) and isValid(m.global.session.user.settings)
+        userSettings = m.global.session.user.settings
+    end if
 
     ' validate to prevent crash
     if not isValid(m.itemPoster) then initItemPoster()
@@ -166,17 +171,22 @@ sub itemContentChanged()
             drawProgressBar(itemData)
         end if
 
-        if userSettings["ui.general.episodeimagesnextup"] = "webclient"
-            tmpSetting = m.global.session.user.Configuration.useEpisodeImagesInNextUpAndResume
-            if isValid(tmpSetting) and tmpSetting
-                m.itemPoster.uri = itemData.thumbnailURL
-            else
+        if isValid(userSettings)
+            if userSettings["ui.general.episodeimagesnextup"] = "webclient"
+                tmpSetting = m.global.session.user.Configuration.useEpisodeImagesInNextUpAndResume
+                if isValid(tmpSetting) and tmpSetting
+                    m.itemPoster.uri = itemData.thumbnailURL
+                else
+                    m.itemPoster.uri = itemData.widePosterURL
+                end if
+            else if userSettings["ui.general.episodeimagesnextup"] = "show"
                 m.itemPoster.uri = itemData.widePosterURL
+            else if userSettings["ui.general.episodeimagesnextup"] = "episode"
+                m.itemPoster.uri = itemData.thumbnailURL
             end if
-        else if userSettings["ui.general.episodeimagesnextup"] = "show"
+        else
+            ' use show image if user settings are invalid for some reason
             m.itemPoster.uri = itemData.widePosterURL
-        else if userSettings["ui.general.episodeimagesnextup"] = "episode"
-            m.itemPoster.uri = itemData.thumbnailURL
         end if
 
         ' Set Series and Episode Number for Extra Text

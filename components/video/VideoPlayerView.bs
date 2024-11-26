@@ -34,7 +34,6 @@ sub init()
 
     m.playbackTimer = m.top.findNode("playbackTimer")
     m.bufferCheckTimer = m.top.findNode("bufferCheckTimer")
-    m.top.observeField("state", "onState")
     m.top.observeField("content", "onContentChange")
     m.top.observeField("selectedSubtitle", "onSubtitleChange")
     m.top.observeField("audioIndex", "onAudioIndexChange")
@@ -397,6 +396,8 @@ sub onVideoContentLoaded()
         return
     end if
 
+    m.top.observeField("state", "onState")
+
     m.top.content = videoContent[0].content
     m.top.PlaySessionId = videoContent[0].PlaySessionId
     m.top.videoId = videoContent[0].id
@@ -412,7 +413,7 @@ sub onVideoContentLoaded()
     m.osd.itemTitleText = m.top.content.title
 
     ' If video is an episode, attempt to add season and episode numbers to OSD
-    if m.top.content.contenttype = 4
+    if m.top.content.contenttype = 4 or m.top.content.live
         if isValid(videoContent[0].seasonNumber)
             m.osd.seasonNumber = videoContent[0].seasonNumber
         end if
@@ -438,13 +439,9 @@ sub onVideoContentLoaded()
 
     populateChapterMenu()
 
-    if m.LoadMetaDataTask.isIntro
-        ' Disable trackplay bar for intro videos
-        m.top.enableTrickPlay = false
-    else
-        ' Allow custom captions for non intro videos
-        m.top.allowCaptions = true
-    end if
+
+    ' Allow custom captions for all videos including intro videos
+    m.top.allowCaptions = true
 
     ' Allow default subtitles
     m.top.unobserveField("selectedSubtitle")
@@ -466,8 +463,8 @@ sub onVideoContentLoaded()
                     ' If IsForced, make sure to remember the Roku global setting so we
                     ' can set it back when the video is done playing.
                     m.originalClosedCaptionState = m.top.globalCaptionMode
-                    m.top.globalCaptionMode = "On"
                 end if
+                m.top.globalCaptionMode = "On"
                 m.top.subtitleTrack = m.top.availableSubtitleTracks[availableSubtitleTrackIndex].TrackName
             end if
         end if
@@ -639,6 +636,17 @@ sub onState(msg)
 
         if not m.playReported and m.top.transcodeAvailable
             m.top.retryWithTranscoding = true ' If playback was not reported, retry with transcoding
+        else if m.top.errorStr = "decoder:pump:Unsupported AAC stream."
+            m.log.info("retrying video with mp3 audio stream", m.currentItem.id, m.top.SelectedSubtitle, m.top.audioIndex)
+
+            m.top.unobserveField("state")
+            m.LoadMetaDataTask.forceMp3 = true
+            m.LoadMetaDataTask.selectedSubtitleIndex = m.top.SelectedSubtitle
+            m.LoadMetaDataTask.selectedAudioStreamIndex = m.top.audioIndex
+            m.LoadMetaDataTask.itemId = m.currentItem.id
+            m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
+
+            m.LoadMetaDataTask.control = "RUN"
         else
             ' If an error was encountered, Display dialog
             showPlaybackErrorDialog(tr("Error During Playback"))
@@ -825,62 +833,52 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
 
     if key = "down" and not m.top.trickPlayBar.visible
-        if not m.LoadMetaDataTask.isIntro
-            ' Don't allow user to open menu prior to video loading
-            if not stateAllowsOSD() then return true
+        ' Don't allow user to open menu prior to video loading
+        if not stateAllowsOSD() then return true
 
-            m.osd.visible = true
-            m.osd.hasFocus = true
-            m.osd.setFocus(true)
-            return true
-        end if
+        m.osd.visible = true
+        m.osd.hasFocus = true
+        m.osd.setFocus(true)
+        return true
 
     else if key = "up" and not m.top.trickPlayBar.visible
-        if not m.LoadMetaDataTask.isIntro
-            ' Don't allow user to open menu prior to video loading
-            if not stateAllowsOSD() then return true
+        ' Don't allow user to open menu prior to video loading
+        if not stateAllowsOSD() then return true
 
-            m.osd.visible = true
-            m.osd.hasFocus = true
-            m.osd.setFocus(true)
-            return true
-        end if
+        m.osd.visible = true
+        m.osd.hasFocus = true
+        m.osd.setFocus(true)
+        return true
 
     else if key = "OK" and not m.top.trickPlayBar.visible
-        if not m.LoadMetaDataTask.isIntro
-            ' Don't allow user to open menu prior to video loading
-            if not stateAllowsOSD() then return true
+        ' Don't allow user to open menu prior to video loading
+        if not stateAllowsOSD() then return true
 
-            ' Show OSD, but don't pause video
-            m.osd.visible = true
-            m.osd.hasFocus = true
-            m.osd.setFocus(true)
-            return true
-        end if
-
-        return false
+        ' Show OSD, but don't pause video
+        m.osd.visible = true
+        m.osd.hasFocus = true
+        m.osd.setFocus(true)
+        return true
     end if
 
     ' Disable OSD for intro videos
-    if not m.LoadMetaDataTask.isIntro
-        if key = "play" and not m.top.trickPlayBar.visible
+    if key = "play" and not m.top.trickPlayBar.visible
 
-            ' Don't allow user to open menu prior to video loading
-            if not stateAllowsOSD() then return true
+        ' Don't allow user to open menu prior to video loading
+        if not stateAllowsOSD() then return true
 
-            ' If video is paused, resume it and don't show OSD
-            if m.top.state = "paused"
-                m.top.control = "resume"
-                return true
-            end if
-
-            ' Pause video and show OSD
-            m.top.control = "pause"
-            m.osd.visible = true
-            m.osd.hasFocus = true
-            m.osd.setFocus(true)
+        ' If video is paused, resume it and don't show OSD
+        if m.top.state = "paused"
+            m.top.control = "resume"
             return true
         end if
+
+        ' Pause video and show OSD
+        m.top.control = "pause"
+        m.osd.visible = true
+        m.osd.hasFocus = true
+        m.osd.setFocus(true)
+        return true
     end if
 
     if key = "back"

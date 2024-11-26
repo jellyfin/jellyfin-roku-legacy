@@ -53,20 +53,30 @@ sub loadLibraries()
 end sub
 
 sub updateSize()
-    m.top.translation = [111, 180]
-    itemHeight = 330
+    uiRowLayout = m.global.session.user.settings["ui.row.layout"]
 
-    'Set width of Rows to cut off at edge of Safe Zone
-    m.top.itemSize = [1703, itemHeight]
+    if isValid(uiRowLayout)
+        if uiRowLayout = "fullwidth"
+            m.top.translation = [0, 180]
+            ' rows take up full width of the screen
+            m.top.itemSize = [1920, 330]
+            ' align with edge of "action" safe zone
+            m.top.focusXOffset = [96]
+            m.top.rowLabelOffset = [96, 20]
+        else
+            ' original layout
+            m.top.translation = [111, 180]
+            m.top.itemSize = [1703, 330]
+            ' reset to defaults
+            m.top.focusXOffset = []
+            m.top.rowLabelOffset = [0, 20]
+        end if
+    end if
 
     ' spacing between rows
     m.top.itemSpacing = [0, 105]
-
     ' spacing between items in a row
-    m.top.rowItemSpacing = [20, 0]
-
-    ' Default size to wide poster, the most used size
-    m.top.rowItemSize = homeRowItemSizes.WIDE_POSTER
+    m.top.rowItemSpacing = [21, 0]
 
     m.top.visible = true
 end sub
@@ -413,15 +423,6 @@ end sub
 ' createContinueWatchingRow: Creates a row displaying items the user can continue watching
 '
 sub createContinueWatchingRow()
-    sectionName = tr("Continue Watching")
-
-    if not sectionExists(sectionName)
-        nextUpRow = m.top.content.CreateChild("HomeRow")
-        nextUpRow.title = sectionName
-        nextUpRow.imageWidth = homeRowItemSizes.WIDE_POSTER[0]
-        nextUpRow.cursorSize = homeRowItemSizes.WIDE_POSTER
-    end if
-
     ' Load the Continue Watching Data
     m.LoadContinueWatchingTask.observeField("content", "updateContinueWatchingItems")
     m.LoadContinueWatchingTask.control = "RUN"
@@ -457,6 +458,8 @@ end sub
 sub updateHomeRows()
     ' Hide the row counter to prevent flicker. We'll show it once loading timer fires
     m.top.showRowCounter = [false]
+    m.top.visible = false
+    updateSize()
     processUserSections()
 end sub
 

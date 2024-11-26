@@ -1,7 +1,7 @@
 {
   "name": "jellyfin-roku",
   "type": "module",
-  "version": "2.2.2",
+  "version": "2.2.5",
   "description": "Roku app for Jellyfin media server",
   "dependencies": {
     "@rokucommunity/bslib": "0.1.1",
@@ -15,7 +15,7 @@
     "clean-jsdoc-theme": "4.3.0",
     "jsdoc": "4.0.4",
     "jshint": "2.13.6",
-    "markdownlint-cli2": "0.14.0",
+    "markdownlint-cli2": "0.15.0",
     "rimraf": "6.0.1",
     "roku-deploy": "3.12.2",
     "roku-log-bsc-plugin": "0.8.1",
