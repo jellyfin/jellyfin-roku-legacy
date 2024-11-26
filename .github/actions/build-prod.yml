@@ -1,0 +1,27 @@
+# Builds the production version of the app
+name: build-prod
+
+on:
+  workflow_call:
+
+jobs:
+  prod:
+    if: ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'release-prep') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
+        with:
+          node-version: "lts/*"
+          cache: "npm"
+      - name: NPM install
+        run: npm ci
+      - name: Install roku module dependencies
+        run: npm run ropm
+      - name: Build app for production
+        run: npm run build-prod
+      - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
+        with:
+          name: Jellyfin-Roku-v${{ env.newManVersion }}-${{ github.sha }}
+          path: ${{ github.workspace }}/build/staging
+          if-no-files-found: error

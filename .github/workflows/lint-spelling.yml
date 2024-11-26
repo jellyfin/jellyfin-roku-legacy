@@ -6,17 +6,4 @@ on:
 
 jobs:
   run:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Clone github repo
-        uses: actions/checkout@master
-      - uses: actions/setup-node@master
-        with:
-          node-version: "lts/*"
-          cache: "npm"
-      - name: Install npm dependencies
-        run: npm ci
-      - name: Install roku package dependencies
-        run: npx ropm install
-      - name: Check markdown files for spelling errors
-        run: npm run lint-spelling
+    uses: ./.github/actions/lint-spelling.yml

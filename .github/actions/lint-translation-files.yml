@@ -1,0 +1,24 @@
+name: lint-translation-files
+
+on:
+  workflow_call:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone github repo
+        uses: actions/checkout@master
+      - name: Install xmllint and xmlstarlet using apt (from cache)
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libxml2-utils xmlstarlet
+      - name: Validate XML syntax
+        run: xmllint --noout ./locale/en_US/translations.ts
+      - name: Save output of duplicate check
+        run: echo "tsDuplicates=$(xmlstarlet sel -t -m '/TS/context/message/source' -c '.' -nl ./locale/en_US/translations.ts | sort | uniq -d | awk '{ printf "%s", $0 }')" >> $GITHUB_ENV
+      - name: Check for duplicates
+        run: xmlstarlet sel -t -m '/TS/context/message/source' -f -o ' ' -c '.' -nl ./locale/en_US/translations.ts | sort | uniq -d
+      - name: Duplicates found
+        if: env.tsDuplicates != ''
+        run: exit 1

@@ -1,0 +1,22 @@
+name: lint-markdown
+
+on:
+  workflow_call:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone github repo
+        uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: "lts/*"
+          cache: "npm"
+      - name: Install npm dependencies
+        run: npm ci
+      - name: Install roku package dependencies
+        run: npx ropm install
+      - uses: xt0rted/markdownlint-problem-matcher@1a5fabfb577370cfdf5af944d418e4be3ea06f27 # v3
+      - name: Lint markdown files
+        run: npm run lint-markdown
