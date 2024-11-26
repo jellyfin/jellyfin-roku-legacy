@@ -1,0 +1,23 @@
+name: validate-dependencies
+
+on:
+  workflow_call:
+
+jobs:
+  lint-brightscript:
+    uses: ./.github/workflows/_lint-brightscript.yml
+  lint-json:
+    uses: ./.github/workflows/_lint-json.yml
+  lint-markdown:
+    uses: ./.github/workflows/_lint-markdown.yml
+  lint-spelling:
+    uses: ./.github/workflows/_lint-spelling.yml
+  lint-translation-files:
+    uses: ./.github/workflows/_lint-translation-files.yml
+  build-dev:
+    uses: ./.github/workflows/_build-dev.yml
+  build-prod:
+    uses: ./.github/workflows/_build-prod.yml
+  roku-analysis:
+    uses: ./.github/workflows/_roku-analysis.yml
+
