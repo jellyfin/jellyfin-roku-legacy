@@ -74,7 +74,7 @@ sub updateSize()
     ' spacing between rows
     m.top.itemSpacing = [0, 105]
     ' spacing between items in a row
-    m.top.rowItemSpacing = [21, 0]
+    m.top.rowItemSpacing = [30, 0]
 
     m.top.visible = true
 end sub
