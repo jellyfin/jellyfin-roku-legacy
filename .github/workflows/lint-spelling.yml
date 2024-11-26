@@ -6,4 +6,4 @@ on:
 
 jobs:
   run:
-    uses: ./.github/workflows/actions/lint-spelling.yml
+    uses: ./.github/workflows/_lint-spelling.yml

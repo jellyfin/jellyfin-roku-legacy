@@ -6,4 +6,4 @@ on:
 
 jobs:
   dev:
-    uses: ./.github/workflows/actions/build-dev.yml
+    uses: ./.github/workflows/_build-dev.yml

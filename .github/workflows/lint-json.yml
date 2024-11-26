@@ -7,4 +7,4 @@ on:
 
 jobs:
   run:
-    uses: ./.github/workflows/actions/lint-json.yml
+    uses: ./.github/workflows/_lint-json.yml

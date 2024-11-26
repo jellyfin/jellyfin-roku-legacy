@@ -6,4 +6,4 @@ on:
 
 jobs:
   run:
-    uses: ./.github/workflows/actions/lint-translation-files.yml
+    uses: ./.github/workflows/_lint-translation-files.yml

@@ -7,4 +7,4 @@ on:
 
 jobs:
   run:
-    uses: ./.github/workflows/actions/lint-brightscript.yml
+    uses: ./.github/workflows/_lint-brightscript.yml

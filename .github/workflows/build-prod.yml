@@ -9,4 +9,4 @@ on:
 
 jobs:
   prod:
-    uses: ./.github/workflows/actions/build-prod.yml
+    uses: ./.github/workflows/_build-prod.yml
