@@ -7,26 +7,26 @@ on:
 jobs:
   lint-brightscript:
     if: contains(github.event.pull_request.labels.*.name, 'dependencies')
-    uses: ./.github/actions/lint-brightscript.yml
+    uses: ./.github/workflows/actions/lint-brightscript.yml
   lint-json:
     if: contains(github.event.pull_request.labels.*.name, 'dependencies')
-    uses: ./.github/actions/lint-json.yml
+    uses: ./.github/workflows/actions/lint-json.yml
   lint-markdown:
     if: contains(github.event.pull_request.labels.*.name, 'dependencies')
-    uses: ./.github/actions/lint-markdown.yml
+    uses: ./.github/workflows/actions/lint-markdown.yml
   lint-spelling:
     if: contains(github.event.pull_request.labels.*.name, 'dependencies')
-    uses: ./.github/actions/lint-spelling.yml
+    uses: ./.github/workflows/actions/lint-spelling.yml
   lint-translation-files:
     if: contains(github.event.pull_request.labels.*.name, 'dependencies')
-    uses: ./.github/actions/lint-translation-files.yml
+    uses: ./.github/workflows/actions/lint-translation-files.yml
   build-dev:
     if: contains(github.event.pull_request.labels.*.name, 'dependencies')
-    uses: ./.github/actions/build-dev.yml
+    uses: ./.github/workflows/actions/build-dev.yml
   build-prod:
     if: contains(github.event.pull_request.labels.*.name, 'dependencies')
-    uses: ./.github/actions/build-prod.yml
+    uses: ./.github/workflows/actions/build-prod.yml
   roku-analysis:
     if: contains(github.event.pull_request.labels.*.name, 'dependencies')
-    uses: ./.github/actions/roku-analysis.yml
+    uses: ./.github/workflows/actions/roku-analysis.yml
 

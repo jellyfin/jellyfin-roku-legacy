@@ -6,4 +6,4 @@ on:
 
 jobs:
   run:
-    uses: ./.github/actions/lint-markdown.yml
+    uses: ./.github/workflows/actions/lint-markdown.yml

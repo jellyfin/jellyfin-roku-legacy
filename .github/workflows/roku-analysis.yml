@@ -8,4 +8,4 @@ env:
 
 jobs:
   static:
-    uses: ./.github/actions/roku-analysis.yml
+    uses: ./.github/workflows/actions/roku-analysis.yml
