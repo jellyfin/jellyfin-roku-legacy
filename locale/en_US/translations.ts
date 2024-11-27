@@ -1401,5 +1401,9 @@
             <translation>CH</translation>
             <extracomment>Abbreviation for Channel</extracomment>
         </message>
+        <message>
+            <source>Folders</source>
+            <translation>Folders</translation>
+        </message>
     </context>
 </TS>
