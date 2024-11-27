@@ -192,6 +192,22 @@
         <source>Save Credentials?</source>
         <translation>¿Guardar Credenciales?</translation>
     </message>
+    <message>
+        <source>Episodes</source>
+        <translation>Episodios</translation>
+    </message>
+    <message>
+        <source>Extras</source>
+        <translation>Extras</translation>
+    </message>
+    <message>
+        <source>Error Retrieving Content</source>
+        <translation>Error al acceder al contenido</translation>
+    </message>
+    <message>
+        <source>Error During Playback</source>
+        <translation>Error al reproducir</translation>
+    </message>
 </context>
 <context>
     <name></name>
