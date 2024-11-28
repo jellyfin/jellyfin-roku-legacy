@@ -127,6 +127,12 @@ function getSavedUsers() as object
             userArray["serverId"] = serverId
         end if
 
+        primaryImageTag = registry_read("primaryimagetag", userId)
+        if primaryImageTag <> invalid
+            print "Found Saved Primary Image Tag: ", primaryImageTag, " for user: ", userId
+            userArray["primaryImageTag"] = primaryImageTag
+        end if
+
         if username <> invalid and token <> invalid and serverId <> invalid and serverId = m.global.session.server.id
             savedServerUsers.push(userArray)
         end if
