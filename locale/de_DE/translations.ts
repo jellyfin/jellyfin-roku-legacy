@@ -1386,6 +1386,30 @@
         <source>Both</source>
         <translation>Beide</translation>
     </message>
+    <message>
+        <source>Original</source>
+        <translation>Original</translation>
+    </message>
+    <message>
+        <source>Full Width</source>
+        <translation>Volle Breite</translation>
+    </message>
+    <message>
+        <source>Choose how rows are displayed on the home screen.</source>
+        <translation>Wähle aus wie Reihen auf dem Startbildschirm angezeigt werden.</translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation>N/A</translation>
+    </message>
+    <message>
+        <source>Row Layout</source>
+        <translation>Reihen Layout</translation>
+    </message>
+    <message>
+        <source>CH</source>
+        <translation>CH</translation>
+    </message>
 </context>
 <context>
     <name></name>
