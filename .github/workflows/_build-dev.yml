@@ -1,0 +1,27 @@
+name: build-dev
+
+on:
+  workflow_call:
+
+jobs:
+  dev:
+    # prevent job from running twice when a PR pushes a new commit
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
+        with:
+          node-version: "lts/*"
+          cache: "npm"
+      - name: NPM install
+        run: npm ci
+      - name: Install roku module dependencies
+        run: npm run ropm
+      - name: Build app
+        run: npm run build
+      - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
+        with:
+          name: Jellyfin-Roku-dev-${{ github.sha }}
+          path: ${{ github.workspace }}/build/staging
+          if-no-files-found: error

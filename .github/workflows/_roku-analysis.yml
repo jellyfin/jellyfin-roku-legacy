@@ -1,0 +1,40 @@
+name: roku-analysis
+
+on:
+  workflow_call:
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  static:
+    # don't run job on forks and prevent job from running twice when a PR pushes a new commit
+    if: github.repository == 'jellyfin/jellyfin-roku' && github.event_name != 'pull_request' || github.repository == 'jellyfin/jellyfin-roku' && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
+        with:
+          node-version: "lts/*"
+          cache: "npm"
+      - name: NPM install
+        run: npm ci
+      - name: Install roku module dependencies
+        run: npm run ropm
+      - name: Build dev app
+        if: env.BRANCH_NAME != 'master'
+        run: npm run build
+      - name: Build app for production
+        if: env.BRANCH_NAME == 'master'
+        run: npm run build-prod
+      - name: Setup Java
+        uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+      - name: Download the Static Channel Analysis CLI
+        run: |
+          curl -sSL "https://devtools.web.roku.com/static-channel-analysis/sca-cmd.zip" -o sca-cmd.zip
+          unzip sca-cmd.zip
+      - name: Run Roku Static Analysis
+        run: ./sca-cmd/bin/sca-cmd ${{ github.workspace }}/build/staging --exit error
