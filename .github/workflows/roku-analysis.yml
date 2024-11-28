@@ -3,9 +3,6 @@ name: roku-analysis
 on:
   pull_request:
 
-env:
-  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-
 jobs:
   static:
     uses: ./.github/workflows/_roku-analysis.yml

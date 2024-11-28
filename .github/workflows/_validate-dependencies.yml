@@ -14,8 +14,6 @@ jobs:
     uses: ./.github/workflows/_lint-spelling.yml
   lint-translation-files:
     uses: ./.github/workflows/_lint-translation-files.yml
-  build-dev:
-    uses: ./.github/workflows/_build-dev.yml
   build-prod:
     uses: ./.github/workflows/_build-prod.yml
   roku-analysis:
