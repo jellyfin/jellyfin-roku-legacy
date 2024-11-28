@@ -9,7 +9,7 @@ env:
 jobs:
   static:
     # don't run job on forks and prevent job from running twice when a PR pushes a new commit
-    if: github.repository == 'jellyfin/jellyfin-roku' && github.event_name != 'pull_request' || github.repository == 'jellyfin/jellyfin-roku' && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+    if: github.repository == 'jellyfin/jellyfin-roku' && github.event_name != 'pull_request' || github.repository == 'jellyfin/jellyfin-roku' && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name || contains(github.event.pull_request.labels.*.name, 'dependencies')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
