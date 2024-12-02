@@ -1378,6 +1378,18 @@
         <source>Both</source>
         <translation>Les deux</translation>
     </message>
+    <message>
+        <source>Choose how rows are displayed on the home screen.</source>
+        <translation>Choisissez comment les lignes sont affichées sur l&apos;écran d&apos;accueil.</translation>
+    </message>
+    <message>
+        <source>Original</source>
+        <translation>Original</translation>
+    </message>
+    <message>
+        <source>Full Width</source>
+        <translation>Largeur maximale</translation>
+    </message>
 </context>
 <context>
     <name></name>
