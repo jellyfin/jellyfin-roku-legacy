@@ -1401,6 +1401,26 @@
         <source>Both</source>
         <translation>Ambos</translation>
     </message>
+    <message>
+        <source>Original</source>
+        <translation>Original</translation>
+    </message>
+    <message>
+        <source>Row Layout</source>
+        <translation>Layout de Linha</translation>
+    </message>
+    <message>
+        <source>Choose how rows are displayed on the home screen.</source>
+        <translation>Escolhe como as linhas são mostradas na tela inicial.</translation>
+    </message>
+    <message>
+        <source>Full Width</source>
+        <translation>Largura Total</translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation>N/A</translation>
+    </message>
 </context>
 <context>
     <name></name>
