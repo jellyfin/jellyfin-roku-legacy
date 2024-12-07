@@ -1040,7 +1040,7 @@
     </message>
     <message>
         <source>Album</source>
-        <translation type="unfinished">Album</translation>
+        <translation>Album</translation>
     </message>
     <message>
         <source>Album Artists (Grid)</source>
@@ -1069,6 +1069,66 @@
     <message>
         <source>Grid View Settings</source>
         <translation>Paramètres de la vue Grille</translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation>N/A</translation>
+    </message>
+    <message>
+        <source>Grid</source>
+        <translation>Grille</translation>
+    </message>
+    <message>
+        <source>Loading trailer</source>
+        <translation>Chargement de la bande annonce</translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation>Valeur</translation>
+    </message>
+    <message>
+        <source>Presentation</source>
+        <translation>Présentation</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Mode</translation>
+    </message>
+    <message>
+        <source>Play Next Episode Automatically</source>
+        <translation>Lire l&apos;épisode suivant automatiquement</translation>
+    </message>
+    <message>
+        <source>Compatibility</source>
+        <translation>Compatibilité</translation>
+    </message>
+    <message>
+        <source>Original</source>
+        <translation>Original</translation>
+    </message>
+    <message>
+        <source>Remember Me?</source>
+        <translation>Se souvenir de moi?</translation>
+    </message>
+    <message>
+        <source>Random</source>
+        <translation>Aléatoire</translation>
+    </message>
+    <message>
+        <source>Special</source>
+        <translation>Spécial</translation>
+    </message>
+    <message>
+        <source>Maximum Resolution</source>
+        <translation>Résolution maximale</translation>
+    </message>
+    <message>
+        <source>Direct playing</source>
+        <translation>Lecture directe</translation>
+    </message>
+    <message>
+        <source>The source file is entirely compatible with this client and the session is receiving the file without modifications.</source>
+        <translation>Le fichier source est entièrement compatible avec ce client et la session reçoit le fichier sans modifications.</translation>
     </message>
 </context>
 <context>
