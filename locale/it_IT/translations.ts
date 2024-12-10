@@ -1298,6 +1298,10 @@
         <translation>Voti della Community e della Critica</translation>
         <extracomment>User Setting - Setting title</extracomment>
     </message>
+    <message>
+        <source>View All Next Up</source>
+        <translation>Guarda tutti i successivi</translation>
+    </message>
 </context>
 <context>
     <name></name>
