@@ -344,11 +344,17 @@ sub onAudioIndexChange()
     ' Save the current video position
     m.global.queueManager.callFunc("setTopStartingPoint", int(m.top.position) * 10000000&)
 
-    m.top.control = "stop"
+    ' Ensure metadata task is stopped before reusing
+    if m.LoadMetaDataTask.control = "RUN"
+        m.LoadMetaDataTask.control = "STOP"
+    end if
 
+    ' Configure metadata task with updated audio index
     m.LoadMetaDataTask.selectedSubtitleIndex = m.top.SelectedSubtitle
     m.LoadMetaDataTask.selectedAudioStreamIndex = m.top.audioIndex
     m.LoadMetaDataTask.itemId = m.currentItem.id
+
+    ' Observe content and start task
     m.LoadMetaDataTask.observeField("content", "onVideoContentLoaded")
     m.LoadMetaDataTask.control = "RUN"
 end sub
