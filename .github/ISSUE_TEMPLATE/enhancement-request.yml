@@ -3,6 +3,18 @@ description: Suggest a modification to an existing feature
 labels: enhancement
 
 body:
+  - type: checkboxes
+    id: before-posting
+    attributes:
+      label: "This request respects the following points:"
+      description: All conditions are **required**.
+      options:
+        - label: This request is **not** already on [GitHub](https://github.com/jellyfin/jellyfin-roku/labels/enhancement) _(I've searched it)_.
+          required: true
+        - label: I agree to follow Jellyfin's [Code of Conduct](https://jellyfin.org/docs/general/community-standards.html#code-of-conduct).
+          required: true
+
+
   - type: textarea
     attributes:
       label: Problem Description
