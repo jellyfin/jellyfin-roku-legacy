@@ -1,5 +1,5 @@
 ---
-name: Feature request
+name: Feature request [legacy]
 about: Suggest a new feature
 title: ''
 labels: feature
