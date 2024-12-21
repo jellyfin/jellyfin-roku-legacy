@@ -1,0 +1,39 @@
+name: Feature Request
+description: Suggest a new feature
+labels: feature
+
+body:
+  - type: checkboxes
+    id: before-posting
+    attributes:
+      label: "This request respects the following points:"
+      description: All conditions are **required**.
+      options:
+        - label: This request is **not** already on [GitHub](https://github.com/jellyfin/jellyfin-roku/labels/enhancement) _(I've searched it)_.
+          required: true
+        - label: I agree to follow Jellyfin's [Code of Conduct](https://jellyfin.org/docs/general/community-standards.html#code-of-conduct).
+          required: true
+
+  - type: textarea
+    attributes:
+      label: Describe the feature you would like
+      description: Provide a clear and concise description of the feature you want to see implemented.
+    validations:
+      required: true
+    
+  - type: textarea
+    id: why-needed
+    attributes:
+      label: Why is this feature needed?
+      description: Explain why this feature would be beneficial and how it improves the project.
+      placeholder: "Describe why this feature would be useful."
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Additional Context
+      description: Add any additional context, resources, or screenshots that might help understand or implement the feature.
+      placeholder: Add any additional context or relevant details here.
+    validations:
+      required: false
