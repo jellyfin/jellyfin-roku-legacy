@@ -1,5 +1,5 @@
 ---
-name: Enhancement request
+name: Enhancement request [legacy]
 about: Suggest a modification to an existing feature
 title: ''
 labels: enhancement

@@ -1,0 +1,48 @@
+name: Enhancement request
+description: Suggest a modification to an existing feature
+labels: enhancement
+
+body:
+  - type: checkboxes
+    id: before-posting
+    attributes:
+      label: "This request respects the following points:"
+      description: All conditions are **required**.
+      options:
+        - label: This request is **not** already on [GitHub](https://github.com/jellyfin/jellyfin-roku/labels/enhancement) _(I've searched it)_.
+          required: true
+        - label: I agree to follow Jellyfin's [Code of Conduct](https://jellyfin.org/docs/general/community-standards.html#code-of-conduct).
+          required: true
+
+
+  - type: textarea
+    attributes:
+      label: Problem Description
+      description: Describe the issue you are experiencing or the gap you are trying to address.
+      placeholder: I often encounter issues when...
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Proposed Solution
+      description: Provide a detailed description of what you would like to see implemented or changed.
+      placeholder: Describe the feature or change in detail.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Alternatives Considered
+      description: Outline any other approaches you have thought about or explored to solve the problem.
+      placeholder: Describe any alternative solutions or features.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional Information
+      description: Include any relevant details, resources, or screenshots that might help in understanding or implementing the request.
+      placeholder: Add any additional context here.
+    validations:
+      required: false
