@@ -588,6 +588,26 @@
         <translation>Hiba a lejátszási információk lekérésekor</translation>
         <extracomment>Dialog Title: Received error from server when trying to get information about the selected item for playback</extracomment>
     </message>
+    <message>
+        <source>Codec Support</source>
+        <translation>Támogatott kódolások</translation>
+    </message>
+    <message>
+        <source>Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.</source>
+        <translation>Támogatja az MPEG-2 tartalom közvetlen lejátszását (például élő tévéadás). Ez megakadályozza az MPEG-2 tartalom átkódolását, de lényegesen nagyobb sávszélességet használ.</translation>
+    </message>
+    <message>
+        <source>MPEG-2</source>
+        <translation>MPEG-2</translation>
+    </message>
+    <message>
+        <source>MPEG-4</source>
+        <translation>MPEG-4</translation>
+    </message>
+    <message>
+        <source>Enable or disable Direct Play for optional codecs</source>
+        <translation>A Direct Play engedélyezése vagy letiltása a választható kódolókhoz</translation>
+    </message>
 </context>
 <context>
     <name></name>
