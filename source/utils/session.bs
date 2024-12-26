@@ -155,12 +155,19 @@ namespace session
             if userData.json = invalid
                 ' we were passed data from AboutMe()
                 myAuthToken = tmpSession.user.authToken
+                myPrimaryImageTag = tmpSession.user.primaryImageTag
                 tmpSession.AddReplace("user", userData)
                 tmpSession.user.AddReplace("authToken", myAuthToken)
+                if isValid(myPrimaryImageTag)
+                    tmpSession.user.AddReplace("primaryImageTag", myPrimaryImageTag)
+                end if
             else
                 ' we were passed data from a UserData object
                 tmpSession.AddReplace("user", userData.json.User)
                 tmpSession.user.AddReplace("authToken", userData.json.AccessToken)
+                if isValid(userData.json.user.PrimaryImageTag)
+                    tmpSession.user.AddReplace("primaryImageTag", userData.json.user.PrimaryImageTag)
+                end if
             end if
             ' remove special characters from name
             regex = CreateObject("roRegex", "[^a-zA-Z0-9\ \-\_]", "")
@@ -191,6 +198,9 @@ namespace session
             if saveCredentials
                 set_user_setting("token", tmpSession.user.authToken)
                 set_user_setting("username", tmpSession.user.name)
+                if isValid(tmpSession.user.primaryImageTag)
+                    set_user_setting("primaryimagetag", tmpSession.user.primaryImageTag)
+                end if
             end if
 
             if m.global.session.user.settings["global.rememberme"]
