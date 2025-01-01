@@ -4,7 +4,7 @@
     <Poster uri="pkg:/images/osdBackground.png" width="1920" height="279" />
 
     <LayoutGroup id="videoInfo" layoutDirection="vert" translation="[103,61]">
-      <ScrollingLabel id="itemTitle" font="font:LargeBoldSystemFont" maxWidth="1400" />
+      <jfScrollingLabel id="itemTitle" font="font:LargeBoldSystemFont" maxWidth="1400" />
       <LayoutGroup id="videoInfo" layoutDirection="horiz" translation="[103,61]">
         <Label id="itemSeason" font="font:MediumSystemFont" color="0xffffffFF" />
         <Label id="itemEpisode" font="font:MediumSystemFont" color="0xffffffFF" />
