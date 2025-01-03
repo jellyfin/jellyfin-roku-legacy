@@ -1324,6 +1324,78 @@
         <source>Use Show Image</source>
         <translation>Použít obrázek seriálu</translation>
     </message>
+    <message>
+        <source>Row Layout</source>
+        <translation>Vzhled řádku</translation>
+    </message>
+    <message>
+        <source>Original</source>
+        <translation>Původní</translation>
+    </message>
+    <message>
+        <source>This controls what clicking OK on a Next Up episode does.</source>
+        <translation>Tato volba určuje, co se stane po kliknutí na OK v dialogu Další díly.</translation>
+    </message>
+    <message>
+        <source>How is remaining time represented. Remaining time shows hours, minutes, and seconds remaining. Time of day shows what time the video will complete.</source>
+        <translation>Znázornění zbývajícího času. Zbývající čas ukazuje hodiny, minuty a sekundy, které zbývají. Denní čas ukazuje, v kolik hodin bude dokončeno přehrání videa.</translation>
+    </message>
+    <message>
+        <source>Choose how rows are displayed on the home screen.</source>
+        <translation>Vyber způsob zobrazení řádků na domovské obrazovce.</translation>
+    </message>
+    <message>
+        <source>Full Width</source>
+        <translation>Plná šířka</translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation>Není k dispozici</translation>
+    </message>
+    <message>
+        <source>CH</source>
+        <translation>K</translation>
+    </message>
+    <message>
+        <source>Play Next Episode Automatically</source>
+        <translation>Automaticky přehrát další díl</translation>
+    </message>
+    <message>
+        <source>When finished playing a single episode, play the next one automatically.</source>
+        <translation>Jakmile skončí přehrávání jedné epizody, přehrát automaticky další.</translation>
+    </message>
+    <message>
+        <source>Special</source>
+        <translation>Speciál</translation>
+    </message>
+    <message>
+        <source>Episode Next Up Behavior</source>
+        <translation>Chování pro další epizodu</translation>
+    </message>
+    <message>
+        <source>View Episode Details</source>
+        <translation>Zobrazit podrobnosti epizody</translation>
+    </message>
+    <message>
+        <source>View Season Details</source>
+        <translation>Zobrazit podrobnosti série</translation>
+    </message>
+    <message>
+        <source>OSD Remaining Time</source>
+        <translation>Zbývající čas v OSD</translation>
+    </message>
+    <message>
+        <source>Remaining Time</source>
+        <translation>Zbývající čas</translation>
+    </message>
+    <message>
+        <source>Time of Day</source>
+        <translation>Denní čas</translation>
+    </message>
+    <message>
+        <source>Both</source>
+        <translation>Obojí</translation>
+    </message>
 </context>
 <context>
     <name></name>
