@@ -77,6 +77,10 @@ function LoginFlow()
                                 user.name = savedUser.username
                             end if
 
+                            if isValid(savedUser.primaryImageTag)
+                                user.ImageURL = UserImageURL(user.id, { "tag": savedUser.primaryImageTag })
+                            end if
+
                             publicUsersNodes.push(user)
                         end if
                     end if
@@ -103,6 +107,7 @@ function LoginFlow()
                 end for
                 ' try to login with token from registry
                 myToken = get_user_setting("token")
+                myPrimaryImageTag = get_user_setting("primaryimagetag")
                 if myToken <> invalid
                     ' check if token is valid
                     print "Auth token found in registry for selected user"
@@ -113,6 +118,9 @@ function LoginFlow()
                         print "Auth token is no longer valid - deleting token"
                         unset_user_setting("token")
                         unset_user_setting("username")
+                        if isValid(myPrimaryImageTag)
+                            unset_user_setting("primaryimagetag")
+                        end if
                     else
                         print "Success! Auth token is still valid"
                         session.user.Login(currentUser, true)
@@ -155,10 +163,14 @@ function LoginFlow()
 
         myUsername = get_user_setting("username")
         myAuthToken = get_user_setting("token")
+        myPrimaryImageTag = get_user_setting("primaryimagetag")
         if isValid(myAuthToken) and isValid(myUsername)
             print "Auth token found in registry"
             session.user.Update("authToken", myAuthToken)
             session.user.Update("name", myUsername)
+            if isValid(myPrimaryImageTag)
+                session.user.Update("primaryImageTag", myPrimaryImageTag)
+            end if
 
             print "Attempting to use API with auth token"
             currentUser = AboutMe()
@@ -177,6 +189,9 @@ function LoginFlow()
                     print "delete token and restart login flow"
                     unset_user_setting("token")
                     unset_user_setting("username")
+                    if isValid(myPrimaryImageTag)
+                        unset_user_setting("primaryimagetag")
+                    end if
                     goto start_login
                 end if
             else
@@ -484,6 +499,9 @@ function CreateSigninGroup(user = "")
                         session.user.Login(activeUser, true)
                         set_user_setting("token", activeUser.token)
                         set_user_setting("username", username.value)
+                        if isValid(activeUser.json.PrimaryImageTag)
+                            set_user_setting("primaryimagetag", activeUser.json.PrimaryImageTag)
+                        end if
                     else
                         session.user.Login(activeUser)
                     end if

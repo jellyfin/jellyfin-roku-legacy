@@ -1398,6 +1398,10 @@
         <source>Direct playing</source>
         <translation>Reprodución directa</translation>
     </message>
+    <message>
+        <source>Play Next Episode Automatically</source>
+        <translation>Reproducir Siguiente Episodio Automáticamente</translation>
+    </message>
 </context>
 <context>
     <name></name>

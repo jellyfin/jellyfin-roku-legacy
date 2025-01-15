@@ -1,13 +1,12 @@
-name: build-dev
+# Builds the production version of the app
+name: build-prod
 
 on:
-  pull_request:
-  push:
+  workflow_call:
 
 jobs:
-  dev:
-    # prevent job from running twice when a PR pushes a new commit
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+  prod:
+    if: ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'dependencies') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -19,10 +18,10 @@ jobs:
         run: npm ci
       - name: Install roku module dependencies
         run: npm run ropm
-      - name: Build app
-        run: npm run build
+      - name: Build app for production
+        run: npm run build-prod
       - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
         with:
-          name: Jellyfin-Roku-dev-${{ github.sha }}
+          name: Jellyfin-Roku-v${{ env.newManVersion }}-${{ github.sha }}
           path: ${{ github.workspace }}/build/staging
           if-no-files-found: error

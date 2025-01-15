@@ -1348,7 +1348,7 @@
     </message>
     <message>
         <source>Episode Next Up Behavior</source>
-        <translation type="unfinished">Comportement du prochain épisode</translation>
+        <translation>Comportement du prochain épisode</translation>
     </message>
     <message>
         <source>This controls what clicking OK on a Next Up episode does.</source>
@@ -1364,7 +1364,7 @@
     </message>
     <message>
         <source>OSD Remaining Time</source>
-        <translation type="unfinished">Affichage à l&apos;écran du temps restant</translation>
+        <translation>Affichage à l&apos;écran du temps restant</translation>
     </message>
     <message>
         <source>Remaining Time</source>
@@ -1377,6 +1377,30 @@
     <message>
         <source>Both</source>
         <translation>Les deux</translation>
+    </message>
+    <message>
+        <source>Choose how rows are displayed on the home screen.</source>
+        <translation>Choisissez comment les lignes sont affichées sur l&apos;écran d&apos;accueil.</translation>
+    </message>
+    <message>
+        <source>Original</source>
+        <translation>Original</translation>
+    </message>
+    <message>
+        <source>Full Width</source>
+        <translation>Largeur maximale</translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation>N/A</translation>
+    </message>
+    <message>
+        <source>Row Layout</source>
+        <translation>Disposition de la colonne</translation>
+    </message>
+    <message>
+        <source>CH</source>
+        <translation>CH</translation>
     </message>
 </context>
 <context>

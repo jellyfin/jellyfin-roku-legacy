@@ -5,22 +5,22 @@
   "description": "Roku app for Jellyfin media server",
   "dependencies": {
     "@rokucommunity/bslib": "0.1.1",
-    "brighterscript-formatter": "1.7.6",
+    "brighterscript-formatter": "1.7.8",
     "log": "npm:roku-log@0.11.1"
   },
   "devDependencies": {
-    "@rokucommunity/bslint": "0.8.26",
-    "brighterscript": "0.67.8",
+    "@rokucommunity/bslint": "0.8.28",
+    "brighterscript": "0.68.3",
     "brighterscript-jsdocs-plugin": "0.7.3",
     "clean-jsdoc-theme": "4.3.0",
     "jsdoc": "4.0.4",
     "jshint": "2.13.6",
-    "markdownlint-cli2": "0.15.0",
+    "markdownlint-cli2": "0.17.1",
     "rimraf": "6.0.1",
-    "roku-deploy": "3.12.2",
+    "roku-deploy": "3.12.3",
     "roku-log-bsc-plugin": "0.8.1",
     "rooibos-roku": "5.14.0",
-    "ropm": "0.10.27",
+    "ropm": "0.10.30",
     "spellchecker-cli": "7.0.0",
     "undent": "0.1.0"
   },

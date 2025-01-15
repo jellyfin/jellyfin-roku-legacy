@@ -44,9 +44,9 @@ cd jellyfin-roku
 
 ## Install Dependencies
 
-You'll need [`npm`](https://nodejs.org), version 16 at least.
+You'll need [`node`](https://nodejs.org), version 16 at least.
 
-Then, use it to install dependencies
+Then, use `npm` to install dependencies
 
 ```bash
 npm install

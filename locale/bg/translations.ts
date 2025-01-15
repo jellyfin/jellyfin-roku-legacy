@@ -58,7 +58,7 @@
     </message>
     <message>
         <source>Server not found, is it online?</source>
-        <translation>Сървърът не е намерен.Сигурни ли сте ,че е активен?</translation>
+        <translation>Сървърът не е намерен. Сигурни ли сте, че е активен?</translation>
     </message>
     <message>
         <source>Shuffle</source>
@@ -211,6 +211,323 @@
     <message>
         <source>Unable to load Channel Data from the server</source>
         <translation>Не е възможно зареждането на информацията за каналите от сървъра</translation>
+    </message>
+    <message>
+        <source>Additional Parts</source>
+        <translation>Допълнителни части</translation>
+    </message>
+    <message>
+        <source>DATE_PLAYED</source>
+        <translation>Дата на възпроизвеждане</translation>
+    </message>
+    <message>
+        <source>Movies (Presentation)</source>
+        <translation>Филми (Презентация)</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Сряда</translation>
+    </message>
+    <message>
+        <source>Started at</source>
+        <translation>Пуснато от</translation>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation>Пуснато</translation>
+    </message>
+    <message>
+        <source>Cancel Series Recording</source>
+        <translation>Откажи записа на сериал</translation>
+    </message>
+    <message>
+        <source>Ends at</source>
+        <translation>Приключва в</translation>
+    </message>
+    <message>
+        <source>User Interface</source>
+        <translation>Потребителски Интерфейс</translation>
+    </message>
+    <message>
+        <source>TV Guide</source>
+        <translation>ТВ Справочник</translation>
+    </message>
+    <message>
+        <source>...or enter server URL manually:</source>
+        <translation>Или въведете адреса ръчно:</translation>
+    </message>
+    <message>
+        <source>Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.</source>
+        <translation>Поддържане на директно възпроизвеждане на MPEG-2 съдържание (напр. телевизия на живо). Това ще предотврати прекодирането на MPEG-2 съдържание, но използва значително повече данни.</translation>
+    </message>
+    <message>
+        <source>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</source>
+        <translation>Поддръжане на директно възпроизвеждане на MPEG-4 съдържание. Може да трябва да се изключи за възпроизвеждане на файлове с DIVX кодиране.</translation>
+    </message>
+    <message>
+        <source>OFFICIAL_RATING</source>
+        <translation>Родителски контрол</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to sort library content</comment>
+        <source>TAB_SORT</source>
+        <translation>Подреди</translation>
+    </message>
+    <message>
+        <source>TV Shows</source>
+        <translation>Сериали</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Четвъртък</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>Петък</translation>
+    </message>
+    <message>
+        <source>Starts at</source>
+        <translation>Започва в</translation>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation>Повтори</translation>
+    </message>
+    <message>
+        <source>Enable or disable Direct Play for optional codecs</source>
+        <translation>Включване или изключване на Директно възпроизвеждане за опционални кодеци</translation>
+    </message>
+    <message>
+        <source>Media Grid options.</source>
+        <translation>Опции на Медийна решетка.</translation>
+    </message>
+    <message>
+        <source>Press &apos;OK&apos; to Close</source>
+        <translation>Натиснете &apos;ОК&apos; за да затворите</translation>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>Този %1 не съдържа артикули</translation>
+    </message>
+    <message>
+        <source>More Like This</source>
+        <translation>Подобни на тези</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Име</translation>
+    </message>
+    <message>
+        <source>DATE_ADDED</source>
+        <translation>Дата на добавяне</translation>
+    </message>
+    <message>
+        <source>Died</source>
+        <translation>Починал</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Запази идентификация?</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Изтрий запазените</translation>
+    </message>
+    <message>
+        <source>Cast &amp; Crew</source>
+        <translation>Актьорски състав</translation>
+    </message>
+    <message>
+        <source>Special Features</source>
+        <translation>Специални функций</translation>
+    </message>
+    <message>
+        <source>Movies (Grid)</source>
+        <translation>Филми (Решетка)</translation>
+    </message>
+    <message>
+        <source>today</source>
+        <translation>днес</translation>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation>утре</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Неделя</translation>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation>Понеделник</translation>
+    </message>
+    <message>
+        <source>Episodes</source>
+        <translation>Епизоди</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for switching &quot;views&quot; when looking at a library</comment>
+        <source>TAB_VIEW</source>
+        <translation>Изглед</translation>
+    </message>
+    <message>
+        <source>RUNTIME</source>
+        <translation>Времетраене</translation>
+    </message>
+    <message>
+        <source>yesterday</source>
+        <translation>вчера</translation>
+    </message>
+    <message>
+        <source>Born</source>
+        <translation>Роден</translation>
+    </message>
+    <message>
+        <source>RELEASE_DATE</source>
+        <translation>Дата на издаване</translation>
+    </message>
+    <message>
+        <source>PLAY_COUNT</source>
+        <translation>Брой пускания</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Събота</translation>
+    </message>
+    <message>
+        <source>Starts</source>
+        <translation>Започва</translation>
+    </message>
+    <message>
+        <source>Live</source>
+        <translation>На живо</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation>Канали</translation>
+    </message>
+    <message>
+        <source>Codec Support</source>
+        <translation>Поддръжка на кодеци</translation>
+    </message>
+    <message>
+        <source>MPEG-2</source>
+        <translation>MPEG-2</translation>
+    </message>
+    <message>
+        <source>MPEG-4</source>
+        <translation>MPEG-4</translation>
+    </message>
+    <message>
+        <source>Media Grid</source>
+        <translation>Медийна решетка</translation>
+    </message>
+    <message>
+        <source>Item Count</source>
+        <translation>Преброени елементи</translation>
+    </message>
+    <message>
+        <source>Extras</source>
+        <translation>Екстри</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>IMDb Рейтинг</translation>
+    </message>
+    <message>
+        <comment>Title of Tab for options to filter library content</comment>
+        <source>TAB_FILTER</source>
+        <translation>Филтър</translation>
+    </message>
+    <message>
+        <source>Age</source>
+        <translation>Възраст</translation>
+    </message>
+    <message>
+        <source>Movies</source>
+        <translation>Филми</translation>
+    </message>
+    <message>
+        <source>Ended at</source>
+        <translation>Приключило в</translation>
+    </message>
+    <message>
+        <source>View Channel</source>
+        <translation>Виж канал</translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation>Запиши</translation>
+    </message>
+    <message>
+        <source>Record Series</source>
+        <translation>Запиши сериал</translation>
+    </message>
+    <message>
+        <source>Cancel Recording</source>
+        <translation>Откажи записа</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Затвори</translation>
+    </message>
+    <message>
+        <source>Connecting to Server</source>
+        <translation>Свързване към сървъра</translation>
+    </message>
+    <message>
+        <source>Not found</source>
+        <translation>Не е намерено</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Непознат</translation>
+    </message>
+    <message>
+        <source>The requested content does not exist on the server</source>
+        <translation>Търсеното съдържание не е намерено на сървъра</translation>
+    </message>
+    <message>
+        <source>Enter the server name or IP address</source>
+        <translation>Въведете името на сървъра или IP адрес</translation>
+    </message>
+    <message>
+        <source>Pick a Jellyfin server from the local network</source>
+        <translation>Изберете наличен Jellyfin сървър от локалната ви мрежа</translation>
+    </message>
+    <message>
+        <source>Error Getting Playback Information</source>
+        <translation>Грешка при извличането на информация за възпроизвеждането</translation>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item. Server did not provide required transcoding data.</source>
+        <translation>Възникна грешка при възпроизвеждането на този елемент. Сървърът не предостави необходимите данни за транскодиране.</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Версия</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Оценка</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Вторник</translation>
+    </message>
+    <message>
+        <source>Playback</source>
+        <translation>Възпроизвеждане</translation>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation>Активиран</translation>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation>Изключено</translation>
     </message>
 </context>
 <context>

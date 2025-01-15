@@ -1362,6 +1362,30 @@
         <source>Both</source>
         <translation>Both</translation>
     </message>
+    <message>
+        <source>Choose how rows are displayed on the home screen.</source>
+        <translation>Choose how rows are displayed on the home screen.</translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation>N/A</translation>
+    </message>
+    <message>
+        <source>Row Layout</source>
+        <translation>Row Layout</translation>
+    </message>
+    <message>
+        <source>Original</source>
+        <translation>Original</translation>
+    </message>
+    <message>
+        <source>Full Width</source>
+        <translation>Full Width</translation>
+    </message>
+    <message>
+        <source>CH</source>
+        <translation>CH</translation>
+    </message>
 </context>
 <context>
     <name></name>
