@@ -228,7 +228,7 @@
         </message>
         <message>
             <source>IMDB_RATING</source>
-            <translation>IMDb Rating</translation>
+            <translation>Community Rating</translation>
         </message>
         <message>
             <source>CRITIC_RATING</source>
@@ -1400,6 +1400,16 @@
             <source>CH</source>
             <translation>CH</translation>
             <extracomment>Abbreviation for Channel</extracomment>
+        </message>
+        <message>
+            <source>DATE_EPISODE_ADDED</source>
+            <translation>Date Episode Added</translation>
+            <extracomment>TV Show library sort option</extracomment>
+        </message>
+        <message>
+            <source>DATE_SHOW_ADDED</source>
+            <translation>Date Show Added</translation>
+            <extracomment>TV Show library sort option</extracomment>
         </message>
     </context>
 </TS>
