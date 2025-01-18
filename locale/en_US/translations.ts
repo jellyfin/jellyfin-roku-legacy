@@ -1402,9 +1402,8 @@
             <extracomment>Abbreviation for Channel</extracomment>
         </message>
         <message>
-            <source>DATE_EPISODE_ADDED</source>
-            <translation>Date Episode Added</translation>
-            <extracomment>TV Show library sort option</extracomment>
+            <source>Folders</source>
+            <translation>Folders</translation>
         </message>
         <message>
             <source>DATE_SHOW_ADDED</source>
