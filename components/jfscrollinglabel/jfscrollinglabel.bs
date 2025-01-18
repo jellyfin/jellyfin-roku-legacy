@@ -1,0 +1,24 @@
+sub init()
+    m.top.id = "jfscrollinglabel"
+    m.top.observeField("text", "onText")
+    setFallbackfont()
+end sub
+
+sub onText()
+    setFallbackfont()
+end sub
+
+sub setFallbackfont()
+    if m.global.fallbackFont = invalid or m.top.font.id = "jffallbackfont" then return
+    fontSize = m.top.font.size
+
+    fallbackFontSize = m.top.fallbackFontSize
+    if getInterface(fallbackFontSize, "ifInteger") <> invalid and fallbackFontSize > 1 then fontSize = fallbackFontSize
+
+    m.top.font = m.global.fallbackFont.clone(true)
+    m.top.font.size = fontSize
+end sub
+
+sub onFallbackFontSize()
+    if m.top.font.size <> m.top.fallbackFontSize then m.top.font.size = m.top.fallbackFontSize
+end sub

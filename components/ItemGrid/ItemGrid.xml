@@ -18,7 +18,7 @@
 
     <RowList opacity="0" id="genrelist" translation="[120, 160]" showRowLabel="true" itemComponentName="GridItemSmall" numColumns="1" numRows="3" vertFocusAnimationStyle="fixed" itemSize="[1900, 360]" rowItemSize="[ [230, 320] ]" rowItemSpacing="[ [20, 0] ]" itemSpacing="[0, 60]" />
     
-    <Label translation="[0,540]" id="emptyText" font="font:LargeSystemFont" width="1910" horizAlign="center" vertAlign="center" height="64" visible="false" />
+    <jfLabel translation="[0,540]" id="emptyText" font="font:LargeSystemFont" width="1910" horizAlign="center" vertAlign="center" height="64" visible="false" />
     <ItemGridOptions id="options" visible="false" />
     <Animation id="backroundSwapAnimation" duration="1" repeat="false" easeFunction="linear">
       <FloatFieldInterpolator id="fadeinLoading" key="[0.0, 1.0]" keyValue="[ 0.00, 0.25 ]" fieldToInterp="backdropTransition.opacity" />

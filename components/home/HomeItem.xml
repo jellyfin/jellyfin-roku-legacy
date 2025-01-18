@@ -12,8 +12,8 @@
     <Rectangle id="progressBackground" visible="false" color="0x00000098" width="464" height="8" translation="[0,253]">
       <Rectangle id="progress" color="#00a4dcFF" width="0" height="8" />
     </Rectangle>
-    <ScrollingLabel id="itemText" horizAlign="center" vertAlign="center" font="font:SmallBoldSystemFont" height="64" maxWidth="456" translation="[8,267]" repeatCount="0" />
-    <Label id="itemTextExtra" horizAlign="left" vertAlign="center" font="font:SmallBoldSystemFont" height="32" width="456" translation="[8,300]" visible="false" color="#777777FF" />
+    <jfScrollingLabel id="itemText" horizAlign="center" vertAlign="center" font="font:SmallBoldSystemFont" height="64" maxWidth="456" translation="[8,267]" repeatCount="0" />
+    <jfLabel id="itemTextExtra" horizAlign="left" vertAlign="center" font="font:SmallBoldSystemFont" height="32" width="456" translation="[8,300]" visible="false" color="#777777FF" />
 
     <Animation id="showProgressBar" duration="0.5" repeat="false" easeFunction="linear">
       <FloatFieldInterpolator id="showProgressBarField" key="[0.0, 1.0]" fieldToInterp="progress.width" />

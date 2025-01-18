@@ -39,10 +39,12 @@ sub Main (args as dynamic) as void
     m.global.addFields({ app_loaded: false, playstateTask: playstateTask, sceneManager: sceneManager, launchSource: "" })
     m.global.addFields({ queueManager: CreateObject("roSGNode", "QueueManager") })
     m.global.addFields({ audioPlayer: CreateObject("roSGNode", "AudioPlayer") })
+    m.global.addField("fallbackFont", "node", true)
 
     app_start:
     ' First thing to do is validate the ability to use the API
     if not LoginFlow() then return
+    loadFallbackFont() 'load custom font if enabled
 
     ' remove login scenes from the stack
     sceneManager.callFunc("clearScenes")
@@ -54,23 +56,6 @@ sub Main (args as dynamic) as void
     sceneManager.callFunc("pushScene", group)
 
     m.scene.observeField("exit", m.port)
-
-    ' Downloads and stores a fallback font to tmp:/
-    configEncoding = api.system.GetConfigurationByName("encoding")
-
-    if isValid(configEncoding) and isValid(configEncoding.EnableFallbackFont)
-        if configEncoding.EnableFallbackFont
-            re = CreateObject("roRegex", "Name.:.(.*?).,.Size", "s")
-            filename = APIRequest("FallbackFont/Fonts").GetToString()
-            if isValid(filename)
-                filename = re.match(filename)
-                if isValid(filename) and filename.count() > 0
-                    filename = filename[1]
-                    APIRequest("FallbackFont/Fonts/" + filename).gettofile("tmp:/font")
-                end if
-            end if
-        end if
-    end if
 
     ' only show whats new popup and update lastRunVersion on prod
     if not m.global.app.isDev
@@ -898,4 +883,30 @@ sub Main (args as dynamic) as void
         end if
     end while
 
+end sub
+
+sub loadFallbackFont()
+    configEncoding = api.system.GetConfigurationByName("encoding")
+    if not configEncoding.EnableFallbackFont then return
+
+    fontFiles = APIRequest("FallbackFont/Fonts").GetToString()
+    fontFilesList = parseJson(fontFiles)
+    isFirstFont = getInterface(fontFilesList, "ifArray") <> invalid and fontFilesList[0] <> invalid and fontFilesList[0].name <> invalid
+    if not isFirstFont then return
+
+    fontFilename = fontFilesList[0].name 'pickup the first font
+    if fontFilename = invalid then return
+
+    APIRequest("FallbackFont/Fonts/" + fontFilename).gettofile("tmp:/font")
+
+    fs = CreateObject("roFileSystem")
+    if fs.Exists("tmp:/font")
+        getFallbackFont = function() as object
+            font = CreateObject("roSGNode", "Font")
+            font.id = "jffallbackfont"
+            font.uri = "tmp:/font"
+            return font
+        end function
+        m.global.fallbackFont = getFallbackFont()
+    end if
 end sub

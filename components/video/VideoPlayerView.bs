@@ -68,6 +68,9 @@ sub init()
     m.top.retrievingBar.filledBarBlendColor = m.global.constants.colors.blue
     m.top.bufferingBar.filledBarBlendColor = m.global.constants.colors.blue
     m.top.trickPlayBar.filledBarBlendColor = m.global.constants.colors.blue
+
+    m.customTitle = createObject("roSgNode", "jflabel")
+    m.top.customTitle = m.customTitle
 end sub
 
 ' handleChapterSkipAction: Handles user command to skip chapters in playing video
@@ -410,6 +413,7 @@ sub onVideoContentLoaded()
     m.chapters = videoContent[0].chapters
     m.top.showID = videoContent[0].showID
 
+    m.customTitle.text = m.top.content.title
     m.osd.itemTitleText = m.top.content.title
 
     ' If video is an episode, attempt to add season and episode numbers to OSD
