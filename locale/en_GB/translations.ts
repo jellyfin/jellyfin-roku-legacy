@@ -208,7 +208,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation>IMDb Rating</translation>
+        <translation type="unfinished">IMDb Rating</translation>
     </message>
     <message>
         <source>CRITIC_RATING</source>
