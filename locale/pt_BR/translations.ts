@@ -1421,6 +1421,10 @@
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
+    <message>
+        <source>CH</source>
+        <translation>CH</translation>
+    </message>
 </context>
 <context>
     <name></name>
