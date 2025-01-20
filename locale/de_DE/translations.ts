@@ -1410,6 +1410,10 @@
         <source>CH</source>
         <translation>CH</translation>
     </message>
+    <message>
+        <source>Folders</source>
+        <translation>Ordner</translation>
+    </message>
 </context>
 <context>
     <name></name>
