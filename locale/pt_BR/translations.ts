@@ -1184,7 +1184,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation>Avaliação IMDb</translation>
+        <translation type="unfinished">Avaliação IMDb</translation>
     </message>
     <message>
         <source>DATE_ADDED</source>
