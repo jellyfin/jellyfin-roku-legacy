@@ -608,7 +608,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation type="unfinished">Valoración IMDB</translation>
+        <translation>Valoración de la comunidad</translation>
     </message>
     <message>
         <source>OFFICIAL_RATING</source>
@@ -1401,6 +1401,38 @@
     <message>
         <source>Play Next Episode Automatically</source>
         <translation>Reproducir Siguiente Episodio Automáticamente</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Carpetas</translation>
+    </message>
+    <message>
+        <source>DATE_SHOW_ADDED</source>
+        <translation>Fecha en que se añadió el programa</translation>
+    </message>
+    <message>
+        <source>Row Layout</source>
+        <translation>Disposición de filas</translation>
+    </message>
+    <message>
+        <source>Original</source>
+        <translation>Original</translation>
+    </message>
+    <message>
+        <source>Choose how rows are displayed on the home screen.</source>
+        <translation>Elija cómo se muestran las filas en la pantalla de inicio.</translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation>N/A</translation>
+    </message>
+    <message>
+        <source>Full Width</source>
+        <translation>Ancho completo</translation>
+    </message>
+    <message>
+        <source>CH</source>
+        <translation>CH</translation>
     </message>
 </context>
 <context>
