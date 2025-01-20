@@ -234,7 +234,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation>IMDb Vērtējums</translation>
+        <translation type="unfinished">IMDb Vērtējums</translation>
     </message>
     <message>
         <comment>Name or Title field of media item</comment>
