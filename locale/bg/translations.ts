@@ -434,7 +434,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation>IMDb Рейтинг</translation>
+        <translation type="unfinished">IMDb Рейтинг</translation>
     </message>
     <message>
         <comment>Title of Tab for options to filter library content</comment>
