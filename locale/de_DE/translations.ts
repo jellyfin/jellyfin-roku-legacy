@@ -272,7 +272,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation>IMDb Bewertung</translation>
+        <translation type="unfinished">IMDb Bewertung</translation>
     </message>
     <message>
         <source>PLAY_COUNT</source>
