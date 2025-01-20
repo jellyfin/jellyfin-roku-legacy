@@ -219,7 +219,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation>Valutazione IMDb</translation>
+        <translation type="unfinished">Valutazione IMDb</translation>
     </message>
     <message>
         <source>OFFICIAL_RATING</source>
