@@ -298,7 +298,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation>Note IMDb</translation>
+        <translation type="unfinished">Note IMDb</translation>
     </message>
     <message>
         <source>CRITIC_RATING</source>
