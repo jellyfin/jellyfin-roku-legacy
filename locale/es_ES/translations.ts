@@ -608,7 +608,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation>Valoración IMDB</translation>
+        <translation type="unfinished">Valoración IMDB</translation>
     </message>
     <message>
         <source>OFFICIAL_RATING</source>
