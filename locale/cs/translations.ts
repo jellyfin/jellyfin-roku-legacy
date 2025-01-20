@@ -246,7 +246,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation>Hodnocení IMDb</translation>
+        <translation type="unfinished">Hodnocení IMDb</translation>
     </message>
     <message>
         <source>Compatibility</source>
