@@ -230,7 +230,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation>Recenzie IMDb</translation>
+        <translation type="unfinished">Recenzie IMDb</translation>
     </message>
     <message>
         <source>Unable to load Channel Data from the server</source>
