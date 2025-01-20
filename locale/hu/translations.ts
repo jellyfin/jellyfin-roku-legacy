@@ -447,7 +447,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation>IMDb Értékelés</translation>
+        <translation type="unfinished">IMDb Értékelés</translation>
     </message>
     <message>
         <source>DATE_PLAYED</source>
