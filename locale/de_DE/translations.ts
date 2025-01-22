@@ -272,7 +272,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation type="unfinished">IMDb Bewertung</translation>
+        <translation>Community Bewertung</translation>
     </message>
     <message>
         <source>PLAY_COUNT</source>
@@ -1413,6 +1413,10 @@
     <message>
         <source>Folders</source>
         <translation>Ordner</translation>
+    </message>
+    <message>
+        <source>DATE_SHOW_ADDED</source>
+        <translation>Hinzufügedatum der Serie</translation>
     </message>
 </context>
 <context>
