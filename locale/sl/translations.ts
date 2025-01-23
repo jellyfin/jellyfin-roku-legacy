@@ -226,7 +226,7 @@
     </message>
     <message>
         <source>Press &apos;OK&apos; to Close</source>
-        <translation>Za zapiranje pritisnite »V redu«.</translation>
+        <translation>Za zapiranje pritisnite »V redu«</translation>
     </message>
     <message>
         <source>Movies (Grid)</source>
@@ -812,6 +812,454 @@
     <message>
         <source>Slideshow On</source>
         <translation>Diaprojekcija vklopljena</translation>
+    </message>
+    <message>
+        <source>Global</source>
+        <translation>Globalno</translation>
+    </message>
+    <message>
+        <source>Movie Library Default View</source>
+        <translation>Privzeti pogled knjižnice filmov</translation>
+    </message>
+    <message>
+        <source>Enable or disable the &apos;Maximum Bitrate&apos; setting.</source>
+        <translation>Omogočite ali onemogočite nastavitev »Največja bitna hitrost«.</translation>
+    </message>
+    <message>
+        <source>Rewatching Next Up</source>
+        <translation>Ponovni ogled &quot;Sledi&quot;</translation>
+    </message>
+    <message>
+        <source>Default view for Movie Libraries.</source>
+        <translation>Privzeti pogled za knjižnice filmov.</translation>
+    </message>
+    <message>
+        <source>Remember the currently logged in user and try to log them in again next time you start the Jellyfin app.</source>
+        <translation>Zapomnite si trenutno prijavljenega uporabnika in ga poskusite znova prijaviti, ko naslednjič zaženete aplikacijo Jellyfin.</translation>
+    </message>
+    <message>
+        <source>Settings relating to the appearance of pages in Movie Libraries.</source>
+        <translation>Nastavitve v zvezi z videzom strani v knjižnicah filmov.</translation>
+    </message>
+    <message>
+        <source>Configure the maximum playback bitrate.</source>
+        <translation>Konfigurirajte največjo bitno hitrost predvajanja.</translation>
+    </message>
+    <message>
+        <source>Bitrate Limit</source>
+        <translation>Omejitev bitne hitrosti</translation>
+    </message>
+    <message>
+        <source>Maximum Bitrate</source>
+        <translation>Največja bitna hitrost</translation>
+    </message>
+    <message>
+        <source>Set the maximum bitrate in Mbps. Set to 0 to use Roku&apos;s specifications. This setting must be enabled to take effect.</source>
+        <translation>Nastavite največjo bitno hitrost v Mbps. Nastavite na 0, če želite uporabiti Rokujeve specifikacije. Ta nastavitev mora biti omogočena, da začne veljati.</translation>
+    </message>
+    <message>
+        <source>Make the arrangement of the Roku home view sections match the web client&apos;s home screen. Jellyfin will need to be closed and reopened for change to take effect.</source>
+        <translation>Naj se razporeditev razdelkov domačega pogleda Roku ujema z domačim zaslonom spletnega odjemalca. Jellyfin bo treba zapreti in znova odpreti, da bo sprememba začela veljati.</translation>
+    </message>
+    <message>
+        <source>View All Next Up</source>
+        <translation>Prikaži vse naprej</translation>
+    </message>
+    <message>
+        <source>Show already watched episodes in &apos;Next Up&apos; sections.</source>
+        <translation>Pokaži že gledane epizode v razdelkih »Sledi«.</translation>
+    </message>
+    <message>
+        <source>What type of images to use for Episodes shown in the &apos;Next Up&apos; and &apos;Continue Watching&apos; sections.</source>
+        <translation>Kakšno vrsto slik uporabiti za epizode, prikazane v razdelkih »Sledi« in »Nadaljuj z gledanjem«.</translation>
+    </message>
+    <message>
+        <source>Row Layout</source>
+        <translation>Postavitev vrstice</translation>
+    </message>
+    <message>
+        <source>How is remaining time represented. Remaining time shows hours, minutes, and seconds remaining. Time of day shows what time the video will complete.</source>
+        <translation>Kako je predstavljen preostali čas. Preostali čas prikazuje preostale ure, minute in sekunde. Ura dneva prikazuje, ob kateri uri bo videoposnetek končan.</translation>
+    </message>
+    <message>
+        <source>DATE_SHOW_ADDED</source>
+        <translation>Prikaz datuma je dodan</translation>
+    </message>
+    <message>
+        <source>Disable HEVC</source>
+        <translation>Onemogoči HEVC</translation>
+    </message>
+    <message>
+        <source>Welcome to version</source>
+        <translation>Dobrodošli v različici</translation>
+    </message>
+    <message>
+        <source>To view a complete list of changes visit</source>
+        <translation>Za ogled celotnega seznama sprememb obiščite</translation>
+    </message>
+    <message>
+        <source>Community and Critical Ratings</source>
+        <translation>Ocene skupnosti in kritične ocene</translation>
+    </message>
+    <message>
+        <source>Ratings for how good a movie is</source>
+        <translation>Ocene, kako dober je film</translation>
+    </message>
+    <message>
+        <source>Play Next Episode Automatically</source>
+        <translation>Samodejno predvajaj naslednjo epizodo</translation>
+    </message>
+    <message>
+        <source>When finished playing a single episode, play the next one automatically.</source>
+        <translation>Ko končate s predvajanjem ene epizode, samodejno predvajajte naslednjo.</translation>
+    </message>
+    <message>
+        <source>Episode Images Next Up</source>
+        <translation>Slike epizod &quot;Sledi&quot;</translation>
+    </message>
+    <message>
+        <source>Use Web Client Setting</source>
+        <translation>Uporabi nastavitev spletnega odjemalca</translation>
+    </message>
+    <message>
+        <source>Use Episode Image</source>
+        <translation>Uporabite sliko epizode</translation>
+    </message>
+    <message>
+        <source>Use Show Image</source>
+        <translation>Uporabite slikovno epizodo</translation>
+    </message>
+    <message>
+        <source>Random</source>
+        <translation>Naključno</translation>
+    </message>
+    <message>
+        <source>Special</source>
+        <translation>Posebna</translation>
+    </message>
+    <message>
+        <source>Use Web Client&apos;s Home Section Arrangement</source>
+        <translation>Uporabite ureditev domačega razdelka spletnega odjemalca</translation>
+    </message>
+    <message>
+        <source>Loading trailer</source>
+        <translation>Nakladanje prikolice</translation>
+    </message>
+    <message>
+        <source>Choose how rows are displayed on the home screen.</source>
+        <translation>Izberite, kako so vrstice prikazane na začetnem zaslonu.</translation>
+    </message>
+    <message>
+        <source>Original</source>
+        <translation>Original</translation>
+    </message>
+    <message>
+        <source>Full Width</source>
+        <translation>Polna širina</translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation>N/A</translation>
+    </message>
+    <message>
+        <source>CH</source>
+        <translation>Kanal</translation>
+    </message>
+    <message>
+        <source>Preferred Audio Codec</source>
+        <translation>Prednostni zvočni kodek</translation>
+    </message>
+    <message>
+        <source>Use the selected audio codec for transcodes. If the device or stream does not support it, a fallback codec will be used.</source>
+        <translation>Uporabite izbrani zvočni kodek za prekodiranje. Če naprava ali tok tega ne podpira, bo uporabljen nadomestni kodek.</translation>
+    </message>
+    <message>
+        <source>Use system settings</source>
+        <translation>Uporabite sistemske nastavitve</translation>
+    </message>
+    <message>
+        <source>... (Press * to read more)</source>
+        <translation>... (Pritisnite *, če želite prebrati več)</translation>
+    </message>
+    <message>
+        <source>Slideshow Paused</source>
+        <translation>Diaprojekcija zaustavljena</translation>
+    </message>
+    <message>
+        <source>Parental Ratings</source>
+        <translation>Starševske ocene</translation>
+    </message>
+    <message>
+        <source>Select when to show titles.</source>
+        <translation>Izberite, kdaj želite prikazati naslove.</translation>
+    </message>
+    <message>
+        <source>Show On Hover</source>
+        <translation>Pokaži pri lebdenju</translation>
+    </message>
+    <message>
+        <source>Always Hide</source>
+        <translation>Vedno skrij</translation>
+    </message>
+    <message>
+        <source>Album Artists (Presentation)</source>
+        <translation>Izvajalci albuma (predstavitev)</translation>
+    </message>
+    <message>
+        <source>Song</source>
+        <translation>Pesem</translation>
+    </message>
+    <message>
+        <source>Enable Limit</source>
+        <translation>Omogoči omejitev</translation>
+    </message>
+    <message>
+        <source>Libraries</source>
+        <translation>Knjižnice</translation>
+    </message>
+    <message>
+        <source>Settings relating to the appearance of Library pages</source>
+        <translation>Nastavitve v zvezi z videzom strani knjižnice</translation>
+    </message>
+    <message>
+        <source>Grid View Settings</source>
+        <translation>Nastavitve mrežnega pogleda</translation>
+    </message>
+    <message>
+        <source>Disable Unwatched Episode Count</source>
+        <translation>Onemogoči štetje neogledanih epizod</translation>
+    </message>
+    <message>
+        <source>Apply max resolution to all files or only transcoded files.</source>
+        <translation>Uporabi največjo ločljivost za vse datoteke ali samo za prekodirane datoteke.</translation>
+    </message>
+    <message>
+        <source>Compatibility</source>
+        <translation>Združljivost</translation>
+    </message>
+    <message>
+        <source>Attempt to prevent playback failures.</source>
+        <translation>Poskusite preprečiti napake pri predvajanju.</translation>
+    </message>
+    <message>
+        <source>Disable the HEVC codec on this device. This may improve playback for some devices (ultra).</source>
+        <translation>Onemogočite kodek HEVC v tej napravi. To lahko izboljša predvajanje v nekaterih napravah (ultra).</translation>
+    </message>
+    <message>
+        <source>Global settings that affect everyone that uses this Roku device.</source>
+        <translation>Globalne nastavitve, ki vplivajo na vse, ki uporabljajo to napravo Roku.</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Mape</translation>
+    </message>
+    <message>
+        <source>Next Episode Button Time</source>
+        <translation>Čas gumba za naslednjo epizodo</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation>Splošno</translation>
+    </message>
+    <message>
+        <source>Presentation</source>
+        <translation>Predstavitev</translation>
+    </message>
+    <message>
+        <source>Artists (Presentation)</source>
+        <translation>Izvajalci (predstavitev)</translation>
+    </message>
+    <message>
+        <source>Songs</source>
+        <translation>Pesmi</translation>
+    </message>
+    <message>
+        <source>Random On</source>
+        <translation>Naključno vklopljeno</translation>
+    </message>
+    <message>
+        <source>No Chapter Data Found</source>
+        <translation>Ni podatkov o poglavju</translation>
+    </message>
+    <message>
+        <source>Artists (Grid)</source>
+        <translation>Izvajalci (mreža)</translation>
+    </message>
+    <message>
+        <source>Disable Community Rating for Episodes</source>
+        <translation>Onemogoči ocenjevanje skupnosti za epizode</translation>
+    </message>
+    <message>
+        <source>Years</source>
+        <translation>Leta</translation>
+    </message>
+    <message>
+        <source>Show What&apos;s New Popup</source>
+        <translation>Prikaži pojavno okno Kaj je novega</translation>
+    </message>
+    <message>
+        <source>Item Titles</source>
+        <translation>Naslovi predmetov</translation>
+    </message>
+    <message>
+        <source>Show What&apos;s New popup when Jellyfin is updated to a new version.</source>
+        <translation>Pokaži pojavno okno Kaj je novega, ko je Jellyfin posodobljen na novo različico.</translation>
+    </message>
+    <message>
+        <source>Always Show</source>
+        <translation>Vedno pokaži</translation>
+    </message>
+    <message>
+        <source>Album</source>
+        <translation>Album</translation>
+    </message>
+    <message>
+        <source>Biographical information for this person is not currently available.</source>
+        <translation>Biografski podatki za to osebo trenutno niso na voljo.</translation>
+    </message>
+    <message>
+        <source>Settings relating to the appearance of the Home screen and the program in general.</source>
+        <translation>Nastavitve v zvezi z videzom začetnega zaslona in programa na splošno.</translation>
+    </message>
+    <message>
+        <source>Settings that apply when Grid views are enabled.</source>
+        <translation>Nastavitve, ki veljajo, ko so omogočeni pogledi mreže.</translation>
+    </message>
+    <message>
+        <source>Grid</source>
+        <translation>Mreža</translation>
+    </message>
+    <message>
+        <source>Episode Next Up Behavior</source>
+        <translation>Vedenje epizode &quot;Sledi&quot;</translation>
+    </message>
+    <message>
+        <source>This controls what clicking OK on a Next Up episode does.</source>
+        <translation>To nadzira, kaj naredi klik V redu v epizodi Sledi.</translation>
+    </message>
+    <message>
+        <source>View Episode Details</source>
+        <translation>Oglejte si podrobnosti o epizodi</translation>
+    </message>
+    <message>
+        <source>OSD Remaining Time</source>
+        <translation>OSD preostali čas</translation>
+    </message>
+    <message>
+        <source>View Season Details</source>
+        <translation>Oglejte si podrobnosti o sezoni</translation>
+    </message>
+    <message>
+        <source>Time of Day</source>
+        <translation>Čas dneva</translation>
+    </message>
+    <message>
+        <source>Both</source>
+        <translation>Oba</translation>
+    </message>
+    <message>
+        <source>Remaining Time</source>
+        <translation>Preostali čas</translation>
+    </message>
+    <message>
+        <source>Unplayed</source>
+        <translation>Nepredvajano</translation>
+    </message>
+    <message>
+        <source>Played</source>
+        <translation>Predvajano</translation>
+    </message>
+    <message>
+        <source>Resumable</source>
+        <translation>Možnost nadaljevanja</translation>
+    </message>
+    <message>
+        <source>Slideshow Resumed</source>
+        <translation>Diaprojekcija se nadaljuje</translation>
+    </message>
+    <message>
+        <source>Random Off</source>
+        <translation>Naključno izklopljeno</translation>
+    </message>
+    <message>
+        <source>MPEG-4 Support</source>
+        <translation>Podpora za MPEG-4</translation>
+    </message>
+    <message>
+        <source>Albums</source>
+        <translation>Albumi</translation>
+    </message>
+    <message>
+        <source>Album Artists (Grid)</source>
+        <translation>Izvajalci albuma (mreža)</translation>
+    </message>
+    <message>
+        <source>View All</source>
+        <translation>Prikaži vse</translation>
+    </message>
+    <message>
+        <source>Hide the star and community rating for episodes of a TV show. This is to prevent spoilers of an upcoming good/bad episode.</source>
+        <translation>Skrij oceno zvezdic in skupnosti za epizode TV-oddaje. S tem preprečimo kvarjenje prihajajoče dobre/slabe epizode.</translation>
+    </message>
+    <message>
+        <source>If enabled, the number of unwatched episodes in a series/season will be removed.</source>
+        <translation>Če je omogočeno, bo število neogledanih epizod v seriji/sezoni odstranjeno.</translation>
+    </message>
+    <message>
+        <source>Settings relating to the appearance of pages in TV Libraries.</source>
+        <translation>Nastavitve v zvezi z videzom strani v TV knjižnicah.</translation>
+    </message>
+    <message>
+        <source>Set how many seconds before the end of an episode the Next Episode button should appear. Set to 0 to disable.</source>
+        <translation>Nastavite, koliko sekund pred koncem epizode naj se prikaže gumb Naslednja epizoda. Nastavite na 0, da onemogočite.</translation>
+    </message>
+    <message>
+        <source>Maximum Resolution</source>
+        <translation>Največja ločljivost</translation>
+    </message>
+    <message>
+        <source>Set the maximum resolution when playing video files on this device.</source>
+        <translation>Nastavite največjo ločljivost pri predvajanju video datotek na tej napravi.</translation>
+    </message>
+    <message>
+        <source>Off - Attempt to play all resolutions</source>
+        <translation>Izklopljeno - poskusite predvajati vse ločljivosti</translation>
+    </message>
+    <message>
+        <source>Auto - Use TV resolution</source>
+        <translation>Samodejno - Uporabi ločljivost televizorja</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Način</translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation>Vrednost</translation>
+    </message>
+    <message>
+        <source>Configure the maximum resolution when playing video files on this device.</source>
+        <translation>Konfigurirajte največjo ločljivost pri predvajanju video datotek na tej napravi.</translation>
+    </message>
+    <message>
+        <source>Only transcoded files</source>
+        <translation>Samo prekodirane datoteke</translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation>Vse datoteke</translation>
+    </message>
+    <message>
+        <source>Remember Me?</source>
+        <translation>Zapomni si me?</translation>
+    </message>
+    <message>
+        <source>Direct playing</source>
+        <translation>Neposredno predvajanje</translation>
+    </message>
+    <message>
+        <source>The source file is entirely compatible with this client and the session is receiving the file without modifications.</source>
+        <translation>Izvorna datoteka je popolnoma združljiva s tem odjemalcem in seja prejema datoteko brez sprememb.</translation>
     </message>
 </context>
 <context>
