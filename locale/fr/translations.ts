@@ -1402,6 +1402,14 @@
         <source>CH</source>
         <translation>CH</translation>
     </message>
+    <message>
+        <source>DATE_SHOW_ADDED</source>
+        <translation type="unfinished">Date d&apos;ajout de la série</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation type="unfinished">Dossiers</translation>
+    </message>
 </context>
 <context>
     <name></name>
