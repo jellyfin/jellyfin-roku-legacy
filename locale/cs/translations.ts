@@ -246,7 +246,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation type="unfinished">Hodnocení IMDb</translation>
+        <translation>Hodnocení komunity</translation>
     </message>
     <message>
         <source>Compatibility</source>
@@ -1395,6 +1395,14 @@
     <message>
         <source>Both</source>
         <translation>Obojí</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Složky</translation>
+    </message>
+    <message>
+        <source>DATE_SHOW_ADDED</source>
+        <translation>Datum přidání pořadu</translation>
     </message>
 </context>
 <context>
