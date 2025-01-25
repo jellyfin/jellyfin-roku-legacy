@@ -411,6 +411,13 @@ namespace api
     end namespace
 
     namespace items
+        ' Gets items based on a query.
+        ' requires userid passed in params
+        function Get(params = {} as object)
+            req = APIRequest("/items/", params)
+            return getJson(req)
+        end function
+
         ' Gets legacy query filters.
         function GetFilters(params = {} as object)
             req = APIRequest("/items/filters", params)

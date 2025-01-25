@@ -52,7 +52,7 @@ function getData()
     ' todo - Or get the old data? I can't remember...
     data = CreateObject("roSGNode", "ContentNode")
     ' Do this to keep the ordering, AssociateArrays have no order
-    type_array = ["Movie", "Series", "TvChannel", "Episode", "MusicArtist", "MusicAlbum", "Audio", "Person", "PlaylistsFolder"]
+    type_array = ["Movie", "Series", "TvChannel", "Episode", "MusicArtist", "MusicAlbum", "Audio", "Person", "Playlist", "Program"]
     content_types = {
         "TvChannel": { "label": "Channels", "count": 0 },
         "Movie": { "label": "Movies", "count": 0 },
@@ -62,7 +62,8 @@ function getData()
         "MusicAlbum": { "label": "Albums", "count": 0 },
         "Audio": { "label": "Songs", "count": 0 },
         "Person": { "label": "People", "count": 0 },
-        "PlaylistsFolder": { "label": "Playlist", "count": 0 }
+        "Playlist": { "label": "Playlist", "count": 0 },
+        "Program": { "label": "Programs", "count": 0 }
     }
 
     for each item in itemData.Items

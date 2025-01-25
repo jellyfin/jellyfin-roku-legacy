@@ -581,6 +581,9 @@ sub Main (args as dynamic) as void
                 m.global.queueManager.callFunc("resetShuffle")
                 m.global.queueManager.callFunc("push", screenContent.albumData.items[node.id])
                 m.global.queueManager.callFunc("playQueue")
+            else if node.type = "Playlist"
+                group = CreatePlaylistView(node.json)
+                sceneManager.callFunc("pushScene", group)
             else
                 ' TODO - switch on more node types
                 stopLoadingSpinner()
