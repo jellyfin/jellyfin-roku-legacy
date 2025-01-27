@@ -1434,6 +1434,50 @@
         <source>CH</source>
         <translation>CH</translation>
     </message>
+    <message>
+        <source>Special</source>
+        <translation>Episodio Especial</translation>
+    </message>
+    <message>
+        <source>When finished playing a single episode, play the next one automatically.</source>
+        <translation>Cuando termine de reproducirse un episodio, reproduce el siguiente automáticamente.</translation>
+    </message>
+    <message>
+        <source>Episode Next Up Behavior</source>
+        <translation>Comportamiento de Próximo Episodio</translation>
+    </message>
+    <message>
+        <source>View Episode Details</source>
+        <translation>Ver Detalles del Episodio</translation>
+    </message>
+    <message>
+        <source>View Season Details</source>
+        <translation>Ver Detalles de la Temporada</translation>
+    </message>
+    <message>
+        <source>OSD Remaining Time</source>
+        <translation>Tiempo Restante en OSD</translation>
+    </message>
+    <message>
+        <source>This controls what clicking OK on a Next Up episode does.</source>
+        <translation>Esto controla lo que sucede al hacer clic en OK en un episodio siguiente.</translation>
+    </message>
+    <message>
+        <source>How is remaining time represented. Remaining time shows hours, minutes, and seconds remaining. Time of day shows what time the video will complete.</source>
+        <translation>¿Cómo se representa el tiempo restante? El tiempo restante muestra las horas, minutos y segundos restantes. La hora del día muestra a qué hora se completará el video.</translation>
+    </message>
+    <message>
+        <source>Remaining Time</source>
+        <translation>Tiempo Restante</translation>
+    </message>
+    <message>
+        <source>Time of Day</source>
+        <translation>Hora del Día</translation>
+    </message>
+    <message>
+        <source>Both</source>
+        <translation>Ambos</translation>
+    </message>
 </context>
 <context>
     <name></name>
