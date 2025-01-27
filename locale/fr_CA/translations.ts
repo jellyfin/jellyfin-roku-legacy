@@ -298,7 +298,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation type="unfinished">Note IMDb</translation>
+        <translation>Note commauté</translation>
     </message>
     <message>
         <source>CRITIC_RATING</source>
@@ -832,7 +832,7 @@
     </message>
     <message>
         <source>View All</source>
-        <translation type="unfinished">Tout voir</translation>
+        <translation>Tout voir</translation>
     </message>
     <message>
         <source>Configure the maximum playback bitrate.</source>
@@ -1129,6 +1129,218 @@
     <message>
         <source>The source file is entirely compatible with this client and the session is receiving the file without modifications.</source>
         <translation>Le fichier source est entièrement compatible avec ce client et la session reçoit le fichier sans modifications.</translation>
+    </message>
+    <message>
+        <source>Use Web Client Setting</source>
+        <translation>Utiliser les paramètres du client web</translation>
+    </message>
+    <message>
+        <source>Disable HEVC</source>
+        <translation>Désactiver HEVC</translation>
+    </message>
+    <message>
+        <source>Preferred Audio Codec</source>
+        <translation>Codec audio préféré</translation>
+    </message>
+    <message>
+        <source>Use system settings</source>
+        <translation>Utiliser les paramètres système</translation>
+    </message>
+    <message>
+        <source>Only transcoded files</source>
+        <translation>Uniquement les fichiers transcodés</translation>
+    </message>
+    <message>
+        <source>DATE_SHOW_ADDED</source>
+        <translation>Date d&apos;ajout des émissions télé</translation>
+    </message>
+    <message>
+        <source>View Episode Details</source>
+        <translation>Voir les détails de l&apos;épisode</translation>
+    </message>
+    <message>
+        <source>OSD Remaining Time</source>
+        <translation>Affichage à l&apos;écran du temps restant</translation>
+    </message>
+    <message>
+        <source>View Season Details</source>
+        <translation>Voir les détails de la saison</translation>
+    </message>
+    <message>
+        <source>Remaining Time</source>
+        <translation>Temps restant</translation>
+    </message>
+    <message>
+        <source>Time of Day</source>
+        <translation>Heure de la journée</translation>
+    </message>
+    <message>
+        <source>Next Episode Button Time</source>
+        <translation>Délai du bouton épisode suivant</translation>
+    </message>
+    <message>
+        <source>Settings relating to the appearance of pages in Movie Libraries.</source>
+        <translation>Paramètres relatifs à l&apos;apparence des pages dans la médiathèque de Films.</translation>
+    </message>
+    <message>
+        <source>Disable Unwatched Episode Count</source>
+        <translation>Désactive le décompte d&apos;épisodes non-vu</translation>
+    </message>
+    <message>
+        <source>If enabled, the number of unwatched episodes in a series/season will be removed.</source>
+        <translation>Si cette option est activée, le nombre d&apos;épisodes non-vus dans une série/saison sera retiré.</translation>
+    </message>
+    <message>
+        <source>Apply max resolution to all files or only transcoded files.</source>
+        <translation>Appliquer la résolution maximale à tous les fichiers ou seulement aux fichiers transcodés.</translation>
+    </message>
+    <message>
+        <source>Set how many seconds before the end of an episode the Next Episode button should appear. Set to 0 to disable.</source>
+        <translation>Définir combien de secondes avant la fin d&apos;un épisode le bouton «&#x202f;Prochain épisode&#x202f;» doit apparaître. La valeur 0 permet de le désactiver.</translation>
+    </message>
+    <message>
+        <source>Off - Attempt to play all resolutions</source>
+        <translation>Désactivé - Essaie de lire à toutes les résolutions</translation>
+    </message>
+    <message>
+        <source>Auto - Use TV resolution</source>
+        <translation>Auto - Utiliser la résolution de la TV</translation>
+    </message>
+    <message>
+        <source>Use the selected audio codec for transcodes. If the device or stream does not support it, a fallback codec will be used.</source>
+        <translation>Utilisez le codec audio sélectionné pour les transcodages. Si l&apos;appareil ou le flux ne le prend pas en charge, un codec de secours sera utilisé.</translation>
+    </message>
+    <message>
+        <source>Global settings that affect everyone that uses this Roku device.</source>
+        <translation>Paramètres généraux qui s&apos;appliquent à tous ceux qui utilisent cet appareil Roku.</translation>
+    </message>
+    <message>
+        <source>Set the maximum resolution when playing video files on this device.</source>
+        <translation>Définit la résolution maximale de lecture de fichiers vidéos sur cet appareil.</translation>
+    </message>
+    <message>
+        <source>Configure the maximum resolution when playing video files on this device.</source>
+        <translation>Définit la résolution maximale de lecture de fichiers vidéos sur cet appareil.</translation>
+    </message>
+    <message>
+        <source>Disable the HEVC codec on this device. This may improve playback for some devices (ultra).</source>
+        <translation>Désactive le codec HEVC sur cet appareil. Ceci peut améliorer la lecture sur certains appareils (ultra).</translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation>Tous les fichiers</translation>
+    </message>
+    <message>
+        <source>Attempt to prevent playback failures.</source>
+        <translation>Essaie de prévenir les erreurs de lecture.</translation>
+    </message>
+    <message>
+        <source>Global</source>
+        <translation>Général</translation>
+    </message>
+    <message>
+        <source>Community and Critical Ratings</source>
+        <translation>Notes de la communauté et des critiques</translation>
+    </message>
+    <message>
+        <source>Remember the currently logged in user and try to log them in again next time you start the Jellyfin app.</source>
+        <translation>Se souvenir de l&apos;utilisateur actuellement connecté et tenter de le connecter à nouveau au prochain démarrage de l&apos;application Jellyfin.</translation>
+    </message>
+    <message>
+        <source>... (Press * to read more)</source>
+        <translation>... (appuyer sur * pour lire plus)</translation>
+    </message>
+    <message>
+        <source>Ratings for how good a movie is</source>
+        <translation>Notes pour dire que le film est bon</translation>
+    </message>
+    <message>
+        <source>No Chapter Data Found</source>
+        <translation>Aucune données de chapitre n&apos;a été trouvé</translation>
+    </message>
+    <message>
+        <source>Use Web Client&apos;s Home Section Arrangement</source>
+        <translation>Utiliser la disposition de la section d&apos;accueil du client web</translation>
+    </message>
+    <message>
+        <source>Make the arrangement of the Roku home view sections match the web client&apos;s home screen. Jellyfin will need to be closed and reopened for change to take effect.</source>
+        <translation>Fait correspondre la disposition de la section d&apos;accueil de Roku avec celle de l&apos;écran d&apos;accueil du client Web. Jellyfin doit être fermé et rouvert pour que les changements prennent effet.</translation>
+    </message>
+    <message>
+        <source>Rewatching Next Up</source>
+        <translation>Revoir tout ce qui est à suivre</translation>
+    </message>
+    <message>
+        <source>Welcome to version</source>
+        <translation>Bienvenue à la version</translation>
+    </message>
+    <message>
+        <source>View All Next Up</source>
+        <translation>Voir tout ce qui est à suivre</translation>
+    </message>
+    <message>
+        <source>Row Layout</source>
+        <translation>Disposition de la colonne</translation>
+    </message>
+    <message>
+        <source>To view a complete list of changes visit</source>
+        <translation>Pour consulter la liste complète des modifications, visitez</translation>
+    </message>
+    <message>
+        <source>Use Show Image</source>
+        <translation>Utiliser l&apos;image de la série</translation>
+    </message>
+    <message>
+        <source>Show already watched episodes in &apos;Next Up&apos; sections.</source>
+        <translation>Voir les épisodes déjà vus dans la section &quot;À suivre&quot;.</translation>
+    </message>
+    <message>
+        <source>Both</source>
+        <translation>Les deux</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Dossiers</translation>
+    </message>
+    <message>
+        <source>When finished playing a single episode, play the next one automatically.</source>
+        <translation>Lorsque la lecture d&apos;un épisode est terminée, lancer automatiquement le suivant.</translation>
+    </message>
+    <message>
+        <source>Episode Images Next Up</source>
+        <translation>Images d&apos;épisodes à suivre</translation>
+    </message>
+    <message>
+        <source>What type of images to use for Episodes shown in the &apos;Next Up&apos; and &apos;Continue Watching&apos; sections.</source>
+        <translation>Quel type d&apos;images utiliser pour les épisodes visibles dans les sections &quot;À suivre&quot; et &quot;Continuer la lecture&quot;.</translation>
+    </message>
+    <message>
+        <source>Use Episode Image</source>
+        <translation>Utiliser l&apos;image de l&apos;épisode</translation>
+    </message>
+    <message>
+        <source>Episode Next Up Behavior</source>
+        <translation>Comportement du prochain épisode</translation>
+    </message>
+    <message>
+        <source>Choose how rows are displayed on the home screen.</source>
+        <translation>Choisissez comment les lignes sont affichées sur l&apos;écran d&apos;accueil.</translation>
+    </message>
+    <message>
+        <source>Full Width</source>
+        <translation>Largeur maximale</translation>
+    </message>
+    <message>
+        <source>This controls what clicking OK on a Next Up episode does.</source>
+        <translation>Cela contrôle ce que fait un clic sur OK sur un épisode suivant.</translation>
+    </message>
+    <message>
+        <source>How is remaining time represented. Remaining time shows hours, minutes, and seconds remaining. Time of day shows what time the video will complete.</source>
+        <translation>Comment le temps restant est-il représenté ? Le temps restant indique les heures, les minutes et les secondes restantes. L&apos;heure du jour indique l&apos;heure à laquelle la vidéo se terminera.</translation>
+    </message>
+    <message>
+        <source>CH</source>
+        <translation>CH</translation>
     </message>
 </context>
 <context>
