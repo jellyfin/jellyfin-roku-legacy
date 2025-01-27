@@ -356,7 +356,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation type="unfinished">Note IMDb</translation>
+        <translation>Note commauté</translation>
     </message>
     <message>
         <source>OFFICIAL_RATING</source>
@@ -1404,11 +1404,11 @@
     </message>
     <message>
         <source>DATE_SHOW_ADDED</source>
-        <translation type="unfinished">Date d&apos;ajout de la série</translation>
+        <translation>Date d&apos;ajout de la série TV</translation>
     </message>
     <message>
         <source>Folders</source>
-        <translation type="unfinished">Dossiers</translation>
+        <translation>Dossiers</translation>
     </message>
 </context>
 <context>
