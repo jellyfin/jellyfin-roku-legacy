@@ -219,7 +219,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation type="unfinished">Valutazione IMDb</translation>
+        <translation>Valutazione del Pubblico</translation>
     </message>
     <message>
         <source>OFFICIAL_RATING</source>
@@ -1301,6 +1301,38 @@
     <message>
         <source>View All Next Up</source>
         <translation>Guarda tutti i successivi</translation>
+    </message>
+    <message>
+        <source>Episode Images Next Up</source>
+        <translation>Immagini episodi - Prossimo episodio</translation>
+    </message>
+    <message>
+        <source>Rewatching Next Up</source>
+        <translation>Riproduci di nuovo il prossimo episodio</translation>
+    </message>
+    <message>
+        <source>Play Next Episode Automatically</source>
+        <translation>Riproduci l&apos;episodio successivo automaticamente</translation>
+    </message>
+    <message>
+        <source>Show already watched episodes in &apos;Next Up&apos; sections.</source>
+        <translation>Mostra gli episodi già visti nella sezione &apos;Prossimo episodio&apos;.</translation>
+    </message>
+    <message>
+        <source>When finished playing a single episode, play the next one automatically.</source>
+        <translation>Alla fine della riproduzione di un episodio, avvia automaticamente il successivo.</translation>
+    </message>
+    <message>
+        <source>What type of images to use for Episodes shown in the &apos;Next Up&apos; and &apos;Continue Watching&apos; sections.</source>
+        <translation>Tipo di immagini da usare per gli Episodi mostrati nelle sezioni &apos;Prossimo episodio&apos; e &apos;Continua a guardare&apos;.</translation>
+    </message>
+    <message>
+        <source>Use Web Client Setting</source>
+        <translation>Usa le impostazioni del client web</translation>
+    </message>
+    <message>
+        <source>Use Episode Image</source>
+        <translation>Usa l&apos;immagine dell&apos;episodio</translation>
     </message>
 </context>
 <context>
