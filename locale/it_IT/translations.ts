@@ -1334,6 +1334,74 @@
         <source>Use Episode Image</source>
         <translation>Usa l&apos;immagine dell&apos;episodio</translation>
     </message>
+    <message>
+        <source>Use Show Image</source>
+        <translation>Usa l&apos;immagine della serie</translation>
+    </message>
+    <message>
+        <source>Row Layout</source>
+        <translation>Disposizione a righe</translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation>N/D</translation>
+    </message>
+    <message>
+        <source>CH</source>
+        <translation>Canale</translation>
+    </message>
+    <message>
+        <source>Choose how rows are displayed on the home screen.</source>
+        <translation>Scegli come visualizzare le righe nella schermata principale.</translation>
+    </message>
+    <message>
+        <source>Original</source>
+        <translation>Originale</translation>
+    </message>
+    <message>
+        <source>View Episode Details</source>
+        <translation>Visualizza dettagli dell&apos;episodio</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Cartelle</translation>
+    </message>
+    <message>
+        <source>Full Width</source>
+        <translation>Massima larghezza</translation>
+    </message>
+    <message>
+        <source>Both</source>
+        <translation>Entrambi</translation>
+    </message>
+    <message>
+        <source>Special</source>
+        <translation>Speciale</translation>
+    </message>
+    <message>
+        <source>Episode Next Up Behavior</source>
+        <translation>Comportamento del prossimo episodio</translation>
+    </message>
+    <message>
+        <source>This controls what clicking OK on a Next Up episode does.</source>
+        <translation>Definisce l&apos;azione del tasto OK su un episodio in &apos;Prossimo episodio&apos;.</translation>
+    </message>
+    <message>
+        <source>OSD Remaining Time</source>
+        <translation>Tempo Rimanente OSD</translation>
+    </message>
+    <message>
+        <source>View Season Details</source>
+        <translation>Visualizza dettagli della stagione</translation>
+    </message>
+    <message>
+        <source>Remaining Time</source>
+        <translation>Tempo Rimanente</translation>
+    </message>
+    <message>
+        <source>Time of Day</source>
+        <translation>Ora del giorno</translation>
+    </message>
 </context>
 <context>
     <name></name>
