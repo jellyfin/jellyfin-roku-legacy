@@ -565,7 +565,7 @@ sub Main (args as dynamic) as void
                 m.global.queueManager.callFunc("playQueue")
             else if node.type = "Person"
                 group = CreatePersonView(node)
-            else if node.type = "TvChannel"
+            else if node.type = "TvChannel" or node.type = "Program"
                 group = CreateVideoPlayerGroup(node.id)
                 sceneManager.callFunc("pushScene", group)
             else if node.type = "Episode"
