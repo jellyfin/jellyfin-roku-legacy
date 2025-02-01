@@ -1,5 +1,6 @@
 import "pkg:/source/utils/misc.bs"
 import "pkg:/source/utils/config.bs"
+import "pkg:/source/api/Image.bs"
 
 sub init()
     m.extrasGrp = m.top.findnode("extrasGrp")
@@ -100,7 +101,19 @@ sub itemContentChanged()
         userSettings = m.global.session.user.settings
         itemData = item.json
         m.top.id = itemData.id
-        m.top.findNode("moviePoster").uri = m.top.itemContent.posterURL
+
+        posterUrl = item.posterURL
+
+        ' Really need to update TvShowDetails to include the options for changing audio tracks etc
+        ' so that we can use that instead of MovieDetails when a user clicks on a TV Show in "Next Up"
+        if LCase(itemData.type) = "episode" and IsValid(itemData.ImageTags)
+            m.moviePoster.width = 464
+            m.moviePoster.height = 261
+            params = { "Tag": itemData.ImageTags.Primary, "maxHeight": 261, "maxWidth": 464 }
+            posterUrl = ImageURL(itemData.id, "Primary", params)
+        end if
+
+        m.moviePoster.uri = posterUrl
 
         ' Set default video source if user hasn't selected one yet
         if m.top.selectedVideoStreamId = "" and isValid(itemData.MediaSources)
