@@ -1402,6 +1402,14 @@
         <source>Time of Day</source>
         <translation>Ora del giorno</translation>
     </message>
+    <message>
+        <source>How is remaining time represented. Remaining time shows hours, minutes, and seconds remaining. Time of day shows what time the video will complete.</source>
+        <translation>Come viene rappresentato il tempo rimanente. Il tempo rimanente mostra le ore, i minuti e i secondi mancanti. L&apos;orario mostra a che ora terminerà il video.</translation>
+    </message>
+    <message>
+        <source>DATE_SHOW_ADDED</source>
+        <translation>Data di aggiunta della serie</translation>
+    </message>
 </context>
 <context>
     <name></name>
