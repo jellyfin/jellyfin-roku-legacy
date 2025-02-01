@@ -36,7 +36,7 @@ sub updateSize()
     m.top.itemSpacing = [0, 105]
 
     m.top.rowItemSize = [itemWidth, itemHeight]
-    m.top.rowItemSpacing = [0, 0]
+    m.top.rowItemSpacing = [40, 0]
     m.top.numRows = 2
     m.top.translation = "[12,18]"
 end sub
