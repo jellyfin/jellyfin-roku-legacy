@@ -36,7 +36,7 @@ sub updateSize()
     m.top.itemSpacing = [0, 105]
 
     m.top.rowItemSize = [itemWidth, itemHeight]
-    m.top.rowItemSpacing = [0, 0]
+    m.top.rowItemSpacing = [40, 0]
     m.top.numRows = 2
     m.top.translation = "[12,18]"
 end sub
@@ -84,10 +84,16 @@ function getData()
 end function
 
 sub addRow(data, title, type_filter)
+    startDate = createObject("roDateTime")
+
     itemData = m.top.itemData
     row = data.CreateChild("ContentNode")
     row.title = title
     for each item in itemData.Items
+        if LCase(item.type) = "program" and isValid(item.json.StartDate)
+            startDate.FromISO8601String(item.json.StartDate)
+            item.title += " - " + startDate.AsDateString("short-date") + " " + startDate.AsTimeStringLoc("short")
+        end if
         if item.type = type_filter
             row.appendChild(item)
         end if
