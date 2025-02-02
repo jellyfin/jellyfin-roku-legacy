@@ -15,10 +15,10 @@ sub init()
             "fontUri": "font:SystemFontFile",
             "color": "#EFEFEFFF"
         },
-        "url": {
+        "author": {
             "fontSize": 27,
             "fontUri": "font:SystemFontFile",
-            "color": "#00a4dcFF"
+            "color": "0xff6867FF"
         }
     }
 
