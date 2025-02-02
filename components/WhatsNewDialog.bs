@@ -22,13 +22,13 @@ sub init()
         }
     }
 
-    ' empty line for spacing
-    textLine = m.content.CreateChild("StdDlgMultiStyleTextItem")
-    textLine.text = ""
+    whatsNewList = ParseJSON(ReadAsciiFile("pkg:/source/static/whatsNew/details.json"))
 
-    textLine = m.content.CreateChild("StdDlgMultiStyleTextItem")
-    textLine.drawingStyles = dialogStyles
-    textLine.text = tr("To view a complete list of changes visit") + " <url>https://github.com/jellyfin/jellyfin-roku/releases/tag/v" + appVersion + "</url>"
+    for each item in whatsNewList
+        textLine = m.content.CreateChild("StdDlgMultiStyleTextItem")
+        textLine.drawingStyles = dialogStyles
+        textLine.text = "• " + item.description + " <author>" + item.author + "</author>"
+    end for
 end sub
 
 sub setPalette()
