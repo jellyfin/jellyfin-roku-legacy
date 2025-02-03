@@ -14,8 +14,7 @@ sub init()
 
     main = m.top.findNode("main_group")
     main.translation = [96, 175]
-    overview = m.top.findNode("overview")
-    overview.width = 1920 - 96 - 300 - 96 - 30
+    m.overview = m.top.findNode("overview")
 
     m.details = m.top.findNode("details")
     m.tagline = m.top.findNode("tagline")
@@ -105,12 +104,14 @@ sub itemContentChanged()
         m.top.id = itemData.id
 
         posterUrl = item.posterURL
+        m.overview.width = 1400
 
         ' Really need to update TvShowDetails to include the options for changing audio tracks etc
         ' so that we can use that instead of MovieDetails when a user clicks on a TV Show in "Next Up"
         if LCase(itemData.type) = "episode" and IsValid(itemData.ImageTags)
             m.moviePoster.width = 464
             m.moviePoster.height = 261
+            m.overview.width = 1000
             params = { "Tag": itemData.ImageTags.Primary, "maxHeight": 261, "maxWidth": 464 }
             posterUrl = ImageURL(itemData.id, "Primary", params)
         end if

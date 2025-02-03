@@ -17,20 +17,20 @@
             "fontUri": "font:SystemFontFile",
             "color": "#EFEFEFFF"
         },
-        "url": {
+        "author": {
             "fontSize": 27,
             "fontUri": "font:SystemFontFile",
-            "color": "#00a4dcFF"
+            "color": "0xff6867FF"
         }
     }
 
-    ' empty line for spacing
-    textLine = m.content.CreateChild("StdDlgMultiStyleTextItem")
-    textLine.text = ""
+    whatsNewList = ParseJSON(ReadAsciiFile("pkg:/source/static/whatsNew/details.json"))
 
-    textLine = m.content.CreateChild("StdDlgMultiStyleTextItem")
-    textLine.drawingStyles = dialogStyles
-    textLine.text = tr("To view a complete list of changes visit") + " &lt;url>https://github.com/jellyfin/jellyfin-roku/releases/tag/v" + appVersion + "&lt;/url>"
+    for each item in whatsNewList
+        textLine = m.content.CreateChild("StdDlgMultiStyleTextItem")
+        textLine.drawingStyles = dialogStyles
+        textLine.text = "• " + item.description + " &lt;author>" + item.author + "&lt;/author>"
+    end for
 end sub
 
 sub setPalette()
