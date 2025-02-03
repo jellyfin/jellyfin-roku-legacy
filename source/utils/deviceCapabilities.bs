@@ -350,6 +350,7 @@ function getTranscodingProfiles() as object
         "VideoCodec": tsVideoCodecs,
         "MaxAudioChannels": maxAudioChannels,
         "MinSegments": 1,
+        "SegmentLength": 6,
         "BreakOnNonKeyFrames": false
     }
     mp4Array = {
@@ -361,6 +362,7 @@ function getTranscodingProfiles() as object
         "VideoCodec": mp4VideoCodecs,
         "MaxAudioChannels": maxAudioChannels,
         "MinSegments": 1,
+        "SegmentLength": 6,
         "BreakOnNonKeyFrames": false
     }
 
