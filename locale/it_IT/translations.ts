@@ -14,7 +14,7 @@
     </message>
     <message>
         <source>Connect to Server</source>
-        <translation>Connettersi al Server</translation>
+        <translation>Connetti al Server</translation>
     </message>
     <message>
         <source>Ends at %1</source>
@@ -114,7 +114,7 @@
     </message>
     <message>
         <source>Enter a username</source>
-        <translation>Inserisci il tuo nome utente</translation>
+        <translation>Inserisci il nome utente</translation>
     </message>
     <message>
         <source>Enter a password</source>
@@ -186,7 +186,7 @@
     </message>
     <message>
         <source>Error During Playback</source>
-        <translation>Errore Durante la Riproduzione</translation>
+        <translation>Errore durante la riproduzione</translation>
         <extracomment>Dialog title when error occurs during playback</extracomment>
     </message>
     <message>
@@ -223,7 +223,7 @@
     </message>
     <message>
         <source>OFFICIAL_RATING</source>
-        <translation>Classificazione Parentale</translation>
+        <translation>Classificazione parentale</translation>
     </message>
     <message>
         <source>On Now</source>
@@ -231,15 +231,15 @@
     </message>
     <message>
         <source>Died</source>
-        <translation>Data di Morte</translation>
+        <translation>Data di morte</translation>
     </message>
     <message>
         <source>DATE_ADDED</source>
-        <translation>Data di Aggiunta</translation>
+        <translation>Data di aggiunta</translation>
     </message>
     <message>
         <source>DATE_PLAYED</source>
-        <translation>Data di Riproduzione</translation>
+        <translation>Data di riproduzione</translation>
     </message>
     <message>
         <source>Delete Saved</source>
@@ -256,11 +256,11 @@
     </message>
     <message>
         <source>Born</source>
-        <translation>Data di Nascita</translation>
+        <translation>Data di nascita</translation>
     </message>
     <message>
         <source>More Like This</source>
-        <translation>Titoli Simili</translation>
+        <translation>Titoli simili</translation>
     </message>
     <message>
         <source>Episodes</source>
@@ -268,11 +268,11 @@
     </message>
     <message>
         <source>Loading Channel Data</source>
-        <translation>Caricamento dei Dati del Canale</translation>
+        <translation>Caricamento dei dati del canale</translation>
     </message>
     <message>
         <source>Error loading Channel Data</source>
-        <translation>Errore nel Caricamento dei Dati del Canale</translation>
+        <translation>Errore nel caricamento dei dati del canale</translation>
     </message>
     <message>
         <source>CRITIC_RATING</source>
@@ -304,12 +304,12 @@
     </message>
     <message>
         <source>Error Retrieving Content</source>
-        <translation>Errore nel Recuperare i Contenuti</translation>
+        <translation>Errore nel recupero dei contenuti</translation>
         <extracomment>Dialog title when unable to load Content from Server</extracomment>
     </message>
     <message>
         <source>Unable to load Channel Data from the server</source>
-        <translation>Impossibile caricare i Dati del Canale dal server</translation>
+        <translation>Impossibile caricare i dati del canale dal server</translation>
     </message>
     <message>
         <source>Sign Out</source>
@@ -1005,7 +1005,7 @@
     </message>
     <message>
         <source>RELEASE_DATE</source>
-        <translation>Data di Uscita</translation>
+        <translation>Data di uscita</translation>
     </message>
     <message>
         <source>Special Features</source>
