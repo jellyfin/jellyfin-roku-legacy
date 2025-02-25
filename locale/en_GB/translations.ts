@@ -208,7 +208,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation type="unfinished">IMDb Rating</translation>
+        <translation>Community Rating</translation>
     </message>
     <message>
         <source>CRITIC_RATING</source>
@@ -1385,6 +1385,14 @@
     <message>
         <source>CH</source>
         <translation>CH</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Folders</translation>
+    </message>
+    <message>
+        <source>DATE_SHOW_ADDED</source>
+        <translation>Date Show Added</translation>
     </message>
 </context>
 <context>
