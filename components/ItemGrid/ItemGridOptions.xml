@@ -13,7 +13,7 @@
           </RadiobuttonList>
           <RadiobuttonList id="sortMenu" itemSize="[600, 75]" itemspacing="[0,10]" vertFocusAnimationStyle="floatingFocus" opacity="1" numRows="8" drawFocusFeedback="false">
           </RadiobuttonList>
-          <RadiobuttonList id="filterMenu" itemSize="[600, 75]" checkOnSelect="false" itemspacing="[0,10]" vertFocusAnimationStyle="floatingFocus" opacity="0" drawFocusFeedback="false">
+          <RadiobuttonList id="filterMenu" itemSize="[600, 75]" checkOnSelect="false" itemspacing="[0,10]" vertFocusAnimationStyle="floatingFocus" opacity="0" numRows="8" drawFocusFeedback="false">
           </RadiobuttonList>
         </Group>
       </LayoutGroup>
