@@ -377,16 +377,20 @@ sub FilterDataLoaded(msg)
 
     ' Add Movie filters from the API data
     if LCase(m.loadItemsTask.view) = "movies"
-        if isValid(data.genres)
+        if isValid(data.genres) and data.genres.Count() > 0
             options.filter.push({ "Title": tr("Genres"), "Name": "Genres", "Options": data.genres, "Delimiter": "|", "CheckedState": [] })
         end if
 
-        if isValid(data.OfficialRatings)
+        if isValid(data.OfficialRatings) and data.OfficialRatings.Count() > 0
             options.filter.push({ "Title": tr("Parental Ratings"), "Name": "OfficialRatings", "Options": data.OfficialRatings, "Delimiter": "|", "CheckedState": [] })
         end if
 
-        if isValid(data.Years)
+        if isValid(data.Years) and data.Years.Count() > 0
             options.filter.push({ "Title": tr("Years"), "Name": "Years", "Options": data.Years, "Delimiter": ",", "CheckedState": [] })
+        end if
+
+        if isValid(data.Tags) and data.Tags.Count() > 0
+            options.filter.push({ "Title": tr("Tags"), "Name": "Tags", "Options": data.Tags, "Delimiter": ",", "CheckedState": [] })
         end if
     end if
 
