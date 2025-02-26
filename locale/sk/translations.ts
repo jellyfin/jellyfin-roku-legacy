@@ -212,6 +212,380 @@
         <source>Unable to load Channel Data from the server</source>
         <translation>Nie je možné načítať dáta o kanáli zo servera</translation>
     </message>
+    <message>
+        <source>Friday</source>
+        <translation>Piatok</translation>
+    </message>
+    <message>
+        <comment>Name or Title field of media item</comment>
+        <source>TITLE</source>
+        <translation>Názov</translation>
+    </message>
+    <message>
+        <source>DATE_ADDED</source>
+        <translation>Dátum pridania</translation>
+    </message>
+    <message>
+        <source>Save Credentials?</source>
+        <translation>Uložiť prihlasovacie údaje?</translation>
+    </message>
+    <message>
+        <source>On Now</source>
+        <translation>Vysielané teraz</translation>
+    </message>
+    <message>
+        <source>DATE_PLAYED</source>
+        <translation>Dátum prehrania</translation>
+    </message>
+    <message>
+        <source>Design Elements</source>
+        <translation>Dizajnové Elementy</translation>
+    </message>
+    <message>
+        <source>Quick Connect</source>
+        <translation>Rýchle pripojenie</translation>
+    </message>
+    <message>
+        <source>Shows</source>
+        <translation>Seriály</translation>
+    </message>
+    <message>
+        <source>Extras</source>
+        <translation>Bonusy</translation>
+    </message>
+    <message>
+        <source>Episodes</source>
+        <translation>Epizódy</translation>
+    </message>
+    <message>
+        <source>TV Guide</source>
+        <translation>TV sprievodca</translation>
+    </message>
+    <message>
+        <source>IMDB_RATING</source>
+        <translation>Hodnotenie komunity</translation>
+    </message>
+    <message>
+        <source>More Like This</source>
+        <translation>Podobné ako toto</translation>
+    </message>
+    <message>
+        <source>Movies</source>
+        <translation>Filmy</translation>
+    </message>
+    <message>
+        <source>Monday</source>
+        <translation>Pondelok</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Utorok</translation>
+    </message>
+    <message>
+        <source>Set Watched</source>
+        <translation>Pridať do pozretých</translation>
+    </message>
+    <message>
+        <source>Blur images of unwatched episodes.</source>
+        <translation>Rozmazať obrázky nepozretých epizód.</translation>
+    </message>
+    <message>
+        <source>CRITIC_RATING</source>
+        <translation>Hodnotenie kritikov</translation>
+    </message>
+    <message>
+        <source>Press &apos;OK&apos; to Close</source>
+        <translation>Zatvoriť stlačením &apos;OK&apos;</translation>
+    </message>
+    <message>
+        <source>Special Features</source>
+        <translation>Špeciálne Funkcie</translation>
+    </message>
+    <message>
+        <source>Additional Parts</source>
+        <translation>Dodatočné Časti</translation>
+    </message>
+    <message>
+        <source>yesterday</source>
+        <translation>včera</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Nedeľa</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Streda</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Štvrtok</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Sobota</translation>
+    </message>
+    <message>
+        <source>Started at</source>
+        <translation>Začalo o</translation>
+    </message>
+    <message>
+        <source>Starts at</source>
+        <translation>Začína o</translation>
+    </message>
+    <message>
+        <source>Ends at</source>
+        <translation>Končí o</translation>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation>Opakujúce sa</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation>Kanály</translation>
+    </message>
+    <message>
+        <source>View Channel</source>
+        <translation>Zobraziť kanál</translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation>Nahrať</translation>
+    </message>
+    <message>
+        <source>Record Series</source>
+        <translation>Nahrať seriály</translation>
+    </message>
+    <message>
+        <source>Connecting to Server</source>
+        <translation>Pripája sa k serveru</translation>
+    </message>
+    <message>
+        <source>Not found</source>
+        <translation>Nenájdené</translation>
+    </message>
+    <message>
+        <source>The requested content does not exist on the server</source>
+        <translation>Požadovaný obsah neexistuje na serveri</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Verzia</translation>
+    </message>
+    <message>
+        <source>Item Count</source>
+        <translation>Počet položiek</translation>
+    </message>
+    <message>
+        <source>Networks</source>
+        <translation>Sieť</translation>
+    </message>
+    <message>
+        <source>Movies (Presentation)</source>
+        <translation>Filmy (prezentácia)</translation>
+    </message>
+    <message>
+        <source>Movies (Grid)</source>
+        <translation>Filmy (mriežka)</translation>
+    </message>
+    <message>
+        <source>TV Shows</source>
+        <translation>TV Seriály</translation>
+    </message>
+    <message>
+        <source>today</source>
+        <translation>dnes</translation>
+    </message>
+    <message>
+        <source>tomorrow</source>
+        <translation>zajtra</translation>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation>Začalo</translation>
+    </message>
+    <message>
+        <source>Starts</source>
+        <translation>Začína</translation>
+    </message>
+    <message>
+        <source>Ended at</source>
+        <translation>Skončilo o</translation>
+    </message>
+    <message>
+        <source>Live</source>
+        <translation>Naživo</translation>
+    </message>
+    <message>
+        <source>Cancel Recording</source>
+        <translation>Zrušiť Nahrávanie</translation>
+    </message>
+    <message>
+        <source>Cancel Series Recording</source>
+        <translation>Zrušiť nahrávanie série</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Zatvoriť</translation>
+    </message>
+    <message>
+        <source>Enter the server name or IP address</source>
+        <translation>Zadajte názov servera alebo IP adresu</translation>
+    </message>
+    <message>
+        <source>Pick a Jellyfin server from the local network</source>
+        <translation>Vyberte dostupný server Jellyfin z vašej lokálnej siete:</translation>
+    </message>
+    <message>
+        <source>...or enter server URL manually:</source>
+        <translation>Ak vyššie nie je uvedený žiadny server, adresu URL servera môžete zadať aj ručne:</translation>
+    </message>
+    <message>
+        <source>Error Getting Playback Information</source>
+        <translation>Chyba počas získavania informácií o prehrávaní</translation>
+    </message>
+    <message>
+        <source>An error was encountered while playing this item. Server did not provide required transcoding data.</source>
+        <translation>Pri prehrávaní tejto položky sa vyskytla chyba. Server neposkytol požadované údaje na prekódovanie.</translation>
+    </message>
+    <message>
+        <source>Codec Support</source>
+        <translation>Podporovaný formát</translation>
+    </message>
+    <message>
+        <source>Enable or disable Direct Play for optional codecs</source>
+        <translation>Povoliť alebo zakázať Priame prehrávanie pre voliteľné kodeky</translation>
+    </message>
+    <message>
+        <source>MPEG-2</source>
+        <translation>MPEG-2</translation>
+    </message>
+    <message>
+        <source>Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.</source>
+        <translation>Podpora Priameho prehrávania MPEG-2 materiálu (napr., Live TV). Toto neumožní transkódovanie MPEG-2 materiálov ale použiva drasticky viac šírky pásma.</translation>
+    </message>
+    <message>
+        <source>MPEG-4</source>
+        <translation>MPEG-4</translation>
+    </message>
+    <message>
+        <source>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</source>
+        <translation>Podpora Priameho prehrávania MPEG-4 obsahu. Toto by malo byť zakázané pri prehrávaní videa s DIVX enkódovaním.</translation>
+    </message>
+    <message>
+        <source>Go to series</source>
+        <translation>Prejsť na seriál</translation>
+    </message>
+    <message>
+        <source>Go to season</source>
+        <translation>Prejsť na sériu</translation>
+    </message>
+    <message>
+        <source>Search now</source>
+        <translation>Vyhľadať teraz</translation>
+    </message>
+    <message>
+        <source>Studios</source>
+        <translation>Produkčné štúdio</translation>
+    </message>
+    <message>
+        <source>Delete Saved</source>
+        <translation>Vymazať uložené</translation>
+    </message>
+    <message>
+        <source>User Interface</source>
+        <translation>Použivateľské rozhranie</translation>
+    </message>
+    <message>
+        <source>Media Grid</source>
+        <translation type="unfinished">Zoznam médií</translation>
+    </message>
+    <message>
+        <source>Media Grid options.</source>
+        <translation type="unfinished">Nastavenia zoznamu médií.</translation>
+    </message>
+    <message>
+        <source>Show item count in the library and index of selected item.</source>
+        <translation>Zobraziť počet položiek v knižnici a poradnie zvolenej položky.</translation>
+    </message>
+    <message>
+        <source>Set Favorite</source>
+        <translation>Pridať do obľúbených</translation>
+    </message>
+    <message>
+        <source>Go to episode</source>
+        <translation>Prejsť na epizódu</translation>
+    </message>
+    <message>
+        <source>Use voice remote to search</source>
+        <translation type="unfinished">Použiť hlasové vyhľadávanie</translation>
+    </message>
+    <message>
+        <source>You can search for Titles, People, Live TV Channels and more</source>
+        <translation>Vyhľadávanie pomocou Názvu, Osoby, Kanálov a iných</translation>
+    </message>
+    <message>
+        <source>%1 of %2</source>
+        <translation>%1 z %2</translation>
+    </message>
+    <message>
+        <source>Here is your Quick Connect code:</source>
+        <translation>Tu je váš kód pre Rýchle Pripojenie:</translation>
+    </message>
+    <message>
+        <source>(Dialog will close automatically)</source>
+        <translation>(Dialóg sa zavrie automaticky)</translation>
+    </message>
+    <message>
+        <source>There was an error authenticating via Quick Connect.</source>
+        <translation>Nastala chyba pri autentifikácii cez Rýchle Pripojenie.</translation>
+    </message>
+    <message>
+        <source>Return to Top</source>
+        <translation type="unfinished">Naspäť na vrch</translation>
+    </message>
+    <message>
+        <source>Options for TV Shows.</source>
+        <translation>Nastavenia pre TV Seriály.</translation>
+    </message>
+    <message>
+        <source>Blur Unwatched Episodes</source>
+        <translation>Rozmazať nepozreté epizódy</translation>
+    </message>
+    <message>
+        <source>Skip Details for Single Seasons</source>
+        <translation>Preskočiť detaily pre seriály s jednou sezónov</translation>
+    </message>
+    <message>
+        <source>Options that alter the design of Jellyfin.</source>
+        <translation>Nastavenia, ktoré upravujú vzhľad Jellyfin-u.</translation>
+    </message>
+    <message>
+        <source>Go directly to the episode list if a TV series has only one season.</source>
+        <translation>Zobraziť list epizód, keď má TV séria len jednu sezódu.</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Neznámy</translation>
+    </message>
+    <message>
+        <source>Playback</source>
+        <translation>Prehrávanie</translation>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation>Povolené</translation>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation>Vypnuté</translation>
+    </message>
+    <message>
+        <comment>Message displayed in Item Grid when no item to display. %1 is container type (e.g. Boxset, Collection, Folder, etc)</comment>
+        <source>NO_ITEMS</source>
+        <translation>Tento %1 neobsahuje žiadne položky</translation>
+    </message>
 </context>
 <context>
     <name></name>
