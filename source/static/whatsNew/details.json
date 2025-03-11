@@ -1,26 +1,6 @@
 [
   {
-    "description": "Next Up behavior update for TV Shows",
-    "author": "Renbo2024"
-  },
-  {
-    "description": "Hide Time of Completion OSD for Hide Clocks setting",
-    "author": "Renbo2024"
-  },
-  {
-    "description": "Add channel number to Live TV channel title",
-    "author": "Michael Cresswell"
-  },
-  {
-    "description": "Enable OSD for intro videos",
-    "author": "sivart73"
-  },
-  {
-    "description": "Show user icon for saved users",
-    "author": "SonicMastr"
-  },
-  {
-    "description": "Add Live TV Channels, People and Playlists to search",
+    "description": "Fix crash on movie library if it contains a lot of Tags",
     "author": "jimdogx"
   }
 ]
