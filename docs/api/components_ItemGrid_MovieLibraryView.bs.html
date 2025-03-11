@@ -389,7 +389,7 @@ sub FilterDataLoaded(msg)
             options.filter.push({ "Title": tr("Years"), "Name": "Years", "Options": data.Years, "Delimiter": ",", "CheckedState": [] })
         end if
 
-        if isValid(data.Tags) and data.Tags.Count() > 0
+        if isValid(data.Tags) and data.Tags.Count() > 0 and data.Tags.Count() &lt; 100 ' Limit tags to 100 otherwise some Rokus will crash
             options.filter.push({ "Title": tr("Tags"), "Name": "Tags", "Options": data.Tags, "Delimiter": ",", "CheckedState": [] })
         end if
     end if
