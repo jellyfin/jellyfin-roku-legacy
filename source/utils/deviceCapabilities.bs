@@ -23,7 +23,7 @@ end function
 function getDeviceProfile() as object
     globalDevice = m.global.device
     return {
-        "Name": "viv",
+        "Name": "Official Roku Client",
         "Id": globalDevice.id,
         "Identification": {
             "FriendlyName": globalDevice.friendlyName,

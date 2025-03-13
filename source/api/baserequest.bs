@@ -203,7 +203,7 @@ end function
 ' Returns a string containing the "Authorization" header payload
 function buildAuthHeader() as string
     QUOTE = Chr(34)
-    auth = "MediaBrowser" + " Client=" + QUOTE + "viv" + QUOTE
+    auth = "MediaBrowser" + " Client=" + QUOTE + "Jellyfin Roku" + QUOTE
     auth = auth + ", Device=" + QUOTE + m.global.device.name + " (" + m.global.device.model + ")" + QUOTE
     auth = auth + ", Version=" + QUOTE + m.global.app.version + QUOTE
 

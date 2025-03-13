@@ -1,15 +1,42 @@
-<p align="center"><img src="https://raw.githubusercontent.com/1hitsong/viv/master/images/channel-poster_fhd.jpg" style="border: 1px solid #eee; border-radius: 4px" /></p>
+<h1 align="center">Jellyfin Roku</h1>
+<h2 align="center">Part of the <a href="https://jellyfin.org">Jellyfin Project</a></h2>
 
-<h1 align="center">viv</h1>
-<p align="center">An unofficial <strong>Jellyfin</strong> roku client.</p>
-<p align="center">Navigate your Jellyfin library and watch, listen, and view your media.</p>
-<p align="center">Cool features include song lyric support, trickplay images, media segment support, downloading subtitles direct from your Roku, and more.</p>
-<p align="center"><a href="https://channelstore.roku.com/details/80d6198927c29fe1a562d4400a712c63/viv">Roku Channel Store</a></p>
+[![Logo Banner](https://raw.githubusercontent.com/jellyfin/jellyfin-ux/master/branding/SVG/banner-logo-solid.svg?sanitize=true "Jellyfin")](https://jellyfin.org)
 
-<h2>Screenshots</h2>
-<p align="center">
-<a href="https://raw.githubusercontent.com/1hitsong/viv/master/screenshots/home.jpg" title="Home Screen"><img src="https://raw.githubusercontent.com/1hitsong/viv/master/screenshots/home.jpg" style="border: 1px solid #eee;" width="300" alt="Home Screen" /></a>
-<a href="https://raw.githubusercontent.com/1hitsong/viv/master/screenshots/movieDetails.jpg" title="Movie Details"><img src="https://raw.githubusercontent.com/1hitsong/viv/master/screenshots/movieDetails.jpg" style="border: 1px solid #eee;" width="300" alt="Movie Details" /></a>
-<a href="https://raw.githubusercontent.com/1hitsong/viv/master/screenshots/musicPlayback.jpg" title="Music Playback"><img src="https://raw.githubusercontent.com/1hitsong/viv/master/screenshots/musicPlayback.jpg" style="border: 1px solid #eee;" width="300" alt="Music Playback" /></a>
-<a href="https://raw.githubusercontent.com/1hitsong/viv/master/screenshots/tvLibrary.jpg" title="TV Show Library"><img src="https://raw.githubusercontent.com/1hitsong/viv/master/screenshots/tvLibrary.jpg" style="border: 1px solid #eee;" width="300" alt="TV Show Library" /></a>
-</p>
+[![Code Documentation](https://img.shields.io/badge/Code%20Documentation-purple)](https://jellyfin.github.io/jellyfin-roku/)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/jellyfin/jellyfin-roku/build-dev.yml?logo=github&branch=unstable "Build Status")](https://github.com/jellyfin/jellyfin-roku/actions/workflows/build-dev.yml?query=branch%3Aunstable)
+[![Current Release](https://img.shields.io/github/release/jellyfin/jellyfin-roku.svg?logo=github "Current Release")](https://github.com/jellyfin/jellyfin-roku/releases)
+[![Translation Status](https://translate.jellyfin.org/widgets/jellyfin/-/jellyfin-roku/svg-badge.svg "Translation Status")](https://translate.jellyfin.org/projects/jellyfin/jellyfin-roku/?utm_source=widget)
+[![Forum](https://img.shields.io/badge/forum-MyBB-00A4DC "Check out our forum!")](https://forum.jellyfin.org/f-roku-development)
+[![Matrix](https://img.shields.io/matrix/jellyfin:matrix.org.svg?logo=matrix "Chat on Matrix")](https://matrix.to/#/#jellyfin-dev-roku:matrix.org)
+[![License](https://img.shields.io/github/license/jellyfin/jellyfin-roku.svg "GPL 2.0 License")](LICENSE)
+
+Jellyfin Roku is the official Jellyfin client for Roku devices. We welcome all contributions and pull requests! If you have a larger feature in mind please [open an issue](https://github.com/jellyfin/jellyfin-roku/issues/new?assignees=&labels=feature&template=feature_request.md&title=) so we can discuss the implementation before you start.
+
+## Install
+
+Download the latest release on the [Roku Channel Store](https://channelstore.roku.com/details/cc5e559d08d9ec87c5f30dcebdeebc12/jellyfin).
+
+## Get Involved
+
+No matter what your interests or skills are you can help make this client better for everyone by simply using the client and giving feedback to the developers when things break. [Create an issue](https://github.com/jellyfin/jellyfin-roku/issues/new/choose) here on GitHub or give us a shout on [Matrix](https://matrix.to/#/#jellyfin-dev-roku:matrix.org).
+
+## Beta Test
+
+To test the latest features before they get released:
+
+1. Put your Roku device in [developer mode](https://blog.roku.com/developer/2016/02/04/developer-setup-guide). Write down your Roku device IP and the password you created - you will need these!
+2. Download the [latest build](https://github.com/jellyfin/jellyfin-roku/actions/workflows/build-dev.yml). Select the build you wish to test then click the link at the bottom of the page i.e. `Jellyfin-Roku-dev-d3352495c579f6adeca085cdbc137ac36e70d558`. This will download a zip file to your computer.
+3. Put your Roku's IP from step 1 into a browser i.e. `http://192.168.1.2` and press enter.
+4. Log in with credentials from step 1.
+5. Upload and install the zip file downloaded in step 2.
+
+> NOTE: The beta app will always be at the bottom of your Roku's channel list and it will *not* automatically update.
+
+## Advanced
+
+For more advanced deployment methods, access to crash logs, or to learn how to setup a developer environment so you can write some code yourself please read the [DEVGUIDE](docs/DEVGUIDE.md).
+
+## Feature Requests
+
+New feature requests are always welcome but before creating an issue please read through the [existing issues](https://github.com/jellyfin/jellyfin-roku/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) to see if someone has already raised one for what you're looking for.

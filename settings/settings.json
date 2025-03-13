@@ -11,7 +11,7 @@
         "children": [
             {
                 "title": "Remember Me?",
-                "description": "Remember the currently logged in user and try to log them in again next time you start viv.",
+                "description": "Remember the currently logged in user and try to log them in again next time you start the app.",
                 "settingName": "global.rememberme",
                 "type": "bool",
                 "default": "true"
@@ -149,11 +149,11 @@
             },
             {
                 "title": "Media Segment Actions",
-                "description": "Settings relating to how viv should handle media segments.",
+                "description": "Settings relating to how the app should handle media segments.",
                 "children": [
                     {
                         "title": "Commercial Segments",
-                        "description": "What action should viv take for commercial segments? ",
+                        "description": "What action should the app take for commercial segments? ",
                         "settingName": "playback.mediasegments.commercial",
                         "type": "radio",
                         "default": "none",
@@ -174,7 +174,7 @@
                     },
                     {
                         "title": "Intro Segments",
-                        "description": "What action should viv take for intro segments? ",
+                        "description": "What action should the app take for intro segments? ",
                         "settingName": "playback.mediasegments.intro",
                         "type": "radio",
                         "default": "asktoskip",
@@ -195,7 +195,7 @@
                     },
                     {
                         "title": "Outro Segments",
-                        "description": "What action should viv take for outro segments? ",
+                        "description": "What action should the app take for outro segments? ",
                         "settingName": "playback.mediasegments.outro",
                         "type": "radio",
                         "default": "asktoskip",
@@ -216,7 +216,7 @@
                     },
                     {
                         "title": "Preview Segments",
-                        "description": "What action should viv take for preview segments? ",
+                        "description": "What action should the app take for preview segments? ",
                         "settingName": "playback.mediasegments.preview",
                         "type": "radio",
                         "default": "none",
@@ -237,7 +237,7 @@
                     },
                     {
                         "title": "Recap Segments",
-                        "description": "What action should viv take for recap segments? ",
+                        "description": "What action should the app take for recap segments? ",
                         "settingName": "playback.mediasegments.recap",
                         "type": "radio",
                         "default": "none",
@@ -374,7 +374,7 @@
                     },
                     {
                         "title": "Hide Clock",
-                        "description": "Hide all clocks in viv. Viv will need to be closed and reopened for changes to take effect.",
+                        "description": "Hide all clocks in the app. The app will need to be closed and reopened for changes to take effect.",
                         "settingName": "ui.design.hideclock",
                         "type": "bool",
                         "default": "false"
@@ -395,21 +395,21 @@
                     },
                     {
                         "title": "Show What's New Popup",
-                        "description": "Show What's New popup when viv is updated to a new version.",
+                        "description": "Show What's New popup when the app is updated to a new version.",
                         "settingName": "load.allowwhatsnew",
                         "type": "bool",
                         "default": "true"
                     },
                     {
                         "title": "Use Splashscreen as Home Background",
-                        "description": "Use generated splashscreen image as viv's home background. Viv will need to be closed and reopened for change to take effect.",
+                        "description": "Use generated splashscreen image as the app's home background. The app will need to be closed and reopened for change to take effect.",
                         "settingName": "ui.home.splashBackground",
                         "type": "bool",
                         "default": "false"
                     },
                     {
                         "title": "Use Web Client's Home Section Arrangement",
-                        "description": "Make the arrangement of the Roku home view sections match the web client's home screen. Viv will need to be closed and reopened for change to take effect.",
+                        "description": "Make the arrangement of the Roku home view sections match the web client's home screen. The app will need to be closed and reopened for change to take effect.",
                         "settingName": "ui.home.useWebSectionArrangement",
                         "type": "bool",
                         "default": "true"

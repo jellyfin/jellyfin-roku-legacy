@@ -1,8 +1,8 @@
 {
-  "name": "viv",
+  "name": "jellyfin-roku",
   "type": "module",
-  "version": "1.1.7",
-  "description": "Unofficial Roku app for Jellyfin media server",
+  "version": "3.0.0",
+  "description": "Roku app for Jellyfin media server",
   "dependencies": {
     "@rokucommunity/bslib": "0.1.1",
     "brighterscript-formatter": "1.7.10"
@@ -23,19 +23,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/1hitsong/viv.git"
+    "url": "https://github.com/jellyfin/jellyfin-roku.git"
   },
   "keywords": [
     "jellyfin",
     "roku",
-    "viv",
     "music",
     "movies"
   ],
-  "author": "1hitsong",
+  "author": "jellyfin",
   "license": "GPL-2.0",
   "bugs": {
-    "url": "https://github.com/1hitsong/viv"
+    "url": "https://github.com/jellyfin/jellyfin-roku"
   },
-  "homepage": "https://github.com/1hitsong/viv"
+  "homepage": "https://github.com/jellyfin/jellyfin-roku"
 }

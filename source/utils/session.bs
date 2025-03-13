@@ -389,7 +389,7 @@ namespace session
             ' Grab global vars from registry and overwrite defaults
             sub LoadGlobals()
                 ' search main registry block for all keys that start with "global."
-                jfRegistry = RegistryReadAll("viv")
+                jfRegistry = RegistryReadAll("Jellyfin")
                 for each item in jfRegistry
                     if Left(item, 7) = "global."
                         session.user.settings.Save(item, get_setting(item))

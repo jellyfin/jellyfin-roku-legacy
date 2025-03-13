@@ -40,7 +40,7 @@ sub init()
 
     if isValid(m.version)
         m.version.drawingStyles = drawingStyles
-        m.version.text = `viv ${m.global.app.version} - What's New?`
+        m.version.text = `${m.global.app.version} - What's New?`
     end if
 
     m.boolSetting = m.top.findNode("boolSetting")
@@ -320,7 +320,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         if isStringEqual(key, KeyCode.DOWN)
             if m.settingsMenu.hasFocus()
                 m.version.setfocus(true)
-                m.version.text = `viv ${m.global.app.version} - <b>What's New?</b>`
+                m.version.text = `${m.global.app.version} - <b>What's New?</b>`
                 return true
             end if
         end if
@@ -328,7 +328,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         if m.version.hasFocus()
             if isStringEqual(key, KeyCode.UP)
                 m.settingsMenu.setfocus(true)
-                m.version.text = `viv ${m.global.app.version} - What's New?`
+                m.version.text = `${m.global.app.version} - What's New?`
                 return true
             end if
 
