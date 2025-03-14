@@ -130,5 +130,5 @@ sub onPlaylistDataLoaded()
     if not chainLookup(m.getPlaylistDataTask.playlistData, "canedit") then return
 
     popupData = [tr("Remove From Playlist")]
-    m.global.sceneManager.callFunc("optionDialog", "playlist", m.getPlaylistDataTask.LookupCI("selectedItemTitle") ?? tr("Options"), [], popupData, m.getPlaylistDataTask.LookupCI("selectedItemID"))
+    m.global.sceneManager.callFunc("optionDialog", "playlist", m.getPlaylistDataTask.LookupCI("selectedItemTitle") ?? tr("Options"), [], popupData, { id: m.getPlaylistDataTask.LookupCI("selectedItemID") })
 end sub

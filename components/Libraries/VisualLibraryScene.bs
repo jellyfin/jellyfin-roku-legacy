@@ -1657,8 +1657,10 @@ sub onMyListLoaded()
     if not isValid(focusedItem) then return
 
     dialogData = isInMyListData[0] ? [tr("Remove From My List")] : [tr("Add To My List")]
-
     dialogData.push(tr("Add To Playlist"))
+    paramData = {
+        id: focusedItem.LookupCI("id")
+    }
 
     if isChainValid(focusedItem, "watched")
         if focusedItem.watched
@@ -1668,7 +1670,14 @@ sub onMyListLoaded()
         end if
     end if
 
-    m.global.sceneManager.callFunc("optionDialog", "libraryitem", focusedItem.LookupCI("title") ?? tr("Options"), [], dialogData, focusedItem.LookupCI("id"))
+    if inArray([ItemType.EPISODE, ItemType.SEASON], focusedItem.LookupCI("type"))
+        dialogData.push(tr("Go To Series"))
+        dialogData.push(tr("Go To Season"))
+        paramData.SeasonId = focusedItem.json.LookupCI("SeasonId")
+        paramData.SeriesId = focusedItem.json.LookupCI("SeriesId")
+    end if
+
+    m.global.sceneManager.callFunc("optionDialog", "libraryitem", focusedItem.LookupCI("title") ?? tr("Options"), [], dialogData, paramData)
 end sub
 
 sub reclaimResources()

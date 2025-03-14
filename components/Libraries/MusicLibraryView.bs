@@ -1244,7 +1244,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
         if isStringEqual(focusedItem.LookupCI("type"), ItemType.MUSICALBUM)
             dialogData = [tr("Play Album"), tr("Shuffle Play Album"), tr("Instant Mix Album"), tr("Add To Playlist")]
-            m.global.sceneManager.callFunc("optionDialog", "libraryitem", popupTitle ?? tr("Options"), [], dialogData, focusedItem.LookupCI("id"))
+            m.global.sceneManager.callFunc("optionDialog", "libraryitem", popupTitle ?? tr("Options"), [], dialogData, { id: focusedItem.LookupCI("id") })
         end if
 
         return true

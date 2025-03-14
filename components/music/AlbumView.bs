@@ -131,7 +131,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             if not isValidAndNotEmpty(focusedSong) then return false
 
             dialogData = [tr("Add To Playlist")]
-            m.global.sceneManager.callFunc("optionDialog", "libraryitem", focusedSong.LookupCI("title") ?? tr("Options"), [], dialogData, focusedSong.LookupCI("id"))
+            m.global.sceneManager.callFunc("optionDialog", "libraryitem", focusedSong.LookupCI("title") ?? tr("Options"), [], dialogData, { id: focusedSong.LookupCI("id") })
 
             return true
         end if

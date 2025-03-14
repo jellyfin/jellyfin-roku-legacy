@@ -3,6 +3,7 @@ import "pkg:/source/enums/String.bs"
 import "pkg:/source/utils/misc.bs"
 
 sub init()
+    m.params = {}
     m.groups = []
     m.scene = m.top.getScene()
     m.content = m.scene.findNode("content")
@@ -397,9 +398,10 @@ end sub
 
 '
 ' Display dialog to user with an OK button
-sub optionDialog(id, title, message, buttons, itemID)
+sub optionDialog(id, title, message, buttons, params)
     m.buttonData = buttons
-    m.itemID = itemID
+    m.itemID = params.LookupCI("id")
+    m.params = params
     m.top.dataReturned = false
     m.top.returnData = invalid
     m.userselection = false
@@ -441,6 +443,7 @@ sub optionClosed()
     m.top.returnData = {
         id: m.scene.dialog.id,
         itemID: m.itemID,
+        params: m.params,
         indexSelected: -1,
         buttonSelected: ""
     }
@@ -454,6 +457,7 @@ sub optionSelected()
     m.top.returnData = {
         id: m.scene.dialog.id,
         itemID: m.itemID,
+        params: m.params,
         indexSelected: m.scene.dialog.buttonSelected,
         buttonSelected: m.buttonData[m.scene.dialog.buttonSelected],
         text: m.scene.dialog.text

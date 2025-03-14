@@ -916,7 +916,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             end if
 
             dialogData = [tr("Delete Playlist")]
-            m.global.sceneManager.callFunc("optionDialog", "libraryitem", itemToPlay.LookupCI("title") ?? tr("Options"), [], dialogData, itemToPlay.LookupCI("id"))
+            m.global.sceneManager.callFunc("optionDialog", "libraryitem", itemToPlay.LookupCI("title") ?? tr("Options"), [], dialogData, { id: itemToPlay.LookupCI("id") })
             return true
         end if
 
@@ -1013,5 +1013,5 @@ sub onPlaylistDataLoaded()
     if not chainLookup(m.getPlaylistDataTask.playlistData, "canedit") then return
 
     dialogData = [tr("Delete Playlist")]
-    m.global.sceneManager.callFunc("optionDialog", "libraryitem", m.getPlaylistDataTask.LookupCI("selectedItemTitle") ?? tr("Options"), [], dialogData, m.getPlaylistDataTask.LookupCI("playlistID"))
+    m.global.sceneManager.callFunc("optionDialog", "libraryitem", m.getPlaylistDataTask.LookupCI("selectedItemTitle") ?? tr("Options"), [], dialogData, { id: m.getPlaylistDataTask.LookupCI("playlistID") })
 end sub

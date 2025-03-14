@@ -1085,7 +1085,7 @@ sub onContentEvent(msg)
     popupData.push(tr("New Playlist"))
 
     stopLoadingSpinner()
-    m.global.sceneManager.callFunc("optionDialog", "playlist", tr("Add To Playlist"), [], popupData, node.itemId)
+    m.global.sceneManager.callFunc("optionDialog", "playlist", tr("Add To Playlist"), [], popupData, { id: node.itemId })
 end sub
 
 sub onButtonSelectedEvent(msg)
@@ -1302,6 +1302,7 @@ sub onDataReturnedEvent(msg)
 
     selectedPopupID = chainLookup(popupNode, "returndata.id")
     itemID = chainLookup(popupNode, "returndata.itemID")
+    params = chainLookup(popupNode, "returndata.params")
     selectedPopupAction = chainLookup(popupNode, "returndata.indexselected")
     selectedPopupButton = chainLookup(popupNode, "returndata.buttonselected")
 
@@ -1360,7 +1361,7 @@ sub onDataReturnedEvent(msg)
 
     if isStringEqual(selectedPopupID, "libraryitem")
         if not isValid(itemID) then return
-        processLibraryItemPopup(selectedPopupButton, itemID)
+        processLibraryItemPopup(selectedPopupButton, itemID, params)
         return
     end if
 
@@ -1426,7 +1427,7 @@ sub processPlaylistPopup(selectedPopupButton as string, itemID as string)
         end if
 
         stopLoadingSpinner()
-        m.global.sceneManager.callFunc("optionDialog", "existingPlaylist", tr("Add To Playlist"), [], m.playlistData, itemID)
+        m.global.sceneManager.callFunc("optionDialog", "existingPlaylist", tr("Add To Playlist"), [], m.playlistData, { id: itemID })
         return
     end if
 
@@ -1458,7 +1459,7 @@ sub processPlaylistPopup(selectedPopupButton as string, itemID as string)
     end if
 end sub
 
-sub processLibraryItemPopup(selectedPopupButton as string, itemID as string)
+sub processLibraryItemPopup(selectedPopupButton as string, itemID as string, params as object)
     if isStringEqual(selectedPopupButton, "Play Track")
         quickplay.audio({
             id: itemID,
@@ -1543,6 +1544,16 @@ sub processLibraryItemPopup(selectedPopupButton as string, itemID as string)
         return
     end if
 
+    if isStringEqual(selectedPopupButton, "Go To Series")
+        CreateSeriesDetailsGroup(params.seriesid)
+        return
+    end if
+
+    if isStringEqual(selectedPopupButton, "Go To Season")
+        CreateSeasonDetailsGroupByID(params.LookupCI("seriesid"), params.LookupCI("seasonid"))
+        return
+    end if
+
     ' Mark item as played
     if isStringEqual(selectedPopupButton, "Mark As Played")
         MainAction.setPlayed(itemID, true)
@@ -1595,7 +1606,7 @@ sub processLibraryItemPopup(selectedPopupButton as string, itemID as string)
         end if
 
         stopLoadingSpinner()
-        m.global.sceneManager.callFunc("optionDialog", "existingPlaylist", tr("Add To Playlist"), [], m.playlistData, itemID)
+        m.global.sceneManager.callFunc("optionDialog", "existingPlaylist", tr("Add To Playlist"), [], m.playlistData, { id: itemID })
         return
     end if
 

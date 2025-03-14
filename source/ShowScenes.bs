@@ -969,5 +969,5 @@ sub playbackOptionDialog(time as longinteger, meta as object)
         end if
     end if
     stopLoadingSpinner()
-    m.global.sceneManager.callFunc("optionDialog", "playback", tr("Playback Options"), [], resumeData, string.EMPTY)
+    m.global.sceneManager.callFunc("optionDialog", "playback", tr("Playback Options"), [], resumeData, { id: string.EMPTY })
 end sub

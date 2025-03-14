@@ -105,6 +105,9 @@ sub onMyListLoaded()
     if not isValid(focusedItem) then return
 
     dialogData = []
+    paramData = {
+        id: focusedItem.LookupCI("id")
+    }
 
     if isInMyListData[0]
         dialogData.push(tr("Remove From My List"))
@@ -126,7 +129,15 @@ sub onMyListLoaded()
         end if
     end if
 
-    m.global.sceneManager.callFunc("optionDialog", "libraryitem", focusedItem.LookupCI("title") ?? tr("Options"), [], dialogData, focusedItem.LookupCI("id"))
+    if inArray([ItemType.EPISODE, ItemType.SEASON], focusedItem.LookupCI("type"))
+        dialogData.push(tr("Go To Series"))
+        dialogData.push(tr("Go To Season"))
+        paramData.SeasonId = focusedItem.json.LookupCI("SeasonId")
+        paramData.SeriesId = focusedItem.json.LookupCI("SeriesId")
+    end if
+
+
+    m.global.sceneManager.callFunc("optionDialog", "libraryitem", focusedItem.LookupCI("title") ?? tr("Options"), [], dialogData, paramData)
 end sub
 
 ' Special handling for key presses on the home screen.
