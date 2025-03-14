@@ -447,7 +447,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation type="unfinished">IMDb Értékelés</translation>
+        <translation>Közösségi Értékelés</translation>
     </message>
     <message>
         <source>DATE_PLAYED</source>
@@ -607,6 +607,38 @@
     <message>
         <source>Enable or disable Direct Play for optional codecs</source>
         <translation>A Direct Play engedélyezése vagy letiltása a választható kódolókhoz</translation>
+    </message>
+    <message>
+        <source>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</source>
+        <translation>Támogatja az MPEG-4 tartalom közvetlen lejátszását. DIVX-el enkódolt videó fájlok lejátszásához lehet, hogy le kell tiltani.</translation>
+    </message>
+    <message>
+        <source>User Interface</source>
+        <translation>Felhasználói Felület</translation>
+    </message>
+    <message>
+        <source>Media Grid options.</source>
+        <translation>Média rács beállítások.</translation>
+    </message>
+    <message>
+        <source>Item Count</source>
+        <translation>Elemek száma</translation>
+    </message>
+    <message>
+        <source>Show item count in the library and index of selected item.</source>
+        <translation>Elemszám megjelenítése a könyvtárban és a kiválasztott elem indexében.</translation>
+    </message>
+    <message>
+        <source>Media Grid</source>
+        <translation>Média Rács</translation>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation>Engedélyezett</translation>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation type="unfinished">Letiltott</translation>
     </message>
 </context>
 <context>
