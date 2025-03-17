@@ -8,7 +8,11 @@ sub init()
     ' how many rows are visible on the screen
     m.top.numRows = 2
 
-    m.top.rowFocusAnimationStyle = "fixedFocusWrap"
+    if m.global.session.user.settings["ui.home.wrapHomeItems"] = true
+        m.top.rowFocusAnimationStyle = "fixedFocusWrap"
+    else
+        m.top.rowFocusAnimationStyle = "fixedFocus"
+    end if
     m.top.vertFocusAnimationStyle = "fixedFocus"
 
     m.top.showRowLabel = [true]

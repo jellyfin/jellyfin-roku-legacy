@@ -358,6 +358,13 @@
                         "settingName": "ui.home.useWebSectionArrangement",
                         "type": "bool",
                         "default": "true"
+                    },
+                    {
+                        "title": "Wrap Items on Home Rows",
+                        "description": "Allow cursor to wrap around to start when end of home row is reached. Jellyfin will need to be closed and reopened for change to take effect.",
+                        "settingName": "ui.home.wrapHomeItems",
+                        "type": "bool",
+                        "default": "true"
                     }
                 ]
             },
