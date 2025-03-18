@@ -230,7 +230,7 @@
     </message>
     <message>
         <source>IMDB_RATING</source>
-        <translation type="unfinished">Recenzie IMDb</translation>
+        <translation>Evaluare Comunitate</translation>
     </message>
     <message>
         <source>Unable to load Channel Data from the server</source>
@@ -587,7 +587,7 @@
     </message>
     <message>
         <source>Slideshow Paused</source>
-        <translation>Slideshow Paused</translation>
+        <translation>Slideshow pe Pauză</translation>
     </message>
     <message>
         <source>Random Off</source>
@@ -667,7 +667,7 @@
     </message>
     <message>
         <source>Slideshow Off</source>
-        <translation>Slideshow Off</translation>
+        <translation>Slideshow Oprit</translation>
     </message>
     <message>
         <source>Slideshow On</source>
@@ -679,7 +679,7 @@
     </message>
     <message>
         <source>Slideshow Resumed</source>
-        <translation>Slideshow Resumed</translation>
+        <translation>Slideshow Reluat</translation>
     </message>
     <message>
         <source>Parental Ratings</source>
@@ -884,6 +884,42 @@
     <message>
         <source>Unplayed</source>
         <translation>Nevizionat</translation>
+    </message>
+    <message>
+        <source>Select when to show titles.</source>
+        <translation>Selectați când să afișați titlurile.</translation>
+    </message>
+    <message>
+        <source>Movie Library Default View</source>
+        <translation>Vizualizare implicită a bibliotecii de filme</translation>
+    </message>
+    <message>
+        <source>Default view for Movie Libraries.</source>
+        <translation>Vizualizare implicită pentru bibliotecile de filme.</translation>
+    </message>
+    <message>
+        <source>Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.</source>
+        <translation>Suport Direct Play de conținut MPEG-4. Acest lucru poate fi necesar să fie dezactivat pentru redarea fișierelor video codificate DIVX.</translation>
+    </message>
+    <message>
+        <source>Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.</source>
+        <translation>Sprijin Direct Play de conținut MPEG-2 (de exemplu, Live TV). Acest lucru va preveni transcodarea conținutului MPEG-2, dar utilizează semnificativ mai multă lățime de bandă.</translation>
+    </message>
+    <message>
+        <source>Enable or disable Direct Play for optional codecs</source>
+        <translation>Activați sau dezactivați redarea directă pentru codecurile opționale</translation>
+    </message>
+    <message>
+        <source>Played</source>
+        <translation>Vizualizat</translation>
+    </message>
+    <message>
+        <source>Resumable</source>
+        <translation>Reluabil</translation>
+    </message>
+    <message>
+        <source>Item Titles</source>
+        <translation>Titluri Conținut</translation>
     </message>
 </context>
 <context>
