@@ -962,7 +962,7 @@
     </message>
     <message>
         <source>WxH</source>
-        <translation>WxH</translation>
+        <translation>ancho x alto</translation>
         <extracomment>Video width x height</extracomment>
     </message>
     <message>
