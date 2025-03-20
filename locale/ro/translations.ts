@@ -921,6 +921,30 @@
         <source>Item Titles</source>
         <translation>Titluri Conținut</translation>
     </message>
+    <message>
+        <source>Songs</source>
+        <translation>Melodii</translation>
+    </message>
+    <message>
+        <source>Always Show</source>
+        <translation>Afișează întodeauna</translation>
+    </message>
+    <message>
+        <source>Always Hide</source>
+        <translation>Ascunde Mereu</translation>
+    </message>
+    <message>
+        <source>Album</source>
+        <translation>Album</translation>
+    </message>
+    <message>
+        <source>Albums</source>
+        <translation>Albume</translation>
+    </message>
+    <message>
+        <source>Song</source>
+        <translation>Melodie</translation>
+    </message>
 </context>
 <context>
     <name></name>
