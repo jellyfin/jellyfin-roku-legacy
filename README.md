@@ -3,7 +3,7 @@
 
 [![Logo Banner](https://raw.githubusercontent.com/jellyfin/jellyfin-ux/master/branding/SVG/banner-logo-solid.svg?sanitize=true "Jellyfin")](https://jellyfin.org)
 
-## This version is no longer being maintained. See [JellyFin-Roku](https://github.com/jellyfin/jellyfin-roku) for the latest version
+## This version is no longer being maintained. See [Jellyfin-Roku](https://github.com/jellyfin/jellyfin-roku) for the latest version
 
 [![Code Documentation](https://img.shields.io/badge/Code%20Documentation-purple)](https://jellyfin.github.io/jellyfin-roku-legacy/)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/jellyfin/jellyfin-roku-legacy/build-dev.yml?logo=github&branch=unstable "Build Status")](https://github.com/jellyfin/jellyfin-roku-legacy/actions/workflows/build-dev.yml?query=branch%3Aunstable)
