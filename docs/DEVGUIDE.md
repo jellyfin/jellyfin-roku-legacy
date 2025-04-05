@@ -33,13 +33,13 @@ Put your Roku device in [developer mode](https://blog.roku.com/developer/2016/02
 Navigate to where you'd like to install the app then copy the application files:
 
 ```bash
-git clone https://github.com/jellyfin/jellyfin-roku.git
+git clone https://github.com/jellyfin/jellyfin-roku-legacy.git
 ```
 
 Open up the new folder:
 
 ```bash
-cd jellyfin-roku
+cd jellyfin-roku-legacy
 ```
 
 ## Install Dependencies
@@ -63,7 +63,7 @@ We recommend using Visual Studio Code when working on this project. The [BrightS
 
 ### Usage
 
-1. Open the `jellyfin-roku` folder in VSCode
+1. Open the `jellyfin-roku-legacy` folder in VSCode
 2. Press `F5` on your keyboard or click `Run` -> `Start Debugging` from the VSCode menu. ![image](https://user-images.githubusercontent.com/2544493/170696233-8ba49bf4-bebb-4655-88f3-ac45150dda02.png)
 
 3. Enter your Roku IP address and developer password when prompted
@@ -124,7 +124,7 @@ Note: You only have to run this command once if you are not a developer. The Jel
 
 ### Bug/Crash Reports
 
-Did the app crash? Find a nasty bug? Use this command to view the error log and [report it to the developers](https://github.com/jellyfin/jellyfin-roku/issues):
+Did the app crash? Find a nasty bug? Use this command to view the error log and [report it to the developers](https://github.com/jellyfin/jellyfin-roku-legacy/issues):
 
 ```bash
 telnet ${ROKU_DEV_TARGET} 8085
